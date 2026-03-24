@@ -15,15 +15,10 @@ const PLACEHOLDER_TEXTS = [
   'What you need to know',
   'Search stats like the pros',
   'Make your hitlist',
-  'Find the signal',
-  'Query the game',
-  "What's the angle",
-  'Ask the engine',
-  "Who's trending",
-  "What's the window",
-  'Build your case',
-  'Run the numbers',
-  'Start with a stat',
+  'nspe nba -ast10 -last7/10',
+  'nspe nhl -pts min100 -season',
+  'Need to sound like an analyst?',
+  'nspe nba -pts30 -last3/5',
 ]
 
 interface Star {
@@ -43,7 +38,7 @@ function App() {
   useEffect(() => {
     const generateStars = () => {
       const newStars: Star[] = []
-      const density = 350
+      const density = 217
       
       for (let i = 0; i < density; i++) {
         newStars.push({
