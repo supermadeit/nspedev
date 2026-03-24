@@ -73,13 +73,12 @@ const STAT_LABELS: Record<string, string> = {
 }
 
 function formatTickerEntry(entry: HitlistEntry): string {
-  const playerName = entry.player.replace(/\s+/g, '-')
   const statLabel = STAT_LABELS[entry.stat] || entry.stat
   const threshold = `${entry.threshold}+`
   const values = entry.values.join(' | ')
   const dates = entry.hit_dates.join(' • ')
   
-  return `${playerName} ${threshold} ${statLabel} | ${values} | ${dates}`
+  return `${entry.player} ${threshold} ${statLabel} | ${values} | ${dates}`
 }
 
 function App() {
@@ -275,13 +274,13 @@ function App() {
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 z-10 overflow-hidden pointer-events-none">
+      <div className="absolute bottom-0 left-0 right-0 z-10 overflow-hidden pointer-events-none border-t border-border">
         <div 
           ref={tickerRef}
           className="whitespace-nowrap font-mono text-[13px] py-2 animate-ticker"
           style={{ 
             color: 'oklch(0.85 0.15 195)',
-            animation: 'ticker-scroll 180s linear infinite'
+            animation: 'ticker-scroll 120s linear infinite'
           }}
         >
           {tickerText}    ★    {tickerText}    ★    {tickerText}

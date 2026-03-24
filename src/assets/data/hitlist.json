@@ -1,44 +1,9 @@
 [
   {
-    "player": "Luka Doncic",
+    "player": "Luka-Doncic",
     "stat": "tpm",
-    "values": [9, 7, 4, 4],
     "threshold": 4,
+    "values": [9, 7, 4, 4],
     "hit_dates": ["Thu 3/19", "Wed 3/18", "Mon 3/16", "Sat 3/14"]
-  },
-  {
-    "player": "Stephen Curry",
-    "stat": "tpm",
-    "values": [6, 5, 8, 7],
-    "threshold": 5,
-    "hit_dates": ["Fri 3/20", "Wed 3/18", "Mon 3/16", "Sun 3/15"]
-  },
-  {
-    "player": "Nikola Jokic",
-    "stat": "ast",
-    "values": [12, 11, 14, 10],
-    "threshold": 10,
-    "hit_dates": ["Thu 3/19", "Tue 3/17", "Sun 3/15", "Fri 3/13"]
-  },
-  {
-    "player": "Giannis Antetokounmpo",
-    "stat": "reb",
-    "values": [15, 13, 16, 14],
-    "threshold": 12,
-    "hit_dates": ["Fri 3/20", "Wed 3/18", "Mon 3/16", "Sat 3/14"]
-  },
-  {
-    "player": "Damian Lillard",
-    "stat": "tpm",
-    "values": [7, 6, 5, 8],
-    "threshold": 5,
-    "hit_dates": ["Thu 3/19", "Tue 3/17", "Sun 3/15", "Thu 3/12"]
-  },
-  {
-    "player": "Kawhi Leonard",
-    "stat": "stl",
-    "values": [3, 4, 3, 2],
-    "threshold": 2,
-    "hit_dates": ["Fri 3/20", "Wed 3/18", "Mon 3/16", "Sat 3/14"]
   }
 ]
