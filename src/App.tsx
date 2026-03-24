@@ -280,7 +280,7 @@ function App() {
           className="whitespace-nowrap font-mono text-[13px] py-2 animate-ticker"
           style={{ 
             color: 'oklch(0.85 0.15 195)',
-            animation: 'ticker-scroll 80s linear infinite'
+            animation: 'ticker-scroll 17s linear infinite'
           }}
         >
           {tickerText}    ★    {tickerText}    ★    {tickerText}
