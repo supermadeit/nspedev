@@ -35,8 +35,8 @@ const COMMAND_EXAMPLES = [
     description: 'Players with 10+ assists in 7 of their last 10 games',
   },
   {
-    command: 'nspe mlb -hr5 -last10',
-    description: 'Batters with 5+ home runs in their last 10 games',
+    command: 'nspe mlb -dub -last3/5',
+    description: 'Batters with a double in 3 of their last 5 games',
   },
   {
     command: 'nspe nba -pts min1500 -season',
