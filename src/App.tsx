@@ -21,6 +21,33 @@ const PLACEHOLDER_TEXTS = [
   'nspe nba -pts30 -last3/5',
 ]
 
+const COMMAND_EXAMPLES = [
+  {
+    command: 'nspe nba -pts30 -last3/5',
+    description: 'Players with 30+ points in 3 of their last 5 games',
+  },
+  {
+    command: 'nspe nhl -pts min100 -season',
+    description: 'Skaters with 100+ points this season',
+  },
+  {
+    command: 'nspe nba -ast10 -last7/10',
+    description: 'Players with 10+ assists in 7 of their last 10 games',
+  },
+  {
+    command: 'nspe mlb -hr5 -last10',
+    description: 'Batters with 5+ home runs in their last 10 games',
+  },
+  {
+    command: 'nspe nfl -td3 -lastweek',
+    description: 'Players with 3+ touchdowns in the last week',
+  },
+  {
+    command: 'nspe nba -reb15 -last5',
+    description: 'Players with 15+ rebounds in their last 5 games',
+  },
+]
+
 interface Star {
   char: string
   x: number
@@ -34,6 +61,11 @@ function App() {
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
   const [placeholderOpacity, setPlaceholderOpacity] = useState(1)
   const [searchValue, setSearchValue] = useState('')
+  const [isMiniOpen, setIsMiniOpen] = useState(false)
+  const [miniPosition, setMiniPosition] = useState({ x: 100, y: 100 })
+  const [isDragging, setIsDragging] = useState(false)
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
+  const miniRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const generateStars = () => {
@@ -69,6 +101,46 @@ function App() {
     return () => clearInterval(interval)
   }, [])
 
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (miniRef.current && e.target === e.currentTarget) {
+      setIsDragging(true)
+      setDragOffset({
+        x: e.clientX - miniPosition.x,
+        y: e.clientY - miniPosition.y,
+      })
+    }
+  }
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (isDragging) {
+      setMiniPosition({
+        x: e.clientX - dragOffset.x,
+        y: e.clientY - dragOffset.y,
+      })
+    }
+  }
+
+  const handleMouseUp = () => {
+    setIsDragging(false)
+  }
+
+  useEffect(() => {
+    if (isDragging) {
+      window.addEventListener('mousemove', handleMouseMove)
+      window.addEventListener('mouseup', handleMouseUp)
+      return () => {
+        window.removeEventListener('mousemove', handleMouseMove)
+        window.removeEventListener('mouseup', handleMouseUp)
+      }
+    }
+  }, [isDragging, dragOffset])
+
+  const handleSearchSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && searchValue.toLowerCase().trim() === 'help') {
+      setIsMiniOpen(true)
+    }
+  }
+
   return (
     <div className="relative w-screen h-screen bg-background overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
@@ -88,6 +160,57 @@ function App() {
         ))}
       </div>
 
+      <button
+        onClick={() => setIsMiniOpen(!isMiniOpen)}
+        className="absolute top-6 right-6 z-20 font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity"
+        style={{ color: 'oklch(0.85 0.15 195)' }}
+      >
+        nspe-mini
+      </button>
+
+      {isMiniOpen && (
+        <div
+          ref={miniRef}
+          className="absolute z-30 w-[600px] max-h-[70vh] rounded-lg shadow-2xl overflow-hidden"
+          style={{
+            left: `${miniPosition.x}px`,
+            top: `${miniPosition.y}px`,
+            backgroundColor: 'oklch(0.15 0 0)',
+            border: '1px solid oklch(0.30 0 0)',
+          }}
+        >
+          <div
+            className="flex items-center justify-between px-5 py-3 cursor-move select-none"
+            style={{ backgroundColor: 'oklch(0.18 0 0)', borderBottom: '1px solid oklch(0.30 0 0)' }}
+            onMouseDown={handleMouseDown}
+          >
+            <span className="font-mono font-bold text-[14px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
+              NSPE — Command Legend
+            </span>
+            <button
+              onClick={() => setIsMiniOpen(false)}
+              className="font-mono text-[14px] hover:opacity-70 transition-opacity"
+              style={{ color: 'oklch(0.85 0.15 195)' }}
+            >
+              ✕
+            </button>
+          </div>
+
+          <div className="overflow-y-auto max-h-[calc(70vh-50px)] px-5 py-4 space-y-5">
+            {COMMAND_EXAMPLES.map((example, index) => (
+              <div key={index} className="space-y-1">
+                <div className="font-mono text-[13px] font-medium" style={{ color: 'oklch(0.85 0.15 195)' }}>
+                  {example.command}
+                </div>
+                <div className="font-mono text-[12px] pl-4" style={{ color: 'oklch(0.70 0 0)' }}>
+                  → {example.description}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="relative z-10 flex flex-col items-center justify-start h-screen pt-[40vh]">
         <div className="w-[65%] max-w-4xl min-w-[320px] px-4">
           <div className="relative">
@@ -95,6 +218,7 @@ function App() {
               type="text"
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
+              onKeyDown={handleSearchSubmit}
               className="w-full h-[52px] px-5 py-3 bg-card text-foreground font-mono text-[16px] rounded-lg border border-border outline-none focus:border-primary transition-colors duration-200"
               style={{
                 opacity: 1,
