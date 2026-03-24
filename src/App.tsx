@@ -274,7 +274,7 @@ function App() {
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 z-10 overflow-hidden pointer-events-none border-t border-border">
+      <div className="absolute bottom-0 left-0 right-0 z-10 overflow-hidden pointer-events-none border-t" style={{ borderColor: 'oklch(0.30 0 0)' }}>
         <div 
           ref={tickerRef}
           className="whitespace-nowrap font-mono text-[13px] py-2 animate-ticker"
