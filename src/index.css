@@ -79,3 +79,13 @@ body {
   font-family: 'JetBrains Mono', monospace;
   overflow: hidden;
 }
+
+@keyframes ticker-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.33%);
+  }
+}
+

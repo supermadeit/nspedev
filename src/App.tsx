@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import hitlistData from '@/assets/data/hitlist.json'
 
 const STARFIELD_CHARS = ['@', '%', '#', '$', '*', '+', '~', '?', 'x', '⋇', '𝛯', '☼', '➲', '⇪', '➚', '₽']
 
@@ -56,6 +57,31 @@ interface Star {
   opacity: number
 }
 
+interface HitlistEntry {
+  player: string
+  stat: string
+  values: number[]
+  threshold: number
+  hit_dates: string[]
+}
+
+const STAT_LABELS: Record<string, string> = {
+  tpm: '3pt',
+  reb: 'reb',
+  stl: 'stl',
+  ast: 'ast',
+}
+
+function formatTickerEntry(entry: HitlistEntry): string {
+  const playerName = entry.player.replace(/\s+/g, '-')
+  const statLabel = STAT_LABELS[entry.stat] || entry.stat
+  const threshold = `${entry.threshold}+`
+  const values = entry.values.join(' | ')
+  const dates = entry.hit_dates.join(' • ')
+  
+  return `${playerName} ${threshold} ${statLabel} | ${values} | ${dates}`
+}
+
 function App() {
   const [stars, setStars] = useState<Star[]>([])
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
@@ -66,6 +92,11 @@ function App() {
   const [isDragging, setIsDragging] = useState(false)
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const miniRef = useRef<HTMLDivElement>(null)
+  const tickerRef = useRef<HTMLDivElement>(null)
+
+  const tickerText = (hitlistData as HitlistEntry[])
+    .map(formatTickerEntry)
+    .join('    ★    ')
 
   useEffect(() => {
     const generateStars = () => {
@@ -241,6 +272,19 @@ function App() {
               Type "help" for available commands
             </p>
           </div>
+        </div>
+      </div>
+
+      <div className="absolute bottom-0 left-0 right-0 z-10 overflow-hidden pointer-events-none">
+        <div 
+          ref={tickerRef}
+          className="whitespace-nowrap font-mono text-[13px] py-2 animate-ticker"
+          style={{ 
+            color: 'oklch(0.85 0.15 195)',
+            animation: 'ticker-scroll 180s linear infinite'
+          }}
+        >
+          {tickerText}    ★    {tickerText}    ★    {tickerText}
         </div>
       </div>
     </div>
