@@ -274,13 +274,13 @@ function App() {
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 z-10 overflow-hidden pointer-events-none border-t" style={{ borderColor: 'oklch(0.85 0.15 195)' }}>
+      <div className="absolute bottom-0 left-0 right-0 z-10 overflow-hidden pointer-events-none border-t" style={{ borderColor: 'oklch(0.25 0 0)' }}>
         <div 
           ref={tickerRef}
           className="whitespace-nowrap font-mono text-[13px] py-2 animate-ticker"
           style={{ 
             color: 'oklch(0.85 0.15 195)',
-            animation: 'ticker-scroll 17s linear infinite'
+            animation: 'ticker-scroll 11.33s linear infinite'
           }}
         >
           {tickerText}    ★    {tickerText}    ★    {tickerText}
