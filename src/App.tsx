@@ -39,8 +39,8 @@ const COMMAND_EXAMPLES = [
     description: 'Batters with 5+ home runs in their last 10 games',
   },
   {
-    command: 'nspe nfl -td3 -lastweek',
-    description: 'Players with 3+ touchdowns in the last week',
+    command: 'nspe nba -pts min1500 -season',
+    description: 'Players with 1500+ points this season',
   },
   {
     command: 'nspe nba -reb15 -last5',
