@@ -12,7 +12,7 @@ const TERMINAL_COLORS = [
 ]
 
 const PLACEHOLDER_TEXTS = [
-  'What you need to know',
+  'What do you need to know?',
   'Search stats like the pros',
   'Make your hitlist',
   'nspe nba -ast10 -last7/10',
