@@ -190,48 +190,6 @@ function App() {
         ))}
       </div>
 
-      <div
-        className="fixed top-6 left-6 z-20 border"
-        style={{
-          backgroundColor: 'oklch(0.18 0 0)',
-          borderColor: 'oklch(0.25 0 0)',
-          padding: '8px',
-        }}
-      >
-        <svg
-          width="80"
-          height="24"
-          viewBox="0 0 80 24"
-          xmlns="http://www.w3.org/2000/svg"
-          style={{ display: 'block', margin: '0 auto' }}
-        >
-          <path
-            d="M 2 22 L 2 2 L 10 22 L 10 2"
-            stroke="#ffffff"
-            strokeWidth="1.5"
-            fill="none"
-          />
-          <path
-            d="M 16 22 Q 16 2, 24 2 Q 24 22, 16 22"
-            stroke="#ffffff"
-            strokeWidth="1.5"
-            fill="none"
-          />
-          <path
-            d="M 30 22 L 30 2 L 38 2 Q 38 12, 30 12"
-            stroke="#ffffff"
-            strokeWidth="1.5"
-            fill="none"
-          />
-          <path
-            d="M 44 22 L 44 2 L 52 2 M 44 12 L 50 12 M 44 22 L 52 22"
-            stroke="#ffffff"
-            strokeWidth="1.5"
-            fill="none"
-          />
-        </svg>
-      </div>
-
       <button
         onClick={() => setIsMiniOpen(!isMiniOpen)}
         className="absolute top-6 right-6 z-20 font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity"
