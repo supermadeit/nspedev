@@ -280,11 +280,11 @@ function App() {
                       <div className="font-mono text-[13px] font-medium" style={{ color: 'oklch(0.95 0 0)' }}>
                         {result.line}
                       </div>
-                      <div className="font-mono text-[12px] space-y-1" style={{ color: 'oklch(0.85 0.15 195)' }}>
+                      <div className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[12px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
                         {dates.map((date: string, idx: number) => (
-                          <div key={idx}>
+                          <span key={idx}>
                             {date} {notes[idx] || ''}
-                          </div>
+                          </span>
                         ))}
                       </div>
                       <div className="font-mono text-[11px]" style={{ color: 'oklch(0.70 0 0)' }}>
