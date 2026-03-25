@@ -273,7 +273,7 @@ function App() {
       </div>
 
       <img
-        src="/src/assets/images/footer-logo.png"
+        src="/src/assets/images/madeit-tech-logo-v2.jpeg"
         alt="NSPE Footer Logo"
         className="absolute bottom-[42px] left-4 z-10 pointer-events-none"
         style={{
