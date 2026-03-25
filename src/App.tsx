@@ -116,7 +116,7 @@ function App() {
       }
       
       const data = await response.json()
-      setQueryResults(data)
+      setQueryResults(data.results || [])
       setLastQuery(query)
     } catch (error) {
       console.error('Query error:', error)
