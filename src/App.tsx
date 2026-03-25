@@ -239,7 +239,7 @@ function App() {
       {isMiniOpen && (
         <div
           ref={miniRef}
-          className="absolute z-30 w-[600px] max-h-[70vh] rounded-lg shadow-2xl overflow-hidden"
+          className="absolute z-30 w-[600px] max-h-[40vh] rounded-lg shadow-2xl overflow-hidden"
           style={{
             left: `${miniPosition.x}px`,
             top: `${miniPosition.y}px`,
@@ -264,7 +264,7 @@ function App() {
             </button>
           </div>
 
-          <div className="overflow-y-auto max-h-[calc(70vh-50px)] px-5 py-4 space-y-5">
+          <div className="overflow-y-auto max-h-[calc(40vh-50px)] px-5 py-4 space-y-5">
             {isLoading ? (
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
                 Loading...
