@@ -42,8 +42,8 @@ const COMMAND_EXAMPLES = [
     description: 'Players with 1500+ points this season',
   },
   {
-    command: 'nspe nba -reb15 -last5',
-    description: 'Players with 15+ rebounds in their last 5 games',
+    command: 'nspe nba -reb min100 -last10',
+    description: 'Players with 100+ rebounds in their last 10 games',
   },
 ]
 
