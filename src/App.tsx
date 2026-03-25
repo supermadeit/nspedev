@@ -276,8 +276,11 @@ function App() {
                     <div className="font-mono text-[13px] font-medium" style={{ color: 'oklch(0.95 0 0)' }}>
                       {result.line}
                     </div>
-                    <div className="font-mono text-[12px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
+                    <div className="font-mono text-[12px] space-y-1" style={{ color: 'oklch(0.85 0.15 195)' }}>
                       {result.date}
+                    </div>
+                    <div className="font-mono text-[11px]" style={{ color: 'oklch(0.70 0 0)' }}>
+                      Hits: {result.hits}
                     </div>
                     {result.notes && (
                       <div className="font-mono text-[11px]" style={{ color: 'oklch(0.60 0 0)' }}>
