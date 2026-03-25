@@ -107,6 +107,7 @@ function App() {
 
   const runQuery = async (query: string) => {
     setIsLoading(true)
+    setLastQuery(query)
     try {
       const encodedQuery = encodeURIComponent(query)
       const response = await fetch(`http://localhost:5050/query?q=${encodedQuery}`)
@@ -116,8 +117,8 @@ function App() {
       }
       
       const data = await response.json()
+      console.log('Query response:', data)
       setQueryResults(data.results || [])
-      setLastQuery(query)
     } catch (error) {
       console.error('Query error:', error)
       setQueryResults([])
@@ -284,8 +285,13 @@ function App() {
                 </div>
               ))
             ) : queryResults && queryResults.length === 0 ? (
-              <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
-                No results found
+              <div className="text-center py-8 space-y-2">
+                <div className="font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
+                  No results found
+                </div>
+                <div className="font-mono text-[11px]" style={{ color: 'oklch(0.50 0 0)' }}>
+                  Check console for errors or verify localhost:5050 is running
+                </div>
               </div>
             ) : (
               COMMAND_EXAMPLES.map((example, index) => (
