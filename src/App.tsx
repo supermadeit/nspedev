@@ -110,7 +110,7 @@ function App() {
     setLastQuery(query)
     try {
       const encodedQuery = encodeURIComponent(query)
-      const response = await fetch(`http://localhost:5050/query?q=${encodedQuery}`)
+      const response = await fetch(`https://localhost:5050/query?q=${encodedQuery}`)
       
       if (!response.ok) {
         throw new Error(`Query failed: ${response.statusText}`)
