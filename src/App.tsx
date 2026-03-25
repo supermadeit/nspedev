@@ -271,24 +271,28 @@ function App() {
               </div>
             ) : queryResults ? (
               queryResults.length > 0 ? (
-                queryResults.map((result, index) => (
-                  <div key={index} className="space-y-2 pb-4 border-b" style={{ borderColor: 'oklch(0.25 0 0)' }}>
-                    <div className="font-mono text-[13px] font-medium" style={{ color: 'oklch(0.95 0 0)' }}>
-                      {result.line}
-                    </div>
-                    <div className="font-mono text-[12px] space-y-1" style={{ color: 'oklch(0.85 0.15 195)' }}>
-                      {result.date}
-                    </div>
-                    <div className="font-mono text-[11px]" style={{ color: 'oklch(0.70 0 0)' }}>
-                      Hits: {result.hits}
-                    </div>
-                    {result.notes && (
-                      <div className="font-mono text-[11px]" style={{ color: 'oklch(0.60 0 0)' }}>
-                        {result.notes}
+                queryResults.map((result, index) => {
+                  const dates = result.date ? result.date.split(',').map((d: string) => d.trim()) : []
+                  const notes = result.notes ? result.notes.split(',').map((n: string) => n.trim()) : []
+                  
+                  return (
+                    <div key={index} className="space-y-2 pb-4 border-b" style={{ borderColor: 'oklch(0.25 0 0)' }}>
+                      <div className="font-mono text-[13px] font-medium" style={{ color: 'oklch(0.95 0 0)' }}>
+                        {result.line}
                       </div>
-                    )}
-                  </div>
-                ))
+                      <div className="font-mono text-[12px] space-y-1" style={{ color: 'oklch(0.85 0.15 195)' }}>
+                        {dates.map((date: string, idx: number) => (
+                          <div key={idx}>
+                            {date} {notes[idx] || ''}
+                          </div>
+                        ))}
+                      </div>
+                      <div className="font-mono text-[11px]" style={{ color: 'oklch(0.70 0 0)' }}>
+                        Hits: {result.hits}
+                      </div>
+                    </div>
+                  )
+                })
               ) : (
                 <div className="text-center py-8 space-y-2">
                   <div className="font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
