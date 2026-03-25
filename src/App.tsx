@@ -47,6 +47,13 @@ const COMMAND_EXAMPLES = [
   },
 ]
 
+interface QueryResult {
+  date: string
+  line: string
+  hits: number
+  notes: string
+}
+
 interface Star {
   char: string
   x: number
@@ -88,12 +95,36 @@ function App() {
   const [miniPosition, setMiniPosition] = useState({ x: 100, y: 100 })
   const [isDragging, setIsDragging] = useState(false)
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
+  const [queryResults, setQueryResults] = useState<QueryResult[] | null>(null)
+  const [lastQuery, setLastQuery] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   const miniRef = useRef<HTMLDivElement>(null)
   const tickerRef = useRef<HTMLDivElement>(null)
 
   const tickerText = (hitlistData as HitlistEntry[])
     .map(formatTickerEntry)
     .join('    ★    ')
+
+  const runQuery = async (query: string) => {
+    setIsLoading(true)
+    try {
+      const encodedQuery = encodeURIComponent(query)
+      const response = await fetch(`http://localhost:5050/query?q=${encodedQuery}`)
+      
+      if (!response.ok) {
+        throw new Error(`Query failed: ${response.statusText}`)
+      }
+      
+      const data = await response.json()
+      setQueryResults(data)
+      setLastQuery(query)
+    } catch (error) {
+      console.error('Query error:', error)
+      setQueryResults([])
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   useEffect(() => {
     const generateStars = () => {
@@ -164,8 +195,16 @@ function App() {
   }, [isDragging, dragOffset])
 
   const handleSearchSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && searchValue.toLowerCase().trim() === 'help') {
-      setIsMiniOpen(true)
+    if (e.key === 'Enter' && searchValue.trim()) {
+      const trimmedQuery = searchValue.trim().toLowerCase()
+      
+      if (trimmedQuery === 'help') {
+        setIsMiniOpen(true)
+        setQueryResults(null)
+      } else {
+        runQuery(searchValue.trim())
+        setIsMiniOpen(true)
+      }
     }
   }
 
@@ -213,7 +252,7 @@ function App() {
             onMouseDown={handleMouseDown}
           >
             <span className="font-mono font-bold text-[14px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
-              NSPE — Command Legend
+              {queryResults ? `${lastQuery} — hitlist` : 'NSPE — Command Legend'}
             </span>
             <button
               onClick={() => setIsMiniOpen(false)}
@@ -225,16 +264,43 @@ function App() {
           </div>
 
           <div className="overflow-y-auto max-h-[calc(70vh-50px)] px-5 py-4 space-y-5">
-            {COMMAND_EXAMPLES.map((example, index) => (
-              <div key={index} className="space-y-1">
-                <div className="font-mono text-[13px] font-medium" style={{ color: 'oklch(0.85 0.15 195)' }}>
-                  {example.command}
-                </div>
-                <div className="font-mono text-[12px] pl-4" style={{ color: 'oklch(0.70 0 0)' }}>
-                  → {example.description}
-                </div>
+            {isLoading ? (
+              <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
+                Loading...
               </div>
-            ))}
+            ) : queryResults ? (
+              queryResults.length === 0 ? (
+                <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
+                  No results found
+                </div>
+              ) : (
+                queryResults.map((result, index) => (
+                  <div key={index} className="space-y-2 pb-4 border-b" style={{ borderColor: 'oklch(0.25 0 0)' }}>
+                    <div className="font-mono text-[12px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
+                      {result.date}
+                    </div>
+                    <div className="font-mono text-[13px] font-medium" style={{ color: 'oklch(0.95 0 0)' }}>
+                      {result.line}
+                    </div>
+                    <div className="flex items-center gap-4 font-mono text-[12px]" style={{ color: 'oklch(0.70 0 0)' }}>
+                      <span>Hits: {result.hits}</span>
+                      {result.notes && <span>• {result.notes}</span>}
+                    </div>
+                  </div>
+                ))
+              )
+            ) : (
+              COMMAND_EXAMPLES.map((example, index) => (
+                <div key={index} className="space-y-1">
+                  <div className="font-mono text-[13px] font-medium" style={{ color: 'oklch(0.85 0.15 195)' }}>
+                    {example.command}
+                  </div>
+                  <div className="font-mono text-[12px] pl-4" style={{ color: 'oklch(0.70 0 0)' }}>
+                    → {example.description}
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       )}
