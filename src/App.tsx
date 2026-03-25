@@ -272,6 +272,19 @@ function App() {
         </div>
       </div>
 
+      <img
+        src="/src/assets/images/footer-logo.png"
+        alt="NSPE Footer Logo"
+        className="absolute bottom-[42px] left-4 z-10 pointer-events-none"
+        style={{
+          width: '55px',
+          height: '90px',
+          maxWidth: '55px',
+          maxHeight: '90px',
+          objectFit: 'contain',
+        }}
+      />
+
       <div className="absolute bottom-0 left-0 right-0 z-10 overflow-hidden pointer-events-none border-t" style={{ borderColor: 'oklch(0.25 0 0)' }}>
         <div 
           ref={tickerRef}
