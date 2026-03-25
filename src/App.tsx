@@ -269,7 +269,7 @@ function App() {
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
                 Loading...
               </div>
-            ) : queryResults && queryResults.length > 0 ? (
+            ) : queryResults !== null && queryResults.length > 0 ? (
               queryResults.map((result, index) => (
                 <div key={index} className="space-y-2 pb-4 border-b" style={{ borderColor: 'oklch(0.25 0 0)' }}>
                   <div className="font-mono text-[12px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
@@ -284,7 +284,7 @@ function App() {
                   </div>
                 </div>
               ))
-            ) : queryResults && queryResults.length === 0 ? (
+            ) : queryResults !== null && queryResults.length === 0 ? (
               <div className="text-center py-8 space-y-2">
                 <div className="font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
                   No results found
