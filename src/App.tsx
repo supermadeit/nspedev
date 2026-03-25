@@ -269,30 +269,32 @@ function App() {
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
                 Loading...
               </div>
-            ) : queryResults !== null && queryResults.length > 0 ? (
-              queryResults.map((result, index) => (
-                <div key={index} className="space-y-2 pb-4 border-b" style={{ borderColor: 'oklch(0.25 0 0)' }}>
-                  <div className="font-mono text-[12px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
-                    {result.date}
+            ) : queryResults ? (
+              queryResults.length > 0 ? (
+                queryResults.map((result, index) => (
+                  <div key={index} className="space-y-2 pb-4 border-b" style={{ borderColor: 'oklch(0.25 0 0)' }}>
+                    <div className="font-mono text-[12px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
+                      {result.date}
+                    </div>
+                    <div className="font-mono text-[13px] font-medium" style={{ color: 'oklch(0.95 0 0)' }}>
+                      {result.line}
+                    </div>
+                    <div className="flex items-center gap-4 font-mono text-[12px]" style={{ color: 'oklch(0.70 0 0)' }}>
+                      <span>Hits: {result.hits}</span>
+                      {result.notes && <span>• {result.notes}</span>}
+                    </div>
                   </div>
-                  <div className="font-mono text-[13px] font-medium" style={{ color: 'oklch(0.95 0 0)' }}>
-                    {result.line}
+                ))
+              ) : (
+                <div className="text-center py-8 space-y-2">
+                  <div className="font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
+                    No results found
                   </div>
-                  <div className="flex items-center gap-4 font-mono text-[12px]" style={{ color: 'oklch(0.70 0 0)' }}>
-                    <span>Hits: {result.hits}</span>
-                    {result.notes && <span>• {result.notes}</span>}
+                  <div className="font-mono text-[11px]" style={{ color: 'oklch(0.50 0 0)' }}>
+                    Check console for errors or verify localhost:5050 is running
                   </div>
                 </div>
-              ))
-            ) : queryResults !== null && queryResults.length === 0 ? (
-              <div className="text-center py-8 space-y-2">
-                <div className="font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
-                  No results found
-                </div>
-                <div className="font-mono text-[11px]" style={{ color: 'oklch(0.50 0 0)' }}>
-                  Check console for errors or verify localhost:5050 is running
-                </div>
-              </div>
+              )
             ) : (
               COMMAND_EXAMPLES.map((example, index) => (
                 <div key={index} className="space-y-1">
