@@ -275,15 +275,20 @@ function App() {
                   const dates = result.date ? result.date.split(',').map((d: string) => d.trim()) : []
                   const notes = result.notes ? result.notes.split(',').map((n: string) => n.trim()) : []
                   
+                  const gameEntries = dates.map((date: string, idx: number) => {
+                    const note = notes[idx] || ''
+                    return `${date} ${note}`
+                  })
+                  
                   return (
                     <div key={index} className="space-y-2 pb-4 border-b" style={{ borderColor: 'oklch(0.25 0 0)' }}>
                       <div className="font-mono text-[13px] font-medium" style={{ color: 'oklch(0.95 0 0)' }}>
                         {result.line}
                       </div>
                       <div className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[12px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
-                        {dates.map((date: string, idx: number) => (
+                        {gameEntries.map((entry: string, idx: number) => (
                           <span key={idx}>
-                            {date} {notes[idx] || ''}
+                            {entry}
                           </span>
                         ))}
                       </div>
