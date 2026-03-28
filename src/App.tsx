@@ -92,7 +92,7 @@ function App() {
   const [placeholderOpacity, setPlaceholderOpacity] = useState(1)
   const [searchValue, setSearchValue] = useState('')
   const [isMiniOpen, setIsMiniOpen] = useState(false)
-  const [miniPosition, setMiniPosition] = useState({ x: window.innerWidth / 2 - 300, y: window.innerHeight / 2 - 200 })
+  const [miniPosition, setMiniPosition] = useState({ x: window.innerWidth / 2 - 300, y: window.innerHeight * 0.40 + 70 })
   const [isDragging, setIsDragging] = useState(false)
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const [queryResults, setQueryResults] = useState<QueryResult[] | null>(null)
