@@ -98,6 +98,7 @@ function App() {
   const [queryResults, setQueryResults] = useState<QueryResult[] | null>(null)
   const [lastQuery, setLastQuery] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [leftMascotVisible, setLeftMascotVisible] = useState(true)
   const miniRef = useRef<HTMLDivElement>(null)
   const tickerRef = useRef<HTMLDivElement>(null)
 
@@ -205,6 +206,14 @@ function App() {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLeftMascotVisible((prev) => !prev)
+    }, 3000)
+
+    return () => clearInterval(interval)
   }, [])
 
   const handleSearchSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -371,8 +380,21 @@ function App() {
 
       <img
         src="/src/assets/images/madeit-tech-logo-v2.jpeg"
-        alt="NSPE Footer Logo"
-        className="absolute bottom-[42px] left-4 z-10 pointer-events-none"
+        alt="NSPE Footer Logo Left"
+        className={`absolute bottom-[42px] left-4 z-10 pointer-events-none ${leftMascotVisible ? 'fade-in' : 'fade-out'}`}
+        style={{
+          width: '55px',
+          height: '90px',
+          maxWidth: '55px',
+          maxHeight: '90px',
+          objectFit: 'contain',
+        }}
+      />
+
+      <img
+        src="/src/assets/images/madeit-tech-logo-v2.jpeg"
+        alt="NSPE Footer Logo Right"
+        className={`absolute bottom-[42px] right-4 z-10 pointer-events-none flip-horizontal ${!leftMascotVisible ? 'fade-in' : 'fade-out'}`}
         style={{
           width: '55px',
           height: '90px',
