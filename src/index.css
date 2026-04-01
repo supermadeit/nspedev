@@ -91,12 +91,12 @@ body {
 
 .fade-in {
   opacity: 1;
-  transition: opacity 1s;
+  transition: opacity 3s;
 }
 
 .fade-out {
   opacity: 0;
-  transition: opacity 1s;
+  transition: opacity 8s;
 }
 
 .flip-horizontal {

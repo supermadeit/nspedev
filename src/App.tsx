@@ -13,11 +13,7 @@ const TERMINAL_COLORS = [
 const PLACEHOLDER_TEXTS = [
   'What do you need to know?',
   'Search stats like the pros',
-  'Make your hitlist',
-  'nspe nba -ast10 -last7/10',
-  'nspe nhl -pts min100 -season',
-  'Need to sound like an analyst?',
-  'nspe nba -pts30 -last3/5',
+  '{SPORTS}{WORLD} IS YOURS',
 ]
 
 const COMMAND_EXAMPLES = [
