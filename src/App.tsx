@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import hitlistData from '@/assets/data/hitlist.json'
 
+const API_BASE = 'https://api.nspe.dev'
+
 const STARFIELD_CHARS = ['$', '*', '+', '⋇', '𝛯', '☼', '➲','✦','⚛︎','⚇']
 
 const TERMINAL_COLORS = [
@@ -106,8 +108,13 @@ function App() {
     setIsLoading(true)
     setLastQuery(query)
     try {
-      const encodedQuery = encodeURIComponent(query)
-      const response = await fetch(`https://localhost:5050/query?q=${encodedQuery}`)
+      const response = await fetch(`${API_BASE}/run`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query }),
+      })
       
       if (!response.ok) {
         throw new Error(`Query failed: ${response.statusText}`)
