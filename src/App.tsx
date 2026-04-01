@@ -328,7 +328,7 @@ function App() {
                     No results found
                   </div>
                   <div className="font-mono text-[11px]" style={{ color: 'oklch(0.50 0 0)' }}>
-                    Check console for errors or verify localhost:5050 is running
+                    Engine unavailable — try again soon
                   </div>
                 </div>
               )
