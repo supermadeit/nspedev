@@ -386,10 +386,10 @@ function App() {
         alt="NSPE Footer Logo Left"
         className={`absolute bottom-[42px] left-4 z-10 pointer-events-none ${leftMascotVisible ? 'fade-in' : 'fade-out'}`}
         style={{
-          width: '55px',
-          height: '90px',
-          maxWidth: '55px',
-          maxHeight: '90px',
+          width: '38.5px',
+          height: '63px',
+          maxWidth: '38.5px',
+          maxHeight: '63px',
           objectFit: 'contain',
         }}
       />
@@ -399,10 +399,10 @@ function App() {
         alt="NSPE Footer Logo Right"
         className={`absolute bottom-[42px] right-4 z-10 pointer-events-none flip-horizontal ${!leftMascotVisible ? 'fade-in' : 'fade-out'}`}
         style={{
-          width: '55px',
-          height: '90px',
-          maxWidth: '55px',
-          maxHeight: '90px',
+          width: '38.5px',
+          height: '63px',
+          maxWidth: '38.5px',
+          maxHeight: '63px',
           objectFit: 'contain',
         }}
       />
