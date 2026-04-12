@@ -2,8 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import hitlistData from '@/assets/data/hitlist.json'
 
 const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE ||
-  window.NSPE_API_BASE ||
+  (window as any).NSPE_API_BASE ||
   "https://api.nspe.dev";
 
 const STARFIELD_CHARS = ['$', '*', '+', '⋇', '𝛯', '☼', '➲','✦','⚛︎','⚇']
