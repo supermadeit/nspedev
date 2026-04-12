@@ -46,10 +46,8 @@ const COMMAND_EXAMPLES = [
 ]
 
 interface QueryResult {
-  date: string
-  line: string
-  hits: number
-  notes: string
+  player: string
+  total: number
 }
 
 interface Star {
@@ -297,19 +295,11 @@ function App() {
             ) : queryResults ? (
               queryResults.map((result, index) => (
                 <div key={index} className="space-y-2 pb-4 border-b last:border-b-0" style={{ borderColor: 'oklch(0.25 0 0)' }}>
-                  <div className="font-mono text-[12px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
-                    {result.date}
-                  </div>
                   <div className="font-mono text-[13px]" style={{ color: 'oklch(0.95 0 0)' }}>
-                    {result.line}
+                    {result.player}
                   </div>
-                  {result.notes && (
-                    <div className="font-mono text-[11px]" style={{ color: 'oklch(0.70 0 0)' }}>
-                      {result.notes}
-                    </div>
-                  )}
-                  <div className="font-mono text-[11px]" style={{ color: 'oklch(0.70 0 0)' }}>
-                    Hits: {result.hits}
+                  <div className="font-mono text-[12px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
+                    Total: {result.total}
                   </div>
                 </div>
               ))
