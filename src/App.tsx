@@ -224,8 +224,9 @@ function App() {
       const trimmedQuery = searchValue.trim().toLowerCase()
       
       if (trimmedQuery === 'help') {
-        setIsMiniOpen(true)
         setQueryResults(null)
+        setLastQuery('')
+        setIsMiniOpen(true)
       } else {
         runQuery(searchValue.trim())
         setIsMiniOpen(true)
@@ -293,7 +294,7 @@ function App() {
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
                 Loading...
               </div>
-            ) : queryResults ? (
+            ) : queryResults !== null ? (
               queryResults.length > 0 ? (
                 queryResults.map((result, index) => {
                   const dates = result.date ? result.date.split(',').map((d: string) => d.trim()) : []
@@ -326,9 +327,6 @@ function App() {
                 <div className="text-center py-8 space-y-2">
                   <div className="font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
                     No results found
-                  </div>
-                  <div className="font-mono text-[11px]" style={{ color: 'oklch(0.50 0 0)' }}>
-                    Engine unavailable — try again soon
                   </div>
                 </div>
               )
