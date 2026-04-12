@@ -122,6 +122,7 @@ function App() {
       
       const data = await response.json()
       console.log('Query response:', data)
+      console.log("API envelope:", data);
       setQueryResults(data.results || [])
     } catch (error) {
       console.error('Query error:', error)
