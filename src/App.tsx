@@ -294,26 +294,7 @@ function App() {
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
                 Loading...
               </div>
-            ) : queryResults === null ? (
-              <div className="space-y-4">
-                {COMMAND_EXAMPLES.map((example, index) => (
-                  <div key={index} className="space-y-1">
-                    <div className="font-mono text-[13px] font-bold" style={{ color: 'oklch(0.85 0.15 195)' }}>
-                      {example.command}
-                    </div>
-                    <div className="font-mono text-[12px]" style={{ color: 'oklch(0.70 0 0)' }}>
-                      {example.description}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : queryResults.length === 0 ? (
-              <div className="text-center py-8 space-y-2">
-                <div className="font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
-                  No results found
-                </div>
-              </div>
-            ) : (
+          
               queryResults.map((result, index) => (
                 <div key={index} className="space-y-2 pb-4 border-b last:border-b-0" style={{ borderColor: 'oklch(0.25 0 0)' }}>
                   <div className="font-mono text-[12px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
@@ -374,12 +355,6 @@ function App() {
         src="/src/assets/images/madeit-tech-logo-v2.jpeg"
         alt="NSPE Footer Logo Left"
         className={`absolute bottom-[42px] left-4 z-10 pointer-events-none ${leftMascotVisible ? 'fade-in' : 'fade-out'}`}
-        style={{
-          width: '38.5px',
-          height: '63px',
-          maxWidth: '38.5px',
-          maxHeight: '63px',
-          objectFit: 'contain',
         }}
       />
 
