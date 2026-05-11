@@ -37,8 +37,12 @@ function shouldUseSameOriginApi(): boolean {
     return true
   }
 
+  if (forced === 'false') {
+    return false
+  }
+
   const host = window.location.hostname.toLowerCase()
-  return host === 'nspe.dev' || host.endsWith('.nspe.dev') || host === 'localhost' || host === '127.0.0.1'
+  return host === 'localhost' || host === '127.0.0.1'
 }
 
 function buildApiBaseCandidates(): string[] {
