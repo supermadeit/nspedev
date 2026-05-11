@@ -98,14 +98,15 @@ async function fetchFirstSuccessful(
       })
 
       if (!response.ok) {
-        failures.push(`${url} -> HTTP ${response.status}`)
+        failures.push(`${url} -> HTTP ${response.status} ${response.statusText}`.trim())
         continue
       }
 
       return { response, url }
     } catch (error) {
-      const reason = error instanceof Error ? error.message : 'Unknown error'
-      failures.push(`${url} -> ${reason}`)
+      const reason = error instanceof Error ? `${error.name}: ${error.message}` : 'Unknown error'
+      const onlineState = navigator.onLine ? 'online' : 'offline'
+      failures.push(`${url} -> ${reason} (browser ${onlineState})`)
     } finally {
       window.clearTimeout(timeout)
     }
@@ -367,10 +368,14 @@ function formatQueryError(error: unknown): string {
   }
 
   if (error instanceof TypeError) {
-    return `Load failed: network request to ${CONFIGURED_API_BASE} was blocked or failed (possible CORS, DNS, SSL, or WAF issue).`
+    return `Load failed: browser could not complete network request to ${CONFIGURED_API_BASE} (possible CORS, DNS, SSL, WAF, extension, or mixed-content policy issue).`
   }
 
   if (error instanceof Error) {
+    if (error.message.startsWith('No API endpoint responded successfully.')) {
+      return `${error.message} Check browser DevTools Network/Console for blocked-request details from ${window.location.origin}.`
+    }
+
     return error.message
   }
 
