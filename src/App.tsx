@@ -1,13 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import hitlistData from '@/assets/data/hitlist.json'
-
-const CONFIGURED_API_BASE =
-  (window as any).NSPE_API_BASE ||
-  import.meta.env.VITE_NSPE_API_BASE ||
-  'https://api.nspe.dev'
-
-const RUN_ENDPOINT = joinUrl(CONFIGURED_API_BASE, '/run')
-const HITLIST_ENDPOINT = joinUrl(CONFIGURED_API_BASE, '/data/hitlist.json')
+import madeitLogo from '@/assets/images/madeit-tech-logo-v2.jpeg'
 
 function joinUrl(base: string, endpoint: string): string {
   if (!base) {
@@ -15,6 +8,106 @@ function joinUrl(base: string, endpoint: string): string {
   }
 
   return `${base.replace(/\/$/, '')}${endpoint}`
+}
+
+function uniqueNonEmpty(values: Array<string | undefined | null>): string[] {
+  const seen = new Set<string>()
+  const out: string[] = []
+
+  for (const value of values) {
+    if (!value) {
+      continue
+    }
+
+    const normalized = value.trim().replace(/\/$/, '')
+    if (!normalized || seen.has(normalized)) {
+      continue
+    }
+
+    seen.add(normalized)
+    out.push(normalized)
+  }
+
+  return out
+}
+
+function shouldUseSameOriginApi(): boolean {
+  const forced = String(import.meta.env.VITE_USE_SAME_ORIGIN_API || '').toLowerCase()
+  if (forced === 'true') {
+    return true
+  }
+
+  const host = window.location.hostname.toLowerCase()
+  return host === 'nspe.dev' || host.endsWith('.nspe.dev') || host === 'localhost' || host === '127.0.0.1'
+}
+
+function buildApiBaseCandidates(): string[] {
+  const sameOriginApi = shouldUseSameOriginApi() ? `${window.location.origin}/api` : null
+
+  return uniqueNonEmpty([
+    (window as any).NSPE_API_BASE,
+    import.meta.env.VITE_NSPE_API_BASE,
+    sameOriginApi,
+    'https://api.nspe.dev',
+  ])
+}
+
+function buildRunEndpoints(bases: string[]): string[] {
+  return bases.map((base) => joinUrl(base, '/run'))
+}
+
+function buildHitlistEndpoints(bases: string[]): string[] {
+  const candidates: string[] = []
+
+  for (const base of bases) {
+    candidates.push(joinUrl(base, '/data/hitlist.json'))
+
+    // Legacy backend layout can expose data under /api/data only.
+    if (!base.endsWith('/api')) {
+      candidates.push(joinUrl(base, '/api/data/hitlist.json'))
+    }
+  }
+
+  return uniqueNonEmpty(candidates)
+}
+
+const API_BASE_CANDIDATES = buildApiBaseCandidates()
+const CONFIGURED_API_BASE = API_BASE_CANDIDATES[0] || 'https://api.nspe.dev'
+const RUN_ENDPOINTS = buildRunEndpoints(API_BASE_CANDIDATES)
+const HITLIST_ENDPOINTS = buildHitlistEndpoints(API_BASE_CANDIDATES)
+
+async function fetchFirstSuccessful(
+  urls: string[],
+  init: RequestInit,
+  timeoutMs: number,
+): Promise<{ response: Response; url: string }> {
+  const failures: string[] = []
+
+  for (const url of urls) {
+    const controller = new AbortController()
+    const timeout = window.setTimeout(() => controller.abort(), timeoutMs)
+
+    try {
+      const response = await fetch(url, {
+        ...init,
+        signal: controller.signal,
+      })
+
+      if (!response.ok) {
+        failures.push(`${url} -> HTTP ${response.status}`)
+        continue
+      }
+
+      return { response, url }
+    } catch (error) {
+      const reason = error instanceof Error ? error.message : 'Unknown error'
+      failures.push(`${url} -> ${reason}`)
+    } finally {
+      window.clearTimeout(timeout)
+    }
+  }
+
+  throw new Error(`No API endpoint responded successfully. Attempts: ${failures.join(' | ')}`)
 }
 
 const STARFIELD_CHARS = ['$', '*', '+', '⋇', '𝛯', '☼', '➲','✦','⚛︎','⚇']
@@ -270,7 +363,7 @@ function formatQueryError(error: unknown): string {
   }
 
   if (error instanceof TypeError) {
-    return 'Load failed: network/CORS blocked request between nspe.dev and backend.'
+    return `Load failed: network request to ${CONFIGURED_API_BASE} was blocked or failed (possible CORS, DNS, SSL, or WAF issue).`
   }
 
   if (error instanceof Error) {
@@ -366,11 +459,13 @@ function App() {
 
     const loadHitlist = async () => {
       try {
-        const response = await fetch(HITLIST_ENDPOINT)
-        if (!response.ok) {
-          throw new Error(`Hitlist fetch failed: ${response.status}`)
-        }
-
+        const { response, url } = await fetchFirstSuccessful(
+          HITLIST_ENDPOINTS,
+          {
+            method: 'GET',
+          },
+          8000,
+        )
         const payload = await response.json()
         if (!Array.isArray(payload)) {
           throw new Error('Hitlist payload is not an array')
@@ -379,6 +474,8 @@ function App() {
         if (isMounted) {
           setHitlistEntries(payload as HitlistEntry[])
         }
+
+        console.info('Loaded hitlist from endpoint:', url)
       } catch (error) {
         console.warn('Using bundled hitlist fallback:', error)
       }
@@ -406,29 +503,21 @@ function App() {
     }
 
     try {
-      const controller = new AbortController()
-      const timeout = window.setTimeout(() => controller.abort(), 12000)
-      let response: Response
-      try {
-        response = await fetch(RUN_ENDPOINT, {
+      const { response, url } = await fetchFirstSuccessful(
+        RUN_ENDPOINTS,
+        {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ query: sanitizedQuery }),
-          signal: controller.signal,
-        })
-      } finally {
-        window.clearTimeout(timeout)
-      }
-
-      if (!response.ok) {
-        throw new Error(`Search failed: ${response.status}`)
-      }
+        },
+        12000,
+      )
 
       const payload = await parseApiPayload(response)
 
-      console.log('Query response:', payload)
+      console.log('Query response:', payload, 'via', url)
       const normalized = normalizeQueryResults(payload)
       const payloadError = getPayloadError(payload)
       setQueryResults(normalized)
@@ -666,7 +755,7 @@ function App() {
       </div>
 
       <img
-        src="/src/assets/images/madeit-tech-logo-v2.jpeg"
+        src={madeitLogo}
         alt="NSPE Footer Logo Left"
         className={`absolute bottom-[42px] left-4 z-10 pointer-events-none ${leftMascotVisible ? 'fade-in' : 'fade-out'}`}
         style={{
@@ -679,7 +768,7 @@ function App() {
       />
 
       <img
-        src="/src/assets/images/madeit-tech-logo-v2.jpeg"
+        src={madeitLogo}
         alt="NSPE Footer Logo Right"
         className={`absolute bottom-[42px] right-4 z-10 pointer-events-none flip-horizontal ${!leftMascotVisible ? 'fade-in' : 'fade-out'}`}
         style={{
