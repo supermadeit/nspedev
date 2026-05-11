@@ -1,9 +1,21 @@
 import { useState, useEffect, useRef } from 'react'
 import hitlistData from '@/assets/data/hitlist.json'
 
-const API_BASE =
+const CONFIGURED_API_BASE =
   (window as any).NSPE_API_BASE ||
-  "https://api.nspe.dev";
+  import.meta.env.VITE_NSPE_API_BASE ||
+  'https://api.nspe.dev'
+
+const RUN_ENDPOINT = joinUrl(CONFIGURED_API_BASE, '/run')
+const HITLIST_ENDPOINT = joinUrl(CONFIGURED_API_BASE, '/data/hitlist.json')
+
+function joinUrl(base: string, endpoint: string): string {
+  if (!base) {
+    return endpoint
+  }
+
+  return `${base.replace(/\/$/, '')}${endpoint}`
+}
 
 const STARFIELD_CHARS = ['$', '*', '+', '⋇', '𝛯', '☼', '➲','✦','⚛︎','⚇']
 
@@ -22,27 +34,27 @@ const PLACEHOLDER_TEXTS = [
 
 const COMMAND_EXAMPLES = [
   {
-    command: 'nspe nba -pts30 -last3/5',
+    command: 'nba -pts30 -last3/5',
     description: 'Players with 30+ points in 3 of their last 5 games',
   },
   {
-    command: 'nspe nhl -pts min100 -season',
+    command: 'nhl -pts min100 -season',
     description: 'Skaters with 100+ points this season',
   },
   {
-    command: 'nspe nba -ast10 -last7/10',
+    command: 'nba -ast10 -last7/10',
     description: 'Players with 10+ assists in 7 of their last 10 games',
   },
   {
-    command: 'nspe mlb -dub -last3/5',
+    command: 'mlb -dub -last3/5',
     description: 'Batters with a double in 3 of their last 5 games',
   },
   {
-    command: 'nspe nba -pts min1500 -season',
+    command: 'nba -pts min1500 -season',
     description: 'Players with 1500+ points this season',
   },
   {
-    command: 'nspe nba -reb min100 -last10',
+    command: 'nba -reb min100 -last10',
     description: 'Players with 100+ rebounds in their last 10 games',
   },
 ]
@@ -51,6 +63,8 @@ interface QueryResult {
   player: string
   total: number
 }
+
+type ApiPayload = Record<string, unknown> | unknown[]
 
 interface Star {
   char: string
@@ -84,6 +98,247 @@ function formatTickerEntry(entry: HitlistEntry): string {
   return `${entry.player} ${threshold} ${statLabel} | ${values} | ${dates}`
 }
 
+function asNumber(value: unknown): number {
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return value
+  }
+
+  if (typeof value === 'string') {
+    const parsed = Number(value)
+    if (Number.isFinite(parsed)) {
+      return parsed
+    }
+  }
+
+  return 0
+}
+
+function parsePlayerFromNotes(notes: unknown): string | null {
+  if (typeof notes !== 'string') {
+    return null
+  }
+
+  const match = notes.match(/player:([^\s]+)/i)
+  if (!match) {
+    return null
+  }
+
+  const player = match[1].trim()
+  return player.length > 0 ? player : null
+}
+
+function parseGamesFromNotes(notes: unknown): number | null {
+  if (typeof notes !== 'string') {
+    return null
+  }
+
+  const match = notes.match(/games:(\d+)/i)
+  if (!match) {
+    return null
+  }
+
+  const parsed = Number(match[1])
+  return Number.isFinite(parsed) ? parsed : null
+}
+
+function extractResultArray(payload: ApiPayload): unknown[] {
+  if (Array.isArray(payload)) {
+    return payload
+  }
+
+  if (!payload || typeof payload !== 'object') {
+    return []
+  }
+
+  const record = payload as Record<string, unknown>
+  const candidates = [
+    record.results,
+    record.result,
+    record.data,
+    (record.data as Record<string, unknown> | undefined)?.results,
+    (record.data as Record<string, unknown> | undefined)?.rows,
+    (record.data as Record<string, unknown> | undefined)?.items,
+    record.hitlist,
+    record.items,
+    record.rows,
+    record.records,
+    record.entries,
+  ]
+
+  for (const candidate of candidates) {
+    if (Array.isArray(candidate)) {
+      return candidate
+    }
+  }
+
+  return []
+}
+
+function normalizeQueryResults(payload: ApiPayload): QueryResult[] {
+  let envelope = extractResultArray(payload)
+
+  if (envelope.length === 0 && !Array.isArray(payload) && typeof payload === 'object') {
+    const output = (payload as Record<string, unknown>)?.output
+    if (typeof output === 'string') {
+      const parsedOutput = extractEnvelopeFromText(output)
+      if (parsedOutput) {
+        envelope = extractResultArray(parsedOutput)
+      }
+    }
+  }
+
+  return envelope
+    .map((item) => {
+      if (Array.isArray(item)) {
+        const [playerCandidate, totalCandidate] = item
+        if (typeof playerCandidate === 'string' && playerCandidate.trim()) {
+          return {
+            player: playerCandidate,
+            total: asNumber(totalCandidate),
+          }
+        }
+
+        return null
+      }
+
+      if (!item || typeof item !== 'object') {
+        return null
+      }
+
+      const row = item as Record<string, unknown>
+      const playerFromNotes = parsePlayerFromNotes(row.notes)
+      const gamesFromNotes = parseGamesFromNotes(row.notes)
+      const matchesCount = Array.isArray(row.matches) ? row.matches.length : null
+
+      const playerCandidate =
+        row.player ??
+        row.name ??
+        row.athlete ??
+        row.player_name ??
+        row.playerName ??
+        row.full_name ??
+        row.label ??
+        playerFromNotes
+
+      const totalCandidate =
+        row.total ??
+        row.value ??
+        row.count ??
+        row.met ??
+        row.hits ??
+        row.stat_total ??
+        row.statTotal ??
+        row.result ??
+        matchesCount ??
+        gamesFromNotes
+
+      if (typeof playerCandidate !== 'string' || !playerCandidate.trim()) {
+        return null
+      }
+
+      return {
+        player: playerCandidate,
+        total: asNumber(totalCandidate),
+      }
+    })
+    .filter((row): row is QueryResult => row !== null)
+}
+
+function sanitizeQueryForApi(query: string): string {
+  return query.trim().replace(/^nspe\s+/i, '')
+}
+
+function getPayloadError(payload: ApiPayload): string | null {
+  if (!payload || Array.isArray(payload) || typeof payload !== 'object') {
+    return null
+  }
+
+  const record = payload as Record<string, unknown>
+  const exitCode = asNumber(record.exit_code)
+  const output = typeof record.output === 'string' ? record.output.trim() : ''
+
+  if (exitCode !== 0 && output) {
+    return output
+  }
+
+  return null
+}
+
+function formatQueryError(error: unknown): string {
+  if (error instanceof DOMException && error.name === 'AbortError') {
+    return 'Load failed: request timed out while waiting for backend response.'
+  }
+
+  if (error instanceof TypeError) {
+    return 'Load failed: network/CORS blocked request between nspe.dev and backend.'
+  }
+
+  if (error instanceof Error) {
+    return error.message
+  }
+
+  return 'Unknown query error'
+}
+
+function extractEnvelopeFromText(text: string): ApiPayload | null {
+  const trimmed = text.trim()
+  if (!trimmed) {
+    return null
+  }
+
+  try {
+    const parsed = JSON.parse(trimmed)
+    if (parsed && (typeof parsed === 'object' || Array.isArray(parsed))) {
+      return parsed as ApiPayload
+    }
+  } catch {
+    // Continue with line-by-line extraction.
+  }
+
+  const lines = trimmed.split(/\r?\n/)
+  for (let index = lines.length - 1; index >= 0; index -= 1) {
+    const line = lines[index].trim()
+    if (!line || (!line.startsWith('{') && !line.startsWith('['))) {
+      continue
+    }
+
+    try {
+      const parsed = JSON.parse(line)
+      if (parsed && (typeof parsed === 'object' || Array.isArray(parsed))) {
+        return parsed as ApiPayload
+      }
+    } catch {
+      // Not valid JSON on this line; continue scanning upward.
+    }
+  }
+
+  return null
+}
+
+async function parseApiPayload(response: Response): Promise<ApiPayload> {
+  const fallbackResponse = response.clone()
+
+  try {
+    return await response.json()
+  } catch {
+    const textPayload = await fallbackResponse.text()
+    const parsedOutput = extractEnvelopeFromText(textPayload)
+
+    if (parsedOutput) {
+      if (Array.isArray(parsedOutput)) {
+        return parsedOutput
+      }
+
+      return {
+        ...parsedOutput,
+        output: textPayload,
+      }
+    }
+
+    return { results: [] as unknown[], output: textPayload }
+  }
+}
+
 function App() {
   const [stars, setStars] = useState<Star[]>([])
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
@@ -96,37 +351,97 @@ function App() {
   const [queryResults, setQueryResults] = useState<QueryResult[] | null>(null)
   const [lastQuery, setLastQuery] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [queryError, setQueryError] = useState<string | null>(null)
   const [leftMascotVisible, setLeftMascotVisible] = useState(true)
+  const [hitlistEntries, setHitlistEntries] = useState<HitlistEntry[]>(hitlistData as HitlistEntry[])
   const miniRef = useRef<HTMLDivElement>(null)
   const tickerRef = useRef<HTMLDivElement>(null)
 
-  const tickerText = (hitlistData as HitlistEntry[])
+  const tickerText = hitlistEntries
     .map(formatTickerEntry)
     .join('    ★    ')
 
-  const runQuery = async (query: string) => {
-    setIsLoading(true)
-    setLastQuery(query)
-    try {
-      const response = await fetch(`${API_BASE}/run`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ query }),
-      })
-      
-      if (!response.ok) {
-        throw new Error(`Query failed: ${response.statusText}`)
+  useEffect(() => {
+    let isMounted = true
+
+    const loadHitlist = async () => {
+      try {
+        const response = await fetch(HITLIST_ENDPOINT)
+        if (!response.ok) {
+          throw new Error(`Hitlist fetch failed: ${response.status}`)
+        }
+
+        const payload = await response.json()
+        if (!Array.isArray(payload)) {
+          throw new Error('Hitlist payload is not an array')
+        }
+
+        if (isMounted) {
+          setHitlistEntries(payload as HitlistEntry[])
+        }
+      } catch (error) {
+        console.warn('Using bundled hitlist fallback:', error)
       }
-      
-      const data = await response.json()
-      console.log('Query response:', data)
-      console.log("API envelope:", data);
-      setQueryResults(data.results || [])
+    }
+
+    void loadHitlist()
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  const runQuery = async (query: string) => {
+    const sanitizedQuery = sanitizeQueryForApi(query)
+
+    setIsLoading(true)
+    setLastQuery(sanitizedQuery || query.trim())
+    setQueryError(null)
+
+    if (!sanitizedQuery) {
+      setQueryResults([])
+      setQueryError('Enter a valid query.')
+      setIsLoading(false)
+      return
+    }
+
+    try {
+      const controller = new AbortController()
+      const timeout = window.setTimeout(() => controller.abort(), 12000)
+      let response: Response
+      try {
+        response = await fetch(RUN_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ query: sanitizedQuery }),
+          signal: controller.signal,
+        })
+      } finally {
+        window.clearTimeout(timeout)
+      }
+
+      if (!response.ok) {
+        throw new Error(`Search failed: ${response.status}`)
+      }
+
+      const payload = await parseApiPayload(response)
+
+      console.log('Query response:', payload)
+      const normalized = normalizeQueryResults(payload)
+      const payloadError = getPayloadError(payload)
+      setQueryResults(normalized)
+
+      if (payloadError) {
+        setQueryError(payloadError)
+      } else if (normalized.length === 0) {
+        setQueryError('Connected to API, but response contained no recognizable result rows.')
+      }
     } catch (error) {
       console.error('Query error:', error)
       setQueryResults([])
+      setQueryError(formatQueryError(error))
     } finally {
       setIsLoading(false)
     }
@@ -227,6 +542,7 @@ function App() {
       if (trimmedQuery === 'help') {
         setQueryResults(null)
         setLastQuery('')
+        setQueryError(null)
         setIsMiniOpen(true)
       } else {
         runQuery(searchValue.trim())
@@ -291,13 +607,18 @@ function App() {
           </div>
 
           <div className="overflow-y-auto max-h-[calc(40vh-50px)] px-5 py-4 space-y-5">
-            {queryResults === null ? (
+            {isLoading ? (
+              <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
+                Running query...
+              </div>
+            ) : queryResults === null ? (
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
                 Type a query to begin
               </div>
             ) : queryResults.length === 0 ? (
-              <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
-                No results found
+              <div className="text-center py-8 font-mono text-[13px] space-y-2" style={{ color: 'oklch(0.70 0 0)' }}>
+                <div>No results found</div>
+                {queryError && <div>{queryError}</div>}
               </div>
             ) : (
               queryResults.map((result, index) => (
