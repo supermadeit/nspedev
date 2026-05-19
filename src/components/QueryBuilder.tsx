@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 
-type QueryMode = 'trend' | 'compute'
+type QueryMode = 'trend' | 'compute' | 'streak'
 type SeasonType = 'post' | 'reg' | ''
 type PeriodType = 'q1' | ''
 type ComputeWindow = '-season' | '-career' | '-last' | ''
@@ -8,7 +8,7 @@ type ComputeWindow = '-season' | '-career' | '-last' | ''
 const SPORTS = [
   { value: 'nba', label: 'NBA', comingSoon: false },
   { value: 'mlb', label: 'MLB', comingSoon: false },
-  { value: 'nhl', label: 'NHL', comingSoon: true },
+  { value: 'nhl', label: 'NHL', comingSoon: false },
   { value: 'nfl', label: 'NFL', comingSoon: true },
 ]
 
@@ -32,7 +32,14 @@ const SPORT_STATS: Record<string, Array<{ value: string; label: string }>> = {
     { value: 'k', label: 'K' },
     { value: 'bb', label: 'BB' },
   ],
-  nhl: [],
+  nhl: [
+    { value: 'g', label: 'G' },
+    { value: 'a', label: 'A' },
+    { value: 'pts', label: 'PTS' },
+    { value: 'sog', label: 'SOG' },
+    { value: 'blk', label: 'BLK' },
+    { value: 'pim', label: 'PIM' },
+  ],
   nfl: [],
 }
 
@@ -135,6 +142,9 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
   const [minN, setMinN] = useState('')
   const [computeWindow, setComputeWindow] = useState<ComputeWindow>('')
   const [windowN, setWindowN] = useState('')
+  // streak
+  const [streakN, setStreakN] = useState('')
+  const [streakYear, setStreakYear] = useState('')
 
   const stats = SPORT_STATS[sport] ?? []
 
@@ -154,16 +164,20 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
     if (mode === 'trend') {
       if (stat) parts.push(`-${stat}${thresholdN}`)
       if (lastA && lastB) parts.push(`-last${lastA}/${lastB}`)
-    } else {
+    } else if (mode === 'compute') {
       if (stat) parts.push(`-${stat}`)
       if (minN) parts.push(`min${minN}`)
       if (computeWindow === '-season') parts.push('-season')
       else if (computeWindow === '-career') parts.push('-career')
       else if (computeWindow === '-last' && windowN) parts.push(`-last${windowN}`)
+    } else if (mode === 'streak') {
+      if (stat && streakN) parts.push(`-${stat}${thresholdN}`)
+      if (streakN) parts.push(`-streak${streakN}`)
+      if (streakYear) parts.push(streakYear)
     }
 
     return parts.join(' ')
-  }, [mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, computeWindow, windowN])
+  }, [mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, computeWindow, windowN, streakN, streakYear])
 
   const canRun = Boolean(builtCommand) && !isLoading
 
@@ -171,7 +185,7 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
     <div className="w-full" style={{ color: C.textBright, fontFamily: 'monospace' }}>
       {/* Mode tabs */}
       <div className="flex gap-2 mb-4">
-        {(['trend', 'compute'] as QueryMode[]).map((m) => (
+        {(['trend', 'compute', 'streak'] as QueryMode[]).map((m) => (
           <button
             key={m}
             type="button"
@@ -192,8 +206,34 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
       <div className="text-[10px] mb-4 leading-relaxed" style={{ color: C.textDim }}>
         {mode === 'trend'
           ? '▸ nspe {sport} {post/reg} {full/q1} {stat}N -lastN/N'
-          : '▸ nspe {sport} {post/reg} {full/q1} {stat} minN {-window}'}
+          : mode === 'compute'
+          ? '▸ nspe {sport} {post/reg} {full/q1} {stat} minN {-window}'
+          : '▸ nspe {sport} {post/reg} {full/q1} {stat}N -streakN {YYYY|YYYY-YYYY}'}
       </div>
+      {/* Streak: threshold + streakN + year */}
+      {mode === 'streak' && stat && (
+        <div className="mb-3 flex items-end gap-5 flex-wrap">
+          <div>
+            <SLabel>threshold</SLabel>
+            <NumInput value={thresholdN} onChange={setThresholdN} w={64} />
+          </div>
+          <div>
+            <SLabel>min streak</SLabel>
+            <NumInput value={streakN} onChange={setStreakN} placeholder="N" w={54} />
+          </div>
+          <div>
+            <SLabel>year window</SLabel>
+            <input
+              type="text"
+              value={streakYear}
+              onChange={e => setStreakYear(e.target.value.replace(/[^0-9\-]/g, ''))}
+              placeholder="YYYY or YYYY-YYYY"
+              className="font-mono text-[13px] rounded border px-2 py-1.5 outline-none"
+              style={{ width: '110px', backgroundColor: C.surface2, borderColor: C.border, color: C.accent }}
+            />
+          </div>
+        </div>
+      )
 
       {/* Sport */}
       <div className="mb-3">
