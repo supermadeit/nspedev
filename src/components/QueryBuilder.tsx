@@ -5,6 +5,12 @@ type SeasonType = 'post' | 'reg' | ''
 type PeriodType = 'q1' | ''
 type ComputeWindow = '-season' | '-career' | '-last' | ''
 
+const DEFAULT_POST_YEAR_BY_SPORT: Record<string, string> = {
+  nba: '2026',
+  nhl: '2026',
+  mlb: '2025',
+}
+
 const SPORTS = [
   { value: 'nba', label: 'NBA', comingSoon: false },
   { value: 'mlb', label: 'MLB', comingSoon: false },
@@ -132,6 +138,7 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
   const [mode, setMode] = useState<QueryMode>('trend')
   const [sport, setSport] = useState('')
   const [seasonType, setSeasonType] = useState<SeasonType>('')
+  const [postYear, setPostYear] = useState('')
   const [period, setPeriod] = useState<PeriodType>('')
   const [stat, setStat] = useState('')
   // trend
@@ -161,15 +168,22 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
     if (seasonType) parts.push(seasonType)
     if (period === 'q1') parts.push('q1')
 
+    const resolvedPostYear =
+      seasonType === 'post'
+        ? postYear || DEFAULT_POST_YEAR_BY_SPORT[sport] || ''
+        : ''
+
     if (mode === 'trend') {
       if (stat) parts.push(`-${stat}${thresholdN}`)
       if (lastA && lastB) parts.push(`-last${lastA}/${lastB}`)
+      if (resolvedPostYear) parts.push(resolvedPostYear)
     } else if (mode === 'compute') {
       if (stat) parts.push(`-${stat}`)
       if (minN) parts.push(`min${minN}`)
       if (computeWindow === '-season') parts.push('-season')
       else if (computeWindow === '-career') parts.push('-career')
       else if (computeWindow === '-last' && windowN) parts.push(`-last${windowN}`)
+      if (resolvedPostYear) parts.push(resolvedPostYear)
     } else if (mode === 'streak') {
       if (stat && streakN) parts.push(`-${stat}${thresholdN}`)
       if (streakN) parts.push(`-streak${streakN}`)
@@ -177,7 +191,7 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
     }
 
     return parts.join(' ')
-  }, [mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, computeWindow, windowN, streakN, streakYear])
+  }, [mode, sport, seasonType, postYear, period, stat, thresholdN, lastA, lastB, minN, computeWindow, windowN, streakN, streakYear])
 
   const canRun = Boolean(builtCommand) && !isLoading
 
@@ -279,6 +293,26 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
             </Pill>
           </div>
         </div>
+        {seasonType === 'post' && (mode === 'trend' || mode === 'compute') && (
+          <div>
+            <SLabel>post year</SLabel>
+            <input
+              type="text"
+              inputMode="numeric"
+              maxLength={4}
+              value={postYear}
+              onChange={(e) => setPostYear(e.target.value.replace(/[^0-9]/g, '').slice(0, 4))}
+              placeholder={sport ? DEFAULT_POST_YEAR_BY_SPORT[sport] || 'YYYY' : 'YYYY'}
+              className="font-mono text-[13px] rounded border px-2 py-1.5 outline-none"
+              style={{
+                width: '88px',
+                backgroundColor: C.surface2,
+                borderColor: C.border,
+                color: C.accent,
+              }}
+            />
+          </div>
+        )}
       </div>
 
       {/* Stats */}
