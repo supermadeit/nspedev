@@ -233,7 +233,7 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
             />
           </div>
         </div>
-      )
+      )}
 
       {/* Sport */}
       <div className="mb-3">
