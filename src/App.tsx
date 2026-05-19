@@ -171,6 +171,13 @@ const SAMPLE_COMMANDS = [
 interface QueryResult {
   player: string
   total: number
+  streakDetails?: StreakDetail[]
+}
+
+interface StreakDetail {
+  length: number
+  start: string
+  end: string
 }
 
 type ApiPayload = Record<string, unknown> | unknown[]
@@ -250,6 +257,105 @@ function parseGamesFromNotes(notes: unknown): number | null {
   return Number.isFinite(parsed) ? parsed : null
 }
 
+function extractDateToken(value: unknown): string | null {
+  if (typeof value !== 'string') {
+    return null
+  }
+
+  const match = value.match(/(\d{1,2}\/\d{1,2}(?:\/\d{2,4})?)/)
+  return match ? match[1] : null
+}
+
+function toStreakDetailFromRecord(record: Record<string, unknown>): StreakDetail | null {
+  const directStart =
+    (typeof record.start === 'string' && record.start) ||
+    (typeof record.start_date === 'string' && record.start_date) ||
+    (typeof record.first_date === 'string' && record.first_date) ||
+    (typeof record.from === 'string' && record.from) ||
+    ''
+
+  const directEnd =
+    (typeof record.end === 'string' && record.end) ||
+    (typeof record.end_date === 'string' && record.end_date) ||
+    (typeof record.last_date === 'string' && record.last_date) ||
+    (typeof record.to === 'string' && record.to) ||
+    ''
+
+  const matches = Array.isArray(record.matches) ? record.matches : []
+  const firstMatchDate = matches.length > 0 ? extractDateToken(String(matches[0])) : null
+  const lastMatchDate = matches.length > 0 ? extractDateToken(String(matches[matches.length - 1])) : null
+
+  const start = extractDateToken(directStart) || firstMatchDate || ''
+  const end = extractDateToken(directEnd) || lastMatchDate || ''
+
+  const length = asNumber(
+    record.length ??
+      record.streak ??
+      record.streak_length ??
+      record.games ??
+      record.count ??
+      (matches.length > 0 ? matches.length : 0),
+  )
+
+  if (!length || !start || !end) {
+    return null
+  }
+
+  return {
+    length,
+    start,
+    end,
+  }
+}
+
+function extractStreakDetails(row: Record<string, unknown>): StreakDetail[] {
+  const candidates = [
+    row.streaks,
+    row.streak_details,
+    row.streakDetails,
+    row.details,
+    row.sequences,
+    row.runs,
+  ]
+
+  for (const candidate of candidates) {
+    if (!Array.isArray(candidate)) {
+      continue
+    }
+
+    const parsed = candidate
+      .map((item) => {
+        if (!item || typeof item !== 'object' || Array.isArray(item)) {
+          return null
+        }
+
+        return toStreakDetailFromRecord(item as Record<string, unknown>)
+      })
+      .filter((detail): detail is StreakDetail => detail !== null)
+
+    if (parsed.length > 0) {
+      return parsed
+    }
+  }
+
+  if (Array.isArray(row.matches) && row.matches.length > 0) {
+    const start = extractDateToken(String(row.matches[0]))
+    const end = extractDateToken(String(row.matches[row.matches.length - 1]))
+
+    if (start && end) {
+      return [
+        {
+          length: row.matches.length,
+          start,
+          end,
+        },
+      ]
+    }
+  }
+
+  return []
+}
+
 function extractResultArray(payload: ApiPayload): unknown[] {
   if (Array.isArray(payload)) {
     return payload
@@ -318,6 +424,7 @@ function normalizeQueryResults(payload: ApiPayload): QueryResult[] {
       const playerFromNotes = parsePlayerFromNotes(row.notes)
       const gamesFromNotes = parseGamesFromNotes(row.notes)
       const matchesCount = Array.isArray(row.matches) ? row.matches.length : null
+      const streakDetails = extractStreakDetails(row)
 
       const playerCandidate =
         row.player ??
@@ -347,7 +454,8 @@ function normalizeQueryResults(payload: ApiPayload): QueryResult[] {
 
       return {
         player: playerCandidate,
-        total: asNumber(totalCandidate),
+        total: asNumber(totalCandidate) || streakDetails.length,
+        streakDetails: streakDetails.length > 0 ? streakDetails : undefined,
       }
     })
     .filter((row): row is QueryResult => row !== null)
@@ -466,6 +574,7 @@ function App() {
   const [lastQuery, setLastQuery] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [queryError, setQueryError] = useState<string | null>(null)
+  const [expandedStreakPlayers, setExpandedStreakPlayers] = useState<Record<string, boolean>>({})
   const [leftMascotVisible, setLeftMascotVisible] = useState(true)
   const [hitlistEntries, setHitlistEntries] = useState<HitlistEntry[]>(hitlistData as HitlistEntry[])
   const [isBuilderOpen, setIsBuilderOpen] = useState(false)
@@ -519,6 +628,7 @@ function App() {
     setIsLoading(true)
     setLastQuery(sanitizedQuery || query.trim())
     setQueryError(null)
+    setExpandedStreakPlayers({})
 
     if (!sanitizedQuery) {
       setQueryResults([])
@@ -707,6 +817,13 @@ function App() {
     })
   }
 
+  const toggleStreakPlayer = (player: string) => {
+    setExpandedStreakPlayers((prev) => ({
+      ...prev,
+      [player]: !prev[player],
+    }))
+  }
+
   return (
     <div className="relative w-screen h-screen bg-background overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
@@ -824,23 +941,62 @@ function App() {
                 {queryError && <div>{queryError}</div>}
               </div>
             ) : (
-              queryResults.map((result, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between py-2 border-b"
-                  style={{ borderColor: 'oklch(0.22 0 0)' }}
-                >
-                  <span className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
-                    {result.player}
-                  </span>
-                  <span
-                    className="font-mono font-bold text-[13px] ml-4 shrink-0 px-2 py-0.5 rounded"
-                    style={{ backgroundColor: 'oklch(0.22 0 0)', color: 'oklch(0.85 0.15 145)' }}
+              queryResults.map((result, index) => {
+                const hasStreakDetails = Boolean(result.streakDetails && result.streakDetails.length > 0)
+                const isExpanded = hasStreakDetails ? Boolean(expandedStreakPlayers[result.player]) : false
+
+                return (
+                  <div
+                    key={index}
+                    className="py-2 border-b"
+                    style={{ borderColor: 'oklch(0.22 0 0)' }}
                   >
-                    {result.total}
-                  </span>
-                </div>
-              ))
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+                        {result.player}
+                      </span>
+                      {hasStreakDetails ? (
+                        <button
+                          type="button"
+                          onClick={() => toggleStreakPlayer(result.player)}
+                          className="font-mono font-bold text-[13px] ml-4 shrink-0 px-2 py-0.5 rounded border"
+                          style={{
+                            backgroundColor: isExpanded ? 'oklch(0.27 0.03 145)' : 'oklch(0.22 0 0)',
+                            color: 'oklch(0.85 0.15 145)',
+                            borderColor: 'oklch(0.35 0 0)',
+                            cursor: 'pointer',
+                          }}
+                          aria-expanded={isExpanded}
+                          aria-label={`Toggle streak details for ${result.player}`}
+                        >
+                          {result.total}
+                        </button>
+                      ) : (
+                        <span
+                          className="font-mono font-bold text-[13px] ml-4 shrink-0 px-2 py-0.5 rounded"
+                          style={{ backgroundColor: 'oklch(0.22 0 0)', color: 'oklch(0.85 0.15 145)' }}
+                        >
+                          {result.total}
+                        </span>
+                      )}
+                    </div>
+
+                    {isExpanded && result.streakDetails && (
+                      <div className="mt-2 space-y-1.5 pl-2">
+                        {result.streakDetails.map((detail, detailIndex) => (
+                          <div
+                            key={`${result.player}-${detailIndex}`}
+                            className="font-mono text-[12px]"
+                            style={{ color: 'oklch(0.76 0 0)' }}
+                          >
+                            {`${detail.length} game streak ${detail.start} - ${detail.end}`}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )
+              })
             )}
           </div>
         </div>
