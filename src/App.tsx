@@ -874,8 +874,20 @@ function App() {
   }
 
   const handleSampleCommandSelect = (command: string) => {
-    setSearchValue(command)
     setIsSampleMenuOpen(false)
+
+    if (isMobile) {
+      if (!command.trim()) {
+        return
+      }
+
+      setSearchValue(command)
+      runQuery(command)
+      setIsMiniOpen(true)
+      return
+    }
+
+    setSearchValue(command)
 
     window.requestAnimationFrame(() => {
       if (!searchInputRef.current) {
@@ -1084,49 +1096,62 @@ function App() {
 
       <div className="relative z-10 flex flex-col items-center justify-start h-screen pt-[40vh]">
         <div className="w-[65%] max-w-4xl min-w-[320px] px-4">
-          <div className="flex items-center gap-3">
-            <div className="relative flex-1">
-              <input
-                ref={searchInputRef}
-                type="text"
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-                onKeyDown={handleSearchSubmit}
-                className="w-full h-[52px] px-5 py-3 bg-card text-foreground font-mono text-[16px] rounded-lg border border-border outline-none focus:border-primary transition-colors duration-200"
-                style={{
-                  opacity: 1,
-                }}
-              />
-              {!searchValue && (
-                <div
-                  className="absolute inset-0 flex items-center px-5 pointer-events-none font-mono text-[16px] text-muted-foreground transition-opacity duration-300"
-                  style={{
-                    opacity: placeholderOpacity * 0.5,
-                  }}
-                >
-                  {PLACEHOLDER_TEXTS[placeholderIndex]}
-                </div>
-              )}
+          {isMobile ? (
+            <div className="flex items-center justify-center">
+              <button
+                type="button"
+                onClick={() => setIsBuilderOpen(true)}
+                className="h-[52px] rounded-lg border px-8 font-mono text-[14px] hover:opacity-80 transition-opacity"
+                style={{ color: 'oklch(0.85 0.15 195)', borderColor: 'oklch(0.85 0.15 195)' }}
+              >
+                build
+              </button>
             </div>
+          ) : (
+            <div className="flex items-center gap-3">
+              <div className="relative flex-1">
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                  onKeyDown={handleSearchSubmit}
+                  className="w-full h-[52px] px-5 py-3 bg-card text-foreground font-mono text-[16px] rounded-lg border border-border outline-none focus:border-primary transition-colors duration-200"
+                  style={{
+                    opacity: 1,
+                  }}
+                />
+                {!searchValue && (
+                  <div
+                    className="absolute inset-0 flex items-center px-5 pointer-events-none font-mono text-[16px] text-muted-foreground transition-opacity duration-300"
+                    style={{
+                      opacity: placeholderOpacity * 0.5,
+                    }}
+                  >
+                    {PLACEHOLDER_TEXTS[placeholderIndex]}
+                  </div>
+                )}
+              </div>
 
-            <button
-              type="button"
-              onClick={runSearchFromInput}
-              className="h-[52px] shrink-0 rounded-lg border border-border px-5 font-mono text-[14px] hover:opacity-80 transition-opacity"
-              style={{ color: 'oklch(0.90 0.18 195)' }}
-            >
-              search
-            </button>
+              <button
+                type="button"
+                onClick={runSearchFromInput}
+                className="h-[52px] shrink-0 rounded-lg border border-border px-5 font-mono text-[14px] hover:opacity-80 transition-opacity"
+                style={{ color: 'oklch(0.90 0.18 195)' }}
+              >
+                search
+              </button>
 
-            <button
-              type="button"
-              onClick={() => setIsBuilderOpen(true)}
-              className="h-[52px] shrink-0 rounded-lg border px-5 font-mono text-[14px] hover:opacity-80 transition-opacity"
-              style={{ color: 'oklch(0.85 0.15 195)', borderColor: 'oklch(0.85 0.15 195)' }}
-            >
-              build
-            </button>
-          </div>
+              <button
+                type="button"
+                onClick={() => setIsBuilderOpen(true)}
+                className="h-[52px] shrink-0 rounded-lg border px-5 font-mono text-[14px] hover:opacity-80 transition-opacity"
+                style={{ color: 'oklch(0.85 0.15 195)', borderColor: 'oklch(0.85 0.15 195)' }}
+              >
+                build
+              </button>
+            </div>
+          )}
 
           <div className="mt-6 text-center">
             <p className="font-mono text-[14px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
