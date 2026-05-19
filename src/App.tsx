@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import hitlistData from '@/assets/data/hitlist.json'
 import madeitLogo from '@/assets/images/madeit-tech-logo-v2.jpeg'
+import { useIsMobile } from '@/hooks/use-mobile'
+import { QueryBuilder } from '@/components/QueryBuilder'
 
 function joinUrl(base: string, endpoint: string): string {
   if (!base) {
@@ -466,6 +468,8 @@ function App() {
   const [queryError, setQueryError] = useState<string | null>(null)
   const [leftMascotVisible, setLeftMascotVisible] = useState(true)
   const [hitlistEntries, setHitlistEntries] = useState<HitlistEntry[]>(hitlistData as HitlistEntry[])
+  const [isBuilderOpen, setIsBuilderOpen] = useState(false)
+  const isMobile = useIsMobile()
   const searchInputRef = useRef<HTMLInputElement>(null)
   const sampleMenuRef = useRef<HTMLDivElement>(null)
   const miniRef = useRef<HTMLDivElement>(null)
@@ -674,6 +678,13 @@ function App() {
     }
   }
 
+  const handleRunFromBuilder = (query: string) => {
+    setSearchValue(query)
+    setIsBuilderOpen(false)
+    runQuery(query)
+    setIsMiniOpen(true)
+  }
+
   const handleSearchSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault()
@@ -772,13 +783,14 @@ function App() {
       {isMiniOpen && (
         <div
           ref={miniRef}
-          className="absolute z-30 w-[600px] max-h-[40vh] rounded-lg shadow-2xl overflow-hidden"
-          style={{
-            left: `${miniPosition.x}px`,
-            top: `${miniPosition.y}px`,
-            backgroundColor: 'oklch(0.15 0 0)',
-            border: '1px solid oklch(0.30 0 0)',
-          }}
+          className={isMobile
+            ? 'fixed inset-x-2 top-2 z-30 rounded-lg shadow-2xl overflow-hidden'
+            : 'absolute z-30 w-[600px] max-h-[40vh] rounded-lg shadow-2xl overflow-hidden'
+          }
+          style={isMobile
+            ? { maxHeight: 'calc(100dvh - 80px)', backgroundColor: 'oklch(0.15 0 0)', border: '1px solid oklch(0.30 0 0)' }
+            : { left: `${miniPosition.x}px`, top: `${miniPosition.y}px`, backgroundColor: 'oklch(0.15 0 0)', border: '1px solid oklch(0.30 0 0)' }
+          }
         >
           <div
             className="flex items-center justify-between px-5 py-3 cursor-move select-none"
@@ -797,7 +809,7 @@ function App() {
             </button>
           </div>
 
-          <div className="overflow-y-auto max-h-[calc(40vh-50px)] px-5 py-4 space-y-5">
+          <div className={`overflow-y-auto px-5 py-4 space-y-3 ${isMobile ? 'max-h-[calc(100dvh-130px)]' : 'max-h-[calc(40vh-50px)]'}`}>
             {isLoading ? (
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
                 Running query...
@@ -813,9 +825,20 @@ function App() {
               </div>
             ) : (
               queryResults.map((result, index) => (
-                <div key={index}>
-                  <div>{result.player}</div>
-                  <div>{result.total}</div>
+                <div
+                  key={index}
+                  className="flex items-center justify-between py-2 border-b"
+                  style={{ borderColor: 'oklch(0.22 0 0)' }}
+                >
+                  <span className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+                    {result.player}
+                  </span>
+                  <span
+                    className="font-mono font-bold text-[13px] ml-4 shrink-0 px-2 py-0.5 rounded"
+                    style={{ backgroundColor: 'oklch(0.22 0 0)', color: 'oklch(0.85 0.15 145)' }}
+                  >
+                    {result.total}
+                  </span>
                 </div>
               ))
             )}
@@ -858,6 +881,15 @@ function App() {
             >
               search
             </button>
+
+            <button
+              type="button"
+              onClick={() => setIsBuilderOpen(true)}
+              className="h-[52px] shrink-0 rounded-lg border px-5 font-mono text-[14px] hover:opacity-80 transition-opacity"
+              style={{ color: 'oklch(0.85 0.15 195)', borderColor: 'oklch(0.85 0.15 195)' }}
+            >
+              build
+            </button>
           </div>
 
           <div className="mt-6 text-center">
@@ -867,6 +899,53 @@ function App() {
           </div>
         </div>
       </div>
+
+      {/* Query builder sheet */}
+      {isBuilderOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 z-40"
+            style={{ backgroundColor: 'rgba(0,0,0,0.55)' }}
+            onClick={() => setIsBuilderOpen(false)}
+          />
+          {/* Sheet */}
+          <div
+            className="fixed z-50 rounded-t-2xl overflow-y-auto"
+            style={{
+              bottom: 0,
+              left: isMobile ? 0 : '50%',
+              right: isMobile ? 0 : 'auto',
+              transform: isMobile ? undefined : 'translateX(-50%)',
+              width: isMobile ? undefined : '480px',
+              maxHeight: '88dvh',
+              backgroundColor: 'oklch(0.13 0 0)',
+              border: '1px solid oklch(0.28 0 0)',
+              borderBottom: 'none',
+            }}
+          >
+            {/* Drag handle */}
+            <div className="flex justify-center pt-3 pb-1">
+              <div className="w-10 h-1 rounded-full" style={{ backgroundColor: 'oklch(0.32 0 0)' }} />
+            </div>
+            <div className="px-5 pb-3 flex items-center justify-between">
+              <span className="font-mono font-bold text-[13px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
+                Query Builder
+              </span>
+              <button
+                onClick={() => setIsBuilderOpen(false)}
+                className="font-mono text-[14px] hover:opacity-70 transition-opacity"
+                style={{ color: 'oklch(0.85 0.15 195)' }}
+              >
+                ✕
+              </button>
+            </div>
+            <div className="px-5 pb-10">
+              <QueryBuilder onRunQuery={handleRunFromBuilder} isLoading={isLoading} />
+            </div>
+          </div>
+        </>
+      )}
 
       <img
         src={madeitLogo}
