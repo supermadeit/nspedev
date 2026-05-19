@@ -157,6 +157,15 @@ const COMMAND_EXAMPLES = [
   },
 ]
 
+const SAMPLE_COMMANDS = [
+  { label: 'nspe nba post q1 -pts10 -last2/5', command: 'nspe nba post q1 -pts10 -last2/5' },
+  { label: 'nspe nba post -total40 -last3/5', command: 'nspe nba post -total40 -last3/5' },
+  { label: 'nspe mlb -hits2 -last2/5', command: 'nspe mlb -hits2 -last2/5' },
+  { label: 'nspe mlb -dub -last1/5', command: 'nspe mlb -dub -last1/5' },
+  { label: '{nhl coming soon}', command: '', comingSoon: true },
+  { label: '{nfl coming soon}', command: '', comingSoon: true },
+]
+
 interface QueryResult {
   player: string
   total: number
@@ -447,6 +456,7 @@ function App() {
   const [placeholderOpacity, setPlaceholderOpacity] = useState(1)
   const [searchValue, setSearchValue] = useState('')
   const [isMiniOpen, setIsMiniOpen] = useState(false)
+  const [isSampleMenuOpen, setIsSampleMenuOpen] = useState(false)
   const [miniPosition, setMiniPosition] = useState({ x: window.innerWidth / 2 - 300, y: window.innerHeight * 0.40 + 70 })
   const [isDragging, setIsDragging] = useState(false)
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
@@ -456,6 +466,8 @@ function App() {
   const [queryError, setQueryError] = useState<string | null>(null)
   const [leftMascotVisible, setLeftMascotVisible] = useState(true)
   const [hitlistEntries, setHitlistEntries] = useState<HitlistEntry[]>(hitlistData as HitlistEntry[])
+  const searchInputRef = useRef<HTMLInputElement>(null)
+  const sampleMenuRef = useRef<HTMLDivElement>(null)
   const miniRef = useRef<HTMLDivElement>(null)
   const tickerRef = useRef<HTMLDivElement>(null)
 
@@ -626,6 +638,17 @@ function App() {
   }, [])
 
   useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (sampleMenuRef.current && !sampleMenuRef.current.contains(e.target as Node)) {
+        setIsSampleMenuOpen(false)
+      }
+    }
+
+    window.addEventListener('mousedown', handleClickOutside)
+    return () => window.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  useEffect(() => {
     const interval = setInterval(() => {
       setLeftMascotVisible((prev) => !prev)
     }, 3000)
@@ -633,20 +656,44 @@ function App() {
     return () => clearInterval(interval)
   }, [])
 
-  const handleSearchSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && searchValue.trim()) {
-      const trimmedQuery = searchValue.trim().toLowerCase()
-      
-      if (trimmedQuery === 'help') {
-        setQueryResults(null)
-        setLastQuery('')
-        setQueryError(null)
-        setIsMiniOpen(true)
-      } else {
-        runQuery(searchValue.trim())
-        setIsMiniOpen(true)
-      }
+  const runSearchFromInput = () => {
+    if (!searchValue.trim()) {
+      return
     }
+
+    const trimmedQuery = searchValue.trim().toLowerCase()
+
+    if (trimmedQuery === 'help') {
+      setQueryResults(null)
+      setLastQuery('')
+      setQueryError(null)
+      setIsMiniOpen(true)
+    } else {
+      runQuery(searchValue.trim())
+      setIsMiniOpen(true)
+    }
+  }
+
+  const handleSearchSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      runSearchFromInput()
+    }
+  }
+
+  const handleSampleCommandSelect = (command: string) => {
+    setSearchValue(command)
+    setIsSampleMenuOpen(false)
+
+    window.requestAnimationFrame(() => {
+      if (!searchInputRef.current) {
+        return
+      }
+
+      searchInputRef.current.focus()
+      const cursorPosition = command.length
+      searchInputRef.current.setSelectionRange(cursorPosition, cursorPosition)
+    })
   }
 
   return (
@@ -668,13 +715,59 @@ function App() {
         ))}
       </div>
 
-      <button
-        onClick={() => setIsMiniOpen(!isMiniOpen)}
-        className="absolute top-6 right-6 z-20 font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity"
-        style={{ color: 'oklch(0.85 0.15 195)' }}
-      >
-        nspe-mini
-      </button>
+      <div className="absolute top-6 right-6 z-20 flex items-center gap-3" ref={sampleMenuRef}>
+        <div className="relative">
+          <button
+            onClick={() => setIsSampleMenuOpen((prev) => !prev)}
+            className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity"
+            style={{ color: 'oklch(0.85 0.15 195)' }}
+          >
+            sample-commands
+          </button>
+
+          {isSampleMenuOpen && (
+            <div
+              className="absolute right-0 mt-3 w-[340px] rounded-md p-2"
+              style={{
+                backgroundColor: 'oklch(0.12 0 0)',
+                border: '1px solid oklch(0.30 0 0)',
+                boxShadow: '0 16px 40px rgba(0, 0, 0, 0.45)',
+              }}
+            >
+              <div className="mb-2 px-2 font-mono text-[12px]" style={{ color: 'oklch(0.75 0 0)' }}>
+                Select a command to prefill search
+              </div>
+              <div className="space-y-1">
+                {SAMPLE_COMMANDS.map((sample) => (
+                  <button
+                    key={sample.label}
+                    type="button"
+                    onClick={() => !sample.comingSoon && handleSampleCommandSelect(sample.command)}
+                    disabled={Boolean(sample.comingSoon)}
+                    className="w-full rounded px-2 py-2 text-left font-mono text-[12px] transition-opacity"
+                    style={{
+                      color: sample.comingSoon ? 'oklch(0.56 0 0)' : 'oklch(0.90 0.18 195)',
+                      backgroundColor: sample.comingSoon ? 'transparent' : 'oklch(0.18 0 0)',
+                      opacity: sample.comingSoon ? 0.8 : 1,
+                      cursor: sample.comingSoon ? 'not-allowed' : 'pointer',
+                    }}
+                  >
+                    {sample.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <button
+          onClick={() => setIsMiniOpen(!isMiniOpen)}
+          className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity"
+          style={{ color: 'oklch(0.85 0.15 195)' }}
+        >
+          nspe-mini
+        </button>
+      </div>
 
       {isMiniOpen && (
         <div
@@ -732,27 +825,39 @@ function App() {
 
       <div className="relative z-10 flex flex-col items-center justify-start h-screen pt-[40vh]">
         <div className="w-[65%] max-w-4xl min-w-[320px] px-4">
-          <div className="relative">
-            <input
-              type="text"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              onKeyDown={handleSearchSubmit}
-              className="w-full h-[52px] px-5 py-3 bg-card text-foreground font-mono text-[16px] rounded-lg border border-border outline-none focus:border-primary transition-colors duration-200"
-              style={{
-                opacity: 1,
-              }}
-            />
-            {!searchValue && (
-              <div
-                className="absolute inset-0 flex items-center px-5 pointer-events-none font-mono text-[16px] text-muted-foreground transition-opacity duration-300"
+          <div className="flex items-center gap-3">
+            <div className="relative flex-1">
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                onKeyDown={handleSearchSubmit}
+                className="w-full h-[52px] px-5 py-3 bg-card text-foreground font-mono text-[16px] rounded-lg border border-border outline-none focus:border-primary transition-colors duration-200"
                 style={{
-                  opacity: placeholderOpacity * 0.5,
+                  opacity: 1,
                 }}
-              >
-                {PLACEHOLDER_TEXTS[placeholderIndex]}
-              </div>
-            )}
+              />
+              {!searchValue && (
+                <div
+                  className="absolute inset-0 flex items-center px-5 pointer-events-none font-mono text-[16px] text-muted-foreground transition-opacity duration-300"
+                  style={{
+                    opacity: placeholderOpacity * 0.5,
+                  }}
+                >
+                  {PLACEHOLDER_TEXTS[placeholderIndex]}
+                </div>
+              )}
+            </div>
+
+            <button
+              type="button"
+              onClick={runSearchFromInput}
+              className="h-[52px] shrink-0 rounded-lg border border-border px-5 font-mono text-[14px] hover:opacity-80 transition-opacity"
+              style={{ color: 'oklch(0.90 0.18 195)' }}
+            >
+              search
+            </button>
           </div>
 
           <div className="mt-6 text-center">
