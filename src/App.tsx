@@ -646,7 +646,6 @@ function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [queryError, setQueryError] = useState<string | null>(null)
   const [expandedStreakPlayers, setExpandedStreakPlayers] = useState<Record<string, boolean>>({})
-  const [leftMascotVisible, setLeftMascotVisible] = useState(true)
   const [hitlistEntries, setHitlistEntries] = useState<HitlistEntry[]>(hitlistData as HitlistEntry[])
   const [isBuilderOpen, setIsBuilderOpen] = useState(false)
   const isMobile = useIsMobile()
@@ -833,14 +832,6 @@ function App() {
     return () => window.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setLeftMascotVisible((prev) => !prev)
-    }, 3000)
-
-    return () => clearInterval(interval)
-  }, [])
-
   const runSearchFromInput = () => {
     if (!searchValue.trim()) {
       return
@@ -928,7 +919,14 @@ function App() {
         ))}
       </div>
 
-      <div className="absolute top-6 right-6 z-20 flex items-center gap-3" ref={sampleMenuRef}>
+      <div
+        className={
+          isMobile
+            ? 'absolute top-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3'
+            : 'absolute top-6 right-6 z-20 flex items-center gap-3'
+        }
+        ref={sampleMenuRef}
+      >
         <div className="relative">
           <button
             onClick={() => setIsSampleMenuOpen((prev) => !prev)}
@@ -940,7 +938,11 @@ function App() {
 
           {isSampleMenuOpen && (
             <div
-              className="absolute right-0 mt-3 w-[340px] rounded-md p-2"
+              className={
+                isMobile
+                  ? 'absolute left-1/2 -translate-x-1/2 mt-3 w-[300px] max-w-[92vw] rounded-md p-2'
+                  : 'absolute right-0 mt-3 w-[340px] rounded-md p-2'
+              }
               style={{
                 backgroundColor: 'oklch(0.12 0 0)',
                 border: '1px solid oklch(0.30 0 0)',
@@ -1018,7 +1020,7 @@ function App() {
               </div>
             ) : queryResults === null ? (
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
-                Type a query to begin
+                Build a query to begin
               </div>
             ) : queryResults.length === 0 ? (
               <div className="text-center py-8 font-mono text-[13px] space-y-2" style={{ color: 'oklch(0.70 0 0)' }}>
@@ -1155,7 +1157,7 @@ function App() {
 
           <div className="mt-6 text-center">
             <p className="font-mono text-[14px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
-              Type "help" for available commands
+              Search stats like the pros
             </p>
           </div>
         </div>
@@ -1211,20 +1213,7 @@ function App() {
       <img
         src={madeitLogo}
         alt="NSPE Footer Logo Left"
-        className={`absolute bottom-[42px] left-4 z-10 pointer-events-none ${leftMascotVisible ? 'fade-in' : 'fade-out'}`}
-        style={{
-          width: '38.5px',
-          height: '63px',
-          maxWidth: '38.5px',
-          maxHeight: '63px',
-          objectFit: 'contain',
-        }}
-      />
-
-      <img
-        src={madeitLogo}
-        alt="NSPE Footer Logo Right"
-        className={`absolute bottom-[42px] right-4 z-10 pointer-events-none flip-horizontal ${!leftMascotVisible ? 'fade-in' : 'fade-out'}`}
+        className="absolute bottom-[42px] left-4 z-10 pointer-events-none"
         style={{
           width: '38.5px',
           height: '63px',
