@@ -164,7 +164,7 @@ const SAMPLE_COMMANDS = [
   { label: 'nspe nba post -total40 -last3/5', command: 'nspe nba post -total40 -last3/5' },
   { label: 'nspe mlb -hits2 -last2/5', command: 'nspe mlb -hits2 -last2/5' },
   { label: 'nspe mlb -dub -last1/5', command: 'nspe mlb -dub -last1/5' },
-  { label: '{nhl coming soon}', command: '', comingSoon: true },
+  { label: 'nspe nhl -pts2 -last2/5', command: 'nspe nhl -pts2 -last2/5' },
   { label: '{nfl coming soon}', command: '', comingSoon: true },
 ]
 
@@ -356,6 +356,62 @@ function extractStreakDetails(row: Record<string, unknown>): StreakDetail[] {
   return []
 }
 
+function normalizePlayerKey(player: string): string {
+  return player.toLowerCase().replace(/[^a-z0-9]/g, '')
+}
+
+function parseStreakDetailsFromOutput(output: string): Record<string, StreakDetail[]> {
+  const byPlayer: Record<string, StreakDetail[]> = {}
+  const lines = output.split(/\r?\n/)
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim()
+    if (!line || !/\bstreak\d+/i.test(line) || !/\bmatch:/i.test(line)) {
+      continue
+    }
+
+    const match = line.match(/^(.+?)\s+streak(\d+)\b.*?\bmatch:\s*(.+)$/i)
+    if (!match) {
+      continue
+    }
+
+    const [, playerRaw, streakLengthRaw, matchListRaw] = match
+    const player = playerRaw.trim()
+    const streakLength = Number(streakLengthRaw)
+    if (!player || !Number.isFinite(streakLength) || streakLength <= 0) {
+      continue
+    }
+
+    const segments = matchListRaw
+      .split(',')
+      .map((segment) => segment.trim())
+      .filter(Boolean)
+
+    if (segments.length === 0) {
+      continue
+    }
+
+    const firstDate = extractDateToken(segments[0])
+    const lastDate = extractDateToken(segments[segments.length - 1])
+    if (!firstDate || !lastDate) {
+      continue
+    }
+
+    const key = normalizePlayerKey(player)
+    if (!byPlayer[key]) {
+      byPlayer[key] = []
+    }
+
+    byPlayer[key].push({
+      length: streakLength,
+      start: firstDate,
+      end: lastDate,
+    })
+  }
+
+  return byPlayer
+}
+
 function extractResultArray(payload: ApiPayload): unknown[] {
   if (Array.isArray(payload)) {
     return payload
@@ -391,6 +447,14 @@ function extractResultArray(payload: ApiPayload): unknown[] {
 
 function normalizeQueryResults(payload: ApiPayload): QueryResult[] {
   let envelope = extractResultArray(payload)
+  let outputText = ''
+
+  if (!Array.isArray(payload) && payload && typeof payload === 'object') {
+    const payloadOutput = (payload as Record<string, unknown>)?.output
+    if (typeof payloadOutput === 'string') {
+      outputText = payloadOutput
+    }
+  }
 
   if (envelope.length === 0 && !Array.isArray(payload) && typeof payload === 'object') {
     const output = (payload as Record<string, unknown>)?.output
@@ -401,6 +465,8 @@ function normalizeQueryResults(payload: ApiPayload): QueryResult[] {
       }
     }
   }
+
+  const streakDetailsByPlayer = outputText ? parseStreakDetailsFromOutput(outputText) : {}
 
   return envelope
     .map((item) => {
@@ -424,8 +490,6 @@ function normalizeQueryResults(payload: ApiPayload): QueryResult[] {
       const playerFromNotes = parsePlayerFromNotes(row.notes)
       const gamesFromNotes = parseGamesFromNotes(row.notes)
       const matchesCount = Array.isArray(row.matches) ? row.matches.length : null
-      const streakDetails = extractStreakDetails(row)
-
       const playerCandidate =
         row.player ??
         row.name ??
@@ -435,6 +499,13 @@ function normalizeQueryResults(payload: ApiPayload): QueryResult[] {
         row.full_name ??
         row.label ??
         playerFromNotes
+
+      const rowStreakDetails = extractStreakDetails(row)
+      const outputStreakDetails =
+        typeof playerCandidate === 'string' && playerCandidate.trim()
+          ? streakDetailsByPlayer[normalizePlayerKey(playerCandidate)] ?? []
+          : []
+      const streakDetails = rowStreakDetails.length > 0 ? rowStreakDetails : outputStreakDetails
 
       const totalCandidate =
         row.total ??
@@ -817,6 +888,8 @@ function App() {
     })
   }
 
+  const isStreakQuery = /(^|\s)-streak\d+/i.test(lastQuery)
+
   const toggleStreakPlayer = (player: string) => {
     setExpandedStreakPlayers((prev) => ({
       ...prev,
@@ -943,7 +1016,8 @@ function App() {
             ) : (
               queryResults.map((result, index) => {
                 const hasStreakDetails = Boolean(result.streakDetails && result.streakDetails.length > 0)
-                const isExpanded = hasStreakDetails ? Boolean(expandedStreakPlayers[result.player]) : false
+                const canExpand = hasStreakDetails || (isStreakQuery && result.total > 0)
+                const isExpanded = canExpand ? Boolean(expandedStreakPlayers[result.player]) : false
 
                 return (
                   <div
@@ -955,7 +1029,7 @@ function App() {
                       <span className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
                         {result.player}
                       </span>
-                      {hasStreakDetails ? (
+                      {canExpand ? (
                         <button
                           type="button"
                           onClick={() => toggleStreakPlayer(result.player)}
@@ -992,6 +1066,12 @@ function App() {
                             {`${detail.length} game streak ${detail.start} - ${detail.end}`}
                           </div>
                         ))}
+                      </div>
+                    )}
+
+                    {isExpanded && !hasStreakDetails && (
+                      <div className="mt-2 pl-2 font-mono text-[12px]" style={{ color: 'oklch(0.68 0 0)' }}>
+                        Detailed streak ranges were not returned by the API for this player.
                       </div>
                     )}
                   </div>
