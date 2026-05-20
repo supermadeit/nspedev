@@ -25,6 +25,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Configure maintenance mode
+        env:
+          MAINTENANCE_MODE: ${{ vars.MAINTENANCE_MODE }}
+        run: |
+          if [ "${MAINTENANCE_MODE,,}" = "true" ]; then
+            echo "Maintenance mode: ON — rewriting all routes to /maintenance.html"
+            printf '/*  /maintenance.html  200\n' > public/_redirects
+          else
+            echo "Maintenance mode: OFF — using app SPA fallback"
+          fi
+          echo "--- public/_redirects ---"
+          cat public/_redirects
+
       - name: Build
         run: npm run build
         env:

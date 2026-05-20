@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>NSPE.dev — Upgrading the System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --bg-0: #05080f;
+      --bg-1: #0a1020;
+      --bg-2: #0f1830;
+      --grid: rgba(64, 180, 255, 0.07);
+      --neon: #38d6ff;
+      --neon-bright: #7ef0ff;
+      --neon-dim: #1f8fb8;
+      --navy: #0b1d3a;
+      --navy-deep: #07142b;
+      --text: #cfeaff;
+      --text-dim: #6f8aa8;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: var(--bg-0);
+      color: var(--text);
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      overflow-x: hidden;
+    }
+
+    body {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      background:
+        radial-gradient(1200px 700px at 50% 0%, rgba(56, 214, 255, 0.10), transparent 60%),
+        radial-gradient(900px 600px at 50% 100%, rgba(11, 29, 58, 0.85), transparent 60%),
+        linear-gradient(180deg, var(--bg-0), var(--bg-1));
+    }
+
+    /* subtle grid */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* top scanline */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.012) 0,
+        rgba(255, 255, 255, 0.012) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    header.brand {
+      position: relative;
+      z-index: 2;
+      padding: 22px 28px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: 0.18em;
+      font-size: 13px;
+      color: var(--neon);
+    }
+
+    .brand .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--neon);
+      box-shadow: 0 0 10px var(--neon), 0 0 24px rgba(56, 214, 255, 0.6);
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+
+    main {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 20px 40px;
+    }
+
+    .hero {
+      width: 100%;
+      max-width: 720px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .scene {
+      width: min(520px, 100%);
+      aspect-ratio: 5 / 4;
+      filter: drop-shadow(0 12px 40px rgba(56, 214, 255, 0.18));
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(26px, 5vw, 40px);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #eaf6ff;
+      text-shadow: 0 0 22px rgba(56, 214, 255, 0.35);
+    }
+
+    h1 .accent {
+      color: var(--neon-bright);
+      text-shadow: 0 0 18px rgba(126, 240, 255, 0.55);
+    }
+
+    .subtext {
+      margin: 0;
+      font-size: clamp(13px, 2.2vw, 15px);
+      line-height: 1.6;
+      color: var(--text);
+      opacity: 0.88;
+      max-width: 560px;
+    }
+
+    .subtext .tag {
+      color: var(--neon);
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      border: 1px solid rgba(56, 214, 255, 0.35);
+      border-radius: 999px;
+      background: rgba(11, 29, 58, 0.5);
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--neon);
+    }
+
+    .status .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--neon-bright);
+      box-shadow: 0 0 10px var(--neon-bright);
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+
+    /* typing terminal line */
+    .term {
+      display: inline-flex;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-dim);
+      letter-spacing: 0.04em;
+    }
+
+    .term .prompt { color: var(--neon); margin-right: 8px; }
+    .term .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 14px;
+      background: var(--neon-bright);
+      margin-left: 6px;
+      transform: translateY(2px);
+      animation: blink 1s steps(2, end) infinite;
+      box-shadow: 0 0 8px var(--neon-bright);
+    }
+
+    footer.foot {
+      position: relative;
+      z-index: 2;
+      padding: 20px 28px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 12px;
+      letter-spacing: 0.22em;
+      color: var(--text-dim);
+    }
+
+    footer .tag {
+      padding: 4px 10px;
+      border: 1px solid rgba(56, 214, 255, 0.25);
+      border-radius: 4px;
+      background: rgba(11, 29, 58, 0.4);
+      color: var(--neon);
+    }
+
+    /* ---- SVG animations ---- */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.55; transform: scale(0.92); }
+    }
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      50.01%, 100% { opacity: 0; }
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes spinRev {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(-360deg); }
+    }
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      48% { opacity: 1; }
+      50% { opacity: 0.35; }
+      52% { opacity: 1; }
+      70% { opacity: 0.7; }
+      72% { opacity: 1; }
+    }
+    @keyframes sweep {
+      0% { transform: translateX(-120%); }
+      100% { transform: translateX(120%); }
+    }
+    @keyframes typeBar {
+      0%, 100% { transform: scaleX(0.2); }
+      50% { transform: scaleX(1); }
+    }
+
+    .gear-a { transform-origin: 92px 70px; animation: spin 6s linear infinite; }
+    .gear-b { transform-origin: 410px 70px; animation: spinRev 8s linear infinite; }
+    .light-1 { animation: pulse 1.6s ease-in-out infinite; }
+    .light-2 { animation: pulse 2.1s ease-in-out infinite; animation-delay: 0.4s; }
+    .light-3 { animation: pulse 1.8s ease-in-out infinite; animation-delay: 0.9s; }
+    .screen-flicker { animation: flicker 4.5s ease-in-out infinite; }
+    .screen-bar { transform-origin: left center; animation: typeBar 1.8s ease-in-out infinite; }
+    .screen-bar.b2 { animation-delay: 0.4s; }
+    .screen-bar.b3 { animation-delay: 0.9s; }
+    .sweep { animation: sweep 3.2s ease-in-out infinite; }
+
+    @media (max-width: 480px) {
+      header.brand { padding: 18px 18px; font-size: 11px; }
+      footer.foot { padding: 16px 18px 22px; font-size: 11px; letter-spacing: 0.18em; }
+      .hero { gap: 22px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .gear-a, .gear-b, .light-1, .light-2, .light-3,
+      .screen-flicker, .screen-bar, .sweep, .status .dot,
+      .brand .dot, .term .cursor {
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="brand">
+    <span class="dot" aria-hidden="true"></span>
+    <span>NSPE&nbsp;//&nbsp;SYSTEM&nbsp;OPS</span>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="title">
+      <div class="status" role="status" aria-live="polite">
+        <span class="dot" aria-hidden="true"></span>
+        <span>Maintenance In Progress</span>
+      </div>
+
+      <!-- Scene: technician at futuristic console -->
+      <svg
+        class="scene"
+        viewBox="0 0 500 400"
+        role="img"
+        aria-label="A digital technician in an NSPE-branded jacket working on a futuristic console"
+      >
+        <defs>
+          <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0a1830" stop-opacity="0" />
+            <stop offset="100%" stop-color="#0a1830" stop-opacity="0.9" />
+          </linearGradient>
+          <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0a3a55" />
+            <stop offset="100%" stop-color="#062236" />
+          </linearGradient>
+          <linearGradient id="jacket" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0f2750" />
+            <stop offset="100%" stop-color="#07142b" />
+          </linearGradient>
+          <linearGradient id="console" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#102240" />
+            <stop offset="100%" stop-color="#06101f" />
+          </linearGradient>
+          <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0%" stop-color="#38d6ff" stop-opacity="0.55" />
+            <stop offset="100%" stop-color="#38d6ff" stop-opacity="0" />
+          </radialGradient>
+          <clipPath id="screenClip">
+            <rect x="170" y="118" width="240" height="120" rx="6" />
+          </clipPath>
+        </defs>
+
+        <!-- ambient glow behind console -->
+        <ellipse cx="250" cy="200" rx="220" ry="120" fill="url(#glow)" opacity="0.7" />
+
+        <!-- floor -->
+        <rect x="0" y="320" width="500" height="80" fill="url(#floor)" />
+        <line x1="0" y1="320" x2="500" y2="320" stroke="#1a3a66" stroke-width="1" opacity="0.6" />
+
+        <!-- gear A (left, behind) -->
+        <g class="gear-a" opacity="0.55">
+          <g transform="translate(92,70)">
+            <circle r="22" fill="none" stroke="#1f8fb8" stroke-width="2" />
+            <circle r="6" fill="#1f8fb8" />
+            <g stroke="#1f8fb8" stroke-width="4" stroke-linecap="round">
+              <line x1="0" y1="-28" x2="0" y2="-22" />
+              <line x1="0" y1="22" x2="0" y2="28" />
+              <line x1="-28" y1="0" x2="-22" y2="0" />
+              <line x1="22" y1="0" x2="28" y2="0" />
+              <line x1="-20" y1="-20" x2="-15" y2="-15" />
+              <line x1="20" y1="-20" x2="15" y2="-15" />
+              <line x1="-20" y1="20" x2="-15" y2="15" />
+              <line x1="20" y1="20" x2="15" y2="15" />
+            </g>
+          </g>
+        </g>
+
+        <!-- gear B (right, behind) -->
+        <g class="gear-b" opacity="0.45">
+          <g transform="translate(410,70)">
+            <circle r="18" fill="none" stroke="#1f8fb8" stroke-width="2" />
+            <circle r="5" fill="#1f8fb8" />
+            <g stroke="#1f8fb8" stroke-width="3" stroke-linecap="round">
+              <line x1="0" y1="-24" x2="0" y2="-19" />
+              <line x1="0" y1="19" x2="0" y2="24" />
+              <line x1="-24" y1="0" x2="-19" y2="0" />
+              <line x1="19" y1="0" x2="24" y2="0" />
+              <line x1="-17" y1="-17" x2="-13" y2="-13" />
+              <line x1="17" y1="-17" x2="13" y2="-13" />
+              <line x1="-17" y1="17" x2="-13" y2="13" />
+              <line x1="17" y1="17" x2="13" y2="13" />
+            </g>
+          </g>
+        </g>
+
+        <!-- console base -->
+        <rect x="140" y="240" width="300" height="90" rx="8" fill="url(#console)" stroke="#1a3a66" />
+        <!-- console top / monitor housing -->
+        <rect x="160" y="108" width="260" height="140" rx="10" fill="#0c1a33" stroke="#1a3a66" />
+        <!-- screen -->
+        <rect x="170" y="118" width="240" height="120" rx="6" fill="url(#screen)" />
+        <g clip-path="url(#screenClip)" class="screen-flicker">
+          <!-- code-like bars -->
+          <g transform="translate(182,134)">
+            <rect class="screen-bar" x="0" y="0" width="120" height="6" rx="2" fill="#38d6ff" opacity="0.9" />
+            <rect class="screen-bar b2" x="0" y="16" width="160" height="6" rx="2" fill="#7ef0ff" opacity="0.75" />
+            <rect class="screen-bar b3" x="0" y="32" width="90" height="6" rx="2" fill="#38d6ff" opacity="0.85" />
+            <rect class="screen-bar" x="0" y="48" width="140" height="6" rx="2" fill="#1f8fb8" opacity="0.8" />
+            <rect class="screen-bar b2" x="0" y="64" width="70" height="6" rx="2" fill="#7ef0ff" opacity="0.7" />
+            <rect class="screen-bar b3" x="0" y="80" width="110" height="6" rx="2" fill="#38d6ff" opacity="0.85" />
+          </g>
+          <!-- sweep highlight -->
+          <rect class="sweep" x="170" y="118" width="80" height="120" fill="url(#glow)" opacity="0.6" />
+        </g>
+        <!-- screen frame highlight -->
+        <rect x="170" y="118" width="240" height="120" rx="6" fill="none" stroke="#38d6ff" stroke-opacity="0.35" />
+
+        <!-- console lights row -->
+        <g transform="translate(160,258)">
+          <circle class="light-1" cx="10" cy="10" r="4" fill="#7ef0ff" />
+          <circle class="light-2" cx="28" cy="10" r="4" fill="#38d6ff" />
+          <circle class="light-3" cx="46" cy="10" r="4" fill="#1f8fb8" />
+          <rect x="70" y="6" width="180" height="8" rx="2" fill="#0a1d3a" stroke="#1a3a66" />
+          <rect x="72" y="8" width="60" height="4" rx="1" fill="#38d6ff" opacity="0.8" />
+          <rect x="260" y="6" width="100" height="8" rx="2" fill="#0a1d3a" stroke="#1a3a66" />
+          <rect x="262" y="8" width="80" height="4" rx="1" fill="#7ef0ff" opacity="0.7" />
+        </g>
+
+        <!-- console keyboard slab -->
+        <rect x="160" y="284" width="260" height="34" rx="4" fill="#0a162c" stroke="#1a3a66" />
+        <g fill="#1a3a66">
+          <rect x="170" y="292" width="18" height="18" rx="2" />
+          <rect x="192" y="292" width="18" height="18" rx="2" />
+          <rect x="214" y="292" width="18" height="18" rx="2" />
+          <rect x="236" y="292" width="18" height="18" rx="2" />
+          <rect x="258" y="292" width="18" height="18" rx="2" />
+          <rect x="280" y="292" width="60" height="18" rx="2" />
+          <rect x="344" y="292" width="18" height="18" rx="2" />
+          <rect x="366" y="292" width="18" height="18" rx="2" />
+          <rect x="388" y="292" width="22" height="18" rx="2" />
+        </g>
+
+        <!-- ====== Technician ====== -->
+        <g>
+          <!-- chair stool -->
+          <rect x="80" y="300" width="60" height="10" rx="3" fill="#0a162c" stroke="#1a3a66" />
+          <rect x="104" y="310" width="12" height="20" fill="#0a162c" />
+          <ellipse cx="110" cy="332" rx="22" ry="4" fill="#000" opacity="0.4" />
+
+          <!-- body / jacket -->
+          <path
+            d="M70,300 Q70,250 110,238 Q150,250 150,300 L150,310 L70,310 Z"
+            fill="url(#jacket)"
+            stroke="#1a3a66"
+            stroke-width="1"
+          />
+          <!-- jacket zipper -->
+          <line x1="110" y1="244" x2="110" y2="306" stroke="#38d6ff" stroke-width="1.2" stroke-dasharray="2 3" opacity="0.85" />
+          <!-- jacket electric blue trim -->
+          <path d="M70,300 Q70,260 96,244" fill="none" stroke="#38d6ff" stroke-width="2" opacity="0.9" />
+          <path d="M150,300 Q150,260 124,244" fill="none" stroke="#38d6ff" stroke-width="2" opacity="0.9" />
+          <!-- collar -->
+          <path d="M96,244 L110,254 L124,244 L120,238 L100,238 Z" fill="#0b1d3a" stroke="#38d6ff" stroke-width="1" />
+
+          <!-- NSPE chest badge -->
+          <g transform="translate(124,266)">
+            <rect x="0" y="0" width="22" height="10" rx="2" fill="#07142b" stroke="#38d6ff" stroke-width="0.8" />
+            <text x="11" y="8" text-anchor="middle"
+              font-family="JetBrains Mono, monospace" font-size="7" font-weight="700"
+              fill="#7ef0ff" letter-spacing="0.5">NSPE</text>
+          </g>
+
+          <!-- shoulder accent stripe -->
+          <rect x="74" y="252" width="20" height="3" rx="1" fill="#38d6ff" opacity="0.9" />
+          <rect x="74" y="258" width="14" height="2" rx="1" fill="#7ef0ff" opacity="0.7" />
+
+          <!-- arm reaching to keyboard -->
+          <path
+            d="M148,272 Q176,278 196,296 Q200,300 196,304 L168,302 Q150,298 144,290 Z"
+            fill="url(#jacket)"
+            stroke="#1a3a66"
+            stroke-width="1"
+          />
+          <!-- glove -->
+          <ellipse cx="198" cy="300" rx="9" ry="6" fill="#0b1d3a" stroke="#38d6ff" stroke-width="1" />
+
+          <!-- other arm at side -->
+          <path
+            d="M72,272 Q60,290 70,310 L82,310 Q80,294 88,282 Z"
+            fill="url(#jacket)"
+            stroke="#1a3a66"
+            stroke-width="1"
+          />
+
+          <!-- neck -->
+          <rect x="104" y="222" width="12" height="14" rx="3" fill="#caa07a" />
+
+          <!-- head -->
+          <circle cx="110" cy="212" r="18" fill="#d9b48a" stroke="#1a3a66" stroke-width="0.5" />
+          <!-- hair -->
+          <path d="M92,210 Q92,194 110,194 Q128,194 128,210 Q128,202 118,200 Q108,198 100,204 Q96,206 92,210 Z" fill="#1a2440" />
+          <!-- AR visor -->
+          <rect x="94" y="208" width="32" height="8" rx="3" fill="#0b1d3a" stroke="#38d6ff" stroke-width="1" opacity="0.95" />
+          <rect x="96" y="210" width="28" height="4" rx="2" fill="#38d6ff" opacity="0.55" />
+          <circle class="light-1" cx="124" cy="212" r="1.4" fill="#7ef0ff" />
+          <!-- mouth -->
+          <path d="M106,224 Q110,226 114,224" stroke="#5a3a22" stroke-width="1" fill="none" stroke-linecap="round" />
+          <!-- ear -->
+          <circle cx="92" cy="214" r="2" fill="#caa07a" />
+          <!-- headset arc -->
+          <path d="M92,200 Q110,188 128,200" fill="none" stroke="#38d6ff" stroke-width="1.2" opacity="0.9" />
+          <circle cx="90" cy="200" r="2" fill="#38d6ff" />
+          <circle cx="130" cy="200" r="2" fill="#38d6ff" />
+        </g>
+
+        <!-- floating data points -->
+        <g opacity="0.85">
+          <circle class="light-2" cx="450" cy="180" r="2.5" fill="#7ef0ff" />
+          <circle class="light-3" cx="58" cy="160" r="2" fill="#38d6ff" />
+          <circle class="light-1" cx="44" cy="220" r="1.6" fill="#7ef0ff" />
+          <circle class="light-2" cx="468" cy="240" r="2" fill="#38d6ff" />
+        </g>
+      </svg>
+
+      <h1 id="title">We're Upgrading the <span class="accent">System</span></h1>
+
+      <p class="subtext">
+        NSPE is performing scheduled enhancements.
+        <span class="tag">{come back soon}</span>.
+      </p>
+
+      <div class="term" aria-hidden="true">
+        <span class="prompt">nspe&nbsp;//&nbsp;</span>
+        <span>deploying upgrades</span>
+        <span class="cursor"></span>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span class="tag">{SPORTS}</span>
+    <span class="tag">{WORLD}</span>
+  </footer>
+</body>
+</html>

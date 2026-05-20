@@ -171,13 +171,61 @@ const SAMPLE_COMMANDS = [
 interface QueryResult {
   player: string
   total: number
+  team?: string
   streakDetails?: StreakDetail[]
+  matchDetails?: MatchDetail[]
 }
 
 interface StreakDetail {
   length: number
   start: string
   end: string
+}
+
+interface MatchDetail {
+  value: number
+  date: string
+  statLabel: string
+}
+
+interface StatContext {
+  sport: string
+  stat: string
+}
+
+const STAT_FIELDS: Record<string, Record<string, string | string[]>> = {
+  nba: {
+    pts: 'points',
+    reb: 'rebounds',
+    ast: 'assists',
+    stl: 'steals',
+    blk: 'blocks',
+    tpm: 'three_made',
+    total: ['points', 'rebounds', 'assists'],
+  },
+  mlb: {
+    hits: 'hits',
+    hr: 'hr',
+    rbi: 'rbi',
+    dub: 'doubles',
+    trp: 'triples',
+    sb: 'sb',
+    k: 'k',
+    bb: 'bb',
+  },
+  nhl: {
+    g: 'goals',
+    a: 'assists',
+    pts: 'points',
+    sog: 'sog',
+    blk: 'blocks',
+    pim: 'pim',
+  },
+}
+
+const STAT_DISPLAY_LABELS: Record<string, string> = {
+  tpm: '3pm',
+  total: 'tot',
 }
 
 type ApiPayload = Record<string, unknown> | unknown[]
@@ -445,7 +493,101 @@ function extractResultArray(payload: ApiPayload): unknown[] {
   return []
 }
 
-function normalizeQueryResults(payload: ApiPayload): QueryResult[] {
+function detectStatContext(payload: ApiPayload, fallbackQuery: string): StatContext | null {
+  const tokens: string[] = []
+
+  if (payload && !Array.isArray(payload) && typeof payload === 'object') {
+    const rec = payload as Record<string, unknown>
+    if (Array.isArray(rec.query)) {
+      for (const t of rec.query) if (typeof t === 'string') tokens.push(t)
+    }
+  }
+
+  if (tokens.length === 0 && fallbackQuery) {
+    for (const t of fallbackQuery.split(/\s+/)) tokens.push(t.replace(/^-/, ''))
+  }
+
+  let sport = ''
+  if (payload && !Array.isArray(payload) && typeof payload === 'object') {
+    const s = (payload as Record<string, unknown>).sport
+    if (typeof s === 'string') sport = s.toLowerCase()
+  }
+  if (!sport) {
+    for (const t of tokens) {
+      if (STAT_FIELDS[t.toLowerCase()]) {
+        sport = t.toLowerCase()
+        break
+      }
+    }
+  }
+  if (!STAT_FIELDS[sport]) return null
+
+  const knownStats = Object.keys(STAT_FIELDS[sport]).sort((a, b) => b.length - a.length)
+  for (const tok of tokens) {
+    const lower = tok.toLowerCase()
+    for (const s of knownStats) {
+      if (lower.startsWith(s) && /^[a-z]+/i.test(lower)) {
+        return { sport, stat: s }
+      }
+    }
+  }
+  return null
+}
+
+function computeMatchValue(match: Record<string, unknown>, ctx: StatContext): number | null {
+  const field = STAT_FIELDS[ctx.sport]?.[ctx.stat]
+  if (!field) return null
+  if (Array.isArray(field)) {
+    let sum = 0
+    let anyPresent = false
+    for (const f of field) {
+      if (match[f] !== undefined) anyPresent = true
+      sum += asNumber(match[f])
+    }
+    return anyPresent ? sum : null
+  }
+  if (match[field] === undefined) return null
+  return asNumber(match[field])
+}
+
+function extractTeamFromRow(row: Record<string, unknown>): string {
+  const direct =
+    (typeof row.team === 'string' && row.team) ||
+    (typeof row.team_abbr === 'string' && row.team_abbr) ||
+    (typeof row.teamAbbr === 'string' && row.teamAbbr) ||
+    ''
+  if (direct) return direct
+
+  const matches = Array.isArray(row.matches) ? row.matches : []
+  for (const m of matches) {
+    if (m && typeof m === 'object' && !Array.isArray(m)) {
+      const t = (m as Record<string, unknown>).team
+      if (typeof t === 'string' && t) return t
+    }
+  }
+  return ''
+}
+
+function extractMatchDetails(row: Record<string, unknown>, ctx: StatContext | null): MatchDetail[] {
+  if (!ctx) return []
+  const matches = Array.isArray(row.matches) ? row.matches : []
+  const out: MatchDetail[] = []
+  const label = STAT_DISPLAY_LABELS[ctx.stat] ?? ctx.stat
+
+  for (const m of matches) {
+    if (!m || typeof m !== 'object' || Array.isArray(m)) continue
+    const rec = m as Record<string, unknown>
+    const value = computeMatchValue(rec, ctx)
+    const dateRaw = typeof rec.date === 'string' ? rec.date : ''
+    const date = extractDateToken(dateRaw) ?? ''
+    if (value === null || !date) continue
+    out.push({ value, date, statLabel: label })
+  }
+  return out
+}
+
+function normalizeQueryResults(payload: ApiPayload, fallbackQuery = ''): QueryResult[] {
+  const statContext = detectStatContext(payload, fallbackQuery)
   let envelope = extractResultArray(payload)
   let outputText = ''
 
@@ -506,6 +648,8 @@ function normalizeQueryResults(payload: ApiPayload): QueryResult[] {
           ? streakDetailsByPlayer[normalizePlayerKey(playerCandidate)] ?? []
           : []
       const streakDetails = rowStreakDetails.length > 0 ? rowStreakDetails : outputStreakDetails
+      const matchDetails = extractMatchDetails(row, statContext)
+      const team = extractTeamFromRow(row)
 
       const totalCandidate =
         row.total ??
@@ -525,8 +669,10 @@ function normalizeQueryResults(payload: ApiPayload): QueryResult[] {
 
       return {
         player: playerCandidate,
-        total: asNumber(totalCandidate) || streakDetails.length,
+        total: asNumber(totalCandidate) || streakDetails.length || matchDetails.length,
+        team: team || undefined,
         streakDetails: streakDetails.length > 0 ? streakDetails : undefined,
+        matchDetails: matchDetails.length > 0 ? matchDetails : undefined,
       }
     })
     .filter((row): row is QueryResult => row !== null)
@@ -645,7 +791,7 @@ function App() {
   const [lastQuery, setLastQuery] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [queryError, setQueryError] = useState<string | null>(null)
-  const [expandedStreakPlayers, setExpandedStreakPlayers] = useState<Record<string, boolean>>({})
+  const [collapsedPlayers, setCollapsedPlayers] = useState<Record<string, boolean>>({})
   const [hitlistEntries, setHitlistEntries] = useState<HitlistEntry[]>(hitlistData as HitlistEntry[])
   const [isBuilderOpen, setIsBuilderOpen] = useState(false)
   const isMobile = useIsMobile()
@@ -698,7 +844,7 @@ function App() {
     setIsLoading(true)
     setLastQuery(sanitizedQuery || query.trim())
     setQueryError(null)
-    setExpandedStreakPlayers({})
+    setCollapsedPlayers({})
 
     if (!sanitizedQuery) {
       setQueryResults([])
@@ -723,7 +869,7 @@ function App() {
       const payload = await parseApiPayload(response)
 
       console.log('Query response:', payload, 'via', url)
-      const normalized = normalizeQueryResults(payload)
+      const normalized = normalizeQueryResults(payload, sanitizedQuery)
       const payloadError = getPayloadError(payload)
       setQueryResults(normalized)
 
@@ -891,10 +1037,8 @@ function App() {
     })
   }
 
-  const isStreakQuery = /(^|\s)-streak\d+/i.test(lastQuery)
-
-  const toggleStreakPlayer = (player: string) => {
-    setExpandedStreakPlayers((prev) => ({
+  const togglePlayerCollapsed = (player: string) => {
+    setCollapsedPlayers((prev) => ({
       ...prev,
       [player]: !prev[player],
     }))
@@ -1030,8 +1174,9 @@ function App() {
             ) : (
               queryResults.map((result, index) => {
                 const hasStreakDetails = Boolean(result.streakDetails && result.streakDetails.length > 0)
-                const canExpand = hasStreakDetails || (isStreakQuery && result.total > 0)
-                const isExpanded = canExpand ? Boolean(expandedStreakPlayers[result.player]) : false
+                const hasMatchDetails = Boolean(result.matchDetails && result.matchDetails.length > 0)
+                const canExpand = hasStreakDetails || hasMatchDetails
+                const isExpanded = canExpand ? !collapsedPlayers[result.player] : false
 
                 return (
                   <div
@@ -1041,12 +1186,18 @@ function App() {
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+                        {result.team ? (
+                          <>
+                            <span style={{ color: 'oklch(0.70 0.10 195)' }}>{result.team}</span>
+                            <span style={{ color: 'oklch(0.55 0 0)' }}>{' — '}</span>
+                          </>
+                        ) : null}
                         {result.player}
                       </span>
                       {canExpand ? (
                         <button
                           type="button"
-                          onClick={() => toggleStreakPlayer(result.player)}
+                          onClick={() => togglePlayerCollapsed(result.player)}
                           className="font-mono font-bold text-[13px] ml-4 shrink-0 px-2 py-0.5 rounded border"
                           style={{
                             backgroundColor: isExpanded ? 'oklch(0.27 0.03 145)' : 'oklch(0.22 0 0)',
@@ -1055,7 +1206,7 @@ function App() {
                             cursor: 'pointer',
                           }}
                           aria-expanded={isExpanded}
-                          aria-label={`Toggle streak details for ${result.player}`}
+                          aria-label={`Toggle details for ${result.player}`}
                         >
                           {result.total}
                         </button>
@@ -1069,11 +1220,11 @@ function App() {
                       )}
                     </div>
 
-                    {isExpanded && result.streakDetails && (
+                    {isExpanded && hasStreakDetails && result.streakDetails && (
                       <div className="mt-2 space-y-1.5 pl-2">
                         {result.streakDetails.map((detail, detailIndex) => (
                           <div
-                            key={`${result.player}-${detailIndex}`}
+                            key={`${result.player}-streak-${detailIndex}`}
                             className="font-mono text-[12px]"
                             style={{ color: 'oklch(0.76 0 0)' }}
                           >
@@ -1083,9 +1234,12 @@ function App() {
                       </div>
                     )}
 
-                    {isExpanded && !hasStreakDetails && (
-                      <div className="mt-2 pl-2 font-mono text-[12px]" style={{ color: 'oklch(0.68 0 0)' }}>
-                        Detailed streak ranges were not returned by the API for this player.
+                    {isExpanded && hasMatchDetails && result.matchDetails && (
+                      <div className="mt-2 pl-2 font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+                        <span style={{ color: 'oklch(0.55 0 0)' }}>match: </span>
+                        {result.matchDetails
+                          .map((m) => `${m.value}${m.statLabel} ${m.date}`)
+                          .join(', ')}
                       </div>
                     )}
                   </div>
