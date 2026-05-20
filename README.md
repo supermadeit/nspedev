@@ -7,6 +7,21 @@ This template is your blank canvas. It comes with a minimal setup to help you ge
 - A clean, minimal Spark environment
 - Pre-configured for local development
 - Ready to scale with your ideas
+
+## Maintenance Mode Toggle
+
+This repo includes a full-page maintenance screen for nspe.dev.
+
+To turn it on:
+1. Set `VITE_MAINTENANCE_MODE=true` in your environment.
+2. Build and deploy.
+
+To turn it off:
+1. Set `VITE_MAINTENANCE_MODE=false` (or remove it).
+2. Build and deploy.
+
+You can define it in an `.env.production` file or your deployment environment variables.
+When enabled, the app renders the maintenance page instead of the main NSPE experience.
   
 🧠 What Can You Do?
 
