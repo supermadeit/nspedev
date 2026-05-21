@@ -90,21 +90,25 @@
       text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
     }
 
-    .top .tag { font-size: clamp(5px, 1.05vw, 8px); }
-    .bot .tag { font-size: clamp(6px, 1.4vw, 11px); }
+    .top .tag { font-size: 20px; }
+    .bot .tag { font-size: 10px; }
 
     footer {
       position: fixed;
       bottom: 14px;
-      left: 16px;
       z-index: 2;
       font-size: 11px;
       letter-spacing: 0.06em;
       color: rgba(10, 37, 64, 0.65);
     }
 
+    footer.left { left: 16px; }
+    footer.right { right: 16px; }
+
     @media (max-width: 480px) {
-      footer { font-size: 10px; left: 12px; bottom: 10px; }
+      footer { font-size: 10px; bottom: 10px; }
+      footer.left { left: 12px; }
+      footer.right { right: 12px; }
     }
   </style>
 </head>
@@ -115,11 +119,12 @@
         <span class="tag">{sports}</span><span class="tag">{world}</span>
       </div>
       <div class="line bot">
-        <span class="tag">{come}</span><span class="tag">{back}</span><span class="tag">{soon}</span>
+        <span class="tag">come back soon</span>
       </div>
     </div>
   </main>
 
-  <footer>{madeit technologies}</footer>
+  <footer class="left">{madeit technologies}</footer>
+  <footer class="right">nspe.dev</footer>
 </body>
 </html>
