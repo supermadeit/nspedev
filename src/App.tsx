@@ -794,8 +794,32 @@ function App() {
     .map(formatTickerEntry)
     .join('    ★    ')
 
-  // Keep scroll speed roughly constant (~50 chars/sec) regardless of list size.
-  const tickerDurationSec = Math.max(20, Math.round(tickerText.length / 50))
+  // Continuous ticker scroll driven by requestAnimationFrame.
+  // 3 copies are rendered; we translate by exactly one copy's width then wrap modulo,
+  // so the strip never restarts visibly. Speed is constant pixels-per-second.
+  useEffect(() => {
+    const el = tickerRef.current
+    if (!el) return
+
+    const PIXELS_PER_SECOND = 120
+    let offset = 0
+    let lastTime = performance.now()
+    let rafId = 0
+
+    const tick = (now: number) => {
+      const dt = (now - lastTime) / 1000
+      lastTime = now
+      const copyWidth = el.scrollWidth / 3
+      if (copyWidth > 0) {
+        offset = (offset + PIXELS_PER_SECOND * dt) % copyWidth
+        el.style.transform = `translateX(${-offset}px)`
+      }
+      rafId = requestAnimationFrame(tick)
+    }
+
+    rafId = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(rafId)
+  }, [tickerText])
 
   const runQuery = async (query: string) => {
     const sanitizedQuery = sanitizeQueryForApi(query)
@@ -1349,10 +1373,10 @@ function App() {
       <div className="absolute bottom-0 left-0 right-0 z-10 overflow-hidden pointer-events-none border-t" style={{ borderColor: 'oklch(0.25 0 0)' }}>
         <div 
           ref={tickerRef}
-          className="whitespace-nowrap font-mono text-[13px] py-2 animate-ticker"
+          className="whitespace-nowrap font-mono text-[13px] py-2"
           style={{ 
             color: 'oklch(0.85 0.15 195)',
-            animation: `ticker-scroll ${tickerDurationSec}s linear infinite`
+            willChange: 'transform'
           }}
         >
           {tickerText}    ★    {tickerText}    ★    {tickerText}
