@@ -2,8 +2,11 @@ import { useState, useMemo } from 'react'
 
 type QueryMode = 'trend' | 'compute' | 'streak'
 type SeasonType = 'post' | 'reg' | ''
-type PeriodType = 'q1' | ''
+type PeriodType = 'q1' | 'q2' | '1h' | ''
 type ComputeWindow = '-season' | '-career' | '-last' | ''
+
+const NBA_HALF_PERIODS: PeriodType[] = ['q2', '1h']
+const NBA_HALF_STATS = new Set(['pts', 'tpm'])
 
 const DEFAULT_POST_YEAR_BY_SPORT: Record<string, string> = {
   nba: '2026',
@@ -153,11 +156,27 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
   const [streakN, setStreakN] = useState('')
   const [streakYear, setStreakYear] = useState('')
 
-  const stats = SPORT_STATS[sport] ?? []
+  const isNbaHalfPeriod = sport === 'nba' && (period === 'q2' || period === '1h')
+  const allStats = SPORT_STATS[sport] ?? []
+  const stats = isNbaHalfPeriod
+    ? allStats.filter((s) => NBA_HALF_STATS.has(s.value))
+    : allStats
 
   const handleSportSelect = (s: string) => {
     setSport((prev) => (prev === s ? '' : s))
     setStat('')
+    // q2/1h are NBA-only — clear if switching away
+    if (s !== 'nba' && (period === 'q2' || period === '1h')) {
+      setPeriod('')
+    }
+  }
+
+  const handlePeriodSelect = (p: PeriodType) => {
+    setPeriod((prev) => (prev === p ? '' : p))
+    // when entering q2/1h, stat must be pts or tpm
+    if ((p === 'q2' || p === '1h') && stat && !NBA_HALF_STATS.has(stat)) {
+      setStat('')
+    }
   }
 
   const builtCommand = useMemo(() => {
@@ -167,6 +186,8 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
 
     if (seasonType) parts.push(seasonType)
     if (period === 'q1') parts.push('q1')
+    else if (period === 'q2') parts.push('q2')
+    else if (period === '1h') parts.push('1h')
 
     const resolvedPostYear =
       seasonType === 'post'
@@ -284,13 +305,23 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
         </div>
         <div>
           <SLabel>period</SLabel>
-          <div className="flex gap-1.5">
-            <Pill selected={period === ''} onClick={() => setPeriod('')}>
+          <div className="flex gap-1.5 flex-wrap">
+            <Pill selected={period === ''} onClick={() => handlePeriodSelect('')}>
               full
             </Pill>
-            <Pill selected={period === 'q1'} onClick={() => setPeriod('q1')}>
+            <Pill selected={period === 'q1'} onClick={() => handlePeriodSelect('q1')}>
               q1
             </Pill>
+            {sport === 'nba' && (
+              <>
+                <Pill selected={period === 'q2'} onClick={() => handlePeriodSelect('q2')}>
+                  q2
+                </Pill>
+                <Pill selected={period === '1h'} onClick={() => handlePeriodSelect('1h')}>
+                  1h
+                </Pill>
+              </>
+            )}
           </div>
         </div>
         {seasonType === 'post' && (mode === 'trend' || mode === 'compute') && (
