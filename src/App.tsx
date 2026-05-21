@@ -63,25 +63,9 @@ function buildRunEndpoints(bases: string[]): string[] {
   return bases.map((base) => joinUrl(base, '/run'))
 }
 
-function buildHitlistEndpoints(bases: string[]): string[] {
-  const candidates: string[] = []
-
-  for (const base of bases) {
-    candidates.push(joinUrl(base, '/data/hitlist.json'))
-
-    // Legacy backend layout can expose data under /api/data only.
-    if (!base.endsWith('/api')) {
-      candidates.push(joinUrl(base, '/api/data/hitlist.json'))
-    }
-  }
-
-  return uniqueNonEmpty(candidates)
-}
-
 const API_BASE_CANDIDATES = buildApiBaseCandidates()
 const CONFIGURED_API_BASE = API_BASE_CANDIDATES[0] || 'https://api.nspe.dev'
 const RUN_ENDPOINTS = buildRunEndpoints(API_BASE_CANDIDATES)
-const HITLIST_ENDPOINTS = buildHitlistEndpoints(API_BASE_CANDIDATES)
 
 async function fetchFirstSuccessful(
   urls: string[],
@@ -805,40 +789,6 @@ function App() {
   const tickerText = hitlistEntries
     .map(formatTickerEntry)
     .join('    ★    ')
-
-  useEffect(() => {
-    let isMounted = true
-
-    const loadHitlist = async () => {
-      try {
-        const { response, url } = await fetchFirstSuccessful(
-          HITLIST_ENDPOINTS,
-          {
-            method: 'GET',
-          },
-          8000,
-        )
-        const payload = await response.json()
-        if (!Array.isArray(payload)) {
-          throw new Error('Hitlist payload is not an array')
-        }
-
-        if (isMounted) {
-          setHitlistEntries(payload as HitlistEntry[])
-        }
-
-        console.info('Loaded hitlist from endpoint:', url)
-      } catch (error) {
-        console.warn('Using bundled hitlist fallback:', error)
-      }
-    }
-
-    void loadHitlist()
-
-    return () => {
-      isMounted = false
-    }
-  }, [])
 
   const runQuery = async (query: string) => {
     const sanitizedQuery = sanitizeQueryForApi(query)
