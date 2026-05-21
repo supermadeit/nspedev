@@ -145,11 +145,16 @@ const COMMAND_EXAMPLES = [
 ]
 
 const SAMPLE_COMMANDS = [
-  { label: 'nspe nba post q1 -pts10 -last2/5', command: 'nspe nba post q1 -pts10 -last2/5' },
-  { label: 'nspe nba post -total40 -last3/5', command: 'nspe nba post -total40 -last3/5' },
-  { label: 'nspe mlb -hits2 -last2/5', command: 'nspe mlb -hits2 -last2/5' },
-  { label: 'nspe mlb -dub -last1/5', command: 'nspe mlb -dub -last1/5' },
-  { label: 'nspe nhl -pts2 -last2/5', command: 'nspe nhl -pts2 -last2/5' },
+  { label: 'nspe nba post -pts min300 -last10', command: 'nspe nba post -pts min300 -last10' },
+  { label: 'nspe nba post 1h -pts15 -last3/5', command: 'nspe nba post 1h -pts15 -last3/5' },
+  { label: 'nspe nba post q1 -tpm2 -last2/5', command: 'nspe nba post q1 -tpm2 -last2/5' },
+  { label: 'nspe nba -ast8 -last8/10', command: 'nspe nba -ast8 -last8/10' },
+  { label: 'nspe nba -pts30 -streak5', command: 'nspe nba -pts30 -streak5' },
+  { label: 'nspe nhl post -g1 -last3/5', command: 'nspe nhl post -g1 -last3/5' },
+  { label: 'nspe nhl post p1 -pts1 -last3/5', command: 'nspe nhl post p1 -pts1 -last3/5' },
+  { label: 'nspe nhl -pts min80 -season', command: 'nspe nhl -pts min80 -season' },
+  { label: 'nspe mlb -hits2 -last3/5', command: 'nspe mlb -hits2 -last3/5' },
+  { label: 'nspe mlb -hr -streak3', command: 'nspe mlb -hr -streak3' },
   { label: '{nfl coming soon}', command: '', comingSoon: true },
 ]
 
