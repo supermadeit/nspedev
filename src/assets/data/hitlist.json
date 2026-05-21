@@ -50,56 +50,6 @@
     ]
   },
   {
-    "player": "Drake Batherson",
-    "stat": "g",
-    "values": [
-      1,
-      1,
-      1
-    ],
-    "threshold": 1,
-    "window": "3/5",
-    "hit_dates": [
-      "Sat 4/25",
-      "Thu 4/23",
-      "Mon 4/20"
-    ]
-  },
-  {
-    "player": "Dylan Guenther",
-    "stat": "g",
-    "values": [
-      1,
-      1,
-      1
-    ],
-    "threshold": 1,
-    "window": "3/5",
-    "hit_dates": [
-      "Wed 4/29",
-      "Fri 4/24",
-      "Tue 4/21"
-    ]
-  },
-  {
-    "player": "Jason Robertson",
-    "stat": "g",
-    "values": [
-      1,
-      1,
-      1,
-      1
-    ],
-    "threshold": 1,
-    "window": "3/5",
-    "hit_dates": [
-      "Tue 4/28",
-      "Sat 4/25",
-      "Wed 4/22",
-      "Mon 4/20"
-    ]
-  },
-  {
     "player": "Nathan MacKinnon",
     "stat": "g",
     "values": [
@@ -165,22 +115,6 @@
       "Sat 5/16",
       "Tue 5/12",
       "Sun 5/10"
-    ]
-  },
-  {
-    "player": "Wyatt Johnston",
-    "stat": "g",
-    "values": [
-      1,
-      1,
-      2
-    ],
-    "threshold": 1,
-    "window": "3/5",
-    "hit_dates": [
-      "Thu 4/30",
-      "Wed 4/22",
-      "Mon 4/20"
     ]
   },
   {
