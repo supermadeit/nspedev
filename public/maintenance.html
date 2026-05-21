@@ -73,25 +73,25 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: clamp(14px, 3vw, 22px);
+      gap: clamp(4px, 0.6vw, 8px);
     }
 
     .line {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: clamp(6px, 1.4vw, 14px);
+      gap: 0;
     }
 
     .tag {
       font-weight: 700;
-      letter-spacing: 0.04em;
+      letter-spacing: 0;
       color: #0a2540;
       text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
     }
 
     .top .tag { font-size: clamp(20px, 4.6vw, 36px); }
-    .bot .tag { font-size: clamp(28px, 7vw, 64px); }
+    .bot .tag { font-size: clamp(24px, 5.4vw, 44px); }
 
     footer {
       position: fixed;
@@ -112,13 +112,10 @@
   <main>
     <div class="stack">
       <div class="line top">
-        <span class="tag">{SPORTS}</span>
-        <span class="tag">{WORLD}</span>
+        <span class="tag">{sports}</span><span class="tag">{world}</span>
       </div>
       <div class="line bot">
-        <span class="tag">{COME}</span>
-        <span class="tag">{BACK}</span>
-        <span class="tag">{SOON}</span>
+        <span class="tag">{come}</span><span class="tag">{back}</span><span class="tag">{soon}</span>
       </div>
     </div>
   </main>
