@@ -228,11 +228,12 @@ interface HitlistEntry {
   stat: string
   values: number[]
   threshold: number
+  window?: string
   hit_dates: string[]
 }
 
 const STAT_LABELS: Record<string, string> = {
-  tpm: '3pt',
+  tpm: '3pm',
   reb: 'reb',
   stl: 'stl',
   ast: 'ast',
@@ -240,11 +241,14 @@ const STAT_LABELS: Record<string, string> = {
 
 function formatTickerEntry(entry: HitlistEntry): string {
   const statLabel = STAT_LABELS[entry.stat] || entry.stat
-  const threshold = `${entry.threshold}+`
-  const values = entry.values.join(' | ')
-  const dates = entry.hit_dates.join(' • ')
-  
-  return `${entry.player} ${threshold} ${statLabel} | ${values} | ${dates}`
+  const windowPart = entry.window ? ` last${entry.window}` : ''
+  const header = `{${statLabel}${entry.threshold}${windowPart}}`
+  const pairs = entry.hit_dates.map((date, i) => {
+    const value = entry.values[i]
+    return `"${date}" {${value ?? ''}}`
+  })
+
+  return `${entry.player} ${header} ${pairs.join(', ')}`
 }
 
 function asNumber(value: unknown): number {
