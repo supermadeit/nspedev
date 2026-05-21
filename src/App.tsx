@@ -801,7 +801,7 @@ function App() {
     const el = tickerRef.current
     if (!el) return
 
-    const PIXELS_PER_SECOND = 80
+    const PIXELS_PER_SECOND = 70
     let offset = 0
     let lastTime = performance.now()
     let rafId = 0
