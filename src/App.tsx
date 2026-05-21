@@ -794,6 +794,9 @@ function App() {
     .map(formatTickerEntry)
     .join('    ★    ')
 
+  // Keep scroll speed roughly constant (~50 chars/sec) regardless of list size.
+  const tickerDurationSec = Math.max(20, Math.round(tickerText.length / 50))
+
   const runQuery = async (query: string) => {
     const sanitizedQuery = sanitizeQueryForApi(query)
 
@@ -1349,7 +1352,7 @@ function App() {
           className="whitespace-nowrap font-mono text-[13px] py-2 animate-ticker"
           style={{ 
             color: 'oklch(0.85 0.15 195)',
-            animation: 'ticker-scroll 11.33s linear infinite'
+            animation: `ticker-scroll ${tickerDurationSec}s linear infinite`
           }}
         >
           {tickerText}    ★    {tickerText}    ★    {tickerText}
