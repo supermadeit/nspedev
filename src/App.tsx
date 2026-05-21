@@ -3,6 +3,7 @@ import hitlistData from '@/assets/data/hitlist.json'
 import madeitLogo from '@/assets/images/madeit-tech-logo-v2.jpeg'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { QueryBuilder } from '@/components/QueryBuilder'
+import { QueryBuilderTutorial } from '@/components/QueryBuilderTutorial'
 
 function joinUrl(base: string, endpoint: string): string {
   if (!base) {
@@ -784,6 +785,7 @@ function App() {
   const [searchValue, setSearchValue] = useState('')
   const [isMiniOpen, setIsMiniOpen] = useState(false)
   const [isSampleMenuOpen, setIsSampleMenuOpen] = useState(false)
+  const [isTutorialOpen, setIsTutorialOpen] = useState(false)
   const [miniPosition, setMiniPosition] = useState({ x: window.innerWidth / 2 - 300, y: window.innerHeight * 0.40 + 70 })
   const [isDragging, setIsDragging] = useState(false)
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
@@ -1071,6 +1073,14 @@ function App() {
         }
         ref={sampleMenuRef}
       >
+        <button
+          onClick={() => setIsTutorialOpen(true)}
+          className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity"
+          style={{ color: 'oklch(0.85 0.15 195)' }}
+        >
+          {'{tutorial}'}
+        </button>
+
         <div className="relative">
           <button
             onClick={() => setIsSampleMenuOpen((prev) => !prev)}
@@ -1127,6 +1137,8 @@ function App() {
           nspe-mini
         </button>
       </div>
+
+      <QueryBuilderTutorial open={isTutorialOpen} onClose={() => setIsTutorialOpen(false)} />
 
       {isMiniOpen && (
         <div

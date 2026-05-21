@@ -169,6 +169,10 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
     if (s !== 'nba' && (period === 'q2' || period === '1h')) {
       setPeriod('')
     }
+    // MLB has no q1 yet — clear q1 if switching to MLB
+    if (s === 'mlb' && period === 'q1') {
+      setPeriod('')
+    }
   }
 
   const handlePeriodSelect = (p: PeriodType) => {
@@ -185,7 +189,10 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
     const parts: string[] = ['nspe', sport]
 
     if (seasonType) parts.push(seasonType)
-    if (period === 'q1') parts.push('q1')
+    if (period === 'q1') {
+      if (sport === 'nhl') parts.push('p1')
+      else if (sport !== 'mlb') parts.push('q1')
+    }
     else if (period === 'q2') parts.push('q2')
     else if (period === '1h') parts.push('1h')
 
@@ -309,9 +316,15 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
             <Pill selected={period === ''} onClick={() => handlePeriodSelect('')}>
               full
             </Pill>
-            <Pill selected={period === 'q1'} onClick={() => handlePeriodSelect('q1')}>
-              q1
-            </Pill>
+            {sport === 'mlb' ? (
+              <Pill selected={false} onClick={() => {}} disabled>
+                {'{1AB}'}
+              </Pill>
+            ) : (
+              <Pill selected={period === 'q1'} onClick={() => handlePeriodSelect('q1')}>
+                {sport === 'nhl' ? 'p1' : 'q1'}
+              </Pill>
+            )}
             {sport === 'nba' && (
               <>
                 <Pill selected={period === 'q2'} onClick={() => handlePeriodSelect('q2')}>
