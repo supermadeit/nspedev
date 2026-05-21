@@ -1,189 +1,344 @@
 [
   {
-    "player": "JaylenBrown",
+    "player": "JalenBrunson",
     "stat": "pts",
     "values": [
-      31,
-      30,
-      32,
-      41
+      38,
+      33,
+      35
     ],
     "threshold": 30,
     "hit_dates": [
-      "Wed 3/25",
-      "Fri 3/20",
-      "Wed 3/18",
-      "Mon 3/16"
+      "Tue 5/19",
+      "Fri 5/8",
+      "Mon 5/4"
     ]
   },
   {
-    "player": "JalenDuren",
-    "stat": "reb",
+    "player": "BeckettSennecke",
+    "stat": "g",
     "values": [
-      10,
-      14,
-      11,
-      11
+      1,
+      1,
+      1,
+      1
     ],
-    "threshold": 10,
+    "threshold": 1,
     "hit_dates": [
-      "Thu 3/26",
-      "Wed 3/25",
-      "Mon 3/23",
-      "Thu 3/19"
+      "Tue 5/12",
+      "Sun 5/10",
+      "Fri 5/8",
+      "Wed 5/6"
     ]
   },
   {
-    "player": "LaMeloBall",
-    "stat": "tpm",
+    "player": "ColeCaufield",
+    "stat": "g",
     "values": [
-      4,
-      6,
-      7,
-      4
+      1,
+      1,
+      1
     ],
-    "threshold": 4,
+    "threshold": 1,
     "hit_dates": [
-      "Thu 3/26",
-      "Tue 3/24",
-      "Sat 3/21",
-      "Tue 3/17"
+      "Thu 5/14",
+      "Tue 5/12",
+      "Sun 5/10"
     ]
   },
   {
-    "player": "CooperFlagg",
-    "stat": "stl",
+    "player": "DrakeBatherson",
+    "stat": "g",
     "values": [
+      1,
+      1,
+      1
+    ],
+    "threshold": 1,
+    "hit_dates": [
+      "Sat 4/25",
+      "Thu 4/23",
+      "Mon 4/20"
+    ]
+  },
+  {
+    "player": "DylanGuenther",
+    "stat": "g",
+    "values": [
+      1,
+      1,
+      1
+    ],
+    "threshold": 1,
+    "hit_dates": [
+      "Wed 4/29",
+      "Fri 4/24",
+      "Tue 4/21"
+    ]
+  },
+  {
+    "player": "JasonRobertson",
+    "stat": "g",
+    "values": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "threshold": 1,
+    "hit_dates": [
+      "Tue 4/28",
+      "Sat 4/25",
+      "Wed 4/22",
+      "Mon 4/20"
+    ]
+  },
+  {
+    "player": "NathanMacKinnon",
+    "stat": "g",
+    "values": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "threshold": 1,
+    "hit_dates": [
+      "Wed 5/13",
+      "Mon 5/11",
+      "Sat 5/9",
+      "Tue 5/5"
+    ]
+  },
+  {
+    "player": "PavelDorofeyev",
+    "stat": "g",
+    "values": [
+      1,
       2,
+      2,
+      1
+    ],
+    "threshold": 1,
+    "hit_dates": [
+      "Wed 5/20",
+      "Thu 5/14",
+      "Tue 5/12",
+      "Sun 5/10"
+    ]
+  },
+  {
+    "player": "RasmusDahlin",
+    "stat": "g",
+    "values": [
+      1,
+      1,
+      1
+    ],
+    "threshold": 1,
+    "hit_dates": [
+      "Mon 5/18",
+      "Sat 5/16",
+      "Sun 5/10"
+    ]
+  },
+  {
+    "player": "TageThompson",
+    "stat": "g",
+    "values": [
+      1,
+      1,
+      1
+    ],
+    "threshold": 1,
+    "hit_dates": [
+      "Sat 5/16",
+      "Tue 5/12",
+      "Sun 5/10"
+    ]
+  },
+  {
+    "player": "WyattJohnston",
+    "stat": "g",
+    "values": [
+      1,
+      1,
+      2
+    ],
+    "threshold": 1,
+    "hit_dates": [
+      "Thu 4/30",
+      "Wed 4/22",
+      "Mon 4/20"
+    ]
+  },
+  {
+    "player": "CorbinCarroll",
+    "stat": "hits",
+    "values": [
       2,
       2,
       2
     ],
     "threshold": 2,
     "hit_dates": [
-      "Wed 3/25",
-      "Mon 3/23",
-      "Wed 3/18",
-      "Mon 3/16"
+      "Mon 5/18",
+      "Sun 5/17",
+      "Fri 5/15"
     ]
   },
   {
-    "player": "JuliusRandle",
-    "stat": "stl",
-    "values": [
-      2,
-      2,
-      4,
-      3
-    ],
-    "threshold": 2,
-    "hit_dates": [
-      "Wed 3/25",
-      "Sun 3/22",
-      "Wed 3/18",
-      "Tue 3/17"
-    ]
-  },
-  {
-    "player": "Karl-AnthonyTowns",
-    "stat": "reb",
-    "values": [
-      14,
-      16,
-      15,
-      11
-    ],
-    "threshold": 10,
-    "hit_dates": [
-      "Tue 3/24",
-      "Sun 3/22",
-      "Fri 3/20",
-      "Tue 3/17"
-    ]
-  },
-  {
-    "player": "KawhiLeonard",
-    "stat": "stl",
+    "player": "KetelMarte",
+    "stat": "hits",
     "values": [
       3,
       2,
-      2,
       2
     ],
     "threshold": 2,
     "hit_dates": [
-      "Mon 3/23",
-      "Sat 3/21",
-      "Wed 3/18",
-      "Sat 3/14"
+      "Wed 5/20",
+      "Mon 5/18",
+      "Sat 5/16"
     ]
   },
   {
-    "player": "ReedSheppard",
-    "stat": "stl",
-    "values": [
-      2,
-      2,
-      4,
-      2
-    ],
-    "threshold": 2,
-    "hit_dates": [
-      "Wed 3/25",
-      "Mon 3/23",
-      "Sat 3/21",
-      "Wed 3/18"
-    ]
-  },
-  {
-    "player": "BrandonMiller",
-    "stat": "tpm",
-    "values": [
-      4,
-      5,
-      5,
-      4
-    ],
-    "threshold": 4,
-    "hit_dates": [
-      "Thu 3/26",
-      "Sat 3/21",
-      "Thu 3/19",
-      "Tue 3/17"
-    ]
-  },
-  {
-    "player": "ImmanuelQuickley",
-    "stat": "stl",
+    "player": "PeteAlonso",
+    "stat": "hits",
     "values": [
       2,
       3,
-      2,
-      3
+      2
     ],
     "threshold": 2,
     "hit_dates": [
-      "Sun 3/22",
-      "Fri 3/20",
-      "Wed 3/18",
-      "Sun 3/15"
+      "Wed 5/20",
+      "Mon 5/18",
+      "Sat 5/16"
     ]
   },
   {
-    "player": "KrisDunn",
-    "stat": "stl",
+    "player": "JarrenDuran",
+    "stat": "hits",
+    "values": [
+      2,
+      2,
+      2
+    ],
+    "threshold": 2,
+    "hit_dates": [
+      "Wed 5/20",
+      "Tue 5/19",
+      "Sun 5/17"
+    ]
+  },
+  {
+    "player": "ShoheiOhtani",
+    "stat": "hits",
+    "values": [
+      2,
+      2,
+      3,
+      2
+    ],
+    "threshold": 2,
+    "hit_dates": [
+      "Tue 5/19",
+      "Mon 5/18",
+      "Sun 5/17",
+      "Sat 5/16"
+    ]
+  },
+  {
+    "player": "WilliamContreras",
+    "stat": "hits",
+    "values": [
+      3,
+      2,
+      2
+    ],
+    "threshold": 2,
+    "hit_dates": [
+      "Wed 5/20",
+      "Mon 5/18",
+      "Sun 5/17"
+    ]
+  },
+  {
+    "player": "FranciscoLindor",
+    "stat": "hits",
+    "values": [
+      2,
+      2,
+      2
+    ],
+    "threshold": 2,
+    "hit_dates": [
+      "Wed 4/22",
+      "Sat 4/18",
+      "Fri 4/17"
+    ]
+  },
+  {
+    "player": "JuanSoto",
+    "stat": "hits",
     "values": [
       2,
       2,
       2,
+      2
+    ],
+    "threshold": 2,
+    "hit_dates": [
+      "Wed 5/20",
+      "Tue 5/19",
+      "Mon 5/18",
+      "Sat 5/16"
+    ]
+  },
+  {
+    "player": "JuniorCaminero",
+    "stat": "hits",
+    "values": [
+      2,
+      2,
+      2
+    ],
+    "threshold": 2,
+    "hit_dates": [
+      "Wed 5/20",
+      "Mon 5/18",
+      "Sat 5/16"
+    ]
+  },
+  {
+    "player": "JamesWood",
+    "stat": "hits",
+    "values": [
+      3,
+      3,
+      2
+    ],
+    "threshold": 2,
+    "hit_dates": [
+      "Tue 5/19",
+      "Mon 5/18",
+      "Sun 5/17"
+    ]
+  },
+  {
+    "player": "CJAbrams",
+    "stat": "hits",
+    "values": [
+      2,
+      2,
       3
     ],
     "threshold": 2,
     "hit_dates": [
-      "Wed 3/25",
-      "Mon 3/23",
-      "Sat 3/21",
-      "Thu 3/19"
+      "Wed 5/20",
+      "Mon 5/18",
+      "Sat 5/16"
     ]
   }
 ]
