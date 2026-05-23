@@ -1054,6 +1054,22 @@ function App() {
       <div
         className={
           isMobile
+            ? 'absolute top-2 left-3 z-20 flex flex-col items-start gap-0 font-mono text-[11px]'
+            : 'absolute top-6 left-6 z-20 flex flex-col items-start gap-1 font-mono text-[14px]'
+        }
+      >
+        <span style={{ color: 'oklch(0.95 0 0)', fontWeight: 700 }}>
+          nspe.dev{' '}
+          <span style={{ color: 'oklch(0.75 0.15 145)' }}>{'{preview}'}</span>
+        </span>
+        <span style={{ color: 'oklch(0.65 0 0)', fontSize: isMobile ? '10px' : '12px' }}>
+          {`{stats refreshed ${new Date().getMonth() + 1}/${new Date().getDate()}}`}
+        </span>
+      </div>
+
+      <div
+        className={
+          isMobile
             ? 'absolute top-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3'
             : 'absolute top-6 right-6 z-20 flex items-center gap-3'
         }
