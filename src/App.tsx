@@ -145,7 +145,7 @@ const COMMAND_EXAMPLES = [
 ]
 
 const SAMPLE_COMMANDS = [
-  { label: 'nspe nba post -pts min300 -last10', command: 'nspe nba post -pts min300 -last10' },
+  { label: 'nspe nba post -pts/-ast350 -last10', command: 'nspe nba post -pts/-ast350 -last10' },
   { label: 'nspe nba post 1h -pts15 -last3/5', command: 'nspe nba post 1h -pts15 -last3/5' },
   { label: 'nspe nba post q1 -tpm2 -last2/5', command: 'nspe nba post q1 -tpm2 -last2/5' },
   { label: 'nspe nba -ast8 -last8/10', command: 'nspe nba -ast8 -last8/10' },
@@ -1200,12 +1200,63 @@ function App() {
           </button>
 
           {isSampleMenuOpen && (
+            isMobile ? (
+              <div
+                className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-12"
+                style={{ backgroundColor: 'rgba(0,0,0,0.78)' }}
+                onClick={() => setIsSampleMenuOpen(false)}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Sample commands"
+              >
+                <div
+                  className="w-full max-w-[420px] max-h-[85vh] overflow-y-auto rounded-lg p-3"
+                  style={{
+                    backgroundColor: 'oklch(0.12 0 0)',
+                    border: '1px solid oklch(0.30 0 0)',
+                    boxShadow: '0 16px 40px rgba(0, 0, 0, 0.45)',
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div
+                    className="flex items-center justify-between mb-3 px-1 font-mono text-[12px]"
+                    style={{ color: 'oklch(0.75 0 0)' }}
+                  >
+                    <span>Select a command to prefill search</span>
+                    <button
+                      type="button"
+                      onClick={() => setIsSampleMenuOpen(false)}
+                      className="font-mono text-[14px] hover:opacity-70 transition-opacity"
+                      style={{ color: 'oklch(0.85 0.15 195)' }}
+                      aria-label="Close sample commands"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                  <div className="space-y-1">
+                    {SAMPLE_COMMANDS.map((sample) => (
+                      <button
+                        key={sample.label}
+                        type="button"
+                        onClick={() => !sample.comingSoon && handleSampleCommandSelect(sample.command)}
+                        disabled={Boolean(sample.comingSoon)}
+                        className="w-full rounded px-2 py-2 text-left font-mono text-[12px] transition-opacity"
+                        style={{
+                          color: sample.comingSoon ? 'oklch(0.56 0 0)' : 'oklch(0.90 0.18 195)',
+                          backgroundColor: sample.comingSoon ? 'transparent' : 'oklch(0.18 0 0)',
+                          opacity: sample.comingSoon ? 0.8 : 1,
+                          cursor: sample.comingSoon ? 'not-allowed' : 'pointer',
+                        }}
+                      >
+                        {sample.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
             <div
-              className={
-                isMobile
-                  ? 'absolute right-0 mt-3 w-[300px] max-w-[92vw] max-h-[70vh] overflow-y-auto rounded-md p-2'
-                  : 'absolute right-0 mt-3 w-[340px] max-h-[70vh] overflow-y-auto rounded-md p-2'
-              }
+              className="absolute right-0 mt-3 w-[340px] max-h-[70vh] overflow-y-auto rounded-md p-2"
               style={{
                 backgroundColor: 'oklch(0.12 0 0)',
                 border: '1px solid oklch(0.30 0 0)',
@@ -1235,6 +1286,7 @@ function App() {
                 ))}
               </div>
             </div>
+            )
           )}
         </div>
 
