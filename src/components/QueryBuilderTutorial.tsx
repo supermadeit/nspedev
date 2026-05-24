@@ -14,8 +14,8 @@ const C = {
 type DemoStep = {
   mode: 'trend' | 'compute' | 'streak'
   sport: 'nba' | 'mlb' | 'nhl'
-  season?: 'post' | 'reg'
-  period?: 'q1' | 'q2' | '1h' | 'p1'
+  season?: 'post'
+  period?: 'q1' | '1h' | 'p1'
   stat?: string
   thresholdN?: string
   lastA?: string
@@ -42,13 +42,13 @@ const DEMOS: DemoStep[] = [
   {
     mode: 'trend',
     sport: 'nba',
-    period: 'q2',
+    period: 'q1',
     stat: 'tpm',
     thresholdN: '2',
     lastA: '3',
     lastB: '5',
-    command: 'nspe nba q2 -tpm2 -last3/5',
-    caption: 'NBA \u2014 Q2 3PM \u2265 2 in 3 of last 5 games',
+    command: 'nspe nba q1 -tpm2 -last3/5',
+    caption: 'NBA \u2014 Q1 3PM \u2265 2 in 3 of last 5 games',
   },
   {
     mode: 'trend',
@@ -336,8 +336,7 @@ export function QueryBuilderTutorial({ open, onClose }: QueryBuilderTutorialProp
               <div>
                 <SLabel>season</SLabel>
                 <div className="flex gap-1.5">
-                  {(['post', 'reg'] as const).map((v) => (
-                    <Pill
+                  {(['post'] as const).map((v) => (                    <Pill
                       key={v}
                       selected={reached('season') && demo.season === v}
                       highlight={stage === 'season' && demo.season === v}
@@ -360,20 +359,12 @@ export function QueryBuilderTutorial({ open, onClose }: QueryBuilderTutorialProp
                     </Pill>
                   )}
                   {demo.sport === 'nba' && (
-                    <>
-                      <Pill
-                        selected={reached('period') && demo.period === 'q2'}
-                        highlight={stage === 'period' && demo.period === 'q2'}
-                      >
-                        q2
-                      </Pill>
-                      <Pill
-                        selected={reached('period') && demo.period === '1h'}
-                        highlight={stage === 'period' && demo.period === '1h'}
-                      >
-                        1h
-                      </Pill>
-                    </>
+                    <Pill
+                      selected={reached('period') && demo.period === '1h'}
+                      highlight={stage === 'period' && demo.period === '1h'}
+                    >
+                      1h
+                    </Pill>
                   )}
                 </div>
               </div>
@@ -386,7 +377,7 @@ export function QueryBuilderTutorial({ open, onClose }: QueryBuilderTutorialProp
                 {(demo.sport === 'nba'
                   ? ['pts', 'reb', 'ast', 'tpm', 'pts+ast']
                   : demo.sport === 'mlb'
-                    ? ['hits', 'hr', 'rbi', 'k', 'tb']
+                    ? ['hits', 'hr', 'rbi', 'tb']
                     : ['g', 'a', 'pts', 'sog']
                 ).map((s) => (
                   <Pill
@@ -407,11 +398,14 @@ export function QueryBuilderTutorial({ open, onClose }: QueryBuilderTutorialProp
                   <SLabel>threshold</SLabel>
                   <FakeNum value={demo.thresholdN ?? ''} visible={reached('value')} />
                 </div>
-                <div>
-                  <SLabel>-last met</SLabel>
-                  <div className="flex items-center gap-1.5">
+                <div className="flex items-end gap-1.5">
+                  <div>
+                    <SLabel>met</SLabel>
                     <FakeNum value={demo.lastA ?? ''} visible={reached('value')} />
-                    <span style={{ color: C.textDim }}>/</span>
+                  </div>
+                  <span style={{ color: C.textDim, paddingBottom: '8px' }}>/</span>
+                  <div>
+                    <SLabel>-last</SLabel>
                     <FakeNum value={demo.lastB ?? ''} visible={reached('value')} />
                   </div>
                 </div>

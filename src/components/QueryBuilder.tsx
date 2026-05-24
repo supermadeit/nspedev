@@ -1,11 +1,10 @@
 import { useState, useMemo } from 'react'
 
 type QueryMode = 'trend' | 'compute' | 'streak'
-type SeasonType = 'post' | 'reg' | ''
-type PeriodType = 'q1' | 'q2' | '1h' | ''
+type SeasonType = 'post' | ''
+type PeriodType = 'q1' | '1h' | ''
 type ComputeWindow = '-season' | '-career' | '-last' | ''
 
-const NBA_HALF_PERIODS: PeriodType[] = ['q2', '1h']
 const NBA_HALF_STATS = new Set(['pts', 'tpm'])
 
 const DEFAULT_POST_YEAR_BY_SPORT: Record<string, string> = {
@@ -29,7 +28,7 @@ const SPORT_STATS: Record<string, Array<{ value: string; label: string }>> = {
     { value: 'stl', label: 'STL' },
     { value: 'blk', label: 'BLK' },
     { value: 'tpm', label: '3PM' },
-    { value: 'total', label: 'TOT' },
+    { value: 'total', label: 'TOTAL' },
     { value: 'pts+ast', label: 'PTS+AST' },
     { value: 'pts+reb', label: 'PTS+REB' },
     { value: 'reb+ast', label: 'REB+AST' },
@@ -41,7 +40,6 @@ const SPORT_STATS: Record<string, Array<{ value: string; label: string }>> = {
     { value: 'dub', label: '2B' },
     { value: 'trp', label: '3B' },
     { value: 'sb', label: 'SB' },
-    { value: 'k', label: 'K' },
     { value: 'bb', label: 'BB' },
     { value: 'tb', label: 'TB' },
   ],
@@ -51,7 +49,6 @@ const SPORT_STATS: Record<string, Array<{ value: string; label: string }>> = {
     { value: 'pts', label: 'PTS' },
     { value: 'sog', label: 'SOG' },
     { value: 'blk', label: 'BLK' },
-    { value: 'pim', label: 'PIM' },
   ],
   nfl: [],
 }
@@ -160,7 +157,7 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
   const [streakN, setStreakN] = useState('')
   const [streakYear, setStreakYear] = useState('')
 
-  const isNbaHalfPeriod = sport === 'nba' && (period === 'q2' || period === '1h')
+  const isNbaHalfPeriod = sport === 'nba' && period === '1h'
   const allStats = SPORT_STATS[sport] ?? []
   const stats = isNbaHalfPeriod
     ? allStats.filter((s) => NBA_HALF_STATS.has(s.value))
@@ -169,8 +166,8 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
   const handleSportSelect = (s: string) => {
     setSport((prev) => (prev === s ? '' : s))
     setStat('')
-    // q2/1h are NBA-only — clear if switching away
-    if (s !== 'nba' && (period === 'q2' || period === '1h')) {
+    // 1h is NBA-only — clear if switching away
+    if (s !== 'nba' && period === '1h') {
       setPeriod('')
     }
     // MLB has no q1 yet — clear q1 if switching to MLB
@@ -181,8 +178,8 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
 
   const handlePeriodSelect = (p: PeriodType) => {
     setPeriod((prev) => (prev === p ? '' : p))
-    // when entering q2/1h, stat must be pts or tpm
-    if ((p === 'q2' || p === '1h') && stat && !NBA_HALF_STATS.has(stat)) {
+    // when entering 1h, stat must be pts or tpm
+    if (p === '1h' && stat && !NBA_HALF_STATS.has(stat)) {
       setStat('')
     }
   }
@@ -197,7 +194,6 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
       if (sport === 'nhl') parts.push('p1')
       else if (sport !== 'mlb') parts.push('q1')
     }
-    else if (period === 'q2') parts.push('q2')
     else if (period === '1h') parts.push('1h')
 
     const resolvedPostYear =
@@ -251,10 +247,10 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
       {/* Format hint */}
       <div className="text-[10px] mb-4 leading-relaxed" style={{ color: C.textDim }}>
         {mode === 'trend'
-          ? '▸ nspe {sport} {post/reg} {full/q1} {stat}N -lastN/N'
+          ? '▸ nspe {sport} {post} {full/q1} {stat}N -lastN/N'
           : mode === 'compute'
-          ? '▸ nspe {sport} {post/reg} {full/q1} {stat} minN {-window}'
-          : '▸ nspe {sport} {post/reg} {full/q1} {stat}N -streakN {YYYY|YYYY-YYYY}'}
+          ? '▸ nspe {sport} {post} {full/q1} {stat} minN {-window}'
+          : '▸ nspe {sport} {post} {full/q1} {stat}N -streakN {YYYY|YYYY-YYYY}'}
       </div>
       {/* Streak: threshold + streakN + year */}
       {mode === 'streak' && stat && (
@@ -303,15 +299,12 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
         <div>
           <SLabel>season</SLabel>
           <div className="flex gap-1.5">
-            {(['post', 'reg'] as const).map((v) => (
-              <Pill
-                key={v}
-                selected={seasonType === v}
-                onClick={() => setSeasonType((p) => (p === v ? '' : v))}
-              >
-                {v}
-              </Pill>
-            ))}
+            <Pill
+              selected={seasonType === 'post'}
+              onClick={() => setSeasonType((p) => (p === 'post' ? '' : 'post'))}
+            >
+              post
+            </Pill>
           </div>
         </div>
         <div>
@@ -326,14 +319,9 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
               </Pill>
             )}
             {sport === 'nba' && (
-              <>
-                <Pill selected={period === 'q2'} onClick={() => handlePeriodSelect('q2')}>
-                  q2
-                </Pill>
-                <Pill selected={period === '1h'} onClick={() => handlePeriodSelect('1h')}>
-                  1h
-                </Pill>
-              </>
+              <Pill selected={period === '1h'} onClick={() => handlePeriodSelect('1h')}>
+                1h
+              </Pill>
             )}
           </div>
         </div>
@@ -384,12 +372,15 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
             <SLabel>threshold</SLabel>
             <NumInput value={thresholdN} onChange={setThresholdN} w={64} />
           </div>
-          <div>
-            <SLabel>-last &nbsp;met</SLabel>
-            <div className="flex items-center gap-1.5">
+          <div className="flex items-end gap-1.5">
+            <div>
+              <SLabel>met</SLabel>
               <NumInput value={lastA} onChange={setLastA} placeholder="N" w={54} />
-              <span style={{ color: C.textDim }}>/</span>
-              <NumInput value={lastB} onChange={setLastB} placeholder="" w={54} />
+            </div>
+            <span style={{ color: C.textDim, paddingBottom: '8px' }}>/</span>
+            <div>
+              <SLabel>-last</SLabel>
+              <NumInput value={lastB} onChange={setLastB} placeholder="N" w={54} />
             </div>
           </div>
         </div>
