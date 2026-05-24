@@ -1175,7 +1175,7 @@ function App() {
       <div
         className={
           isMobile
-            ? 'absolute top-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 whitespace-nowrap'
+            ? 'absolute top-6 right-3 z-20 flex items-center gap-2 whitespace-nowrap'
             : 'absolute top-6 right-6 z-20 flex items-center gap-3'
         }
         ref={sampleMenuRef}
@@ -1203,8 +1203,8 @@ function App() {
             <div
               className={
                 isMobile
-                  ? 'absolute left-1/2 -translate-x-1/2 mt-3 w-[300px] max-w-[92vw] rounded-md p-2'
-                  : 'absolute right-0 mt-3 w-[340px] rounded-md p-2'
+                  ? 'absolute right-0 mt-3 w-[300px] max-w-[92vw] max-h-[70vh] overflow-y-auto rounded-md p-2'
+                  : 'absolute right-0 mt-3 w-[340px] max-h-[70vh] overflow-y-auto rounded-md p-2'
               }
               style={{
                 backgroundColor: 'oklch(0.12 0 0)',
