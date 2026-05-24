@@ -1133,17 +1133,43 @@ function App() {
       <div
         className={
           isMobile
-            ? 'absolute top-2 left-3 z-20 flex flex-col items-start gap-0 font-mono text-[11px]'
+            ? 'absolute top-2 left-3 z-20 flex flex-col items-start gap-1 font-mono text-[11px]'
             : 'absolute top-6 left-6 z-20 flex flex-col items-start gap-1 font-mono text-[14px]'
         }
       >
-        <span style={{ color: 'oklch(0.95 0 0)', fontWeight: 700 }}>
-          nspe.dev{' '}
-          <span style={{ color: 'oklch(0.75 0.15 145)' }}>{'{preview}'}</span>
-        </span>
-        <span style={{ color: 'oklch(0.65 0 0)', fontSize: isMobile ? '10px' : '12px' }}>
-          {`{stats refreshed ${new Date().getMonth() + 1}/${new Date().getDate()}}`}
-        </span>
+        {isMobile ? (
+          <span
+            className="flex items-center gap-2 whitespace-nowrap"
+            style={{ color: 'oklch(0.95 0 0)', fontWeight: 700 }}
+          >
+            <span>
+              nspe.dev{' '}
+              <span style={{ color: 'oklch(0.75 0.15 145)' }}>{'{preview}'}</span>
+            </span>
+            <span style={{ color: 'oklch(0.65 0 0)', fontSize: '10px', fontWeight: 400 }}>
+              {`{stats refreshed ${new Date().getMonth() + 1}/${new Date().getDate()}}`}
+            </span>
+          </span>
+        ) : (
+          <>
+            <span style={{ color: 'oklch(0.95 0 0)', fontWeight: 700 }}>
+              nspe.dev{' '}
+              <span style={{ color: 'oklch(0.75 0.15 145)' }}>{'{preview}'}</span>
+            </span>
+            <span style={{ color: 'oklch(0.65 0 0)', fontSize: '12px' }}>
+              {`{stats refreshed ${new Date().getMonth() + 1}/${new Date().getDate()}}`}
+            </span>
+          </>
+        )}
+        {isMobile && (
+          <button
+            onClick={() => setIsTutorialOpen(true)}
+            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+            style={{ color: 'oklch(0.78 0.18 145)' }}
+          >
+            {'{tutorial}'}
+          </button>
+        )}
       </div>
 
       <div
@@ -1154,13 +1180,15 @@ function App() {
         }
         ref={sampleMenuRef}
       >
-        <button
-          onClick={() => setIsTutorialOpen(true)}
-          className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-          style={{ color: 'oklch(0.78 0.18 145)' }}
-        >
-          {'{tutorial}'}
-        </button>
+        {!isMobile && (
+          <button
+            onClick={() => setIsTutorialOpen(true)}
+            className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+            style={{ color: 'oklch(0.78 0.18 145)' }}
+          >
+            {'{tutorial}'}
+          </button>
+        )}
 
         <div className="relative">
           <button

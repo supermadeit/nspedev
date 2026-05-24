@@ -63,12 +63,11 @@ const DEMOS: DemoStep[] = [
   {
     mode: 'compute',
     sport: 'mlb',
-    season: 'post',
     stat: 'hits',
-    minN: '1',
-    window: '-season',
-    command: 'nspe mlb post -hits min1 -season 2025',
-    caption: 'MLB \u2014 postseason hits \u2265 1, full season window',
+    minN: '20',
+    window: '-last',
+    command: 'nspe mlb -hits min20 -last10',
+    caption: 'MLB \u2014 regular-season hits \u2265 20, last 10 games',
   },
   {
     mode: 'trend',
@@ -427,14 +426,15 @@ export function QueryBuilderTutorial({ open, onClose }: QueryBuilderTutorialProp
                 <div>
                   <SLabel>window</SLabel>
                   <div className="flex gap-1.5">
-                    <Pill
-                      selected={reached('value') && demo.window === '-season'}
-                      highlight={stage === 'value' && demo.window === '-season'}
-                    >
-                      -season
-                    </Pill>
-                    <Pill selected={false}>-career</Pill>
-                    <Pill selected={false}>-last</Pill>
+                    {(['-season', '-career', '-last'] as const).map((w) => (
+                      <Pill
+                        key={w}
+                        selected={reached('value') && demo.window === w}
+                        highlight={stage === 'value' && demo.window === w}
+                      >
+                        {w}
+                      </Pill>
+                    ))}
                   </div>
                 </div>
               </div>
