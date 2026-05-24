@@ -1199,79 +1199,7 @@ function App() {
             sample-commands
           </button>
 
-          {isSampleMenuOpen && (
-            isMobile ? (
-              <div
-                className="fixed inset-0 z-50 flex items-center justify-center p-4"
-                style={{ backgroundColor: 'rgba(0,0,0,0.78)' }}
-                onClick={() => setIsSampleMenuOpen(false)}
-                role="dialog"
-                aria-modal="true"
-                aria-label="Sample commands"
-              >
-                <div
-                  className="w-full max-w-[640px] max-h-[92vh] overflow-y-auto rounded-lg"
-                  style={{
-                    backgroundColor: 'oklch(0.12 0 0)',
-                    border: '1px solid oklch(0.28 0 0)',
-                    color: 'oklch(0.88 0 0)',
-                    fontFamily: 'monospace',
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <div
-                    className="flex items-center justify-between px-5 py-3 sticky top-0"
-                    style={{
-                      backgroundColor: 'oklch(0.18 0 0)',
-                      borderBottom: '1px solid oklch(0.28 0 0)',
-                    }}
-                  >
-                    <span
-                      className="font-mono font-bold text-[14px]"
-                      style={{ color: 'oklch(0.85 0.15 195)' }}
-                    >
-                      {'{sample-commands}'}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => setIsSampleMenuOpen(false)}
-                      className="font-mono text-[14px] hover:opacity-70 transition-opacity"
-                      style={{ color: 'oklch(0.85 0.15 195)' }}
-                      aria-label="Close sample commands"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                  <div className="p-5 space-y-3">
-                    <div
-                      className="text-[11px] leading-relaxed"
-                      style={{ color: 'oklch(0.48 0 0)' }}
-                    >
-                      Tap a command to prefill the search bar.
-                    </div>
-                    <div className="space-y-1">
-                      {SAMPLE_COMMANDS.map((sample) => (
-                        <button
-                          key={sample.label}
-                          type="button"
-                          onClick={() => !sample.comingSoon && handleSampleCommandSelect(sample.command)}
-                          disabled={Boolean(sample.comingSoon)}
-                          className="w-full rounded px-3 py-3 text-left font-mono text-[13px] transition-opacity"
-                          style={{
-                            color: sample.comingSoon ? 'oklch(0.56 0 0)' : 'oklch(0.90 0.18 195)',
-                            backgroundColor: sample.comingSoon ? 'transparent' : 'oklch(0.18 0 0)',
-                            opacity: sample.comingSoon ? 0.8 : 1,
-                            cursor: sample.comingSoon ? 'not-allowed' : 'pointer',
-                          }}
-                        >
-                          {sample.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ) : (
+          {isSampleMenuOpen && !isMobile && (
             <div
               className="absolute right-0 mt-3 w-[340px] max-h-[70vh] overflow-y-auto rounded-md p-2"
               style={{
@@ -1303,7 +1231,6 @@ function App() {
                 ))}
               </div>
             </div>
-            )
           )}
         </div>
 
@@ -1317,6 +1244,82 @@ function App() {
       </div>
 
       <QueryBuilderTutorial open={isTutorialOpen} onClose={() => setIsTutorialOpen(false)} />
+
+      {isMobile && isSampleMenuOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ backgroundColor: 'rgba(0,0,0,0.78)', whiteSpace: 'normal' }}
+          onClick={() => setIsSampleMenuOpen(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Sample commands"
+        >
+          <div
+            className="w-full max-w-[640px] max-h-[92vh] overflow-y-auto rounded-lg"
+            style={{
+              backgroundColor: 'oklch(0.12 0 0)',
+              border: '1px solid oklch(0.28 0 0)',
+              color: 'oklch(0.88 0 0)',
+              fontFamily: 'monospace',
+              whiteSpace: 'normal',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div
+              className="flex items-center justify-between px-5 py-3 sticky top-0"
+              style={{
+                backgroundColor: 'oklch(0.18 0 0)',
+                borderBottom: '1px solid oklch(0.28 0 0)',
+              }}
+            >
+              <span
+                className="font-mono font-bold text-[14px]"
+                style={{ color: 'oklch(0.85 0.15 195)' }}
+              >
+                {'{sample-commands}'}
+              </span>
+              <button
+                type="button"
+                onClick={() => setIsSampleMenuOpen(false)}
+                className="font-mono text-[14px] hover:opacity-70 transition-opacity"
+                style={{ color: 'oklch(0.85 0.15 195)' }}
+                aria-label="Close sample commands"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="p-5">
+              <div
+                className="text-[11px] leading-relaxed mb-3"
+                style={{ color: 'oklch(0.48 0 0)' }}
+              >
+                Tap a command to prefill the search bar.
+              </div>
+              <div className="flex flex-col gap-1">
+                {SAMPLE_COMMANDS.map((sample) => (
+                  <button
+                    key={sample.label}
+                    type="button"
+                    onClick={() => !sample.comingSoon && handleSampleCommandSelect(sample.command)}
+                    disabled={Boolean(sample.comingSoon)}
+                    className="block w-full rounded px-3 py-3 text-left font-mono text-[13px] transition-opacity"
+                    style={{
+                      color: sample.comingSoon ? 'oklch(0.56 0 0)' : 'oklch(0.90 0.18 195)',
+                      backgroundColor: sample.comingSoon ? 'transparent' : 'oklch(0.18 0 0)',
+                      opacity: sample.comingSoon ? 0.8 : 1,
+                      cursor: sample.comingSoon ? 'not-allowed' : 'pointer',
+                      whiteSpace: 'normal',
+                      wordBreak: 'break-word',
+                    }}
+                  >
+                    {sample.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {isMiniOpen && (
         <div
