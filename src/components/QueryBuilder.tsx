@@ -30,6 +30,9 @@ const SPORT_STATS: Record<string, Array<{ value: string; label: string }>> = {
     { value: 'blk', label: 'BLK' },
     { value: 'tpm', label: '3PM' },
     { value: 'total', label: 'TOT' },
+    { value: 'pts+ast', label: 'PTS+AST' },
+    { value: 'pts+reb', label: 'PTS+REB' },
+    { value: 'reb+ast', label: 'REB+AST' },
   ],
   mlb: [
     { value: 'hits', label: 'HITS' },
@@ -40,6 +43,7 @@ const SPORT_STATS: Record<string, Array<{ value: string; label: string }>> = {
     { value: 'sb', label: 'SB' },
     { value: 'k', label: 'K' },
     { value: 'bb', label: 'BB' },
+    { value: 'tb', label: 'TB' },
   ],
   nhl: [
     { value: 'g', label: 'G' },
@@ -316,11 +320,7 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
             <Pill selected={period === ''} onClick={() => handlePeriodSelect('')}>
               full
             </Pill>
-            {sport === 'mlb' ? (
-              <Pill selected={false} onClick={() => {}} disabled>
-                {'{1AB}'}
-              </Pill>
-            ) : (
+            {sport !== 'mlb' && (
               <Pill selected={period === 'q1'} onClick={() => handlePeriodSelect('q1')}>
                 {sport === 'nhl' ? 'p1' : 'q1'}
               </Pill>

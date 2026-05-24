@@ -155,6 +155,9 @@ const SAMPLE_COMMANDS = [
   { label: 'nspe nhl -pts min80 -season', command: 'nspe nhl -pts min80 -season' },
   { label: 'nspe mlb -hits2 -last3/5', command: 'nspe mlb -hits2 -last3/5' },
   { label: 'nspe mlb -hr -streak3', command: 'nspe mlb -hr -streak3' },
+  { label: 'nspe mlb -tb2 -last3/5', command: 'nspe mlb -tb2 -last3/5' },
+  { label: 'nspe mlb -tb min20 -last10', command: 'nspe mlb -tb min20 -last10' },
+  { label: 'nspe mlb -tb2 -streak5', command: 'nspe mlb -tb2 -streak5' },
   { label: '{nfl coming soon}', command: '', comingSoon: true },
 ]
 
@@ -192,6 +195,9 @@ const STAT_FIELDS: Record<string, Record<string, string | string[]>> = {
     blk: 'blocks',
     tpm: 'three_made',
     total: ['points', 'rebounds', 'assists'],
+    'pts+ast': ['points', 'assists'],
+    'pts+reb': ['points', 'rebounds'],
+    'reb+ast': ['rebounds', 'assists'],
   },
   mlb: {
     hits: 'hits',
@@ -202,6 +208,7 @@ const STAT_FIELDS: Record<string, Record<string, string | string[]>> = {
     sb: 'sb',
     k: 'k',
     bb: 'bb',
+    tb: 'total_bases',
   },
   nhl: {
     g: 'goals',
@@ -216,6 +223,15 @@ const STAT_FIELDS: Record<string, Record<string, string | string[]>> = {
 const STAT_DISPLAY_LABELS: Record<string, string> = {
   tpm: '3pm',
   total: 'tot',
+  tb: 'tb',
+}
+
+// Insert a space before any internal capital (e.g. "AaronJudge" -> "Aaron Judge").
+// Leaves already-spaced names untouched.
+function normalizeDisplayPlayer(player: string): string {
+  const trimmed = player.trim()
+  if (!trimmed || trimmed.includes(' ')) return trimmed
+  return trimmed.replace(/([a-z])([A-Z])/g, '$1 $2')
 }
 
 type ApiPayload = Record<string, unknown> | unknown[]
@@ -323,20 +339,39 @@ function toStreakDetailFromRecord(record: Record<string, unknown>): StreakDetail
     (typeof record.to === 'string' && record.to) ||
     ''
 
-  const matches = Array.isArray(record.matches) ? record.matches : []
-  const firstMatchDate = matches.length > 0 ? extractDateToken(String(matches[0])) : null
-  const lastMatchDate = matches.length > 0 ? extractDateToken(String(matches[matches.length - 1])) : null
+  // Accept `matches` (legacy) or `games` (new post-streak shape) as the per-game array.
+  const games = Array.isArray(record.matches)
+    ? record.matches
+    : Array.isArray(record.games)
+    ? record.games
+    : []
+  const firstGameDate =
+    games.length > 0
+      ? extractDateToken(
+          typeof games[0] === 'string'
+            ? games[0]
+            : (games[0] as Record<string, unknown>)?.date as string ?? '',
+        )
+      : null
+  const lastGameDate =
+    games.length > 0
+      ? extractDateToken(
+          typeof games[games.length - 1] === 'string'
+            ? (games[games.length - 1] as string)
+            : (games[games.length - 1] as Record<string, unknown>)?.date as string ?? '',
+        )
+      : null
 
-  const start = extractDateToken(directStart) || firstMatchDate || ''
-  const end = extractDateToken(directEnd) || lastMatchDate || ''
+  const start = extractDateToken(directStart) || firstGameDate || ''
+  const end = extractDateToken(directEnd) || lastGameDate || ''
 
   const length = asNumber(
     record.length ??
       record.streak ??
       record.streak_length ??
-      record.games ??
+      record.games_count ??
       record.count ??
-      (matches.length > 0 ? matches.length : 0),
+      (games.length > 0 ? games.length : 0),
   )
 
   if (!length || !start || !end) {
@@ -348,6 +383,17 @@ function toStreakDetailFromRecord(record: Record<string, unknown>): StreakDetail
     start,
     end,
   }
+}
+
+// Parse string streaks like "8 game streak 5/7 - 5/15" (trend-streak engine output).
+function parseStringStreak(value: string): StreakDetail | null {
+  const match = value.match(
+    /(\d+)\s*game\s*streak\s*(\d{1,2}\/\d{1,2}(?:\/\d{2,4})?)\s*-\s*(\d{1,2}\/\d{1,2}(?:\/\d{2,4})?)/i,
+  )
+  if (!match) return null
+  const length = Number(match[1])
+  if (!Number.isFinite(length) || length <= 0) return null
+  return { length, start: match[2], end: match[3] }
 }
 
 function extractStreakDetails(row: Record<string, unknown>): StreakDetail[] {
@@ -367,6 +413,9 @@ function extractStreakDetails(row: Record<string, unknown>): StreakDetail[] {
 
     const parsed = candidate
       .map((item) => {
+        if (typeof item === 'string') {
+          return parseStringStreak(item)
+        }
         if (!item || typeof item !== 'object' || Array.isArray(item)) {
           return null
         }
@@ -489,11 +538,21 @@ function extractResultArray(payload: ApiPayload): unknown[] {
 
 function detectStatContext(payload: ApiPayload, fallbackQuery: string): StatContext | null {
   const tokens: string[] = []
+  let queryStat = ''
 
   if (payload && !Array.isArray(payload) && typeof payload === 'object') {
     const rec = payload as Record<string, unknown>
     if (Array.isArray(rec.query)) {
       for (const t of rec.query) if (typeof t === 'string') tokens.push(t)
+    } else if (rec.query && typeof rec.query === 'object') {
+      // New engines (post-trend, compute, trend-streak, post-streak, combo-*) use an object form.
+      const q = rec.query as Record<string, unknown>
+      if (typeof q.stat === 'string') queryStat = q.stat.toLowerCase()
+      else if (typeof q.short === 'string') queryStat = q.short.toLowerCase()
+      else if (Array.isArray(q.stats)) {
+        const joined = q.stats.filter((s) => typeof s === 'string').join('+').toLowerCase()
+        if (joined) queryStat = joined
+      }
     }
   }
 
@@ -517,6 +576,9 @@ function detectStatContext(payload: ApiPayload, fallbackQuery: string): StatCont
   if (!STAT_FIELDS[sport]) return null
 
   const knownStats = Object.keys(STAT_FIELDS[sport]).sort((a, b) => b.length - a.length)
+  if (queryStat && knownStats.includes(queryStat)) {
+    return { sport, stat: queryStat }
+  }
   for (const tok of tokens) {
     const lower = tok.toLowerCase()
     for (const s of knownStats) {
@@ -529,6 +591,10 @@ function detectStatContext(payload: ApiPayload, fallbackQuery: string): StatCont
 }
 
 function computeMatchValue(match: Record<string, unknown>, ctx: StatContext): number | null {
+  // New backend shape uses a sport-agnostic `val` field; prefer it when present.
+  if (match.val !== undefined) {
+    return asNumber(match.val)
+  }
   const field = STAT_FIELDS[ctx.sport]?.[ctx.stat]
   if (!field) return null
   if (Array.isArray(field)) {
@@ -564,7 +630,12 @@ function extractTeamFromRow(row: Record<string, unknown>): string {
 
 function extractMatchDetails(row: Record<string, unknown>, ctx: StatContext | null): MatchDetail[] {
   if (!ctx) return []
-  const matches = Array.isArray(row.matches) ? row.matches : []
+  // Accept both `matches` (legacy) and `match` (new singular form).
+  const matches = Array.isArray(row.matches)
+    ? row.matches
+    : Array.isArray(row.match)
+    ? row.match
+    : []
   const out: MatchDetail[] = []
   const label = STAT_DISPLAY_LABELS[ctx.stat] ?? ctx.stat
 
@@ -610,7 +681,7 @@ function normalizeQueryResults(payload: ApiPayload, fallbackQuery = ''): QueryRe
         const [playerCandidate, totalCandidate] = item
         if (typeof playerCandidate === 'string' && playerCandidate.trim()) {
           return {
-            player: playerCandidate,
+            player: normalizeDisplayPlayer(playerCandidate),
             total: asNumber(totalCandidate),
           }
         }
@@ -625,8 +696,12 @@ function normalizeQueryResults(payload: ApiPayload, fallbackQuery = ''): QueryRe
       const row = item as Record<string, unknown>
       const playerFromNotes = parsePlayerFromNotes(row.notes)
       const gamesFromNotes = parseGamesFromNotes(row.notes)
-      const matchesCount = Array.isArray(row.matches) ? row.matches.length : null
-      const playerCandidate =
+      const matchesCount = Array.isArray(row.matches)
+        ? row.matches.length
+        : Array.isArray(row.match)
+        ? row.match.length
+        : null
+      const playerCandidateRaw =
         row.player ??
         row.name ??
         row.athlete ??
@@ -635,6 +710,10 @@ function normalizeQueryResults(payload: ApiPayload, fallbackQuery = ''): QueryRe
         row.full_name ??
         row.label ??
         playerFromNotes
+      const playerCandidate =
+        typeof playerCandidateRaw === 'string'
+          ? normalizeDisplayPlayer(playerCandidateRaw)
+          : playerCandidateRaw
 
       const rowStreakDetails = extractStreakDetails(row)
       const outputStreakDetails =
