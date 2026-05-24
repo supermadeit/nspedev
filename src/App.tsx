@@ -1149,15 +1149,15 @@ function App() {
       <div
         className={
           isMobile
-            ? 'absolute top-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3'
+            ? 'absolute top-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 whitespace-nowrap'
             : 'absolute top-6 right-6 z-20 flex items-center gap-3'
         }
         ref={sampleMenuRef}
       >
         <button
           onClick={() => setIsTutorialOpen(true)}
-          className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity"
-          style={{ color: 'oklch(0.85 0.15 195)' }}
+          className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+          style={{ color: 'oklch(0.78 0.18 145)' }}
         >
           {'{tutorial}'}
         </button>
@@ -1165,7 +1165,7 @@ function App() {
         <div className="relative">
           <button
             onClick={() => setIsSampleMenuOpen((prev) => !prev)}
-            className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity"
+            className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
             style={{ color: 'oklch(0.85 0.15 195)' }}
           >
             sample-commands
@@ -1212,7 +1212,7 @@ function App() {
 
         <button
           onClick={() => setIsMiniOpen(!isMiniOpen)}
-          className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity"
+          className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
           style={{ color: 'oklch(0.85 0.15 195)' }}
         >
           nspe-mini

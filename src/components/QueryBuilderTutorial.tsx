@@ -51,6 +51,16 @@ const DEMOS: DemoStep[] = [
     caption: 'NBA \u2014 Q2 3PM \u2265 2 in 3 of last 5 games',
   },
   {
+    mode: 'trend',
+    sport: 'nba',
+    stat: 'pts+ast',
+    thresholdN: '35',
+    lastA: '2',
+    lastB: '5',
+    command: 'nspe nba -pts+ast35 -last2/5',
+    caption: 'NBA \u2014 PTS+AST combo \u2265 35 in 2 of last 5 games',
+  },
+  {
     mode: 'compute',
     sport: 'mlb',
     season: 'post',
@@ -59,6 +69,16 @@ const DEMOS: DemoStep[] = [
     window: '-season',
     command: 'nspe mlb post -hits min1 -season 2025',
     caption: 'MLB \u2014 postseason hits \u2265 1, full season window',
+  },
+  {
+    mode: 'trend',
+    sport: 'mlb',
+    stat: 'tb',
+    thresholdN: '2',
+    lastA: '3',
+    lastB: '5',
+    command: 'nspe mlb -tb2 -last3/5',
+    caption: 'MLB \u2014 total bases \u2265 2 in 3 of last 5 games',
   },
   {
     mode: 'streak',
@@ -140,24 +160,30 @@ export interface QueryBuilderTutorialProps {
 export function QueryBuilderTutorial({ open, onClose }: QueryBuilderTutorialProps) {
   const [stepIdx, setStepIdx] = useState(0)
   const [stageIdx, setStageIdx] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
 
   useEffect(() => {
     if (!open) return
     setStepIdx(0)
     setStageIdx(0)
+    setIsPaused(false)
   }, [open])
 
   useEffect(() => {
     if (!open) return
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
+      else if (e.key === ' ') {
+        e.preventDefault()
+        setIsPaused((p) => !p)
+      }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [open, onClose])
 
   useEffect(() => {
-    if (!open) return
+    if (!open || isPaused) return
     const id = window.setInterval(() => {
       setStageIdx((s) => {
         if (s < PILL_STAGES.length - 1) return s + 1
@@ -165,9 +191,9 @@ export function QueryBuilderTutorial({ open, onClose }: QueryBuilderTutorialProp
         setStepIdx((d) => (d + 1) % DEMOS.length)
         return 0
       })
-    }, 850)
+    }, 1150)
     return () => window.clearInterval(id)
-  }, [open])
+  }, [open, isPaused])
 
   const demo = DEMOS[stepIdx]
   const stage: Stage = PILL_STAGES[stageIdx]
@@ -210,14 +236,18 @@ export function QueryBuilderTutorial({ open, onClose }: QueryBuilderTutorialProp
       aria-label="Query builder tutorial"
     >
       <div
-        className="w-full max-w-[640px] max-h-[92vh] rounded-lg overflow-y-auto"
+        className="w-full max-w-[640px] max-h-[92vh] rounded-lg overflow-y-auto cursor-pointer"
         style={{
           backgroundColor: C.surface,
           border: `1px solid ${C.border}`,
           color: C.textBright,
           fontFamily: 'monospace',
         }}
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e) => {
+          e.stopPropagation()
+          setIsPaused((p) => !p)
+        }}
+        title={isPaused ? 'click to resume' : 'click to pause'}
       >
         {/* header */}
         <div
@@ -227,21 +257,32 @@ export function QueryBuilderTutorial({ open, onClose }: QueryBuilderTutorialProp
           <span className="font-mono font-bold text-[14px]" style={{ color: C.accent }}>
             {'{tutorial}'} — query builder
           </span>
-          <button
-            type="button"
-            onClick={onClose}
-            className="font-mono text-[14px] hover:opacity-70 transition-opacity"
-            style={{ color: C.accent }}
-            aria-label="Close tutorial"
-          >
-            ✕
-          </button>
+          <div className="flex items-center gap-3">
+            <span
+              className="font-mono text-[10px] uppercase tracking-widest"
+              style={{ color: isPaused ? 'oklch(0.75 0.15 145)' : C.textDim }}
+            >
+              {isPaused ? '❙❙ paused' : '▸ playing'}
+            </span>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation()
+                onClose()
+              }}
+              className="font-mono text-[14px] hover:opacity-70 transition-opacity"
+              style={{ color: C.accent }}
+              aria-label="Close tutorial"
+            >
+              ✕
+            </button>
+          </div>
         </div>
 
         <div className="p-5 space-y-4">
           <div className="text-[11px] leading-relaxed" style={{ color: C.textDim }}>
-            Watch the builder light up step-by-step. This view is read-only — run real queries from
-            the query builder or search bar.
+            Watch the builder light up step-by-step. Click anywhere to pause / resume (space also
+            works). Read-only — run real queries from the query builder or search bar.
           </div>
 
           {/* step caption */}
@@ -311,9 +352,7 @@ export function QueryBuilderTutorial({ open, onClose }: QueryBuilderTutorialProp
                 <SLabel>period</SLabel>
                 <div className="flex gap-1.5 flex-wrap">
                   <Pill selected={reached('period') && !demo.period}>full</Pill>
-                  {demo.sport === 'mlb' ? (
-                    <Pill disabled>{'{1AB}'}</Pill>
-                  ) : (
+                  {demo.sport !== 'mlb' && (
                     <Pill
                       selected={reached('period') && (demo.period === 'q1' || demo.period === 'p1')}
                       highlight={stage === 'period' && (demo.period === 'q1' || demo.period === 'p1')}
@@ -346,9 +385,9 @@ export function QueryBuilderTutorial({ open, onClose }: QueryBuilderTutorialProp
               <SLabel>stat</SLabel>
               <div className="flex gap-1.5 flex-wrap">
                 {(demo.sport === 'nba'
-                  ? ['pts', 'reb', 'ast', 'tpm']
+                  ? ['pts', 'reb', 'ast', 'tpm', 'pts+ast']
                   : demo.sport === 'mlb'
-                    ? ['hits', 'hr', 'rbi', 'k']
+                    ? ['hits', 'hr', 'rbi', 'k', 'tb']
                     : ['g', 'a', 'pts', 'sog']
                 ).map((s) => (
                   <Pill
