@@ -1659,12 +1659,12 @@ function App() {
           {isLeaderboardOpen && (
             <div
               className="overflow-y-auto"
-              style={{ maxHeight: '260px', backgroundColor: 'oklch(0.10 0 0)' }}
+              style={{ maxHeight: '210px', backgroundColor: 'oklch(0.10 0 0)' }}
             >
               {leaderboard.rows.map((row, idx) => {
                 const rank = String(idx + 1).padStart(2, '0')
                 const player = normalizeLeaderboardPlayer(row.player)
-                const star = row.streak_active ? '★' : ' '
+                const star = idx < 3 ? '★' : ' '
                 return (
                   <div
                     key={`${row.player}-${idx}`}
