@@ -28,10 +28,10 @@ const SPORT_STATS: Record<string, Array<{ value: string; label: string }>> = {
     { value: 'stl', label: 'STL' },
     { value: 'blk', label: 'BLK' },
     { value: 'tpm', label: '3PM' },
-    { value: 'total', label: 'TOTAL' },
     { value: 'pts+ast', label: 'PTS+AST' },
     { value: 'pts+reb', label: 'PTS+REB' },
     { value: 'reb+ast', label: 'REB+AST' },
+    { value: 'total', label: 'TOTAL' },
   ],
   mlb: [
     { value: 'hits', label: 'HITS' },

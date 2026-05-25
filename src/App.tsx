@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import hitlistData from '@/assets/data/hitlist.json'
+import leaderboardData from '@/assets/data/leaderboard.json'
 import madeitLogo from '@/assets/images/madeit-tech-logo-v2.jpeg'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { QueryBuilder } from '@/components/QueryBuilder'
@@ -270,6 +271,44 @@ function formatTickerEntry(entry: HitlistEntry): string {
   })
 
   return `${entry.player} ${header} ${pairs.join(', ')}`
+}
+
+interface LeaderboardRow {
+  player: string
+  team: string
+  streak_type: string
+  streak_label: string
+  streak_length: number
+  streak_active: boolean
+  avg: number
+  hits: number
+  at_bats: number
+  score: number
+}
+
+interface LeaderboardPayload {
+  kind: string
+  generated_at: string
+  thresholds?: Record<string, number>
+  rows: LeaderboardRow[]
+}
+
+function formatLeaderboardDate(iso: string): string {
+  if (!iso) return ''
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return ''
+  return `${d.getMonth() + 1}/${d.getDate()}`
+}
+
+function leaderboardSportLabel(kind: string): string {
+  const m = /^([a-z]+)_leaderboard$/i.exec(kind)
+  return m ? m[1].toLowerCase() : kind
+}
+
+function normalizeLeaderboardPlayer(name: string): string {
+  if (!name) return ''
+  if (name.includes(' ')) return name
+  return name.replace(/([a-z])([A-Z])/g, '$1 $2')
 }
 
 function asNumber(value: unknown): number {
@@ -868,6 +907,8 @@ function App() {
   const [collapsedPlayers, setCollapsedPlayers] = useState<Record<string, boolean>>({})
   const [hitlistEntries, setHitlistEntries] = useState<HitlistEntry[]>(hitlistData as HitlistEntry[])
   const [isBuilderOpen, setIsBuilderOpen] = useState(false)
+  const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(true)
+  const leaderboard = leaderboardData as LeaderboardPayload
   const isMobile = useIsMobile()
   const searchInputRef = useRef<HTMLInputElement>(null)
   const sampleMenuRef = useRef<HTMLDivElement>(null)
@@ -1569,6 +1610,88 @@ function App() {
           objectFit: 'contain',
         }}
       />
+
+      {!isMobile && leaderboard?.rows?.length > 0 && (
+        <div
+          className="absolute right-4 z-20 rounded-md overflow-hidden"
+          style={{
+            bottom: '44px',
+            width: '420px',
+            backgroundColor: 'oklch(0.12 0 0)',
+            border: '1px solid oklch(0.28 0 0)',
+            boxShadow: '0 -8px 24px rgba(0,0,0,0.45)',
+            fontFamily: 'monospace',
+          }}
+        >
+          <button
+            type="button"
+            onClick={() => setIsLeaderboardOpen((p) => !p)}
+            className="w-full flex items-center justify-between px-3 py-2 hover:opacity-90 transition-opacity"
+            style={{
+              backgroundColor: 'oklch(0.18 0 0)',
+              borderBottom: isLeaderboardOpen ? '1px solid oklch(0.28 0 0)' : 'none',
+              cursor: 'pointer',
+            }}
+            title={isLeaderboardOpen ? 'collapse leaderboard' : 'expand leaderboard'}
+          >
+            <span className="flex items-baseline gap-2">
+              <span className="font-mono font-bold text-[13px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
+                {'{leaderboard}'}
+              </span>
+              <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: 'oklch(0.55 0 0)' }}>
+                {leaderboardSportLabel(leaderboard.kind)} · top {leaderboard.rows.length}
+              </span>
+            </span>
+            <span className="flex items-baseline gap-2">
+              {!isLeaderboardOpen && leaderboard.rows[0] && (
+                <span className="font-mono text-[11px]" style={{ color: 'oklch(0.75 0 0)' }}>
+                  #1 {normalizeLeaderboardPlayer(leaderboard.rows[0].player)} {leaderboard.rows[0].score.toFixed(1)}
+                </span>
+              )}
+              <span className="font-mono text-[10px]" style={{ color: 'oklch(0.48 0 0)' }}>
+                {formatLeaderboardDate(leaderboard.generated_at)}
+              </span>
+              <span className="font-mono text-[11px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
+                {isLeaderboardOpen ? '▾' : '▸'}
+              </span>
+            </span>
+          </button>
+          {isLeaderboardOpen && (
+            <div
+              className="overflow-y-auto"
+              style={{ maxHeight: '260px', backgroundColor: 'oklch(0.10 0 0)' }}
+            >
+              {leaderboard.rows.map((row, idx) => {
+                const rank = String(idx + 1).padStart(2, '0')
+                const player = normalizeLeaderboardPlayer(row.player)
+                const star = row.streak_active ? '★' : ' '
+                return (
+                  <div
+                    key={`${row.player}-${idx}`}
+                    className="grid items-center px-3 py-1.5 font-mono text-[12px]"
+                    style={{
+                      gridTemplateColumns: '22px 1fr 36px 84px 56px',
+                      gap: '8px',
+                      borderBottom: idx === leaderboard.rows.length - 1 ? 'none' : '1px solid oklch(0.16 0 0)',
+                      color: 'oklch(0.85 0 0)',
+                    }}
+                  >
+                    <span style={{ color: 'oklch(0.48 0 0)' }}>{rank}</span>
+                    <span className="truncate" style={{ color: 'oklch(0.92 0 0)' }}>{player}</span>
+                    <span style={{ color: 'oklch(0.55 0 0)' }}>{row.team}</span>
+                    <span style={{ color: 'oklch(0.85 0.15 195)' }}>
+                      {row.streak_label}({row.streak_length}){star}
+                    </span>
+                    <span className="text-right" style={{ color: 'oklch(0.78 0.18 145)', fontWeight: 600 }}>
+                      {row.score.toFixed(1)}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="absolute bottom-0 left-0 right-0 z-10 overflow-hidden pointer-events-none border-t" style={{ borderColor: 'oklch(0.25 0 0)' }}>
         <div 
