@@ -363,6 +363,19 @@ function extractDateToken(value: unknown): string | null {
   return match ? match[1] : null
 }
 
+// Convert a date token like "M/D", "M/D/YY", or "M/D/YYYY" to a sortable number.
+// When the year is missing we use 0 so all year-less dates remain comparable to each other.
+function dateTokenSortKey(token: string): number {
+  const parts = token.split('/')
+  if (parts.length < 2) return 0
+  const month = Number(parts[0])
+  const day = Number(parts[1])
+  let year = parts.length >= 3 ? Number(parts[2]) : 0
+  if (year > 0 && year < 100) year += 2000
+  if (!Number.isFinite(month) || !Number.isFinite(day)) return 0
+  return year * 10000 + month * 100 + day
+}
+
 function toStreakDetailFromRecord(record: Record<string, unknown>): StreakDetail | null {
   const directStart =
     (typeof record.start === 'string' && record.start) ||
@@ -464,6 +477,7 @@ function extractStreakDetails(row: Record<string, unknown>): StreakDetail[] {
       .filter((detail): detail is StreakDetail => detail !== null)
 
     if (parsed.length > 0) {
+      parsed.sort((a, b) => dateTokenSortKey(b.end) - dateTokenSortKey(a.end))
       return parsed
     }
   }
@@ -687,6 +701,8 @@ function extractMatchDetails(row: Record<string, unknown>, ctx: StatContext | nu
     if (value === null || !date) continue
     out.push({ value, date, statLabel: label })
   }
+  // Sort most-recent gamelog first.
+  out.sort((a, b) => dateTokenSortKey(b.date) - dateTokenSortKey(a.date))
   return out
 }
 
