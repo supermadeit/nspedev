@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import hitlistData from '@/assets/data/hitlist.json'
 import leaderboardData from '@/assets/data/leaderboard.json'
 import madeitLogo from '@/assets/images/madeit-tech-logo-v2.jpeg'
@@ -363,33 +363,6 @@ function extractDateToken(value: unknown): string | null {
   return match ? match[1] : null
 }
 
-// Convert a date token like "M/D", "M/D/YY", or "M/D/YYYY" into a real Date.
-// When the year is missing we assume the current year; if that lands more than
-// 180 days in the future we roll back a year (handles cross-year postseason data).
-function dateTokenToDate(token: string): Date | null {
-  const parts = token.split('/')
-  if (parts.length < 2) return null
-  const month = Number(parts[0])
-  const day = Number(parts[1])
-  let year = parts.length >= 3 ? Number(parts[2]) : new Date().getFullYear()
-  if (!Number.isFinite(month) || !Number.isFinite(day) || !Number.isFinite(year)) return null
-  if (year < 100) year += 2000
-  const d = new Date(year, month - 1, day)
-  if (Number.isNaN(d.getTime())) return null
-  if (parts.length < 3) {
-    const sixMonths = 1000 * 60 * 60 * 24 * 180
-    if (d.getTime() - Date.now() > sixMonths) {
-      d.setFullYear(year - 1)
-    }
-  }
-  return d
-}
-
-function dateTokenSortKey(token: string): number {
-  const d = dateTokenToDate(token)
-  return d ? d.getTime() : 0
-}
-
 function toStreakDetailFromRecord(record: Record<string, unknown>): StreakDetail | null {
   const directStart =
     (typeof record.start === 'string' && record.start) ||
@@ -491,7 +464,6 @@ function extractStreakDetails(row: Record<string, unknown>): StreakDetail[] {
       .filter((detail): detail is StreakDetail => detail !== null)
 
     if (parsed.length > 0) {
-      parsed.sort((a, b) => dateTokenSortKey(b.end) - dateTokenSortKey(a.end))
       return parsed
     }
   }
@@ -715,8 +687,6 @@ function extractMatchDetails(row: Record<string, unknown>, ctx: StatContext | nu
     if (value === null || !date) continue
     out.push({ value, date, statLabel: label })
   }
-  // Sort most-recent gamelog first.
-  out.sort((a, b) => dateTokenSortKey(b.date) - dateTokenSortKey(a.date))
   return out
 }
 
@@ -935,7 +905,6 @@ function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [queryError, setQueryError] = useState<string | null>(null)
   const [collapsedPlayers, setCollapsedPlayers] = useState<Record<string, boolean>>({})
-  const [dayWindow, setDayWindow] = useState<'full' | 10 | 30 | 60>('full')
   const [hitlistEntries, setHitlistEntries] = useState<HitlistEntry[]>(hitlistData as HitlistEntry[])
   const [isBuilderOpen, setIsBuilderOpen] = useState(false)
   const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(true)
@@ -1184,40 +1153,6 @@ function App() {
     }))
   }
 
-  const displayedResults = useMemo(() => {
-    if (!queryResults) return queryResults
-    const cutoff =
-      dayWindow === 'full'
-        ? null
-        : Date.now() - dayWindow * 24 * 60 * 60 * 1000
-
-    const mostRecentMs = (r: QueryResult): number => {
-      if (r.matchDetails && r.matchDetails.length > 0) {
-        return dateTokenSortKey(r.matchDetails[0].date)
-      }
-      if (r.streakDetails && r.streakDetails.length > 0) {
-        return dateTokenSortKey(r.streakDetails[0].end)
-      }
-      return 0
-    }
-
-    const out: QueryResult[] = []
-    for (const r of queryResults) {
-      if (cutoff !== null && r.matchDetails && r.matchDetails.length > 0) {
-        const filtered = r.matchDetails.filter((m) => {
-          const t = dateTokenSortKey(m.date)
-          return t > 0 && t >= cutoff
-        })
-        if (filtered.length === 0) continue
-        out.push({ ...r, matchDetails: filtered, total: filtered.length })
-      } else {
-        out.push(r)
-      }
-    }
-    out.sort((a, b) => mostRecentMs(b) - mostRecentMs(a))
-    return out
-  }, [queryResults, dayWindow])
-
   return (
     <div className="relative w-screen h-screen bg-background overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
@@ -1457,57 +1392,22 @@ function App() {
             </button>
           </div>
 
-          {queryResults && queryResults.length > 0 && (
-            <div
-              className="flex items-center gap-1.5 px-5 py-2"
-              style={{ backgroundColor: 'oklch(0.13 0 0)', borderBottom: '1px solid oklch(0.22 0 0)' }}
-            >
-              <span
-                className="font-mono text-[10px] uppercase tracking-widest mr-1"
-                style={{ color: 'oklch(0.48 0 0)' }}
-              >
-                window
-              </span>
-              {(['full', 10, 30, 60] as const).map((opt) => {
-                const selected = dayWindow === opt
-                const label = opt === 'full' ? 'full' : `${opt}d`
-                return (
-                  <button
-                    key={String(opt)}
-                    type="button"
-                    onClick={() => setDayWindow(opt)}
-                    className="font-mono text-[11px] px-2.5 py-1 rounded border transition-colors select-none"
-                    style={{
-                      backgroundColor: selected ? 'oklch(0.85 0.15 195)' : 'oklch(0.20 0 0)',
-                      color: selected ? 'oklch(0.10 0.02 195)' : 'oklch(0.88 0 0)',
-                      borderColor: selected ? 'oklch(0.85 0.15 195)' : 'oklch(0.28 0 0)',
-                      fontWeight: selected ? 700 : 400,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {label}
-                  </button>
-                )
-              })}
-            </div>
-          )}
-
           <div className={`overflow-y-auto px-5 py-4 space-y-3 ${isMobile ? 'max-h-[calc(100dvh-130px)]' : 'max-h-[calc(40vh-50px)]'}`}>
             {isLoading ? (
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
                 Running query...
               </div>
-            ) : displayedResults === null ? (
+            ) : queryResults === null ? (
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
                 Build a query to begin
               </div>
-            ) : displayedResults.length === 0 ? (
+            ) : queryResults.length === 0 ? (
               <div className="text-center py-8 font-mono text-[13px] space-y-2" style={{ color: 'oklch(0.70 0 0)' }}>
                 <div>No results found</div>
                 {queryError && <div>{queryError}</div>}
               </div>
             ) : (
-              displayedResults.map((result, index) => {
+              queryResults.map((result, index) => {
                 const hasStreakDetails = Boolean(result.streakDetails && result.streakDetails.length > 0)
                 const hasMatchDetails = Boolean(result.matchDetails && result.matchDetails.length > 0)
                 const canExpand = hasStreakDetails || hasMatchDetails

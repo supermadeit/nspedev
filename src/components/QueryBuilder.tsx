@@ -7,12 +7,6 @@ type ComputeWindow = '-season' | '-career' | '-last' | ''
 
 const NBA_HALF_STATS = new Set(['pts', 'tpm'])
 
-const DEFAULT_POST_YEAR_BY_SPORT: Record<string, string> = {
-  nba: '2026',
-  nhl: '2026',
-  mlb: '2025',
-}
-
 const SPORTS = [
   { value: 'nba', label: 'NBA', comingSoon: false },
   { value: 'mlb', label: 'MLB', comingSoon: false },
@@ -194,22 +188,15 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
     }
     else if (period === '1h') parts.push('1h')
 
-    const resolvedPostYear =
-      seasonType === 'post'
-        ? DEFAULT_POST_YEAR_BY_SPORT[sport] || ''
-        : ''
-
     if (mode === 'trend') {
       if (stat) parts.push(`-${stat}${thresholdN}`)
       if (lastA && lastB) parts.push(`-last${lastA}/${lastB}`)
-      if (resolvedPostYear) parts.push(resolvedPostYear)
     } else if (mode === 'compute') {
       if (stat) parts.push(`-${stat}`)
       if (minN) parts.push(`min${minN}`)
       if (computeWindow === '-season') parts.push('-season')
       else if (computeWindow === '-career') parts.push('-career')
       else if (computeWindow === '-last' && windowN) parts.push(`-last${windowN}`)
-      if (resolvedPostYear) parts.push(resolvedPostYear)
     } else if (mode === 'streak') {
       if (stat && streakN) parts.push(`-${stat}${thresholdN}`)
       if (streakN) parts.push(`-streak${streakN}`)
