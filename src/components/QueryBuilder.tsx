@@ -142,7 +142,6 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
   const [mode, setMode] = useState<QueryMode>('trend')
   const [sport, setSport] = useState('')
   const [seasonType, setSeasonType] = useState<SeasonType>('')
-  const [postYear, setPostYear] = useState('')
   const [period, setPeriod] = useState<PeriodType>('')
   const [stat, setStat] = useState('')
   // trend
@@ -155,7 +154,6 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
   const [windowN, setWindowN] = useState('')
   // streak
   const [streakN, setStreakN] = useState('')
-  const [streakYear, setStreakYear] = useState('')
 
   const isNbaHalfPeriod = sport === 'nba' && period === '1h'
   const allStats = SPORT_STATS[sport] ?? []
@@ -198,7 +196,7 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
 
     const resolvedPostYear =
       seasonType === 'post'
-        ? postYear || DEFAULT_POST_YEAR_BY_SPORT[sport] || ''
+        ? DEFAULT_POST_YEAR_BY_SPORT[sport] || ''
         : ''
 
     if (mode === 'trend') {
@@ -215,11 +213,10 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
     } else if (mode === 'streak') {
       if (stat && streakN) parts.push(`-${stat}${thresholdN}`)
       if (streakN) parts.push(`-streak${streakN}`)
-      if (streakYear) parts.push(streakYear)
     }
 
     return parts.join(' ')
-  }, [mode, sport, seasonType, postYear, period, stat, thresholdN, lastA, lastB, minN, computeWindow, windowN, streakN, streakYear])
+  }, [mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, computeWindow, windowN, streakN])
 
   const canRun = Boolean(builtCommand) && !isLoading
 
@@ -250,7 +247,7 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
           ? '▸ nspe {sport} {post} {full/q1} {stat}N -lastN/N'
           : mode === 'compute'
           ? '▸ nspe {sport} {post} {full/q1} {stat} minN {-window}'
-          : '▸ nspe {sport} {post} {full/q1} {stat}N -streakN {YYYY|YYYY-YYYY}'}
+          : '▸ nspe {sport} {post} {full/q1} {stat}N -streakN'}
       </div>
       {/* Streak: threshold + streakN + year */}
       {mode === 'streak' && stat && (
@@ -262,17 +259,6 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
           <div>
             <SLabel>min streak</SLabel>
             <NumInput value={streakN} onChange={setStreakN} placeholder="N" w={54} />
-          </div>
-          <div>
-            <SLabel>year window</SLabel>
-            <input
-              type="text"
-              value={streakYear}
-              onChange={e => setStreakYear(e.target.value.replace(/[^0-9\-]/g, ''))}
-              placeholder="YYYY or YYYY-YYYY"
-              className="font-mono text-[13px] rounded border px-2 py-1.5 outline-none"
-              style={{ width: '110px', backgroundColor: C.surface2, borderColor: C.border, color: C.accent }}
-            />
           </div>
         </div>
       )}
@@ -325,26 +311,6 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
             )}
           </div>
         </div>
-        {seasonType === 'post' && (mode === 'trend' || mode === 'compute') && (
-          <div>
-            <SLabel>post year</SLabel>
-            <input
-              type="text"
-              inputMode="numeric"
-              maxLength={4}
-              value={postYear}
-              onChange={(e) => setPostYear(e.target.value.replace(/[^0-9]/g, '').slice(0, 4))}
-              placeholder={sport ? DEFAULT_POST_YEAR_BY_SPORT[sport] || 'YYYY' : 'YYYY'}
-              className="font-mono text-[13px] rounded border px-2 py-1.5 outline-none"
-              style={{
-                width: '88px',
-                backgroundColor: C.surface2,
-                borderColor: C.border,
-                color: C.accent,
-              }}
-            />
-          </div>
-        )}
       </div>
 
       {/* Stats */}
