@@ -359,6 +359,16 @@ function extractDateToken(value: unknown): string | null {
     return null
   }
 
+  // ISO form like "2026-05-25" or "2026-05-25T...": normalize to M/D for display.
+  const iso = value.match(/(\d{4})-(\d{2})-(\d{2})/)
+  if (iso) {
+    const month = Number(iso[2])
+    const day = Number(iso[3])
+    if (Number.isFinite(month) && Number.isFinite(day)) {
+      return `${month}/${day}`
+    }
+  }
+
   const match = value.match(/(\d{1,2}\/\d{1,2}(?:\/\d{2,4})?)/)
   return match ? match[1] : null
 }
@@ -617,6 +627,21 @@ function detectStatContext(payload: ApiPayload, fallbackQuery: string): StatCont
   const knownStats = Object.keys(STAT_FIELDS[sport]).sort((a, b) => b.length - a.length)
   if (queryStat && knownStats.includes(queryStat)) {
     return { sport, stat: queryStat }
+  }
+
+  // Period-prefixed stats like "q1_points", "1h_points", "p1_goals": strip the
+  // prefix and reverse-map the canonical field name back to its short code.
+  if (queryStat) {
+    const stripped = queryStat.replace(/^(q1|1h|p1|h1|h2|q2|q3|q4)_/, '')
+    if (knownStats.includes(stripped)) {
+      return { sport, stat: stripped }
+    }
+    const fields = STAT_FIELDS[sport]
+    for (const [short, fld] of Object.entries(fields)) {
+      if (typeof fld === 'string' && fld === stripped) {
+        return { sport, stat: short }
+      }
+    }
   }
   for (const tok of tokens) {
     const lower = tok.toLowerCase()
