@@ -934,7 +934,7 @@ function App() {
   const [isBuilderOpen, setIsBuilderOpen] = useState(false)
   const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(true)
   const [isMobileLeaderboardOpen, setIsMobileLeaderboardOpen] = useState(false)
-  const leaderboard = leaderboardData as LeaderboardPayload
+  const leaderboard = leaderboardData as unknown as LeaderboardPayload
   const isMobile = useIsMobile()
   const searchInputRef = useRef<HTMLInputElement>(null)
   const sampleMenuRef = useRef<HTMLDivElement>(null)
