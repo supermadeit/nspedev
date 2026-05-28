@@ -1571,7 +1571,7 @@ function App() {
 
           <div className="mt-6 text-center">
             <p className="font-mono text-[14px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
-              Search stats like the pros
+              try sample commands or build your own query
             </p>
           </div>
         </div>
