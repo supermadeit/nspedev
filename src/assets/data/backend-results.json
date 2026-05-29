@@ -1,0 +1,218 @@
+{
+  "kind": "mlb_stat_leaderboard",
+  "generated_at": "2026-05-29T11:23:14.056972Z",
+  "query": {
+    "stat": "hits",
+    "field": "H",
+    "short": "H",
+    "threshold": 2,
+    "year": 2026,
+    "last_n": 10
+  },
+  "thresholds": {
+    "min_ab_season": 20,
+    "top_n": 20
+  },
+  "rows": [
+    {
+      "player": "Ketel Marte",
+      "team": "ARI",
+      "games_meeting": 7,
+      "window_games": 10,
+      "season_ab": 43,
+      "season_hits": 22,
+      "season_avg": 0.5116,
+      "last_match": "2026-05-27"
+    },
+    {
+      "player": "Juan Soto",
+      "team": "NYM",
+      "games_meeting": 6,
+      "window_games": 10,
+      "season_ab": 36,
+      "season_hits": 14,
+      "season_avg": 0.3889,
+      "last_match": "2026-05-27"
+    },
+    {
+      "player": "Jazz Chisholm Jr",
+      "team": "NYY",
+      "games_meeting": 6,
+      "window_games": 10,
+      "season_ab": 38,
+      "season_hits": 14,
+      "season_avg": 0.3684,
+      "last_match": "2026-05-26"
+    },
+    {
+      "player": "Shohei Ohtani",
+      "team": "LAD",
+      "games_meeting": 5,
+      "window_games": 10,
+      "season_ab": 27,
+      "season_hits": 14,
+      "season_avg": 0.5185,
+      "last_match": "2026-05-23"
+    },
+    {
+      "player": "Willson Contreras",
+      "team": "BOS",
+      "games_meeting": 5,
+      "window_games": 10,
+      "season_ab": 38,
+      "season_hits": 16,
+      "season_avg": 0.4211,
+      "last_match": "2026-05-26"
+    },
+    {
+      "player": "William Contreras",
+      "team": "MIL",
+      "games_meeting": 5,
+      "window_games": 10,
+      "season_ab": 41,
+      "season_hits": 16,
+      "season_avg": 0.3902,
+      "last_match": "2026-05-26"
+    },
+    {
+      "player": "Jorge Mateo",
+      "team": "ATL",
+      "games_meeting": 5,
+      "window_games": 10,
+      "season_ab": 31,
+      "season_hits": 12,
+      "season_avg": 0.3871,
+      "last_match": "2026-05-28"
+    },
+    {
+      "player": "Carson Kelly",
+      "team": "CHC",
+      "games_meeting": 5,
+      "window_games": 10,
+      "season_ab": 32,
+      "season_hits": 12,
+      "season_avg": 0.375,
+      "last_match": "2026-05-27"
+    },
+    {
+      "player": "Willi Castro",
+      "team": "COL",
+      "games_meeting": 5,
+      "window_games": 10,
+      "season_ab": 32,
+      "season_hits": 12,
+      "season_avg": 0.375,
+      "last_match": "2026-05-26"
+    },
+    {
+      "player": "Corbin Carroll",
+      "team": "ARI",
+      "games_meeting": 5,
+      "window_games": 10,
+      "season_ab": 41,
+      "season_hits": 15,
+      "season_avg": 0.3659,
+      "last_match": "2026-05-25"
+    },
+    {
+      "player": "Leody Taveras",
+      "team": "BAL",
+      "games_meeting": 5,
+      "window_games": 10,
+      "season_ab": 36,
+      "season_hits": 13,
+      "season_avg": 0.3611,
+      "last_match": "2026-05-27"
+    },
+    {
+      "player": "Ryan Waldschmidt",
+      "team": "ARI",
+      "games_meeting": 5,
+      "window_games": 10,
+      "season_ab": 34,
+      "season_hits": 12,
+      "season_avg": 0.3529,
+      "last_match": "2026-05-24"
+    },
+    {
+      "player": "Jake Bauers",
+      "team": "MIL",
+      "games_meeting": 5,
+      "window_games": 10,
+      "season_ab": 37,
+      "season_hits": 13,
+      "season_avg": 0.3514,
+      "last_match": "2026-05-26"
+    },
+    {
+      "player": "Jarren Duran",
+      "team": "BOS",
+      "games_meeting": 5,
+      "window_games": 10,
+      "season_ab": 43,
+      "season_hits": 15,
+      "season_avg": 0.3488,
+      "last_match": "2026-05-27"
+    },
+    {
+      "player": "Brandon Lowe",
+      "team": "PIT",
+      "games_meeting": 5,
+      "window_games": 10,
+      "season_ab": 38,
+      "season_hits": 13,
+      "season_avg": 0.3421,
+      "last_match": "2026-05-26"
+    },
+    {
+      "player": "Blake Dunn",
+      "team": "CIN",
+      "games_meeting": 5,
+      "window_games": 10,
+      "season_ab": 41,
+      "season_hits": 14,
+      "season_avg": 0.3415,
+      "last_match": "2026-05-27"
+    },
+    {
+      "player": "Michael Harris II",
+      "team": "ATL",
+      "games_meeting": 5,
+      "window_games": 10,
+      "season_ab": 43,
+      "season_hits": 14,
+      "season_avg": 0.3256,
+      "last_match": "2026-05-28"
+    },
+    {
+      "player": "Josh Naylor",
+      "team": "SEA",
+      "games_meeting": 5,
+      "window_games": 10,
+      "season_ab": 39,
+      "season_hits": 12,
+      "season_avg": 0.3077,
+      "last_match": "2026-05-27"
+    },
+    {
+      "player": "Nathan Lukes",
+      "team": "TOR",
+      "games_meeting": 4,
+      "window_games": 10,
+      "season_ab": 32,
+      "season_hits": 16,
+      "season_avg": 0.5,
+      "last_match": "2026-05-25"
+    },
+    {
+      "player": "James Wood",
+      "team": "WSH",
+      "games_meeting": 4,
+      "window_games": 10,
+      "season_ab": 39,
+      "season_hits": 17,
+      "season_avg": 0.4359,
+      "last_match": "2026-05-26"
+    }
+  ]
+}

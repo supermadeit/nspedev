@@ -1,9 +1,40 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 type QueryMode = 'trend' | 'compute' | 'streak'
 type SeasonType = 'post' | ''
 type PeriodType = 'q1' | '1h' | ''
 type ComputeWindow = '-season' | '-career' | '-last' | ''
+
+interface PersistedBuilderState {
+  mode: QueryMode
+  sport: string
+  seasonType: SeasonType
+  period: PeriodType
+  stat: string
+  thresholdN: string
+  lastA: string
+  lastB: string
+  minN: string
+  computeWindow: ComputeWindow
+  windowN: string
+  streakN: string
+}
+
+const STORAGE_KEY_DESKTOP = 'nspe.queryBuilder.desktop.v1'
+const STORAGE_KEY_MOBILE = 'nspe.queryBuilder.mobile.v1'
+
+function loadPersistedState(key: string): Partial<PersistedBuilderState> | null {
+  if (typeof window === 'undefined') return null
+  try {
+    const raw = window.localStorage.getItem(key)
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    return parsed && typeof parsed === 'object' ? parsed : null
+  } catch {
+    return null
+  }
+}
 
 const NBA_HALF_STATS = new Set(['pts', 'tpm'])
 
@@ -133,21 +164,40 @@ export interface QueryBuilderProps {
 }
 
 export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
-  const [mode, setMode] = useState<QueryMode>('trend')
-  const [sport, setSport] = useState('')
-  const [seasonType, setSeasonType] = useState<SeasonType>('')
-  const [period, setPeriod] = useState<PeriodType>('')
-  const [stat, setStat] = useState('')
+  const isMobile = useIsMobile()
+  const storageKey = isMobile ? STORAGE_KEY_MOBILE : STORAGE_KEY_DESKTOP
+  const initial = useMemo(() => loadPersistedState(storageKey) ?? {}, [storageKey])
+
+  const [mode, setMode] = useState<QueryMode>(initial.mode ?? 'trend')
+  const [sport, setSport] = useState(initial.sport ?? '')
+  const [seasonType, setSeasonType] = useState<SeasonType>(initial.seasonType ?? '')
+  const [period, setPeriod] = useState<PeriodType>(initial.period ?? '')
+  const [stat, setStat] = useState(initial.stat ?? '')
   // trend
-  const [thresholdN, setThresholdN] = useState('')
-  const [lastA, setLastA] = useState('')
-  const [lastB, setLastB] = useState('')
+  const [thresholdN, setThresholdN] = useState(initial.thresholdN ?? '')
+  const [lastA, setLastA] = useState(initial.lastA ?? '')
+  const [lastB, setLastB] = useState(initial.lastB ?? '')
   // compute
-  const [minN, setMinN] = useState('')
-  const [computeWindow, setComputeWindow] = useState<ComputeWindow>('')
-  const [windowN, setWindowN] = useState('')
+  const [minN, setMinN] = useState(initial.minN ?? '')
+  const [computeWindow, setComputeWindow] = useState<ComputeWindow>(initial.computeWindow ?? '')
+  const [windowN, setWindowN] = useState(initial.windowN ?? '')
   // streak
-  const [streakN, setStreakN] = useState('')
+  const [streakN, setStreakN] = useState(initial.streakN ?? '')
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const payload: PersistedBuilderState = {
+      mode, sport, seasonType, period, stat,
+      thresholdN, lastA, lastB,
+      minN, computeWindow, windowN,
+      streakN,
+    }
+    try {
+      window.localStorage.setItem(storageKey, JSON.stringify(payload))
+    } catch {
+      // ignore quota / unavailable storage
+    }
+  }, [storageKey, mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, computeWindow, windowN, streakN])
 
   const isNbaHalfPeriod = sport === 'nba' && period === '1h'
   const allStats = SPORT_STATS[sport] ?? []

@@ -246,12 +246,16 @@ interface Star {
 }
 
 interface HitlistEntry {
-  player: string
-  stat: string
-  values: number[]
-  threshold: number
+  player?: string
+  team?: string
+  stat?: string
+  values?: number[]
+  threshold?: number
   window?: string
-  hit_dates: string[]
+  hit_dates?: string[]
+  games_meeting?: number
+  window_games?: number
+  raw?: string
 }
 
 const STAT_LABELS: Record<string, string> = {
@@ -262,15 +266,29 @@ const STAT_LABELS: Record<string, string> = {
 }
 
 function formatTickerEntry(entry: HitlistEntry): string {
-  const statLabel = STAT_LABELS[entry.stat] || entry.stat
+  if (entry.raw) {
+    return entry.raw
+  }
+
+  const statLabel = entry.stat ? (STAT_LABELS[entry.stat] || entry.stat) : ''
+
+  // MLB-leaderboard style: team + player + {Nstat MG LW}
+  if (entry.team && typeof entry.games_meeting === 'number' && typeof entry.window_games === 'number') {
+    const tag = `{${entry.threshold ?? ''}${statLabel} ${entry.games_meeting}G L${entry.window_games}}`
+    return `${entry.team} ${entry.player ?? ''} ${tag}`.trim()
+  }
+
+  // Legacy per-player rolling entries
   const windowPart = entry.window ? ` last${entry.window}` : ''
-  const header = `{${statLabel}${entry.threshold}${windowPart}}`
-  const pairs = entry.hit_dates.map((date, i) => {
-    const value = entry.values[i]
+  const header = `{${statLabel}${entry.threshold ?? ''}${windowPart}}`
+  const dates = entry.hit_dates ?? []
+  const values = entry.values ?? []
+  const pairs = dates.map((date, i) => {
+    const value = values[i]
     return `"${date}" {${value ?? ''}}`
   })
 
-  return `${entry.player} ${header} ${pairs.join(', ')}`
+  return `${entry.player ?? ''} ${header} ${pairs.join(', ')}`.trim()
 }
 
 interface LeaderboardRow {
