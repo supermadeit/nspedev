@@ -272,9 +272,11 @@ function formatTickerEntry(entry: HitlistEntry): string {
 
   const statLabel = entry.stat ? (STAT_LABELS[entry.stat] || entry.stat) : ''
 
-  // MLB-leaderboard style: team + player + {Nstat MG LW}
-  if (entry.team && typeof entry.games_meeting === 'number' && typeof entry.window_games === 'number') {
-    const tag = `{${entry.threshold ?? ''}${statLabel} ${entry.games_meeting}G L${entry.window_games}}`
+  // MLB-leaderboard style: team + player + {Nstat MG <window>}
+  if (entry.team && typeof entry.games_meeting === 'number') {
+    const windowSuffix =
+      typeof entry.window_games === 'number' ? `L${entry.window_games}` : 'season'
+    const tag = `{${entry.threshold ?? ''}${statLabel} ${entry.games_meeting}G ${windowSuffix}}`
     return `${entry.team} ${entry.player ?? ''} ${tag}`.trim()
   }
 
@@ -1232,7 +1234,7 @@ function App() {
               <span style={{ color: 'oklch(0.75 0.15 145)' }}>{'{preview}'}</span>
             </span>
             <span style={{ color: 'oklch(0.65 0 0)', fontSize: '10px', fontWeight: 400 }}>
-              {`{stats refreshed ${new Date().getMonth() + 1}/${new Date().getDate()}}`}
+              {`{ ${new Date().getMonth() + 1}/${new Date().getDate()}}`}
             </span>
           </span>
         ) : (
