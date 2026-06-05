@@ -1234,7 +1234,7 @@ function App() {
               <span style={{ color: 'oklch(0.75 0.15 145)' }}>{'{preview}'}</span>
             </span>
             <span style={{ color: 'oklch(0.65 0 0)', fontSize: '10px', fontWeight: 400 }}>
-              {`{ ${new Date().getMonth() + 1}/${new Date().getDate()}}`}
+              {`{${new Date().getMonth() + 1}/${new Date().getDate()} stats}`}
             </span>
           </span>
         ) : (
@@ -1244,7 +1244,7 @@ function App() {
               <span style={{ color: 'oklch(0.75 0.15 145)' }}>{'{preview}'}</span>
             </span>
             <span style={{ color: 'oklch(0.65 0 0)', fontSize: '12px' }}>
-              {`{stats refreshed ${new Date().getMonth() + 1}/${new Date().getDate()}}`}
+              {`{${new Date().getMonth() + 1}/${new Date().getDate()} stats}`}
             </span>
           </>
         )}
