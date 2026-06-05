@@ -265,6 +265,85 @@ const STAT_LABELS: Record<string, string> = {
   ast: 'ast',
 }
 
+interface GlossaryEntry {
+  term: string
+  meaning: string
+}
+
+const GLOSSARY_STATS: { sport: string; entries: GlossaryEntry[] }[] = [
+  {
+    sport: 'nba',
+    entries: [
+      { term: 'pts', meaning: 'Points' },
+      { term: 'reb', meaning: 'Rebounds' },
+      { term: 'ast', meaning: 'Assists' },
+      { term: 'stl', meaning: 'Steals' },
+      { term: 'blk', meaning: 'Blocks' },
+      { term: 'tpm / 3pm', meaning: 'Three-Pointers Made' },
+      { term: 'pts+ast', meaning: 'Points + Assists combined' },
+      { term: 'pts+reb', meaning: 'Points + Rebounds combined' },
+      { term: 'reb+ast', meaning: 'Rebounds + Assists combined' },
+      { term: 'total', meaning: 'Points + Rebounds + Assists' },
+      { term: 'q1 / q2 / q3 / q4', meaning: 'By quarter (e.g. q1 -pts10)' },
+      { term: '1h', meaning: 'First half' },
+    ],
+  },
+  {
+    sport: 'nhl',
+    entries: [
+      { term: 'g', meaning: 'Goals' },
+      { term: 'a', meaning: 'Assists' },
+      { term: 'pts', meaning: 'Points (Goals + Assists)' },
+      { term: 'sog', meaning: 'Shots On Goal' },
+      { term: 'blk', meaning: 'Blocks' },
+      { term: 'pim', meaning: 'Penalty Minutes' },
+      { term: 'p1 / p2 / p3', meaning: 'By period' },
+    ],
+  },
+  {
+    sport: 'mlb',
+    entries: [
+      { term: 'hits', meaning: 'Hits' },
+      { term: 'hr', meaning: 'Home Runs' },
+      { term: 'rbi', meaning: 'Runs Batted In' },
+      { term: 'dub', meaning: 'Doubles (2B)' },
+      { term: 'trp', meaning: 'Triples (3B)' },
+      { term: 'tb', meaning: 'Total Bases' },
+      { term: 'sb', meaning: 'Stolen Bases' },
+      { term: 'k', meaning: 'Strikeouts' },
+      { term: 'bb', meaning: 'Walks (Base on Balls)' },
+    ],
+  },
+]
+
+const GLOSSARY_QUERY: GlossaryEntry[] = [
+  { term: '-statN', meaning: 'Per-game threshold (e.g. -pts30 = 30+ points in a game)' },
+  { term: '-stat minN', meaning: 'Season/window total (e.g. -pts min1500)' },
+  { term: '-lastN', meaning: 'Look back across the player\'s last N games' },
+  { term: '-lastM/N', meaning: 'M of the last N games meeting the threshold' },
+  { term: '-streakN', meaning: 'Active streak of N+ consecutive games meeting the threshold' },
+  { term: '-season', meaning: 'Use the full current season window' },
+  { term: 'post', meaning: 'Postseason / playoff scope' },
+]
+
+const GLOSSARY_LEADERBOARD: GlossaryEntry[] = [
+  { term: 'Rank', meaning: 'Position in the top list (sorted by Score)' },
+  { term: 'Player / Team', meaning: 'Player name and team abbreviation' },
+  { term: 'Label(N)', meaning: 'Active streak type with (N) = number of games the streak is currently on' },
+  { term: '★', meaning: 'Top 3 indicator' },
+  { term: 'Score', meaning: 'Composite ranking value combining streak length, type weight, and recent form' },
+]
+
+const GLOSSARY_STREAK_LABELS: GlossaryEntry[] = [
+  { term: 'HR', meaning: 'Home Run streak — HR in each game' },
+  { term: '2TB', meaning: '2+ Total Bases in each game' },
+  { term: 'Hit', meaning: 'Hit streak — at least one hit each game' },
+  { term: '2H', meaning: '2+ Hits in each game' },
+  { term: 'OB', meaning: 'On-Base streak — reached base each game' },
+  { term: '2R', meaning: '2+ Runs scored in each game' },
+  { term: '2RBI', meaning: '2+ RBI in each game' },
+]
+
 function formatTickerEntry(entry: HitlistEntry): string {
   if (entry.raw) {
     return entry.raw
@@ -954,6 +1033,7 @@ function App() {
   const [isBuilderOpen, setIsBuilderOpen] = useState(false)
   const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(true)
   const [isMobileLeaderboardOpen, setIsMobileLeaderboardOpen] = useState(false)
+  const [isGlossaryOpen, setIsGlossaryOpen] = useState(false)
   const leaderboard = leaderboardData as unknown as LeaderboardPayload
   const isMobile = useIsMobile()
   const searchInputRef = useRef<HTMLInputElement>(null)
@@ -1234,7 +1314,7 @@ function App() {
               <span style={{ color: 'oklch(0.75 0.15 145)' }}>{'{preview}'}</span>
             </span>
             <span style={{ color: 'oklch(0.65 0 0)', fontSize: '10px', fontWeight: 400 }}>
-              {`{${new Date().getMonth() + 1}/${new Date().getDate()} stats}`}
+              {`{${new Date().getMonth() + 1}/${new Date().getDate()} stats refreshed}`}
             </span>
           </span>
         ) : (
@@ -1657,6 +1737,22 @@ function App() {
         }}
       />
 
+      {!isMobile && (
+        <button
+          type="button"
+          onClick={() => setIsGlossaryOpen(true)}
+          className="absolute z-20 font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+          style={{
+            bottom: '52px',
+            right: '440px',
+            color: 'oklch(0.85 0.15 195)',
+          }}
+          aria-label="Open glossary"
+        >
+          {'{glossary}'}
+        </button>
+      )}
+
       {!isMobile && leaderboard?.rows?.length > 0 && (
         <div
           className="absolute right-4 z-20 rounded-md overflow-hidden"          style={{
@@ -1751,6 +1847,22 @@ function App() {
           aria-label="Open leaderboard"
         >
           {'{leaderboard}'}
+        </button>
+      )}
+
+      {isMobile && (
+        <button
+          type="button"
+          onClick={() => setIsGlossaryOpen(true)}
+          className="absolute z-20 font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+          style={{
+            bottom: '46px',
+            right: leaderboard?.rows?.length > 0 ? '128px' : '12px',
+            color: 'oklch(0.85 0.15 195)',
+          }}
+          aria-label="Open glossary"
+        >
+          {'{glossary}'}
         </button>
       )}
 
@@ -1849,6 +1961,142 @@ function App() {
                   </div>
                 )
               })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isGlossaryOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ backgroundColor: 'rgba(0,0,0,0.78)', whiteSpace: 'normal' }}
+          onClick={() => setIsGlossaryOpen(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Glossary"
+        >
+          <div
+            className="w-full max-w-[680px] max-h-[92vh] overflow-y-auto rounded-lg"
+            style={{
+              backgroundColor: 'oklch(0.12 0 0)',
+              border: '1px solid oklch(0.28 0 0)',
+              color: 'oklch(0.88 0 0)',
+              fontFamily: 'monospace',
+              whiteSpace: 'normal',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div
+              className="flex items-center justify-between px-5 py-3 sticky top-0"
+              style={{
+                backgroundColor: 'oklch(0.18 0 0)',
+                borderBottom: '1px solid oklch(0.28 0 0)',
+              }}
+            >
+              <span
+                className="font-mono font-bold text-[14px]"
+                style={{ color: 'oklch(0.85 0.15 195)' }}
+              >
+                {'{glossary}'}
+              </span>
+              <button
+                type="button"
+                onClick={() => setIsGlossaryOpen(false)}
+                className="font-mono text-[14px] hover:opacity-70 transition-opacity"
+                style={{ color: 'oklch(0.85 0.15 195)' }}
+                aria-label="Close glossary"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="px-5 py-4 space-y-5">
+              {GLOSSARY_STATS.map((group) => (
+                <section key={group.sport}>
+                  <div
+                    className="font-mono text-[12px] uppercase tracking-widest mb-2"
+                    style={{ color: 'oklch(0.78 0.18 145)' }}
+                  >
+                    {`{${group.sport} stats}`}
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1.5">
+                    {group.entries.map((e) => (
+                      <div key={e.term} className="font-mono text-[12px] flex gap-2">
+                        <span
+                          className="shrink-0"
+                          style={{ color: 'oklch(0.90 0.18 195)', minWidth: '92px' }}
+                        >
+                          {e.term}
+                        </span>
+                        <span style={{ color: 'oklch(0.82 0 0)' }}>{e.meaning}</span>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              ))}
+
+              <section>
+                <div
+                  className="font-mono text-[12px] uppercase tracking-widest mb-2"
+                  style={{ color: 'oklch(0.78 0.18 145)' }}
+                >
+                  {'{query syntax}'}
+                </div>
+                <div className="grid grid-cols-1 gap-y-1.5">
+                  {GLOSSARY_QUERY.map((e) => (
+                    <div key={e.term} className="font-mono text-[12px] flex gap-2">
+                      <span
+                        className="shrink-0"
+                        style={{ color: 'oklch(0.90 0.18 195)', minWidth: '110px' }}
+                      >
+                        {e.term}
+                      </span>
+                      <span style={{ color: 'oklch(0.82 0 0)' }}>{e.meaning}</span>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              <section>
+                <div
+                  className="font-mono text-[12px] uppercase tracking-widest mb-2"
+                  style={{ color: 'oklch(0.78 0.18 145)' }}
+                >
+                  {'{leaderboard}'}
+                </div>
+                <div className="grid grid-cols-1 gap-y-1.5 mb-3">
+                  {GLOSSARY_LEADERBOARD.map((e) => (
+                    <div key={e.term} className="font-mono text-[12px] flex gap-2">
+                      <span
+                        className="shrink-0"
+                        style={{ color: 'oklch(0.90 0.18 195)', minWidth: '110px' }}
+                      >
+                        {e.term}
+                      </span>
+                      <span style={{ color: 'oklch(0.82 0 0)' }}>{e.meaning}</span>
+                    </div>
+                  ))}
+                </div>
+                <div
+                  className="font-mono text-[11px] mb-2"
+                  style={{ color: 'oklch(0.62 0 0)' }}
+                >
+                  Streak labels (mlb):
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1.5">
+                  {GLOSSARY_STREAK_LABELS.map((e) => (
+                    <div key={e.term} className="font-mono text-[12px] flex gap-2">
+                      <span
+                        className="shrink-0"
+                        style={{ color: 'oklch(0.90 0.18 195)', minWidth: '60px' }}
+                      >
+                        {e.term}
+                      </span>
+                      <span style={{ color: 'oklch(0.82 0 0)' }}>{e.meaning}</span>
+                    </div>
+                  ))}
+                </div>
+              </section>
             </div>
           </div>
         </div>
