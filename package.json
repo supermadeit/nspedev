@@ -9,7 +9,8 @@
         "build": "tsc -b --noCheck && vite build",
         "lint": "eslint .",
         "optimize": "vite optimize",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "format-hitlist": "node scripts/format-hitlist.mjs"
     },
     "dependencies": {
         "@heroicons/react": "^2.2.0",

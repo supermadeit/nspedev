@@ -1,23 +1,165 @@
 [
-  { "raw": "MLB 2rbi+ {top20} {season}" },
-  { "team": "MIA", "player": "Liam Hicks",          "stat": "rbi", "threshold": 2, "games_meeting": 15 },
-  { "team": "LAD", "player": "Andy Pages",          "stat": "rbi", "threshold": 2, "games_meeting": 14 },
-  { "team": "HOU", "player": "Yordan Alvarez",      "stat": "rbi", "threshold": 2, "games_meeting": 13 },
-  { "team": "NYY", "player": "Ben Rice",            "stat": "rbi", "threshold": 2, "games_meeting": 13 },
-  { "team": "ATL", "player": "Michael Harris II",   "stat": "rbi", "threshold": 2, "games_meeting": 12 },
-  { "team": "STL", "player": "Jordan Walker",       "stat": "rbi", "threshold": 2, "games_meeting": 12 },
-  { "team": "TB",  "player": "Jonathan Aranda",     "stat": "rbi", "threshold": 2, "games_meeting": 12 },
-  { "team": "ARI", "player": "Ketel Marte",         "stat": "rbi", "threshold": 2, "games_meeting": 12 },
-  { "team": "HOU", "player": "Christian Walker",    "stat": "rbi", "threshold": 2, "games_meeting": 12 },
-  { "team": "WSH", "player": "CJ Abrams",           "stat": "rbi", "threshold": 2, "games_meeting": 11 },
-  { "team": "STL", "player": "Alec Burleson",       "stat": "rbi", "threshold": 2, "games_meeting": 11 },
-  { "team": "ARI", "player": "Ildemaro Vargas",     "stat": "rbi", "threshold": 2, "games_meeting": 11 },
-  { "team": "MIL", "player": "William Contreras",   "stat": "rbi", "threshold": 2, "games_meeting": 11 },
-  { "team": "ATL", "player": "Matt Olson",          "stat": "rbi", "threshold": 2, "games_meeting": 11 },
-  { "team": "PIT", "player": "Oneil Cruz",          "stat": "rbi", "threshold": 2, "games_meeting": 11 },
-  { "team": "CLE", "player": "Chase Delauter",      "stat": "rbi", "threshold": 2, "games_meeting": 11 },
-  { "team": "ATL", "player": "Mauricio Dubon",      "stat": "rbi", "threshold": 2, "games_meeting": 11 },
-  { "team": "DET", "player": "Dillon Dingler",      "stat": "rbi", "threshold": 2, "games_meeting": 11 },
-  { "team": "CHW", "player": "Munetaka Murakami",   "stat": "rbi", "threshold": 2, "games_meeting": 11 },
-  { "team": "BOS", "player": "Willson Contreras",   "stat": "rbi", "threshold": 2, "games_meeting": 10 }
+  {
+    "raw": "MLB 4tb+ {top20} {L10}"
+  },
+  {
+    "team": "NYY",
+    "player": "Ben Rice",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 5,
+    "window_games": 10
+  },
+  {
+    "team": "CHC",
+    "player": "Ian Happ",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 5,
+    "window_games": 10
+  },
+  {
+    "team": "SF",
+    "player": "Willy Adames",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 5,
+    "window_games": 10
+  },
+  {
+    "team": "CIN",
+    "player": "JJ Bleday",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 5,
+    "window_games": 10
+  },
+  {
+    "team": "TEX",
+    "player": "Joc Pederson",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 5,
+    "window_games": 10
+  },
+  {
+    "team": "COL",
+    "player": "Hunter Goodman",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 5,
+    "window_games": 10
+  },
+  {
+    "team": "HOU",
+    "player": "Jeremy Pena",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 4,
+    "window_games": 10
+  },
+  {
+    "team": "LAD",
+    "player": "Shohei Ohtani",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 4,
+    "window_games": 10
+  },
+  {
+    "team": "BOS",
+    "player": "Willson Contreras",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 4,
+    "window_games": 10
+  },
+  {
+    "team": "HOU",
+    "player": "Yordan Alvarez",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 4,
+    "window_games": 10
+  },
+  {
+    "team": "PIT",
+    "player": "Bryan Reynolds",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 4,
+    "window_games": 10
+  },
+  {
+    "team": "LAD",
+    "player": "Freddie Freeman",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 4,
+    "window_games": 10
+  },
+  {
+    "team": "PHI",
+    "player": "Kyle Schwarber",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 4,
+    "window_games": 10
+  },
+  {
+    "team": "WSH",
+    "player": "James Wood",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 4,
+    "window_games": 10
+  },
+  {
+    "team": "BOS",
+    "player": "Jarren Duran",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 4,
+    "window_games": 10
+  },
+  {
+    "team": "DET",
+    "player": "Dillon Dingler",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 4,
+    "window_games": 10
+  },
+  {
+    "team": "MIN",
+    "player": "Kody Clemens",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 4,
+    "window_games": 10
+  },
+  {
+    "team": "ATL",
+    "player": "Ronald Acuna Jr",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 4,
+    "window_games": 10
+  },
+  {
+    "team": "SEA",
+    "player": "Julio Rodriguez",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 4,
+    "window_games": 10
+  },
+  {
+    "team": "MIL",
+    "player": "Jake Bauers",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 4,
+    "window_games": 10
+  }
 ]
