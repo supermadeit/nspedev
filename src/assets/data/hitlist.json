@@ -1,145 +1,145 @@
 [
   {
-    "raw": "MLB 4tb+ {top20} {season}"
-  },
-  {
-    "team": "NYY",
-    "player": "Ben Rice",
-    "stat": "tb",
-    "threshold": 4,
-    "games_meeting": 22
-  },
-  {
-    "team": "HOU",
-    "player": "Yordan Alvarez",
-    "stat": "tb",
-    "threshold": 4,
-    "games_meeting": 21
-  },
-  {
-    "team": "PHI",
-    "player": "Kyle Schwarber",
-    "stat": "tb",
-    "threshold": 4,
-    "games_meeting": 21
-  },
-  {
-    "team": "LAD",
-    "player": "Shohei Ohtani",
-    "stat": "tb",
-    "threshold": 4,
-    "games_meeting": 20
-  },
-  {
-    "team": "STL",
-    "player": "Jordan Walker",
-    "stat": "tb",
-    "threshold": 4,
-    "games_meeting": 19
-  },
-  {
-    "team": "ATL",
-    "player": "Matt Olson",
-    "stat": "tb",
-    "threshold": 4,
-    "games_meeting": 19
+    "raw": "MLB 2runs+ {top20} {season}"
   },
   {
     "team": "WSH",
     "player": "James Wood",
-    "stat": "tb",
-    "threshold": 4,
-    "games_meeting": 19
-  },
-  {
-    "team": "CHW",
-    "player": "Munetaka Murakami",
-    "stat": "tb",
-    "threshold": 4,
-    "games_meeting": 19
-  },
-  {
-    "team": "MIN",
-    "player": "Byron Buxton",
-    "stat": "tb",
-    "threshold": 4,
-    "games_meeting": 18
-  },
-  {
-    "team": "WSH",
-    "player": "CJ Abrams",
-    "stat": "tb",
-    "threshold": 4,
+    "stat": "runs",
+    "threshold": 2,
     "games_meeting": 17
   },
   {
-    "team": "BOS",
-    "player": "Willson Contreras",
-    "stat": "tb",
-    "threshold": 4,
-    "games_meeting": 16
-  },
-  {
-    "team": "PHI",
-    "player": "Bryce Harper",
-    "stat": "tb",
-    "threshold": 4,
-    "games_meeting": 16
-  },
-  {
-    "team": "NYY",
-    "player": "Aaron Judge",
-    "stat": "tb",
-    "threshold": 4,
-    "games_meeting": 16
+    "team": "LAD",
+    "player": "Shohei Ohtani",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 14
   },
   {
     "team": "CHW",
-    "player": "Colson Montgomery",
-    "stat": "tb",
-    "threshold": 4,
-    "games_meeting": 16
+    "player": "Miguel Vargas",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 13
   },
   {
-    "team": "SF",
-    "player": "Casey Schmitt",
-    "stat": "tb",
-    "threshold": 4,
-    "games_meeting": 15
+    "team": "NYY",
+    "player": "Ben Rice",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 12
   },
   {
-    "team": "ATH",
-    "player": "Shea Langeliers",
-    "stat": "tb",
-    "threshold": 4,
-    "games_meeting": 15
+    "team": "MIL",
+    "player": "Brice Turang",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 12
   },
   {
-    "team": "TB",
-    "player": "Junior Caminero",
-    "stat": "tb",
-    "threshold": 4,
-    "games_meeting": 15
+    "team": "ATL",
+    "player": "Matt Olson",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 12
   },
   {
     "team": "PIT",
     "player": "Oneil Cruz",
-    "stat": "tb",
-    "threshold": 4,
-    "games_meeting": 15
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 12
   },
   {
-    "team": "HOU",
-    "player": "Christian Walker",
-    "stat": "tb",
-    "threshold": 4,
-    "games_meeting": 15
+    "team": "STL",
+    "player": "Ivan Herrera",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 11
   },
   {
     "team": "PIT",
     "player": "Brandon Lowe",
-    "stat": "tb",
-    "threshold": 4,
-    "games_meeting": 15
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 11
+  },
+  {
+    "team": "LAA",
+    "player": "Zach Neto",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 11
+  },
+  {
+    "team": "SF",
+    "player": "Luis Arraez",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 10
+  },
+  {
+    "team": "HOU",
+    "player": "Yordan Alvarez",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 10
+  },
+  {
+    "team": "NYM",
+    "player": "Carson Benge",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 10
+  },
+  {
+    "team": "NYY",
+    "player": "Aaron Judge",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 10
+  },
+  {
+    "team": "CHW",
+    "player": "Munetaka Murakami",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 10
+  },
+  {
+    "team": "CHC",
+    "player": "Ian Happ",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 10
+  },
+  {
+    "team": "SEA",
+    "player": "Randy Arozarena",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 9
+  },
+  {
+    "team": "SF",
+    "player": "Casey Schmitt",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 9
+  },
+  {
+    "team": "CIN",
+    "player": "Elly De La Cruz",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 9
+  },
+  {
+    "team": "ATH",
+    "player": "Nick Kurtz",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 9
   }
 ]
