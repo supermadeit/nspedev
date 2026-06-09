@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { useIsMobile } from '@/hooks/use-mobile'
 
-type QueryMode = 'trend' | 'compute' | 'streak'
+type QueryMode = 'trend' | 'compute' | 'streak' | 'h2h'
 type SeasonType = 'post' | ''
 type PeriodType = 'q1' | '1h' | ''
 type ComputeWindow = '-season' | '-career' | '-last' | ''
@@ -19,7 +19,21 @@ interface PersistedBuilderState {
   computeWindow: ComputeWindow
   windowN: string
   streakN: string
+  h2hPlayer: string
+  h2hOpponent: string
 }
+
+export interface PopularPlayer {
+  player: string
+  team: string
+}
+
+// All 30 MLB team abbreviations matching backend codes (e.g. ATH for Athletics).
+const MLB_TEAMS = [
+  'ARI', 'ATL', 'BAL', 'BOS', 'CHC', 'CWS', 'CIN', 'CLE', 'COL', 'DET',
+  'HOU', 'KC', 'LAA', 'LAD', 'MIA', 'MIL', 'MIN', 'NYM', 'NYY', 'ATH',
+  'PHI', 'PIT', 'SD', 'SEA', 'SF', 'STL', 'TB', 'TEX', 'TOR', 'WSH',
+]
 
 const STORAGE_KEY_DESKTOP = 'nspe.queryBuilder.desktop.v1'
 const STORAGE_KEY_MOBILE = 'nspe.queryBuilder.mobile.v1'
@@ -161,9 +175,10 @@ function NumInput({
 export interface QueryBuilderProps {
   onRunQuery: (query: string) => void
   isLoading: boolean
+  popularPlayers?: PopularPlayer[]
 }
 
-export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
+export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: QueryBuilderProps) {
   const isMobile = useIsMobile()
   const storageKey = isMobile ? STORAGE_KEY_MOBILE : STORAGE_KEY_DESKTOP
   const initial = useMemo(() => loadPersistedState(storageKey) ?? {}, [storageKey])
@@ -183,6 +198,9 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
   const [windowN, setWindowN] = useState(initial.windowN ?? '')
   // streak
   const [streakN, setStreakN] = useState(initial.streakN ?? '')
+  // h2h
+  const [h2hPlayer, setH2hPlayer] = useState(initial.h2hPlayer ?? '')
+  const [h2hOpponent, setH2hOpponent] = useState(initial.h2hOpponent ?? '')
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -191,13 +209,14 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
       thresholdN, lastA, lastB,
       minN, computeWindow, windowN,
       streakN,
+      h2hPlayer, h2hOpponent,
     }
     try {
       window.localStorage.setItem(storageKey, JSON.stringify(payload))
     } catch {
       // ignore quota / unavailable storage
     }
-  }, [storageKey, mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, computeWindow, windowN, streakN])
+  }, [storageKey, mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent])
 
   const isNbaHalfPeriod = sport === 'nba' && period === '1h'
   const allStats = SPORT_STATS[sport] ?? []
@@ -218,6 +237,16 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
     }
   }
 
+  const handleModeSelect = (m: QueryMode) => {
+    setMode(m)
+    // h2h is MLB-only at launch; force sport to mlb when switching in.
+    if (m === 'h2h' && sport !== 'mlb') {
+      setSport('mlb')
+      setStat('')
+      if (period === '1h' || period === 'q1') setPeriod('')
+    }
+  }
+
   const handlePeriodSelect = (p: PeriodType) => {
     setPeriod((prev) => (prev === p ? '' : p))
     // when entering 1h, stat must be pts or tpm
@@ -227,6 +256,12 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
   }
 
   const builtCommand = useMemo(() => {
+    if (mode === 'h2h') {
+      const player = h2hPlayer.trim()
+      if (!player || !h2hOpponent) return ''
+      return `nspe mlb ${player.toLowerCase()} vs ${h2hOpponent}`
+    }
+
     if (!sport) return ''
 
     const parts: string[] = ['nspe', sport]
@@ -253,7 +288,7 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
     }
 
     return parts.join(' ')
-  }, [mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, computeWindow, windowN, streakN])
+  }, [mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent])
 
   const canRun = Boolean(builtCommand) && !isLoading
 
@@ -261,11 +296,11 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
     <div className="w-full" style={{ color: C.textBright, fontFamily: 'monospace' }}>
       {/* Mode tabs */}
       <div className="flex gap-2 mb-4">
-        {(['trend', 'compute', 'streak'] as QueryMode[]).map((m) => (
+        {(['trend', 'compute', 'streak', 'h2h'] as QueryMode[]).map((m) => (
           <button
             key={m}
             type="button"
-            onClick={() => setMode(m)}
+            onClick={() => handleModeSelect(m)}
             className="flex-1 py-2 text-[12px] font-bold rounded border uppercase tracking-wider transition-colors"
             style={{
               backgroundColor: mode === m ? C.accent : C.surface2,
@@ -284,8 +319,70 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
           ? '▸ nspe {sport} {post} {full/q1} {stat}N -lastN/N'
           : mode === 'compute'
           ? '▸ nspe {sport} {post} {full/q1} {stat} minN {-window}'
-          : '▸ nspe {sport} {post} {full/q1} {stat}N -streakN'}
+          : mode === 'streak'
+          ? '▸ nspe {sport} {post} {full/q1} {stat}N -streakN'
+          : '▸ nspe mlb {player name} vs {TEAM}'}
       </div>
+
+      {/* H2H: opponent team + player */}
+      {mode === 'h2h' && (
+        <>
+          <div className="mb-3">
+            <SLabel>opponent team</SLabel>
+            <div className="flex gap-1.5 flex-wrap">
+              {MLB_TEAMS.map((t) => (
+                <Pill
+                  key={t}
+                  selected={h2hOpponent === t}
+                  onClick={() => setH2hOpponent((prev) => (prev === t ? '' : t))}
+                >
+                  {t}
+                </Pill>
+              ))}
+            </div>
+          </div>
+
+          <div className="mb-3">
+            <SLabel>player name</SLabel>
+            <input
+              type="text"
+              value={h2hPlayer}
+              onChange={(e) => setH2hPlayer(e.target.value)}
+              placeholder="type any MLB player (e.g. ketel marte)"
+              className="w-full font-mono text-[13px] rounded border px-3 py-2 outline-none"
+              style={{
+                backgroundColor: C.surface2,
+                borderColor: C.border,
+                color: C.accent,
+              }}
+            />
+          </div>
+
+          {popularPlayers.length > 0 && (
+            <div className="mb-3">
+              <SLabel>popular {'{'}top {popularPlayers.length}{'}'}</SLabel>
+              <div className="flex gap-1.5 flex-wrap">
+                {popularPlayers.map((p) => {
+                  const selected = h2hPlayer.trim().toLowerCase() === p.player.toLowerCase()
+                  return (
+                    <Pill
+                      key={`${p.team}-${p.player}`}
+                      selected={selected}
+                      onClick={() => setH2hPlayer(selected ? '' : p.player)}
+                    >
+                      {`${p.team} ${p.player}`}
+                    </Pill>
+                  )
+                })}
+              </div>
+              <div className="text-[10px] mt-2" style={{ color: C.textDim }}>
+                or type any player name above — not limited to this list
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
       {/* Streak: threshold + streakN + year */}
       {mode === 'streak' && stat && (
         <div className="mb-3 flex items-end gap-5 flex-wrap">
@@ -301,23 +398,26 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
       )}
 
       {/* Sport */}
-      <div className="mb-3">
-        <SLabel>sport</SLabel>
-        <div className="flex gap-2 flex-wrap">
-          {SPORTS.map((s) => (
-            <Pill
-              key={s.value}
-              selected={sport === s.value}
-              onClick={() => handleSportSelect(s.value)}
-              disabled={s.comingSoon}
-            >
-              {s.comingSoon ? `{${s.label}}` : s.label}
-            </Pill>
-          ))}
+      {mode !== 'h2h' && (
+        <div className="mb-3">
+          <SLabel>sport</SLabel>
+          <div className="flex gap-2 flex-wrap">
+            {SPORTS.map((s) => (
+              <Pill
+                key={s.value}
+                selected={sport === s.value}
+                onClick={() => handleSportSelect(s.value)}
+                disabled={s.comingSoon}
+              >
+                {s.comingSoon ? `{${s.label}}` : s.label}
+              </Pill>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Season / Period */}
+      {mode !== 'h2h' && (
       <div className="flex gap-6 mb-3">
         <div>
           <SLabel>season</SLabel>
@@ -349,9 +449,10 @@ export function QueryBuilder({ onRunQuery, isLoading }: QueryBuilderProps) {
           </div>
         </div>
       </div>
+      )}
 
       {/* Stats */}
-      {sport && stats.length > 0 && (
+      {mode !== 'h2h' && sport && stats.length > 0 && (
         <div className="mb-3">
           <SLabel>stat</SLabel>
           <div className="flex gap-1.5 flex-wrap">

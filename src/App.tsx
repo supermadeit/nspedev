@@ -159,6 +159,7 @@ const SAMPLE_COMMANDS = [
   { label: 'nspe mlb -tb2 -last3/5', command: 'nspe mlb -tb2 -last3/5' },
   { label: 'nspe mlb -tb min20 -last10', command: 'nspe mlb -tb min20 -last10' },
   { label: 'nspe mlb -tb2 -streak5', command: 'nspe mlb -tb2 -streak5' },
+  { label: 'nspe mlb shohei ohtani vs SF', command: 'nspe mlb shohei ohtani vs SF' },
   { label: '{nfl coming soon}', command: '', comingSoon: true },
 ]
 
@@ -180,6 +181,67 @@ interface MatchDetail {
   value: number
   date: string
   statLabel: string
+}
+
+interface H2hGame {
+  date: string
+  date_iso?: string
+  venue?: string
+  opponent?: string
+  AB?: number
+  R?: number
+  H?: number
+  '2B'?: number
+  '3B'?: number
+  HR?: number
+  RBI?: number
+  BB?: number
+  SO?: number
+  SB?: number
+}
+
+interface H2hTotals {
+  games?: number
+  AB?: number
+  R?: number
+  H?: number
+  '2B'?: number
+  '3B'?: number
+  HR?: number
+  RBI?: number
+  BB?: number
+  SO?: number
+  SB?: number
+  TB?: number
+  AVG?: number
+  OBP?: number
+  SLG?: number
+  OPS?: number
+}
+
+interface H2hPayload {
+  engine: string
+  query: {
+    player_query?: string
+    player_display?: string
+    player_team?: string
+    opponent_code?: string
+    home_away?: string
+    source?: string
+    year?: number
+    last_n?: number | null
+    season?: boolean
+    window_label?: string
+  }
+  totals: H2hTotals
+  games: H2hGame[]
+}
+
+function isH2hPayload(payload: unknown): payload is H2hPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  const engine = typeof rec.engine === 'string' ? rec.engine : ''
+  return engine.endsWith('-h2h') && typeof rec.totals === 'object' && Array.isArray(rec.games)
 }
 
 interface StatContext {
@@ -1013,6 +1075,142 @@ async function parseApiPayload(response: Response): Promise<ApiPayload> {
   }
 }
 
+function H2hView({ payload }: { payload: H2hPayload }) {
+  const q = payload.query ?? {}
+  const t = payload.totals ?? {}
+  const games = payload.games ?? []
+
+  const playerLabel = q.player_display || q.player_query || 'player'
+  const playerTeam = q.player_team || ''
+  const opponent = q.opponent_code || ''
+  const venueLabel =
+    q.home_away === 'home' ? '@ home' : q.home_away === 'away' ? 'on the road' : 'home & away'
+  const windowLabel = q.window_label || (q.year ? `(${q.year})` : '')
+
+  const formatAvg = (n?: number) => (typeof n === 'number' ? n.toFixed(3).replace(/^0+/, '') : '—')
+
+  const slashLine: { label: string; value: string }[] = [
+    { label: 'AVG', value: formatAvg(t.AVG) },
+    { label: 'OBP', value: formatAvg(t.OBP) },
+    { label: 'SLG', value: formatAvg(t.SLG) },
+    { label: 'OPS', value: formatAvg(t.OPS) },
+  ]
+
+  const counting: { label: string; value: number }[] = [
+    { label: 'G', value: t.games ?? 0 },
+    { label: 'AB', value: t.AB ?? 0 },
+    { label: 'H', value: t.H ?? 0 },
+    { label: 'R', value: t.R ?? 0 },
+    { label: 'HR', value: t.HR ?? 0 },
+    { label: 'RBI', value: t.RBI ?? 0 },
+    { label: 'TB', value: t.TB ?? 0 },
+    { label: '2B', value: t['2B'] ?? 0 },
+    { label: '3B', value: t['3B'] ?? 0 },
+    { label: 'BB', value: t.BB ?? 0 },
+    { label: 'SO', value: t.SO ?? 0 },
+    { label: 'SB', value: t.SB ?? 0 },
+  ]
+
+  return (
+    <div className="space-y-4">
+      {/* Header */}
+      <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+        {playerTeam ? (
+          <>
+            <span style={{ color: 'oklch(0.70 0.10 195)' }}>{playerTeam}</span>
+            <span style={{ color: 'oklch(0.55 0 0)' }}>{' — '}</span>
+          </>
+        ) : null}
+        <span>{playerLabel}</span>
+        <span style={{ color: 'oklch(0.55 0 0)' }}> vs </span>
+        <span style={{ color: 'oklch(0.70 0.10 195)' }}>{opponent || '—'}</span>
+        <span style={{ color: 'oklch(0.55 0 0)' }}>{` · ${venueLabel}${windowLabel ? ` · ${windowLabel}` : ''}`}</span>
+      </div>
+
+      {/* Totals card */}
+      <div
+        className="rounded p-3"
+        style={{ backgroundColor: 'oklch(0.18 0 0)', border: '1px solid oklch(0.28 0 0)' }}
+      >
+        <div className="grid grid-cols-4 gap-2 mb-3">
+          {slashLine.map((s) => (
+            <div key={s.label} className="flex flex-col items-center">
+              <span className="font-mono text-[10px] uppercase tracking-wider" style={{ color: 'oklch(0.55 0 0)' }}>
+                {s.label}
+              </span>
+              <span className="font-mono font-bold text-[15px]" style={{ color: 'oklch(0.85 0.15 145)' }}>
+                {s.value}
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-6 gap-2">
+          {counting.map((s) => (
+            <div key={s.label} className="flex flex-col items-center">
+              <span className="font-mono text-[10px] uppercase tracking-wider" style={{ color: 'oklch(0.48 0 0)' }}>
+                {s.label}
+              </span>
+              <span className="font-mono text-[13px]" style={{ color: 'oklch(0.88 0 0)' }}>
+                {s.value}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Game log */}
+      <div>
+        <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: 'oklch(0.48 0 0)' }}>
+          game log
+        </div>
+        {games.length === 0 ? (
+          <div className="text-center py-4 font-mono text-[12px]" style={{ color: 'oklch(0.70 0 0)' }}>
+            No games found in window
+          </div>
+        ) : (
+          <div className="space-y-1.5">
+            {games.map((g, i) => {
+              const venuePrefix = g.venue === 'away' ? '@' : g.venue === 'home' ? 'vs' : ''
+              const opp = g.opponent ?? ''
+              const matchup = [venuePrefix, opp].filter(Boolean).join(' ')
+              const line = [
+                `${g.AB ?? 0} AB`,
+                `${g.H ?? 0} H`,
+                ...(g.HR ? [`${g.HR} HR`] : []),
+                ...(g.RBI ? [`${g.RBI} RBI`] : []),
+                ...(g.R ? [`${g.R} R`] : []),
+                ...(g['2B'] ? [`${g['2B']} 2B`] : []),
+                ...(g['3B'] ? [`${g['3B']} 3B`] : []),
+                ...(g.BB ? [`${g.BB} BB`] : []),
+                ...(g.SO ? [`${g.SO} SO`] : []),
+                ...(g.SB ? [`${g.SB} SB`] : []),
+              ].join(', ')
+              return (
+                <div
+                  key={`${g.date_iso ?? g.date}-${i}`}
+                  className="flex items-baseline justify-between py-1.5 border-b font-mono text-[12px]"
+                  style={{ borderColor: 'oklch(0.22 0 0)' }}
+                >
+                  <span style={{ color: 'oklch(0.76 0 0)' }}>
+                    <span style={{ color: 'oklch(0.55 0 0)' }}>{g.date}</span>
+                    {matchup ? (
+                      <>
+                        <span style={{ color: 'oklch(0.40 0 0)' }}>{'  '}</span>
+                        <span style={{ color: 'oklch(0.70 0.10 195)' }}>{matchup}</span>
+                      </>
+                    ) : null}
+                  </span>
+                  <span style={{ color: 'oklch(0.85 0.15 145)' }}>{line}</span>
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 function App() {
   const [stars, setStars] = useState<Star[]>([])
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
@@ -1025,6 +1223,7 @@ function App() {
   const [isDragging, setIsDragging] = useState(false)
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const [queryResults, setQueryResults] = useState<QueryResult[] | null>(null)
+  const [h2hResult, setH2hResult] = useState<H2hPayload | null>(null)
   const [lastQuery, setLastQuery] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [queryError, setQueryError] = useState<string | null>(null)
@@ -1079,6 +1278,7 @@ function App() {
     setLastQuery(sanitizedQuery || query.trim())
     setQueryError(null)
     setCollapsedPlayers({})
+    setH2hResult(null)
 
     if (!sanitizedQuery) {
       setQueryResults([])
@@ -1103,6 +1303,13 @@ function App() {
       const payload = await parseApiPayload(response)
 
       console.log('Query response:', payload, 'via', url)
+
+      if (isH2hPayload(payload)) {
+        setH2hResult(payload)
+        setQueryResults([])
+        return
+      }
+
       const normalized = normalizeQueryResults(payload, sanitizedQuery)
       const payloadError = getPayloadError(payload)
       setQueryResults(normalized)
@@ -1221,6 +1428,7 @@ function App() {
 
     if (trimmedQuery === 'help') {
       setQueryResults(null)
+      setH2hResult(null)
       setLastQuery('')
       setQueryError(null)
       setIsMiniOpen(true)
@@ -1506,7 +1714,11 @@ function App() {
             onMouseDown={handleMouseDown}
           >
             <span className="font-mono font-bold text-[14px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
-              {queryResults ? `${lastQuery} — hitlist` : 'NSPE — Command Legend'}
+              {h2hResult
+                ? `${lastQuery} — h2h`
+                : queryResults
+                ? `${lastQuery} — hitlist`
+                : 'NSPE — Command Legend'}
             </span>
             <button
               onClick={() => setIsMiniOpen(false)}
@@ -1522,6 +1734,8 @@ function App() {
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
                 Running query...
               </div>
+            ) : h2hResult ? (
+              <H2hView payload={h2hResult} />
             ) : queryResults === null ? (
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
                 Build a query to begin
@@ -1718,7 +1932,11 @@ function App() {
               </button>
             </div>
             <div className="px-5 pb-10">
-              <QueryBuilder onRunQuery={handleRunFromBuilder} isLoading={isLoading} />
+              <QueryBuilder
+                onRunQuery={handleRunFromBuilder}
+                isLoading={isLoading}
+                popularPlayers={(leaderboard?.rows ?? []).slice(0, 20).map((r) => ({ player: r.player, team: r.team }))}
+              />
             </div>
           </div>
         </>
