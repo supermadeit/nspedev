@@ -244,6 +244,27 @@ function isH2hPayload(payload: unknown): payload is H2hPayload {
   return engine.endsWith('-h2h') && typeof rec.totals === 'object' && Array.isArray(rec.games)
 }
 
+// h2h responses may arrive either as a top-level JSON object or wrapped inside
+// the standard envelope as `{ output: "<json string>", ... }`. Try both shapes.
+function extractH2hPayload(payload: unknown): H2hPayload | null {
+  if (isH2hPayload(payload)) return payload
+
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isH2hPayload(inner)) return inner
+    }
+    // Some envelopes nest the structured payload under `data` or `result`.
+    for (const key of ['data', 'result', 'payload']) {
+      const v = rec[key]
+      if (isH2hPayload(v)) return v
+    }
+  }
+
+  return null
+}
+
 interface StatContext {
   sport: string
   stat: string
@@ -1304,8 +1325,9 @@ function App() {
 
       console.log('Query response:', payload, 'via', url)
 
-      if (isH2hPayload(payload)) {
-        setH2hResult(payload)
+      const h2hPayload = extractH2hPayload(payload)
+      if (h2hPayload) {
+        setH2hResult(h2hPayload)
         setQueryResults([])
         return
       }
