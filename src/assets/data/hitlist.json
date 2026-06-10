@@ -1,145 +1,145 @@
 [
   {
-    "raw": "MLB 3hits+ {top20} {season}"
+    "raw": "MLB 2runs+ {top20} {season}"
+  },
+  {
+    "team": "WSH",
+    "player": "James Wood",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 18
   },
   {
     "team": "LAD",
     "player": "Shohei Ohtani",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 9
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 14
   },
   {
-    "team": "MIA",
-    "player": "Otto Lopez",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 8
+    "team": "CHW",
+    "player": "Miguel Vargas",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 14
   },
   {
-    "team": "SF",
-    "player": "Jung Hoo Lee",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 8
+    "team": "NYY",
+    "player": "Ben Rice",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 13
   },
   {
-    "team": "TB",
-    "player": "Yandy Diaz",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 7
+    "team": "MIL",
+    "player": "Brice Turang",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 13
+  },
+  {
+    "team": "ATL",
+    "player": "Matt Olson",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 13
+  },
+  {
+    "team": "PIT",
+    "player": "Oneil Cruz",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 12
+  },
+  {
+    "team": "STL",
+    "player": "Ivan Herrera",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 12
+  },
+  {
+    "team": "PIT",
+    "player": "Brandon Lowe",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 11
+  },
+  {
+    "team": "LAA",
+    "player": "Zach Neto",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 11
   },
   {
     "team": "SF",
     "player": "Luis Arraez",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 7
-  },
-  {
-    "team": "TEX",
-    "player": "Josh Jung",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 7
-  },
-  {
-    "team": "ATL",
-    "player": "Michael Harris II",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 7
-  },
-  {
-    "team": "STL",
-    "player": "Jordan Walker",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 7
-  },
-  {
-    "team": "LAD",
-    "player": "Andy Pages",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 7
-  },
-  {
-    "team": "TOR",
-    "player": "Vladimir Guerrero Jr",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 7
-  },
-  {
-    "team": "PHI",
-    "player": "Brandon Marsh",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 6
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 10
   },
   {
     "team": "HOU",
     "player": "Yordan Alvarez",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 6
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 10
   },
   {
-    "team": "PIT",
-    "player": "Nick Gonzales",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 6
-  },
-  {
-    "team": "TEX",
-    "player": "Ezequiel Duran",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 6
+    "team": "SEA",
+    "player": "Randy Arozarena",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 10
   },
   {
     "team": "ATH",
-    "player": "Shea Langeliers",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 6
-  },
-  {
-    "team": "CLE",
-    "player": "Brayan Rocchio",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 6
-  },
-  {
-    "team": "SF",
-    "player": "Casey Schmitt",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 6
+    "player": "Nick Kurtz",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 10
   },
   {
     "team": "ATL",
     "player": "Ozzie Albies",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 6
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 10
   },
   {
-    "team": "COL",
-    "player": "TJ Rumfield",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 6
+    "team": "PIT",
+    "player": "Bryan Reynolds",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 10
   },
   {
     "team": "NYM",
     "player": "Carson Benge",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 6
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 10
+  },
+  {
+    "team": "NYY",
+    "player": "Aaron Judge",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 10
+  },
+  {
+    "team": "CHW",
+    "player": "Munetaka Murakami",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 10
+  },
+  {
+    "team": "CHC",
+    "player": "Ian Happ",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 10
   }
 ]
