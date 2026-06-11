@@ -1,1 +1,7 @@
+# A missing hashed asset must NOT fall through to index.html, or Safari sees
+# text/html for a <script type="module"> and blocks it (nosniff). Force a real
+# 404 instead -- the browser will just report a clean module load error.
+/assets/*  /index.html  404
+
+# SPA fallback for client-side routes.
 /*  /index.html  200

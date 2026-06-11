@@ -5,6 +5,19 @@
   Permissions-Policy: geolocation=(), microphone=(), camera=()
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
 
+# HTML must always revalidate so a new deploy's asset hashes are picked up
+# immediately. Without this, Safari can hold onto a stale index.html that
+# references deleted /assets/*.js files, which then fall through to the SPA
+# rewrite and get served as text/html -- breaking module loading.
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
