@@ -1713,7 +1713,7 @@ function App() {
   const [isMiniOpen, setIsMiniOpen] = useState(false)
   const [isSampleMenuOpen, setIsSampleMenuOpen] = useState(false)
   const [isTutorialOpen, setIsTutorialOpen] = useState(false)
-  const [miniPosition, setMiniPosition] = useState({ x: window.innerWidth / 2 - 300, y: window.innerHeight * 0.40 + 70 })
+  const [miniPosition, setMiniPosition] = useState({ x: window.innerWidth / 2 - 310, y: window.innerHeight * 0.40 + 70 })
   const [isDragging, setIsDragging] = useState(false)
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const [queryResults, setQueryResults] = useState<QueryResult[] | null>(null)
@@ -2255,7 +2255,7 @@ function App() {
           ref={miniRef}
           className={isMobile
             ? 'fixed inset-x-2 top-2 z-30 rounded-lg shadow-2xl overflow-hidden'
-            : 'absolute z-30 w-[600px] max-h-[40vh] rounded-lg shadow-2xl overflow-hidden'
+            : 'absolute z-30 w-[620px] max-h-[62vh] rounded-lg shadow-2xl overflow-hidden'
           }
           style={isMobile
             ? { maxHeight: 'calc(100dvh - 80px)', backgroundColor: 'oklch(0.15 0 0)', border: '1px solid oklch(0.30 0 0)' }
@@ -2287,7 +2287,7 @@ function App() {
             </button>
           </div>
 
-          <div className={`overflow-y-auto px-5 py-4 space-y-3 ${isMobile ? 'max-h-[calc(100dvh-130px)]' : 'max-h-[calc(40vh-50px)]'}`}>
+          <div className={`overflow-y-auto px-5 py-4 space-y-3 ${isMobile ? 'max-h-[calc(100dvh-130px)]' : 'max-h-[calc(62vh-50px)]'}`}>
             {isLoading ? (
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
                 Running query...
