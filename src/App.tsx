@@ -160,6 +160,10 @@ const SAMPLE_COMMANDS = [
   { label: 'nspe mlb -tb min20 -last10', command: 'nspe mlb -tb min20 -last10' },
   { label: 'nspe mlb -tb2 -streak5', command: 'nspe mlb -tb2 -streak5' },
   { label: 'nspe mlb shohei ohtani vs SF', command: 'nspe mlb shohei ohtani vs SF' },
+  { label: 'nspe mlb pitch wheeler -vfp', command: 'nspe mlb pitch wheeler -vfp' },
+  { label: 'nspe mlb pitch skenes -outs', command: 'nspe mlb pitch skenes -outs' },
+  { label: 'nspe mlb pitch braxton -vfp vs atl', command: 'nspe mlb pitch braxton -vfp vs atl' },
+  { label: 'nspe mlb bat vs NYM -outs', command: 'nspe mlb bat vs NYM -outs' },
   { label: '{nfl coming soon}', command: '', comingSoon: true },
 ]
 
@@ -241,6 +245,8 @@ function isH2hPayload(payload: unknown): payload is H2hPayload {
   if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
   const rec = payload as Record<string, unknown>
   const engine = typeof rec.engine === 'string' ? rec.engine : ''
+  // Pitcher h2h has its own dedicated view.
+  if (engine === 'mlb-pitch-h2h') return false
   return engine.endsWith('-h2h') && typeof rec.totals === 'object' && Array.isArray(rec.games)
 }
 
@@ -255,13 +261,151 @@ function extractH2hPayload(payload: unknown): H2hPayload | null {
       const inner = extractEnvelopeFromText(rec.output)
       if (inner && isH2hPayload(inner)) return inner
     }
-    // Some envelopes nest the structured payload under `data` or `result`.
-    for (const key of ['data', 'result', 'payload']) {
+    // Some envelopes nest the structured payload under `data`, `result`, or
+    // `query_results_envelope`.
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
       const v = rec[key]
       if (isH2hPayload(v)) return v
     }
   }
 
+  return null
+}
+
+// ---------- MLB Pitcher H2H ----------
+
+interface MlbPitchGame {
+  date_display?: string
+  date_iso?: string
+  venue?: string
+  ip?: string | number
+  k?: number
+  bb?: number
+  hr?: number
+  pitches?: number
+  vfp?: number | null
+  updown_match?: number | null
+  first_k?: unknown
+  first_match?: unknown
+}
+
+interface MlbPitchTotals {
+  games?: number
+  ip_outs?: number
+  k?: number
+  bb?: number
+  hr?: number
+  h?: number
+  er?: number
+  pitches?: number
+  first_pitch_velocities?: number[]
+  gb?: number
+  fb?: number
+  popout?: number
+  foul_out?: number
+}
+
+interface MlbPitchRates {
+  k_pct?: number
+  bb_pct?: number
+  hr_pct?: number
+  h_pct?: number
+  go_pct?: number
+  fo_pct?: number
+  po_pct?: number
+  lo_pct?: number
+  foul_out_pct?: number
+  dp_pct?: number
+  total_contact_outs?: number
+  pa?: number
+  era?: number
+  k9?: number
+  bb9?: number
+  hr9?: number
+  innings?: number
+}
+
+interface MlbFirstPitchSummary {
+  avg?: number
+  min?: number
+  max?: number
+  median?: number
+  pitch_types?: Record<string, number>
+}
+
+interface MlbPitchH2hPayload {
+  engine: 'mlb-pitch-h2h'
+  player?: string
+  opponent?: string | null
+  year_window?: [number, number]
+  career?: boolean
+  last_n?: number | null
+  games: MlbPitchGame[]
+  totals?: MlbPitchTotals
+  pbp_tally?: Record<string, number>
+  out_types?: Record<string, number>
+  pitch_type_counts?: Record<string, number>
+  rates?: MlbPitchRates
+  first_pitch_summary?: MlbFirstPitchSummary
+}
+
+function isMlbPitchH2hPayload(payload: unknown): payload is MlbPitchH2hPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return rec.engine === 'mlb-pitch-h2h' && Array.isArray(rec.games)
+}
+
+function extractMlbPitchH2hPayload(payload: unknown): MlbPitchH2hPayload | null {
+  if (isMlbPitchH2hPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isMlbPitchH2hPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isMlbPitchH2hPayload(v)) return v
+    }
+  }
+  return null
+}
+
+// ---------- MLB Batter Team ----------
+
+interface MlbBatTeamPayload {
+  engine: 'mlb-bat-team'
+  team?: string
+  last_n?: number | null
+  year_window?: [number, number]
+  career?: boolean
+  games?: number
+  pbp_tally?: Record<string, number>
+  out_types?: Record<string, number>
+  rates?: MlbPitchRates
+  first_pitch_summary?: MlbFirstPitchSummary
+  contributing_pitchers?: { name: string; games: number }[]
+}
+
+function isMlbBatTeamPayload(payload: unknown): payload is MlbBatTeamPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return rec.engine === 'mlb-bat-team' && typeof rec.rates === 'object'
+}
+
+function extractMlbBatTeamPayload(payload: unknown): MlbBatTeamPayload | null {
+  if (isMlbBatTeamPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isMlbBatTeamPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isMlbBatTeamPayload(v)) return v
+    }
+  }
   return null
 }
 
@@ -1232,6 +1376,335 @@ function H2hView({ payload }: { payload: H2hPayload }) {
   )
 }
 
+function formatIpFromOuts(outs?: number): string {
+  if (typeof outs !== 'number' || outs <= 0) return '0.0'
+  const whole = Math.floor(outs / 3)
+  const rem = outs % 3
+  return `${whole}.${rem}`
+}
+
+const PITCH_STAT_PILL = 'oklch(0.18 0 0)'
+const PITCH_LABEL = 'oklch(0.55 0 0)'
+const PITCH_VALUE = 'oklch(0.88 0 0)'
+const PITCH_ACCENT = 'oklch(0.85 0.15 195)'
+const PITCH_GREEN = 'oklch(0.85 0.15 145)'
+const PITCH_BORDER = 'oklch(0.28 0 0)'
+
+function StatBox({ label, value, accent }: { label: string; value: string | number; accent?: string }) {
+  return (
+    <div className="flex flex-col items-center justify-center px-2 py-1.5 rounded" style={{ backgroundColor: PITCH_STAT_PILL, border: `1px solid ${PITCH_BORDER}` }}>
+      <span className="font-mono text-[9px] uppercase tracking-wider" style={{ color: PITCH_LABEL }}>{label}</span>
+      <span className="font-mono font-bold text-[13px]" style={{ color: accent ?? PITCH_VALUE }}>{value}</span>
+    </div>
+  )
+}
+
+const OUT_TYPE_LABELS: Array<[keyof Record<string, number>, string]> = [
+  ['GO', 'Ground out'],
+  ['FO', 'Fly out'],
+  ['LO', 'Line out'],
+  ['PO', 'Pop out'],
+  ['FOUL_OUT', 'Foul out'],
+  ['DP', 'Double play'],
+  ['SAC_FLY', 'Sac fly'],
+  ['SAC_BUNT', 'Sac bunt'],
+  ['BUNT_OUT', 'Bunt out'],
+  ['FORCE_OUT', 'Force out'],
+  ['CS', 'Caught stealing'],
+  ['PICKOFF', 'Pickoff'],
+  ['TP', 'Triple play'],
+  ['OTHER_OUT', 'Other'],
+]
+
+function OutTypeGrid({ outTypes, totalOuts }: { outTypes: Record<string, number>; totalOuts: number }) {
+  const rows = OUT_TYPE_LABELS
+    .map(([key, label]) => ({ key: key as string, label, value: outTypes[key as string] ?? 0 }))
+    .filter((r) => r.value > 0)
+  if (rows.length === 0) return null
+  return (
+    <div className="grid grid-cols-2 gap-x-4 gap-y-1 font-mono text-[12px]">
+      {rows.map((r) => {
+        const pct = totalOuts > 0 ? (r.value / totalOuts) * 100 : 0
+        return (
+          <div key={r.key} className="flex items-baseline justify-between">
+            <span style={{ color: PITCH_VALUE }}>{r.label}</span>
+            <span style={{ color: PITCH_LABEL }}>
+              <span style={{ color: PITCH_VALUE }}>{r.value}</span>
+              {totalOuts > 0 ? ` (${pct.toFixed(1)}%)` : ''}
+            </span>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+function PitchArsenalBars({ counts }: { counts: Record<string, number> }) {
+  const entries = Object.entries(counts)
+    .filter(([, v]) => typeof v === 'number' && v > 0)
+    .sort((a, b) => (b[1] as number) - (a[1] as number))
+  const total = entries.reduce((sum, [, v]) => sum + (v as number), 0)
+  if (total === 0) return null
+  const max = entries[0][1] as number
+  return (
+    <div className="space-y-1 font-mono text-[12px]">
+      {entries.map(([name, count]) => {
+        const pct = (count / total) * 100
+        const widthPct = (count / max) * 100
+        return (
+          <div key={name} className="flex items-center gap-2">
+            <span className="w-[120px] shrink-0" style={{ color: PITCH_VALUE }}>{name}</span>
+            <span className="w-[34px] text-right tabular-nums" style={{ color: PITCH_LABEL }}>{count}</span>
+            <span className="w-[52px] text-right tabular-nums" style={{ color: PITCH_LABEL }}>{pct.toFixed(1)}%</span>
+            <div className="flex-1 h-[8px] rounded-sm" style={{ backgroundColor: 'oklch(0.16 0 0)' }}>
+              <div className="h-full rounded-sm" style={{ width: `${widthPct}%`, backgroundColor: PITCH_ACCENT }} />
+            </div>
+          </div>
+        )
+      })}
+      <div className="text-[10px] mt-1" style={{ color: PITCH_LABEL }}>{total} pitches total</div>
+    </div>
+  )
+}
+
+function MlbPitchH2hView({ payload }: { payload: MlbPitchH2hPayload }) {
+  const games = payload.games ?? []
+  const totals = payload.totals ?? {}
+  const rates = payload.rates ?? {}
+  const out_types = payload.out_types ?? {}
+  const pbp = payload.pbp_tally ?? {}
+  const arsenal = payload.pitch_type_counts ?? {}
+  const fp = payload.first_pitch_summary ?? {}
+
+  const playerLabel = payload.player || 'pitcher'
+  const opponent = payload.opponent || 'ALL'
+  const yw = payload.year_window
+  const yearLabel = yw ? (yw[0] === yw[1] ? `${yw[0]}` : `${yw[0]}–${yw[1]}`) : payload.career ? 'career' : ''
+
+  const ip = formatIpFromOuts(totals.ip_outs)
+  const totalOuts = rates.total_contact_outs ?? 0
+
+  return (
+    <div className="space-y-4">
+      <div className="font-mono text-[13px]" style={{ color: PITCH_ACCENT }}>
+        <span>{playerLabel}</span>
+        <span style={{ color: PITCH_LABEL }}> vs </span>
+        <span style={{ color: 'oklch(0.70 0.10 195)' }}>{opponent}</span>
+        <span style={{ color: PITCH_LABEL }}>{` · ${games.length} game${games.length === 1 ? '' : 's'}${yearLabel ? ` · ${yearLabel}` : ''}`}</span>
+      </div>
+
+      {/* Totals */}
+      <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.18 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+        <div className="grid grid-cols-4 gap-2 mb-2">
+          <StatBox label="G" value={totals.games ?? games.length} />
+          <StatBox label="IP" value={ip} />
+          <StatBox label="K" value={totals.k ?? 0} accent={PITCH_GREEN} />
+          <StatBox label="ERA" value={typeof rates.era === 'number' ? rates.era.toFixed(2) : '—'} accent={PITCH_GREEN} />
+          <StatBox label="BB" value={totals.bb ?? 0} />
+          <StatBox label="HR" value={totals.hr ?? 0} />
+          <StatBox label="H" value={totals.h ?? 0} />
+          <StatBox label="P" value={totals.pitches ?? 0} />
+          <StatBox label="K/9" value={typeof rates.k9 === 'number' ? rates.k9.toFixed(2) : '—'} />
+          <StatBox label="BB/9" value={typeof rates.bb9 === 'number' ? rates.bb9.toFixed(2) : '—'} />
+          <StatBox label="HR/9" value={typeof rates.hr9 === 'number' ? rates.hr9.toFixed(2) : '—'} />
+          <StatBox label="PA" value={rates.pa ?? 0} />
+        </div>
+        <div className="grid grid-cols-4 gap-2 font-mono text-[11px]" style={{ color: PITCH_LABEL }}>
+          <div className="flex items-baseline gap-1.5"><span>K%</span><span style={{ color: PITCH_VALUE }}>{rates.k_pct?.toFixed(1) ?? '—'}</span></div>
+          <div className="flex items-baseline gap-1.5"><span>BB%</span><span style={{ color: PITCH_VALUE }}>{rates.bb_pct?.toFixed(1) ?? '—'}</span></div>
+          <div className="flex items-baseline gap-1.5"><span>HR%</span><span style={{ color: PITCH_VALUE }}>{rates.hr_pct?.toFixed(1) ?? '—'}</span></div>
+          <div className="flex items-baseline gap-1.5"><span>H%</span><span style={{ color: PITCH_VALUE }}>{rates.h_pct?.toFixed(1) ?? '—'}</span></div>
+        </div>
+      </div>
+
+      {/* Out types + Arsenal side-by-side on wide */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {Object.keys(out_types).length > 0 && (
+          <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.13 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+            <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
+              out types {totalOuts > 0 ? `({${totalOuts}} contact outs)` : ''}
+            </div>
+            <OutTypeGrid outTypes={out_types} totalOuts={totalOuts} />
+          </div>
+        )}
+        {Object.keys(arsenal).length > 0 && (
+          <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.13 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+            <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
+              pitch arsenal
+            </div>
+            <PitchArsenalBars counts={arsenal} />
+          </div>
+        )}
+      </div>
+
+      {/* PBP + first-pitch */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {Object.keys(pbp).length > 0 && (
+          <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.13 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+            <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
+              plate appearances
+            </div>
+            <div className="grid grid-cols-3 gap-x-3 gap-y-1 font-mono text-[12px]">
+              {(['K', 'BB', 'H', 'HR', 'HBP', 'OUT', 'FC', 'ROE', 'OTHER'] as const).map((k) => (
+                pbp[k] ? (
+                  <div key={k} className="flex items-baseline justify-between">
+                    <span style={{ color: PITCH_VALUE }}>{k}</span>
+                    <span style={{ color: PITCH_VALUE }}>{pbp[k]}</span>
+                  </div>
+                ) : null
+              ))}
+            </div>
+          </div>
+        )}
+        {(typeof fp.avg === 'number' || typeof fp.median === 'number') && (
+          <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.13 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+            <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
+              first pitch
+            </div>
+            <div className="grid grid-cols-4 gap-2 font-mono text-[12px]">
+              <StatBox label="avg" value={typeof fp.avg === 'number' ? fp.avg.toFixed(1) : '—'} accent={PITCH_ACCENT} />
+              <StatBox label="med" value={typeof fp.median === 'number' ? fp.median.toFixed(1) : '—'} />
+              <StatBox label="min" value={typeof fp.min === 'number' ? fp.min.toFixed(0) : '—'} />
+              <StatBox label="max" value={typeof fp.max === 'number' ? fp.max.toFixed(0) : '—'} />
+            </div>
+            {fp.pitch_types && Object.keys(fp.pitch_types).length > 0 && (
+              <div className="mt-2 font-mono text-[11px]" style={{ color: PITCH_LABEL }}>
+                {Object.entries(fp.pitch_types).map(([k, v]) => `${k}: ${v}`).join(' · ')}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Game log */}
+      <div>
+        <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
+          game log
+        </div>
+        {games.length === 0 ? (
+          <div className="text-center py-3 font-mono text-[12px]" style={{ color: PITCH_VALUE }}>No games found</div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full font-mono text-[12px] border-collapse">
+              <thead>
+                <tr style={{ color: PITCH_LABEL, borderBottom: `1px solid ${PITCH_BORDER}` }}>
+                  <th className="text-left py-1 pr-2 font-normal">Date</th>
+                  <th className="text-left py-1 pr-2 font-normal">@</th>
+                  <th className="text-right py-1 pr-2 font-normal">IP</th>
+                  <th className="text-right py-1 pr-2 font-normal">K</th>
+                  <th className="text-right py-1 pr-2 font-normal">BB</th>
+                  <th className="text-right py-1 pr-2 font-normal">HR</th>
+                  <th className="text-right py-1 pr-2 font-normal">P</th>
+                  <th className="text-right py-1 font-normal">VFP</th>
+                </tr>
+              </thead>
+              <tbody>
+                {games.map((g, i) => (
+                  <tr key={`${g.date_iso ?? g.date_display ?? i}`} style={{ borderBottom: '1px solid oklch(0.18 0 0)', color: PITCH_VALUE }}>
+                    <td className="py-1 pr-2" style={{ color: PITCH_LABEL }}>{g.date_display ?? g.date_iso ?? ''}</td>
+                    <td className="py-1 pr-2" style={{ color: 'oklch(0.70 0.10 195)' }}>{g.venue ?? ''}</td>
+                    <td className="py-1 pr-2 text-right">{g.ip ?? ''}</td>
+                    <td className="py-1 pr-2 text-right" style={{ color: PITCH_GREEN }}>{g.k ?? 0}</td>
+                    <td className="py-1 pr-2 text-right">{g.bb ?? 0}</td>
+                    <td className="py-1 pr-2 text-right">{g.hr ?? 0}</td>
+                    <td className="py-1 pr-2 text-right">{g.pitches ?? 0}</td>
+                    <td className="py-1 text-right" style={{ color: PITCH_ACCENT }}>{typeof g.vfp === 'number' ? g.vfp.toFixed(1) : '—'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function MlbBatTeamView({ payload }: { payload: MlbBatTeamPayload }) {
+  const rates = payload.rates ?? {}
+  const out_types = payload.out_types ?? {}
+  const pbp = payload.pbp_tally ?? {}
+  const fp = payload.first_pitch_summary ?? {}
+  const pitchers = payload.contributing_pitchers ?? []
+
+  const team = payload.team || 'TEAM'
+  const yw = payload.year_window
+  const yearLabel = yw ? (yw[0] === yw[1] ? `${yw[0]} season` : `${yw[0]}–${yw[1]}`) : payload.career ? 'career' : ''
+  const totalOuts = rates.total_contact_outs ?? 0
+
+  return (
+    <div className="space-y-4">
+      <div className="font-mono text-[13px]" style={{ color: PITCH_ACCENT }}>
+        <span style={{ color: 'oklch(0.70 0.10 195)' }}>{team}</span>
+        <span> batters</span>
+        <span style={{ color: PITCH_LABEL }}>{` · ${payload.games ?? 0} game${payload.games === 1 ? '' : 's'}${yearLabel ? ` · ${yearLabel}` : ''} · ${rates.pa ?? 0} PA`}</span>
+      </div>
+
+      <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.18 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+        <div className="grid grid-cols-4 gap-2">
+          <StatBox label="K%" value={rates.k_pct?.toFixed(1) ?? '—'} accent={PITCH_GREEN} />
+          <StatBox label="BB%" value={rates.bb_pct?.toFixed(1) ?? '—'} />
+          <StatBox label="HR%" value={rates.hr_pct?.toFixed(1) ?? '—'} />
+          <StatBox label="H%" value={rates.h_pct?.toFixed(1) ?? '—'} />
+          <StatBox label="K" value={pbp.K ?? 0} />
+          <StatBox label="BB" value={pbp.BB ?? 0} />
+          <StatBox label="HR" value={pbp.HR ?? 0} />
+          <StatBox label="H" value={pbp.H ?? 0} />
+          <StatBox label="ERA" value={typeof rates.era === 'number' ? rates.era.toFixed(2) : '—'} />
+          <StatBox label="K/9" value={typeof rates.k9 === 'number' ? rates.k9.toFixed(2) : '—'} />
+          <StatBox label="BB/9" value={typeof rates.bb9 === 'number' ? rates.bb9.toFixed(2) : '—'} />
+          <StatBox label="HR/9" value={typeof rates.hr9 === 'number' ? rates.hr9.toFixed(2) : '—'} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {Object.keys(out_types).length > 0 && (
+          <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.13 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+            <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
+              out types {totalOuts > 0 ? `({${totalOuts}} contact outs)` : ''}
+            </div>
+            <OutTypeGrid outTypes={out_types} totalOuts={totalOuts} />
+          </div>
+        )}
+        {(typeof fp.avg === 'number' || typeof fp.median === 'number') && (
+          <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.13 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+            <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
+              first pitch (opposing)
+            </div>
+            <div className="grid grid-cols-4 gap-2">
+              <StatBox label="avg" value={typeof fp.avg === 'number' ? fp.avg.toFixed(1) : '—'} accent={PITCH_ACCENT} />
+              <StatBox label="med" value={typeof fp.median === 'number' ? fp.median.toFixed(1) : '—'} />
+              <StatBox label="min" value={typeof fp.min === 'number' ? fp.min.toFixed(0) : '—'} />
+              <StatBox label="max" value={typeof fp.max === 'number' ? fp.max.toFixed(0) : '—'} />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {pitchers.length > 0 && (
+        <div>
+          <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
+            opposing pitchers in window
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-1 font-mono text-[12px]">
+            {pitchers.slice(0, 24).map((p) => (
+              <div key={p.name} className="flex items-baseline justify-between">
+                <span style={{ color: PITCH_VALUE }}>{p.name}</span>
+                <span style={{ color: PITCH_LABEL }}>{p.games} g</span>
+              </div>
+            ))}
+          </div>
+          {pitchers.length > 24 && (
+            <div className="mt-1 font-mono text-[11px]" style={{ color: PITCH_LABEL }}>
+              +{pitchers.length - 24} more
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
 function App() {
   const [stars, setStars] = useState<Star[]>([])
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
@@ -1245,12 +1718,20 @@ function App() {
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const [queryResults, setQueryResults] = useState<QueryResult[] | null>(null)
   const [h2hResult, setH2hResult] = useState<H2hPayload | null>(null)
+  const [pitchResult, setPitchResult] = useState<MlbPitchH2hPayload | null>(null)
+  const [batTeamResult, setBatTeamResult] = useState<MlbBatTeamPayload | null>(null)
   const [lastQuery, setLastQuery] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [queryError, setQueryError] = useState<string | null>(null)
   const [collapsedPlayers, setCollapsedPlayers] = useState<Record<string, boolean>>({})
   const [hitlistEntries, setHitlistEntries] = useState<HitlistEntry[]>(hitlistData as HitlistEntry[])
   const [isBuilderOpen, setIsBuilderOpen] = useState(false)
+  const [builderPosition, setBuilderPosition] = useState({
+    x: Math.max(16, Math.floor(window.innerWidth / 2 - 320)),
+    y: 96,
+  })
+  const [isBuilderDragging, setIsBuilderDragging] = useState(false)
+  const [builderDragOffset, setBuilderDragOffset] = useState({ x: 0, y: 0 })
   const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(true)
   const [isMobileLeaderboardOpen, setIsMobileLeaderboardOpen] = useState(false)
   const [isGlossaryOpen, setIsGlossaryOpen] = useState(false)
@@ -1259,6 +1740,7 @@ function App() {
   const searchInputRef = useRef<HTMLInputElement>(null)
   const sampleMenuRef = useRef<HTMLDivElement>(null)
   const miniRef = useRef<HTMLDivElement>(null)
+  const builderRef = useRef<HTMLDivElement>(null)
   const tickerRef = useRef<HTMLDivElement>(null)
 
   const tickerText = hitlistEntries
@@ -1300,6 +1782,8 @@ function App() {
     setQueryError(null)
     setCollapsedPlayers({})
     setH2hResult(null)
+    setPitchResult(null)
+    setBatTeamResult(null)
 
     if (!sanitizedQuery) {
       setQueryResults([])
@@ -1332,6 +1816,20 @@ function App() {
         return
       }
 
+      const pitchPayload = extractMlbPitchH2hPayload(payload)
+      if (pitchPayload) {
+        setPitchResult(pitchPayload)
+        setQueryResults([])
+        return
+      }
+
+      const batTeamPayload = extractMlbBatTeamPayload(payload)
+      if (batTeamPayload) {
+        setBatTeamResult(batTeamPayload)
+        setQueryResults([])
+        return
+      }
+
       const normalized = normalizeQueryResults(payload, sanitizedQuery)
       const payloadError = getPayloadError(payload)
       setQueryResults(normalized)
@@ -1339,7 +1837,12 @@ function App() {
       if (payloadError) {
         setQueryError(payloadError)
       } else if (normalized.length === 0) {
-        setQueryError('Connected to API, but response contained no recognizable result rows.')
+        // If backend returned plain stdout with no structured envelope, surface it.
+        const rec = (payload && typeof payload === 'object' && !Array.isArray(payload))
+          ? (payload as Record<string, unknown>)
+          : null
+        const stdout = rec && typeof rec.output === 'string' ? rec.output.trim() : ''
+        setQueryError(stdout || 'Connected to API, but response contained no recognizable result rows.')
       }
     } catch (error) {
       console.error('Query error:', error)
@@ -1418,6 +1921,33 @@ function App() {
     }
   }, [isDragging, dragOffset])
 
+  const handleBuilderMouseDown = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      setIsBuilderDragging(true)
+      setBuilderDragOffset({
+        x: e.clientX - builderPosition.x,
+        y: e.clientY - builderPosition.y,
+      })
+    }
+  }
+
+  useEffect(() => {
+    if (!isBuilderDragging) return
+
+    const move = (e: MouseEvent) => {
+      const x = Math.max(0, Math.min(window.innerWidth - 240, e.clientX - builderDragOffset.x))
+      const y = Math.max(0, Math.min(window.innerHeight - 60, e.clientY - builderDragOffset.y))
+      setBuilderPosition({ x, y })
+    }
+    const up = () => setIsBuilderDragging(false)
+    window.addEventListener('mousemove', move)
+    window.addEventListener('mouseup', up)
+    return () => {
+      window.removeEventListener('mousemove', move)
+      window.removeEventListener('mouseup', up)
+    }
+  }, [isBuilderDragging, builderDragOffset])
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
@@ -1451,6 +1981,8 @@ function App() {
     if (trimmedQuery === 'help') {
       setQueryResults(null)
       setH2hResult(null)
+      setPitchResult(null)
+      setBatTeamResult(null)
       setLastQuery('')
       setQueryError(null)
       setIsMiniOpen(true)
@@ -1738,6 +2270,10 @@ function App() {
             <span className="font-mono font-bold text-[14px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
               {h2hResult
                 ? `${lastQuery} — h2h`
+                : pitchResult
+                ? `${lastQuery} — pitch`
+                : batTeamResult
+                ? `${lastQuery} — team`
                 : queryResults
                 ? `${lastQuery} — hitlist`
                 : 'NSPE — Command Legend'}
@@ -1758,6 +2294,10 @@ function App() {
               </div>
             ) : h2hResult ? (
               <H2hView payload={h2hResult} />
+            ) : pitchResult ? (
+              <MlbPitchH2hView payload={pitchResult} />
+            ) : batTeamResult ? (
+              <MlbBatTeamView payload={batTeamResult} />
             ) : queryResults === null ? (
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
                 Build a query to begin
@@ -1913,31 +2453,26 @@ function App() {
         </div>
       </div>
 
-      {/* Query builder sheet */}
-      {isBuilderOpen && (
+      {/* Query builder — bottom sheet on mobile, draggable floating panel on desktop */}
+      {isBuilderOpen && isMobile && (
         <>
-          {/* Backdrop */}
           <div
             className="fixed inset-0 z-40"
             style={{ backgroundColor: 'rgba(0,0,0,0.55)' }}
             onClick={() => setIsBuilderOpen(false)}
           />
-          {/* Sheet */}
           <div
             className="fixed z-50 rounded-t-2xl overflow-y-auto"
             style={{
               bottom: 0,
-              left: isMobile ? 0 : '50%',
-              right: isMobile ? 0 : 'auto',
-              transform: isMobile ? undefined : 'translateX(-50%)',
-              width: isMobile ? undefined : '480px',
+              left: 0,
+              right: 0,
               maxHeight: '88dvh',
               backgroundColor: 'oklch(0.13 0 0)',
               border: '1px solid oklch(0.28 0 0)',
               borderBottom: 'none',
             }}
           >
-            {/* Drag handle */}
             <div className="flex justify-center pt-3 pb-1">
               <div className="w-10 h-1 rounded-full" style={{ backgroundColor: 'oklch(0.32 0 0)' }} />
             </div>
@@ -1962,6 +2497,57 @@ function App() {
             </div>
           </div>
         </>
+      )}
+
+      {isBuilderOpen && !isMobile && (
+        <div
+          ref={builderRef}
+          className="fixed z-50 rounded-lg overflow-hidden shadow-2xl"
+          style={{
+            left: `${builderPosition.x}px`,
+            top: `${builderPosition.y}px`,
+            width: '640px',
+            maxHeight: 'calc(100vh - 120px)',
+            backgroundColor: 'oklch(0.13 0 0)',
+            border: '1px solid oklch(0.30 0 0)',
+          }}
+        >
+          <div
+            className="flex items-center justify-between px-5 py-2.5 cursor-move select-none"
+            style={{
+              backgroundColor: 'oklch(0.18 0 0)',
+              borderBottom: '1px solid oklch(0.30 0 0)',
+            }}
+            onMouseDown={handleBuilderMouseDown}
+          >
+            <span
+              className="font-mono font-bold text-[13px] pointer-events-none"
+              style={{ color: 'oklch(0.85 0.15 195)' }}
+            >
+              {'{query builder}'}
+              <span
+                className="ml-2 font-normal"
+                style={{ color: 'oklch(0.55 0 0)', fontSize: '10px', letterSpacing: '0.1em' }}
+              >
+                DRAG TO MOVE
+              </span>
+            </span>
+            <button
+              onClick={() => setIsBuilderOpen(false)}
+              className="font-mono text-[14px] hover:opacity-70 transition-opacity"
+              style={{ color: 'oklch(0.85 0.15 195)' }}
+            >
+              ✕
+            </button>
+          </div>
+          <div className="overflow-y-auto px-5 py-4" style={{ maxHeight: 'calc(100vh - 180px)' }}>
+            <QueryBuilder
+              onRunQuery={handleRunFromBuilder}
+              isLoading={isLoading}
+              popularPlayers={(leaderboard?.rows ?? []).slice(0, 20).map((r) => ({ player: r.player, team: r.team }))}
+            />
+          </div>
+        </div>
       )}
 
       <img

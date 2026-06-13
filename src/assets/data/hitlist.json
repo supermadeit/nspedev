@@ -7,14 +7,14 @@
     "player": "James Wood",
     "stat": "runs",
     "threshold": 2,
-    "games_meeting": 18
+    "games_meeting": 19
   },
   {
     "team": "LAD",
     "player": "Shohei Ohtani",
     "stat": "runs",
     "threshold": 2,
-    "games_meeting": 14
+    "games_meeting": 15
   },
   {
     "team": "CHW",
@@ -31,6 +31,13 @@
     "games_meeting": 13
   },
   {
+    "team": "ATL",
+    "player": "Matt Olson",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 13
+  },
+  {
     "team": "MIL",
     "player": "Brice Turang",
     "stat": "runs",
@@ -38,8 +45,8 @@
     "games_meeting": 13
   },
   {
-    "team": "ATL",
-    "player": "Matt Olson",
+    "team": "STL",
+    "player": "Ivan Herrera",
     "stat": "runs",
     "threshold": 2,
     "games_meeting": 13
@@ -52,11 +59,25 @@
     "games_meeting": 12
   },
   {
-    "team": "STL",
-    "player": "Ivan Herrera",
+    "team": "LAA",
+    "player": "Zach Neto",
     "stat": "runs",
     "threshold": 2,
     "games_meeting": 12
+  },
+  {
+    "team": "HOU",
+    "player": "Yordan Alvarez",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 11
+  },
+  {
+    "team": "ATL",
+    "player": "Ozzie Albies",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 11
   },
   {
     "team": "PIT",
@@ -66,22 +87,8 @@
     "games_meeting": 11
   },
   {
-    "team": "LAA",
-    "player": "Zach Neto",
-    "stat": "runs",
-    "threshold": 2,
-    "games_meeting": 11
-  },
-  {
     "team": "SF",
     "player": "Luis Arraez",
-    "stat": "runs",
-    "threshold": 2,
-    "games_meeting": 10
-  },
-  {
-    "team": "HOU",
-    "player": "Yordan Alvarez",
     "stat": "runs",
     "threshold": 2,
     "games_meeting": 10
@@ -101,8 +108,8 @@
     "games_meeting": 10
   },
   {
-    "team": "ATL",
-    "player": "Ozzie Albies",
+    "team": "MIN",
+    "player": "Byron Buxton",
     "stat": "runs",
     "threshold": 2,
     "games_meeting": 10
@@ -115,29 +122,22 @@
     "games_meeting": 10
   },
   {
+    "team": "PHI",
+    "player": "Bryce Harper",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 10
+  },
+  {
+    "team": "LAD",
+    "player": "Max Muncy",
+    "stat": "runs",
+    "threshold": 2,
+    "games_meeting": 10
+  },
+  {
     "team": "NYM",
     "player": "Carson Benge",
-    "stat": "runs",
-    "threshold": 2,
-    "games_meeting": 10
-  },
-  {
-    "team": "NYY",
-    "player": "Aaron Judge",
-    "stat": "runs",
-    "threshold": 2,
-    "games_meeting": 10
-  },
-  {
-    "team": "CHW",
-    "player": "Munetaka Murakami",
-    "stat": "runs",
-    "threshold": 2,
-    "games_meeting": 10
-  },
-  {
-    "team": "CHC",
-    "player": "Ian Happ",
     "stat": "runs",
     "threshold": 2,
     "games_meeting": 10

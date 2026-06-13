@@ -1,10 +1,12 @@
 import { useState, useMemo, useEffect } from 'react'
 import { useIsMobile } from '@/hooks/use-mobile'
 
-type QueryMode = 'trend' | 'compute' | 'streak' | 'h2h'
+type QueryMode = 'trend' | 'compute' | 'streak' | 'h2h' | 'pitch' | 'team'
 type SeasonType = 'post' | ''
 type PeriodType = 'q1' | '1h' | ''
 type ComputeWindow = '-season' | '-career' | '-last' | ''
+type PitchFlag = 'vfp' | 'outs' | 'down' | ''
+type TeamFlag = 'outs' | ''
 
 interface PersistedBuilderState {
   mode: QueryMode
@@ -21,6 +23,12 @@ interface PersistedBuilderState {
   streakN: string
   h2hPlayer: string
   h2hOpponent: string
+  pitchPlayer: string
+  pitchOpponent: string
+  pitchFlag: PitchFlag
+  pitchDownN: string
+  teamCode: string
+  teamFlag: TeamFlag
 }
 
 export interface PopularPlayer {
@@ -198,9 +206,17 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
   const [windowN, setWindowN] = useState(initial.windowN ?? '')
   // streak
   const [streakN, setStreakN] = useState(initial.streakN ?? '')
-  // h2h
+  // h2h (batter)
   const [h2hPlayer, setH2hPlayer] = useState(initial.h2hPlayer ?? '')
   const [h2hOpponent, setH2hOpponent] = useState(initial.h2hOpponent ?? '')
+  // pitch (pitcher h2h)
+  const [pitchPlayer, setPitchPlayer] = useState(initial.pitchPlayer ?? '')
+  const [pitchOpponent, setPitchOpponent] = useState(initial.pitchOpponent ?? '')
+  const [pitchFlag, setPitchFlag] = useState<PitchFlag>(initial.pitchFlag ?? '')
+  const [pitchDownN, setPitchDownN] = useState(initial.pitchDownN ?? '')
+  // team (bat vs TEAM)
+  const [teamCode, setTeamCode] = useState(initial.teamCode ?? '')
+  const [teamFlag, setTeamFlag] = useState<TeamFlag>(initial.teamFlag ?? '')
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -210,13 +226,15 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       minN, computeWindow, windowN,
       streakN,
       h2hPlayer, h2hOpponent,
+      pitchPlayer, pitchOpponent, pitchFlag, pitchDownN,
+      teamCode, teamFlag,
     }
     try {
       window.localStorage.setItem(storageKey, JSON.stringify(payload))
     } catch {
       // ignore quota / unavailable storage
     }
-  }, [storageKey, mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent])
+  }, [storageKey, mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, pitchPlayer, pitchOpponent, pitchFlag, pitchDownN, teamCode, teamFlag])
 
   const isNbaHalfPeriod = sport === 'nba' && period === '1h'
   const allStats = SPORT_STATS[sport] ?? []
@@ -239,8 +257,8 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
 
   const handleModeSelect = (m: QueryMode) => {
     setMode(m)
-    // h2h is MLB-only at launch; force sport to mlb when switching in.
-    if (m === 'h2h' && sport !== 'mlb') {
+    // h2h, pitch, team are MLB-only — force sport to mlb when switching in.
+    if ((m === 'h2h' || m === 'pitch' || m === 'team') && sport !== 'mlb') {
       setSport('mlb')
       setStat('')
       if (period === '1h' || period === 'q1') setPeriod('')
@@ -260,6 +278,24 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       const player = h2hPlayer.trim()
       if (!player || !h2hOpponent) return ''
       return `nspe mlb ${player.toLowerCase()} vs ${h2hOpponent}`
+    }
+
+    if (mode === 'pitch') {
+      const player = pitchPlayer.trim()
+      if (!player) return ''
+      const parts = ['nspe', 'mlb', 'pitch', player.toLowerCase()]
+      if (pitchFlag === 'vfp') parts.push('-vfp')
+      else if (pitchFlag === 'outs') parts.push('-outs')
+      else if (pitchFlag === 'down' && pitchDownN) parts.push(`-${pitchDownN}down`)
+      if (pitchOpponent) parts.push('vs', pitchOpponent)
+      return parts.join(' ')
+    }
+
+    if (mode === 'team') {
+      if (!teamCode) return ''
+      const parts = ['nspe', 'mlb', 'bat', 'vs', teamCode]
+      if (teamFlag === 'outs') parts.push('-outs')
+      return parts.join(' ')
     }
 
     if (!sport) return ''
@@ -288,20 +324,22 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     }
 
     return parts.join(' ')
-  }, [mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent])
+  }, [mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, pitchPlayer, pitchOpponent, pitchFlag, pitchDownN, teamCode, teamFlag])
 
   const canRun = Boolean(builtCommand) && !isLoading
+
+  const isBuilderQuery = mode === 'trend' || mode === 'compute' || mode === 'streak'
 
   return (
     <div className="w-full" style={{ color: C.textBright, fontFamily: 'monospace' }}>
       {/* Mode tabs */}
-      <div className="flex gap-2 mb-4">
-        {(['trend', 'compute', 'streak', 'h2h'] as QueryMode[]).map((m) => (
+      <div className="flex gap-1.5 mb-4 flex-wrap">
+        {(['trend', 'compute', 'streak', 'h2h', 'pitch', 'team'] as QueryMode[]).map((m) => (
           <button
             key={m}
             type="button"
             onClick={() => handleModeSelect(m)}
-            className="flex-1 py-2 text-[12px] font-bold rounded border uppercase tracking-wider transition-colors"
+            className="flex-1 min-w-[72px] py-2 text-[12px] font-bold rounded border uppercase tracking-wider transition-colors"
             style={{
               backgroundColor: mode === m ? C.accent : C.surface2,
               color: mode === m ? C.accentDark : C.accentDim,
@@ -321,7 +359,11 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
           ? '▸ nspe {sport} {post} {full/q1} {stat} minN {-window}'
           : mode === 'streak'
           ? '▸ nspe {sport} {post} {full/q1} {stat}N -streakN'
-          : '▸ nspe mlb {player name} vs {TEAM}'}
+          : mode === 'h2h'
+          ? '▸ nspe mlb {player name} vs {TEAM}'
+          : mode === 'pitch'
+          ? '▸ nspe mlb pitch {player} {-vfp|-outs|-Ndown} {vs TEAM}'
+          : '▸ nspe mlb bat vs {TEAM} {-outs}'}
       </div>
 
       {/* H2H: opponent team + player */}
@@ -383,6 +425,115 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
         </>
       )}
 
+      {/* Pitch (pitcher h2h) */}
+      {mode === 'pitch' && (
+        <>
+          <div className="mb-3">
+            <SLabel>pitcher name</SLabel>
+            <input
+              type="text"
+              value={pitchPlayer}
+              onChange={(e) => setPitchPlayer(e.target.value)}
+              placeholder="type any MLB pitcher (e.g. wheeler, skenes)"
+              className="w-full font-mono text-[13px] rounded border px-3 py-2 outline-none"
+              style={{
+                backgroundColor: C.surface2,
+                borderColor: C.border,
+                color: C.accent,
+              }}
+            />
+          </div>
+
+          <div className="mb-3">
+            <SLabel>flag {'{optional}'}</SLabel>
+            <div className="flex gap-1.5 flex-wrap items-center">
+              <Pill
+                selected={pitchFlag === ''}
+                onClick={() => { setPitchFlag(''); setPitchDownN('') }}
+              >
+                none
+              </Pill>
+              <Pill
+                selected={pitchFlag === 'vfp'}
+                onClick={() => setPitchFlag((p) => (p === 'vfp' ? '' : 'vfp'))}
+              >
+                -vfp
+              </Pill>
+              <Pill
+                selected={pitchFlag === 'outs'}
+                onClick={() => setPitchFlag((p) => (p === 'outs' ? '' : 'outs'))}
+              >
+                -outs
+              </Pill>
+              <div className="flex items-center gap-1.5">
+                <Pill
+                  selected={pitchFlag === 'down'}
+                  onClick={() => setPitchFlag((p) => (p === 'down' ? '' : 'down'))}
+                >
+                  -Ndown
+                </Pill>
+                {pitchFlag === 'down' && (
+                  <NumInput value={pitchDownN} onChange={setPitchDownN} placeholder="N" w={52} />
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="mb-3">
+            <SLabel>opponent team {'{optional}'}</SLabel>
+            <div className="flex gap-1.5 flex-wrap">
+              <Pill selected={pitchOpponent === ''} onClick={() => setPitchOpponent('')}>
+                any
+              </Pill>
+              {MLB_TEAMS.map((t) => (
+                <Pill
+                  key={t}
+                  selected={pitchOpponent === t}
+                  onClick={() => setPitchOpponent((prev) => (prev === t ? '' : t))}
+                >
+                  {t}
+                </Pill>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Team (bat vs TEAM) */}
+      {mode === 'team' && (
+        <>
+          <div className="mb-3">
+            <SLabel>team</SLabel>
+            <div className="flex gap-1.5 flex-wrap">
+              {MLB_TEAMS.map((t) => (
+                <Pill
+                  key={t}
+                  selected={teamCode === t}
+                  onClick={() => setTeamCode((prev) => (prev === t ? '' : t))}
+                >
+                  {t}
+                </Pill>
+              ))}
+            </div>
+          </div>
+
+          <div className="mb-3">
+            <SLabel>flag {'{optional}'}</SLabel>
+            <div className="flex gap-1.5 flex-wrap">
+              <Pill selected={teamFlag === ''} onClick={() => setTeamFlag('')}>
+                none
+              </Pill>
+              <Pill
+                selected={teamFlag === 'outs'}
+                onClick={() => setTeamFlag((p) => (p === 'outs' ? '' : 'outs'))}
+              >
+                -outs
+              </Pill>
+            </div>
+          </div>
+        </>
+      )}
+
       {/* Streak: threshold + streakN + year */}
       {mode === 'streak' && stat && (
         <div className="mb-3 flex items-end gap-5 flex-wrap">
@@ -398,7 +549,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       )}
 
       {/* Sport */}
-      {mode !== 'h2h' && (
+      {isBuilderQuery && (
         <div className="mb-3">
           <SLabel>sport</SLabel>
           <div className="flex gap-2 flex-wrap">
@@ -417,7 +568,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       )}
 
       {/* Season / Period */}
-      {mode !== 'h2h' && (
+      {isBuilderQuery && (
       <div className="flex gap-6 mb-3">
         <div>
           <SLabel>season</SLabel>
@@ -452,7 +603,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       )}
 
       {/* Stats */}
-      {mode !== 'h2h' && sport && stats.length > 0 && (
+      {isBuilderQuery && sport && stats.length > 0 && (
         <div className="mb-3">
           <SLabel>stat</SLabel>
           <div className="flex gap-1.5 flex-wrap">
