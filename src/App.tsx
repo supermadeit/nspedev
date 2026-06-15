@@ -2075,20 +2075,12 @@ function App() {
               nspe.dev{' '}
               <span style={{ color: 'oklch(0.75 0.15 145)' }}>{'{preview}'}</span>
             </span>
-            <span style={{ color: 'oklch(0.65 0 0)', fontSize: '10px', fontWeight: 400 }}>
-              {`{${new Date().getMonth() + 1}/${new Date().getDate()} stats refreshed}`}
-            </span>
           </span>
         ) : (
-          <>
-            <span style={{ color: 'oklch(0.95 0 0)', fontWeight: 700 }}>
-              nspe.dev{' '}
-              <span style={{ color: 'oklch(0.75 0.15 145)' }}>{'{preview}'}</span>
-            </span>
-            <span style={{ color: 'oklch(0.65 0 0)', fontSize: '12px' }}>
-              {`{${new Date().getMonth() + 1}/${new Date().getDate()} stats}`}
-            </span>
-          </>
+          <span style={{ color: 'oklch(0.95 0 0)', fontWeight: 700 }}>
+            nspe.dev{' '}
+            <span style={{ color: 'oklch(0.75 0.15 145)' }}>{'{preview}'}</span>
+          </span>
         )}
         {isMobile && (
           <button
