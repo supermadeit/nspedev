@@ -2267,7 +2267,7 @@ function App() {
                 : batTeamResult
                 ? `${lastQuery} — team`
                 : queryResults
-                ? `${lastQuery} — hitlist`
+                ? `${lastQuery} — ${queryResults.length}results`
                 : 'NSPE — Command Legend'}
             </span>
             <button
