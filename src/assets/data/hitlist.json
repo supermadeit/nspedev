@@ -1,165 +1,145 @@
 [
   {
-    "raw": "MLB 2hits+ {top20} {L20}"
-  },
-  {
-    "team": "BOS",
-    "player": "Willson Contreras",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 11,
-    "window_games": 20
-  },
-  {
-    "team": "SF",
-    "player": "Jung Hoo Lee",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 10,
-    "window_games": 20
-  },
-  {
-    "team": "SD",
-    "player": "Fernando Tatis Jr",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 10,
-    "window_games": 20
-  },
-  {
-    "team": "CIN",
-    "player": "Elly De La Cruz",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 10,
-    "window_games": 20
+    "raw": "MLB 4tb+ {top20} {season}"
   },
   {
     "team": "LAD",
     "player": "Shohei Ohtani",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 9,
-    "window_games": 20
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 24
   },
   {
-    "team": "MIL",
-    "player": "Jackson Chourio",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 9,
-    "window_games": 20
+    "team": "NYY",
+    "player": "Ben Rice",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 24
   },
   {
-    "team": "MIA",
-    "player": "Otto Lopez",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 9,
-    "window_games": 20
+    "team": "MIN",
+    "player": "Byron Buxton",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 24
   },
   {
-    "team": "COL",
-    "player": "Willi Castro",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 9,
-    "window_games": 20
+    "team": "PHI",
+    "player": "Kyle Schwarber",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 23
   },
   {
     "team": "HOU",
     "player": "Yordan Alvarez",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 8,
-    "window_games": 20
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 22
   },
   {
-    "team": "MIL",
-    "player": "Andrew Vaughn",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 8,
-    "window_games": 20
-  },
-  {
-    "team": "CHW",
-    "player": "Tristan Peters",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 8,
-    "window_games": 20
-  },
-  {
-    "team": "NYY",
-    "player": "Trent Grisham",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 8,
-    "window_games": 20
-  },
-  {
-    "team": "KC",
-    "player": "Michael Massey",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 8,
-    "window_games": 20
-  },
-  {
-    "team": "TOR",
-    "player": "Ernie Clement",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 8,
-    "window_games": 20
-  },
-  {
-    "team": "COL",
-    "player": "Troy Johnston",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 8,
-    "window_games": 20
-  },
-  {
-    "team": "SF",
-    "player": "Luis Arraez",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 8,
-    "window_games": 20
-  },
-  {
-    "team": "PIT",
-    "player": "Spencer Horwitz",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 8,
-    "window_games": 20
+    "team": "WSH",
+    "player": "James Wood",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 22
   },
   {
     "team": "STL",
-    "player": "JJ Wetherholt",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 8,
-    "window_games": 20
+    "player": "Jordan Walker",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 21
   },
   {
-    "team": "MIL",
-    "player": "Christian Yelich",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 8,
-    "window_games": 20
+    "team": "ATL",
+    "player": "Matt Olson",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 21
+  },
+  {
+    "team": "ATH",
+    "player": "Nick Kurtz",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 19
+  },
+  {
+    "team": "CHW",
+    "player": "Munetaka Murakami",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 19
+  },
+  {
+    "team": "BOS",
+    "player": "Willson Contreras",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 18
+  },
+  {
+    "team": "WSH",
+    "player": "CJ Abrams",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 18
+  },
+  {
+    "team": "BAL",
+    "player": "Pete Alonso",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 18
+  },
+  {
+    "team": "PIT",
+    "player": "Brandon Lowe",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 18
+  },
+  {
+    "team": "ATH",
+    "player": "Shea Langeliers",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 17
+  },
+  {
+    "team": "ARI",
+    "player": "Corbin Carroll",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 17
+  },
+  {
+    "team": "DET",
+    "player": "Dillon Dingler",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 17
   },
   {
     "team": "COL",
-    "player": "Jake Mccarthy",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 8,
-    "window_games": 20
+    "player": "Hunter Goodman",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 17
+  },
+  {
+    "team": "PHI",
+    "player": "Bryce Harper",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 17
+  },
+  {
+    "team": "HOU",
+    "player": "Christian Walker",
+    "stat": "tb",
+    "threshold": 4,
+    "games_meeting": 17
   }
 ]
