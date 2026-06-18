@@ -6,7 +6,7 @@ type SeasonType = 'post' | ''
 type PeriodType = 'q1' | '1h' | ''
 type ComputeWindow = '-season' | '-career' | '-last' | ''
 type PitchFlag = 'vfp' | 'outs' | 'down' | ''
-type TeamFlag = 'outs' | ''
+type TeamFlag = 'outs' | 'ov' | ''
 
 interface PersistedBuilderState {
   mode: QueryMode
@@ -24,7 +24,6 @@ interface PersistedBuilderState {
   h2hPlayer: string
   h2hOpponent: string
   pitchPlayer: string
-  pitchOpponent: string
   pitchFlag: PitchFlag
   pitchDownN: string
   teamCode: string
@@ -211,7 +210,6 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
   const [h2hOpponent, setH2hOpponent] = useState(initial.h2hOpponent ?? '')
   // pitch (pitcher h2h)
   const [pitchPlayer, setPitchPlayer] = useState(initial.pitchPlayer ?? '')
-  const [pitchOpponent, setPitchOpponent] = useState(initial.pitchOpponent ?? '')
   const [pitchFlag, setPitchFlag] = useState<PitchFlag>(initial.pitchFlag ?? '')
   const [pitchDownN, setPitchDownN] = useState(initial.pitchDownN ?? '')
   // team (bat vs TEAM)
@@ -226,7 +224,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       minN, computeWindow, windowN,
       streakN,
       h2hPlayer, h2hOpponent,
-      pitchPlayer, pitchOpponent, pitchFlag, pitchDownN,
+      pitchPlayer, pitchFlag, pitchDownN,
       teamCode, teamFlag,
     }
     try {
@@ -234,7 +232,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     } catch {
       // ignore quota / unavailable storage
     }
-  }, [storageKey, mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, pitchPlayer, pitchOpponent, pitchFlag, pitchDownN, teamCode, teamFlag])
+  }, [storageKey, mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, pitchPlayer, pitchFlag, pitchDownN, teamCode, teamFlag])
 
   const isNbaHalfPeriod = sport === 'nba' && period === '1h'
   const allStats = SPORT_STATS[sport] ?? []
@@ -287,14 +285,18 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       if (pitchFlag === 'vfp') parts.push('-vfp')
       else if (pitchFlag === 'outs') parts.push('-outs')
       else if (pitchFlag === 'down' && pitchDownN) parts.push(`-${pitchDownN}down`)
-      if (pitchOpponent) parts.push('vs', pitchOpponent)
       return parts.join(' ')
     }
 
     if (mode === 'team') {
       if (!teamCode) return ''
+      if (teamFlag === 'outs') {
+        return `nspe mlb bat ${teamCode} -outs -season`
+      }
+      if (teamFlag === 'ov') {
+        return `nspe mlb ${teamCode} -ov -season`
+      }
       const parts = ['nspe', 'mlb', 'bat', 'vs', teamCode]
-      if (teamFlag === 'outs') parts.push('-outs')
       return parts.join(' ')
     }
 
@@ -324,7 +326,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     }
 
     return parts.join(' ')
-  }, [mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, pitchPlayer, pitchOpponent, pitchFlag, pitchDownN, teamCode, teamFlag])
+  }, [mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, pitchPlayer, pitchFlag, pitchDownN, teamCode, teamFlag])
 
   const canRun = Boolean(builtCommand) && !isLoading
 
@@ -473,27 +475,19 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
                   -Ndown
                 </Pill>
                 {pitchFlag === 'down' && (
-                  <NumInput value={pitchDownN} onChange={setPitchDownN} placeholder="N" w={52} />
+                  <div className="flex gap-1">
+                    {(['3', '6', '9'] as const).map((n) => (
+                      <Pill
+                        key={n}
+                        selected={pitchDownN === n}
+                        onClick={() => setPitchDownN((prev) => (prev === n ? '' : n))}
+                      >
+                        {n}
+                      </Pill>
+                    ))}
+                  </div>
                 )}
               </div>
-            </div>
-          </div>
-
-          <div className="mb-3">
-            <SLabel>opponent team {'{optional}'}</SLabel>
-            <div className="flex gap-1.5 flex-wrap">
-              <Pill selected={pitchOpponent === ''} onClick={() => setPitchOpponent('')}>
-                any
-              </Pill>
-              {MLB_TEAMS.map((t) => (
-                <Pill
-                  key={t}
-                  selected={pitchOpponent === t}
-                  onClick={() => setPitchOpponent((prev) => (prev === t ? '' : t))}
-                >
-                  {t}
-                </Pill>
-              ))}
             </div>
           </div>
         </>
@@ -528,6 +522,12 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
                 onClick={() => setTeamFlag((p) => (p === 'outs' ? '' : 'outs'))}
               >
                 -outs
+              </Pill>
+              <Pill
+                selected={teamFlag === 'ov'}
+                onClick={() => setTeamFlag((p) => (p === 'ov' ? '' : 'ov'))}
+              >
+                -ov
               </Pill>
             </div>
           </div>

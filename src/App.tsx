@@ -162,8 +162,9 @@ const SAMPLE_COMMANDS = [
   { label: 'nspe mlb shohei ohtani vs SF', command: 'nspe mlb shohei ohtani vs SF' },
   { label: 'nspe mlb pitch wheeler -vfp', command: 'nspe mlb pitch wheeler -vfp' },
   { label: 'nspe mlb pitch skenes -outs', command: 'nspe mlb pitch skenes -outs' },
-  { label: 'nspe mlb pitch braxton -vfp vs atl', command: 'nspe mlb pitch braxton -vfp vs atl' },
-  { label: 'nspe mlb bat vs NYM -outs', command: 'nspe mlb bat vs NYM -outs' },
+  { label: 'nspe mlb pitch gavin -3down', command: 'nspe mlb pitch gavin -3down' },
+  { label: 'nspe mlb bat LAD -outs -season', command: 'nspe mlb bat LAD -outs -season' },
+  { label: 'nspe mlb LAD -ov -season', command: 'nspe mlb LAD -ov -season' },
   { label: '{nfl coming soon}', command: '', comingSoon: true },
 ]
 
@@ -277,6 +278,7 @@ function extractH2hPayload(payload: unknown): H2hPayload | null {
 interface MlbPitchGame {
   date_display?: string
   date_iso?: string
+  opponent_team?: string
   venue?: string
   ip?: string | number
   k?: number
@@ -284,7 +286,7 @@ interface MlbPitchGame {
   hr?: number
   pitches?: number
   vfp?: number | null
-  updown_match?: number | null
+  updown_match?: boolean | null
   first_k?: unknown
   first_match?: unknown
 }
@@ -333,6 +335,12 @@ interface MlbFirstPitchSummary {
   pitch_types?: Record<string, number>
 }
 
+interface MlbPitchUpdown {
+  target?: string
+  matches?: number
+  per_game?: boolean[]
+}
+
 interface MlbPitchH2hPayload {
   engine: 'mlb-pitch-h2h'
   player?: string
@@ -347,6 +355,7 @@ interface MlbPitchH2hPayload {
   pitch_type_counts?: Record<string, number>
   rates?: MlbPitchRates
   first_pitch_summary?: MlbFirstPitchSummary
+  updown?: MlbPitchUpdown
 }
 
 function isMlbPitchH2hPayload(payload: unknown): payload is MlbPitchH2hPayload {
@@ -366,6 +375,57 @@ function extractMlbPitchH2hPayload(payload: unknown): MlbPitchH2hPayload | null 
     for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
       const v = rec[key]
       if (isMlbPitchH2hPayload(v)) return v
+    }
+  }
+  return null
+}
+
+// ---------- MLB Pitcher First-Pitch Velocity (-fpv / -vfp) ----------
+
+interface MlbPitchFpvGame {
+  date_iso?: string
+  opponent_team?: string
+  home_away?: string
+  fpv?: number | null
+  pitch_type?: string
+  inning?: number
+  batter_play?: string
+}
+
+interface MlbPitchFpvSummary {
+  avg_fpv?: number
+  min_fpv?: number
+  max_fpv?: number
+  first_pitch_types?: Record<string, number>
+  count?: number
+}
+
+interface MlbPitchFpvPayload {
+  engine: 'mlb-pitch-fpv'
+  player?: string
+  window?: string
+  generated_at?: string
+  games: MlbPitchFpvGame[]
+  summary?: MlbPitchFpvSummary
+}
+
+function isMlbPitchFpvPayload(payload: unknown): payload is MlbPitchFpvPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return rec.engine === 'mlb-pitch-fpv' && Array.isArray(rec.games)
+}
+
+function extractMlbPitchFpvPayload(payload: unknown): MlbPitchFpvPayload | null {
+  if (isMlbPitchFpvPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isMlbPitchFpvPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isMlbPitchFpvPayload(v)) return v
     }
   }
   return null
@@ -404,6 +464,50 @@ function extractMlbBatTeamPayload(payload: unknown): MlbBatTeamPayload | null {
     for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
       const v = rec[key]
       if (isMlbBatTeamPayload(v)) return v
+    }
+  }
+  return null
+}
+
+// ---------- MLB Team Overview (-ov) ----------
+
+interface MlbTeamOverviewPayload {
+  engine: 'mlb-team-overview'
+  team?: string
+  season?: number
+  games_processed?: number
+  scheduled_games?: number
+  missing_games_count?: number
+  missing_game_ids_sample?: string[]
+  completeness_pct?: number
+  '3down'?: number
+  '6down'?: number
+  '9down'?: number
+  avg_first_baserunner_inning?: number
+  team_k_total?: number
+  team_bb_total?: number
+  out_type_pct?: Record<string, number>
+  hits_per_inning_avg?: Record<string, number>
+  generated_at?: string
+}
+
+function isMlbTeamOverviewPayload(payload: unknown): payload is MlbTeamOverviewPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return rec.engine === 'mlb-team-overview'
+}
+
+function extractMlbTeamOverviewPayload(payload: unknown): MlbTeamOverviewPayload | null {
+  if (isMlbTeamOverviewPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isMlbTeamOverviewPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isMlbTeamOverviewPayload(v)) return v
     }
   }
   return null
@@ -1475,6 +1579,9 @@ function MlbPitchH2hView({ payload }: { payload: MlbPitchH2hPayload }) {
   const pbp = payload.pbp_tally ?? {}
   const arsenal = payload.pitch_type_counts ?? {}
   const fp = payload.first_pitch_summary ?? {}
+  const updown = payload.updown
+  const hasUpdown = !!updown && typeof updown.target === 'string'
+  const hasOpp = games.some((g) => typeof g.opponent_team === 'string' && g.opponent_team.length > 0)
 
   const playerLabel = payload.player || 'pitcher'
   const opponent = payload.opponent || 'ALL'
@@ -1576,6 +1683,48 @@ function MlbPitchH2hView({ payload }: { payload: MlbPitchH2hPayload }) {
         )}
       </div>
 
+      {/* Updown summary */}
+      {hasUpdown && (
+        <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.13 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+          <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
+            {`${updown!.target ?? ''} match`}
+          </div>
+          <div className="grid grid-cols-4 gap-2">
+            <StatBox label="matches" value={typeof updown!.matches === 'number' ? updown!.matches : 0} accent={PITCH_GREEN} />
+            <StatBox label="games" value={updown!.per_game?.length ?? games.length} />
+            <StatBox
+              label="hit %"
+              value={(() => {
+                const m = typeof updown!.matches === 'number' ? updown!.matches : 0
+                const g = updown!.per_game?.length ?? games.length
+                return g > 0 ? `${((m / g) * 100).toFixed(1)}%` : '—'
+              })()}
+              accent={PITCH_ACCENT}
+            />
+            <StatBox
+              label="miss"
+              value={(() => {
+                const m = typeof updown!.matches === 'number' ? updown!.matches : 0
+                const g = updown!.per_game?.length ?? games.length
+                return g - m
+              })()}
+            />
+          </div>
+          {Array.isArray(updown!.per_game) && updown!.per_game.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-1">
+              {updown!.per_game.map((hit, i) => (
+                <span
+                  key={i}
+                  className="inline-block w-[10px] h-[10px] rounded-sm"
+                  style={{ backgroundColor: hit ? PITCH_GREEN : 'oklch(0.22 0 0)' }}
+                  title={hit ? 'match' : 'miss'}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Game log */}
       <div>
         <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
@@ -1589,28 +1738,121 @@ function MlbPitchH2hView({ payload }: { payload: MlbPitchH2hPayload }) {
               <thead>
                 <tr style={{ color: PITCH_LABEL, borderBottom: `1px solid ${PITCH_BORDER}` }}>
                   <th className="text-left py-1 pr-2 font-normal">Date</th>
+                  {hasOpp && <th className="text-left py-1 pr-2 font-normal">Opp</th>}
                   <th className="text-left py-1 pr-2 font-normal">@</th>
                   <th className="text-right py-1 pr-2 font-normal">IP</th>
                   <th className="text-right py-1 pr-2 font-normal">K</th>
                   <th className="text-right py-1 pr-2 font-normal">BB</th>
                   <th className="text-right py-1 pr-2 font-normal">HR</th>
                   <th className="text-right py-1 pr-2 font-normal">P</th>
-                  <th className="text-right py-1 font-normal">VFP</th>
+                  <th className={`text-right py-1 ${hasUpdown ? 'pr-2' : ''} font-normal`}>VFP</th>
+                  {hasUpdown && <th className="text-center py-1 font-normal">UD</th>}
                 </tr>
               </thead>
               <tbody>
                 {games.map((g, i) => (
                   <tr key={`${g.date_iso ?? g.date_display ?? i}`} style={{ borderBottom: '1px solid oklch(0.18 0 0)', color: PITCH_VALUE }}>
                     <td className="py-1 pr-2" style={{ color: PITCH_LABEL }}>{g.date_display ?? g.date_iso ?? ''}</td>
+                    {hasOpp && <td className="py-1 pr-2" style={{ color: 'oklch(0.70 0.10 195)' }}>{g.opponent_team ?? ''}</td>}
                     <td className="py-1 pr-2" style={{ color: 'oklch(0.70 0.10 195)' }}>{g.venue ?? ''}</td>
                     <td className="py-1 pr-2 text-right">{g.ip ?? ''}</td>
                     <td className="py-1 pr-2 text-right" style={{ color: PITCH_GREEN }}>{g.k ?? 0}</td>
                     <td className="py-1 pr-2 text-right">{g.bb ?? 0}</td>
                     <td className="py-1 pr-2 text-right">{g.hr ?? 0}</td>
                     <td className="py-1 pr-2 text-right">{g.pitches ?? 0}</td>
-                    <td className="py-1 text-right" style={{ color: PITCH_ACCENT }}>{typeof g.vfp === 'number' ? g.vfp.toFixed(1) : '—'}</td>
+                    <td className={`py-1 ${hasUpdown ? 'pr-2' : ''} text-right`} style={{ color: PITCH_ACCENT }}>{typeof g.vfp === 'number' ? g.vfp.toFixed(1) : '—'}</td>
+                    {hasUpdown && (
+                      <td className="py-1 text-center" style={{ color: g.updown_match ? PITCH_GREEN : PITCH_LABEL }}>
+                        {g.updown_match ? '✓' : '·'}
+                      </td>
+                    )}
                   </tr>
                 ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function MlbPitchFpvView({ payload }: { payload: MlbPitchFpvPayload }) {
+  const games = payload.games ?? []
+  const summary = payload.summary ?? {}
+  const firstPitchTypes = summary.first_pitch_types ?? {}
+
+  const playerLabel = payload.player || 'pitcher'
+  const windowLabel = payload.window || ''
+  const count = typeof summary.count === 'number' ? summary.count : games.length
+
+  return (
+    <div className="space-y-4">
+      <div className="font-mono text-[13px]" style={{ color: PITCH_ACCENT }}>
+        <span>{playerLabel}</span>
+        <span style={{ color: PITCH_LABEL }}>{` · first-pitch velocity${windowLabel ? ` · ${windowLabel}` : ''} · ${count} game${count === 1 ? '' : 's'}`}</span>
+      </div>
+
+      {/* FPV summary */}
+      <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.18 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+        <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
+          first pitch velocity
+        </div>
+        <div className="grid grid-cols-4 gap-2">
+          <StatBox label="avg" value={typeof summary.avg_fpv === 'number' ? summary.avg_fpv.toFixed(1) : '—'} accent={PITCH_ACCENT} />
+          <StatBox label="min" value={typeof summary.min_fpv === 'number' ? summary.min_fpv.toFixed(0) : '—'} />
+          <StatBox label="max" value={typeof summary.max_fpv === 'number' ? summary.max_fpv.toFixed(0) : '—'} />
+          <StatBox label="games" value={count} />
+        </div>
+      </div>
+
+      {/* First-pitch type mix */}
+      {Object.keys(firstPitchTypes).length > 0 && (
+        <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.13 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+          <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
+            first pitch types
+          </div>
+          <PitchArsenalBars counts={firstPitchTypes} />
+        </div>
+      )}
+
+      {/* Game log */}
+      <div>
+        <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
+          game log
+        </div>
+        {games.length === 0 ? (
+          <div className="text-center py-3 font-mono text-[12px]" style={{ color: PITCH_VALUE }}>No games found</div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full font-mono text-[12px] border-collapse">
+              <thead>
+                <tr style={{ color: PITCH_LABEL, borderBottom: `1px solid ${PITCH_BORDER}` }}>
+                  <th className="text-left py-1 pr-2 font-normal">Date</th>
+                  <th className="text-left py-1 pr-2 font-normal">Opp</th>
+                  <th className="text-left py-1 pr-2 font-normal">H/A</th>
+                  <th className="text-right py-1 pr-2 font-normal">FPV</th>
+                  <th className="text-left py-1 pr-2 font-normal">Pitch</th>
+                  <th className="text-right py-1 pr-2 font-normal">Inn</th>
+                  <th className="text-left py-1 font-normal">Result</th>
+                </tr>
+              </thead>
+              <tbody>
+                {games.map((g, i) => {
+                  const ha = (g.home_away || '').toUpperCase()
+                  const haLabel = ha === 'HOME' ? 'vs' : ha === 'AWAY' ? '@' : ha
+                  return (
+                    <tr key={`${g.date_iso ?? i}`} style={{ borderBottom: '1px solid oklch(0.18 0 0)', color: PITCH_VALUE }}>
+                      <td className="py-1 pr-2" style={{ color: PITCH_LABEL }}>{g.date_iso ?? ''}</td>
+                      <td className="py-1 pr-2" style={{ color: 'oklch(0.70 0.10 195)' }}>{g.opponent_team ?? ''}</td>
+                      <td className="py-1 pr-2" style={{ color: PITCH_LABEL }}>{haLabel}</td>
+                      <td className="py-1 pr-2 text-right" style={{ color: PITCH_ACCENT }}>{typeof g.fpv === 'number' ? g.fpv.toFixed(1) : '—'}</td>
+                      <td className="py-1 pr-2">{g.pitch_type ?? ''}</td>
+                      <td className="py-1 pr-2 text-right" style={{ color: PITCH_LABEL }}>{g.inning ?? ''}</td>
+                      <td className="py-1" style={{ color: PITCH_VALUE }}>{g.batter_play ?? ''}</td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>
@@ -1705,6 +1947,102 @@ function MlbBatTeamView({ payload }: { payload: MlbBatTeamPayload }) {
   )
 }
 
+function MlbTeamOverviewView({ payload }: { payload: MlbTeamOverviewPayload }) {
+  const team = payload.team || 'TEAM'
+  const season = payload.season
+  const processed = payload.games_processed ?? 0
+  const completeness = typeof payload.completeness_pct === 'number' ? payload.completeness_pct : null
+  const down3 = payload['3down'] ?? 0
+  const down6 = payload['6down'] ?? 0
+  const down9 = payload['9down'] ?? 0
+  const avgFirstBR = payload.avg_first_baserunner_inning
+  const kTotal = payload.team_k_total ?? 0
+  const bbTotal = payload.team_bb_total ?? 0
+  const outTypes = payload.out_type_pct ?? {}
+  const hitsPerInning = payload.hits_per_inning_avg ?? {}
+
+  // Sort out types by pct desc, drop zero rows
+  const outTypeRows = Object.entries(outTypes)
+    .filter(([, v]) => typeof v === 'number' && v > 0)
+    .sort((a, b) => (b[1] as number) - (a[1] as number))
+  const outTypeTotal = outTypeRows.reduce((s, [, v]) => s + (v as number), 0) || 1
+
+  const inningEntries = Object.entries(hitsPerInning)
+    .map(([k, v]) => [Number(k), v as number] as const)
+    .filter(([n]) => Number.isFinite(n))
+    .sort((a, b) => a[0] - b[0])
+  const maxInningHits = inningEntries.reduce((m, [, v]) => Math.max(m, v), 0)
+
+  return (
+    <div className="space-y-4">
+      <div className="font-mono text-[13px]" style={{ color: PITCH_ACCENT }}>
+        <span>{team}</span>
+        <span style={{ color: PITCH_LABEL }}>{` · team overview${season ? ` · ${season} season` : ''} · ${processed} game${processed === 1 ? '' : 's'}`}</span>
+      </div>
+
+      {/* Headline totals */}
+      <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.18 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+        <div className="grid grid-cols-4 gap-2">
+          <StatBox label="K" value={kTotal} accent={PITCH_GREEN} />
+          <StatBox label="BB" value={bbTotal} />
+          <StatBox label="1-2-3" value={down3} accent={PITCH_ACCENT} />
+          <StatBox label="6 UP" value={down6} accent={PITCH_ACCENT} />
+          <StatBox label="9 UP" value={down9} accent={PITCH_ACCENT} />
+          <StatBox label="1st BR inn" value={typeof avgFirstBR === 'number' ? avgFirstBR.toFixed(2) : '—'} />
+          <StatBox label="games" value={processed} />
+          <StatBox label="data %" value={completeness !== null ? `${completeness.toFixed(1)}%` : '—'} />
+        </div>
+      </div>
+
+      {/* Out type mix + Hits per inning */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {outTypeRows.length > 0 && (
+          <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.13 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+            <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
+              out types
+            </div>
+            <div className="space-y-1">
+              {outTypeRows.map(([k, pct]) => {
+                const widthPct = Math.min(100, ((pct as number) / outTypeTotal) * 100)
+                return (
+                  <div key={k} className="flex items-center gap-2 font-mono text-[11px]">
+                    <span className="w-[80px] shrink-0" style={{ color: PITCH_VALUE }}>{k}</span>
+                    <span className="w-[48px] text-right tabular-nums" style={{ color: PITCH_LABEL }}>{(pct as number).toFixed(2)}%</span>
+                    <div className="flex-1 h-[6px] rounded-sm overflow-hidden" style={{ backgroundColor: 'oklch(0.18 0 0)' }}>
+                      <div className="h-full rounded-sm" style={{ width: `${widthPct}%`, backgroundColor: PITCH_ACCENT }} />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+        {inningEntries.length > 0 && (
+          <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.13 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+            <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
+              avg hits / inning
+            </div>
+            <div className="space-y-1">
+              {inningEntries.map(([n, v]) => {
+                const widthPct = maxInningHits > 0 ? (v / maxInningHits) * 100 : 0
+                return (
+                  <div key={n} className="flex items-center gap-2 font-mono text-[11px]">
+                    <span className="w-[24px] shrink-0 text-right tabular-nums" style={{ color: PITCH_LABEL }}>{n}</span>
+                    <span className="w-[44px] text-right tabular-nums" style={{ color: PITCH_VALUE }}>{v.toFixed(2)}</span>
+                    <div className="flex-1 h-[6px] rounded-sm overflow-hidden" style={{ backgroundColor: 'oklch(0.18 0 0)' }}>
+                      <div className="h-full rounded-sm" style={{ width: `${widthPct}%`, backgroundColor: PITCH_GREEN }} />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 function App() {
   const [stars, setStars] = useState<Star[]>([])
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
@@ -1719,7 +2057,9 @@ function App() {
   const [queryResults, setQueryResults] = useState<QueryResult[] | null>(null)
   const [h2hResult, setH2hResult] = useState<H2hPayload | null>(null)
   const [pitchResult, setPitchResult] = useState<MlbPitchH2hPayload | null>(null)
+  const [fpvResult, setFpvResult] = useState<MlbPitchFpvPayload | null>(null)
   const [batTeamResult, setBatTeamResult] = useState<MlbBatTeamPayload | null>(null)
+  const [teamOverviewResult, setTeamOverviewResult] = useState<MlbTeamOverviewPayload | null>(null)
   const [lastQuery, setLastQuery] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [queryError, setQueryError] = useState<string | null>(null)
@@ -1783,7 +2123,9 @@ function App() {
     setCollapsedPlayers({})
     setH2hResult(null)
     setPitchResult(null)
+    setFpvResult(null)
     setBatTeamResult(null)
+    setTeamOverviewResult(null)
 
     if (!sanitizedQuery) {
       setQueryResults([])
@@ -1823,9 +2165,23 @@ function App() {
         return
       }
 
+      const fpvPayload = extractMlbPitchFpvPayload(payload)
+      if (fpvPayload) {
+        setFpvResult(fpvPayload)
+        setQueryResults([])
+        return
+      }
+
       const batTeamPayload = extractMlbBatTeamPayload(payload)
       if (batTeamPayload) {
         setBatTeamResult(batTeamPayload)
+        setQueryResults([])
+        return
+      }
+
+      const teamOverviewPayload = extractMlbTeamOverviewPayload(payload)
+      if (teamOverviewPayload) {
+        setTeamOverviewResult(teamOverviewPayload)
         setQueryResults([])
         return
       }
@@ -2288,8 +2644,12 @@ function App() {
               <H2hView payload={h2hResult} />
             ) : pitchResult ? (
               <MlbPitchH2hView payload={pitchResult} />
+            ) : fpvResult ? (
+              <MlbPitchFpvView payload={fpvResult} />
             ) : batTeamResult ? (
               <MlbBatTeamView payload={batTeamResult} />
+            ) : teamOverviewResult ? (
+              <MlbTeamOverviewView payload={teamOverviewResult} />
             ) : queryResults === null ? (
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
                 Build a query to begin
