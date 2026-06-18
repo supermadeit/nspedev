@@ -1571,7 +1571,7 @@ function PitchArsenalBars({ counts }: { counts: Record<string, number> }) {
   )
 }
 
-function MlbPitchH2hView({ payload }: { payload: MlbPitchH2hPayload }) {
+function MlbPitchH2hView({ payload, query }: { payload: MlbPitchH2hPayload; query?: string }) {
   const games = payload.games ?? []
   const totals = payload.totals ?? {}
   const rates = payload.rates ?? {}
@@ -1581,7 +1581,8 @@ function MlbPitchH2hView({ payload }: { payload: MlbPitchH2hPayload }) {
   const fp = payload.first_pitch_summary ?? {}
   const updown = payload.updown
   const hasUpdown = !!updown && typeof updown.target === 'string'
-  const hasOpp = games.some((g) => typeof g.opponent_team === 'string' && g.opponent_team.length > 0)
+  const isOutsMode = !hasUpdown && typeof query === 'string' && /(?:^|\s)-outs(?:\s|$)/i.test(query)
+  const mode: 'overview' | 'outs' | 'down' = hasUpdown ? 'down' : isOutsMode ? 'outs' : 'overview'
 
   const playerLabel = payload.player || 'pitcher'
   const opponent = payload.opponent || 'ALL'
@@ -1591,14 +1592,78 @@ function MlbPitchH2hView({ payload }: { payload: MlbPitchH2hPayload }) {
   const ip = formatIpFromOuts(totals.ip_outs)
   const totalOuts = rates.total_contact_outs ?? 0
 
+  const header = (
+    <div className="font-mono text-[13px]" style={{ color: PITCH_ACCENT }}>
+      <span>{playerLabel}</span>
+      <span style={{ color: PITCH_LABEL }}> vs </span>
+      <span style={{ color: 'oklch(0.70 0.10 195)' }}>{opponent}</span>
+      <span style={{ color: PITCH_LABEL }}>{` · ${games.length} game${games.length === 1 ? '' : 's'}${yearLabel ? ` · ${yearLabel}` : ''}${mode === 'outs' ? ' · contact outs' : mode === 'down' ? ` · ${updown!.target ?? 'updown'}` : ''}`}</span>
+    </div>
+  )
+
+  if (mode === 'down') {
+    const matches = typeof updown!.matches === 'number' ? updown!.matches : 0
+    const total = updown!.per_game?.length ?? games.length
+    return (
+      <div className="space-y-4">
+        {header}
+        <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.13 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+          <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
+            {`${updown!.target ?? ''} match`}
+          </div>
+          <div className="grid grid-cols-4 gap-2">
+            <StatBox label="matches" value={matches} accent={PITCH_GREEN} />
+            <StatBox label="games" value={total} />
+            <StatBox label="hit %" value={total > 0 ? `${((matches / total) * 100).toFixed(1)}%` : '—'} accent={PITCH_ACCENT} />
+            <StatBox label="miss" value={total - matches} />
+          </div>
+          {Array.isArray(updown!.per_game) && updown!.per_game.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-1">
+              {updown!.per_game.map((hit, i) => (
+                <span
+                  key={i}
+                  className="inline-block w-[10px] h-[10px] rounded-sm"
+                  style={{ backgroundColor: hit ? PITCH_GREEN : 'oklch(0.22 0 0)' }}
+                  title={hit ? 'match' : 'miss'}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  if (mode === 'outs') {
+    return (
+      <div className="space-y-4">
+        {header}
+        <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.18 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+          <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
+            rate overview
+          </div>
+          <div className="grid grid-cols-4 gap-2">
+            <StatBox label="K%" value={typeof rates.k_pct === 'number' ? rates.k_pct.toFixed(1) : '—'} accent={PITCH_GREEN} />
+            <StatBox label="BB%" value={typeof rates.bb_pct === 'number' ? rates.bb_pct.toFixed(1) : '—'} />
+            <StatBox label="HR%" value={typeof rates.hr_pct === 'number' ? rates.hr_pct.toFixed(1) : '—'} />
+            <StatBox label="H%" value={typeof rates.h_pct === 'number' ? rates.h_pct.toFixed(1) : '—'} />
+          </div>
+        </div>
+        {Object.keys(out_types).length > 0 && (
+          <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.13 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+            <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
+              contact outs {totalOuts > 0 ? `({${totalOuts}} total)` : ''}
+            </div>
+            <OutTypeGrid outTypes={out_types} totalOuts={totalOuts} />
+          </div>
+        )}
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-4">
-      <div className="font-mono text-[13px]" style={{ color: PITCH_ACCENT }}>
-        <span>{playerLabel}</span>
-        <span style={{ color: PITCH_LABEL }}> vs </span>
-        <span style={{ color: 'oklch(0.70 0.10 195)' }}>{opponent}</span>
-        <span style={{ color: PITCH_LABEL }}>{` · ${games.length} game${games.length === 1 ? '' : 's'}${yearLabel ? ` · ${yearLabel}` : ''}`}</span>
-      </div>
+      {header}
 
       {/* Totals */}
       <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.18 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
@@ -1683,48 +1748,6 @@ function MlbPitchH2hView({ payload }: { payload: MlbPitchH2hPayload }) {
         )}
       </div>
 
-      {/* Updown summary */}
-      {hasUpdown && (
-        <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.13 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
-          <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
-            {`${updown!.target ?? ''} match`}
-          </div>
-          <div className="grid grid-cols-4 gap-2">
-            <StatBox label="matches" value={typeof updown!.matches === 'number' ? updown!.matches : 0} accent={PITCH_GREEN} />
-            <StatBox label="games" value={updown!.per_game?.length ?? games.length} />
-            <StatBox
-              label="hit %"
-              value={(() => {
-                const m = typeof updown!.matches === 'number' ? updown!.matches : 0
-                const g = updown!.per_game?.length ?? games.length
-                return g > 0 ? `${((m / g) * 100).toFixed(1)}%` : '—'
-              })()}
-              accent={PITCH_ACCENT}
-            />
-            <StatBox
-              label="miss"
-              value={(() => {
-                const m = typeof updown!.matches === 'number' ? updown!.matches : 0
-                const g = updown!.per_game?.length ?? games.length
-                return g - m
-              })()}
-            />
-          </div>
-          {Array.isArray(updown!.per_game) && updown!.per_game.length > 0 && (
-            <div className="mt-2 flex flex-wrap gap-1">
-              {updown!.per_game.map((hit, i) => (
-                <span
-                  key={i}
-                  className="inline-block w-[10px] h-[10px] rounded-sm"
-                  style={{ backgroundColor: hit ? PITCH_GREEN : 'oklch(0.22 0 0)' }}
-                  title={hit ? 'match' : 'miss'}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
       {/* Game log */}
       <div>
         <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
@@ -1738,34 +1761,26 @@ function MlbPitchH2hView({ payload }: { payload: MlbPitchH2hPayload }) {
               <thead>
                 <tr style={{ color: PITCH_LABEL, borderBottom: `1px solid ${PITCH_BORDER}` }}>
                   <th className="text-left py-1 pr-2 font-normal">Date</th>
-                  {hasOpp && <th className="text-left py-1 pr-2 font-normal">Opp</th>}
-                  <th className="text-left py-1 pr-2 font-normal">@</th>
+                  <th className="text-left py-1 pr-2 font-normal">Opp</th>
                   <th className="text-right py-1 pr-2 font-normal">IP</th>
                   <th className="text-right py-1 pr-2 font-normal">K</th>
                   <th className="text-right py-1 pr-2 font-normal">BB</th>
                   <th className="text-right py-1 pr-2 font-normal">HR</th>
                   <th className="text-right py-1 pr-2 font-normal">P</th>
-                  <th className={`text-right py-1 ${hasUpdown ? 'pr-2' : ''} font-normal`}>VFP</th>
-                  {hasUpdown && <th className="text-center py-1 font-normal">UD</th>}
+                  <th className="text-right py-1 font-normal">VFP</th>
                 </tr>
               </thead>
               <tbody>
                 {games.map((g, i) => (
                   <tr key={`${g.date_iso ?? g.date_display ?? i}`} style={{ borderBottom: '1px solid oklch(0.18 0 0)', color: PITCH_VALUE }}>
                     <td className="py-1 pr-2" style={{ color: PITCH_LABEL }}>{g.date_display ?? g.date_iso ?? ''}</td>
-                    {hasOpp && <td className="py-1 pr-2" style={{ color: 'oklch(0.70 0.10 195)' }}>{g.opponent_team ?? ''}</td>}
-                    <td className="py-1 pr-2" style={{ color: 'oklch(0.70 0.10 195)' }}>{g.venue ?? ''}</td>
+                    <td className="py-1 pr-2" style={{ color: 'oklch(0.70 0.10 195)' }}>{g.opponent_team ?? ''}</td>
                     <td className="py-1 pr-2 text-right">{g.ip ?? ''}</td>
                     <td className="py-1 pr-2 text-right" style={{ color: PITCH_GREEN }}>{g.k ?? 0}</td>
                     <td className="py-1 pr-2 text-right">{g.bb ?? 0}</td>
                     <td className="py-1 pr-2 text-right">{g.hr ?? 0}</td>
                     <td className="py-1 pr-2 text-right">{g.pitches ?? 0}</td>
-                    <td className={`py-1 ${hasUpdown ? 'pr-2' : ''} text-right`} style={{ color: PITCH_ACCENT }}>{typeof g.vfp === 'number' ? g.vfp.toFixed(1) : '—'}</td>
-                    {hasUpdown && (
-                      <td className="py-1 text-center" style={{ color: g.updown_match ? PITCH_GREEN : PITCH_LABEL }}>
-                        {g.updown_match ? '✓' : '·'}
-                      </td>
-                    )}
+                    <td className="py-1 text-right" style={{ color: PITCH_ACCENT }}>{typeof g.vfp === 'number' ? g.vfp.toFixed(1) : '—'}</td>
                   </tr>
                 ))}
               </tbody>
@@ -2643,7 +2658,7 @@ function App() {
             ) : h2hResult ? (
               <H2hView payload={h2hResult} />
             ) : pitchResult ? (
-              <MlbPitchH2hView payload={pitchResult} />
+              <MlbPitchH2hView payload={pitchResult} query={lastQuery} />
             ) : fpvResult ? (
               <MlbPitchFpvView payload={fpvResult} />
             ) : batTeamResult ? (

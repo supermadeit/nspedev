@@ -453,7 +453,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
                 selected={pitchFlag === ''}
                 onClick={() => { setPitchFlag(''); setPitchDownN('') }}
               >
-                none
+                overview
               </Pill>
               <Pill
                 selected={pitchFlag === 'vfp'}
