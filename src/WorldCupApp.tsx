@@ -123,13 +123,13 @@ function matchWinner(m: KnockoutMatch): 'a' | 'b' | null {
 function GroupTable({ group }: { group: Group }) {
   return (
     <div
-      className="rounded p-2"
-      style={{ backgroundColor: C.panel, border: `1px solid ${C.border}` }}
+      className="rounded p-2 h-full min-h-0 flex flex-col overflow-hidden"
+      style={{ backgroundColor: C.panel, border: `1px solid ${C.accent}` }}
     >
-      <div className="font-mono text-[10px] uppercase tracking-widest mb-1.5" style={{ color: C.label }}>
+      <div className="font-mono text-[10px] uppercase tracking-widest mb-1.5 shrink-0" style={{ color: C.label }}>
         group {group.group_letter.toLowerCase()}
       </div>
-      <div className="font-mono text-[11px]">
+      <div className="font-mono text-[11px] flex-1 min-h-0 overflow-y-auto">
         <div
           className="grid items-center gap-x-2 pb-1 mb-1 border-b"
           style={{
@@ -249,30 +249,32 @@ function MatchCell({
 
   const kickoff = formatKickoff(match.kickoff_datetime)
 
-  const championBoxStyle = isChampion
+  const championBoxStyle: React.CSSProperties = isChampion
     ? {
       borderColor: C.accent,
-      boxShadow: `0 0 0 1px ${C.accent}, 0 0 18px oklch(0.85 0.15 195 / 0.35)`,
+      boxShadow: `0 0 0 1px ${C.accent}, 0 0 22px oklch(0.85 0.15 195 / 0.45)`,
     }
-    : {}
+    : {
+      boxShadow: `0 0 0 1px oklch(0.85 0.15 145 / 0.35), 0 0 12px oklch(0.85 0.15 145 / 0.20)`,
+    }
 
   return (
     <div
       className="rounded"
       style={{
-        backgroundColor: C.panel,
-        border: `1px solid ${C.border}`,
+        backgroundColor: 'oklch(0.10 0 0)',
+        border: `2px solid ${isChampion ? C.accent : C.green}`,
         minWidth: 130,
         ...championBoxStyle,
       }}
     >
       {renderSide(match.side_a, match.score_a, match.pens_score_a, aEliminated)}
-      <div style={{ borderTop: `1px solid ${C.border}` }}>
+      <div style={{ borderTop: `1px solid ${C.green}` }}>
         {renderSide(match.side_b, match.score_b, match.pens_score_b, bEliminated)}
       </div>
       <div
         className="font-mono text-[9px] uppercase tracking-wider px-1.5 py-[2px]"
-        style={{ color: C.label, borderTop: `1px solid ${C.border}` }}
+        style={{ color: C.label, borderTop: `1px solid ${C.green}`, backgroundColor: 'oklch(0.08 0 0)' }}
       >
         {match.match_status === 'scheduled' ? (kickoff || 'tbd') : (kickoff || 'final')}
       </div>
@@ -297,8 +299,18 @@ function Bracket({ knockout, groups, currentStage }: { knockout: KnockoutMatch[]
 
   // Helpers for rendering a side.
   const Round = ({ label, n }: { label: string; n: number }) => (
-    <div className="font-mono text-[10px] uppercase tracking-widest text-center" style={{ color: C.label }}>
-      {label} <span style={{ color: C.dim }}>· {n}</span>
+    <div className="flex justify-center">
+      <div
+        className="font-mono font-bold text-[11px] uppercase tracking-widest px-2 py-1 rounded"
+        style={{
+          color: C.green,
+          backgroundColor: 'oklch(0.10 0 0)',
+          border: `1.5px solid ${C.green}`,
+          boxShadow: `0 0 10px oklch(0.85 0.15 145 / 0.25)`,
+        }}
+      >
+        {label} <span style={{ color: C.label, fontWeight: 400 }}>· {n}</span>
+      </div>
     </div>
   )
 
@@ -320,9 +332,19 @@ function Bracket({ knockout, groups, currentStage }: { knockout: KnockoutMatch[]
         <Round label="R16" n={4} />
         <Round label="QF" n={2} />
         <Round label="SF" n={1} />
-        <div className="text-center">
-          <div className="font-mono text-[10px] uppercase tracking-widest" style={{ color: C.accent }}>final</div>
-          <div className="font-mono text-[9px] uppercase tracking-widest" style={{ color: C.label }}>3rd place</div>
+        <div className="flex justify-center">
+          <div
+            className="font-mono font-bold text-[11px] uppercase tracking-widest px-2 py-1 rounded text-center"
+            style={{
+              color: C.accent,
+              backgroundColor: 'oklch(0.10 0 0)',
+              border: `1.5px solid ${C.accent}`,
+              boxShadow: `0 0 10px oklch(0.85 0.15 195 / 0.30)`,
+            }}
+          >
+            final
+            <div className="font-mono text-[9px] uppercase tracking-widest mt-0.5" style={{ color: C.label, fontWeight: 400 }}>3rd place</div>
+          </div>
         </div>
         <Round label="SF" n={1} />
         <Round label="QF" n={2} />
@@ -428,29 +450,6 @@ function Bracket({ knockout, groups, currentStage }: { knockout: KnockoutMatch[]
 
 type ActiveView = 'groups' | 'knockout'
 
-// Country flag color stripes used to letter the host country names in the header.
-// Order matches the flag bands left→right (or hoist→fly), one color per character
-// of the country name. Wraps if the name is longer than the band count.
-const HOST_FLAG_COLORS: Record<string, string[]> = {
-  USA: ['oklch(0.45 0.18 260)', 'oklch(0.60 0.22 25)', 'oklch(0.96 0 0)'],
-  Mexico: ['oklch(0.55 0.18 145)', 'oklch(0.96 0 0)', 'oklch(0.60 0.22 25)'],
-  Canada: ['oklch(0.60 0.22 25)', 'oklch(0.96 0 0)', 'oklch(0.60 0.22 25)'],
-}
-
-function FlagLetteredCountry({ name }: { name: string }) {
-  const colors = HOST_FLAG_COLORS[name]
-  if (!colors || colors.length === 0) {
-    return <span>{name}</span>
-  }
-  return (
-    <span>
-      {Array.from(name).map((ch, i) => (
-        <span key={i} style={{ color: colors[i % colors.length] }}>{ch}</span>
-      ))}
-    </span>
-  )
-}
-
 export default function WorldCupApp() {
   const data = worldcupData as unknown as WorldCupData
   const t = data.tournament
@@ -484,14 +483,8 @@ export default function WorldCupApp() {
             <span style={{ color: C.label }}>{' · '}</span>
             <span style={{ color: C.green }}>{t.tournament_name}</span>
           </div>
-          <div className="font-mono text-[11px] mt-0.5">
-            {t.host_countries.map((country, i) => (
-              <span key={country}>
-                {i > 0 && <span style={{ color: C.label }}>{' · '}</span>}
-                <FlagLetteredCountry name={country} />
-              </span>
-            ))}
-            <span style={{ color: C.label }}>{` · ${stageLabel}`}</span>
+          <div className="font-mono text-[11px] mt-0.5" style={{ color: C.label }}>
+            {`${t.host_countries.join(' · ')} · ${stageLabel}`}
           </div>
         </div>
 
