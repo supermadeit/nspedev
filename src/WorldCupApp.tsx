@@ -1,4 +1,4 @@
-import { useMemo, useState, useRef } from 'react'
+import { useMemo, useState } from 'react'
 import { StarsBackground } from '@/components/StarsBackground'
 import worldcupData from '@/assets/data/worldcup.json'
 
@@ -302,8 +302,8 @@ function Bracket({ knockout, groups, currentStage }: { knockout: KnockoutMatch[]
     </div>
   )
 
-  const Col = ({ children, gap }: { children: React.ReactNode; gap: number }) => (
-    <div className="flex flex-col justify-around" style={{ rowGap: `${gap}px` }}>
+  const Col = ({ children }: { children: React.ReactNode }) => (
+    <div className="flex flex-col justify-around h-full">
       {children}
     </div>
   )
@@ -313,7 +313,7 @@ function Bracket({ knockout, groups, currentStage }: { knockout: KnockoutMatch[]
   // We'll let cells size naturally and use `justify-around` to space them.
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 h-full flex flex-col">
       {/* Round headers */}
       <div className="grid items-center" style={{ gridTemplateColumns: 'repeat(9, minmax(0, 1fr))', gap: 8 }}>
         <Round label="R32" n={8} />
@@ -332,25 +332,25 @@ function Bracket({ knockout, groups, currentStage }: { knockout: KnockoutMatch[]
 
       {/* Bracket body */}
       <div
-        className="grid items-stretch"
-        style={{ gridTemplateColumns: 'repeat(9, minmax(0, 1fr))', gap: 8, minHeight: 760 }}
+        className="grid items-stretch flex-1 min-h-0"
+        style={{ gridTemplateColumns: 'repeat(9, minmax(0, 1fr))', gap: 8 }}
       >
         {/* R32 left: M1..M8 */}
-        <Col gap={6}>
+        <Col>
           {Array.from({ length: 8 }, (_, i) => `R32-M${i + 1}`).map((slot) => {
             const m = get(slot)
             return m ? <MatchCell key={slot} match={m} groups={groups} /> : <div key={slot} />
           })}
         </Col>
         {/* R16 left: M1..M4 */}
-        <Col gap={56}>
+        <Col>
           {['R16-M1', 'R16-M2', 'R16-M3', 'R16-M4'].map((slot) => {
             const m = get(slot)
             return m ? <MatchCell key={slot} match={m} groups={groups} /> : <div key={slot} />
           })}
         </Col>
         {/* QF left: M1..M2 */}
-        <Col gap={170}>
+        <Col>
           {['QF-M1', 'QF-M2'].map((slot) => {
             const m = get(slot)
             return m ? <MatchCell key={slot} match={m} groups={groups} /> : <div key={slot} />
@@ -399,21 +399,21 @@ function Bracket({ knockout, groups, currentStage }: { knockout: KnockoutMatch[]
           })()}
         </div>
         {/* QF right: M3..M4 */}
-        <Col gap={170}>
+        <Col>
           {['QF-M3', 'QF-M4'].map((slot) => {
             const m = get(slot)
             return m ? <MatchCell key={slot} match={m} groups={groups} /> : <div key={slot} />
           })}
         </Col>
         {/* R16 right: M5..M8 */}
-        <Col gap={56}>
+        <Col>
           {['R16-M5', 'R16-M6', 'R16-M7', 'R16-M8'].map((slot) => {
             const m = get(slot)
             return m ? <MatchCell key={slot} match={m} groups={groups} /> : <div key={slot} />
           })}
         </Col>
         {/* R32 right: M9..M16 */}
-        <Col gap={6}>
+        <Col>
           {Array.from({ length: 8 }, (_, i) => `R32-M${i + 9}`).map((slot) => {
             const m = get(slot)
             return m ? <MatchCell key={slot} match={m} groups={groups} /> : <div key={slot} />
@@ -424,63 +424,32 @@ function Bracket({ knockout, groups, currentStage }: { knockout: KnockoutMatch[]
   )
 }
 
-// ---------------- reserved query builder slot ----------------
+// ---------------- page ----------------
 
-function FifaQueryBuilderSlot() {
-  const [pos, setPos] = useState({ x: 0, y: 0 })
-  const [dragging, setDragging] = useState(false)
-  const [offset, setOffset] = useState({ x: 0, y: 0 })
-  const ref = useRef<HTMLDivElement>(null)
+type ActiveView = 'groups' | 'knockout'
 
-  const onMouseDown = (e: React.MouseEvent) => {
-    if (!ref.current) return
-    const rect = ref.current.getBoundingClientRect()
-    setOffset({ x: e.clientX - rect.left, y: e.clientY - rect.top })
-    setDragging(true)
-  }
-
-  const onMouseMove = (e: React.MouseEvent) => {
-    if (!dragging) return
-    setPos({ x: e.clientX - offset.x, y: e.clientY - offset.y })
-  }
-
-  const onMouseUp = () => setDragging(false)
-
-  const style: React.CSSProperties = pos.x === 0 && pos.y === 0
-    ? { right: 24, bottom: 24, position: 'fixed' }
-    : { left: pos.x, top: pos.y, position: 'fixed' }
-
-  return (
-    <div
-      ref={ref}
-      className="rounded select-none"
-      style={{
-        ...style,
-        zIndex: 30,
-        backgroundColor: C.panel2,
-        border: `1px solid ${C.border}`,
-        width: 280,
-      }}
-      onMouseMove={onMouseMove}
-      onMouseUp={onMouseUp}
-      onMouseLeave={onMouseUp}
-    >
-      <div
-        className="px-3 py-1.5 cursor-move flex items-center justify-between"
-        style={{ borderBottom: `1px solid ${C.border}` }}
-        onMouseDown={onMouseDown}
-      >
-        <span className="font-mono text-[12px]" style={{ color: C.accent }}>fifa.querybuilder</span>
-        <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: C.label }}>soon</span>
-      </div>
-      <div className="px-3 py-3 font-mono text-[11px]" style={{ color: C.label }}>
-        Reserved slot. Query syntax pending — drag me anywhere.
-      </div>
-    </div>
-  )
+// Country flag color stripes used to letter the host country names in the header.
+// Order matches the flag bands left→right (or hoist→fly), one color per character
+// of the country name. Wraps if the name is longer than the band count.
+const HOST_FLAG_COLORS: Record<string, string[]> = {
+  USA: ['oklch(0.45 0.18 260)', 'oklch(0.60 0.22 25)', 'oklch(0.96 0 0)'],
+  Mexico: ['oklch(0.55 0.18 145)', 'oklch(0.96 0 0)', 'oklch(0.60 0.22 25)'],
+  Canada: ['oklch(0.60 0.22 25)', 'oklch(0.96 0 0)', 'oklch(0.60 0.22 25)'],
 }
 
-// ---------------- page ----------------
+function FlagLetteredCountry({ name }: { name: string }) {
+  const colors = HOST_FLAG_COLORS[name]
+  if (!colors || colors.length === 0) {
+    return <span>{name}</span>
+  }
+  return (
+    <span>
+      {Array.from(name).map((ch, i) => (
+        <span key={i} style={{ color: colors[i % colors.length] }}>{ch}</span>
+      ))}
+    </span>
+  )
+}
 
 export default function WorldCupApp() {
   const data = worldcupData as unknown as WorldCupData
@@ -489,17 +458,19 @@ export default function WorldCupApp() {
   const knockout = data.knockout ?? []
   const stage = (t.current_stage ?? 'pre') as CurrentStage
 
+  const [activeView, setActiveView] = useState<ActiveView>('groups')
+
   const stageLabel = stage === 'pre' ? 'pre-tournament'
     : stage === 'group' ? 'group stage'
     : stage === 'complete' ? 'complete'
     : `knockout · ${stage}`
 
   return (
-    <div className="relative w-screen min-h-screen bg-background overflow-x-hidden">
+    <div className="relative w-screen h-screen bg-background overflow-hidden">
       <StarsBackground density={180} />
 
       {/* Top bar */}
-      <div className="absolute top-6 left-6 right-6 z-20 flex items-end justify-between">
+      <div className="absolute top-6 left-6 right-6 z-20 flex items-start justify-between gap-6">
         <div className="flex flex-col">
           <a
             href="/"
@@ -510,44 +481,88 @@ export default function WorldCupApp() {
           </a>
           <div className="font-mono text-[18px] mt-1" style={{ color: C.value }}>
             <span style={{ color: C.accent }}>world.cup</span>
-            <span style={{ color: C.label }}>{` · ${t.tournament_name}`}</span>
+            <span style={{ color: C.label }}>{' · '}</span>
+            <span style={{ color: C.green }}>{t.tournament_name}</span>
           </div>
-          <div className="font-mono text-[11px] mt-0.5" style={{ color: C.label }}>
-            {`${t.host_countries.join(' · ')} · ${stageLabel}`}
+          <div className="font-mono text-[11px] mt-0.5">
+            {t.host_countries.map((country, i) => (
+              <span key={country}>
+                {i > 0 && <span style={{ color: C.label }}>{' · '}</span>}
+                <FlagLetteredCountry name={country} />
+              </span>
+            ))}
+            <span style={{ color: C.label }}>{` · ${stageLabel}`}</span>
           </div>
+        </div>
+
+        {/* Right-side action row: querybuilder link + view switcher */}
+        <div className="flex items-center gap-5 pt-2">
+          <a
+            href="#"
+            onClick={(e) => e.preventDefault()}
+            className="font-mono font-bold text-[14px] hover:opacity-80 transition-opacity whitespace-nowrap inline-flex items-baseline gap-1.5"
+            style={{ color: C.dim, cursor: 'not-allowed' }}
+            aria-disabled="true"
+          >
+            <span>{'{fifa.querybuilder}'}</span>
+            <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: C.label }}>
+              (coming soon)
+            </span>
+          </a>
+          <button
+            type="button"
+            onClick={() => setActiveView('groups')}
+            className="font-mono font-bold text-[14px] underline-offset-4 hover:opacity-80 transition-opacity whitespace-nowrap"
+            style={{
+              color: activeView === 'groups' ? C.accent : C.label,
+              textDecoration: activeView === 'groups' ? 'underline' : 'none',
+            }}
+          >
+            {'{world.cup.bracket}'}
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveView('knockout')}
+            className="font-mono font-bold text-[14px] underline-offset-4 hover:opacity-80 transition-opacity whitespace-nowrap"
+            style={{
+              color: activeView === 'knockout' ? C.accent : C.label,
+              textDecoration: activeView === 'knockout' ? 'underline' : 'none',
+            }}
+          >
+            {'{knockout.bracket}'}
+          </button>
         </div>
       </div>
 
-      <div className="relative z-10 pt-24 pb-32 px-6 max-w-[1480px] mx-auto space-y-8">
-        {/* Groups */}
-        <section>
-          <div className="font-mono text-[11px] uppercase tracking-widest mb-3" style={{ color: C.label }}>
-            groups
-          </div>
-          <div
-            className="grid gap-3"
-            style={{ gridTemplateColumns: 'repeat(4, minmax(0, 1fr))' }}
-          >
-            {groups.map((g) => <GroupTable key={g.group_letter} group={g} />)}
-          </div>
-        </section>
-
-        {/* Bracket */}
-        <section>
-          <div className="font-mono text-[11px] uppercase tracking-widest mb-3" style={{ color: C.label }}>
-            knockout bracket
-          </div>
-          <Bracket knockout={knockout} groups={groups} currentStage={stage} />
-        </section>
+      <div className="relative z-10 h-full pt-28 pb-12 px-6 max-w-[1480px] mx-auto">
+        {activeView === 'groups' ? (
+          <section className="h-full flex flex-col">
+            <div className="font-mono text-[11px] uppercase tracking-widest mb-3" style={{ color: C.label }}>
+              groups
+            </div>
+            <div
+              className="grid gap-3 flex-1 min-h-0"
+              style={{ gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gridAutoRows: 'minmax(0, 1fr)' }}
+            >
+              {groups.map((g) => <GroupTable key={g.group_letter} group={g} />)}
+            </div>
+          </section>
+        ) : (
+          <section className="h-full flex flex-col">
+            <div className="font-mono text-[11px] uppercase tracking-widest mb-3" style={{ color: C.label }}>
+              knockout bracket
+            </div>
+            <div className="flex-1 min-h-0 overflow-hidden">
+              <Bracket knockout={knockout} groups={groups} currentStage={stage} />
+            </div>
+          </section>
+        )}
       </div>
 
       {/* Updated caption */}
       <div className="fixed bottom-3 left-4 z-20 font-mono text-[11px]" style={{ color: C.label }}>
         updated · {formatUpdated(data.last_updated)}
       </div>
-
-      {/* Reserved querybuilder slot */}
-      <FifaQueryBuilderSlot />
     </div>
   )
 }
