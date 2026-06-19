@@ -2482,6 +2482,16 @@ function App() {
           </button>
         )}
 
+        {!isMobile && (
+          <a
+            href="/world-cup"
+            className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+            style={{ color: 'oklch(0.85 0.15 195)' }}
+          >
+            {'{world.cup}'}
+          </a>
+        )}
+
         <div className="relative">
           <button
             onClick={() => setIsSampleMenuOpen((prev) => !prev)}
