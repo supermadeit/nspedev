@@ -118,6 +118,82 @@ function matchWinner(m: KnockoutMatch): 'a' | 'b' | null {
   return null
 }
 
+// Resolve a side ref into a display + possibly-resolved team code.
+// Ref shapes:
+//   ABC             -> already a 3-letter team code
+//   1A / 2A         -> 1st/2nd of group A (resolved from current standings)
+//   3ABCDF          -> best 3rd-placed from those groups (FIFA matrix; left as placeholder)
+//   W73 / RU101     -> winner / runner-up of match #N (resolved if that match is complete)
+interface ResolvedSide {
+  display: string
+  resolvedCode: string | null  // present when the slot's actual team is known
+  isPlaceholder: boolean       // true when we couldn't pin a team yet
+  kind: 'team' | 'group-pos' | 'best-third' | 'match-ref' | 'unknown'
+}
+
+function resolveSideRef(
+  ref: string,
+  groups: Group[],
+  byMatchNum: Map<number, KnockoutMatch>,
+): ResolvedSide {
+  if (isResolvedTeam(ref)) {
+    return { display: ref, resolvedCode: ref, isPlaceholder: false, kind: 'team' }
+  }
+
+  // Group position: 1A, 2L, etc.
+  const groupPos = /^([12])([A-L])$/.exec(ref)
+  if (groupPos) {
+    const rank = Number(groupPos[1])
+    const letter = groupPos[2]
+    const group = groups.find((g) => g.group_letter === letter)
+    const team = group?.teams[rank - 1]
+    if (team) {
+      return { display: team.team_code, resolvedCode: team.team_code, isPlaceholder: false, kind: 'group-pos' }
+    }
+    return { display: ref, resolvedCode: null, isPlaceholder: true, kind: 'group-pos' }
+  }
+
+  // Best-third: 3 followed by 4+ group letters.
+  const bestThird = /^3([A-L]{2,})$/.exec(ref)
+  if (bestThird) {
+    const letters = bestThird[1].split('')
+    return {
+      display: `best 3rd · ${letters.join('/')}`,
+      resolvedCode: null,
+      isPlaceholder: true,
+      kind: 'best-third',
+    }
+  }
+
+  // Winner / runner-up of match number.
+  const matchRef = /^(W|RU)(\d+)$/.exec(ref)
+  if (matchRef) {
+    const kindToken = matchRef[1]
+    const num = Number(matchRef[2])
+    const upstream = byMatchNum.get(num)
+    if (upstream) {
+      const w = matchWinner(upstream)
+      if (w != null) {
+        const winRef = w === 'a' ? upstream.side_a : upstream.side_b
+        const loseRef = w === 'a' ? upstream.side_b : upstream.side_a
+        const code = kindToken === 'W' ? winRef : loseRef
+        if (isResolvedTeam(code)) {
+          return { display: code, resolvedCode: code, isPlaceholder: false, kind: 'match-ref' }
+        }
+      }
+    }
+    const label = kindToken === 'W' ? 'winner' : 'loser'
+    return {
+      display: `${label} · M${num}`,
+      resolvedCode: null,
+      isPlaceholder: true,
+      kind: 'match-ref',
+    }
+  }
+
+  return { display: ref, resolvedCode: null, isPlaceholder: true, kind: 'unknown' }
+}
+
 // ---------------- group panel ----------------
 
 function GroupTable({ group }: { group: Group }) {
@@ -181,10 +257,12 @@ function GroupTable({ group }: { group: Group }) {
 function MatchCell({
   match,
   groups,
+  byMatchNum,
   isChampion = false,
 }: {
   match: KnockoutMatch
   groups: Group[]
+  byMatchNum: Map<number, KnockoutMatch>
   isChampion?: boolean
 }) {
   const winner = matchWinner(match)
@@ -194,46 +272,41 @@ function MatchCell({
   const aEliminated = winner === 'b'
   const bEliminated = winner === 'a'
 
-  const isLeftRoom = match.bracket_slot.includes('-M1') ||
-    match.bracket_slot.includes('-M2') ||
-    match.bracket_slot.includes('-M3') ||
-    match.bracket_slot.includes('-M4') ||
-    match.bracket_slot.includes('-M5') ||
-    match.bracket_slot.includes('-M6') ||
-    match.bracket_slot.includes('-M7') ||
-    match.bracket_slot.includes('-M8')
-  void isLeftRoom // currently unused; reserved for future connector logic
-
-  const isTeamEliminatedInGroup = (ref: string): boolean => {
-    if (!isResolvedTeam(ref)) return false
+  const isTeamEliminatedInGroup = (code: string | null): boolean => {
+    if (!code) return false
     for (const g of groups) {
-      const t = g.teams.find((x) => x.team_code === ref)
+      const t = g.teams.find((x) => x.team_code === code)
       if (t) return t.status === 'eliminated'
     }
     return false
   }
 
   const renderSide = (ref: string, score: number | null, pens: number | null, eliminated: boolean) => {
-    const resolved = isResolvedTeam(ref)
-    const elimInGroup = isTeamEliminatedInGroup(ref)
+    const r = resolveSideRef(ref, groups, byMatchNum)
+    const elimInGroup = isTeamEliminatedInGroup(r.resolvedCode)
     const isWinner = winner != null && ((ref === match.side_a && winner === 'a') || (ref === match.side_b && winner === 'b'))
     const dim = eliminated || elimInGroup
+    const isPlaceholder = r.isPlaceholder
     return (
       <div
-        className="flex items-center justify-between gap-2 px-1.5 py-[2px]"
+        className="flex items-center justify-between gap-2 px-1.5 py-[1px]"
         style={{
-          color: resolved ? C.value : C.label,
+          color: isPlaceholder ? C.label : C.value,
           opacity: dim ? 0.4 : 1,
           fontWeight: isWinner ? 600 : 400,
         }}
       >
         <span
-          className="font-mono text-[12px] tabular-nums"
-          style={{ color: isWinner ? C.accent : resolved ? C.value : C.label }}
+          className="font-mono text-[11px] tabular-nums truncate"
+          style={{
+            color: isWinner ? C.accent : isPlaceholder ? C.label : C.value,
+            fontStyle: isPlaceholder ? 'italic' : 'normal',
+          }}
+          title={isPlaceholder ? ref : undefined}
         >
-          {ref}
+          {r.display}
         </span>
-        <span className="font-mono text-[12px] tabular-nums" style={{ color: isWinner ? C.accent : C.value }}>
+        <span className="font-mono text-[11px] tabular-nums shrink-0" style={{ color: isWinner ? C.accent : C.value }}>
           {score != null ? (
             <>
               {score}
@@ -255,7 +328,7 @@ function MatchCell({
       boxShadow: `0 0 0 1px ${C.accent}, 0 0 22px oklch(0.85 0.15 195 / 0.45)`,
     }
     : {
-      boxShadow: `0 0 0 1px oklch(0.85 0.15 145 / 0.35), 0 0 12px oklch(0.85 0.15 145 / 0.20)`,
+      boxShadow: `0 0 0 1px oklch(0.85 0.15 145 / 0.35), 0 0 10px oklch(0.85 0.15 145 / 0.18)`,
     }
 
   return (
@@ -263,8 +336,8 @@ function MatchCell({
       className="rounded"
       style={{
         backgroundColor: 'oklch(0.10 0 0)',
-        border: `2px solid ${isChampion ? C.accent : C.green}`,
-        minWidth: 130,
+        border: `1.5px solid ${isChampion ? C.accent : C.green}`,
+        minWidth: 120,
         ...championBoxStyle,
       }}
     >
@@ -273,7 +346,7 @@ function MatchCell({
         {renderSide(match.side_b, match.score_b, match.pens_score_b, bEliminated)}
       </div>
       <div
-        className="font-mono text-[9px] uppercase tracking-wider px-1.5 py-[2px]"
+        className="font-mono text-[9px] uppercase tracking-wider px-1.5 py-[1px]"
         style={{ color: C.label, borderTop: `1px solid ${C.green}`, backgroundColor: 'oklch(0.08 0 0)' }}
       >
         {match.match_status === 'scheduled' ? (kickoff || 'tbd') : (kickoff || 'final')}
@@ -288,6 +361,12 @@ function Bracket({ knockout, groups, currentStage }: { knockout: KnockoutMatch[]
   const bySlot = useMemo(() => {
     const m = new Map<string, KnockoutMatch>()
     for (const k of knockout) m.set(k.bracket_slot, k)
+    return m
+  }, [knockout])
+
+  const byMatchNum = useMemo(() => {
+    const m = new Map<number, KnockoutMatch>()
+    for (const k of knockout) m.set(k.match_number, k)
     return m
   }, [knockout])
 
@@ -361,35 +440,35 @@ function Bracket({ knockout, groups, currentStage }: { knockout: KnockoutMatch[]
         <Col>
           {Array.from({ length: 8 }, (_, i) => `R32-M${i + 1}`).map((slot) => {
             const m = get(slot)
-            return m ? <MatchCell key={slot} match={m} groups={groups} /> : <div key={slot} />
+            return m ? <MatchCell key={slot} match={m} groups={groups} byMatchNum={byMatchNum} /> : <div key={slot} />
           })}
         </Col>
         {/* R16 left: M1..M4 */}
         <Col>
           {['R16-M1', 'R16-M2', 'R16-M3', 'R16-M4'].map((slot) => {
             const m = get(slot)
-            return m ? <MatchCell key={slot} match={m} groups={groups} /> : <div key={slot} />
+            return m ? <MatchCell key={slot} match={m} groups={groups} byMatchNum={byMatchNum} /> : <div key={slot} />
           })}
         </Col>
         {/* QF left: M1..M2 */}
         <Col>
           {['QF-M1', 'QF-M2'].map((slot) => {
             const m = get(slot)
-            return m ? <MatchCell key={slot} match={m} groups={groups} /> : <div key={slot} />
+            return m ? <MatchCell key={slot} match={m} groups={groups} byMatchNum={byMatchNum} /> : <div key={slot} />
           })}
         </Col>
         {/* SF left: M1 */}
         <div className="flex flex-col justify-center">
           {(() => {
             const m = get('SF-M1')
-            return m ? <MatchCell match={m} groups={groups} /> : null
+            return m ? <MatchCell match={m} groups={groups} byMatchNum={byMatchNum} /> : null
           })()}
         </div>
         {/* Final + 3rd place */}
         <div className="flex flex-col items-stretch justify-center gap-3">
           {final && (
             <div>
-              <MatchCell match={final} groups={groups} isChampion={isComplete} />
+              <MatchCell match={final} groups={groups} byMatchNum={byMatchNum} isChampion={isComplete} />
               {isComplete && finalWinner && (
                 <div
                   className="mt-1.5 font-mono text-[10px] uppercase tracking-widest text-center"
@@ -408,7 +487,7 @@ function Bracket({ knockout, groups, currentStage }: { knockout: KnockoutMatch[]
                 <div className="font-mono text-[9px] uppercase tracking-widest text-center mb-1" style={{ color: C.label }}>
                   3rd place
                 </div>
-                <MatchCell match={m} groups={groups} />
+                <MatchCell match={m} groups={groups} byMatchNum={byMatchNum} />
               </div>
             )
           })()}
@@ -417,28 +496,28 @@ function Bracket({ knockout, groups, currentStage }: { knockout: KnockoutMatch[]
         <div className="flex flex-col justify-center">
           {(() => {
             const m = get('SF-M2')
-            return m ? <MatchCell match={m} groups={groups} /> : null
+            return m ? <MatchCell match={m} groups={groups} byMatchNum={byMatchNum} /> : null
           })()}
         </div>
         {/* QF right: M3..M4 */}
         <Col>
           {['QF-M3', 'QF-M4'].map((slot) => {
             const m = get(slot)
-            return m ? <MatchCell key={slot} match={m} groups={groups} /> : <div key={slot} />
+            return m ? <MatchCell key={slot} match={m} groups={groups} byMatchNum={byMatchNum} /> : <div key={slot} />
           })}
         </Col>
         {/* R16 right: M5..M8 */}
         <Col>
           {['R16-M5', 'R16-M6', 'R16-M7', 'R16-M8'].map((slot) => {
             const m = get(slot)
-            return m ? <MatchCell key={slot} match={m} groups={groups} /> : <div key={slot} />
+            return m ? <MatchCell key={slot} match={m} groups={groups} byMatchNum={byMatchNum} /> : <div key={slot} />
           })}
         </Col>
         {/* R32 right: M9..M16 */}
         <Col>
           {Array.from({ length: 8 }, (_, i) => `R32-M${i + 9}`).map((slot) => {
             const m = get(slot)
-            return m ? <MatchCell key={slot} match={m} groups={groups} /> : <div key={slot} />
+            return m ? <MatchCell key={slot} match={m} groups={groups} byMatchNum={byMatchNum} /> : <div key={slot} />
           })}
         </Col>
       </div>
@@ -527,7 +606,7 @@ export default function WorldCupApp() {
         </div>
       </div>
 
-      <div className="relative z-10 h-full pt-28 pb-12 px-6 max-w-[1480px] mx-auto">
+      <div className="relative z-10 h-full pt-24 pb-8 px-6 max-w-[1480px] mx-auto">
         {activeView === 'groups' ? (
           <section className="h-full flex flex-col">
             <div className="font-mono text-[11px] uppercase tracking-widest mb-3" style={{ color: C.label }}>
@@ -542,10 +621,10 @@ export default function WorldCupApp() {
           </section>
         ) : (
           <section className="h-full flex flex-col">
-            <div className="font-mono text-[11px] uppercase tracking-widest mb-3" style={{ color: C.label }}>
+            <div className="font-mono text-[11px] uppercase tracking-widest mb-2" style={{ color: C.label }}>
               knockout bracket
             </div>
-            <div className="flex-1 min-h-0 overflow-hidden">
+            <div className="flex-1 min-h-0 overflow-y-auto pr-1">
               <Bracket knockout={knockout} groups={groups} currentStage={stage} />
             </div>
           </section>
