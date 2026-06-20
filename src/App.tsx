@@ -2066,7 +2066,10 @@ function App() {
   const [isMiniOpen, setIsMiniOpen] = useState(false)
   const [isSampleMenuOpen, setIsSampleMenuOpen] = useState(false)
   const [isTutorialOpen, setIsTutorialOpen] = useState(false)
-  const [miniPosition, setMiniPosition] = useState({ x: window.innerWidth / 2 - 310, y: window.innerHeight * 0.40 + 70 })
+  const [miniPosition, setMiniPosition] = useState({
+    x: window.innerWidth / 2 - 310,
+    y: Math.max(80, Math.floor((window.innerHeight - window.innerHeight * 0.62) / 2)),
+  })
   const [isDragging, setIsDragging] = useState(false)
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const [queryResults, setQueryResults] = useState<QueryResult[] | null>(null)
@@ -2083,7 +2086,7 @@ function App() {
   const [isBuilderOpen, setIsBuilderOpen] = useState(false)
   const [builderPosition, setBuilderPosition] = useState({
     x: Math.max(16, Math.floor(window.innerWidth / 2 - 320)),
-    y: Math.max(40, Math.floor((window.innerHeight - 640) / 2)),
+    y: 96,
   })
   const [isBuilderDragging, setIsBuilderDragging] = useState(false)
   const [builderDragOffset, setBuilderDragOffset] = useState({ x: 0, y: 0 })
@@ -2884,7 +2887,7 @@ function App() {
             left: `${builderPosition.x}px`,
             top: `${builderPosition.y}px`,
             width: '640px',
-            maxHeight: 'min(640px, calc(100vh - 160px))',
+            maxHeight: 'calc(100vh - 120px)',
             backgroundColor: 'oklch(0.13 0 0)',
             border: '1px solid oklch(0.30 0 0)',
           }}
@@ -2917,7 +2920,7 @@ function App() {
               ✕
             </button>
           </div>
-          <div className="overflow-y-auto px-5 py-4" style={{ maxHeight: 'min(580px, calc(100vh - 220px))' }}>
+          <div className="overflow-y-auto px-5 py-4" style={{ maxHeight: 'calc(100vh - 180px)' }}>
             <QueryBuilder
               onRunQuery={handleRunFromBuilder}
               isLoading={isLoading}
