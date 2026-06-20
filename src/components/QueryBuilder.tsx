@@ -7,6 +7,7 @@ type PeriodType = 'q1' | '1h' | ''
 type ComputeWindow = '-season' | '-career' | '-last' | ''
 type PitchFlag = 'vfp' | 'outs' | 'down' | ''
 type TeamFlag = 'outs' | 'ov' | ''
+type ThresholdMode = 'min' | 'range' | 'exact'
 
 interface PersistedBuilderState {
   mode: QueryMode
@@ -18,6 +19,8 @@ interface PersistedBuilderState {
   lastA: string
   lastB: string
   minN: string
+  maxN: string
+  thresholdMode: ThresholdMode
   computeWindow: ComputeWindow
   windowN: string
   streakN: string
@@ -201,6 +204,8 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
   const [lastB, setLastB] = useState(initial.lastB ?? '')
   // compute
   const [minN, setMinN] = useState(initial.minN ?? '')
+  const [maxN, setMaxN] = useState(initial.maxN ?? '')
+  const [thresholdMode, setThresholdMode] = useState<ThresholdMode>(initial.thresholdMode ?? 'min')
   const [computeWindow, setComputeWindow] = useState<ComputeWindow>(initial.computeWindow ?? '')
   const [windowN, setWindowN] = useState(initial.windowN ?? '')
   // streak
@@ -221,7 +226,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     const payload: PersistedBuilderState = {
       mode, sport, seasonType, period, stat,
       thresholdN, lastA, lastB,
-      minN, computeWindow, windowN,
+      minN, maxN, thresholdMode, computeWindow, windowN,
       streakN,
       h2hPlayer, h2hOpponent,
       pitchPlayer, pitchFlag, pitchDownN,
@@ -232,7 +237,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     } catch {
       // ignore quota / unavailable storage
     }
-  }, [storageKey, mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, pitchPlayer, pitchFlag, pitchDownN, teamCode, teamFlag])
+  }, [storageKey, mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, pitchPlayer, pitchFlag, pitchDownN, teamCode, teamFlag])
 
   const isNbaHalfPeriod = sport === 'nba' && period === '1h'
   const allStats = SPORT_STATS[sport] ?? []
@@ -316,7 +321,17 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       if (lastA && lastB) parts.push(`-last${lastA}/${lastB}`)
     } else if (mode === 'compute') {
       if (stat) parts.push(`-${stat}`)
-      if (minN) parts.push(`min${minN}`)
+      if (thresholdMode === 'min') {
+        if (minN) parts.push(`min${minN}`)
+      } else if (thresholdMode === 'range') {
+        if (minN) parts.push(`min${minN}`)
+        if (maxN) parts.push(`max${maxN}`)
+      } else if (thresholdMode === 'exact') {
+        if (minN) {
+          parts.push(`min${minN}`)
+          parts.push(`max${minN}`)
+        }
+      }
       if (computeWindow === '-season') parts.push('-season')
       else if (computeWindow === '-career') parts.push('-career')
       else if (computeWindow === '-last' && windowN) parts.push(`-last${windowN}`)
@@ -326,7 +341,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     }
 
     return parts.join(' ')
-  }, [mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, pitchPlayer, pitchFlag, pitchDownN, teamCode, teamFlag])
+  }, [mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, pitchPlayer, pitchFlag, pitchDownN, teamCode, teamFlag])
 
   const canRun = Boolean(builtCommand) && !isLoading
 
@@ -358,7 +373,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
         {mode === 'trend'
           ? '▸ nspe {sport} {post} {full/q1} {stat}N -lastN/N'
           : mode === 'compute'
-          ? '▸ nspe {sport} {post} {full/q1} {stat} minN {-window}'
+          ? '▸ nspe {sport} {post} {full/q1} {stat} minN {maxN} {-window}'
           : mode === 'streak'
           ? '▸ nspe {sport} {post} {full/q1} {stat}N -streakN'
           : mode === 'h2h'
@@ -582,10 +597,10 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
           </div>
         </div>
         <div>
-          <SLabel>period</SLabel>
+          <SLabel>{sport === 'mlb' ? 'season' : 'period'}</SLabel>
           <div className="flex gap-1.5 flex-wrap">
             <Pill selected={period === ''} onClick={() => handlePeriodSelect('')}>
-              full
+              {sport === 'mlb' ? 'reg' : 'full'}
             </Pill>
             {sport !== 'mlb' && (
               <Pill selected={period === 'q1'} onClick={() => handlePeriodSelect('q1')}>
@@ -641,12 +656,67 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
         </div>
       )}
 
-      {/* Compute: min + window */}
+      {/* Compute: threshold mode + window */}
       {mode === 'compute' && stat && (
         <div className="mb-3">
-          <div className="mb-3">
-            <SLabel>min threshold</SLabel>
-            <NumInput value={minN} onChange={setMinN} w={72} />
+          <div className="mb-2">
+            <SLabel>threshold mode</SLabel>
+            <div className="flex gap-1.5 flex-wrap">
+              <Pill
+                selected={thresholdMode === 'min'}
+                onClick={() => {
+                  setThresholdMode('min')
+                  setMaxN('')
+                }}
+              >
+                min
+              </Pill>
+              <Pill
+                selected={thresholdMode === 'range'}
+                onClick={() => {
+                  if (thresholdMode === 'exact' && minN) setMaxN(minN)
+                  setThresholdMode('range')
+                }}
+              >
+                min - max
+              </Pill>
+              <Pill
+                selected={thresholdMode === 'exact'}
+                onClick={() => {
+                  setThresholdMode('exact')
+                  setMaxN('')
+                }}
+              >
+                exact
+              </Pill>
+            </div>
+          </div>
+          <div className="mb-3 flex items-end gap-2">
+            {thresholdMode === 'min' && (
+              <div>
+                <SLabel>min threshold</SLabel>
+                <NumInput value={minN} onChange={setMinN} w={72} />
+              </div>
+            )}
+            {thresholdMode === 'range' && (
+              <>
+                <div>
+                  <SLabel>min</SLabel>
+                  <NumInput value={minN} onChange={setMinN} w={64} />
+                </div>
+                <span style={{ color: C.textDim, paddingBottom: '8px' }}>—</span>
+                <div>
+                  <SLabel>max</SLabel>
+                  <NumInput value={maxN} onChange={setMaxN} w={64} />
+                </div>
+              </>
+            )}
+            {thresholdMode === 'exact' && (
+              <div>
+                <SLabel>exact threshold</SLabel>
+                <NumInput value={minN} onChange={setMinN} w={72} />
+              </div>
+            )}
           </div>
           <SLabel>window</SLabel>
           <div className="flex gap-2 flex-wrap items-center">
