@@ -2083,7 +2083,7 @@ function App() {
   const [isBuilderOpen, setIsBuilderOpen] = useState(false)
   const [builderPosition, setBuilderPosition] = useState({
     x: Math.max(16, Math.floor(window.innerWidth / 2 - 320)),
-    y: 96,
+    y: Math.max(40, Math.floor((window.innerHeight - 640) / 2)),
   })
   const [isBuilderDragging, setIsBuilderDragging] = useState(false)
   const [builderDragOffset, setBuilderDragOffset] = useState({ x: 0, y: 0 })
@@ -2884,7 +2884,7 @@ function App() {
             left: `${builderPosition.x}px`,
             top: `${builderPosition.y}px`,
             width: '640px',
-            maxHeight: 'calc(100vh - 120px)',
+            maxHeight: 'min(640px, calc(100vh - 160px))',
             backgroundColor: 'oklch(0.13 0 0)',
             border: '1px solid oklch(0.30 0 0)',
           }}
@@ -2917,7 +2917,7 @@ function App() {
               ✕
             </button>
           </div>
-          <div className="overflow-y-auto px-5 py-4" style={{ maxHeight: 'calc(100vh - 180px)' }}>
+          <div className="overflow-y-auto px-5 py-4" style={{ maxHeight: 'min(580px, calc(100vh - 220px))' }}>
             <QueryBuilder
               onRunQuery={handleRunFromBuilder}
               isLoading={isLoading}
