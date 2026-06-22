@@ -31,12 +31,23 @@ interface PersistedBuilderState {
   pitchDownN: string
   teamCode: string
   teamFlag: TeamFlag
+  batPosition: string
 }
 
 export interface PopularPlayer {
   player: string
   team: string
 }
+
+const MLB_POSITIONS = [
+  { value: 'c', label: 'C', title: 'Catcher' },
+  { value: 'of', label: 'OF', title: 'Outfielder' },
+  { value: 'ss', label: 'SS', title: 'Shortstop' },
+  { value: '1b', label: '1B', title: 'First Base' },
+  { value: '2b', label: '2B', title: 'Second Base' },
+  { value: '3b', label: '3B', title: 'Third Base' },
+  { value: 'dh', label: 'DH', title: 'Designated Hitter' },
+]
 
 // All 30 MLB team abbreviations matching backend codes (e.g. ATH for Athletics).
 const MLB_TEAMS = [
@@ -220,6 +231,8 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
   // team (bat vs TEAM)
   const [teamCode, setTeamCode] = useState(initial.teamCode ?? '')
   const [teamFlag, setTeamFlag] = useState<TeamFlag>(initial.teamFlag ?? '')
+  // batter position (MLB only)
+  const [batPosition, setBatPosition] = useState(initial.batPosition ?? '')
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -231,13 +244,14 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       h2hPlayer, h2hOpponent,
       pitchPlayer, pitchFlag, pitchDownN,
       teamCode, teamFlag,
+      batPosition,
     }
     try {
       window.localStorage.setItem(storageKey, JSON.stringify(payload))
     } catch {
       // ignore quota / unavailable storage
     }
-  }, [storageKey, mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, pitchPlayer, pitchFlag, pitchDownN, teamCode, teamFlag])
+  }, [storageKey, mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, pitchPlayer, pitchFlag, pitchDownN, teamCode, teamFlag, batPosition])
 
   const isNbaHalfPeriod = sport === 'nba' && period === '1h'
   const allStats = SPORT_STATS[sport] ?? []
@@ -255,6 +269,10 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     // MLB has no q1 yet — clear q1 if switching to MLB
     if (s === 'mlb' && period === 'q1') {
       setPeriod('')
+    }
+    // position filter is MLB-only — clear when switching away
+    if (s !== 'mlb') {
+      setBatPosition('')
     }
   }
 
@@ -309,6 +327,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
 
     const parts: string[] = ['nspe', sport]
 
+    if (sport === 'mlb' && batPosition) parts.push(batPosition)
     if (seasonType) parts.push(seasonType)
     if (period === 'q1') {
       if (sport === 'nhl') parts.push('p1')
@@ -341,7 +360,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     }
 
     return parts.join(' ')
-  }, [mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, pitchPlayer, pitchFlag, pitchDownN, teamCode, teamFlag])
+  }, [mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, pitchPlayer, pitchFlag, pitchDownN, teamCode, teamFlag, batPosition])
 
   const canRun = Boolean(builtCommand) && !isLoading
 
@@ -615,6 +634,24 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
           </div>
         </div>
       </div>
+      )}
+
+      {/* Batter position (MLB only) */}
+      {isBuilderQuery && sport === 'mlb' && (
+        <div className="mb-3">
+          <SLabel>batter position {'{optional}'}</SLabel>
+          <div className="flex gap-1.5 flex-wrap">
+            {MLB_POSITIONS.map((pos) => (
+              <Pill
+                key={pos.value}
+                selected={batPosition === pos.value}
+                onClick={() => setBatPosition((prev) => (prev === pos.value ? '' : pos.value))}
+              >
+                {pos.label}
+              </Pill>
+            ))}
+          </div>
+        </div>
       )}
 
       {/* Stats */}
