@@ -2250,7 +2250,7 @@ function MlbReportLeaderboardView({ payload }: { payload: MlbReportLeaderboardPa
               className="text-right tabular-nums"
               style={{ color: 'oklch(0.78 0.18 145)', fontWeight: 600 }}
             >
-              {row.score.toFixed(1)}
+              {Math.round(row.score * 1.5)}
             </span>
           </div>
         )
@@ -2330,7 +2330,7 @@ function MlbPlayerReportView({ payload }: { payload: MlbPlayerReportPayload }) {
         <div className="flex items-center gap-2 font-mono shrink-0">
           <GradeBadge grade={report.grade} />
           <span style={{ color: 'oklch(0.78 0.18 145)', fontWeight: 700, fontSize: '15px' }}>
-            {report.score.toFixed(1)}
+            {Math.round(report.score * 1.5)}
           </span>
           <span style={{ color: PITCH_LABEL, fontSize: '11px' }}>{`${report.games}g`}</span>
         </div>
@@ -2405,7 +2405,7 @@ function MlbPlayerReportView({ payload }: { payload: MlbPlayerReportPayload }) {
           </div>
           {breakdown.map((b, i) => {
             const isNeg = b.weight < 0
-            const pts = b.points
+            const pts = b.points * 1.5
             const ptsColor =
               Math.abs(pts) < 0.01
                 ? PITCH_LABEL
@@ -2435,7 +2435,7 @@ function MlbPlayerReportView({ payload }: { payload: MlbPlayerReportPayload }) {
                   className="text-right tabular-nums font-bold"
                   style={{ color: ptsColor }}
                 >
-                  {pts >= 0 ? `+${pts.toFixed(2)}` : pts.toFixed(2)}
+                  {pts >= 0 ? `+${Math.round(pts * 100) / 100}` : `${Math.round(pts * 100) / 100}`}
                 </span>
               </div>
             )
@@ -2456,7 +2456,7 @@ function MlbPlayerReportView({ payload }: { payload: MlbPlayerReportPayload }) {
               className="text-right tabular-nums font-bold"
               style={{ color: 'oklch(0.78 0.18 145)', fontSize: '13px' }}
             >
-              {totalPoints.toFixed(2)}
+              {Math.round(totalPoints * 1.5)}
             </span>
           </div>
         </div>
