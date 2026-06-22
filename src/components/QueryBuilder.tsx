@@ -1,7 +1,9 @@
 import { useState, useMemo, useEffect } from 'react'
 import { useIsMobile } from '@/hooks/use-mobile'
 
-type QueryMode = 'trend' | 'compute' | 'streak' | 'h2h' | 'pitch' | 'team'
+type QueryMode = 'trend' | 'compute' | 'streak' | 'h2h' | 'pitch' | 'team' | 'report'
+type ReportSubMode = 'leaderboard' | 'player'
+type ReportWindow = '-season' | '-last5' | '-last10' | '-last20' | '-lastN' | ''
 type SeasonType = 'post' | ''
 type PeriodType = 'q1' | '1h' | ''
 type ComputeWindow = '-season' | '-career' | '-last' | ''
@@ -32,6 +34,11 @@ interface PersistedBuilderState {
   teamCode: string
   teamFlag: TeamFlag
   batPosition: string
+  reportSubMode: ReportSubMode
+  reportWindow: ReportWindow
+  reportWindowN: string
+  reportPlayer: string
+  reportPosition: string
 }
 
 export interface PopularPlayer {
@@ -47,6 +54,19 @@ const MLB_POSITIONS = [
   { value: '2b', label: '2B', title: 'Second Base' },
   { value: '3b', label: '3B', title: 'Third Base' },
   { value: 'dh', label: 'DH', title: 'Designated Hitter' },
+]
+
+const REPORT_POSITIONS = [
+  { value: 'c', label: 'C' },
+  { value: '1b', label: '1B' },
+  { value: '2b', label: '2B' },
+  { value: '3b', label: '3B' },
+  { value: 'ss', label: 'SS' },
+  { value: 'lf', label: 'LF' },
+  { value: 'cf', label: 'CF' },
+  { value: 'rf', label: 'RF' },
+  { value: 'of', label: 'OF' },
+  { value: 'dh', label: 'DH' },
 ]
 
 // All 30 MLB team abbreviations matching backend codes (e.g. ATH for Athletics).
@@ -233,6 +253,12 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
   const [teamFlag, setTeamFlag] = useState<TeamFlag>(initial.teamFlag ?? '')
   // batter position (MLB only)
   const [batPosition, setBatPosition] = useState(initial.batPosition ?? '')
+  // report mode
+  const [reportSubMode, setReportSubMode] = useState<ReportSubMode>(initial.reportSubMode ?? 'leaderboard')
+  const [reportWindow, setReportWindow] = useState<ReportWindow>(initial.reportWindow ?? '')
+  const [reportWindowN, setReportWindowN] = useState(initial.reportWindowN ?? '')
+  const [reportPlayer, setReportPlayer] = useState(initial.reportPlayer ?? '')
+  const [reportPosition, setReportPosition] = useState(initial.reportPosition ?? '')
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -245,13 +271,14 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       pitchPlayer, pitchFlag, pitchDownN,
       teamCode, teamFlag,
       batPosition,
+      reportSubMode, reportWindow, reportWindowN, reportPlayer, reportPosition,
     }
     try {
       window.localStorage.setItem(storageKey, JSON.stringify(payload))
     } catch {
       // ignore quota / unavailable storage
     }
-  }, [storageKey, mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, pitchPlayer, pitchFlag, pitchDownN, teamCode, teamFlag, batPosition])
+  }, [storageKey, mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, pitchPlayer, pitchFlag, pitchDownN, teamCode, teamFlag, batPosition, reportSubMode, reportWindow, reportWindowN, reportPlayer, reportPosition])
 
   const isNbaHalfPeriod = sport === 'nba' && period === '1h'
   const allStats = SPORT_STATS[sport] ?? []
@@ -278,8 +305,8 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
 
   const handleModeSelect = (m: QueryMode) => {
     setMode(m)
-    // h2h, pitch, team are MLB-only — force sport to mlb when switching in.
-    if ((m === 'h2h' || m === 'pitch' || m === 'team') && sport !== 'mlb') {
+    // h2h, pitch, team, report are MLB-only — force sport to mlb when switching in.
+    if ((m === 'h2h' || m === 'pitch' || m === 'team' || m === 'report') && sport !== 'mlb') {
       setSport('mlb')
       setStat('')
       if (period === '1h' || period === 'q1') setPeriod('')
@@ -323,6 +350,25 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       return parts.join(' ')
     }
 
+    if (mode === 'report') {
+      const parts = ['nspe', 'mlb']
+      if (reportSubMode === 'player') {
+        const player = reportPlayer.trim()
+        if (!player) return ''
+        parts.push(player.toLowerCase())
+      } else {
+        // leaderboard — optional position filter
+        if (reportPosition) parts.push(reportPosition.toUpperCase())
+      }
+      parts.push('-report')
+      if (reportWindow === '-season') parts.push('-season')
+      else if (reportWindow === '-last5') parts.push('-last5')
+      else if (reportWindow === '-last10') parts.push('-last10')
+      else if (reportWindow === '-last20') parts.push('-last20')
+      else if (reportWindow === '-lastN' && reportWindowN) parts.push(`-last${reportWindowN}`)
+      return parts.join(' ')
+    }
+
     if (!sport) return ''
 
     const parts: string[] = ['nspe', sport]
@@ -360,7 +406,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     }
 
     return parts.join(' ')
-  }, [mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, pitchPlayer, pitchFlag, pitchDownN, teamCode, teamFlag, batPosition])
+  }, [mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, pitchPlayer, pitchFlag, pitchDownN, teamCode, teamFlag, batPosition, reportSubMode, reportWindow, reportWindowN, reportPlayer, reportPosition])
 
   const canRun = Boolean(builtCommand) && !isLoading
 
@@ -370,7 +416,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     <div className="w-full" style={{ color: C.textBright, fontFamily: 'monospace' }}>
       {/* Mode tabs */}
       <div className="flex gap-1.5 mb-4 flex-wrap">
-        {(['trend', 'compute', 'streak', 'h2h', 'pitch', 'team'] as QueryMode[]).map((m) => (
+        {(['trend', 'compute', 'streak', 'h2h', 'pitch', 'team', 'report'] as QueryMode[]).map((m) => (
           <button
             key={m}
             type="button"
@@ -399,6 +445,8 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
           ? '▸ nspe mlb {player name} vs {TEAM}'
           : mode === 'pitch'
           ? '▸ nspe mlb pitch {player} {-vfp|-outs|-Ndown} {vs TEAM}'
+          : mode === 'report'
+          ? '▸ nspe mlb {pos} -report {-season|-lastN}  |  nspe mlb {player} -report {-lastN}'
           : '▸ nspe mlb bat vs {TEAM} {-outs}'}
       </div>
 
@@ -580,6 +628,100 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
             <NumInput value={streakN} onChange={setStreakN} placeholder="N" w={54} />
           </div>
         </div>
+      )}
+
+      {/* Report mode */}
+      {mode === 'report' && (
+        <>
+          {/* Sub-mode: leaderboard vs player */}
+          <div className="mb-3">
+            <SLabel>report type</SLabel>
+            <div className="flex gap-1.5">
+              <Pill
+                selected={reportSubMode === 'leaderboard'}
+                onClick={() => setReportSubMode('leaderboard')}
+              >
+                leaderboard
+              </Pill>
+              <Pill
+                selected={reportSubMode === 'player'}
+                onClick={() => setReportSubMode('player')}
+              >
+                player
+              </Pill>
+            </div>
+          </div>
+
+          {/* Position filter (leaderboard only, optional) */}
+          {reportSubMode === 'leaderboard' && (
+            <div className="mb-3">
+              <SLabel>position filter {'{optional}'}</SLabel>
+              <div className="flex gap-1.5 flex-wrap">
+                {REPORT_POSITIONS.map((pos) => (
+                  <Pill
+                    key={pos.value}
+                    selected={reportPosition === pos.value}
+                    onClick={() => setReportPosition((prev) => (prev === pos.value ? '' : pos.value))}
+                  >
+                    {pos.label}
+                  </Pill>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Player name (player mode only) */}
+          {reportSubMode === 'player' && (
+            <div className="mb-3">
+              <SLabel>player name</SLabel>
+              <input
+                type="text"
+                value={reportPlayer}
+                onChange={(e) => setReportPlayer(e.target.value)}
+                placeholder="e.g. juan soto, judge"
+                className="w-full font-mono text-[13px] rounded border px-3 py-2 outline-none"
+                style={{
+                  backgroundColor: C.surface2,
+                  borderColor: C.border,
+                  color: C.accent,
+                }}
+              />
+            </div>
+          )}
+
+          {/* Window */}
+          <div className="mb-3">
+            <SLabel>window</SLabel>
+            <div className="flex gap-1.5 flex-wrap items-center">
+              <Pill
+                selected={reportWindow === ''}
+                onClick={() => { setReportWindow(''); setReportWindowN('') }}
+              >
+                default
+              </Pill>
+              {(['-last5', '-last10', '-last20', '-season'] as ReportWindow[]).map((w) => (
+                <Pill
+                  key={w as string}
+                  selected={reportWindow === w}
+                  onClick={() => { setReportWindow((p) => (p === w ? '' : w)); setReportWindowN('') }}
+                >
+                  {w as string}
+                </Pill>
+              ))}
+              <div className="flex items-center gap-1.5">
+                <Pill
+                  selected={reportWindow === '-lastN'}
+                  onClick={() => setReportWindow((p) => (p === '-lastN' ? '' : '-lastN'))}
+                >
+                  -lastN
+                </Pill>
+                {reportWindow === '-lastN' && (
+                  <NumInput value={reportWindowN} onChange={setReportWindowN} placeholder="N" w={52} />
+                )}
+              </div>
+            </div>
+          </div>
+        </>
       )}
 
       {/* Sport */}

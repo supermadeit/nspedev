@@ -165,6 +165,10 @@ const SAMPLE_COMMANDS = [
   { label: 'nspe mlb pitch gavin -3down', command: 'nspe mlb pitch gavin -3down' },
   { label: 'nspe mlb bat LAD -outs -season', command: 'nspe mlb bat LAD -outs -season' },
   { label: 'nspe mlb LAD -ov -season', command: 'nspe mlb LAD -ov -season' },
+  { label: 'nspe mlb -report', command: 'nspe mlb -report' },
+  { label: 'nspe mlb -report -last5', command: 'nspe mlb -report -last5' },
+  { label: 'nspe mlb DH -report -season', command: 'nspe mlb DH -report -season' },
+  { label: 'nspe mlb juan soto -report -last20', command: 'nspe mlb juan soto -report -last20' },
   { label: '{nfl coming soon}', command: '', comingSoon: true },
 ]
 
@@ -508,6 +512,108 @@ function extractMlbTeamOverviewPayload(payload: unknown): MlbTeamOverviewPayload
     for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
       const v = rec[key]
       if (isMlbTeamOverviewPayload(v)) return v
+    }
+  }
+  return null
+}
+
+// ---------- MLB Batter Report Leaderboard ----------
+
+interface MlbReportLeaderboardRow {
+  player: string
+  player_key: string
+  team: string
+  grade: string
+  score: number
+  games: number
+  rates: Record<string, number>
+  last_game: string
+}
+
+interface MlbReportLeaderboardPayload {
+  kind: 'mlb_report_leaderboard'
+  generated_at: string
+  query: { window: number; is_season: boolean; top_n: number }
+  rows: MlbReportLeaderboardRow[]
+  grade_buckets: Array<{ min: number; grade: string }>
+  weights: Record<string, number>
+}
+
+function isMlbReportLeaderboardPayload(payload: unknown): payload is MlbReportLeaderboardPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return rec.kind === 'mlb_report_leaderboard' && Array.isArray(rec.rows)
+}
+
+function extractMlbReportLeaderboardPayload(payload: unknown): MlbReportLeaderboardPayload | null {
+  if (isMlbReportLeaderboardPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isMlbReportLeaderboardPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isMlbReportLeaderboardPayload(v)) return v
+    }
+  }
+  return null
+}
+
+// ---------- MLB Player Report ----------
+
+interface MlbPlayerReportBreakdown {
+  label: string
+  rate: number
+  weight: number
+  points: number
+}
+
+interface MlbPlayerReportData {
+  eligible: boolean
+  games: number
+  window: number
+  is_season: boolean
+  first_game: string
+  last_game: string
+  totals: Record<string, number>
+  rates: Record<string, number>
+  breakdown: MlbPlayerReportBreakdown[]
+  raw_score: number
+  score: number
+  grade: string
+}
+
+interface MlbPlayerReportPayload {
+  kind: 'mlb_player_report'
+  generated_at: string
+  query: { selector: string; window: number; is_season: boolean }
+  player: string
+  player_key: string
+  team: string
+  report: MlbPlayerReportData
+  grade_buckets: Array<{ min: number; grade: string }>
+  weights: Record<string, number>
+}
+
+function isMlbPlayerReportPayload(payload: unknown): payload is MlbPlayerReportPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return rec.kind === 'mlb_player_report' && typeof rec.report === 'object'
+}
+
+function extractMlbPlayerReportPayload(payload: unknown): MlbPlayerReportPayload | null {
+  if (isMlbPlayerReportPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isMlbPlayerReportPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isMlbPlayerReportPayload(v)) return v
     }
   }
   return null
@@ -2058,6 +2164,307 @@ function MlbTeamOverviewView({ payload }: { payload: MlbTeamOverviewPayload }) {
   )
 }
 
+// ---------- Grade helpers ----------
+
+function gradeColor(grade: string): string {
+  switch (grade) {
+    case 'A++': return 'oklch(0.78 0.18 145)'
+    case 'A+':  return 'oklch(0.82 0.16 155)'
+    case 'A':   return 'oklch(0.85 0.16 165)'
+    case 'B':   return 'oklch(0.85 0.20 100)'
+    case 'C':   return 'oklch(0.80 0.20 60)'
+    case 'D':   return 'oklch(0.72 0.18 35)'
+    default:    return 'oklch(0.60 0.15 20)'
+  }
+}
+
+function GradeBadge({ grade }: { grade: string }) {
+  return (
+    <span
+      className="font-mono font-bold text-[11px] px-1.5 py-0.5 rounded"
+      style={{
+        backgroundColor: 'oklch(0.16 0 0)',
+        color: gradeColor(grade),
+        border: `1px solid ${gradeColor(grade)}`,
+        letterSpacing: '0.04em',
+      }}
+    >
+      {grade}
+    </span>
+  )
+}
+
+// ---------- MLB Report Leaderboard View ----------
+
+function MlbReportLeaderboardView({ payload }: { payload: MlbReportLeaderboardPayload }) {
+  const rows = payload.rows ?? []
+  const q = payload.query ?? {}
+  const windowLabel = q.is_season ? 'season' : `last ${q.window}`
+  const generatedDate = payload.generated_at ? formatLeaderboardDate(payload.generated_at) : ''
+
+  return (
+    <div className="space-y-3">
+      <div className="font-mono text-[13px]" style={{ color: PITCH_ACCENT }}>
+        <span>MLB Batter Report</span>
+        <span style={{ color: PITCH_LABEL }}>{` · ${windowLabel} · top ${rows.length}`}</span>
+        {generatedDate && (
+          <span style={{ color: 'oklch(0.42 0 0)' }}>{` · ${generatedDate}`}</span>
+        )}
+      </div>
+
+      {/* Header row */}
+      <div
+        className="grid font-mono text-[10px] uppercase tracking-widest px-2 py-1"
+        style={{
+          gridTemplateColumns: '24px 1fr 36px 44px 52px',
+          gap: '8px',
+          color: PITCH_LABEL,
+          borderBottom: `1px solid ${PITCH_BORDER}`,
+        }}
+      >
+        <span>#</span>
+        <span>player</span>
+        <span>tm</span>
+        <span>grade</span>
+        <span className="text-right">score</span>
+      </div>
+
+      {/* Rows */}
+      {rows.map((row, idx) => {
+        const rank = String(idx + 1).padStart(2, '0')
+        return (
+          <div
+            key={`${row.player_key}-${idx}`}
+            className="grid font-mono text-[12px] px-2 py-1.5 items-center"
+            style={{
+              gridTemplateColumns: '24px 1fr 36px 44px 52px',
+              gap: '8px',
+              borderBottom: idx < rows.length - 1 ? '1px solid oklch(0.18 0 0)' : 'none',
+            }}
+          >
+            <span style={{ color: PITCH_LABEL }}>{rank}</span>
+            <span className="truncate" style={{ color: PITCH_VALUE }}>{row.player}</span>
+            <span style={{ color: 'oklch(0.70 0.10 195)' }}>{row.team}</span>
+            <span><GradeBadge grade={row.grade} /></span>
+            <span
+              className="text-right tabular-nums"
+              style={{ color: 'oklch(0.78 0.18 145)', fontWeight: 600 }}
+            >
+              {row.score.toFixed(1)}
+            </span>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+// ---------- MLB Player Report View ----------
+
+function MlbPlayerReportView({ payload }: { payload: MlbPlayerReportPayload }) {
+  const report = payload.report
+  if (!report) {
+    return (
+      <div className="font-mono text-[13px]" style={{ color: PITCH_LABEL }}>
+        No report data available
+      </div>
+    )
+  }
+
+  const windowLabel = report.is_season ? 'season' : `last ${report.window}`
+  const dateRange =
+    report.first_game && report.last_game
+      ? `${report.first_game} — ${report.last_game}`
+      : ''
+  const t = report.totals ?? {}
+  const breakdown = report.breakdown ?? []
+
+  const absStats = [
+    { label: 'PA', value: t.PA ?? 0 },
+    { label: 'AB', value: t.AB ?? 0 },
+    { label: 'H', value: t.H ?? 0 },
+    { label: 'TB', value: t.TB ?? 0 },
+    { label: 'BB', value: t.BB ?? 0 },
+    { label: 'HBP', value: t.HBP ?? 0 },
+    { label: 'SO', value: t.SO ?? 0 },
+  ]
+
+  const gameStats = [
+    { label: 'G/Hit', value: t.games_with_hit ?? 0 },
+    { label: 'G/RBI', value: t.games_with_rbi ?? 0 },
+    { label: 'G/Run', value: t.games_with_run ?? 0 },
+    { label: 'G/HR', value: t.games_with_hr ?? 0 },
+    { label: 'G/SB', value: t.games_with_sb ?? 0 },
+    { label: 'G/2TB', value: t.games_with_2tb ?? 0 },
+    { label: 'G/3K', value: t.games_with_3k ?? 0 },
+  ]
+
+  const totalPoints = breakdown.reduce((sum, b) => sum + b.points, 0)
+
+  const formatRate = (b: MlbPlayerReportBreakdown): string => {
+    // For percentage-style rates, show as %
+    const lbl = b.label.toLowerCase()
+    if (lbl.includes('%') || lbl.includes('pct')) {
+      return `${(b.rate * 100).toFixed(1)}%`
+    }
+    return b.rate.toFixed(4).replace(/\.?0+$/, '') || '0'
+  }
+
+  return (
+    <div className="space-y-4">
+      {/* Header */}
+      <div className="flex items-start justify-between flex-wrap gap-2">
+        <div className="font-mono text-[13px]" style={{ color: PITCH_ACCENT }}>
+          {payload.team ? (
+            <>
+              <span style={{ color: 'oklch(0.70 0.10 195)' }}>{payload.team}</span>
+              <span style={{ color: PITCH_LABEL }}>{' — '}</span>
+            </>
+          ) : null}
+          <span>{payload.player}</span>
+          <span style={{ color: PITCH_LABEL }}>{` · ${windowLabel}`}</span>
+          {dateRange && (
+            <span style={{ color: 'oklch(0.42 0 0)' }}>{` · ${dateRange}`}</span>
+          )}
+        </div>
+        <div className="flex items-center gap-2 font-mono shrink-0">
+          <GradeBadge grade={report.grade} />
+          <span style={{ color: 'oklch(0.78 0.18 145)', fontWeight: 700, fontSize: '15px' }}>
+            {report.score.toFixed(1)}
+          </span>
+          <span style={{ color: PITCH_LABEL, fontSize: '11px' }}>{`${report.games}g`}</span>
+        </div>
+      </div>
+
+      {/* Counting stats */}
+      <div
+        className="rounded p-3"
+        style={{ backgroundColor: 'oklch(0.18 0 0)', border: `1px solid ${PITCH_BORDER}` }}
+      >
+        <div className="grid grid-cols-7 gap-2 mb-3">
+          {absStats.map((s) => (
+            <div key={s.label} className="flex flex-col items-center">
+              <span
+                className="font-mono text-[9px] uppercase tracking-wider"
+                style={{ color: PITCH_LABEL }}
+              >
+                {s.label}
+              </span>
+              <span className="font-mono text-[13px]" style={{ color: PITCH_VALUE }}>
+                {s.value}
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-7 gap-2">
+          {gameStats.map((s) => (
+            <div key={s.label} className="flex flex-col items-center">
+              <span
+                className="font-mono text-[9px] uppercase tracking-wider whitespace-nowrap"
+                style={{ color: PITCH_LABEL }}
+              >
+                {s.label}
+              </span>
+              <span
+                className="font-mono text-[13px]"
+                style={{ color: s.value > 0 ? PITCH_ACCENT : PITCH_VALUE }}
+              >
+                {s.value}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Score breakdown */}
+      <div
+        className="rounded p-3"
+        style={{ backgroundColor: 'oklch(0.13 0 0)', border: `1px solid ${PITCH_BORDER}` }}
+      >
+        <div
+          className="font-mono text-[10px] uppercase tracking-widest mb-2"
+          style={{ color: PITCH_LABEL }}
+        >
+          score breakdown
+        </div>
+        <div className="space-y-0.5">
+          {/* Column headers */}
+          <div
+            className="grid font-mono text-[9px] uppercase tracking-widest pb-1 mb-1"
+            style={{
+              gridTemplateColumns: '1fr 64px 44px 48px',
+              gap: '8px',
+              color: 'oklch(0.38 0 0)',
+              borderBottom: '1px solid oklch(0.20 0 0)',
+            }}
+          >
+            <span>metric</span>
+            <span className="text-right">rate</span>
+            <span className="text-right">wt</span>
+            <span className="text-right">pts</span>
+          </div>
+          {breakdown.map((b, i) => {
+            const isNeg = b.weight < 0
+            const pts = b.points
+            const ptsColor =
+              Math.abs(pts) < 0.01
+                ? PITCH_LABEL
+                : pts > 0
+                ? 'oklch(0.78 0.18 145)'
+                : 'oklch(0.68 0.18 25)'
+            return (
+              <div
+                key={i}
+                className="grid font-mono text-[11px] py-0.5"
+                style={{ gridTemplateColumns: '1fr 64px 44px 48px', gap: '8px' }}
+              >
+                <span style={{ color: PITCH_VALUE }}>{b.label}</span>
+                <span
+                  className="text-right tabular-nums"
+                  style={{ color: PITCH_LABEL }}
+                >
+                  {formatRate(b)}
+                </span>
+                <span
+                  className="text-right tabular-nums"
+                  style={{ color: isNeg ? 'oklch(0.68 0.18 25)' : PITCH_LABEL }}
+                >
+                  {isNeg ? b.weight.toFixed(1) : `+${b.weight.toFixed(1)}`}
+                </span>
+                <span
+                  className="text-right tabular-nums font-bold"
+                  style={{ color: ptsColor }}
+                >
+                  {pts >= 0 ? `+${pts.toFixed(2)}` : pts.toFixed(2)}
+                </span>
+              </div>
+            )
+          })}
+          {/* Total row */}
+          <div
+            className="grid font-mono text-[12px] pt-1.5 mt-1"
+            style={{
+              gridTemplateColumns: '1fr 64px 44px 48px',
+              gap: '8px',
+              borderTop: '1px solid oklch(0.24 0 0)',
+            }}
+          >
+            <span style={{ color: PITCH_VALUE, fontWeight: 600 }}>total</span>
+            <span />
+            <span />
+            <span
+              className="text-right tabular-nums font-bold"
+              style={{ color: 'oklch(0.78 0.18 145)', fontSize: '13px' }}
+            >
+              {totalPoints.toFixed(2)}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function App() {
   const [stars, setStars] = useState<Star[]>([])
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
@@ -2078,6 +2485,8 @@ function App() {
   const [fpvResult, setFpvResult] = useState<MlbPitchFpvPayload | null>(null)
   const [batTeamResult, setBatTeamResult] = useState<MlbBatTeamPayload | null>(null)
   const [teamOverviewResult, setTeamOverviewResult] = useState<MlbTeamOverviewPayload | null>(null)
+  const [reportLeaderboardResult, setReportLeaderboardResult] = useState<MlbReportLeaderboardPayload | null>(null)
+  const [playerReportResult, setPlayerReportResult] = useState<MlbPlayerReportPayload | null>(null)
   const [lastQuery, setLastQuery] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [queryError, setQueryError] = useState<string | null>(null)
@@ -2144,6 +2553,8 @@ function App() {
     setFpvResult(null)
     setBatTeamResult(null)
     setTeamOverviewResult(null)
+    setReportLeaderboardResult(null)
+    setPlayerReportResult(null)
 
     if (!sanitizedQuery) {
       setQueryResults([])
@@ -2200,6 +2611,20 @@ function App() {
       const teamOverviewPayload = extractMlbTeamOverviewPayload(payload)
       if (teamOverviewPayload) {
         setTeamOverviewResult(teamOverviewPayload)
+        setQueryResults([])
+        return
+      }
+
+      const reportLeaderboardPayload = extractMlbReportLeaderboardPayload(payload)
+      if (reportLeaderboardPayload) {
+        setReportLeaderboardResult(reportLeaderboardPayload)
+        setQueryResults([])
+        return
+      }
+
+      const playerReportPayload = extractMlbPlayerReportPayload(payload)
+      if (playerReportPayload) {
+        setPlayerReportResult(playerReportPayload)
         setQueryResults([])
         return
       }
@@ -2650,6 +3075,10 @@ function App() {
                 ? `${lastQuery} — pitch`
                 : batTeamResult
                 ? `${lastQuery} — team`
+                : reportLeaderboardResult
+                ? `${lastQuery} — report`
+                : playerReportResult
+                ? `${lastQuery} — player report`
                 : queryResults
                 ? `${lastQuery} — ${queryResults.length}results`
                 : 'NSPE — Command Legend'}
@@ -2678,6 +3107,10 @@ function App() {
               <MlbBatTeamView payload={batTeamResult} />
             ) : teamOverviewResult ? (
               <MlbTeamOverviewView payload={teamOverviewResult} />
+            ) : reportLeaderboardResult ? (
+              <MlbReportLeaderboardView payload={reportLeaderboardResult} />
+            ) : playerReportResult ? (
+              <MlbPlayerReportView payload={playerReportResult} />
             ) : queryResults === null ? (
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
                 Build a query to begin
