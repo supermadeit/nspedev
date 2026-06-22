@@ -2847,7 +2847,7 @@ function App() {
               bottom: 0,
               left: 0,
               right: 0,
-              maxHeight: '88dvh',
+              maxHeight: '96dvh',
               backgroundColor: 'oklch(0.13 0 0)',
               border: '1px solid oklch(0.28 0 0)',
               borderBottom: 'none',
@@ -2887,7 +2887,7 @@ function App() {
             left: `${builderPosition.x}px`,
             top: `${builderPosition.y}px`,
             width: '640px',
-            maxHeight: 'calc(100vh - 120px)',
+            maxHeight: 'calc(100vh - 40px)',
             backgroundColor: 'oklch(0.13 0 0)',
             border: '1px solid oklch(0.30 0 0)',
           }}
@@ -2920,7 +2920,7 @@ function App() {
               ✕
             </button>
           </div>
-          <div className="overflow-y-auto px-5 py-4" style={{ maxHeight: 'calc(100vh - 180px)' }}>
+          <div className="overflow-y-auto px-5 py-4" style={{ maxHeight: 'calc(100vh - 100px)' }}>
             <QueryBuilder
               onRunQuery={handleRunFromBuilder}
               isLoading={isLoading}
@@ -3008,6 +3008,22 @@ function App() {
               className="overflow-y-auto"
               style={{ maxHeight: '210px', backgroundColor: 'oklch(0.10 0 0)' }}
             >
+              <div
+                className="grid items-center px-3 py-1 font-mono text-[10px] uppercase tracking-widest sticky top-0"
+                style={{
+                  gridTemplateColumns: '22px 1fr 36px 84px 56px',
+                  gap: '8px',
+                  backgroundColor: 'oklch(0.14 0 0)',
+                  borderBottom: '1px solid oklch(0.20 0 0)',
+                  color: 'oklch(0.42 0 0)',
+                }}
+              >
+                <span>#</span>
+                <span>player</span>
+                <span>tm</span>
+                <span>stat(streak)</span>
+                <span className="text-right">score</span>
+              </div>
               {leaderboard.rows.map((row, idx) => {
                 const rank = String(idx + 1).padStart(2, '0')
                 const player = normalizeLeaderboardPlayer(row.player)
@@ -3132,6 +3148,22 @@ function App() {
               </span>
             </div>
             <div style={{ backgroundColor: 'oklch(0.10 0 0)' }}>
+              <div
+                className="grid items-center px-4 py-1 font-mono text-[10px] uppercase tracking-widest sticky top-0"
+                style={{
+                  gridTemplateColumns: '22px 1fr 36px 84px 56px',
+                  gap: '8px',
+                  backgroundColor: 'oklch(0.14 0 0)',
+                  borderBottom: '1px solid oklch(0.20 0 0)',
+                  color: 'oklch(0.42 0 0)',
+                }}
+              >
+                <span>#</span>
+                <span>player</span>
+                <span>tm</span>
+                <span>stat(streak)</span>
+                <span className="text-right">score</span>
+              </div>
               {leaderboard.rows.map((row, idx) => {
                 const rank = String(idx + 1).padStart(2, '0')
                 const player = normalizeLeaderboardPlayer(row.player)
