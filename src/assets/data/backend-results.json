@@ -1,0 +1,218 @@
+{
+  "kind": "mlb_stat_leaderboard",
+  "generated_at": "2026-06-24T10:30:39.935261Z",
+  "query": {
+    "stat": "tb",
+    "field": "TB",
+    "short": "TB",
+    "threshold": 2,
+    "year": 2026,
+    "last_n": 10
+  },
+  "thresholds": {
+    "min_ab_season": 20,
+    "top_n": 20
+  },
+  "rows": [
+    {
+      "player": "Pete Crow Armstrong",
+      "team": "CHC",
+      "games_meeting": 10,
+      "window_games": 10,
+      "season_ab": 41,
+      "season_hits": 20,
+      "season_avg": 0.4878,
+      "last_match": "2026-06-23"
+    },
+    {
+      "player": "Anthony Volpe",
+      "team": "NYY",
+      "games_meeting": 8,
+      "window_games": 10,
+      "season_ab": 34,
+      "season_hits": 15,
+      "season_avg": 0.4412,
+      "last_match": "2026-06-23"
+    },
+    {
+      "player": "Byron Buxton",
+      "team": "MIN",
+      "games_meeting": 8,
+      "window_games": 10,
+      "season_ab": 43,
+      "season_hits": 14,
+      "season_avg": 0.3256,
+      "last_match": "2026-06-23"
+    },
+    {
+      "player": "Casey Schmitt",
+      "team": "SF",
+      "games_meeting": 7,
+      "window_games": 10,
+      "season_ab": 40,
+      "season_hits": 17,
+      "season_avg": 0.425,
+      "last_match": "2026-06-23"
+    },
+    {
+      "player": "BO Bichette",
+      "team": "NYM",
+      "games_meeting": 7,
+      "window_games": 10,
+      "season_ab": 42,
+      "season_hits": 17,
+      "season_avg": 0.4048,
+      "last_match": "2026-06-23"
+    },
+    {
+      "player": "Ketel Marte",
+      "team": "ARI",
+      "games_meeting": 7,
+      "window_games": 10,
+      "season_ab": 38,
+      "season_hits": 14,
+      "season_avg": 0.3684,
+      "last_match": "2026-06-23"
+    },
+    {
+      "player": "Kazuma Okamoto",
+      "team": "TOR",
+      "games_meeting": 7,
+      "window_games": 10,
+      "season_ab": 34,
+      "season_hits": 11,
+      "season_avg": 0.3235,
+      "last_match": "2026-06-23"
+    },
+    {
+      "player": "Jackson Merrill",
+      "team": "SD",
+      "games_meeting": 7,
+      "window_games": 10,
+      "season_ab": 42,
+      "season_hits": 12,
+      "season_avg": 0.2857,
+      "last_match": "2026-06-23"
+    },
+    {
+      "player": "Nasim Nunez",
+      "team": "WSH",
+      "games_meeting": 6,
+      "window_games": 10,
+      "season_ab": 31,
+      "season_hits": 15,
+      "season_avg": 0.4839,
+      "last_match": "2026-06-22"
+    },
+    {
+      "player": "Donovan Walton",
+      "team": "LAA",
+      "games_meeting": 6,
+      "window_games": 10,
+      "season_ab": 33,
+      "season_hits": 14,
+      "season_avg": 0.4242,
+      "last_match": "2026-06-21"
+    },
+    {
+      "player": "Blaze Alexander",
+      "team": "BAL",
+      "games_meeting": 6,
+      "window_games": 10,
+      "season_ab": 31,
+      "season_hits": 13,
+      "season_avg": 0.4194,
+      "last_match": "2026-06-21"
+    },
+    {
+      "player": "Josh Bell",
+      "team": "MIN",
+      "games_meeting": 6,
+      "window_games": 10,
+      "season_ab": 33,
+      "season_hits": 13,
+      "season_avg": 0.3939,
+      "last_match": "2026-06-20"
+    },
+    {
+      "player": "Jake Mangum",
+      "team": "PIT",
+      "games_meeting": 6,
+      "window_games": 10,
+      "season_ab": 39,
+      "season_hits": 15,
+      "season_avg": 0.3846,
+      "last_match": "2026-06-21"
+    },
+    {
+      "player": "Jonah Heim",
+      "team": "ATH",
+      "games_meeting": 6,
+      "window_games": 10,
+      "season_ab": 29,
+      "season_hits": 11,
+      "season_avg": 0.3793,
+      "last_match": "2026-06-19"
+    },
+    {
+      "player": "Dillon Dingler",
+      "team": "DET",
+      "games_meeting": 6,
+      "window_games": 10,
+      "season_ab": 40,
+      "season_hits": 15,
+      "season_avg": 0.375,
+      "last_match": "2026-06-23"
+    },
+    {
+      "player": "Brandon Nimmo",
+      "team": "TEX",
+      "games_meeting": 6,
+      "window_games": 10,
+      "season_ab": 40,
+      "season_hits": 15,
+      "season_avg": 0.375,
+      "last_match": "2026-06-23"
+    },
+    {
+      "player": "JJ Wetherholt",
+      "team": "STL",
+      "games_meeting": 6,
+      "window_games": 10,
+      "season_ab": 43,
+      "season_hits": 16,
+      "season_avg": 0.3721,
+      "last_match": "2026-06-22"
+    },
+    {
+      "player": "Caleb Durbin",
+      "team": "BOS",
+      "games_meeting": 6,
+      "window_games": 10,
+      "season_ab": 35,
+      "season_hits": 13,
+      "season_avg": 0.3714,
+      "last_match": "2026-06-22"
+    },
+    {
+      "player": "Lawrence Butler",
+      "team": "ATH",
+      "games_meeting": 6,
+      "window_games": 10,
+      "season_ab": 30,
+      "season_hits": 11,
+      "season_avg": 0.3667,
+      "last_match": "2026-06-19"
+    },
+    {
+      "player": "Alika Williams",
+      "team": "ATH",
+      "games_meeting": 6,
+      "window_games": 10,
+      "season_ab": 31,
+      "season_hits": 11,
+      "season_avg": 0.3548,
+      "last_match": "2026-06-16"
+    }
+  ]
+}
