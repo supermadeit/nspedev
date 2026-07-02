@@ -1,165 +1,165 @@
 [
   {
-    "raw": "MLB 2tb+ {top20} {L10}"
+    "raw": "MLB 1hr+ {top20} {L10}"
   },
   {
-    "team": "CHC",
-    "player": "Pete Crow Armstrong",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 10,
-    "window_games": 10
-  },
-  {
-    "team": "NYY",
-    "player": "Anthony Volpe",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 8,
-    "window_games": 10
-  },
-  {
-    "team": "MIN",
-    "player": "Byron Buxton",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 8,
-    "window_games": 10
-  },
-  {
-    "team": "SF",
-    "player": "Casey Schmitt",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 7,
-    "window_games": 10
-  },
-  {
-    "team": "NYM",
-    "player": "BO Bichette",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 7,
-    "window_games": 10
-  },
-  {
-    "team": "ARI",
-    "player": "Ketel Marte",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 7,
-    "window_games": 10
-  },
-  {
-    "team": "TOR",
-    "player": "Kazuma Okamoto",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 7,
-    "window_games": 10
-  },
-  {
-    "team": "SD",
-    "player": "Jackson Merrill",
-    "stat": "tb",
-    "threshold": 2,
+    "team": "TB",
+    "player": "Junior Caminero",
+    "stat": "hr",
+    "threshold": 1,
     "games_meeting": 7,
     "window_games": 10
   },
   {
     "team": "WSH",
-    "player": "Nasim Nunez",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 6,
+    "player": "Luis Garcia Jr",
+    "stat": "hr",
+    "threshold": 1,
+    "games_meeting": 5,
+    "window_games": 10
+  },
+  {
+    "team": "PHI",
+    "player": "Brandon Marsh",
+    "stat": "hr",
+    "threshold": 1,
+    "games_meeting": 5,
+    "window_games": 10
+  },
+  {
+    "team": "ARI",
+    "player": "Ketel Marte",
+    "stat": "hr",
+    "threshold": 1,
+    "games_meeting": 5,
+    "window_games": 10
+  },
+  {
+    "team": "TEX",
+    "player": "Joc Pederson",
+    "stat": "hr",
+    "threshold": 1,
+    "games_meeting": 5,
+    "window_games": 10
+  },
+  {
+    "team": "PIT",
+    "player": "Esmerlyn Valdez",
+    "stat": "hr",
+    "threshold": 1,
+    "games_meeting": 4,
+    "window_games": 10
+  },
+  {
+    "team": "CHC",
+    "player": "Dansby Swanson",
+    "stat": "hr",
+    "threshold": 1,
+    "games_meeting": 4,
+    "window_games": 10
+  },
+  {
+    "team": "TOR",
+    "player": "Kazuma Okamoto",
+    "stat": "hr",
+    "threshold": 1,
+    "games_meeting": 4,
+    "window_games": 10
+  },
+  {
+    "team": "COL",
+    "player": "Hunter Goodman",
+    "stat": "hr",
+    "threshold": 1,
+    "games_meeting": 4,
+    "window_games": 10
+  },
+  {
+    "team": "ATH",
+    "player": "Zack Gelof",
+    "stat": "hr",
+    "threshold": 1,
+    "games_meeting": 3,
+    "window_games": 10
+  },
+  {
+    "team": "LAD",
+    "player": "Mookie Betts",
+    "stat": "hr",
+    "threshold": 1,
+    "games_meeting": 3,
+    "window_games": 10
+  },
+  {
+    "team": "MIL",
+    "player": "William Contreras",
+    "stat": "hr",
+    "threshold": 1,
+    "games_meeting": 3,
+    "window_games": 10
+  },
+  {
+    "team": "MIN",
+    "player": "Victor Caratini",
+    "stat": "hr",
+    "threshold": 1,
+    "games_meeting": 3,
+    "window_games": 10
+  },
+  {
+    "team": "PHI",
+    "player": "Bryce Harper",
+    "stat": "hr",
+    "threshold": 1,
+    "games_meeting": 3,
+    "window_games": 10
+  },
+  {
+    "team": "KC",
+    "player": "Carter Jensen",
+    "stat": "hr",
+    "threshold": 1,
+    "games_meeting": 3,
     "window_games": 10
   },
   {
     "team": "LAA",
     "player": "Donovan Walton",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 6,
+    "stat": "hr",
+    "threshold": 1,
+    "games_meeting": 3,
     "window_games": 10
   },
   {
-    "team": "BAL",
-    "player": "Blaze Alexander",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 6,
+    "team": "PHI",
+    "player": "Trea Turner",
+    "stat": "hr",
+    "threshold": 1,
+    "games_meeting": 3,
     "window_games": 10
   },
   {
-    "team": "MIN",
-    "player": "Josh Bell",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 6,
+    "team": "ATL",
+    "player": "Ronald Acuna Jr",
+    "stat": "hr",
+    "threshold": 1,
+    "games_meeting": 3,
     "window_games": 10
   },
   {
-    "team": "PIT",
-    "player": "Jake Mangum",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 6,
+    "team": "SF",
+    "player": "Victor Bericoto",
+    "stat": "hr",
+    "threshold": 1,
+    "games_meeting": 3,
     "window_games": 10
   },
   {
-    "team": "ATH",
-    "player": "Jonah Heim",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 6,
-    "window_games": 10
-  },
-  {
-    "team": "DET",
-    "player": "Dillon Dingler",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 6,
-    "window_games": 10
-  },
-  {
-    "team": "TEX",
-    "player": "Brandon Nimmo",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 6,
-    "window_games": 10
-  },
-  {
-    "team": "STL",
-    "player": "JJ Wetherholt",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 6,
-    "window_games": 10
-  },
-  {
-    "team": "BOS",
-    "player": "Caleb Durbin",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 6,
-    "window_games": 10
-  },
-  {
-    "team": "ATH",
-    "player": "Lawrence Butler",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 6,
-    "window_games": 10
-  },
-  {
-    "team": "ATH",
-    "player": "Alika Williams",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 6,
+    "team": "CHW",
+    "player": "Miguel Vargas",
+    "stat": "hr",
+    "threshold": 1,
+    "games_meeting": 3,
     "window_games": 10
   }
 ]
