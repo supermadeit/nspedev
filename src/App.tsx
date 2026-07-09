@@ -672,6 +672,25 @@ function normalizeDisplayPlayer(player: string): string {
   return trimmed.replace(/([a-z])([A-Z])/g, '$1 $2')
 }
 
+// Static player → team lookup built from bundled data sources.
+// Used as a fallback when live API query results don't include team.
+const PLAYER_TEAM_MAP: Map<string, string> = (() => {
+  const map = new Map<string, string>()
+  const addEntry = (player: unknown, team: unknown) => {
+    if (typeof player === 'string' && typeof team === 'string' && player && team) {
+      map.set(player.toLowerCase(), team)
+    }
+  }
+  // Leaderboard rows (streak leaderboard)
+  const lb = leaderboardData as unknown as { rows?: Array<{ player: string; team: string }> }
+  for (const row of lb?.rows ?? []) addEntry(row.player, row.team)
+  // Hitlist entries
+  for (const entry of hitlistData as Array<{ player?: string; team?: string }>) {
+    addEntry(entry.player, entry.team)
+  }
+  return map
+})()
+
 type ApiPayload = Record<string, unknown> | unknown[]
 
 interface Star {
@@ -2630,8 +2649,11 @@ function App() {
       }
 
       const normalized = normalizeQueryResults(payload, sanitizedQuery)
+      const enriched = normalized.map((r) =>
+        r.team ? r : { ...r, team: PLAYER_TEAM_MAP.get(r.player.toLowerCase()) || undefined }
+      )
       const payloadError = getPayloadError(payload)
-      setQueryResults(normalized)
+      setQueryResults(enriched)
 
       if (payloadError) {
         setQueryError(payloadError)
