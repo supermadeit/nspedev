@@ -410,14 +410,12 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
 
     if (mode === 'trend') {
       if (sport === 'nfl') {
-        // NFL trend: nspe nfl {rush|pass|rec} -yds{N} -lastA/B
-        if (stat) parts.push(stat)
-        if (thresholdN) parts.push(`-yds${thresholdN}`)
-        if (lastA && lastB) parts.push(`-last${lastA}/${lastB}`)
-      } else {
-        if (stat) parts.push(`-${stat}${thresholdN}`)
-        if (lastA && lastB) parts.push(`-last${lastA}/${lastB}`)
+        // NFL per-game trend queries are not yet supported by the REST API.
+        // Return empty so the run button stays disabled.
+        return ''
       }
+      if (stat) parts.push(`-${stat}${thresholdN}`)
+      if (lastA && lastB) parts.push(`-last${lastA}/${lastB}`)
     } else if (mode === 'compute') {
       if (stat) parts.push(`-${stat}`)
       if (thresholdMode === 'min') {
@@ -471,7 +469,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       <div className="text-[10px] mb-4 leading-relaxed" style={{ color: C.textDim }}>
         {mode === 'trend'
           ? (sport === 'nfl'
-            ? '▸ nspe nfl {rush|pass|rec} -ydsN -lastA/B'
+            ? '▸ nfl per-game trend · not yet available via api · use explosive or compute mode'
             : '▸ nspe {sport} {post} {full/q1} {stat}N -lastN/N')
           : mode === 'compute'
           ? '▸ nspe {sport} {post} {full/q1} {stat} minN {maxN} {-window}'
