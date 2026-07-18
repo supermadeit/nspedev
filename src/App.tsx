@@ -2781,9 +2781,25 @@ function App() {
         return
       }
 
-      // NFL explosive (play-by-play long plays)
-      if (isNflExplosivePayload(payload)) {
-        setNflExplosiveResult(payload)
+      // NFL explosive (play-by-play long plays).
+      // The API often wraps the real payload inside an {exit_code, output} envelope.
+      // Check both the direct payload and the inner JSON string.
+      const resolveNflExplosive = (): NflExplosivePayload | null => {
+        if (isNflExplosivePayload(payload)) return payload
+        if (!Array.isArray(payload) && payload && typeof payload === 'object') {
+          const outputStr = (payload as Record<string, unknown>).output
+          if (typeof outputStr === 'string') {
+            try {
+              const inner = JSON.parse(outputStr)
+              if (isNflExplosivePayload(inner)) return inner
+            } catch { /* not JSON */ }
+          }
+        }
+        return null
+      }
+      const nflExplosive = resolveNflExplosive()
+      if (nflExplosive) {
+        setNflExplosiveResult(nflExplosive)
         setQueryResults([])
         return
       }
