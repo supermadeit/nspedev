@@ -1,0 +1,2209 @@
+{
+  "sport": "nfl",
+  "query": [
+    "nfl",
+    "long",
+    "pass",
+    "ydsmin30",
+    "last5",
+    "reqmet5"
+  ],
+  "results": [
+    {
+      "player": "Aaron Rodgers",
+      "met": 5,
+      "matches": [
+        {
+          "date": "1/5/26",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            31
+          ]
+        },
+        {
+          "date": "12/21/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            45
+          ]
+        },
+        {
+          "date": "12/7/25",
+          "value": 4,
+          "count": 4,
+          "yards": [
+            52,
+            41,
+            31,
+            38
+          ]
+        },
+        {
+          "date": "11/16/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            31
+          ]
+        },
+        {
+          "date": "10/27/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            45
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Lamar Jackson",
+      "met": 5,
+      "matches": [
+        {
+          "date": "1/5/26",
+          "value": 3,
+          "count": 3,
+          "yards": [
+            38,
+            50,
+            64
+          ]
+        },
+        {
+          "date": "12/14/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            32,
+            30
+          ]
+        },
+        {
+          "date": "12/7/25",
+          "value": 3,
+          "count": 3,
+          "yards": [
+            31,
+            35,
+            33
+          ]
+        },
+        {
+          "date": "11/28/25",
+          "value": 3,
+          "count": 3,
+          "yards": [
+            30,
+            44,
+            39
+          ]
+        },
+        {
+          "date": "11/23/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            30
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Jacoby Brissett",
+      "met": 5,
+      "matches": [
+        {
+          "date": "1/4/26",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            43
+          ]
+        },
+        {
+          "date": "12/28/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            38
+          ]
+        },
+        {
+          "date": "12/21/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            32
+          ]
+        },
+        {
+          "date": "11/23/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            39,
+            31
+          ]
+        },
+        {
+          "date": "11/16/25",
+          "value": 3,
+          "count": 3,
+          "yards": [
+            34,
+            34,
+            64
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Cam Ward",
+      "met": 5,
+      "matches": [
+        {
+          "date": "1/4/26",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            39
+          ]
+        },
+        {
+          "date": "12/28/25",
+          "value": 3,
+          "count": 3,
+          "yards": [
+            38,
+            43,
+            34
+          ]
+        },
+        {
+          "date": "12/21/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            34,
+            30
+          ]
+        },
+        {
+          "date": "12/14/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            34,
+            43
+          ]
+        },
+        {
+          "date": "12/7/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            44
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Bo Nix",
+      "met": 5,
+      "matches": [
+        {
+          "date": "1/4/26",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            37
+          ]
+        },
+        {
+          "date": "12/21/25",
+          "value": 3,
+          "count": 3,
+          "yards": [
+            33,
+            48,
+            32
+          ]
+        },
+        {
+          "date": "12/14/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            42
+          ]
+        },
+        {
+          "date": "12/1/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            31,
+            41
+          ]
+        },
+        {
+          "date": "11/16/25",
+          "value": 3,
+          "count": 3,
+          "yards": [
+            35,
+            48,
+            32
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "C. J. Stroud",
+      "met": 5,
+      "matches": [
+        {
+          "date": "1/4/26",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            32,
+            33
+          ]
+        },
+        {
+          "date": "12/27/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            75,
+            43
+          ]
+        },
+        {
+          "date": "12/14/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            57
+          ]
+        },
+        {
+          "date": "12/8/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            46,
+            53
+          ]
+        },
+        {
+          "date": "11/2/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            47
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Drake Maye",
+      "met": 5,
+      "matches": [
+        {
+          "date": "1/4/26",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            35,
+            34
+          ]
+        },
+        {
+          "date": "12/28/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            30,
+            31
+          ]
+        },
+        {
+          "date": "12/22/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            33,
+            37
+          ]
+        },
+        {
+          "date": "12/14/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            30
+          ]
+        },
+        {
+          "date": "12/2/25",
+          "value": 3,
+          "count": 3,
+          "yards": [
+            36,
+            33,
+            36
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Kirk Cousins",
+      "met": 5,
+      "matches": [
+        {
+          "date": "1/4/26",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            37
+          ]
+        },
+        {
+          "date": "12/21/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            41
+          ]
+        },
+        {
+          "date": "12/12/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            36
+          ]
+        },
+        {
+          "date": "12/7/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            30
+          ]
+        },
+        {
+          "date": "11/30/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            31
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Jared Goff",
+      "met": 5,
+      "matches": [
+        {
+          "date": "1/4/26",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            30
+          ]
+        },
+        {
+          "date": "12/14/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            52,
+            31
+          ]
+        },
+        {
+          "date": "12/5/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            37
+          ]
+        },
+        {
+          "date": "11/27/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            44
+          ]
+        },
+        {
+          "date": "11/23/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            30,
+            30
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Tyler Shough",
+      "met": 5,
+      "matches": [
+        {
+          "date": "1/4/26",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            59
+          ]
+        },
+        {
+          "date": "12/28/25",
+          "value": 4,
+          "count": 4,
+          "yards": [
+            36,
+            30,
+            39,
+            60
+          ]
+        },
+        {
+          "date": "12/21/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            31
+          ]
+        },
+        {
+          "date": "11/30/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            38
+          ]
+        },
+        {
+          "date": "11/9/25",
+          "value": 3,
+          "count": 3,
+          "yards": [
+            52,
+            62,
+            30
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Bryce Young",
+      "met": 5,
+      "matches": [
+        {
+          "date": "1/3/26",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            40
+          ]
+        },
+        {
+          "date": "12/21/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            34
+          ]
+        },
+        {
+          "date": "12/14/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            34,
+            32
+          ]
+        },
+        {
+          "date": "11/30/25",
+          "value": 3,
+          "count": 3,
+          "yards": [
+            35,
+            33,
+            43
+          ]
+        },
+        {
+          "date": "11/16/25",
+          "value": 3,
+          "count": 3,
+          "yards": [
+            39,
+            36,
+            54
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Matthew Stafford",
+      "met": 5,
+      "matches": [
+        {
+          "date": "12/30/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            36
+          ]
+        },
+        {
+          "date": "12/19/25",
+          "value": 4,
+          "count": 4,
+          "yards": [
+            54,
+            48,
+            58,
+            41
+          ]
+        },
+        {
+          "date": "12/14/25",
+          "value": 4,
+          "count": 4,
+          "yards": [
+            58,
+            36,
+            37,
+            39
+          ]
+        },
+        {
+          "date": "12/7/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            32,
+            31
+          ]
+        },
+        {
+          "date": "11/30/25",
+          "value": 3,
+          "count": 3,
+          "yards": [
+            32,
+            51,
+            31
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Brock Purdy",
+      "met": 5,
+      "matches": [
+        {
+          "date": "12/29/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            30,
+            38
+          ]
+        },
+        {
+          "date": "12/14/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            30,
+            38
+          ]
+        },
+        {
+          "date": "11/30/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            33
+          ]
+        },
+        {
+          "date": "11/16/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            30
+          ]
+        },
+        {
+          "date": "9/28/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            31
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Caleb Williams",
+      "met": 5,
+      "matches": [
+        {
+          "date": "12/29/25",
+          "value": 3,
+          "count": 3,
+          "yards": [
+            35,
+            36,
+            32
+          ]
+        },
+        {
+          "date": "12/21/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            34,
+            46
+          ]
+        },
+        {
+          "date": "12/14/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            40
+          ]
+        },
+        {
+          "date": "11/2/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            31,
+            58
+          ]
+        },
+        {
+          "date": "10/26/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            42
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Josh Allen",
+      "met": 5,
+      "matches": [
+        {
+          "date": "12/28/25",
+          "value": 3,
+          "count": 3,
+          "yards": [
+            50,
+            32,
+            36
+          ]
+        },
+        {
+          "date": "12/14/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            37
+          ]
+        },
+        {
+          "date": "12/7/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            32,
+            31
+          ]
+        },
+        {
+          "date": "11/21/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            44,
+            44
+          ]
+        },
+        {
+          "date": "11/16/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            43,
+            52
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Joe Burrow",
+      "met": 5,
+      "matches": [
+        {
+          "date": "12/28/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            39,
+            32
+          ]
+        },
+        {
+          "date": "12/21/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            35,
+            36
+          ]
+        },
+        {
+          "date": "12/14/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            34
+          ]
+        },
+        {
+          "date": "12/7/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            37
+          ]
+        },
+        {
+          "date": "11/28/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            43
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Shedeur Sanders",
+      "met": 5,
+      "matches": [
+        {
+          "date": "12/28/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            42
+          ]
+        },
+        {
+          "date": "12/14/25",
+          "value": 3,
+          "count": 3,
+          "yards": [
+            42,
+            47,
+            32
+          ]
+        },
+        {
+          "date": "12/7/25",
+          "value": 5,
+          "count": 5,
+          "yards": [
+            58,
+            60,
+            35,
+            35,
+            31
+          ]
+        },
+        {
+          "date": "11/30/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            34
+          ]
+        },
+        {
+          "date": "11/23/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            52,
+            66
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Baker Mayfield",
+      "met": 5,
+      "matches": [
+        {
+          "date": "12/28/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            33,
+            59
+          ]
+        },
+        {
+          "date": "12/21/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            40
+          ]
+        },
+        {
+          "date": "12/12/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            33,
+            45
+          ]
+        },
+        {
+          "date": "11/30/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            31
+          ]
+        },
+        {
+          "date": "11/24/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            31
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Trevor Lawrence",
+      "met": 5,
+      "matches": [
+        {
+          "date": "12/28/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            37
+          ]
+        },
+        {
+          "date": "12/21/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            63
+          ]
+        },
+        {
+          "date": "12/14/25",
+          "value": 3,
+          "count": 3,
+          "yards": [
+            33,
+            39,
+            45
+          ]
+        },
+        {
+          "date": "12/7/25",
+          "value": 3,
+          "count": 3,
+          "yards": [
+            39,
+            37,
+            30
+          ]
+        },
+        {
+          "date": "11/30/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            50
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Jaxson Dart",
+      "met": 5,
+      "matches": [
+        {
+          "date": "12/28/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            36
+          ]
+        },
+        {
+          "date": "12/14/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            55,
+            42
+          ]
+        },
+        {
+          "date": "12/2/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            30
+          ]
+        },
+        {
+          "date": "11/9/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            31,
+            38
+          ]
+        },
+        {
+          "date": "10/26/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            34
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Geno Smith",
+      "met": 5,
+      "matches": [
+        {
+          "date": "12/28/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            47
+          ]
+        },
+        {
+          "date": "12/21/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            37,
+            60
+          ]
+        },
+        {
+          "date": "11/23/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            33
+          ]
+        },
+        {
+          "date": "11/7/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            31
+          ]
+        },
+        {
+          "date": "10/5/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            33,
+            32
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Justin Herbert",
+      "met": 5,
+      "matches": [
+        {
+          "date": "12/27/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            60,
+            31
+          ]
+        },
+        {
+          "date": "12/21/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            50
+          ]
+        },
+        {
+          "date": "12/14/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            37
+          ]
+        },
+        {
+          "date": "12/9/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            60
+          ]
+        },
+        {
+          "date": "11/16/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            30,
+            44
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Dak Prescott",
+      "met": 5,
+      "matches": [
+        {
+          "date": "12/25/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            86,
+            31
+          ]
+        },
+        {
+          "date": "12/21/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            38
+          ]
+        },
+        {
+          "date": "12/15/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            30,
+            30
+          ]
+        },
+        {
+          "date": "12/5/25",
+          "value": 3,
+          "count": 3,
+          "yards": [
+            37,
+            32,
+            42
+          ]
+        },
+        {
+          "date": "11/27/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            39,
+            51
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Marcus Mariota",
+      "met": 5,
+      "matches": [
+        {
+          "date": "12/20/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            40
+          ]
+        },
+        {
+          "date": "12/14/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            51,
+            36
+          ]
+        },
+        {
+          "date": "12/1/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            38
+          ]
+        },
+        {
+          "date": "11/9/25",
+          "value": 3,
+          "count": 3,
+          "yards": [
+            41,
+            37,
+            30
+          ]
+        },
+        {
+          "date": "9/21/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            56,
+            43
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Sam Darnold",
+      "met": 5,
+      "matches": [
+        {
+          "date": "12/19/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            46,
+            56
+          ]
+        },
+        {
+          "date": "12/14/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            39
+          ]
+        },
+        {
+          "date": "12/7/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            30,
+            33
+          ]
+        },
+        {
+          "date": "11/23/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            63,
+            56
+          ]
+        },
+        {
+          "date": "11/16/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            31
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Jalen Hurts",
+      "met": 5,
+      "matches": [
+        {
+          "date": "12/14/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            44,
+            32
+          ]
+        },
+        {
+          "date": "11/28/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            30,
+            33
+          ]
+        },
+        {
+          "date": "11/23/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            41
+          ]
+        },
+        {
+          "date": "11/11/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            41,
+            36
+          ]
+        },
+        {
+          "date": "10/26/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            40
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Patrick Mahomes",
+      "met": 5,
+      "matches": [
+        {
+          "date": "12/8/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            35
+          ]
+        },
+        {
+          "date": "11/27/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            42
+          ]
+        },
+        {
+          "date": "11/23/25",
+          "value": 3,
+          "count": 3,
+          "yards": [
+            42,
+            47,
+            31
+          ]
+        },
+        {
+          "date": "11/16/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            61
+          ]
+        },
+        {
+          "date": "11/2/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            40,
+            33
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Jordan Love",
+      "met": 5,
+      "matches": [
+        {
+          "date": "12/7/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            45,
+            41
+          ]
+        },
+        {
+          "date": "11/27/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            51,
+            30
+          ]
+        },
+        {
+          "date": "11/16/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            33
+          ]
+        },
+        {
+          "date": "11/2/25",
+          "value": 3,
+          "count": 3,
+          "yards": [
+            52,
+            30,
+            36
+          ]
+        },
+        {
+          "date": "10/27/25",
+          "value": 3,
+          "count": 3,
+          "yards": [
+            33,
+            59,
+            33
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Daniel Jones",
+      "met": 5,
+      "matches": [
+        {
+          "date": "11/30/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            33,
+            34
+          ]
+        },
+        {
+          "date": "11/23/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            48
+          ]
+        },
+        {
+          "date": "11/9/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            37
+          ]
+        },
+        {
+          "date": "11/2/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            36
+          ]
+        },
+        {
+          "date": "10/26/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            50
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Tua Tagovailoa",
+      "met": 5,
+      "matches": [
+        {
+          "date": "11/30/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            34
+          ]
+        },
+        {
+          "date": "11/16/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            31
+          ]
+        },
+        {
+          "date": "11/9/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            38
+          ]
+        },
+        {
+          "date": "10/26/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            43
+          ]
+        },
+        {
+          "date": "10/12/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            45
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Michael Penix Jr.",
+      "met": 5,
+      "matches": [
+        {
+          "date": "11/16/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            30,
+            41
+          ]
+        },
+        {
+          "date": "11/9/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            30
+          ]
+        },
+        {
+          "date": "11/2/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            40
+          ]
+        },
+        {
+          "date": "10/20/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            38
+          ]
+        },
+        {
+          "date": "9/28/25",
+          "value": 2,
+          "count": 2,
+          "yards": [
+            43,
+            69
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    },
+    {
+      "player": "Joe Flacco",
+      "met": 5,
+      "matches": [
+        {
+          "date": "11/2/25",
+          "value": 3,
+          "count": 3,
+          "yards": [
+            36,
+            44,
+            33
+          ]
+        },
+        {
+          "date": "10/26/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            44
+          ]
+        },
+        {
+          "date": "10/17/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            37
+          ]
+        },
+        {
+          "date": "9/28/25",
+          "value": 3,
+          "count": 3,
+          "yards": [
+            33,
+            34,
+            35
+          ]
+        },
+        {
+          "date": "9/14/25",
+          "value": 1,
+          "count": 1,
+          "yards": [
+            61
+          ]
+        }
+      ],
+      "last": 5,
+      "threshold": 30
+    }
+  ]
+}
+
+{
+  "engine": "nfl_stats",
+  "query": {
+    "league": "nfl",
+    "stat": "rush_yds",
+    "window": null,
+    "min": 1000,
+    "max": null,
+    "season": true,
+    "position": null
+  },
+  "results": [
+    {
+      "player_name": "JamesCookIii",
+      "position": "UNK",
+      "team": "BUF",
+      "stat": "rush_yds",
+      "value": 1784,
+      "games": 19
+    },
+    {
+      "player_name": "DerrickHenry",
+      "position": "UNK",
+      "team": "BAL",
+      "stat": "rush_yds",
+      "value": 1595,
+      "games": 17
+    },
+    {
+      "player_name": "JonathanTaylor",
+      "position": "UNK",
+      "team": "IND",
+      "stat": "rush_yds",
+      "value": 1585,
+      "games": 17
+    },
+    {
+      "player_name": "BijanRobinson",
+      "position": "UNK",
+      "team": "ATL",
+      "stat": "rush_yds",
+      "value": 1478,
+      "games": 17
+    },
+    {
+      "player_name": "KyrenWilliams",
+      "position": "UNK",
+      "team": "LAR",
+      "stat": "rush_yds",
+      "value": 1435,
+      "games": 20
+    },
+    {
+      "player_name": "DeVonAchane",
+      "position": "UNK",
+      "team": "MIA",
+      "stat": "rush_yds",
+      "value": 1350,
+      "games": 16
+    },
+    {
+      "player_name": "ChristianMccaffrey",
+      "position": "UNK",
+      "team": "SF",
+      "stat": "rush_yds",
+      "value": 1285,
+      "games": 19
+    },
+    {
+      "player_name": "SaquonBarkley",
+      "position": "UNK",
+      "team": "PHI",
+      "stat": "rush_yds",
+      "value": 1246,
+      "games": 17
+    },
+    {
+      "player_name": "JahmyrGibbs",
+      "position": "UNK",
+      "team": "DET",
+      "stat": "rush_yds",
+      "value": 1223,
+      "games": 17
+    },
+    {
+      "player_name": "DAndreSwift",
+      "position": "UNK",
+      "team": "CHI",
+      "stat": "rush_yds",
+      "value": 1217,
+      "games": 18
+    },
+    {
+      "player_name": "JavonteWilliams",
+      "position": "UNK",
+      "team": "DAL",
+      "stat": "rush_yds",
+      "value": 1201,
+      "games": 16
+    },
+    {
+      "player_name": "TonyPollard",
+      "position": "UNK",
+      "team": "TEN",
+      "stat": "rush_yds",
+      "value": 1082,
+      "games": 17
+    },
+    {
+      "player_name": "BreeceHall",
+      "position": "UNK",
+      "team": "NYJ",
+      "stat": "rush_yds",
+      "value": 1065,
+      "games": 16
+    },
+    {
+      "player_name": "ChaseBrown",
+      "position": "UNK",
+      "team": "CIN",
+      "stat": "rush_yds",
+      "value": 1019,
+      "games": 17
+    },
+    {
+      "player_name": "JaylenWarren",
+      "position": "UNK",
+      "team": "PIT",
+      "stat": "rush_yds",
+      "value": 1001,
+      "games": 17
+    }
+  ],
+  "generated_at": "2026-07-18T06:07:42.957689Z"
+}
+
+{
+  "sport": "nfl",
+  "query": "nfl rush ydsmin100 last5 reqmet2",
+  "results": [
+    {
+      "player": "jamescook iii",
+      "matches": [
+        {
+          "player_id": "4379399",
+          "player_name": "JamesCook III",
+          "date": "Sat 1/17",
+          "opponent": "@DEN",
+          "result": "L33-30 OT",
+          "rush_car": 24,
+          "rush_yds": 117,
+          "rush_avg": 4.9,
+          "rush_td": 0,
+          "rush_lng": 24,
+          "rec_rec": 2,
+          "rec_tgts": 3,
+          "rec_yds": 24,
+          "rec_avg": 12,
+          "rec_td": 0,
+          "rec_lng": 24,
+          "fum": 1,
+          "fum_lost": 1,
+          "fum_forced": "-",
+          "fum_kb": "-",
+          "game_id": "401772982",
+          "seasonYear": "2026",
+          "date_iso": "2026-01-17",
+          "team": "BUF",
+          "pass_yds": 0
+        },
+        {
+          "player_id": "4379399",
+          "player_name": "JamesCook III",
+          "date": "Sun 12/21",
+          "opponent": "@CLE",
+          "result": "W23-20",
+          "rush_car": 16,
+          "rush_yds": 117,
+          "rush_avg": 7.3,
+          "rush_td": 2,
+          "rush_lng": 44,
+          "rec_rec": 1,
+          "rec_tgts": 2,
+          "rec_yds": 17,
+          "rec_avg": 17,
+          "rec_td": 0,
+          "rec_lng": 17,
+          "fum": 0,
+          "fum_lost": 0,
+          "fum_forced": "-",
+          "fum_kb": "-",
+          "game_id": "401772802",
+          "seasonYear": "2026",
+          "date_iso": "2025-12-21",
+          "team": "BUF",
+          "pass_yds": 0
+        }
+      ]
+    },
+    {
+      "player": "Saquon Barkley",
+      "matches": [
+        {
+          "player_id": "3929630",
+          "player_name": "SaquonBarkley",
+          "date": "Sun 1/11",
+          "opponent": "vsSF",
+          "result": "L23-19",
+          "rush_car": 26,
+          "rush_yds": 106,
+          "rush_avg": 4.1,
+          "rush_td": 0,
+          "rush_lng": 29,
+          "rec_rec": 3,
+          "rec_tgts": 6,
+          "rec_yds": 25,
+          "rec_avg": 8.3,
+          "rec_td": 0,
+          "rec_lng": 20,
+          "fum": 0,
+          "fum_lost": 0,
+          "fum_forced": "-",
+          "fum_kb": "-",
+          "game_id": "401772980",
+          "seasonYear": "2026",
+          "date_iso": "2026-01-11",
+          "team": "PHI",
+          "pass_yds": 0
+        },
+        {
+          "player_id": "3929630",
+          "player_name": "SaquonBarkley",
+          "date": "Sat 12/20",
+          "opponent": "@WSH",
+          "result": "W29-18",
+          "rush_car": 21,
+          "rush_yds": 132,
+          "rush_avg": 6.3,
+          "rush_td": 1,
+          "rush_lng": 48,
+          "rec_rec": 0,
+          "rec_tgts": 2,
+          "rec_yds": 0,
+          "rec_avg": 0,
+          "rec_td": 0,
+          "rec_lng": 0,
+          "fum": 0,
+          "fum_lost": 0,
+          "fum_forced": "-",
+          "fum_kb": "-",
+          "game_id": "401772612",
+          "seasonYear": "2026",
+          "date_iso": "2025-12-20",
+          "team": "PHI",
+          "pass_yds": 0
+        },
+        {
+          "player_id": "3929630",
+          "player_name": "SaquonBarkley",
+          "date": "Mon 12/8",
+          "opponent": "@LAC",
+          "result": "L22-19 OT",
+          "rush_car": 20,
+          "rush_yds": 122,
+          "rush_avg": 6.1,
+          "rush_td": 1,
+          "rush_lng": 52,
+          "rec_rec": 0,
+          "rec_tgts": 2,
+          "rec_yds": 0,
+          "rec_avg": 0,
+          "rec_td": 0,
+          "rec_lng": 0,
+          "fum": 0,
+          "fum_lost": 0,
+          "fum_forced": "-",
+          "fum_kb": "-",
+          "game_id": "401772822",
+          "seasonYear": "2026",
+          "date_iso": "2025-12-08",
+          "team": "PHI",
+          "pass_yds": 0
+        }
+      ]
+    },
+    {
+      "player": "Derrick Henry",
+      "matches": [
+        {
+          "player_id": "3043078",
+          "player_name": "DerrickHenry",
+          "date": "Sun 1/4",
+          "opponent": "@PIT",
+          "result": "L26-24",
+          "rush_car": 20,
+          "rush_yds": 126,
+          "rush_avg": 6.3,
+          "rush_td": 0,
+          "rush_lng": 41,
+          "rec_rec": 0,
+          "rec_tgts": 1,
+          "rec_yds": 0,
+          "rec_avg": 0,
+          "rec_td": 0,
+          "rec_lng": 0,
+          "fum": 0,
+          "fum_lost": 0,
+          "fum_forced": "-",
+          "fum_kb": "-",
+          "game_id": "401772960",
+          "seasonYear": "2026",
+          "date_iso": "2026-01-04",
+          "team": "BAL",
+          "pass_yds": 0
+        },
+        {
+          "player_id": "3043078",
+          "player_name": "DerrickHenry",
+          "date": "Sat 12/27",
+          "opponent": "@GB",
+          "result": "W41-24",
+          "rush_car": 36,
+          "rush_yds": 216,
+          "rush_avg": 6,
+          "rush_td": 4,
+          "rush_lng": 30,
+          "rec_rec": 0,
+          "rec_tgts": 0,
+          "rec_yds": 0,
+          "rec_avg": 0,
+          "rec_td": 0,
+          "rec_lng": 0,
+          "fum": 0,
+          "fum_lost": 0,
+          "fum_forced": "-",
+          "fum_kb": "-",
+          "game_id": "401772953",
+          "seasonYear": "2026",
+          "date_iso": "2025-12-27",
+          "team": "BAL",
+          "pass_yds": 0
+        },
+        {
+          "player_id": "3043078",
+          "player_name": "DerrickHenry",
+          "date": "Sun 12/21",
+          "opponent": "vsNE",
+          "result": "L28-24",
+          "rush_car": 18,
+          "rush_yds": 128,
+          "rush_avg": 7.1,
+          "rush_td": 2,
+          "rush_lng": 23,
+          "rec_rec": 0,
+          "rec_tgts": 0,
+          "rec_yds": 0,
+          "rec_avg": 0,
+          "rec_td": 0,
+          "rec_lng": 0,
+          "fum": 1,
+          "fum_lost": 1,
+          "fum_forced": "-",
+          "fum_kb": "-",
+          "game_id": "401772804",
+          "seasonYear": "2026",
+          "date_iso": "2025-12-21",
+          "team": "BAL",
+          "pass_yds": 0
+        },
+        {
+          "player_id": "3043078",
+          "player_name": "DerrickHenry",
+          "date": "Sun 12/14",
+          "opponent": "@CIN",
+          "result": "W24-0",
+          "rush_car": 11,
+          "rush_yds": 100,
+          "rush_avg": 9.1,
+          "rush_td": 0,
+          "rush_lng": 29,
+          "rec_rec": 0,
+          "rec_tgts": 0,
+          "rec_yds": 0,
+          "rec_avg": 0,
+          "rec_td": 0,
+          "rec_lng": 0,
+          "fum": 0,
+          "fum_lost": 0,
+          "fum_forced": "-",
+          "fum_kb": "-",
+          "game_id": "401772796",
+          "seasonYear": "2026",
+          "date_iso": "2025-12-14",
+          "team": "BAL",
+          "pass_yds": 0
+        }
+      ]
+    },
+    {
+      "player": "Christian Mc Caffrey",
+      "matches": [
+        {
+          "player_id": "3117251",
+          "player_name": "ChristianMcCaffrey",
+          "date": "Sun 12/28",
+          "opponent": "vsCHI",
+          "result": "W42-38",
+          "rush_car": 23,
+          "rush_yds": 140,
+          "rush_avg": 6.1,
+          "rush_td": 1,
+          "rush_lng": 41,
+          "rec_rec": 4,
+          "rec_tgts": 6,
+          "rec_yds": 41,
+          "rec_avg": 10.3,
+          "rec_td": 0,
+          "rec_lng": 18,
+          "fum": 0,
+          "fum_lost": 0,
+          "fum_forced": "-",
+          "fum_kb": "-",
+          "game_id": "401772935",
+          "seasonYear": "2026",
+          "date_iso": "2025-12-28",
+          "team": "SF",
+          "pass_yds": 0
+        },
+        {
+          "player_id": "3117251",
+          "player_name": "ChristianMcCaffrey",
+          "date": "Mon 12/22",
+          "opponent": "@IND",
+          "result": "W48-27",
+          "rush_car": 21,
+          "rush_yds": 117,
+          "rush_avg": 5.6,
+          "rush_td": 0,
+          "rush_lng": 24,
+          "rec_rec": 6,
+          "rec_tgts": 8,
+          "rec_yds": 29,
+          "rec_avg": 4.8,
+          "rec_td": 2,
+          "rec_lng": 10,
+          "fum": 0,
+          "fum_lost": 0,
+          "fum_forced": "-",
+          "fum_kb": "-",
+          "game_id": "401772824",
+          "seasonYear": "2026",
+          "date_iso": "2025-12-22",
+          "team": "SF",
+          "pass_yds": 0
+        }
+      ]
+    },
+    {
+      "player": "Tony Pollard",
+      "matches": [
+        {
+          "player_id": "3916148",
+          "player_name": "TonyPollard",
+          "date": "Sun 12/21",
+          "opponent": "vsKC",
+          "result": "W26-9",
+          "rush_car": 21,
+          "rush_yds": 102,
+          "rush_avg": 4.9,
+          "rush_td": 0,
+          "rush_lng": 15,
+          "rec_rec": 0,
+          "rec_tgts": 0,
+          "rec_yds": 0,
+          "rec_avg": 0,
+          "rec_td": 0,
+          "rec_lng": 0,
+          "fum": 1,
+          "fum_lost": 0,
+          "fum_forced": 0,
+          "fum_kb": 0,
+          "game_id": "401772803",
+          "seasonYear": "2026",
+          "date_iso": "2025-12-21",
+          "team": "TEN",
+          "pass_yds": 0
+        },
+        {
+          "player_id": "3916148",
+          "player_name": "TonyPollard",
+          "date": "Sun 12/14",
+          "opponent": "@SF",
+          "result": "L37-24",
+          "rush_car": 14,
+          "rush_yds": 104,
+          "rush_avg": 7.4,
+          "rush_td": 1,
+          "rush_lng": 22,
+          "rec_rec": 1,
+          "rec_tgts": 2,
+          "rec_yds": 8,
+          "rec_avg": 8,
+          "rec_td": 0,
+          "rec_lng": 8,
+          "fum": 0,
+          "fum_lost": 0,
+          "fum_forced": "-",
+          "fum_kb": "-",
+          "game_id": "401772907",
+          "seasonYear": "2026",
+          "date_iso": "2025-12-14",
+          "team": "TEN",
+          "pass_yds": 0
+        },
+        {
+          "player_id": "3916148",
+          "player_name": "TonyPollard",
+          "date": "Sun 12/7",
+          "opponent": "@CLE",
+          "result": "W31-29",
+          "rush_car": 25,
+          "rush_yds": 161,
+          "rush_avg": 6.4,
+          "rush_td": 2,
+          "rush_lng": 65,
+          "rec_rec": 0,
+          "rec_tgts": 0,
+          "rec_yds": 0,
+          "rec_avg": 0,
+          "rec_td": 0,
+          "rec_lng": 0,
+          "fum": 0,
+          "fum_lost": 0,
+          "fum_forced": "-",
+          "fum_kb": "-",
+          "game_id": "401772898",
+          "seasonYear": "2026",
+          "date_iso": "2025-12-07",
+          "team": "TEN",
+          "pass_yds": 0
+        }
+      ]
+    }
+  ]
+}

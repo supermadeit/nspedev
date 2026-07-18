@@ -145,7 +145,7 @@ const COMMAND_EXAMPLES = [
   },
 ]
 
-const SAMPLE_COMMANDS = [
+const SAMPLE_COMMANDS: Array<{ label: string; command: string; comingSoon?: boolean }> = [
   { label: 'nspe nba post -pts/-ast350 -last10', command: 'nspe nba post -pts/-ast350 -last10' },
   { label: 'nspe nba post 1h -pts15 -last3/5', command: 'nspe nba post 1h -pts15 -last3/5' },
   { label: 'nspe nba post q1 -tpm2 -last2/5', command: 'nspe nba post q1 -tpm2 -last2/5' },
@@ -169,7 +169,13 @@ const SAMPLE_COMMANDS = [
   { label: 'nspe mlb -report -last5', command: 'nspe mlb -report -last5' },
   { label: 'nspe mlb DH -report -season', command: 'nspe mlb DH -report -season' },
   { label: 'nspe mlb juan soto -report -last20', command: 'nspe mlb juan soto -report -last20' },
-  { label: '{nfl coming soon}', command: '', comingSoon: true },
+  { label: 'nspe nfl long pass -yds30 -last2/5', command: 'nspe nfl long pass -yds30 -last2/5' },
+  { label: 'nspe nfl long rush -yds20 -last3/5', command: 'nspe nfl long rush -yds20 -last3/5' },
+  { label: 'nspe nfl long rec -yds40 -last3/5', command: 'nspe nfl long rec -yds40 -last3/5' },
+  { label: 'nspe nfl rush -yds100 -last3/5', command: 'nspe nfl rush -yds100 -last3/5' },
+  { label: 'nspe nfl pass -yds250 -last2/5', command: 'nspe nfl pass -yds250 -last2/5' },
+  { label: 'nspe nfl -rush min800 -season', command: 'nspe nfl -rush min800 -season' },
+  { label: 'nspe nfl -rec min1000 -season', command: 'nspe nfl -rec min1000 -season' },
 ]
 
 interface QueryResult {
@@ -619,6 +625,41 @@ function extractMlbPlayerReportPayload(payload: unknown): MlbPlayerReportPayload
   return null
 }
 
+// ---------------- NFL explosive (long/PBP) types + detection ----------------
+
+interface NflExplosiveMatch {
+  date: string
+  value: number
+  count: number
+  yards: number[]
+}
+
+interface NflExplosiveResult {
+  player: string
+  met: number
+  matches: NflExplosiveMatch[]
+  last: number
+  threshold: number
+  team?: string
+}
+
+interface NflExplosivePayload {
+  sport: string
+  query: string[]
+  results: NflExplosiveResult[]
+}
+
+function isNflExplosivePayload(payload: unknown): payload is NflExplosivePayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const p = payload as Record<string, unknown>
+  return (
+    p.sport === 'nfl' &&
+    Array.isArray(p.query) &&
+    (p.query as string[]).includes('long') &&
+    Array.isArray(p.results)
+  )
+}
+
 interface StatContext {
   sport: string
   stat: string
@@ -655,6 +696,11 @@ const STAT_FIELDS: Record<string, Record<string, string | string[]>> = {
     sog: 'sog',
     blk: 'blocks',
     pim: 'pim',
+  },
+  nfl: {
+    rush: 'rush_yds',
+    pass: 'pass_yds',
+    rec: 'rec_yds',
   },
 }
 
@@ -1467,6 +1513,73 @@ async function parseApiPayload(response: Response): Promise<ApiPayload> {
 
     return { results: [] as unknown[], output: textPayload }
   }
+}
+
+// ---------------- NFL explosive view ----------------
+
+function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
+  const [expanded, setExpanded] = useState<Set<number>>(new Set())
+  const results = payload.results
+
+  const toggle = (i: number) =>
+    setExpanded((prev) => {
+      const next = new Set(prev)
+      if (next.has(i)) next.delete(i)
+      else next.add(i)
+      return next
+    })
+
+  return (
+    <div className="space-y-0">
+      {results.map((r, i) => {
+        const isOpen = expanded.has(i)
+        return (
+          <div key={i} className="py-2 border-b" style={{ borderColor: 'oklch(0.22 0 0)' }}>
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+                {r.team && (
+                  <>
+                    <span style={{ color: 'oklch(0.70 0.10 195)' }}>{r.team}</span>
+                    <span style={{ color: 'oklch(0.55 0 0)' }}>{' — '}</span>
+                  </>
+                )}
+                {normalizeDisplayPlayer(r.player)}
+              </span>
+              <button
+                type="button"
+                onClick={() => toggle(i)}
+                className="font-mono font-bold text-[13px] ml-4 shrink-0 px-2 py-0.5 rounded border"
+                style={{
+                  backgroundColor: isOpen ? 'oklch(0.27 0.03 145)' : 'oklch(0.22 0 0)',
+                  color: 'oklch(0.85 0.15 145)',
+                  borderColor: 'oklch(0.35 0 0)',
+                  cursor: 'pointer',
+                }}
+              >
+                {r.met}
+              </button>
+            </div>
+            {isOpen && (
+              <div className="mt-2 space-y-1 pl-2">
+                {r.matches.map((m, j) => (
+                  <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+                    <span style={{ color: 'oklch(0.60 0 0)' }}>{m.date}</span>
+                    <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                    <span style={{ color: 'oklch(0.85 0.15 145)' }}>
+                      {m.yards.join(', ')}yds
+                    </span>
+                    {m.count > 1 && (
+                      <span style={{ color: 'oklch(0.50 0 0)' }}> ({m.count} plays)</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
 }
 
 function H2hView({ payload }: { payload: H2hPayload }) {
@@ -2506,6 +2619,7 @@ function App() {
   const [teamOverviewResult, setTeamOverviewResult] = useState<MlbTeamOverviewPayload | null>(null)
   const [reportLeaderboardResult, setReportLeaderboardResult] = useState<MlbReportLeaderboardPayload | null>(null)
   const [playerReportResult, setPlayerReportResult] = useState<MlbPlayerReportPayload | null>(null)
+  const [nflExplosiveResult, setNflExplosiveResult] = useState<NflExplosivePayload | null>(null)
   const [lastQuery, setLastQuery] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [queryError, setQueryError] = useState<string | null>(null)
@@ -2574,6 +2688,7 @@ function App() {
     setTeamOverviewResult(null)
     setReportLeaderboardResult(null)
     setPlayerReportResult(null)
+    setNflExplosiveResult(null)
 
     if (!sanitizedQuery) {
       setQueryResults([])
@@ -2644,6 +2759,13 @@ function App() {
       const playerReportPayload = extractMlbPlayerReportPayload(payload)
       if (playerReportPayload) {
         setPlayerReportResult(playerReportPayload)
+        setQueryResults([])
+        return
+      }
+
+      // NFL explosive (play-by-play long plays)
+      if (isNflExplosivePayload(payload)) {
+        setNflExplosiveResult(payload)
         setQueryResults([])
         return
       }
@@ -3101,6 +3223,8 @@ function App() {
                 ? `${lastQuery} — report`
                 : playerReportResult
                 ? `${lastQuery} — player report`
+                : nflExplosiveResult
+                ? `${lastQuery} — explosive`
                 : queryResults
                 ? `${lastQuery} — ${queryResults.length}results`
                 : 'NSPE — Command Legend'}
@@ -3133,6 +3257,8 @@ function App() {
               <MlbReportLeaderboardView payload={reportLeaderboardResult} />
             ) : playerReportResult ? (
               <MlbPlayerReportView payload={playerReportResult} />
+            ) : nflExplosiveResult ? (
+              <NflExplosiveView payload={nflExplosiveResult} />
             ) : queryResults === null ? (
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
                 Build a query to begin

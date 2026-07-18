@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { useIsMobile } from '@/hooks/use-mobile'
 
-type QueryMode = 'trend' | 'compute' | 'streak' | 'h2h' | 'pitch' | 'team' | 'report'
+type QueryMode = 'trend' | 'compute' | 'streak' | 'h2h' | 'pitch' | 'team' | 'report' | 'explosive'
 type ReportSubMode = 'leaderboard' | 'player'
 type ReportWindow = '-season' | '-last5' | '-last10' | '-last20' | '-lastN' | ''
 type SeasonType = 'post' | ''
@@ -39,6 +39,8 @@ interface PersistedBuilderState {
   reportWindowN: string
   reportPlayer: string
   reportPosition: string
+  nflPlayType: string
+  nflYds: string
 }
 
 export interface PopularPlayer {
@@ -97,7 +99,7 @@ const SPORTS = [
   { value: 'nba', label: 'NBA', comingSoon: false },
   { value: 'mlb', label: 'MLB', comingSoon: false },
   { value: 'nhl', label: 'NHL', comingSoon: false },
-  { value: 'nfl', label: 'NFL', comingSoon: true },
+  { value: 'nfl', label: 'NFL', comingSoon: false },
 ]
 
 const SPORT_STATS: Record<string, Array<{ value: string; label: string }>> = {
@@ -130,7 +132,11 @@ const SPORT_STATS: Record<string, Array<{ value: string; label: string }>> = {
     { value: 'sog', label: 'SOG' },
     { value: 'blk', label: 'BLK' },
   ],
-  nfl: [],
+  nfl: [
+    { value: 'rush', label: 'RUSH' },
+    { value: 'pass', label: 'PASS' },
+    { value: 'rec', label: 'REC' },
+  ],
 }
 
 const C = {
@@ -259,6 +265,9 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
   const [reportWindowN, setReportWindowN] = useState(initial.reportWindowN ?? '')
   const [reportPlayer, setReportPlayer] = useState(initial.reportPlayer ?? '')
   const [reportPosition, setReportPosition] = useState(initial.reportPosition ?? '')
+  // NFL explosive
+  const [nflPlayType, setNflPlayType] = useState(initial.nflPlayType ?? '')
+  const [nflYds, setNflYds] = useState(initial.nflYds ?? '')
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -272,13 +281,14 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       teamCode, teamFlag,
       batPosition,
       reportSubMode, reportWindow, reportWindowN, reportPlayer, reportPosition,
+      nflPlayType, nflYds,
     }
     try {
       window.localStorage.setItem(storageKey, JSON.stringify(payload))
     } catch {
       // ignore quota / unavailable storage
     }
-  }, [storageKey, mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, pitchPlayer, pitchFlag, pitchDownN, teamCode, teamFlag, batPosition, reportSubMode, reportWindow, reportWindowN, reportPlayer, reportPosition])
+  }, [storageKey, mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, pitchPlayer, pitchFlag, pitchDownN, teamCode, teamFlag, batPosition, reportSubMode, reportWindow, reportWindowN, reportPlayer, reportPosition, nflPlayType, nflYds])
 
   const isNbaHalfPeriod = sport === 'nba' && period === '1h'
   const allStats = SPORT_STATS[sport] ?? []
@@ -301,6 +311,10 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     if (s !== 'mlb') {
       setBatPosition('')
     }
+    // explosive mode is NFL-only — switch to trend when leaving NFL
+    if (s !== 'nfl' && mode === 'explosive') {
+      setMode('trend')
+    }
   }
 
   const handleModeSelect = (m: QueryMode) => {
@@ -310,6 +324,13 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       setSport('mlb')
       setStat('')
       if (period === '1h' || period === 'q1') setPeriod('')
+    }
+    // explosive is NFL-only — force sport to nfl when switching in.
+    if (m === 'explosive') {
+      setSport('nfl')
+      setStat('')
+      if (period === '1h' || period === 'q1') setPeriod('')
+      setBatPosition('')
     }
   }
 
@@ -322,6 +343,12 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
   }
 
   const builtCommand = useMemo(() => {
+    // Explosive: nspe nfl long {type} -yds{N} -last{A}/{B}
+    if (mode === 'explosive') {
+      if (!nflPlayType || !nflYds || !lastA || !lastB) return ''
+      return `nspe nfl long ${nflPlayType} -yds${nflYds} -last${lastA}/${lastB}`
+    }
+
     if (mode === 'h2h') {
       const player = h2hPlayer.trim()
       if (!player || !h2hOpponent) return ''
@@ -382,8 +409,15 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     else if (period === '1h') parts.push('1h')
 
     if (mode === 'trend') {
-      if (stat) parts.push(`-${stat}${thresholdN}`)
-      if (lastA && lastB) parts.push(`-last${lastA}/${lastB}`)
+      if (sport === 'nfl') {
+        // NFL trend: nspe nfl {rush|pass|rec} -yds{N} -lastA/B
+        if (stat) parts.push(stat)
+        if (thresholdN) parts.push(`-yds${thresholdN}`)
+        if (lastA && lastB) parts.push(`-last${lastA}/${lastB}`)
+      } else {
+        if (stat) parts.push(`-${stat}${thresholdN}`)
+        if (lastA && lastB) parts.push(`-last${lastA}/${lastB}`)
+      }
     } else if (mode === 'compute') {
       if (stat) parts.push(`-${stat}`)
       if (thresholdMode === 'min') {
@@ -416,7 +450,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     <div className="w-full" style={{ color: C.textBright, fontFamily: 'monospace' }}>
       {/* Mode tabs */}
       <div className="flex gap-1.5 mb-4 flex-wrap">
-        {(['trend', 'compute', 'streak', 'h2h', 'pitch', 'team', 'report'] as QueryMode[]).map((m) => (
+        {(['trend', 'compute', 'streak', 'h2h', 'pitch', 'team', 'report', 'explosive'] as QueryMode[]).map((m) => (
           <button
             key={m}
             type="button"
@@ -436,7 +470,9 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       {/* Format hint */}
       <div className="text-[10px] mb-4 leading-relaxed" style={{ color: C.textDim }}>
         {mode === 'trend'
-          ? '▸ nspe {sport} {post} {full/q1} {stat}N -lastN/N'
+          ? (sport === 'nfl'
+            ? '▸ nspe nfl {rush|pass|rec} -ydsN -lastA/B'
+            : '▸ nspe {sport} {post} {full/q1} {stat}N -lastN/N')
           : mode === 'compute'
           ? '▸ nspe {sport} {post} {full/q1} {stat} minN {maxN} {-window}'
           : mode === 'streak'
@@ -447,8 +483,51 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
           ? '▸ nspe mlb pitch {player} {-vfp|-outs|-Ndown} {vs TEAM}'
           : mode === 'report'
           ? '▸ nspe mlb {pos} -report {-season|-lastN}  |  nspe mlb {player} -report {-lastN}'
+          : mode === 'explosive'
+          ? '▸ nspe nfl long {pass|rush|rec} -ydsN -lastA/B'
           : '▸ nspe mlb bat vs {TEAM} {-outs}'}
       </div>
+
+      {/* Explosive: NFL play-by-play explosive plays */}
+      {mode === 'explosive' && (
+        <>
+          <div className="mb-3">
+            <SLabel>play type</SLabel>
+            <div className="flex gap-1.5 flex-wrap">
+              {(['rush', 'pass', 'rec'] as const).map((pt) => (
+                <Pill
+                  key={pt}
+                  selected={nflPlayType === pt}
+                  onClick={() => setNflPlayType((p) => (p === pt ? '' : pt))}
+                >
+                  {pt.toUpperCase()}
+                </Pill>
+              ))}
+            </div>
+          </div>
+
+          <div className="mb-3 flex items-end gap-5 flex-wrap">
+            <div>
+              <SLabel>yards threshold</SLabel>
+              <div className="flex items-center gap-2">
+                <NumInput value={nflYds} onChange={setNflYds} w={64} />
+                <span className="font-mono text-[11px]" style={{ color: C.textDim }}>yds</span>
+              </div>
+            </div>
+            <div className="flex items-end gap-1.5">
+              <div>
+                <SLabel>met</SLabel>
+                <NumInput value={lastA} onChange={setLastA} placeholder="N" w={54} />
+              </div>
+              <span style={{ color: C.textDim, paddingBottom: '8px' }}>/</span>
+              <div>
+                <SLabel>-last</SLabel>
+                <NumInput value={lastB} onChange={setLastB} placeholder="N" w={54} />
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* H2H: opponent team + player */}
       {mode === 'h2h' && (
@@ -763,7 +842,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
             <Pill selected={period === ''} onClick={() => handlePeriodSelect('')}>
               {sport === 'mlb' ? 'reg' : 'full'}
             </Pill>
-            {sport !== 'mlb' && (
+            {sport !== 'mlb' && sport !== 'nfl' && (
               <Pill selected={period === 'q1'} onClick={() => handlePeriodSelect('q1')}>
                 {sport === 'nhl' ? 'p1' : 'q1'}
               </Pill>
