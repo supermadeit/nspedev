@@ -873,8 +873,23 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
         </div>
       )}
 
+      {/* NFL trend coming soon notice */}
+      {mode === 'trend' && sport === 'nfl' && (
+        <div className="mb-3 flex items-center gap-2">
+          <span
+            className="font-mono text-[12px] px-2.5 py-1 rounded border"
+            style={{ color: C.textDim, borderColor: C.border, backgroundColor: C.surface2 }}
+          >
+            {'{nfl.trend}'}
+          </span>
+          <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: C.textDim }}>
+            coming soon
+          </span>
+        </div>
+      )}
+
       {/* Stats */}
-      {isBuilderQuery && sport && stats.length > 0 && (
+      {isBuilderQuery && sport && stats.length > 0 && !(sport === 'nfl' && mode === 'trend') && (
         <div className="mb-3">
           <SLabel>stat</SLabel>
           <div className="flex gap-1.5 flex-wrap">
