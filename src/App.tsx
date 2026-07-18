@@ -2770,6 +2770,29 @@ function App() {
         return
       }
 
+      // Block non-explosive NFL queries that the REST API routes to the wrong
+      // handler. The response arrives as {exit_code, output: "json_string"} where
+      // the inner JSON has an array query without "long" and threshold: 0 for all
+      // results. Intercept before normalizeQueryResults shows garbage players.
+      if (!Array.isArray(payload) && payload && typeof payload === 'object') {
+        const outputStr = (payload as Record<string, unknown>).output
+        if (typeof outputStr === 'string') {
+          try {
+            const inner = JSON.parse(outputStr) as Record<string, unknown>
+            const isUnsupportedNflTrend =
+              inner.sport === 'nfl' &&
+              Array.isArray(inner.query) &&
+              !(inner.query as string[]).includes('long')
+            if (isUnsupportedNflTrend) {
+              setQueryResults([])
+              setQueryError('nfl per-game trend queries are not yet supported via the api · use explosive or compute mode')
+              setIsLoading(false)
+              return
+            }
+          } catch { /* output is not JSON */ }
+        }
+      }
+
       const normalized = normalizeQueryResults(payload, sanitizedQuery)
       const enriched = normalized.map((r) =>
         r.team ? r : { ...r, team: PLAYER_TEAM_MAP.get(r.player.toLowerCase()) || undefined }
