@@ -2934,11 +2934,11 @@ function App() {
 
         {!isMobile && (
           <a
-            href="/world-cup"
+            href="/nfl.season"
             className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
             style={{ color: 'oklch(0.85 0.15 195)' }}
           >
-            {'{world.cup}'}
+            {'{nfl.season}'}
           </a>
         )}
 

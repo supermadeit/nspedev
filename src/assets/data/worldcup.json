@@ -1,1184 +1,340 @@
 {
-  "tournament": {
-    "tournament_name": "FIFA World Cup 2026™",
-    "year": 2026,
-    "start_date": "2026-06-11T19:00:00Z",
-    "end_date": "2026-07-19T00:00:00Z",
-    "competition_id": "17",
-    "season_id": "285023",
-    "host_countries": [
-      "Canada",
-      "Mexico",
-      "USA"
-    ],
-    "current_stage": "QF"
-  },
-  "groups": [
-    {
-      "group_letter": "A",
-      "teams": [
-        {
-          "team_code": "MEX",
-          "display_name": "Mexico",
-          "P": 3,
-          "W": 3,
-          "D": 0,
-          "L": 0,
-          "GF": 6,
-          "GA": 0,
-          "GD": 6,
-          "Pts": 9,
-          "status": "advancing"
-        },
-        {
-          "team_code": "RSA",
-          "display_name": "South Africa",
-          "P": 3,
-          "W": 1,
-          "D": 1,
-          "L": 1,
-          "GF": 2,
-          "GA": 3,
-          "GD": -1,
-          "Pts": 4,
-          "status": "advancing"
-        },
-        {
-          "team_code": "KOR",
-          "display_name": "Korea Republic",
-          "P": 3,
-          "W": 1,
-          "D": 0,
-          "L": 2,
-          "GF": 2,
-          "GA": 3,
-          "GD": -1,
-          "Pts": 3,
-          "status": "eliminated"
-        },
-        {
-          "team_code": "CZE",
-          "display_name": "Czechia",
-          "P": 3,
-          "W": 0,
-          "D": 1,
-          "L": 2,
-          "GF": 2,
-          "GA": 6,
-          "GD": -4,
-          "Pts": 1,
-          "status": "eliminated"
-        }
-      ]
+  "season": "2026",
+  "current_week": null,
+  "total_weeks": 18,
+  "last_updated": null,
+  "conferences": {
+    "AFC": {
+      "East": {
+        "division": "AFC East",
+        "teams": [
+          {
+            "name": "Bills",
+            "city": "Buffalo",
+            "abbr": "BUF",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          },
+          {
+            "name": "Dolphins",
+            "city": "Miami",
+            "abbr": "MIA",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          },
+          {
+            "name": "Patriots",
+            "city": "New England",
+            "abbr": "NE",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          },
+          {
+            "name": "Jets",
+            "city": "New York",
+            "abbr": "NYJ",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          }
+        ]
+      },
+      "North": {
+        "division": "AFC North",
+        "teams": [
+          {
+            "name": "Ravens",
+            "city": "Baltimore",
+            "abbr": "BAL",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          },
+          {
+            "name": "Bengals",
+            "city": "Cincinnati",
+            "abbr": "CIN",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          },
+          {
+            "name": "Browns",
+            "city": "Cleveland",
+            "abbr": "CLE",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          },
+          {
+            "name": "Steelers",
+            "city": "Pittsburgh",
+            "abbr": "PIT",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          }
+        ]
+      },
+      "South": {
+        "division": "AFC South",
+        "teams": [
+          {
+            "name": "Texans",
+            "city": "Houston",
+            "abbr": "HOU",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          },
+          {
+            "name": "Colts",
+            "city": "Indianapolis",
+            "abbr": "IND",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          },
+          {
+            "name": "Jaguars",
+            "city": "Jacksonville",
+            "abbr": "JAX",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          },
+          {
+            "name": "Titans",
+            "city": "Tennessee",
+            "abbr": "TEN",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          }
+        ]
+      },
+      "West": {
+        "division": "AFC West",
+        "teams": [
+          {
+            "name": "Broncos",
+            "city": "Denver",
+            "abbr": "DEN",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          },
+          {
+            "name": "Chiefs",
+            "city": "Kansas City",
+            "abbr": "KC",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          },
+          {
+            "name": "Raiders",
+            "city": "Las Vegas",
+            "abbr": "LV",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          },
+          {
+            "name": "Chargers",
+            "city": "Los Angeles",
+            "abbr": "LAC",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          }
+        ]
+      }
     },
-    {
-      "group_letter": "B",
-      "teams": [
-        {
-          "team_code": "SUI",
-          "display_name": "Switzerland",
-          "P": 3,
-          "W": 2,
-          "D": 1,
-          "L": 0,
-          "GF": 7,
-          "GA": 3,
-          "GD": 4,
-          "Pts": 7,
-          "status": "advancing"
-        },
-        {
-          "team_code": "CAN",
-          "display_name": "Canada",
-          "P": 3,
-          "W": 1,
-          "D": 1,
-          "L": 1,
-          "GF": 8,
-          "GA": 3,
-          "GD": 5,
-          "Pts": 4,
-          "status": "advancing"
-        },
-        {
-          "team_code": "BIH",
-          "display_name": "Bosnia and Herzegovina",
-          "P": 3,
-          "W": 1,
-          "D": 1,
-          "L": 1,
-          "GF": 5,
-          "GA": 6,
-          "GD": -1,
-          "Pts": 4,
-          "status": "eliminated"
-        },
-        {
-          "team_code": "QAT",
-          "display_name": "Qatar",
-          "P": 3,
-          "W": 0,
-          "D": 1,
-          "L": 2,
-          "GF": 2,
-          "GA": 10,
-          "GD": -8,
-          "Pts": 1,
-          "status": "eliminated"
-        }
-      ]
-    },
-    {
-      "group_letter": "C",
-      "teams": [
-        {
-          "team_code": "BRA",
-          "display_name": "Brazil",
-          "P": 3,
-          "W": 2,
-          "D": 1,
-          "L": 0,
-          "GF": 7,
-          "GA": 1,
-          "GD": 6,
-          "Pts": 7,
-          "status": "advancing"
-        },
-        {
-          "team_code": "MAR",
-          "display_name": "Morocco",
-          "P": 3,
-          "W": 2,
-          "D": 1,
-          "L": 0,
-          "GF": 6,
-          "GA": 3,
-          "GD": 3,
-          "Pts": 7,
-          "status": "advancing"
-        },
-        {
-          "team_code": "SCO",
-          "display_name": "Scotland",
-          "P": 3,
-          "W": 1,
-          "D": 0,
-          "L": 2,
-          "GF": 1,
-          "GA": 4,
-          "GD": -3,
-          "Pts": 3,
-          "status": "eliminated"
-        },
-        {
-          "team_code": "HAI",
-          "display_name": "Haiti",
-          "P": 3,
-          "W": 0,
-          "D": 0,
-          "L": 3,
-          "GF": 2,
-          "GA": 8,
-          "GD": -6,
-          "Pts": 0,
-          "status": "eliminated"
-        }
-      ]
-    },
-    {
-      "group_letter": "D",
-      "teams": [
-        {
-          "team_code": "USA",
-          "display_name": "USA",
-          "P": 3,
-          "W": 2,
-          "D": 0,
-          "L": 1,
-          "GF": 8,
-          "GA": 4,
-          "GD": 4,
-          "Pts": 6,
-          "status": "advancing"
-        },
-        {
-          "team_code": "AUS",
-          "display_name": "Australia",
-          "P": 3,
-          "W": 1,
-          "D": 1,
-          "L": 1,
-          "GF": 2,
-          "GA": 2,
-          "GD": 0,
-          "Pts": 4,
-          "status": "advancing"
-        },
-        {
-          "team_code": "PAR",
-          "display_name": "Paraguay",
-          "P": 3,
-          "W": 1,
-          "D": 1,
-          "L": 1,
-          "GF": 2,
-          "GA": 4,
-          "GD": -2,
-          "Pts": 4,
-          "status": "eliminated"
-        },
-        {
-          "team_code": "TUR",
-          "display_name": "Türkiye",
-          "P": 3,
-          "W": 1,
-          "D": 0,
-          "L": 2,
-          "GF": 3,
-          "GA": 5,
-          "GD": -2,
-          "Pts": 3,
-          "status": "eliminated"
-        }
-      ]
-    },
-    {
-      "group_letter": "E",
-      "teams": [
-        {
-          "team_code": "GER",
-          "display_name": "Germany",
-          "P": 3,
-          "W": 2,
-          "D": 0,
-          "L": 1,
-          "GF": 10,
-          "GA": 4,
-          "GD": 6,
-          "Pts": 6,
-          "status": "advancing"
-        },
-        {
-          "team_code": "CIV",
-          "display_name": "Côte d'Ivoire",
-          "P": 3,
-          "W": 2,
-          "D": 0,
-          "L": 1,
-          "GF": 4,
-          "GA": 2,
-          "GD": 2,
-          "Pts": 6,
-          "status": "advancing"
-        },
-        {
-          "team_code": "ECU",
-          "display_name": "Ecuador",
-          "P": 3,
-          "W": 1,
-          "D": 1,
-          "L": 1,
-          "GF": 2,
-          "GA": 2,
-          "GD": 0,
-          "Pts": 4,
-          "status": "eliminated"
-        },
-        {
-          "team_code": "CUW",
-          "display_name": "Curaçao",
-          "P": 3,
-          "W": 0,
-          "D": 1,
-          "L": 2,
-          "GF": 1,
-          "GA": 9,
-          "GD": -8,
-          "Pts": 1,
-          "status": "eliminated"
-        }
-      ]
-    },
-    {
-      "group_letter": "F",
-      "teams": [
-        {
-          "team_code": "NED",
-          "display_name": "Netherlands",
-          "P": 3,
-          "W": 2,
-          "D": 1,
-          "L": 0,
-          "GF": 10,
-          "GA": 4,
-          "GD": 6,
-          "Pts": 7,
-          "status": "advancing"
-        },
-        {
-          "team_code": "JPN",
-          "display_name": "Japan",
-          "P": 3,
-          "W": 1,
-          "D": 2,
-          "L": 0,
-          "GF": 7,
-          "GA": 3,
-          "GD": 4,
-          "Pts": 5,
-          "status": "advancing"
-        },
-        {
-          "team_code": "SWE",
-          "display_name": "Sweden",
-          "P": 3,
-          "W": 1,
-          "D": 1,
-          "L": 1,
-          "GF": 7,
-          "GA": 7,
-          "GD": 0,
-          "Pts": 4,
-          "status": "eliminated"
-        },
-        {
-          "team_code": "TUN",
-          "display_name": "Tunisia",
-          "P": 3,
-          "W": 0,
-          "D": 0,
-          "L": 3,
-          "GF": 2,
-          "GA": 12,
-          "GD": -10,
-          "Pts": 0,
-          "status": "eliminated"
-        }
-      ]
-    },
-    {
-      "group_letter": "G",
-      "teams": [
-        {
-          "team_code": "BEL",
-          "display_name": "Belgium",
-          "P": 3,
-          "W": 1,
-          "D": 2,
-          "L": 0,
-          "GF": 6,
-          "GA": 2,
-          "GD": 4,
-          "Pts": 5,
-          "status": "advancing"
-        },
-        {
-          "team_code": "EGY",
-          "display_name": "Egypt",
-          "P": 3,
-          "W": 1,
-          "D": 2,
-          "L": 0,
-          "GF": 5,
-          "GA": 3,
-          "GD": 2,
-          "Pts": 5,
-          "status": "advancing"
-        },
-        {
-          "team_code": "IRN",
-          "display_name": "IR Iran",
-          "P": 3,
-          "W": 0,
-          "D": 3,
-          "L": 0,
-          "GF": 3,
-          "GA": 3,
-          "GD": 0,
-          "Pts": 3,
-          "status": "eliminated"
-        },
-        {
-          "team_code": "NZL",
-          "display_name": "New Zealand",
-          "P": 3,
-          "W": 0,
-          "D": 1,
-          "L": 2,
-          "GF": 4,
-          "GA": 10,
-          "GD": -6,
-          "Pts": 1,
-          "status": "eliminated"
-        }
-      ]
-    },
-    {
-      "group_letter": "H",
-      "teams": [
-        {
-          "team_code": "ESP",
-          "display_name": "Spain",
-          "P": 3,
-          "W": 2,
-          "D": 1,
-          "L": 0,
-          "GF": 5,
-          "GA": 0,
-          "GD": 5,
-          "Pts": 7,
-          "status": "advancing"
-        },
-        {
-          "team_code": "CPV",
-          "display_name": "Cabo Verde",
-          "P": 3,
-          "W": 0,
-          "D": 3,
-          "L": 0,
-          "GF": 2,
-          "GA": 2,
-          "GD": 0,
-          "Pts": 3,
-          "status": "advancing"
-        },
-        {
-          "team_code": "URU",
-          "display_name": "Uruguay",
-          "P": 3,
-          "W": 0,
-          "D": 2,
-          "L": 1,
-          "GF": 3,
-          "GA": 4,
-          "GD": -1,
-          "Pts": 2,
-          "status": "eliminated"
-        },
-        {
-          "team_code": "KSA",
-          "display_name": "Saudi Arabia",
-          "P": 3,
-          "W": 0,
-          "D": 2,
-          "L": 1,
-          "GF": 1,
-          "GA": 5,
-          "GD": -4,
-          "Pts": 2,
-          "status": "eliminated"
-        }
-      ]
-    },
-    {
-      "group_letter": "I",
-      "teams": [
-        {
-          "team_code": "FRA",
-          "display_name": "France",
-          "P": 3,
-          "W": 3,
-          "D": 0,
-          "L": 0,
-          "GF": 10,
-          "GA": 2,
-          "GD": 8,
-          "Pts": 9,
-          "status": "advancing"
-        },
-        {
-          "team_code": "NOR",
-          "display_name": "Norway",
-          "P": 3,
-          "W": 2,
-          "D": 0,
-          "L": 1,
-          "GF": 8,
-          "GA": 7,
-          "GD": 1,
-          "Pts": 6,
-          "status": "advancing"
-        },
-        {
-          "team_code": "SEN",
-          "display_name": "Senegal",
-          "P": 3,
-          "W": 1,
-          "D": 0,
-          "L": 2,
-          "GF": 8,
-          "GA": 6,
-          "GD": 2,
-          "Pts": 3,
-          "status": "eliminated"
-        },
-        {
-          "team_code": "IRQ",
-          "display_name": "Iraq",
-          "P": 3,
-          "W": 0,
-          "D": 0,
-          "L": 3,
-          "GF": 1,
-          "GA": 12,
-          "GD": -11,
-          "Pts": 0,
-          "status": "eliminated"
-        }
-      ]
-    },
-    {
-      "group_letter": "J",
-      "teams": [
-        {
-          "team_code": "ARG",
-          "display_name": "Argentina",
-          "P": 3,
-          "W": 3,
-          "D": 0,
-          "L": 0,
-          "GF": 8,
-          "GA": 1,
-          "GD": 7,
-          "Pts": 9,
-          "status": "advancing"
-        },
-        {
-          "team_code": "AUT",
-          "display_name": "Austria",
-          "P": 3,
-          "W": 1,
-          "D": 1,
-          "L": 1,
-          "GF": 6,
-          "GA": 6,
-          "GD": 0,
-          "Pts": 4,
-          "status": "advancing"
-        },
-        {
-          "team_code": "ALG",
-          "display_name": "Algeria",
-          "P": 3,
-          "W": 1,
-          "D": 1,
-          "L": 1,
-          "GF": 5,
-          "GA": 7,
-          "GD": -2,
-          "Pts": 4,
-          "status": "eliminated"
-        },
-        {
-          "team_code": "JOR",
-          "display_name": "Jordan",
-          "P": 3,
-          "W": 0,
-          "D": 0,
-          "L": 3,
-          "GF": 3,
-          "GA": 8,
-          "GD": -5,
-          "Pts": 0,
-          "status": "eliminated"
-        }
-      ]
-    },
-    {
-      "group_letter": "K",
-      "teams": [
-        {
-          "team_code": "COL",
-          "display_name": "Colombia",
-          "P": 3,
-          "W": 2,
-          "D": 1,
-          "L": 0,
-          "GF": 4,
-          "GA": 1,
-          "GD": 3,
-          "Pts": 7,
-          "status": "advancing"
-        },
-        {
-          "team_code": "POR",
-          "display_name": "Portugal",
-          "P": 3,
-          "W": 1,
-          "D": 2,
-          "L": 0,
-          "GF": 6,
-          "GA": 1,
-          "GD": 5,
-          "Pts": 5,
-          "status": "advancing"
-        },
-        {
-          "team_code": "COD",
-          "display_name": "Congo DR",
-          "P": 3,
-          "W": 1,
-          "D": 1,
-          "L": 1,
-          "GF": 4,
-          "GA": 3,
-          "GD": 1,
-          "Pts": 4,
-          "status": "eliminated"
-        },
-        {
-          "team_code": "UZB",
-          "display_name": "Uzbekistan",
-          "P": 3,
-          "W": 0,
-          "D": 0,
-          "L": 3,
-          "GF": 2,
-          "GA": 11,
-          "GD": -9,
-          "Pts": 0,
-          "status": "eliminated"
-        }
-      ]
-    },
-    {
-      "group_letter": "L",
-      "teams": [
-        {
-          "team_code": "ENG",
-          "display_name": "England",
-          "P": 3,
-          "W": 2,
-          "D": 1,
-          "L": 0,
-          "GF": 6,
-          "GA": 2,
-          "GD": 4,
-          "Pts": 7,
-          "status": "advancing"
-        },
-        {
-          "team_code": "CRO",
-          "display_name": "Croatia",
-          "P": 3,
-          "W": 2,
-          "D": 0,
-          "L": 1,
-          "GF": 5,
-          "GA": 5,
-          "GD": 0,
-          "Pts": 6,
-          "status": "advancing"
-        },
-        {
-          "team_code": "GHA",
-          "display_name": "Ghana",
-          "P": 3,
-          "W": 1,
-          "D": 1,
-          "L": 1,
-          "GF": 2,
-          "GA": 2,
-          "GD": 0,
-          "Pts": 4,
-          "status": "eliminated"
-        },
-        {
-          "team_code": "PAN",
-          "display_name": "Panama",
-          "P": 3,
-          "W": 0,
-          "D": 0,
-          "L": 3,
-          "GF": 0,
-          "GA": 4,
-          "GD": -4,
-          "Pts": 0,
-          "status": "eliminated"
-        }
-      ]
+    "NFC": {
+      "East": {
+        "division": "NFC East",
+        "teams": [
+          {
+            "name": "Cowboys",
+            "city": "Dallas",
+            "abbr": "DAL",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          },
+          {
+            "name": "Giants",
+            "city": "New York",
+            "abbr": "NYG",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          },
+          {
+            "name": "Eagles",
+            "city": "Philadelphia",
+            "abbr": "PHI",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          },
+          {
+            "name": "Commanders",
+            "city": "Washington",
+            "abbr": "WSH",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          }
+        ]
+      },
+      "North": {
+        "division": "NFC North",
+        "teams": [
+          {
+            "name": "Bears",
+            "city": "Chicago",
+            "abbr": "CHI",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          },
+          {
+            "name": "Lions",
+            "city": "Detroit",
+            "abbr": "DET",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          },
+          {
+            "name": "Packers",
+            "city": "Green Bay",
+            "abbr": "GB",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          },
+          {
+            "name": "Vikings",
+            "city": "Minnesota",
+            "abbr": "MIN",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          }
+        ]
+      },
+      "South": {
+        "division": "NFC South",
+        "teams": [
+          {
+            "name": "Falcons",
+            "city": "Atlanta",
+            "abbr": "ATL",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          },
+          {
+            "name": "Panthers",
+            "city": "Carolina",
+            "abbr": "CAR",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          },
+          {
+            "name": "Saints",
+            "city": "New Orleans",
+            "abbr": "NO",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          },
+          {
+            "name": "Buccaneers",
+            "city": "Tampa Bay",
+            "abbr": "TB",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          }
+        ]
+      },
+      "West": {
+        "division": "NFC West",
+        "teams": [
+          {
+            "name": "Cardinals",
+            "city": "Arizona",
+            "abbr": "ARI",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          },
+          {
+            "name": "Rams",
+            "city": "Los Angeles",
+            "abbr": "LAR",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          },
+          {
+            "name": "49ers",
+            "city": "San Francisco",
+            "abbr": "SF",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          },
+          {
+            "name": "Seahawks",
+            "city": "Seattle",
+            "abbr": "SEA",
+            "standing": null,
+            "wins": null,
+            "losses": null,
+            "ties": null
+          }
+        ]
+      }
     }
-  ],
-  "knockout": [
-    {
-      "match_id": "400021518",
-      "round_token": "R32",
-      "bracket_slot": "R32-M1",
-      "match_number": 73,
-      "side_a": "RSA",
-      "side_b": "CAN",
-      "score_a": 0,
-      "score_b": 1,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "final",
-      "kickoff_datetime": "2026-06-28T19:00:00Z",
-      "venue": "Los Angeles Stadium, Los Angeles"
-    },
-    {
-      "match_id": "400021513",
-      "round_token": "R32",
-      "bracket_slot": "R32-M2",
-      "match_number": 74,
-      "side_a": "GER",
-      "side_b": "PAR",
-      "score_a": 1,
-      "score_b": 1,
-      "pens_score_a": 3,
-      "pens_score_b": 4,
-      "match_status": "pens",
-      "kickoff_datetime": "2026-06-29T20:30:00Z",
-      "venue": "Boston Stadium, Boston"
-    },
-    {
-      "match_id": "400021522",
-      "round_token": "R32",
-      "bracket_slot": "R32-M3",
-      "match_number": 75,
-      "side_a": "NED",
-      "side_b": "MAR",
-      "score_a": 1,
-      "score_b": 1,
-      "pens_score_a": 2,
-      "pens_score_b": 3,
-      "match_status": "pens",
-      "kickoff_datetime": "2026-06-30T01:00:00Z",
-      "venue": "Monterrey Stadium, Monterrey"
-    },
-    {
-      "match_id": "400021516",
-      "round_token": "R32",
-      "bracket_slot": "R32-M4",
-      "match_number": 76,
-      "side_a": "BRA",
-      "side_b": "JPN",
-      "score_a": 2,
-      "score_b": 1,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "final",
-      "kickoff_datetime": "2026-06-29T17:00:00Z",
-      "venue": "Houston Stadium, Houston"
-    },
-    {
-      "match_id": "400021523",
-      "round_token": "R32",
-      "bracket_slot": "R32-M5",
-      "match_number": 77,
-      "side_a": "FRA",
-      "side_b": "SWE",
-      "score_a": 3,
-      "score_b": 0,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "final",
-      "kickoff_datetime": "2026-06-30T21:00:00Z",
-      "venue": "New York/New Jersey Stadium, New Jersey"
-    },
-    {
-      "match_id": "400021514",
-      "round_token": "R32",
-      "bracket_slot": "R32-M6",
-      "match_number": 78,
-      "side_a": "CIV",
-      "side_b": "NOR",
-      "score_a": 1,
-      "score_b": 2,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "final",
-      "kickoff_datetime": "2026-06-30T17:00:00Z",
-      "venue": "Dallas Stadium, Dallas"
-    },
-    {
-      "match_id": "400021520",
-      "round_token": "R32",
-      "bracket_slot": "R32-M7",
-      "match_number": 79,
-      "side_a": "MEX",
-      "side_b": "ECU",
-      "score_a": 2,
-      "score_b": 0,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "final",
-      "kickoff_datetime": "2026-07-01T02:00:00Z",
-      "venue": "Mexico City Stadium, Mexico City"
-    },
-    {
-      "match_id": "400021512",
-      "round_token": "R32",
-      "bracket_slot": "R32-M8",
-      "match_number": 80,
-      "side_a": "ENG",
-      "side_b": "COD",
-      "score_a": 2,
-      "score_b": 1,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "final",
-      "kickoff_datetime": "2026-07-01T16:00:00Z",
-      "venue": "Atlanta Stadium, Atlanta"
-    },
-    {
-      "match_id": "400021524",
-      "round_token": "R32",
-      "bracket_slot": "R32-M9",
-      "match_number": 81,
-      "side_a": "USA",
-      "side_b": "BIH",
-      "score_a": 2,
-      "score_b": 0,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "final",
-      "kickoff_datetime": "2026-07-02T00:00:00Z",
-      "venue": "San Francisco Bay Area Stadium, San Francisco Bay Area"
-    },
-    {
-      "match_id": "400021525",
-      "round_token": "R32",
-      "bracket_slot": "R32-M10",
-      "match_number": 82,
-      "side_a": "BEL",
-      "side_b": "SEN",
-      "score_a": 3,
-      "score_b": 2,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "extra-time",
-      "kickoff_datetime": "2026-07-01T20:00:00Z",
-      "venue": "Seattle Stadium, Seattle"
-    },
-    {
-      "match_id": "400021526",
-      "round_token": "R32",
-      "bracket_slot": "R32-M11",
-      "match_number": 83,
-      "side_a": "POR",
-      "side_b": "CRO",
-      "score_a": 2,
-      "score_b": 1,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "final",
-      "kickoff_datetime": "2026-07-02T23:00:00Z",
-      "venue": "Toronto Stadium, Toronto"
-    },
-    {
-      "match_id": "400021519",
-      "round_token": "R32",
-      "bracket_slot": "R32-M12",
-      "match_number": 84,
-      "side_a": "ESP",
-      "side_b": "AUT",
-      "score_a": 3,
-      "score_b": 0,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "final",
-      "kickoff_datetime": "2026-07-02T19:00:00Z",
-      "venue": "Los Angeles Stadium, Los Angeles"
-    },
-    {
-      "match_id": "400021527",
-      "round_token": "R32",
-      "bracket_slot": "R32-M13",
-      "match_number": 85,
-      "side_a": "SUI",
-      "side_b": "ALG",
-      "score_a": 2,
-      "score_b": 0,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "final",
-      "kickoff_datetime": "2026-07-03T03:00:00Z",
-      "venue": "BC Place Vancouver, Vancouver"
-    },
-    {
-      "match_id": "400021521",
-      "round_token": "R32",
-      "bracket_slot": "R32-M14",
-      "match_number": 86,
-      "side_a": "ARG",
-      "side_b": "CPV",
-      "score_a": 3,
-      "score_b": 2,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "extra-time",
-      "kickoff_datetime": "2026-07-03T22:00:00Z",
-      "venue": "Miami Stadium, Miami"
-    },
-    {
-      "match_id": "400021517",
-      "round_token": "R32",
-      "bracket_slot": "R32-M15",
-      "match_number": 87,
-      "side_a": "COL",
-      "side_b": "GHA",
-      "score_a": 1,
-      "score_b": 0,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "final",
-      "kickoff_datetime": "2026-07-04T01:30:00Z",
-      "venue": "Kansas City Stadium, Kansas City"
-    },
-    {
-      "match_id": "400021515",
-      "round_token": "R32",
-      "bracket_slot": "R32-M16",
-      "match_number": 88,
-      "side_a": "AUS",
-      "side_b": "EGY",
-      "score_a": 1,
-      "score_b": 1,
-      "pens_score_a": 2,
-      "pens_score_b": 4,
-      "match_status": "pens",
-      "kickoff_datetime": "2026-07-03T18:00:00Z",
-      "venue": "Dallas Stadium, Dallas"
-    },
-    {
-      "match_id": "400021533",
-      "round_token": "R16",
-      "bracket_slot": "R16-M1",
-      "match_number": 89,
-      "side_a": "PAR",
-      "side_b": "FRA",
-      "score_a": 0,
-      "score_b": 1,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "final",
-      "kickoff_datetime": "2026-07-04T21:00:00Z",
-      "venue": "Philadelphia Stadium, Philadelphia"
-    },
-    {
-      "match_id": "400021530",
-      "round_token": "R16",
-      "bracket_slot": "R16-M2",
-      "match_number": 90,
-      "side_a": "CAN",
-      "side_b": "MAR",
-      "score_a": 0,
-      "score_b": 3,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "final",
-      "kickoff_datetime": "2026-07-04T17:00:00Z",
-      "venue": "Houston Stadium, Houston"
-    },
-    {
-      "match_id": "400021532",
-      "round_token": "R16",
-      "bracket_slot": "R16-M3",
-      "match_number": 91,
-      "side_a": "BRA",
-      "side_b": "NOR",
-      "score_a": 1,
-      "score_b": 2,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "final",
-      "kickoff_datetime": "2026-07-05T20:00:00Z",
-      "venue": "New York/New Jersey Stadium, New Jersey"
-    },
-    {
-      "match_id": "400021531",
-      "round_token": "R16",
-      "bracket_slot": "R16-M4",
-      "match_number": 92,
-      "side_a": "MEX",
-      "side_b": "ENG",
-      "score_a": 2,
-      "score_b": 3,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "final",
-      "kickoff_datetime": "2026-07-06T01:00:00Z",
-      "venue": "Mexico City Stadium, Mexico City"
-    },
-    {
-      "match_id": "400021529",
-      "round_token": "R16",
-      "bracket_slot": "R16-M5",
-      "match_number": 93,
-      "side_a": "POR",
-      "side_b": "ESP",
-      "score_a": 0,
-      "score_b": 1,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "final",
-      "kickoff_datetime": "2026-07-06T19:00:00Z",
-      "venue": "Dallas Stadium, Dallas"
-    },
-    {
-      "match_id": "400021534",
-      "round_token": "R16",
-      "bracket_slot": "R16-M6",
-      "match_number": 94,
-      "side_a": "USA",
-      "side_b": "BEL",
-      "score_a": 1,
-      "score_b": 4,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "final",
-      "kickoff_datetime": "2026-07-07T00:00:00Z",
-      "venue": "Seattle Stadium, Seattle"
-    },
-    {
-      "match_id": "400021528",
-      "round_token": "R16",
-      "bracket_slot": "R16-M7",
-      "match_number": 95,
-      "side_a": "ARG",
-      "side_b": "EGY",
-      "score_a": 3,
-      "score_b": 2,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "final",
-      "kickoff_datetime": "2026-07-07T16:00:00Z",
-      "venue": "Atlanta Stadium, Atlanta"
-    },
-    {
-      "match_id": "400021535",
-      "round_token": "R16",
-      "bracket_slot": "R16-M8",
-      "match_number": 96,
-      "side_a": "SUI",
-      "side_b": "COL",
-      "score_a": 0,
-      "score_b": 0,
-      "pens_score_a": 4,
-      "pens_score_b": 3,
-      "match_status": "pens",
-      "kickoff_datetime": "2026-07-07T20:00:00Z",
-      "venue": "BC Place Vancouver, Vancouver"
-    },
-    {
-      "match_id": "400021536",
-      "round_token": "QF",
-      "bracket_slot": "QF-M1",
-      "match_number": 97,
-      "side_a": "FRA",
-      "side_b": "MAR",
-      "score_a": null,
-      "score_b": null,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "scheduled",
-      "kickoff_datetime": "2026-07-09T20:00:00Z",
-      "venue": "Boston Stadium, Boston"
-    },
-    {
-      "match_id": "400021538",
-      "round_token": "QF",
-      "bracket_slot": "QF-M2",
-      "match_number": 98,
-      "side_a": "ESP",
-      "side_b": "BEL",
-      "score_a": null,
-      "score_b": null,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "scheduled",
-      "kickoff_datetime": "2026-07-10T19:00:00Z",
-      "venue": "Los Angeles Stadium, Los Angeles"
-    },
-    {
-      "match_id": "400021539",
-      "round_token": "QF",
-      "bracket_slot": "QF-M3",
-      "match_number": 99,
-      "side_a": "NOR",
-      "side_b": "ENG",
-      "score_a": null,
-      "score_b": null,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "scheduled",
-      "kickoff_datetime": "2026-07-11T21:00:00Z",
-      "venue": "Miami Stadium, Miami"
-    },
-    {
-      "match_id": "400021537",
-      "round_token": "QF",
-      "bracket_slot": "QF-M4",
-      "match_number": 100,
-      "side_a": "ARG",
-      "side_b": "SUI",
-      "score_a": null,
-      "score_b": null,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "scheduled",
-      "kickoff_datetime": "2026-07-12T01:00:00Z",
-      "venue": "Kansas City Stadium, Kansas City"
-    },
-    {
-      "match_id": "400021541",
-      "round_token": "SF",
-      "bracket_slot": "SF-M1",
-      "match_number": 101,
-      "side_a": "W97",
-      "side_b": "W98",
-      "score_a": null,
-      "score_b": null,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "scheduled",
-      "kickoff_datetime": "2026-07-14T19:00:00Z",
-      "venue": "Dallas Stadium, Dallas"
-    },
-    {
-      "match_id": "400021540",
-      "round_token": "SF",
-      "bracket_slot": "SF-M2",
-      "match_number": 102,
-      "side_a": "W99",
-      "side_b": "W100",
-      "score_a": null,
-      "score_b": null,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "scheduled",
-      "kickoff_datetime": "2026-07-15T19:00:00Z",
-      "venue": "Atlanta Stadium, Atlanta"
-    },
-    {
-      "match_id": "400021542",
-      "round_token": "3rd",
-      "bracket_slot": "3rd-M1",
-      "match_number": 103,
-      "side_a": "RU101",
-      "side_b": "RU102",
-      "score_a": null,
-      "score_b": null,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "scheduled",
-      "kickoff_datetime": "2026-07-18T21:00:00Z",
-      "venue": "Miami Stadium, Miami"
-    },
-    {
-      "match_id": "400021543",
-      "round_token": "F",
-      "bracket_slot": "F-M1",
-      "match_number": 104,
-      "side_a": "W101",
-      "side_b": "W102",
-      "score_a": null,
-      "score_b": null,
-      "pens_score_a": null,
-      "pens_score_b": null,
-      "match_status": "scheduled",
-      "kickoff_datetime": "2026-07-19T19:00:00Z",
-      "venue": "New York/New Jersey Stadium, New Jersey"
-    }
-  ]
+  }
 }

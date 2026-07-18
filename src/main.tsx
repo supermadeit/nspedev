@@ -11,7 +11,7 @@ import "./index.css"
 
 function Router() {
   const path = typeof window !== 'undefined' ? window.location.pathname : '/'
-  if (path === '/world-cup' || path === '/world.cup') {
+  if (path === '/world-cup' || path === '/world.cup' || path === '/nfl.season') {
     return <WorldCupApp />
   }
   return <App />

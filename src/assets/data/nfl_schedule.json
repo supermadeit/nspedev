@@ -1,0 +1,1910 @@
+{
+  "season": 2026,
+  "totalGames": 272,
+  "games": [
+    {
+      "week": 1,
+      "awayTeam": "Patriots",
+      "homeTeam": "Seahawks",
+      "gameTime": "8:20PM",
+      "gameDate": "WED"
+    },
+    {
+      "week": 1,
+      "awayTeam": "49ers",
+      "homeTeam": "Rams",
+      "gameTime": "8:35PM",
+      "gameDate": "THU"
+    },
+    {
+      "week": 1,
+      "awayTeam": "Bears",
+      "homeTeam": "Panthers",
+      "gameTime": "1:00PM",
+      "gameDate": "SUN"
+    },
+    {
+      "week": 1,
+      "awayTeam": "Buccaneers",
+      "homeTeam": "Bengals",
+      "gameTime": "1:00PM",
+      "gameDate": "SUN"
+    },
+    {
+      "week": 1,
+      "awayTeam": "Saints",
+      "homeTeam": "Lions",
+      "gameTime": "1:00PM",
+      "gameDate": "SUN"
+    },
+    {
+      "week": 1,
+      "awayTeam": "Bills",
+      "homeTeam": "Texans",
+      "gameTime": "1:00PM",
+      "gameDate": "SUN"
+    },
+    {
+      "week": 1,
+      "awayTeam": "Ravens",
+      "homeTeam": "Colts",
+      "gameTime": "1:00PM",
+      "gameDate": "SUN"
+    },
+    {
+      "week": 1,
+      "awayTeam": "Browns",
+      "homeTeam": "Jaguars",
+      "gameTime": "1:00PM",
+      "gameDate": "SUN"
+    },
+    {
+      "week": 1,
+      "awayTeam": "Falcons",
+      "homeTeam": "Steelers",
+      "gameTime": "1:00PM",
+      "gameDate": "SUN"
+    },
+    {
+      "week": 1,
+      "awayTeam": "Jets",
+      "homeTeam": "Titans",
+      "gameTime": "1:00PM",
+      "gameDate": "SUN"
+    },
+    {
+      "week": 1,
+      "awayTeam": "Cardinals",
+      "homeTeam": "Chargers",
+      "gameTime": "4:25PM",
+      "gameDate": "SUN"
+    },
+    {
+      "week": 1,
+      "awayTeam": "Dolphins",
+      "homeTeam": "Raiders",
+      "gameTime": "4:25PM",
+      "gameDate": "SUN"
+    },
+    {
+      "week": 1,
+      "awayTeam": "Packers",
+      "homeTeam": "Vikings",
+      "gameTime": "4:25PM",
+      "gameDate": "SUN"
+    },
+    {
+      "week": 1,
+      "awayTeam": "Commanders",
+      "homeTeam": "Eagles",
+      "gameTime": "4:25PM",
+      "gameDate": "SUN"
+    },
+    {
+      "week": 1,
+      "awayTeam": "Cowboys",
+      "homeTeam": "Giants",
+      "gameTime": "8:20PM",
+      "gameDate": "SUN"
+    },
+    {
+      "week": 1,
+      "awayTeam": "Broncos",
+      "homeTeam": "Chiefs",
+      "gameTime": "8:15PM",
+      "gameDate": "MON"
+    },
+    {
+      "week": 2,
+      "awayTeam": "Lions",
+      "homeTeam": "Bills",
+      "gameTime": "",
+      "gameDate": "September 17th"
+    },
+    {
+      "week": 2,
+      "awayTeam": "Panthers",
+      "homeTeam": "Falcons",
+      "gameTime": "",
+      "gameDate": "September 20th"
+    },
+    {
+      "week": 2,
+      "awayTeam": "Saints",
+      "homeTeam": "Ravens",
+      "gameTime": "",
+      "gameDate": "September 20th"
+    },
+    {
+      "week": 2,
+      "awayTeam": "Vikings",
+      "homeTeam": "Bears",
+      "gameTime": "",
+      "gameDate": "September 20th"
+    },
+    {
+      "week": 2,
+      "awayTeam": "Bengals",
+      "homeTeam": "Texans",
+      "gameTime": "",
+      "gameDate": "September 20th"
+    },
+    {
+      "week": 2,
+      "awayTeam": "Steelers",
+      "homeTeam": "Patriots",
+      "gameTime": "",
+      "gameDate": "September 20th"
+    },
+    {
+      "week": 2,
+      "awayTeam": "Packers",
+      "homeTeam": "Jets",
+      "gameTime": "",
+      "gameDate": "September 20th"
+    },
+    {
+      "week": 2,
+      "awayTeam": "Browns",
+      "homeTeam": "Buccaneers",
+      "gameTime": "",
+      "gameDate": "September 20th"
+    },
+    {
+      "week": 2,
+      "awayTeam": "Eagles",
+      "homeTeam": "Titans",
+      "gameTime": "",
+      "gameDate": "September 20th"
+    },
+    {
+      "week": 2,
+      "awayTeam": "Jaguars",
+      "homeTeam": "Broncos",
+      "gameTime": "",
+      "gameDate": "September 20th"
+    },
+    {
+      "week": 2,
+      "awayTeam": "Raiders",
+      "homeTeam": "Chargers",
+      "gameTime": "",
+      "gameDate": "September 20th"
+    },
+    {
+      "week": 2,
+      "awayTeam": "Seahawks",
+      "homeTeam": "Cardinals",
+      "gameTime": "",
+      "gameDate": "September 20th"
+    },
+    {
+      "week": 2,
+      "awayTeam": "Commanders",
+      "homeTeam": "Cowboys",
+      "gameTime": "",
+      "gameDate": "September 20th"
+    },
+    {
+      "week": 2,
+      "awayTeam": "Dolphins",
+      "homeTeam": "49ers",
+      "gameTime": "",
+      "gameDate": "September 20th"
+    },
+    {
+      "week": 2,
+      "awayTeam": "Colts",
+      "homeTeam": "Chiefs",
+      "gameTime": "",
+      "gameDate": "September 20th"
+    },
+    {
+      "week": 2,
+      "awayTeam": "Giants",
+      "homeTeam": "Rams",
+      "gameTime": "",
+      "gameDate": "September 21st"
+    },
+    {
+      "week": 3,
+      "awayTeam": "Falcons",
+      "homeTeam": "Packers",
+      "gameTime": "",
+      "gameDate": "September 24th"
+    },
+    {
+      "week": 3,
+      "awayTeam": "Chargers",
+      "homeTeam": "Bills",
+      "gameTime": "",
+      "gameDate": "September 27th"
+    },
+    {
+      "week": 3,
+      "awayTeam": "Panthers",
+      "homeTeam": "Browns",
+      "gameTime": "",
+      "gameDate": "September 27th"
+    },
+    {
+      "week": 3,
+      "awayTeam": "Jets",
+      "homeTeam": "Lions",
+      "gameTime": "",
+      "gameDate": "September 27th"
+    },
+    {
+      "week": 3,
+      "awayTeam": "Texans",
+      "homeTeam": "Colts",
+      "gameTime": "",
+      "gameDate": "September 27th"
+    },
+    {
+      "week": 3,
+      "awayTeam": "Patriots",
+      "homeTeam": "Jaguars",
+      "gameTime": "",
+      "gameDate": "September 27th"
+    },
+    {
+      "week": 3,
+      "awayTeam": "Chiefs",
+      "homeTeam": "Dolphins",
+      "gameTime": "",
+      "gameDate": "September 27th"
+    },
+    {
+      "week": 3,
+      "awayTeam": "Titans",
+      "homeTeam": "Giants",
+      "gameTime": "",
+      "gameDate": "September 27th"
+    },
+    {
+      "week": 3,
+      "awayTeam": "Bengals",
+      "homeTeam": "Steelers",
+      "gameTime": "",
+      "gameDate": "September 27th"
+    },
+    {
+      "week": 3,
+      "awayTeam": "Seahawks",
+      "homeTeam": "Commanders",
+      "gameTime": "",
+      "gameDate": "September 27th"
+    },
+    {
+      "week": 3,
+      "awayTeam": "Cardinals",
+      "homeTeam": "49ers",
+      "gameTime": "",
+      "gameDate": "September 27th"
+    },
+    {
+      "week": 3,
+      "awayTeam": "Vikings",
+      "homeTeam": "Buccaneers",
+      "gameTime": "",
+      "gameDate": "September 27th"
+    },
+    {
+      "week": 3,
+      "awayTeam": "Raiders",
+      "homeTeam": "Saints",
+      "gameTime": "",
+      "gameDate": "September 27th"
+    },
+    {
+      "week": 3,
+      "awayTeam": "Ravens",
+      "homeTeam": "Cowboys",
+      "gameTime": "",
+      "gameDate": "September 27th"
+    },
+    {
+      "week": 3,
+      "awayTeam": "Rams",
+      "homeTeam": "Broncos",
+      "gameTime": "",
+      "gameDate": "September 27th"
+    },
+    {
+      "week": 3,
+      "awayTeam": "Eagles",
+      "homeTeam": "Bears",
+      "gameTime": "",
+      "gameDate": "September 28th"
+    },
+    {
+      "week": 4,
+      "awayTeam": "Steelers",
+      "homeTeam": "Browns",
+      "gameTime": "",
+      "gameDate": "October 1st"
+    },
+    {
+      "week": 4,
+      "awayTeam": "Colts",
+      "homeTeam": "Commanders",
+      "gameTime": "",
+      "gameDate": "October 4th"
+    },
+    {
+      "week": 4,
+      "awayTeam": "Titans",
+      "homeTeam": "Ravens",
+      "gameTime": "",
+      "gameDate": "October 4th"
+    },
+    {
+      "week": 4,
+      "awayTeam": "Patriots",
+      "homeTeam": "Bills",
+      "gameTime": "",
+      "gameDate": "October 4th"
+    },
+    {
+      "week": 4,
+      "awayTeam": "Jets",
+      "homeTeam": "Bears",
+      "gameTime": "",
+      "gameDate": "October 4th"
+    },
+    {
+      "week": 4,
+      "awayTeam": "Jaguars",
+      "homeTeam": "Bengals",
+      "gameTime": "",
+      "gameDate": "October 4th"
+    },
+    {
+      "week": 4,
+      "awayTeam": "Cowboys",
+      "homeTeam": "Texans",
+      "gameTime": "",
+      "gameDate": "October 4th"
+    },
+    {
+      "week": 4,
+      "awayTeam": "Cardinals",
+      "homeTeam": "Giants",
+      "gameTime": "",
+      "gameDate": "October 4th"
+    },
+    {
+      "week": 4,
+      "awayTeam": "Rams",
+      "homeTeam": "Eagles",
+      "gameTime": "",
+      "gameDate": "October 4th"
+    },
+    {
+      "week": 4,
+      "awayTeam": "Packers",
+      "homeTeam": "Buccaneers",
+      "gameTime": "",
+      "gameDate": "October 4th"
+    },
+    {
+      "week": 4,
+      "awayTeam": "Dolphins",
+      "homeTeam": "Vikings",
+      "gameTime": "",
+      "gameDate": "October 4th"
+    },
+    {
+      "week": 4,
+      "awayTeam": "Chiefs",
+      "homeTeam": "Raiders",
+      "gameTime": "",
+      "gameDate": "October 4th"
+    },
+    {
+      "week": 4,
+      "awayTeam": "Chargers",
+      "homeTeam": "Seahawks",
+      "gameTime": "",
+      "gameDate": "October 4th"
+    },
+    {
+      "week": 4,
+      "awayTeam": "Broncos",
+      "homeTeam": "49ers",
+      "gameTime": "",
+      "gameDate": "October 4th"
+    },
+    {
+      "week": 4,
+      "awayTeam": "Lions",
+      "homeTeam": "Panthers",
+      "gameTime": "",
+      "gameDate": "October 4th"
+    },
+    {
+      "week": 4,
+      "awayTeam": "Falcons",
+      "homeTeam": "Saints",
+      "gameTime": "",
+      "gameDate": "October 5th"
+    },
+    {
+      "week": 5,
+      "awayTeam": "Buccaneers",
+      "homeTeam": "Cowboys",
+      "gameTime": "",
+      "gameDate": "October 8th"
+    },
+    {
+      "week": 5,
+      "awayTeam": "Eagles",
+      "homeTeam": "Jaguars",
+      "gameTime": "",
+      "gameDate": "October 11th"
+    },
+    {
+      "week": 5,
+      "awayTeam": "Bengals",
+      "homeTeam": "Dolphins",
+      "gameTime": "",
+      "gameDate": "October 11th"
+    },
+    {
+      "week": 5,
+      "awayTeam": "Raiders",
+      "homeTeam": "Patriots",
+      "gameTime": "",
+      "gameDate": "October 11th"
+    },
+    {
+      "week": 5,
+      "awayTeam": "Vikings",
+      "homeTeam": "Saints",
+      "gameTime": "",
+      "gameDate": "October 11th"
+    },
+    {
+      "week": 5,
+      "awayTeam": "Browns",
+      "homeTeam": "Jets",
+      "gameTime": "",
+      "gameDate": "October 11th"
+    },
+    {
+      "week": 5,
+      "awayTeam": "Colts",
+      "homeTeam": "Steelers",
+      "gameTime": "",
+      "gameDate": "October 11th"
+    },
+    {
+      "week": 5,
+      "awayTeam": "Texans",
+      "homeTeam": "Titans",
+      "gameTime": "",
+      "gameDate": "October 11th"
+    },
+    {
+      "week": 5,
+      "awayTeam": "Giants",
+      "homeTeam": "Commanders",
+      "gameTime": "",
+      "gameDate": "October 11th"
+    },
+    {
+      "week": 5,
+      "awayTeam": "Broncos",
+      "homeTeam": "Chargers",
+      "gameTime": "",
+      "gameDate": "October 11th"
+    },
+    {
+      "week": 5,
+      "awayTeam": "Lions",
+      "homeTeam": "Cardinals",
+      "gameTime": "",
+      "gameDate": "October 11th"
+    },
+    {
+      "week": 5,
+      "awayTeam": "Bears",
+      "homeTeam": "Packers",
+      "gameTime": "",
+      "gameDate": "October 11th"
+    },
+    {
+      "week": 5,
+      "awayTeam": "49ers",
+      "homeTeam": "Seahawks",
+      "gameTime": "",
+      "gameDate": "October 11th"
+    },
+    {
+      "week": 5,
+      "awayTeam": "Ravens",
+      "homeTeam": "Falcons",
+      "gameTime": "",
+      "gameDate": "October 11th"
+    },
+    {
+      "week": 5,
+      "awayTeam": "Bills",
+      "homeTeam": "Rams",
+      "gameTime": "",
+      "gameDate": "October 12th"
+    },
+    {
+      "week": 6,
+      "awayTeam": "Seahawks",
+      "homeTeam": "Broncos",
+      "gameTime": "",
+      "gameDate": "October 15th"
+    },
+    {
+      "week": 6,
+      "awayTeam": "Texans",
+      "homeTeam": "Jaguars",
+      "gameTime": "",
+      "gameDate": "October 18th"
+    },
+    {
+      "week": 6,
+      "awayTeam": "Bears",
+      "homeTeam": "Falcons",
+      "gameTime": "",
+      "gameDate": "October 18th"
+    },
+    {
+      "week": 6,
+      "awayTeam": "Ravens",
+      "homeTeam": "Browns",
+      "gameTime": "",
+      "gameDate": "October 18th"
+    },
+    {
+      "week": 6,
+      "awayTeam": "Titans",
+      "homeTeam": "Colts",
+      "gameTime": "",
+      "gameDate": "October 18th"
+    },
+    {
+      "week": 6,
+      "awayTeam": "Jets",
+      "homeTeam": "Patriots",
+      "gameTime": "",
+      "gameDate": "October 18th"
+    },
+    {
+      "week": 6,
+      "awayTeam": "Saints",
+      "homeTeam": "Giants",
+      "gameTime": "",
+      "gameDate": "October 18th"
+    },
+    {
+      "week": 6,
+      "awayTeam": "Panthers",
+      "homeTeam": "Eagles",
+      "gameTime": "",
+      "gameDate": "October 18th"
+    },
+    {
+      "week": 6,
+      "awayTeam": "Steelers",
+      "homeTeam": "Buccaneers",
+      "gameTime": "",
+      "gameDate": "October 18th"
+    },
+    {
+      "week": 6,
+      "awayTeam": "Cardinals",
+      "homeTeam": "Rams",
+      "gameTime": "",
+      "gameDate": "October 18th"
+    },
+    {
+      "week": 6,
+      "awayTeam": "Chargers",
+      "homeTeam": "Chiefs",
+      "gameTime": "",
+      "gameDate": "October 18th"
+    },
+    {
+      "week": 6,
+      "awayTeam": "Bills",
+      "homeTeam": "Raiders",
+      "gameTime": "",
+      "gameDate": "October 18th"
+    },
+    {
+      "week": 6,
+      "awayTeam": "Cowboys",
+      "homeTeam": "Packers",
+      "gameTime": "",
+      "gameDate": "October 18th"
+    },
+    {
+      "week": 6,
+      "awayTeam": "Commanders",
+      "homeTeam": "49ers",
+      "gameTime": "",
+      "gameDate": "October 19th"
+    },
+    {
+      "week": 7,
+      "awayTeam": "Patriots",
+      "homeTeam": "Bears",
+      "gameTime": "",
+      "gameDate": "October 22nd"
+    },
+    {
+      "week": 7,
+      "awayTeam": "Steelers",
+      "homeTeam": "Saints",
+      "gameTime": "",
+      "gameDate": "October 25th"
+    },
+    {
+      "week": 7,
+      "awayTeam": "49ers",
+      "homeTeam": "Falcons",
+      "gameTime": "",
+      "gameDate": "October 25th"
+    },
+    {
+      "week": 7,
+      "awayTeam": "Bengals",
+      "homeTeam": "Ravens",
+      "gameTime": "",
+      "gameDate": "October 25th"
+    },
+    {
+      "week": 7,
+      "awayTeam": "Buccaneers",
+      "homeTeam": "Panthers",
+      "gameTime": "",
+      "gameDate": "October 25th"
+    },
+    {
+      "week": 7,
+      "awayTeam": "Giants",
+      "homeTeam": "Texans",
+      "gameTime": "",
+      "gameDate": "October 25th"
+    },
+    {
+      "week": 7,
+      "awayTeam": "Colts",
+      "homeTeam": "Vikings",
+      "gameTime": "",
+      "gameDate": "October 25th"
+    },
+    {
+      "week": 7,
+      "awayTeam": "Dolphins",
+      "homeTeam": "Jets",
+      "gameTime": "",
+      "gameDate": "October 25th"
+    },
+    {
+      "week": 7,
+      "awayTeam": "Browns",
+      "homeTeam": "Titans",
+      "gameTime": "",
+      "gameDate": "October 25th"
+    },
+    {
+      "week": 7,
+      "awayTeam": "Broncos",
+      "homeTeam": "Cardinals",
+      "gameTime": "",
+      "gameDate": "October 25th"
+    },
+    {
+      "week": 7,
+      "awayTeam": "Packers",
+      "homeTeam": "Lions",
+      "gameTime": "",
+      "gameDate": "October 25th"
+    },
+    {
+      "week": 7,
+      "awayTeam": "Rams",
+      "homeTeam": "Raiders",
+      "gameTime": "",
+      "gameDate": "October 25th"
+    },
+    {
+      "week": 7,
+      "awayTeam": "Chiefs",
+      "homeTeam": "Seahawks",
+      "gameTime": "",
+      "gameDate": "October 25th"
+    },
+    {
+      "week": 7,
+      "awayTeam": "Cowboys",
+      "homeTeam": "Eagles",
+      "gameTime": "",
+      "gameDate": "October 26th"
+    },
+    {
+      "week": 8,
+      "awayTeam": "Panthers",
+      "homeTeam": "Packers",
+      "gameTime": "",
+      "gameDate": "October 29th"
+    },
+    {
+      "week": 8,
+      "awayTeam": "Ravens",
+      "homeTeam": "Bills",
+      "gameTime": "",
+      "gameDate": "November 1st"
+    },
+    {
+      "week": 8,
+      "awayTeam": "Titans",
+      "homeTeam": "Bengals",
+      "gameTime": "",
+      "gameDate": "November 1st"
+    },
+    {
+      "week": 8,
+      "awayTeam": "Cardinals",
+      "homeTeam": "Cowboys",
+      "gameTime": "",
+      "gameDate": "November 1st"
+    },
+    {
+      "week": 8,
+      "awayTeam": "Vikings",
+      "homeTeam": "Lions",
+      "gameTime": "",
+      "gameDate": "November 1st"
+    },
+    {
+      "week": 8,
+      "awayTeam": "Colts",
+      "homeTeam": "Jaguars",
+      "gameTime": "",
+      "gameDate": "November 1st"
+    },
+    {
+      "week": 8,
+      "awayTeam": "Raiders",
+      "homeTeam": "Jets",
+      "gameTime": "",
+      "gameDate": "November 1st"
+    },
+    {
+      "week": 8,
+      "awayTeam": "Browns",
+      "homeTeam": "Steelers",
+      "gameTime": "",
+      "gameDate": "November 1st"
+    },
+    {
+      "week": 8,
+      "awayTeam": "Falcons",
+      "homeTeam": "Buccaneers",
+      "gameTime": "",
+      "gameDate": "November 1st"
+    },
+    {
+      "week": 8,
+      "awayTeam": "Chargers",
+      "homeTeam": "Rams",
+      "gameTime": "",
+      "gameDate": "November 1st"
+    },
+    {
+      "week": 8,
+      "awayTeam": "Chiefs",
+      "homeTeam": "Broncos",
+      "gameTime": "",
+      "gameDate": "November 1st"
+    },
+    {
+      "week": 8,
+      "awayTeam": "Patriots",
+      "homeTeam": "Dolphins",
+      "gameTime": "",
+      "gameDate": "November 1st"
+    },
+    {
+      "week": 8,
+      "awayTeam": "Eagles",
+      "homeTeam": "Commanders",
+      "gameTime": "",
+      "gameDate": "November 1st"
+    },
+    {
+      "week": 8,
+      "awayTeam": "Bears",
+      "homeTeam": "Seahawks",
+      "gameTime": "",
+      "gameDate": "November 2nd"
+    },
+    {
+      "week": 9,
+      "awayTeam": "Jaguars",
+      "homeTeam": "Ravens",
+      "gameTime": "",
+      "gameDate": "November 5th"
+    },
+    {
+      "week": 9,
+      "awayTeam": "Bengals",
+      "homeTeam": "Falcons",
+      "gameTime": "",
+      "gameDate": "November 8th"
+    },
+    {
+      "week": 9,
+      "awayTeam": "Broncos",
+      "homeTeam": "Panthers",
+      "gameTime": "",
+      "gameDate": "November 8th"
+    },
+    {
+      "week": 9,
+      "awayTeam": "Cowboys",
+      "homeTeam": "Colts",
+      "gameTime": "",
+      "gameDate": "November 8th"
+    },
+    {
+      "week": 9,
+      "awayTeam": "Jets",
+      "homeTeam": "Chiefs",
+      "gameTime": "",
+      "gameDate": "November 8th"
+    },
+    {
+      "week": 9,
+      "awayTeam": "Lions",
+      "homeTeam": "Dolphins",
+      "gameTime": "",
+      "gameDate": "November 8th"
+    },
+    {
+      "week": 9,
+      "awayTeam": "Browns",
+      "homeTeam": "Saints",
+      "gameTime": "",
+      "gameDate": "November 8th"
+    },
+    {
+      "week": 9,
+      "awayTeam": "Giants",
+      "homeTeam": "Eagles",
+      "gameTime": "",
+      "gameDate": "November 8th"
+    },
+    {
+      "week": 9,
+      "awayTeam": "Rams",
+      "homeTeam": "Commanders",
+      "gameTime": "",
+      "gameDate": "November 8th"
+    },
+    {
+      "week": 9,
+      "awayTeam": "Texans",
+      "homeTeam": "Chargers",
+      "gameTime": "",
+      "gameDate": "November 8th"
+    },
+    {
+      "week": 9,
+      "awayTeam": "Raiders",
+      "homeTeam": "49ers",
+      "gameTime": "",
+      "gameDate": "November 8th"
+    },
+    {
+      "week": 9,
+      "awayTeam": "Packers",
+      "homeTeam": "Patriots",
+      "gameTime": "",
+      "gameDate": "November 8th"
+    },
+    {
+      "week": 9,
+      "awayTeam": "Cardinals",
+      "homeTeam": "Seahawks",
+      "gameTime": "",
+      "gameDate": "November 8th"
+    },
+    {
+      "week": 9,
+      "awayTeam": "Buccaneers",
+      "homeTeam": "Bears",
+      "gameTime": "",
+      "gameDate": "November 8th"
+    },
+    {
+      "week": 9,
+      "awayTeam": "Bills",
+      "homeTeam": "Vikings",
+      "gameTime": "",
+      "gameDate": "November 9th"
+    },
+    {
+      "week": 10,
+      "awayTeam": "Commanders",
+      "homeTeam": "Giants",
+      "gameTime": "",
+      "gameDate": "November 12th"
+    },
+    {
+      "week": 10,
+      "awayTeam": "Patriots",
+      "homeTeam": "Lions",
+      "gameTime": "",
+      "gameDate": "November 15th"
+    },
+    {
+      "week": 10,
+      "awayTeam": "Chiefs",
+      "homeTeam": "Falcons",
+      "gameTime": "",
+      "gameDate": "November 15th"
+    },
+    {
+      "week": 10,
+      "awayTeam": "Texans",
+      "homeTeam": "Browns",
+      "gameTime": "",
+      "gameDate": "November 15th"
+    },
+    {
+      "week": 10,
+      "awayTeam": "Vikings",
+      "homeTeam": "Packers",
+      "gameTime": "",
+      "gameDate": "November 15th"
+    },
+    {
+      "week": 10,
+      "awayTeam": "Dolphins",
+      "homeTeam": "Colts",
+      "gameTime": "",
+      "gameDate": "November 15th"
+    },
+    {
+      "week": 10,
+      "awayTeam": "Panthers",
+      "homeTeam": "Saints",
+      "gameTime": "",
+      "gameDate": "November 15th"
+    },
+    {
+      "week": 10,
+      "awayTeam": "Bills",
+      "homeTeam": "Jets",
+      "gameTime": "",
+      "gameDate": "November 15th"
+    },
+    {
+      "week": 10,
+      "awayTeam": "Jaguars",
+      "homeTeam": "Titans",
+      "gameTime": "",
+      "gameDate": "November 15th"
+    },
+    {
+      "week": 10,
+      "awayTeam": "Rams",
+      "homeTeam": "Cardinals",
+      "gameTime": "",
+      "gameDate": "November 15th"
+    },
+    {
+      "week": 10,
+      "awayTeam": "Seahawks",
+      "homeTeam": "Raiders",
+      "gameTime": "",
+      "gameDate": "November 15th"
+    },
+    {
+      "week": 10,
+      "awayTeam": "49ers",
+      "homeTeam": "Cowboys",
+      "gameTime": "",
+      "gameDate": "November 15th"
+    },
+    {
+      "week": 10,
+      "awayTeam": "Steelers",
+      "homeTeam": "Bengals",
+      "gameTime": "",
+      "gameDate": "November 15th"
+    },
+    {
+      "week": 10,
+      "awayTeam": "Chargers",
+      "homeTeam": "Ravens",
+      "gameTime": "",
+      "gameDate": "November 16th"
+    },
+    {
+      "week": 11,
+      "awayTeam": "Colts",
+      "homeTeam": "Texans",
+      "gameTime": "",
+      "gameDate": "November 19th"
+    },
+    {
+      "week": 11,
+      "awayTeam": "Dolphins",
+      "homeTeam": "Bills",
+      "gameTime": "",
+      "gameDate": "November 22nd"
+    },
+    {
+      "week": 11,
+      "awayTeam": "Ravens",
+      "homeTeam": "Panthers",
+      "gameTime": "",
+      "gameDate": "November 22nd"
+    },
+    {
+      "week": 11,
+      "awayTeam": "Saints",
+      "homeTeam": "Bears",
+      "gameTime": "",
+      "gameDate": "November 22nd"
+    },
+    {
+      "week": 11,
+      "awayTeam": "Titans",
+      "homeTeam": "Cowboys",
+      "gameTime": "",
+      "gameDate": "November 22nd"
+    },
+    {
+      "week": 11,
+      "awayTeam": "Buccaneers",
+      "homeTeam": "Lions",
+      "gameTime": "",
+      "gameDate": "November 22nd"
+    },
+    {
+      "week": 11,
+      "awayTeam": "Cardinals",
+      "homeTeam": "Chiefs",
+      "gameTime": "",
+      "gameDate": "November 22nd"
+    },
+    {
+      "week": 11,
+      "awayTeam": "Jaguars",
+      "homeTeam": "Giants",
+      "gameTime": "",
+      "gameDate": "November 22nd"
+    },
+    {
+      "week": 11,
+      "awayTeam": "Jets",
+      "homeTeam": "Chargers",
+      "gameTime": "",
+      "gameDate": "November 22nd"
+    },
+    {
+      "week": 11,
+      "awayTeam": "Raiders",
+      "homeTeam": "Broncos",
+      "gameTime": "",
+      "gameDate": "November 22nd"
+    },
+    {
+      "week": 11,
+      "awayTeam": "Steelers",
+      "homeTeam": "Eagles",
+      "gameTime": "",
+      "gameDate": "November 22nd"
+    },
+    {
+      "week": 11,
+      "awayTeam": "Vikings",
+      "homeTeam": "49ers",
+      "gameTime": "",
+      "gameDate": "November 22nd"
+    },
+    {
+      "week": 11,
+      "awayTeam": "Bengals",
+      "homeTeam": "Commanders",
+      "gameTime": "",
+      "gameDate": "November 23rd"
+    },
+    {
+      "week": 12,
+      "awayTeam": "Packers",
+      "homeTeam": "Rams",
+      "gameTime": "",
+      "gameDate": "November 25th"
+    },
+    {
+      "week": 12,
+      "awayTeam": "Bears",
+      "homeTeam": "Lions",
+      "gameTime": "",
+      "gameDate": "November 26th"
+    },
+    {
+      "week": 12,
+      "awayTeam": "Eagles",
+      "homeTeam": "Cowboys",
+      "gameTime": "",
+      "gameDate": "November 26th"
+    },
+    {
+      "week": 12,
+      "awayTeam": "Chiefs",
+      "homeTeam": "Bills",
+      "gameTime": "",
+      "gameDate": "November 26th"
+    },
+    {
+      "week": 12,
+      "awayTeam": "Broncos",
+      "homeTeam": "Steelers",
+      "gameTime": "",
+      "gameDate": "November 27th"
+    },
+    {
+      "week": 12,
+      "awayTeam": "Saints",
+      "homeTeam": "Bengals",
+      "gameTime": "",
+      "gameDate": "November 29th"
+    },
+    {
+      "week": 12,
+      "awayTeam": "Raiders",
+      "homeTeam": "Browns",
+      "gameTime": "",
+      "gameDate": "November 29th"
+    },
+    {
+      "week": 12,
+      "awayTeam": "Ravens",
+      "homeTeam": "Texans",
+      "gameTime": "",
+      "gameDate": "November 29th"
+    },
+    {
+      "week": 12,
+      "awayTeam": "Giants",
+      "homeTeam": "Colts",
+      "gameTime": "",
+      "gameDate": "November 29th"
+    },
+    {
+      "week": 12,
+      "awayTeam": "Jets",
+      "homeTeam": "Dolphins",
+      "gameTime": "",
+      "gameDate": "November 29th"
+    },
+    {
+      "week": 12,
+      "awayTeam": "Falcons",
+      "homeTeam": "Vikings",
+      "gameTime": "",
+      "gameDate": "November 29th"
+    },
+    {
+      "week": 12,
+      "awayTeam": "Titans",
+      "homeTeam": "Jaguars",
+      "gameTime": "",
+      "gameDate": "November 29th"
+    },
+    {
+      "week": 12,
+      "awayTeam": "Commanders",
+      "homeTeam": "Cardinals",
+      "gameTime": "",
+      "gameDate": "November 29th"
+    },
+    {
+      "week": 12,
+      "awayTeam": "Seahawks",
+      "homeTeam": "49ers",
+      "gameTime": "",
+      "gameDate": "November 29th"
+    },
+    {
+      "week": 12,
+      "awayTeam": "Patriots",
+      "homeTeam": "Chargers",
+      "gameTime": "",
+      "gameDate": "November 29th"
+    },
+    {
+      "week": 12,
+      "awayTeam": "Panthers",
+      "homeTeam": "Buccaneers",
+      "gameTime": "",
+      "gameDate": "November 30th"
+    },
+    {
+      "week": 13,
+      "awayTeam": "Chiefs",
+      "homeTeam": "Rams",
+      "gameTime": "",
+      "gameDate": "December 3rd"
+    },
+    {
+      "week": 13,
+      "awayTeam": "Lions",
+      "homeTeam": "Falcons",
+      "gameTime": "",
+      "gameDate": "December 6th"
+    },
+    {
+      "week": 13,
+      "awayTeam": "Jaguars",
+      "homeTeam": "Bears",
+      "gameTime": "",
+      "gameDate": "December 6th"
+    },
+    {
+      "week": 13,
+      "awayTeam": "Bengals",
+      "homeTeam": "Browns",
+      "gameTime": "",
+      "gameDate": "December 6th"
+    },
+    {
+      "week": 13,
+      "awayTeam": "Packers",
+      "homeTeam": "Saints",
+      "gameTime": "",
+      "gameDate": "December 6th"
+    },
+    {
+      "week": 13,
+      "awayTeam": "49ers",
+      "homeTeam": "Giants",
+      "gameTime": "",
+      "gameDate": "December 6th"
+    },
+    {
+      "week": 13,
+      "awayTeam": "Chargers",
+      "homeTeam": "Buccaneers",
+      "gameTime": "",
+      "gameDate": "December 6th"
+    },
+    {
+      "week": 13,
+      "awayTeam": "Commanders",
+      "homeTeam": "Titans",
+      "gameTime": "",
+      "gameDate": "December 6th"
+    },
+    {
+      "week": 13,
+      "awayTeam": "Eagles",
+      "homeTeam": "Cardinals",
+      "gameTime": "",
+      "gameDate": "December 6th"
+    },
+    {
+      "week": 13,
+      "awayTeam": "Dolphins",
+      "homeTeam": "Broncos",
+      "gameTime": "",
+      "gameDate": "December 6th"
+    },
+    {
+      "week": 13,
+      "awayTeam": "Panthers",
+      "homeTeam": "Vikings",
+      "gameTime": "",
+      "gameDate": "December 6th"
+    },
+    {
+      "week": 13,
+      "awayTeam": "Bills",
+      "homeTeam": "Patriots",
+      "gameTime": "",
+      "gameDate": "December 6th"
+    },
+    {
+      "week": 13,
+      "awayTeam": "Texans",
+      "homeTeam": "Steelers",
+      "gameTime": "",
+      "gameDate": "December 6th"
+    },
+    {
+      "week": 13,
+      "awayTeam": "Cowboys",
+      "homeTeam": "Seahawks",
+      "gameTime": "",
+      "gameDate": "December 7th"
+    },
+    {
+      "week": 14,
+      "awayTeam": "Vikings",
+      "homeTeam": "Patriots",
+      "gameTime": "",
+      "gameDate": "December 10th"
+    },
+    {
+      "week": 14,
+      "awayTeam": "Buccaneers",
+      "homeTeam": "Ravens",
+      "gameTime": "",
+      "gameDate": "December 13th"
+    },
+    {
+      "week": 14,
+      "awayTeam": "Saints",
+      "homeTeam": "Panthers",
+      "gameTime": "",
+      "gameDate": "December 13th"
+    },
+    {
+      "week": 14,
+      "awayTeam": "Falcons",
+      "homeTeam": "Browns",
+      "gameTime": "",
+      "gameDate": "December 13th"
+    },
+    {
+      "week": 14,
+      "awayTeam": "Titans",
+      "homeTeam": "Lions",
+      "gameTime": "",
+      "gameDate": "December 13th"
+    },
+    {
+      "week": 14,
+      "awayTeam": "Bears",
+      "homeTeam": "Dolphins",
+      "gameTime": "",
+      "gameDate": "December 13th"
+    },
+    {
+      "week": 14,
+      "awayTeam": "Broncos",
+      "homeTeam": "Jets",
+      "gameTime": "",
+      "gameDate": "December 13th"
+    },
+    {
+      "week": 14,
+      "awayTeam": "Colts",
+      "homeTeam": "Eagles",
+      "gameTime": "",
+      "gameDate": "December 13th"
+    },
+    {
+      "week": 14,
+      "awayTeam": "Texans",
+      "homeTeam": "Commanders",
+      "gameTime": "",
+      "gameDate": "December 13th"
+    },
+    {
+      "week": 14,
+      "awayTeam": "Chargers",
+      "homeTeam": "Raiders",
+      "gameTime": "",
+      "gameDate": "December 13th"
+    },
+    {
+      "week": 14,
+      "awayTeam": "Chiefs",
+      "homeTeam": "Bengals",
+      "gameTime": "",
+      "gameDate": "December 13th"
+    },
+    {
+      "week": 14,
+      "awayTeam": "Giants",
+      "homeTeam": "Seahawks",
+      "gameTime": "",
+      "gameDate": "December 13th"
+    },
+    {
+      "week": 14,
+      "awayTeam": "Rams",
+      "homeTeam": "49ers",
+      "gameTime": "",
+      "gameDate": "December 13th"
+    },
+    {
+      "week": 14,
+      "awayTeam": "Bills",
+      "homeTeam": "Packers",
+      "gameTime": "",
+      "gameDate": "December 13th"
+    },
+    {
+      "week": 14,
+      "awayTeam": "Steelers",
+      "homeTeam": "Jaguars",
+      "gameTime": "",
+      "gameDate": "December 14th"
+    },
+    {
+      "week": 15,
+      "awayTeam": "49ers",
+      "homeTeam": "Chargers",
+      "gameTime": "",
+      "gameDate": "December 17th"
+    },
+    {
+      "week": 15,
+      "awayTeam": "Seahawks",
+      "homeTeam": "Eagles",
+      "gameTime": "",
+      "gameDate": "December 19th"
+    },
+    {
+      "week": 15,
+      "awayTeam": "Bears",
+      "homeTeam": "Bills",
+      "gameTime": "",
+      "gameDate": "December 19th"
+    },
+    {
+      "week": 15,
+      "awayTeam": "Bengals",
+      "homeTeam": "Panthers",
+      "gameTime": "",
+      "gameDate": "December 20th"
+    },
+    {
+      "week": 15,
+      "awayTeam": "Dolphins",
+      "homeTeam": "Packers",
+      "gameTime": "",
+      "gameDate": "December 20th"
+    },
+    {
+      "week": 15,
+      "awayTeam": "Jaguars",
+      "homeTeam": "Texans",
+      "gameTime": "",
+      "gameDate": "December 20th"
+    },
+    {
+      "week": 15,
+      "awayTeam": "Browns",
+      "homeTeam": "Giants",
+      "gameTime": "",
+      "gameDate": "December 20th"
+    },
+    {
+      "week": 15,
+      "awayTeam": "Ravens",
+      "homeTeam": "Steelers",
+      "gameTime": "",
+      "gameDate": "December 20th"
+    },
+    {
+      "week": 15,
+      "awayTeam": "Saints",
+      "homeTeam": "Buccaneers",
+      "gameTime": "",
+      "gameDate": "December 20th"
+    },
+    {
+      "week": 15,
+      "awayTeam": "Colts",
+      "homeTeam": "Titans",
+      "gameTime": "",
+      "gameDate": "December 20th"
+    },
+    {
+      "week": 15,
+      "awayTeam": "Falcons",
+      "homeTeam": "Commanders",
+      "gameTime": "",
+      "gameDate": "December 20th"
+    },
+    {
+      "week": 15,
+      "awayTeam": "Jets",
+      "homeTeam": "Cardinals",
+      "gameTime": "",
+      "gameDate": "December 20th"
+    },
+    {
+      "week": 15,
+      "awayTeam": "Cowboys",
+      "homeTeam": "Rams",
+      "gameTime": "",
+      "gameDate": "December 20th"
+    },
+    {
+      "week": 15,
+      "awayTeam": "Broncos",
+      "homeTeam": "Raiders",
+      "gameTime": "",
+      "gameDate": "December 20th"
+    },
+    {
+      "week": 15,
+      "awayTeam": "Lions",
+      "homeTeam": "Vikings",
+      "gameTime": "",
+      "gameDate": "December 20th"
+    },
+    {
+      "week": 15,
+      "awayTeam": "Patriots",
+      "homeTeam": "Chiefs",
+      "gameTime": "",
+      "gameDate": "December 21st"
+    },
+    {
+      "week": 16,
+      "awayTeam": "Texans",
+      "homeTeam": "Eagles",
+      "gameTime": "",
+      "gameDate": "December 24th"
+    },
+    {
+      "week": 16,
+      "awayTeam": "Packers",
+      "homeTeam": "Bears",
+      "gameTime": "",
+      "gameDate": "December 25th"
+    },
+    {
+      "week": 16,
+      "awayTeam": "Bills",
+      "homeTeam": "Broncos",
+      "gameTime": "",
+      "gameDate": "December 25th"
+    },
+    {
+      "week": 16,
+      "awayTeam": "Rams",
+      "homeTeam": "Seahawks",
+      "gameTime": "",
+      "gameDate": "December 25th"
+    },
+    {
+      "week": 16,
+      "awayTeam": "Browns",
+      "homeTeam": "Ravens",
+      "gameTime": "",
+      "gameDate": "December 27th"
+    },
+    {
+      "week": 16,
+      "awayTeam": "Chargers",
+      "homeTeam": "Dolphins",
+      "gameTime": "",
+      "gameDate": "December 27th"
+    },
+    {
+      "week": 16,
+      "awayTeam": "Cardinals",
+      "homeTeam": "Saints",
+      "gameTime": "",
+      "gameDate": "December 27th"
+    },
+    {
+      "week": 16,
+      "awayTeam": "Patriots",
+      "homeTeam": "Jets",
+      "gameTime": "",
+      "gameDate": "December 27th"
+    },
+    {
+      "week": 16,
+      "awayTeam": "Titans",
+      "homeTeam": "Raiders",
+      "gameTime": "",
+      "gameDate": "December 27th"
+    },
+    {
+      "week": 16,
+      "awayTeam": "49ers",
+      "homeTeam": "Chiefs",
+      "gameTime": "",
+      "gameDate": "December 27th"
+    },
+    {
+      "week": 16,
+      "awayTeam": "Jaguars",
+      "homeTeam": "Cowboys",
+      "gameTime": "",
+      "gameDate": "December 27th"
+    },
+    {
+      "week": 16,
+      "awayTeam": "Giants",
+      "homeTeam": "Lions",
+      "gameTime": "",
+      "gameDate": "December 28th"
+    },
+    {
+      "week": 16,
+      "awayTeam": "Buccaneers",
+      "homeTeam": "Falcons",
+      "gameTime": "",
+      "gameDate": ""
+    },
+    {
+      "week": 16,
+      "awayTeam": "Bengals",
+      "homeTeam": "Colts",
+      "gameTime": "",
+      "gameDate": ""
+    },
+    {
+      "week": 16,
+      "awayTeam": "Commanders",
+      "homeTeam": "Vikings",
+      "gameTime": "",
+      "gameDate": ""
+    },
+    {
+      "week": 16,
+      "awayTeam": "Panthers",
+      "homeTeam": "Steelers",
+      "gameTime": "",
+      "gameDate": ""
+    },
+    {
+      "week": 17,
+      "awayTeam": "Ravens",
+      "homeTeam": "Bengals",
+      "gameTime": "",
+      "gameDate": "December 31st"
+    },
+    {
+      "week": 17,
+      "awayTeam": "Saints",
+      "homeTeam": "Falcons",
+      "gameTime": "",
+      "gameDate": "January 3rd"
+    },
+    {
+      "week": 17,
+      "awayTeam": "Seahawks",
+      "homeTeam": "Panthers",
+      "gameTime": "",
+      "gameDate": "January 3rd"
+    },
+    {
+      "week": 17,
+      "awayTeam": "Colts",
+      "homeTeam": "Browns",
+      "gameTime": "",
+      "gameDate": "January 3rd"
+    },
+    {
+      "week": 17,
+      "awayTeam": "Giants",
+      "homeTeam": "Cowboys",
+      "gameTime": "",
+      "gameDate": "January 3rd"
+    },
+    {
+      "week": 17,
+      "awayTeam": "Bills",
+      "homeTeam": "Dolphins",
+      "gameTime": "",
+      "gameDate": "January 3rd"
+    },
+    {
+      "week": 17,
+      "awayTeam": "Vikings",
+      "homeTeam": "Jets",
+      "gameTime": "",
+      "gameDate": "January 3rd"
+    },
+    {
+      "week": 17,
+      "awayTeam": "Steelers",
+      "homeTeam": "Titans",
+      "gameTime": "",
+      "gameDate": "January 3rd"
+    },
+    {
+      "week": 17,
+      "awayTeam": "Raiders",
+      "homeTeam": "Cardinals",
+      "gameTime": "",
+      "gameDate": "January 3rd"
+    },
+    {
+      "week": 17,
+      "awayTeam": "Lions",
+      "homeTeam": "Bears",
+      "gameTime": "",
+      "gameDate": "January 3rd"
+    },
+    {
+      "week": 17,
+      "awayTeam": "Eagles",
+      "homeTeam": "49ers",
+      "gameTime": "",
+      "gameDate": "January 3rd"
+    },
+    {
+      "week": 17,
+      "awayTeam": "Texans",
+      "homeTeam": "Packers",
+      "gameTime": "",
+      "gameDate": "January 4th"
+    },
+    {
+      "week": 17,
+      "awayTeam": "Commanders",
+      "homeTeam": "Jaguars",
+      "gameTime": "",
+      "gameDate": ""
+    },
+    {
+      "week": 17,
+      "awayTeam": "Chiefs",
+      "homeTeam": "Chargers",
+      "gameTime": "",
+      "gameDate": ""
+    },
+    {
+      "week": 17,
+      "awayTeam": "Broncos",
+      "homeTeam": "Patriots",
+      "gameTime": "",
+      "gameDate": ""
+    },
+    {
+      "week": 17,
+      "awayTeam": "Rams",
+      "homeTeam": "Buccaneers",
+      "gameTime": "",
+      "gameDate": ""
+    },
+    {
+      "week": 18,
+      "awayTeam": "49ers",
+      "homeTeam": "Cardinals",
+      "gameTime": "",
+      "gameDate": ""
+    },
+    {
+      "week": 18,
+      "awayTeam": "Steelers",
+      "homeTeam": "Ravens",
+      "gameTime": "",
+      "gameDate": ""
+    },
+    {
+      "week": 18,
+      "awayTeam": "Jets",
+      "homeTeam": "Bills",
+      "gameTime": "",
+      "gameDate": ""
+    },
+    {
+      "week": 18,
+      "awayTeam": "Falcons",
+      "homeTeam": "Panthers",
+      "gameTime": "",
+      "gameDate": ""
+    },
+    {
+      "week": 18,
+      "awayTeam": "Browns",
+      "homeTeam": "Bengals",
+      "gameTime": "",
+      "gameDate": ""
+    },
+    {
+      "week": 18,
+      "awayTeam": "Chargers",
+      "homeTeam": "Broncos",
+      "gameTime": "",
+      "gameDate": ""
+    },
+    {
+      "week": 18,
+      "awayTeam": "Lions",
+      "homeTeam": "Packers",
+      "gameTime": "",
+      "gameDate": ""
+    },
+    {
+      "week": 18,
+      "awayTeam": "Titans",
+      "homeTeam": "Texans",
+      "gameTime": "",
+      "gameDate": ""
+    },
+    {
+      "week": 18,
+      "awayTeam": "Jaguars",
+      "homeTeam": "Colts",
+      "gameTime": "",
+      "gameDate": ""
+    },
+    {
+      "week": 18,
+      "awayTeam": "Raiders",
+      "homeTeam": "Chiefs",
+      "gameTime": "",
+      "gameDate": ""
+    },
+    {
+      "week": 18,
+      "awayTeam": "Seahawks",
+      "homeTeam": "Rams",
+      "gameTime": "",
+      "gameDate": ""
+    },
+    {
+      "week": 18,
+      "awayTeam": "Bears",
+      "homeTeam": "Vikings",
+      "gameTime": "",
+      "gameDate": ""
+    },
+    {
+      "week": 18,
+      "awayTeam": "Dolphins",
+      "homeTeam": "Patriots",
+      "gameTime": "",
+      "gameDate": ""
+    },
+    {
+      "week": 18,
+      "awayTeam": "Buccaneers",
+      "homeTeam": "Saints",
+      "gameTime": "",
+      "gameDate": ""
+    },
+    {
+      "week": 18,
+      "awayTeam": "Eagles",
+      "homeTeam": "Giants",
+      "gameTime": "",
+      "gameDate": ""
+    },
+    {
+      "week": 18,
+      "awayTeam": "Cowboys",
+      "homeTeam": "Commanders",
+      "gameTime": "",
+      "gameDate": ""
+    }
+  ]
+}
