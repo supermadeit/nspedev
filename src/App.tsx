@@ -652,10 +652,11 @@ interface NflExplosivePayload {
 function isNflExplosivePayload(payload: unknown): payload is NflExplosivePayload {
   if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
   const p = payload as Record<string, unknown>
+  // Catch both intentional 'long' explosive queries AND non-long queries that
+  // the backend still routes to the explosive/PBP handler (array query format).
   return (
     p.sport === 'nfl' &&
     Array.isArray(p.query) &&
-    (p.query as string[]).includes('long') &&
     Array.isArray(p.results)
   )
 }
@@ -1520,6 +1521,23 @@ async function parseApiPayload(response: Response): Promise<ApiPayload> {
 function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
   const [expanded, setExpanded] = useState<Set<number>>(new Set())
   const results = payload.results
+  const isLongQuery = (payload.query as string[]).includes('long')
+
+  // Detect threshold=0 responses: backend routed a non-long query to the
+  // explosive/PBP handler. These results are meaningless (all players
+  // "appeared" in plays with 0 yards). Show an error instead.
+  const firstThreshold = results[0]?.threshold ?? -1
+  if (!isLongQuery && firstThreshold === 0) {
+    return (
+      <div className="text-center py-8 font-mono text-[13px] space-y-2" style={{ color: 'oklch(0.70 0 0)' }}>
+        <div>query format not supported via api</div>
+        <div className="text-[11px]" style={{ color: 'oklch(0.50 0 0)' }}>
+          per-game nfl trend queries require a different backend route.
+          use explosive mode ({'{'}nfl long pass/rush/rec{'}'}) for play-by-play queries.
+        </div>
+      </div>
+    )
+  }
 
   const toggle = (i: number) =>
     setExpanded((prev) => {
