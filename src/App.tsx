@@ -5,6 +5,7 @@ import madeitLogo from '@/assets/images/madeit-tech-logo-v2.jpeg'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { QueryBuilder } from '@/components/QueryBuilder'
 import { QueryBuilderTutorial } from '@/components/QueryBuilderTutorial'
+import { authHeader } from '@/lib/auth-token'
 
 function joinUrl(base: string, endpoint: string): string {
   if (!base) {
@@ -2704,6 +2705,10 @@ function App() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            // Attach the Supabase JWT when the user is signed in. The /run gate
+            // is still commented out on the backend, so anonymous requests keep
+            // working until the backend flips it on.
+            ...authHeader(),
           },
           body: JSON.stringify({ query: sanitizedQuery }),
         },
@@ -3087,66 +3092,29 @@ function App() {
           </a>
         )}
 
-        <div className="relative">
-          <button
-            onClick={() => setIsSampleMenuOpen((prev) => !prev)}
-            className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-            style={{ color: 'oklch(0.85 0.15 195)' }}
-          >
-            sample-commands
-          </button>
-
-          {isSampleMenuOpen && !isMobile && (
-            <div
-              className="absolute right-0 mt-3 w-[340px] max-h-[70vh] overflow-y-auto rounded-md p-2"
-              style={{
-                backgroundColor: 'oklch(0.12 0 0)',
-                border: '1px solid oklch(0.30 0 0)',
-                boxShadow: '0 16px 40px rgba(0, 0, 0, 0.45)',
-              }}
-            >
-              <div className="mb-2 px-2 font-mono text-[12px]" style={{ color: 'oklch(0.75 0 0)' }}>
-                Select a command to prefill search
-              </div>
-              <div className="space-y-1">
-                {SAMPLE_COMMANDS.map((sample) => (
-                  <button
-                    key={sample.label}
-                    type="button"
-                    onClick={() => !sample.comingSoon && handleSampleCommandSelect(sample.command)}
-                    disabled={Boolean(sample.comingSoon)}
-                    className="w-full rounded px-2 py-2 text-left font-mono text-[12px] transition-opacity"
-                    style={{
-                      color: sample.comingSoon ? 'oklch(0.56 0 0)' : 'oklch(0.90 0.18 195)',
-                      backgroundColor: sample.comingSoon ? 'transparent' : 'oklch(0.18 0 0)',
-                      opacity: sample.comingSoon ? 0.8 : 1,
-                      cursor: sample.comingSoon ? 'not-allowed' : 'pointer',
-                    }}
-                  >
-                    {sample.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-
-        <button
-          onClick={() => setIsMiniOpen(!isMiniOpen)}
+        <a
+          href="/signup"
           className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
           style={{ color: 'oklch(0.85 0.15 195)' }}
         >
-          nspe-mini
-        </button>
+          {'{sign-up}'}
+        </a>
+
+        <a
+          href="/login"
+          className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+          style={{ color: 'oklch(0.85 0.15 195)' }}
+        >
+          {'{log-in}'}
+        </a>
       </div>
 
       <QueryBuilderTutorial open={isTutorialOpen} onClose={() => setIsTutorialOpen(false)} />
 
-      {isMobile && isSampleMenuOpen && (
+      {false && isMobile && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
           style={{ backgroundColor: 'rgba(0,0,0,0.78)', whiteSpace: 'normal' }}
-          onClick={() => setIsSampleMenuOpen(false)}
           role="dialog"
           aria-modal="true"
           aria-label="Sample commands"
