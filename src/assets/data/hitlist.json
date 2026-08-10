@@ -1,145 +1,145 @@
 [
   {
-    "raw": "MLB 2rbi+ {top20} {season}"
+    "raw": "MLB 2hits+ {top20} {season}"
   },
   {
-    "team": "NYY",
-    "player": "Ben Rice",
-    "stat": "rbi",
+    "team": "MIA",
+    "player": "Otto Lopez",
+    "stat": "hits",
     "threshold": 2,
-    "games_meeting": 20
+    "games_meeting": 46
   },
   {
-    "team": "BOS",
-    "player": "Willson Contreras",
-    "stat": "rbi",
+    "team": "PIT",
+    "player": "Nick Gonzales",
+    "stat": "hits",
     "threshold": 2,
-    "games_meeting": 19
+    "games_meeting": 46
   },
   {
-    "team": "MIL",
-    "player": "Brice Turang",
-    "stat": "rbi",
+    "team": "SF",
+    "player": "Luis Arraez",
+    "stat": "hits",
     "threshold": 2,
-    "games_meeting": 19
+    "games_meeting": 44
   },
   {
-    "team": "BAL",
-    "player": "Pete Alonso",
-    "stat": "rbi",
+    "team": "LAD",
+    "player": "Shohei Ohtani",
+    "stat": "hits",
     "threshold": 2,
-    "games_meeting": 19
+    "games_meeting": 40
   },
   {
     "team": "HOU",
     "player": "Yordan Alvarez",
-    "stat": "rbi",
+    "stat": "hits",
     "threshold": 2,
-    "games_meeting": 18
-  },
-  {
-    "team": "ATL",
-    "player": "Michael Harris II",
-    "stat": "rbi",
-    "threshold": 2,
-    "games_meeting": 18
-  },
-  {
-    "team": "STL",
-    "player": "Jordan Walker",
-    "stat": "rbi",
-    "threshold": 2,
-    "games_meeting": 18
-  },
-  {
-    "team": "WSH",
-    "player": "Luis Garcia Jr",
-    "stat": "rbi",
-    "threshold": 2,
-    "games_meeting": 18
+    "games_meeting": 40
   },
   {
     "team": "LAD",
-    "player": "Andy Pages",
-    "stat": "rbi",
+    "player": "Freddie Freeman",
+    "stat": "hits",
     "threshold": 2,
-    "games_meeting": 18
+    "games_meeting": 39
   },
   {
     "team": "TB",
-    "player": "Jonathan Aranda",
-    "stat": "rbi",
+    "player": "Chandler Simpson",
+    "stat": "hits",
     "threshold": 2,
-    "games_meeting": 17
-  },
-  {
-    "team": "MIA",
-    "player": "Liam Hicks",
-    "stat": "rbi",
-    "threshold": 2,
-    "games_meeting": 17
-  },
-  {
-    "team": "TB",
-    "player": "Junior Caminero",
-    "stat": "rbi",
-    "threshold": 2,
-    "games_meeting": 17
+    "games_meeting": 38
   },
   {
     "team": "TEX",
-    "player": "Jake Burger",
-    "stat": "rbi",
+    "player": "Brandon Nimmo",
+    "stat": "hits",
     "threshold": 2,
-    "games_meeting": 17
+    "games_meeting": 37
   },
   {
-    "team": "TOR",
-    "player": "Kazuma Okamoto",
-    "stat": "rbi",
+    "team": "TB",
+    "player": "Yandy Diaz",
+    "stat": "hits",
     "threshold": 2,
-    "games_meeting": 17
+    "games_meeting": 36
   },
   {
-    "team": "CHC",
-    "player": "Pete Crow Armstrong",
-    "stat": "rbi",
+    "team": "STL",
+    "player": "Alec Burleson",
+    "stat": "hits",
     "threshold": 2,
-    "games_meeting": 16
+    "games_meeting": 36
   },
   {
-    "team": "WSH",
-    "player": "James Wood",
-    "stat": "rbi",
+    "team": "SF",
+    "player": "Jung Hoo Lee",
+    "stat": "hits",
     "threshold": 2,
-    "games_meeting": 16
+    "games_meeting": 34
   },
   {
     "team": "WSH",
     "player": "CJ Abrams",
-    "stat": "rbi",
+    "stat": "hits",
     "threshold": 2,
-    "games_meeting": 16
+    "games_meeting": 34
   },
   {
-    "team": "ATH",
-    "player": "Nick Kurtz",
-    "stat": "rbi",
+    "team": "STL",
+    "player": "Jordan Walker",
+    "stat": "hits",
     "threshold": 2,
-    "games_meeting": 16
+    "games_meeting": 34
   },
   {
-    "team": "ARI",
-    "player": "Ketel Marte",
-    "stat": "rbi",
+    "team": "TOR",
+    "player": "Ernie Clement",
+    "stat": "hits",
     "threshold": 2,
-    "games_meeting": 16
+    "games_meeting": 34
+  },
+  {
+    "team": "BOS",
+    "player": "Ceddanne Rafaela",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 34
+  },
+  {
+    "team": "DET",
+    "player": "Riley Greene",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 34
+  },
+  {
+    "team": "DET",
+    "player": "Dillon Dingler",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 34
   },
   {
     "team": "NYM",
-    "player": "Juan Soto",
-    "stat": "rbi",
+    "player": "BO Bichette",
+    "stat": "hits",
     "threshold": 2,
-    "games_meeting": 15
+    "games_meeting": 34
+  },
+  {
+    "team": "ATL",
+    "player": "Michael Harris II",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 33
+  },
+  {
+    "team": "CHC",
+    "player": "Pete Crow Armstrong",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 33
   }
 ]
