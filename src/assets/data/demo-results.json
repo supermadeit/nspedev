@@ -1,0 +1,4783 @@
+[
+  {
+    "command": "nspe mlb -hits2 -last3/5",
+    "caption": "MLB · hits ≥ 2 in 3 of last 5",
+    "results": [{
+          "player": "Bryson Stott",
+          "met": 4,
+          "match": [
+            {
+              "val": 2,
+              "date": "8/10/26"
+            },
+            {
+              "val": 2,
+              "date": "8/9/26"
+            },
+            {
+              "val": 2,
+              "date": "8/8/26"
+            },
+            {
+              "val": 2,
+              "date": "8/6/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 2
+        },
+        {
+          "player": "Gabriel Moreno",
+          "met": 3,
+          "match": [
+            {
+              "val": 2,
+              "date": "8/10/26"
+            },
+            {
+              "val": 2,
+              "date": "8/8/26"
+            },
+            {
+              "val": 3,
+              "date": "8/6/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 2
+        },
+        {
+          "player": "Jackson Holliday",
+          "met": 3,
+          "match": [
+            {
+              "val": 2,
+              "date": "8/10/26"
+            },
+            {
+              "val": 2,
+              "date": "8/9/26"
+            },
+            {
+              "val": 2,
+              "date": "8/8/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 2
+        },
+        {
+          "player": "Coby Mayo",
+          "met": 3,
+          "match": [
+            {
+              "val": 2,
+              "date": "8/10/26"
+            },
+            {
+              "val": 3,
+              "date": "8/9/26"
+            },
+            {
+              "val": 2,
+              "date": "8/5/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 2
+        },
+        {
+          "player": "Ceddanne Rafaela",
+          "met": 3,
+          "match": [
+            {
+              "val": 2,
+              "date": "8/10/26"
+            },
+            {
+              "val": 2,
+              "date": "8/7/26"
+            },
+            {
+              "val": 2,
+              "date": "8/6/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 2
+        },
+        {
+          "player": "Jac Caglianone",
+          "met": 3,
+          "match": [
+            {
+              "val": 2,
+              "date": "8/10/26"
+            },
+            {
+              "val": 4,
+              "date": "8/8/26"
+            },
+            {
+              "val": 2,
+              "date": "8/7/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 2
+        },
+        {
+          "player": "Kyle Schwarber",
+          "met": 3,
+          "match": [
+            {
+              "val": 2,
+              "date": "8/10/26"
+            },
+            {
+              "val": 2,
+              "date": "8/9/26"
+            },
+            {
+              "val": 2,
+              "date": "8/6/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 2
+        },
+        {
+          "player": "Ivan Herrera",
+          "met": 3,
+          "match": [
+            {
+              "val": 2,
+              "date": "8/10/26"
+            },
+            {
+              "val": 4,
+              "date": "8/9/26"
+            },
+            {
+              "val": 3,
+              "date": "8/8/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 2
+        },
+        {
+          "player": "Chandler Simpson",
+          "met": 3,
+          "match": [
+            {
+              "val": 2,
+              "date": "8/10/26"
+            },
+            {
+              "val": 4,
+              "date": "8/9/26"
+            },
+            {
+              "val": 2,
+              "date": "8/8/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 2
+        },
+        {
+          "player": "Yandy Diaz",
+          "met": 3,
+          "match": [
+            {
+              "val": 3,
+              "date": "8/10/26"
+            },
+            {
+              "val": 4,
+              "date": "8/9/26"
+            },
+            {
+              "val": 2,
+              "date": "8/4/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 2
+        },
+        {
+          "player": "Michael Busch",
+          "met": 3,
+          "match": [
+            {
+              "val": 3,
+              "date": "8/9/26"
+            },
+            {
+              "val": 2,
+              "date": "8/7/26"
+            },
+            {
+              "val": 2,
+              "date": "8/5/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 2
+        },
+        {
+          "player": "Brett Sullivan",
+          "met": 3,
+          "match": [
+            {
+              "val": 2,
+              "date": "8/9/26"
+            },
+            {
+              "val": 2,
+              "date": "8/2/26"
+            },
+            {
+              "val": 2,
+              "date": "7/29/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 2
+        },
+        {
+          "player": "Jake Mc Carthy",
+          "met": 3,
+          "match": [
+            {
+              "val": 2,
+              "date": "8/9/26"
+            },
+            {
+              "val": 4,
+              "date": "8/8/26"
+            },
+            {
+              "val": 3,
+              "date": "8/7/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 2
+        },
+        {
+          "player": "Carson Benge",
+          "met": 3,
+          "match": [
+            {
+              "val": 2,
+              "date": "8/9/26"
+            },
+            {
+              "val": 2,
+              "date": "8/7/26"
+            },
+            {
+              "val": 3,
+              "date": "8/6/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 2
+        },
+        {
+          "player": "Freddy Fermin",
+          "met": 3,
+          "match": [
+            {
+              "val": 2,
+              "date": "8/9/26"
+            },
+            {
+              "val": 2,
+              "date": "8/4/26"
+            },
+            {
+              "val": 2,
+              "date": "8/1/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 2
+        },
+        {
+          "player": "Keibert Ruiz",
+          "met": 3,
+          "match": [
+            {
+              "val": 3,
+              "date": "8/9/26"
+            },
+            {
+              "val": 2,
+              "date": "8/6/26"
+            },
+            {
+              "val": 2,
+              "date": "8/3/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 2
+        },
+        {
+          "player": "Masataka Yoshida",
+          "met": 3,
+          "match": [
+            {
+              "val": 2,
+              "date": "8/7/26"
+            },
+            {
+              "val": 2,
+              "date": "8/6/26"
+            },
+            {
+              "val": 2,
+              "date": "8/4/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 2
+        },
+        {
+          "player": "Nathaniel Lowe",
+          "met": 3,
+          "match": [
+            {
+              "val": 2,
+              "date": "8/6/26"
+            },
+            {
+              "val": 2,
+              "date": "8/5/26"
+            },
+            {
+              "val": 3,
+              "date": "8/2/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 2
+        },
+        {
+          "player": "Oneil Cruz",
+          "met": 3,
+          "match": [
+            {
+              "val": 2,
+              "date": "6/4/26"
+            },
+            {
+              "val": 2,
+              "date": "6/3/26"
+            },
+            {
+              "val": 2,
+              "date": "6/2/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 2
+        }]
+  },
+  {
+    "command": "nspe mlb -hits min15 -last10",
+    "caption": "MLB · hits ≥ 15 over last 10 games",
+    "results": [{
+          "player": "Jake Mc Carthy",
+          "total": 18.0
+        },
+        {
+          "player": "Chandler Simpson",
+          "total": 18.0
+        },
+        {
+          "player": "Steven Kwan",
+          "total": 17.0
+        },
+        {
+          "player": "Spencer Torkelson",
+          "total": 17.0
+        },
+        {
+          "player": "Geraldo Perdomo",
+          "total": 16.0
+        },
+        {
+          "player": "Cam Smith",
+          "total": 16.0
+        },
+        {
+          "player": "Ceddanne Rafaela",
+          "total": 15.0
+        },
+        {
+          "player": "Jac Caglianone",
+          "total": 15.0
+        },
+        {
+          "player": "Konnor Griffin",
+          "total": 15.0
+        }]
+  },
+  {
+    "command": "nspe mlb -dub1 -last3/5",
+    "caption": "MLB · doubles ≥ 1 in 3 of last 5",
+    "results": [{
+          "player": "Gabriel Moreno",
+          "met": 4,
+          "match": [
+            {
+              "val": 1,
+              "date": "8/10/26"
+            },
+            {
+              "val": 1,
+              "date": "8/9/26"
+            },
+            {
+              "val": 1,
+              "date": "8/7/26"
+            },
+            {
+              "val": 1,
+              "date": "8/6/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 1
+        },
+        {
+          "player": "Isaac Paredes",
+          "met": 3,
+          "match": [
+            {
+              "val": 1,
+              "date": "8/10/26"
+            },
+            {
+              "val": 1,
+              "date": "8/8/26"
+            },
+            {
+              "val": 1,
+              "date": "8/7/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 1
+        },
+        {
+          "player": "Ivan Herrera",
+          "met": 3,
+          "match": [
+            {
+              "val": 2,
+              "date": "8/10/26"
+            },
+            {
+              "val": 2,
+              "date": "8/8/26"
+            },
+            {
+              "val": 1,
+              "date": "8/5/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 1
+        },
+        {
+          "player": "Andres Chaparro",
+          "met": 3,
+          "match": [
+            {
+              "val": 1,
+              "date": "8/9/26"
+            },
+            {
+              "val": 1,
+              "date": "8/8/26"
+            },
+            {
+              "val": 1,
+              "date": "8/5/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 1
+        },
+        {
+          "player": "Javier Sanoja",
+          "met": 3,
+          "match": [
+            {
+              "val": 1,
+              "date": "8/8/26"
+            },
+            {
+              "val": 1,
+              "date": "8/7/26"
+            },
+            {
+              "val": 1,
+              "date": "8/6/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 1
+        },
+        {
+          "player": "Masataka Yoshida",
+          "met": 3,
+          "match": [
+            {
+              "val": 1,
+              "date": "8/7/26"
+            },
+            {
+              "val": 1,
+              "date": "8/6/26"
+            },
+            {
+              "val": 1,
+              "date": "8/4/26"
+            }
+          ],
+          "last": 5,
+          "threshold": 1
+        }]
+  },
+  {
+    "command": "nspe nfl pass -yds300 -last2/3",
+    "caption": "NFL · pass yds ≥ 300 in 2 of last 3",
+    "results": [{
+          "player": "Jared Goff",
+          "matches": [
+            {
+              "player_id": "3046779",
+              "player_name": "JaredGoff",
+              "date": "Sun 1/4",
+              "opponent": "@CHI",
+              "result": "W19-16",
+              "pass_cmp": 27,
+              "pass_att": 42,
+              "pass_yds": 331,
+              "pass_pct": 64.3,
+              "pass_avg": 7.9,
+              "pass_td": 1,
+              "pass_int": 1,
+              "pass_lng": 30,
+              "pass_sack": 2,
+              "pass_rtg": 86.5,
+              "qbr": 66.4,
+              "rush_car": 0,
+              "rush_yds": 0,
+              "rush_avg": 0,
+              "rush_td": 0,
+              "rush_lng": 0,
+              "game_id": "401772965",
+              "seasonYear": "2026",
+              "date_iso": "2026-01-04",
+              "team": "DET",
+              "rec_yds": 0
+            },
+            {
+              "player_id": "3046779",
+              "player_name": "JaredGoff",
+              "date": "Sun 12/21",
+              "opponent": "vsPIT",
+              "result": "L29-24",
+              "pass_cmp": 34,
+              "pass_att": 54,
+              "pass_yds": 364,
+              "pass_pct": 63,
+              "pass_avg": 6.7,
+              "pass_td": 3,
+              "pass_int": 0,
+              "pass_lng": 27,
+              "pass_sack": 3,
+              "pass_rtg": 101.2,
+              "qbr": 48.8,
+              "rush_car": 1,
+              "rush_yds": -1,
+              "rush_avg": -1,
+              "rush_td": 0,
+              "rush_lng": -1,
+              "game_id": "401772806",
+              "seasonYear": "2026",
+              "date_iso": "2025-12-21",
+              "team": "DET",
+              "rec_yds": 0
+            }
+          ],
+          "met_count": 2,
+          "window": 3
+        },
+        {
+          "player": "Joe Burrow",
+          "matches": [
+            {
+              "player_id": "3915511",
+              "player_name": "JoeBurrow",
+              "date": "Sun 12/28",
+              "opponent": "vsARI",
+              "result": "W37-14",
+              "pass_cmp": 24,
+              "pass_att": 31,
+              "pass_yds": 305,
+              "pass_pct": 77.4,
+              "pass_avg": 9.8,
+              "pass_td": 2,
+              "pass_int": 0,
+              "pass_lng": 39,
+              "pass_sack": 3,
+              "pass_rtg": 129.1,
+              "qbr": 68.5,
+              "rush_car": 3,
+              "rush_yds": 2,
+              "rush_avg": 0.7,
+              "rush_td": 0,
+              "rush_lng": 2,
+              "game_id": "401772954",
+              "seasonYear": "2026",
+              "date_iso": "2025-12-28",
+              "team": "CIN",
+              "rec_yds": 0
+            },
+            {
+              "player_id": "3915511",
+              "player_name": "JoeBurrow",
+              "date": "Sun 12/21",
+              "opponent": "@MIA",
+              "result": "W45-21",
+              "pass_cmp": 25,
+              "pass_att": 32,
+              "pass_yds": 309,
+              "pass_pct": 78.1,
+              "pass_avg": 9.7,
+              "pass_td": 4,
+              "pass_int": 0,
+              "pass_lng": 36,
+              "pass_sack": 2,
+              "pass_rtg": 146.5,
+              "qbr": 87.1,
+              "rush_car": 2,
+              "rush_yds": 6,
+              "rush_avg": 3,
+              "rush_td": 0,
+              "rush_lng": 5,
+              "game_id": "401772934",
+              "seasonYear": "2026",
+              "date_iso": "2025-12-21",
+              "team": "CIN",
+              "rec_yds": 0
+            }
+          ],
+          "met_count": 2,
+          "window": 3
+        },
+        {
+          "player": "Tyler Shough",
+          "matches": [
+            {
+              "player_id": "4360689",
+              "player_name": "TylerShough",
+              "date": "Sun 12/28",
+              "opponent": "@TEN",
+              "result": "W34-26",
+              "pass_cmp": 22,
+              "pass_att": 27,
+              "pass_yds": 333,
+              "pass_pct": 81.5,
+              "pass_avg": 12.3,
+              "pass_td": 2,
+              "pass_int": 0,
+              "pass_lng": 60,
+              "pass_sack": 2,
+              "pass_rtg": 142.7,
+              "qbr": 81.5,
+              "rush_car": 4,
+              "rush_yds": 6,
+              "rush_avg": 1.5,
+              "rush_td": 0,
+              "rush_lng": 7,
+              "game_id": "401772809",
+              "seasonYear": "2026",
+              "date_iso": "2025-12-28",
+              "team": "NO",
+              "rec_yds": 0
+            },
+            {
+              "player_id": "4360689",
+              "player_name": "TylerShough",
+              "date": "Sun 12/21",
+              "opponent": "vsNYJ",
+              "result": "W29-6",
+              "pass_cmp": 32,
+              "pass_att": 49,
+              "pass_yds": 308,
+              "pass_pct": 65.3,
+              "pass_avg": 6.3,
+              "pass_td": 1,
+              "pass_int": 0,
+              "pass_lng": 31,
+              "pass_sack": 3,
+              "pass_rtg": 89.5,
+              "qbr": 30,
+              "rush_car": 2,
+              "rush_yds": 8,
+              "rush_avg": 4,
+              "rush_td": 0,
+              "rush_lng": 4,
+              "game_id": "401772801",
+              "seasonYear": "2026",
+              "date_iso": "2025-12-21",
+              "team": "NO",
+              "rec_yds": 0
+            }
+          ],
+          "met_count": 2,
+          "window": 3
+        }]
+  },
+  {
+    "command": "nspe nfl rush -yds min1000 -season",
+    "caption": "NFL · rush yds ≥ 1000 this season",
+    "results": [{
+          "player": "James Cook Iii",
+          "team": "BUF",
+          "position": "UNK",
+          "value": 1784,
+          "games": 19
+        },
+        {
+          "player": "Derrick Henry",
+          "team": "BAL",
+          "position": "UNK",
+          "value": 1595,
+          "games": 17
+        },
+        {
+          "player": "Jonathan Taylor",
+          "team": "IND",
+          "position": "UNK",
+          "value": 1585,
+          "games": 17
+        },
+        {
+          "player": "Bijan Robinson",
+          "team": "ATL",
+          "position": "UNK",
+          "value": 1478,
+          "games": 17
+        },
+        {
+          "player": "Kyren Williams",
+          "team": "LAR",
+          "position": "UNK",
+          "value": 1435,
+          "games": 20
+        },
+        {
+          "player": "De Von Achane",
+          "team": "MIA",
+          "position": "UNK",
+          "value": 1350,
+          "games": 16
+        },
+        {
+          "player": "Christian Mccaffrey",
+          "team": "SF",
+          "position": "UNK",
+          "value": 1285,
+          "games": 19
+        },
+        {
+          "player": "Saquon Barkley",
+          "team": "PHI",
+          "position": "UNK",
+          "value": 1246,
+          "games": 17
+        },
+        {
+          "player": "Jahmyr Gibbs",
+          "team": "DET",
+          "position": "UNK",
+          "value": 1223,
+          "games": 17
+        },
+        {
+          "player": "DAndre Swift",
+          "team": "CHI",
+          "position": "UNK",
+          "value": 1217,
+          "games": 18
+        },
+        {
+          "player": "Javonte Williams",
+          "team": "DAL",
+          "position": "UNK",
+          "value": 1201,
+          "games": 16
+        },
+        {
+          "player": "Tony Pollard",
+          "team": "TEN",
+          "position": "UNK",
+          "value": 1082,
+          "games": 17
+        },
+        {
+          "player": "Breece Hall",
+          "team": "NYJ",
+          "position": "UNK",
+          "value": 1065,
+          "games": 16
+        },
+        {
+          "player": "Chase Brown",
+          "team": "CIN",
+          "position": "UNK",
+          "value": 1019,
+          "games": 17
+        },
+        {
+          "player": "Jaylen Warren",
+          "team": "PIT",
+          "position": "UNK",
+          "value": 1001,
+          "games": 17
+        }]
+  },
+  {
+    "command": "nspe nfl pass -yds min4000 -season",
+    "caption": "NFL · pass yds ≥ 4000 this season",
+    "results": [{
+          "player": "Matthew Stafford",
+          "team": "LAR",
+          "position": "UNK",
+          "value": 5643,
+          "games": 20
+        },
+        {
+          "player": "Drake Maye",
+          "team": "NE",
+          "position": "UNK",
+          "value": 5222,
+          "games": 21
+        },
+        {
+          "player": "Sam Darnold",
+          "team": "SEA",
+          "position": "UNK",
+          "value": 4720,
+          "games": 20
+        },
+        {
+          "player": "Jared Goff",
+          "team": "DET",
+          "position": "UNK",
+          "value": 4564,
+          "games": 17
+        },
+        {
+          "player": "Caleb Williams",
+          "team": "CHI",
+          "position": "UNK",
+          "value": 4560,
+          "games": 19
+        },
+        {
+          "player": "Dak Prescott",
+          "team": "DAL",
+          "position": "UNK",
+          "value": 4552,
+          "games": 17
+        },
+        {
+          "player": "Josh Allen",
+          "team": "BUF",
+          "position": "UNK",
+          "value": 4224,
+          "games": 19
+        },
+        {
+          "player": "Trevor Lawrence",
+          "team": "JAX",
+          "position": "UNK",
+          "value": 4214,
+          "games": 18
+        },
+        {
+          "player": "Bo Nix",
+          "team": "DEN",
+          "position": "UNK",
+          "value": 4210,
+          "games": 18
+        }]
+  },
+  {
+    "command": "nspe nfl long pass -yds30 -last3/5",
+    "caption": "NFL · explosive pass ≥ 30 yds in 3 of last 5",
+    "results": [{
+          "player": "Aaron Rodgers",
+          "matches": [
+            {
+              "player_name": "AaronRodgers",
+              "player_id": "8439",
+              "position": "QB",
+              "date_iso": "2026-01-05",
+              "date": "2026-01-05",
+              "opponent": "BAL",
+              "game_id": "401772960",
+              "play_type": "pass",
+              "yards": 31,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "PatFreiermuth",
+              "passer": ""
+            },
+            {
+              "player_name": "AaronRodgers",
+              "player_id": "8439",
+              "position": "QB",
+              "date_iso": "2025-12-21",
+              "date": "2025-12-21",
+              "opponent": "DET",
+              "game_id": "401772806",
+              "play_type": "pass",
+              "yards": 45,
+              "touchdown": true,
+              "quarter": 2,
+              "receiver": "KennyGainwell",
+              "passer": ""
+            },
+            {
+              "player_name": "AaronRodgers",
+              "player_id": "8439",
+              "position": "QB",
+              "date_iso": "2025-12-07",
+              "date": "2025-12-07",
+              "opponent": "BAL",
+              "game_id": "401772791",
+              "play_type": "pass",
+              "yards": 52,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "DKMetcalf",
+              "passer": ""
+            }
+          ],
+          "met_count": 3,
+          "window": 5
+        },
+        {
+          "player": "Lamar Jackson",
+          "matches": [
+            {
+              "player_name": "LamarJackson",
+              "player_id": "3916387",
+              "position": "QB",
+              "date_iso": "2026-01-05",
+              "date": "2026-01-05",
+              "opponent": "PIT",
+              "game_id": "401772960",
+              "play_type": "pass",
+              "yards": 38,
+              "touchdown": true,
+              "quarter": 1,
+              "receiver": "DevontezWalker",
+              "passer": ""
+            },
+            {
+              "player_name": "LamarJackson",
+              "player_id": "3916387",
+              "position": "QB",
+              "date_iso": "2025-12-14",
+              "date": "2025-12-14",
+              "opponent": "CIN",
+              "game_id": "401772796",
+              "play_type": "pass",
+              "yards": 32,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "DeAndreHopkins",
+              "passer": ""
+            },
+            {
+              "player_name": "LamarJackson",
+              "player_id": "3916387",
+              "position": "QB",
+              "date_iso": "2025-12-07",
+              "date": "2025-12-07",
+              "opponent": "PIT",
+              "game_id": "401772791",
+              "play_type": "pass",
+              "yards": 31,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "ZayFlowers",
+              "passer": ""
+            },
+            {
+              "player_name": "LamarJackson",
+              "player_id": "3916387",
+              "position": "QB",
+              "date_iso": "2025-11-28",
+              "date": "2025-11-28",
+              "opponent": "CIN",
+              "game_id": "401772930",
+              "play_type": "pass",
+              "yards": 30,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "IsaiahLikely",
+              "passer": ""
+            },
+            {
+              "player_name": "LamarJackson",
+              "player_id": "3916387",
+              "position": "QB",
+              "date_iso": "2025-11-23",
+              "date": "2025-11-23",
+              "opponent": "NYJ",
+              "game_id": "401772782",
+              "play_type": "pass",
+              "yards": 30,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "DevontezWalker",
+              "passer": ""
+            }
+          ],
+          "met_count": 5,
+          "window": 5
+        },
+        {
+          "player": "Jacoby Brissett",
+          "matches": [
+            {
+              "player_name": "JacobyBrissett",
+              "player_id": "2578570",
+              "position": "QB",
+              "date_iso": "2026-01-04",
+              "date": "2026-01-04",
+              "opponent": "LAR",
+              "game_id": "401772955",
+              "play_type": "pass",
+              "yards": 43,
+              "touchdown": true,
+              "quarter": 3,
+              "receiver": "MichaelWilson",
+              "passer": ""
+            },
+            {
+              "player_name": "JacobyBrissett",
+              "player_id": "2578570",
+              "position": "QB",
+              "date_iso": "2025-12-28",
+              "date": "2025-12-28",
+              "opponent": "CIN",
+              "game_id": "401772954",
+              "play_type": "pass",
+              "yards": 38,
+              "touchdown": true,
+              "quarter": 2,
+              "receiver": "MichaelWilson",
+              "passer": ""
+            },
+            {
+              "player_name": "JacobyBrissett",
+              "player_id": "2578570",
+              "position": "QB",
+              "date_iso": "2025-12-21",
+              "date": "2025-12-21",
+              "opponent": "ATL",
+              "game_id": "401772914",
+              "play_type": "pass",
+              "yards": 32,
+              "touchdown": true,
+              "quarter": 1,
+              "receiver": "MichaelWilson",
+              "passer": ""
+            }
+          ],
+          "met_count": 3,
+          "window": 5
+        },
+        {
+          "player": "Cam Ward",
+          "matches": [
+            {
+              "player_name": "CamWard",
+              "player_id": "4688380",
+              "position": "QB",
+              "date_iso": "2026-01-04",
+              "date": "2026-01-04",
+              "opponent": "JAX",
+              "game_id": "401772970",
+              "play_type": "pass",
+              "yards": 39,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "ElicAyomanor",
+              "passer": ""
+            },
+            {
+              "player_name": "CamWard",
+              "player_id": "4688380",
+              "position": "QB",
+              "date_iso": "2025-12-28",
+              "date": "2025-12-28",
+              "opponent": "NO",
+              "game_id": "401772809",
+              "play_type": "pass",
+              "yards": 38,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "ChimereDike",
+              "passer": ""
+            },
+            {
+              "player_name": "CamWard",
+              "player_id": "4688380",
+              "position": "QB",
+              "date_iso": "2025-12-21",
+              "date": "2025-12-21",
+              "opponent": "KC",
+              "game_id": "401772803",
+              "play_type": "pass",
+              "yards": 34,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "TyjaeSpears",
+              "passer": ""
+            },
+            {
+              "player_name": "CamWard",
+              "player_id": "4688380",
+              "position": "QB",
+              "date_iso": "2025-12-14",
+              "date": "2025-12-14",
+              "opponent": "SF",
+              "game_id": "401772907",
+              "play_type": "pass",
+              "yards": 34,
+              "touchdown": true,
+              "quarter": 2,
+              "receiver": "GunnarHelm",
+              "passer": ""
+            },
+            {
+              "player_name": "CamWard",
+              "player_id": "4688380",
+              "position": "QB",
+              "date_iso": "2025-12-07",
+              "date": "2025-12-07",
+              "opponent": "CLE",
+              "game_id": "401772898",
+              "play_type": "pass",
+              "yards": 44,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "ElicAyomanor",
+              "passer": ""
+            }
+          ],
+          "met_count": 5,
+          "window": 5
+        },
+        {
+          "player": "Bo Nix",
+          "matches": [
+            {
+              "player_name": "BoNix",
+              "player_id": "4426338",
+              "position": "QB",
+              "date_iso": "2026-01-04",
+              "date": "2026-01-04",
+              "opponent": "LAC",
+              "game_id": "401772956",
+              "play_type": "pass",
+              "yards": 37,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "EvanEngram",
+              "passer": ""
+            },
+            {
+              "player_name": "BoNix",
+              "player_id": "4426338",
+              "position": "QB",
+              "date_iso": "2025-12-21",
+              "date": "2025-12-21",
+              "opponent": "JAX",
+              "game_id": "401772913",
+              "play_type": "pass",
+              "yards": 33,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "EvanEngram",
+              "passer": ""
+            },
+            {
+              "player_name": "BoNix",
+              "player_id": "4426338",
+              "position": "QB",
+              "date_iso": "2025-12-14",
+              "date": "2025-12-14",
+              "opponent": "GB",
+              "game_id": "401772800",
+              "play_type": "pass",
+              "yards": 42,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "CourtlandSutton",
+              "passer": ""
+            },
+            {
+              "player_name": "BoNix",
+              "player_id": "4426338",
+              "position": "QB",
+              "date_iso": "2025-12-01",
+              "date": "2025-12-01",
+              "opponent": "WSH",
+              "game_id": "401772931",
+              "play_type": "pass",
+              "yards": 31,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "CourtlandSutton",
+              "passer": ""
+            }
+          ],
+          "met_count": 4,
+          "window": 5
+        },
+        {
+          "player": "C. J. Stroud",
+          "matches": [
+            {
+              "player_name": "C.J.Stroud",
+              "player_id": "4432577",
+              "position": "QB",
+              "date_iso": "2026-01-04",
+              "date": "2026-01-04",
+              "opponent": "IND",
+              "game_id": "401772962",
+              "play_type": "pass",
+              "yards": 32,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "DaltonSchultz",
+              "passer": ""
+            },
+            {
+              "player_name": "C.J.Stroud",
+              "player_id": "4432577",
+              "position": "QB",
+              "date_iso": "2025-12-27",
+              "date": "2025-12-27",
+              "opponent": "LAC",
+              "game_id": "401772951",
+              "play_type": "pass",
+              "yards": 75,
+              "touchdown": true,
+              "quarter": 1,
+              "receiver": "JaydenHiggins",
+              "passer": ""
+            },
+            {
+              "player_name": "C.J.Stroud",
+              "player_id": "4432577",
+              "position": "QB",
+              "date_iso": "2025-12-14",
+              "date": "2025-12-14",
+              "opponent": "ARI",
+              "game_id": "401772903",
+              "play_type": "pass",
+              "yards": 57,
+              "touchdown": true,
+              "quarter": 1,
+              "receiver": "NicoCollins",
+              "passer": ""
+            },
+            {
+              "player_name": "C.J.Stroud",
+              "player_id": "4432577",
+              "position": "QB",
+              "date_iso": "2025-12-08",
+              "date": "2025-12-08",
+              "opponent": "KC",
+              "game_id": "401772932",
+              "play_type": "pass",
+              "yards": 46,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "NicoCollins",
+              "passer": ""
+            }
+          ],
+          "met_count": 4,
+          "window": 5
+        },
+        {
+          "player": "Drake Maye",
+          "matches": [
+            {
+              "player_name": "DrakeMaye",
+              "player_id": "4431452",
+              "position": "QB",
+              "date_iso": "2026-01-04",
+              "date": "2026-01-04",
+              "opponent": "MIA",
+              "game_id": "401772958",
+              "play_type": "pass",
+              "yards": 35,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "EftonChismIII",
+              "passer": ""
+            },
+            {
+              "player_name": "DrakeMaye",
+              "player_id": "4431452",
+              "position": "QB",
+              "date_iso": "2025-12-28",
+              "date": "2025-12-28",
+              "opponent": "NYJ",
+              "game_id": "401772808",
+              "play_type": "pass",
+              "yards": 30,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "EftonChismIII",
+              "passer": ""
+            },
+            {
+              "player_name": "DrakeMaye",
+              "player_id": "4431452",
+              "position": "QB",
+              "date_iso": "2025-12-22",
+              "date": "2025-12-22",
+              "opponent": "BAL",
+              "game_id": "401772804",
+              "play_type": "pass",
+              "yards": 33,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "StefonDiggs",
+              "passer": ""
+            },
+            {
+              "player_name": "DrakeMaye",
+              "player_id": "4431452",
+              "position": "QB",
+              "date_iso": "2025-12-14",
+              "date": "2025-12-14",
+              "opponent": "BUF",
+              "game_id": "401772795",
+              "play_type": "pass",
+              "yards": 30,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "KayshonBoutte",
+              "passer": ""
+            },
+            {
+              "player_name": "DrakeMaye",
+              "player_id": "4431452",
+              "position": "QB",
+              "date_iso": "2025-12-02",
+              "date": "2025-12-02",
+              "opponent": "NYG",
+              "game_id": "401772821",
+              "play_type": "pass",
+              "yards": 36,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "HunterHenry",
+              "passer": ""
+            }
+          ],
+          "met_count": 5,
+          "window": 5
+        },
+        {
+          "player": "Kirk Cousins",
+          "matches": [
+            {
+              "player_name": "KirkCousins",
+              "player_id": "14880",
+              "position": "QB",
+              "date_iso": "2026-01-04",
+              "date": "2026-01-04",
+              "opponent": "NO",
+              "game_id": "401772966",
+              "play_type": "pass",
+              "yards": 37,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "DrakeLondon",
+              "passer": ""
+            },
+            {
+              "player_name": "KirkCousins",
+              "player_id": "14880",
+              "position": "QB",
+              "date_iso": "2025-12-21",
+              "date": "2025-12-21",
+              "opponent": "ARI",
+              "game_id": "401772914",
+              "play_type": "pass",
+              "yards": 41,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "BijanRobinson",
+              "passer": ""
+            },
+            {
+              "player_name": "KirkCousins",
+              "player_id": "14880",
+              "position": "QB",
+              "date_iso": "2025-12-12",
+              "date": "2025-12-12",
+              "opponent": "TB",
+              "game_id": "401772948",
+              "play_type": "pass",
+              "yards": 36,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "KylePittsSr.",
+              "passer": ""
+            },
+            {
+              "player_name": "KirkCousins",
+              "player_id": "14880",
+              "position": "QB",
+              "date_iso": "2025-12-07",
+              "date": "2025-12-07",
+              "opponent": "SEA",
+              "game_id": "401772900",
+              "play_type": "pass",
+              "yards": 30,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "KylePittsSr.",
+              "passer": ""
+            }
+          ],
+          "met_count": 4,
+          "window": 5
+        },
+        {
+          "player": "Jared Goff",
+          "matches": [
+            {
+              "player_name": "JaredGoff",
+              "player_id": "3046779",
+              "position": "QB",
+              "date_iso": "2026-01-04",
+              "date": "2026-01-04",
+              "opponent": "CHI",
+              "game_id": "401772965",
+              "play_type": "pass",
+              "yards": 30,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "Amon-RaSt.Brown",
+              "passer": ""
+            },
+            {
+              "player_name": "JaredGoff",
+              "player_id": "3046779",
+              "position": "QB",
+              "date_iso": "2025-12-14",
+              "date": "2025-12-14",
+              "opponent": "LAR",
+              "game_id": "401772909",
+              "play_type": "pass",
+              "yards": 52,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "Amon-RaSt.Brown",
+              "passer": ""
+            },
+            {
+              "player_name": "JaredGoff",
+              "player_id": "3046779",
+              "position": "QB",
+              "date_iso": "2025-12-05",
+              "date": "2025-12-05",
+              "opponent": "DAL",
+              "game_id": "401772947",
+              "play_type": "pass",
+              "yards": 37,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "Amon-RaSt.Brown",
+              "passer": ""
+            }
+          ],
+          "met_count": 3,
+          "window": 5
+        },
+        {
+          "player": "Tyler Shough",
+          "matches": [
+            {
+              "player_name": "TylerShough",
+              "player_id": "4360689",
+              "position": "QB",
+              "date_iso": "2026-01-04",
+              "date": "2026-01-04",
+              "opponent": "ATL",
+              "game_id": "401772966",
+              "play_type": "pass",
+              "yards": 59,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "SamoriToure",
+              "passer": ""
+            },
+            {
+              "player_name": "TylerShough",
+              "player_id": "4360689",
+              "position": "QB",
+              "date_iso": "2025-12-28",
+              "date": "2025-12-28",
+              "opponent": "TEN",
+              "game_id": "401772809",
+              "play_type": "pass",
+              "yards": 36,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "KevinAustinJr.",
+              "passer": ""
+            },
+            {
+              "player_name": "TylerShough",
+              "player_id": "4360689",
+              "position": "QB",
+              "date_iso": "2025-12-21",
+              "date": "2025-12-21",
+              "opponent": "NYJ",
+              "game_id": "401772801",
+              "play_type": "pass",
+              "yards": 31,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "JuwanJohnson",
+              "passer": ""
+            },
+            {
+              "player_name": "TylerShough",
+              "player_id": "4360689",
+              "position": "QB",
+              "date_iso": "2025-11-30",
+              "date": "2025-11-30",
+              "opponent": "MIA",
+              "game_id": "401772892",
+              "play_type": "pass",
+              "yards": 38,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "ChrisOlave",
+              "passer": ""
+            }
+          ],
+          "met_count": 4,
+          "window": 5
+        },
+        {
+          "player": "Bryce Young",
+          "matches": [
+            {
+              "player_name": "BryceYoung",
+              "player_id": "4685720",
+              "position": "QB",
+              "date_iso": "2026-01-03",
+              "date": "2026-01-03",
+              "opponent": "TB",
+              "game_id": "401772969",
+              "play_type": "pass",
+              "yards": 40,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "TetairoaMcMillan",
+              "passer": ""
+            },
+            {
+              "player_name": "BryceYoung",
+              "player_id": "4685720",
+              "position": "QB",
+              "date_iso": "2025-12-21",
+              "date": "2025-12-21",
+              "opponent": "TB",
+              "game_id": "401772912",
+              "play_type": "pass",
+              "yards": 34,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "JalenCoker",
+              "passer": ""
+            },
+            {
+              "player_name": "BryceYoung",
+              "player_id": "4685720",
+              "position": "QB",
+              "date_iso": "2025-12-14",
+              "date": "2025-12-14",
+              "opponent": "NO",
+              "game_id": "401772908",
+              "play_type": "pass",
+              "yards": 34,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "XavierLegette",
+              "passer": ""
+            },
+            {
+              "player_name": "BryceYoung",
+              "player_id": "4685720",
+              "position": "QB",
+              "date_iso": "2025-11-30",
+              "date": "2025-11-30",
+              "opponent": "LAR",
+              "game_id": "401772894",
+              "play_type": "pass",
+              "yards": 35,
+              "touchdown": true,
+              "quarter": 1,
+              "receiver": "ChubaHubbard",
+              "passer": ""
+            }
+          ],
+          "met_count": 4,
+          "window": 5
+        },
+        {
+          "player": "Matthew Stafford",
+          "matches": [
+            {
+              "player_name": "MatthewStafford",
+              "player_id": "12483",
+              "position": "QB",
+              "date_iso": "2025-12-30",
+              "date": "2025-12-30",
+              "opponent": "ATL",
+              "game_id": "401772825",
+              "play_type": "pass",
+              "yards": 36,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "XavierSmith",
+              "passer": ""
+            },
+            {
+              "player_name": "MatthewStafford",
+              "player_id": "12483",
+              "position": "QB",
+              "date_iso": "2025-12-19",
+              "date": "2025-12-19",
+              "opponent": "SEA",
+              "game_id": "401772949",
+              "play_type": "pass",
+              "yards": 54,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "PukaNacua",
+              "passer": ""
+            },
+            {
+              "player_name": "MatthewStafford",
+              "player_id": "12483",
+              "position": "QB",
+              "date_iso": "2025-12-14",
+              "date": "2025-12-14",
+              "opponent": "DET",
+              "game_id": "401772909",
+              "play_type": "pass",
+              "yards": 58,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "ColbyParkinson",
+              "passer": ""
+            },
+            {
+              "player_name": "MatthewStafford",
+              "player_id": "12483",
+              "position": "QB",
+              "date_iso": "2025-12-07",
+              "date": "2025-12-07",
+              "opponent": "ARI",
+              "game_id": "401772901",
+              "play_type": "pass",
+              "yards": 32,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "PukaNacua",
+              "passer": ""
+            }
+          ],
+          "met_count": 4,
+          "window": 5
+        },
+        {
+          "player": "Brock Purdy",
+          "matches": [
+            {
+              "player_name": "BrockPurdy",
+              "player_id": "4361741",
+              "position": "QB",
+              "date_iso": "2025-12-29",
+              "date": "2025-12-29",
+              "opponent": "CHI",
+              "game_id": "401772935",
+              "play_type": "pass",
+              "yards": 30,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "RickyPearsall",
+              "passer": ""
+            },
+            {
+              "player_name": "BrockPurdy",
+              "player_id": "4361741",
+              "position": "QB",
+              "date_iso": "2025-12-14",
+              "date": "2025-12-14",
+              "opponent": "TEN",
+              "game_id": "401772907",
+              "play_type": "pass",
+              "yards": 30,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "DemarcusRobinson",
+              "passer": ""
+            },
+            {
+              "player_name": "BrockPurdy",
+              "player_id": "4361741",
+              "position": "QB",
+              "date_iso": "2025-11-30",
+              "date": "2025-11-30",
+              "opponent": "CLE",
+              "game_id": "401772785",
+              "play_type": "pass",
+              "yards": 33,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "GeorgeKittle",
+              "passer": ""
+            }
+          ],
+          "met_count": 3,
+          "window": 5
+        },
+        {
+          "player": "Caleb Williams",
+          "matches": [
+            {
+              "player_name": "CalebWilliams",
+              "player_id": "4431611",
+              "position": "QB",
+              "date_iso": "2025-12-29",
+              "date": "2025-12-29",
+              "opponent": "SF",
+              "game_id": "401772935",
+              "play_type": "pass",
+              "yards": 35,
+              "touchdown": true,
+              "quarter": 1,
+              "receiver": "LutherBurdenIII",
+              "passer": ""
+            },
+            {
+              "player_name": "CalebWilliams",
+              "player_id": "4431611",
+              "position": "QB",
+              "date_iso": "2025-12-21",
+              "date": "2025-12-21",
+              "opponent": "GB",
+              "game_id": "401772613",
+              "play_type": "pass",
+              "yards": 34,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "KyleMonangai",
+              "passer": ""
+            },
+            {
+              "player_name": "CalebWilliams",
+              "player_id": "4431611",
+              "position": "QB",
+              "date_iso": "2025-12-14",
+              "date": "2025-12-14",
+              "opponent": "CLE",
+              "game_id": "401772904",
+              "play_type": "pass",
+              "yards": 40,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "LutherBurdenIII",
+              "passer": ""
+            }
+          ],
+          "met_count": 3,
+          "window": 5
+        },
+        {
+          "player": "Josh Allen",
+          "matches": [
+            {
+              "player_name": "JoshAllen",
+              "player_id": "3918298",
+              "position": "QB",
+              "date_iso": "2025-12-28",
+              "date": "2025-12-28",
+              "opponent": "PHI",
+              "game_id": "401772917",
+              "play_type": "pass",
+              "yards": 50,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "BrandinCooks",
+              "passer": ""
+            },
+            {
+              "player_name": "JoshAllen",
+              "player_id": "3918298",
+              "position": "QB",
+              "date_iso": "2025-12-14",
+              "date": "2025-12-14",
+              "opponent": "NE",
+              "game_id": "401772795",
+              "play_type": "pass",
+              "yards": 37,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "KhalilShakir",
+              "passer": ""
+            },
+            {
+              "player_name": "JoshAllen",
+              "player_id": "3918298",
+              "position": "QB",
+              "date_iso": "2025-12-07",
+              "date": "2025-12-07",
+              "opponent": "CIN",
+              "game_id": "401772902",
+              "play_type": "pass",
+              "yards": 32,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "DawsonKnox",
+              "passer": ""
+            },
+            {
+              "player_name": "JoshAllen",
+              "player_id": "3918298",
+              "position": "QB",
+              "date_iso": "2025-11-21",
+              "date": "2025-11-21",
+              "opponent": "HOU",
+              "game_id": "401772946",
+              "play_type": "pass",
+              "yards": 44,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "KhalilShakir",
+              "passer": ""
+            }
+          ],
+          "met_count": 4,
+          "window": 5
+        },
+        {
+          "player": "Joe Burrow",
+          "matches": [
+            {
+              "player_name": "JoeBurrow",
+              "player_id": "3915511",
+              "position": "QB",
+              "date_iso": "2025-12-28",
+              "date": "2025-12-28",
+              "opponent": "ARI",
+              "game_id": "401772954",
+              "play_type": "pass",
+              "yards": 39,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "TeeHiggins",
+              "passer": ""
+            },
+            {
+              "player_name": "JoeBurrow",
+              "player_id": "3915511",
+              "position": "QB",
+              "date_iso": "2025-12-21",
+              "date": "2025-12-21",
+              "opponent": "MIA",
+              "game_id": "401772934",
+              "play_type": "pass",
+              "yards": 35,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "TeeHiggins",
+              "passer": ""
+            },
+            {
+              "player_name": "JoeBurrow",
+              "player_id": "3915511",
+              "position": "QB",
+              "date_iso": "2025-12-14",
+              "date": "2025-12-14",
+              "opponent": "BAL",
+              "game_id": "401772796",
+              "play_type": "pass",
+              "yards": 34,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "Ja'MarrChase",
+              "passer": ""
+            },
+            {
+              "player_name": "JoeBurrow",
+              "player_id": "3915511",
+              "position": "QB",
+              "date_iso": "2025-12-07",
+              "date": "2025-12-07",
+              "opponent": "BUF",
+              "game_id": "401772902",
+              "play_type": "pass",
+              "yards": 37,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "MikeGesicki",
+              "passer": ""
+            }
+          ],
+          "met_count": 4,
+          "window": 5
+        },
+        {
+          "player": "Shedeur Sanders",
+          "matches": [
+            {
+              "player_name": "ShedeurSanders",
+              "player_id": "4432762",
+              "position": "QB",
+              "date_iso": "2025-12-28",
+              "date": "2025-12-28",
+              "opponent": "PIT",
+              "game_id": "401772807",
+              "play_type": "pass",
+              "yards": 42,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "CedricTillman",
+              "passer": ""
+            },
+            {
+              "player_name": "ShedeurSanders",
+              "player_id": "4432762",
+              "position": "QB",
+              "date_iso": "2025-12-14",
+              "date": "2025-12-14",
+              "opponent": "CHI",
+              "game_id": "401772904",
+              "play_type": "pass",
+              "yards": 42,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "IsaiahBond",
+              "passer": ""
+            },
+            {
+              "player_name": "ShedeurSanders",
+              "player_id": "4432762",
+              "position": "QB",
+              "date_iso": "2025-12-07",
+              "date": "2025-12-07",
+              "opponent": "TEN",
+              "game_id": "401772898",
+              "play_type": "pass",
+              "yards": 58,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "QuinshonJudkins",
+              "passer": ""
+            }
+          ],
+          "met_count": 3,
+          "window": 5
+        },
+        {
+          "player": "Baker Mayfield",
+          "matches": [
+            {
+              "player_name": "BakerMayfield",
+              "player_id": "3052587",
+              "position": "QB",
+              "date_iso": "2025-12-28",
+              "date": "2025-12-28",
+              "opponent": "MIA",
+              "game_id": "401772916",
+              "play_type": "pass",
+              "yards": 33,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "JalenMcMillan",
+              "passer": ""
+            },
+            {
+              "player_name": "BakerMayfield",
+              "player_id": "3052587",
+              "position": "QB",
+              "date_iso": "2025-12-21",
+              "date": "2025-12-21",
+              "opponent": "CAR",
+              "game_id": "401772912",
+              "play_type": "pass",
+              "yards": 40,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "EmekaEgbuka",
+              "passer": ""
+            },
+            {
+              "player_name": "BakerMayfield",
+              "player_id": "3052587",
+              "position": "QB",
+              "date_iso": "2025-12-12",
+              "date": "2025-12-12",
+              "opponent": "ATL",
+              "game_id": "401772948",
+              "play_type": "pass",
+              "yards": 33,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "MikeEvans",
+              "passer": ""
+            }
+          ],
+          "met_count": 3,
+          "window": 5
+        },
+        {
+          "player": "Trevor Lawrence",
+          "matches": [
+            {
+              "player_name": "TrevorLawrence",
+              "player_id": "4360310",
+              "position": "QB",
+              "date_iso": "2025-12-28",
+              "date": "2025-12-28",
+              "opponent": "IND",
+              "game_id": "401772915",
+              "play_type": "pass",
+              "yards": 37,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "ParkerWashington",
+              "passer": ""
+            },
+            {
+              "player_name": "TrevorLawrence",
+              "player_id": "4360310",
+              "position": "QB",
+              "date_iso": "2025-12-21",
+              "date": "2025-12-21",
+              "opponent": "DEN",
+              "game_id": "401772913",
+              "play_type": "pass",
+              "yards": 63,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "ParkerWashington",
+              "passer": ""
+            },
+            {
+              "player_name": "TrevorLawrence",
+              "player_id": "4360310",
+              "position": "QB",
+              "date_iso": "2025-12-14",
+              "date": "2025-12-14",
+              "opponent": "NYJ",
+              "game_id": "401772797",
+              "play_type": "pass",
+              "yards": 33,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "ParkerWashington",
+              "passer": ""
+            },
+            {
+              "player_name": "TrevorLawrence",
+              "player_id": "4360310",
+              "position": "QB",
+              "date_iso": "2025-12-07",
+              "date": "2025-12-07",
+              "opponent": "IND",
+              "game_id": "401772793",
+              "play_type": "pass",
+              "yards": 39,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "BrianThomasJr.",
+              "passer": ""
+            }
+          ],
+          "met_count": 4,
+          "window": 5
+        },
+        {
+          "player": "Jaxson Dart",
+          "matches": [
+            {
+              "player_name": "JaxsonDart",
+              "player_id": "4689114",
+              "position": "QB",
+              "date_iso": "2025-12-28",
+              "date": "2025-12-28",
+              "opponent": "LV",
+              "game_id": "401772950",
+              "play_type": "pass",
+              "yards": 36,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "Wan'DaleRobinson",
+              "passer": ""
+            },
+            {
+              "player_name": "JaxsonDart",
+              "player_id": "4689114",
+              "position": "QB",
+              "date_iso": "2025-12-14",
+              "date": "2025-12-14",
+              "opponent": "WSH",
+              "game_id": "401772905",
+              "play_type": "pass",
+              "yards": 55,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "JalinHyatt",
+              "passer": ""
+            },
+            {
+              "player_name": "JaxsonDart",
+              "player_id": "4689114",
+              "position": "QB",
+              "date_iso": "2025-12-02",
+              "date": "2025-12-02",
+              "opponent": "NE",
+              "game_id": "401772821",
+              "play_type": "pass",
+              "yards": 30,
+              "touchdown": true,
+              "quarter": 2,
+              "receiver": "DariusSlayton",
+              "passer": ""
+            },
+            {
+              "player_name": "JaxsonDart",
+              "player_id": "4689114",
+              "position": "QB",
+              "date_iso": "2025-11-09",
+              "date": "2025-11-09",
+              "opponent": "CHI",
+              "game_id": "401772875",
+              "play_type": "pass",
+              "yards": 31,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "DariusSlayton",
+              "passer": ""
+            }
+          ],
+          "met_count": 4,
+          "window": 5
+        },
+        {
+          "player": "Geno Smith",
+          "matches": [
+            {
+              "player_name": "GenoSmith",
+              "player_id": "15864",
+              "position": "QB",
+              "date_iso": "2025-12-28",
+              "date": "2025-12-28",
+              "opponent": "NYG",
+              "game_id": "401772950",
+              "play_type": "pass",
+              "yards": 47,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "MichaelMayer",
+              "passer": ""
+            },
+            {
+              "player_name": "GenoSmith",
+              "player_id": "15864",
+              "position": "QB",
+              "date_iso": "2025-12-21",
+              "date": "2025-12-21",
+              "opponent": "HOU",
+              "game_id": "401772805",
+              "play_type": "pass",
+              "yards": 37,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "JackBech",
+              "passer": ""
+            },
+            {
+              "player_name": "GenoSmith",
+              "player_id": "15864",
+              "position": "QB",
+              "date_iso": "2025-11-23",
+              "date": "2025-11-23",
+              "opponent": "CLE",
+              "game_id": "401772784",
+              "play_type": "pass",
+              "yards": 33,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "TylerLockett",
+              "passer": ""
+            }
+          ],
+          "met_count": 3,
+          "window": 5
+        },
+        {
+          "player": "Justin Herbert",
+          "matches": [
+            {
+              "player_name": "JustinHerbert",
+              "player_id": "4038941",
+              "position": "QB",
+              "date_iso": "2025-12-27",
+              "date": "2025-12-27",
+              "opponent": "HOU",
+              "game_id": "401772951",
+              "play_type": "pass",
+              "yards": 60,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "QuentinJohnston",
+              "passer": ""
+            },
+            {
+              "player_name": "JustinHerbert",
+              "player_id": "4038941",
+              "position": "QB",
+              "date_iso": "2025-12-21",
+              "date": "2025-12-21",
+              "opponent": "DAL",
+              "game_id": "401772910",
+              "play_type": "pass",
+              "yards": 50,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "QuentinJohnston",
+              "passer": ""
+            },
+            {
+              "player_name": "JustinHerbert",
+              "player_id": "4038941",
+              "position": "QB",
+              "date_iso": "2025-12-14",
+              "date": "2025-12-14",
+              "opponent": "KC",
+              "game_id": "401772798",
+              "play_type": "pass",
+              "yards": 37,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "Tre'Harris",
+              "passer": ""
+            },
+            {
+              "player_name": "JustinHerbert",
+              "player_id": "4038941",
+              "position": "QB",
+              "date_iso": "2025-12-09",
+              "date": "2025-12-09",
+              "opponent": "PHI",
+              "game_id": "401772822",
+              "play_type": "pass",
+              "yards": 60,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "KimaniVidal",
+              "passer": ""
+            }
+          ],
+          "met_count": 4,
+          "window": 5
+        },
+        {
+          "player": "Dak Prescott",
+          "matches": [
+            {
+              "player_name": "DakPrescott",
+              "player_id": "2577417",
+              "position": "QB",
+              "date_iso": "2025-12-25",
+              "date": "2025-12-25",
+              "opponent": "WSH",
+              "game_id": "401772710",
+              "play_type": "pass",
+              "yards": 86,
+              "touchdown": true,
+              "quarter": 2,
+              "receiver": "KaVontaeTurpin",
+              "passer": ""
+            },
+            {
+              "player_name": "DakPrescott",
+              "player_id": "2577417",
+              "position": "QB",
+              "date_iso": "2025-12-21",
+              "date": "2025-12-21",
+              "opponent": "LAC",
+              "game_id": "401772910",
+              "play_type": "pass",
+              "yards": 38,
+              "touchdown": true,
+              "quarter": 2,
+              "receiver": "GeorgePickens",
+              "passer": ""
+            },
+            {
+              "player_name": "DakPrescott",
+              "player_id": "2577417",
+              "position": "QB",
+              "date_iso": "2025-12-15",
+              "date": "2025-12-15",
+              "opponent": "MIN",
+              "game_id": "401772933",
+              "play_type": "pass",
+              "yards": 30,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "CeeDeeLamb",
+              "passer": ""
+            },
+            {
+              "player_name": "DakPrescott",
+              "player_id": "2577417",
+              "position": "QB",
+              "date_iso": "2025-12-05",
+              "date": "2025-12-05",
+              "opponent": "DET",
+              "game_id": "401772947",
+              "play_type": "pass",
+              "yards": 37,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "CeeDeeLamb",
+              "passer": ""
+            }
+          ],
+          "met_count": 4,
+          "window": 5
+        },
+        {
+          "player": "Marcus Mariota",
+          "matches": [
+            {
+              "player_name": "MarcusMariota",
+              "player_id": "2576980",
+              "position": "QB",
+              "date_iso": "2025-12-20",
+              "date": "2025-12-20",
+              "opponent": "PHI",
+              "game_id": "401772612",
+              "play_type": "pass",
+              "yards": 40,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "TerryMcLaurin",
+              "passer": ""
+            },
+            {
+              "player_name": "MarcusMariota",
+              "player_id": "2576980",
+              "position": "QB",
+              "date_iso": "2025-12-14",
+              "date": "2025-12-14",
+              "opponent": "NYG",
+              "game_id": "401772905",
+              "play_type": "pass",
+              "yards": 51,
+              "touchdown": true,
+              "quarter": 4,
+              "receiver": "TerryMcLaurin",
+              "passer": ""
+            },
+            {
+              "player_name": "MarcusMariota",
+              "player_id": "2576980",
+              "position": "QB",
+              "date_iso": "2025-12-01",
+              "date": "2025-12-01",
+              "opponent": "DEN",
+              "game_id": "401772931",
+              "play_type": "pass",
+              "yards": 38,
+              "touchdown": false,
+              "quarter": 5,
+              "receiver": "DeeboSamuel",
+              "passer": ""
+            },
+            {
+              "player_name": "MarcusMariota",
+              "player_id": "2576980",
+              "position": "QB",
+              "date_iso": "2025-11-09",
+              "date": "2025-11-09",
+              "opponent": "DET",
+              "game_id": "401772878",
+              "play_type": "pass",
+              "yards": 41,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "JaylinLane",
+              "passer": ""
+            }
+          ],
+          "met_count": 4,
+          "window": 5
+        },
+        {
+          "player": "Sam Darnold",
+          "matches": [
+            {
+              "player_name": "SamDarnold",
+              "player_id": "3912547",
+              "position": "QB",
+              "date_iso": "2025-12-19",
+              "date": "2025-12-19",
+              "opponent": "LAR",
+              "game_id": "401772949",
+              "play_type": "pass",
+              "yards": 46,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "KennethWalkerIII",
+              "passer": ""
+            },
+            {
+              "player_name": "SamDarnold",
+              "player_id": "3912547",
+              "position": "QB",
+              "date_iso": "2025-12-14",
+              "date": "2025-12-14",
+              "opponent": "IND",
+              "game_id": "401772799",
+              "play_type": "pass",
+              "yards": 39,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "JaxonSmith-Njigba",
+              "passer": ""
+            },
+            {
+              "player_name": "SamDarnold",
+              "player_id": "3912547",
+              "position": "QB",
+              "date_iso": "2025-12-07",
+              "date": "2025-12-07",
+              "opponent": "ATL",
+              "game_id": "401772900",
+              "play_type": "pass",
+              "yards": 30,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "JaxonSmith-Njigba",
+              "passer": ""
+            }
+          ],
+          "met_count": 3,
+          "window": 5
+        },
+        {
+          "player": "Patrick Mahomes",
+          "matches": [
+            {
+              "player_name": "PatrickMahomes",
+              "player_id": "3139477",
+              "position": "QB",
+              "date_iso": "2025-12-08",
+              "date": "2025-12-08",
+              "opponent": "HOU",
+              "game_id": "401772932",
+              "play_type": "pass",
+              "yards": 35,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "HollywoodBrown",
+              "passer": ""
+            },
+            {
+              "player_name": "PatrickMahomes",
+              "player_id": "3139477",
+              "position": "QB",
+              "date_iso": "2025-11-27",
+              "date": "2025-11-27",
+              "opponent": "DAL",
+              "game_id": "401772694",
+              "play_type": "pass",
+              "yards": 42,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "XavierWorthy",
+              "passer": ""
+            },
+            {
+              "player_name": "PatrickMahomes",
+              "player_id": "3139477",
+              "position": "QB",
+              "date_iso": "2025-11-23",
+              "date": "2025-11-23",
+              "opponent": "IND",
+              "game_id": "401772779",
+              "play_type": "pass",
+              "yards": 42,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "RasheeRice",
+              "passer": ""
+            },
+            {
+              "player_name": "PatrickMahomes",
+              "player_id": "3139477",
+              "position": "QB",
+              "date_iso": "2025-11-16",
+              "date": "2025-11-16",
+              "opponent": "DEN",
+              "game_id": "401772778",
+              "play_type": "pass",
+              "yards": 61,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "TyquanThornton",
+              "passer": ""
+            }
+          ],
+          "met_count": 4,
+          "window": 5
+        },
+        {
+          "player": "Jayden Daniels",
+          "matches": [
+            {
+              "player_name": "JaydenDaniels",
+              "player_id": "4426348",
+              "position": "QB",
+              "date_iso": "2025-12-07",
+              "date": "2025-12-07",
+              "opponent": "MIN",
+              "game_id": "401772899",
+              "play_type": "pass",
+              "yards": 40,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "TerryMcLaurin",
+              "passer": ""
+            },
+            {
+              "player_name": "JaydenDaniels",
+              "player_id": "4426348",
+              "position": "QB",
+              "date_iso": "2025-10-19",
+              "date": "2025-10-19",
+              "opponent": "DAL",
+              "game_id": "401772864",
+              "play_type": "pass",
+              "yards": 44,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "ChrisMoore",
+              "passer": ""
+            },
+            {
+              "player_name": "JaydenDaniels",
+              "player_id": "4426348",
+              "position": "QB",
+              "date_iso": "2025-10-05",
+              "date": "2025-10-05",
+              "opponent": "LAC",
+              "game_id": "401772853",
+              "play_type": "pass",
+              "yards": 50,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "LukeMcCaffrey",
+              "passer": ""
+            }
+          ],
+          "met_count": 3,
+          "window": 5
+        },
+        {
+          "player": "Jordan Love",
+          "matches": [
+            {
+              "player_name": "JordanLove",
+              "player_id": "4036378",
+              "position": "QB",
+              "date_iso": "2025-12-07",
+              "date": "2025-12-07",
+              "opponent": "CHI",
+              "game_id": "401772897",
+              "play_type": "pass",
+              "yards": 45,
+              "touchdown": true,
+              "quarter": 2,
+              "receiver": "BoMelton",
+              "passer": ""
+            },
+            {
+              "player_name": "JordanLove",
+              "player_id": "4036378",
+              "position": "QB",
+              "date_iso": "2025-11-27",
+              "date": "2025-11-27",
+              "opponent": "DET",
+              "game_id": "401772891",
+              "play_type": "pass",
+              "yards": 51,
+              "touchdown": true,
+              "quarter": 3,
+              "receiver": "ChristianWatson",
+              "passer": ""
+            },
+            {
+              "player_name": "JordanLove",
+              "player_id": "4036378",
+              "position": "QB",
+              "date_iso": "2025-11-16",
+              "date": "2025-11-16",
+              "opponent": "NYG",
+              "game_id": "401772883",
+              "play_type": "pass",
+              "yards": 33,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "SavionWilliams",
+              "passer": ""
+            }
+          ],
+          "met_count": 3,
+          "window": 5
+        },
+        {
+          "player": "Daniel Jones",
+          "matches": [
+            {
+              "player_name": "DanielJones",
+              "player_id": "3917792",
+              "position": "QB",
+              "date_iso": "2025-11-30",
+              "date": "2025-11-30",
+              "opponent": "HOU",
+              "game_id": "401772787",
+              "play_type": "pass",
+              "yards": 33,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "JonathanTaylor",
+              "passer": ""
+            },
+            {
+              "player_name": "DanielJones",
+              "player_id": "3917792",
+              "position": "QB",
+              "date_iso": "2025-11-23",
+              "date": "2025-11-23",
+              "opponent": "KC",
+              "game_id": "401772779",
+              "play_type": "pass",
+              "yards": 48,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "AshtonDulin",
+              "passer": ""
+            },
+            {
+              "player_name": "DanielJones",
+              "player_id": "3917792",
+              "position": "QB",
+              "date_iso": "2025-11-09",
+              "date": "2025-11-09",
+              "opponent": "ATL",
+              "game_id": "401772636",
+              "play_type": "pass",
+              "yards": 37,
+              "touchdown": true,
+              "quarter": 1,
+              "receiver": "AlecPierce",
+              "passer": ""
+            },
+            {
+              "player_name": "DanielJones",
+              "player_id": "3917792",
+              "position": "QB",
+              "date_iso": "2025-11-02",
+              "date": "2025-11-02",
+              "opponent": "PIT",
+              "game_id": "401772766",
+              "play_type": "pass",
+              "yards": 36,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "AlecPierce",
+              "passer": ""
+            },
+            {
+              "player_name": "DanielJones",
+              "player_id": "3917792",
+              "position": "QB",
+              "date_iso": "2025-10-26",
+              "date": "2025-10-26",
+              "opponent": "TEN",
+              "game_id": "401772761",
+              "play_type": "pass",
+              "yards": 50,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "AlecPierce",
+              "passer": ""
+            }
+          ],
+          "met_count": 5,
+          "window": 5
+        },
+        {
+          "player": "Tua Tagovailoa",
+          "matches": [
+            {
+              "player_name": "TuaTagovailoa",
+              "player_id": "4241479",
+              "position": "QB",
+              "date_iso": "2025-11-30",
+              "date": "2025-11-30",
+              "opponent": "NO",
+              "game_id": "401772892",
+              "play_type": "pass",
+              "yards": 34,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "DarrenWaller",
+              "passer": ""
+            },
+            {
+              "player_name": "TuaTagovailoa",
+              "player_id": "4241479",
+              "position": "QB",
+              "date_iso": "2025-11-16",
+              "date": "2025-11-16",
+              "opponent": "WSH",
+              "game_id": "401772631",
+              "play_type": "pass",
+              "yards": 31,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "JaylenWaddle",
+              "passer": ""
+            },
+            {
+              "player_name": "TuaTagovailoa",
+              "player_id": "4241479",
+              "position": "QB",
+              "date_iso": "2025-11-09",
+              "date": "2025-11-09",
+              "opponent": "BUF",
+              "game_id": "401772771",
+              "play_type": "pass",
+              "yards": 38,
+              "touchdown": true,
+              "quarter": 2,
+              "receiver": "JaylenWaddle",
+              "passer": ""
+            }
+          ],
+          "met_count": 3,
+          "window": 5
+        },
+        {
+          "player": "Tyrod Taylor",
+          "matches": [
+            {
+              "player_name": "TyrodTaylor",
+              "player_id": "14163",
+              "position": "QB",
+              "date_iso": "2025-11-30",
+              "date": "2025-11-30",
+              "opponent": "ATL",
+              "game_id": "401772893",
+              "play_type": "pass",
+              "yards": 52,
+              "touchdown": true,
+              "quarter": 3,
+              "receiver": "AdonaiMitchell",
+              "passer": ""
+            },
+            {
+              "player_name": "TyrodTaylor",
+              "player_id": "14163",
+              "position": "QB",
+              "date_iso": "2025-11-23",
+              "date": "2025-11-23",
+              "opponent": "BAL",
+              "game_id": "401772782",
+              "play_type": "pass",
+              "yards": 40,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "BreeceHall",
+              "passer": ""
+            },
+            {
+              "player_name": "TyrodTaylor",
+              "player_id": "14163",
+              "position": "QB",
+              "date_iso": "2025-10-19",
+              "date": "2025-10-19",
+              "opponent": "CAR",
+              "game_id": "401772860",
+              "play_type": "pass",
+              "yards": 35,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "TylerJohnson",
+              "passer": ""
+            }
+          ],
+          "met_count": 3,
+          "window": 5
+        },
+        {
+          "player": "Michael Penix Jr.",
+          "matches": [
+            {
+              "player_name": "MichaelPenixJr.",
+              "player_id": "4360423",
+              "position": "QB",
+              "date_iso": "2025-11-16",
+              "date": "2025-11-16",
+              "opponent": "CAR",
+              "game_id": "401772882",
+              "play_type": "pass",
+              "yards": 30,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "DrakeLondon",
+              "passer": ""
+            },
+            {
+              "player_name": "MichaelPenixJr.",
+              "player_id": "4360423",
+              "position": "QB",
+              "date_iso": "2025-11-09",
+              "date": "2025-11-09",
+              "opponent": "IND",
+              "game_id": "401772636",
+              "play_type": "pass",
+              "yards": 30,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "DrakeLondon",
+              "passer": ""
+            },
+            {
+              "player_name": "MichaelPenixJr.",
+              "player_id": "4360423",
+              "position": "QB",
+              "date_iso": "2025-11-02",
+              "date": "2025-11-02",
+              "opponent": "NE",
+              "game_id": "401772763",
+              "play_type": "pass",
+              "yards": 40,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "DrakeLondon",
+              "passer": ""
+            },
+            {
+              "player_name": "MichaelPenixJr.",
+              "player_id": "4360423",
+              "position": "QB",
+              "date_iso": "2025-10-20",
+              "date": "2025-10-20",
+              "opponent": "SF",
+              "game_id": "401772924",
+              "play_type": "pass",
+              "yards": 38,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "DarnellMooney",
+              "passer": ""
+            },
+            {
+              "player_name": "MichaelPenixJr.",
+              "player_id": "4360423",
+              "position": "QB",
+              "date_iso": "2025-09-28",
+              "date": "2025-09-28",
+              "opponent": "WSH",
+              "game_id": "401772739",
+              "play_type": "pass",
+              "yards": 43,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "DrakeLondon",
+              "passer": ""
+            }
+          ],
+          "met_count": 5,
+          "window": 5
+        },
+        {
+          "player": "Mac Jones",
+          "matches": [
+            {
+              "player_name": "MacJones",
+              "player_id": "4241464",
+              "position": "QB",
+              "date_iso": "2025-11-02",
+              "date": "2025-11-02",
+              "opponent": "NYG",
+              "game_id": "401772767",
+              "play_type": "pass",
+              "yards": 39,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "ChristianMcCaffrey",
+              "passer": ""
+            },
+            {
+              "player_name": "MacJones",
+              "player_id": "4241464",
+              "position": "QB",
+              "date_iso": "2025-10-03",
+              "date": "2025-10-03",
+              "opponent": "LAR",
+              "game_id": "401772939",
+              "play_type": "pass",
+              "yards": 35,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "KendrickBourne",
+              "passer": ""
+            },
+            {
+              "player_name": "MacJones",
+              "player_id": "4241464",
+              "position": "QB",
+              "date_iso": "2025-09-21",
+              "date": "2025-09-21",
+              "opponent": "ARI",
+              "game_id": "401772843",
+              "play_type": "pass",
+              "yards": 34,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "RickyPearsall",
+              "passer": ""
+            }
+          ],
+          "met_count": 3,
+          "window": 5
+        },
+        {
+          "player": "Joe Flacco",
+          "matches": [
+            {
+              "player_name": "JoeFlacco",
+              "player_id": "11252",
+              "position": "QB",
+              "date_iso": "2025-11-02",
+              "date": "2025-11-02",
+              "opponent": "CHI",
+              "game_id": "401772765",
+              "play_type": "pass",
+              "yards": 36,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "Ja'MarrChase",
+              "passer": ""
+            },
+            {
+              "player_name": "JoeFlacco",
+              "player_id": "11252",
+              "position": "QB",
+              "date_iso": "2025-10-26",
+              "date": "2025-10-26",
+              "opponent": "NYJ",
+              "game_id": "401772758",
+              "play_type": "pass",
+              "yards": 44,
+              "touchdown": true,
+              "quarter": 2,
+              "receiver": "TeeHiggins",
+              "passer": ""
+            },
+            {
+              "player_name": "JoeFlacco",
+              "player_id": "11252",
+              "position": "QB",
+              "date_iso": "2025-10-17",
+              "date": "2025-10-17",
+              "opponent": "PIT",
+              "game_id": "401772941",
+              "play_type": "pass",
+              "yards": 37,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "AndreiIosivas",
+              "passer": ""
+            },
+            {
+              "player_name": "JoeFlacco",
+              "player_id": "11252",
+              "position": "QB",
+              "date_iso": "2025-09-28",
+              "date": "2025-09-28",
+              "opponent": "DET",
+              "game_id": "401772846",
+              "play_type": "pass",
+              "yards": 33,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "JerryJeudy",
+              "passer": ""
+            }
+          ],
+          "met_count": 4,
+          "window": 5
+        },
+        {
+          "player": "Carson Wentz",
+          "matches": [
+            {
+              "player_name": "CarsonWentz",
+              "player_id": "2573079",
+              "position": "QB",
+              "date_iso": "2025-10-19",
+              "date": "2025-10-19",
+              "opponent": "PHI",
+              "game_id": "401772862",
+              "play_type": "pass",
+              "yards": 34,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "JordanAddison",
+              "passer": ""
+            },
+            {
+              "player_name": "CarsonWentz",
+              "player_id": "2573079",
+              "position": "QB",
+              "date_iso": "2025-10-05",
+              "date": "2025-10-05",
+              "opponent": "CLE",
+              "game_id": "401772633",
+              "play_type": "pass",
+              "yards": 38,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "JustinJefferson",
+              "passer": ""
+            },
+            {
+              "player_name": "CarsonWentz",
+              "player_id": "2573079",
+              "position": "QB",
+              "date_iso": "2025-09-28",
+              "date": "2025-09-28",
+              "opponent": "PIT",
+              "game_id": "401772632",
+              "play_type": "pass",
+              "yards": 81,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "JordanAddison",
+              "passer": ""
+            },
+            {
+              "player_name": "CarsonWentz",
+              "player_id": "2573079",
+              "position": "QB",
+              "date_iso": "2025-09-21",
+              "date": "2025-09-21",
+              "opponent": "CIN",
+              "game_id": "401772731",
+              "play_type": "pass",
+              "yards": 36,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "JustinJefferson",
+              "passer": ""
+            }
+          ],
+          "met_count": 4,
+          "window": 5
+        },
+        {
+          "player": "Spencer Rattler",
+          "matches": [
+            {
+              "player_name": "SpencerRattler",
+              "player_id": "4426339",
+              "position": "QB",
+              "date_iso": "2025-10-19",
+              "date": "2025-10-19",
+              "opponent": "CHI",
+              "game_id": "401772861",
+              "play_type": "pass",
+              "yards": 38,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "MasonTipton",
+              "passer": ""
+            },
+            {
+              "player_name": "SpencerRattler",
+              "player_id": "4426339",
+              "position": "QB",
+              "date_iso": "2025-10-12",
+              "date": "2025-10-12",
+              "opponent": "NE",
+              "game_id": "401772751",
+              "play_type": "pass",
+              "yards": 53,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "ChrisOlave",
+              "passer": ""
+            },
+            {
+              "player_name": "SpencerRattler",
+              "player_id": "4426339",
+              "position": "QB",
+              "date_iso": "2025-10-05",
+              "date": "2025-10-05",
+              "opponent": "NYG",
+              "game_id": "401772744",
+              "play_type": "pass",
+              "yards": 87,
+              "touchdown": true,
+              "quarter": 2,
+              "receiver": "RashidShaheed",
+              "passer": ""
+            }
+          ],
+          "met_count": 3,
+          "window": 5
+        },
+        {
+          "player": "Kyler Murray",
+          "matches": [
+            {
+              "player_name": "KylerMurray",
+              "player_id": "3917315",
+              "position": "QB",
+              "date_iso": "2025-10-05",
+              "date": "2025-10-05",
+              "opponent": "TEN",
+              "game_id": "401772747",
+              "play_type": "pass",
+              "yards": 43,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "MarvinHarrisonJr.",
+              "passer": ""
+            },
+            {
+              "player_name": "KylerMurray",
+              "player_id": "3917315",
+              "position": "QB",
+              "date_iso": "2025-09-21",
+              "date": "2025-09-21",
+              "opponent": "SF",
+              "game_id": "401772843",
+              "play_type": "pass",
+              "yards": 32,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "MarvinHarrisonJr.",
+              "passer": ""
+            },
+            {
+              "player_name": "KylerMurray",
+              "player_id": "3917315",
+              "position": "QB",
+              "date_iso": "2025-09-14",
+              "date": "2025-09-14",
+              "opponent": "CAR",
+              "game_id": "401772730",
+              "play_type": "pass",
+              "yards": 31,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "TreyMcBride",
+              "passer": ""
+            },
+            {
+              "player_name": "KylerMurray",
+              "player_id": "3917315",
+              "position": "QB",
+              "date_iso": "2025-09-07",
+              "date": "2025-09-07",
+              "opponent": "NO",
+              "game_id": "401772718",
+              "play_type": "pass",
+              "yards": 45,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "MarvinHarrisonJr.",
+              "passer": ""
+            }
+          ],
+          "met_count": 4,
+          "window": 5
+        }]
+  },
+  {
+    "command": "nspe nfl long rush -yds20 -last2/3",
+    "caption": "NFL · explosive rush ≥ 20 yds in 2 of last 3",
+    "results": [{
+          "player": "Derrick Henry",
+          "matches": [
+            {
+              "player_name": "DerrickHenry",
+              "player_id": "3043078",
+              "position": "RB",
+              "date_iso": "2026-01-05",
+              "date": "2026-01-05",
+              "opponent": "PIT",
+              "game_id": "401772960",
+              "play_type": "rush",
+              "yards": 21,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "",
+              "passer": ""
+            },
+            {
+              "player_name": "DerrickHenry",
+              "player_id": "3043078",
+              "position": "RB",
+              "date_iso": "2025-12-28",
+              "date": "2025-12-28",
+              "opponent": "GB",
+              "game_id": "401772953",
+              "play_type": "rush",
+              "yards": 30,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "",
+              "passer": ""
+            },
+            {
+              "player_name": "DerrickHenry",
+              "player_id": "3043078",
+              "position": "RB",
+              "date_iso": "2025-12-22",
+              "date": "2025-12-22",
+              "opponent": "NE",
+              "game_id": "401772804",
+              "play_type": "rush",
+              "yards": 21,
+              "touchdown": true,
+              "quarter": 1,
+              "receiver": "",
+              "passer": ""
+            }
+          ],
+          "met_count": 3,
+          "window": 3
+        },
+        {
+          "player": "Kenneth Walker I I I",
+          "matches": [
+            {
+              "player_name": "KennethWalkerIII",
+              "player_id": "4567048",
+              "position": "RB",
+              "date_iso": "2026-01-04",
+              "date": "2026-01-04",
+              "opponent": "SF",
+              "game_id": "401772961",
+              "play_type": "rush",
+              "yards": 20,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "",
+              "passer": ""
+            },
+            {
+              "player_name": "KennethWalkerIII",
+              "player_id": "4567048",
+              "position": "RB",
+              "date_iso": "2025-12-19",
+              "date": "2025-12-19",
+              "opponent": "LAR",
+              "game_id": "401772949",
+              "play_type": "rush",
+              "yards": 55,
+              "touchdown": true,
+              "quarter": 3,
+              "receiver": "",
+              "passer": ""
+            }
+          ],
+          "met_count": 2,
+          "window": 3
+        },
+        {
+          "player": "Zach Charbonnet",
+          "matches": [
+            {
+              "player_name": "ZachCharbonnet",
+              "player_id": "4426385",
+              "position": "RB",
+              "date_iso": "2026-01-04",
+              "date": "2026-01-04",
+              "opponent": "SF",
+              "game_id": "401772961",
+              "play_type": "rush",
+              "yards": 27,
+              "touchdown": true,
+              "quarter": 1,
+              "receiver": "",
+              "passer": ""
+            },
+            {
+              "player_name": "ZachCharbonnet",
+              "player_id": "4426385",
+              "position": "RB",
+              "date_iso": "2025-12-28",
+              "date": "2025-12-28",
+              "opponent": "CAR",
+              "game_id": "401772952",
+              "play_type": "rush",
+              "yards": 25,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "",
+              "passer": ""
+            }
+          ],
+          "met_count": 2,
+          "window": 3
+        },
+        {
+          "player": "Rhamondre Stevenson",
+          "matches": [
+            {
+              "player_name": "RhamondreStevenson",
+              "player_id": "4569173",
+              "position": "RB",
+              "date_iso": "2026-01-04",
+              "date": "2026-01-04",
+              "opponent": "MIA",
+              "game_id": "401772958",
+              "play_type": "rush",
+              "yards": 56,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "",
+              "passer": ""
+            },
+            {
+              "player_name": "RhamondreStevenson",
+              "player_id": "4569173",
+              "position": "RB",
+              "date_iso": "2025-12-28",
+              "date": "2025-12-28",
+              "opponent": "NYJ",
+              "game_id": "401772808",
+              "play_type": "rush",
+              "yards": 24,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "",
+              "passer": ""
+            },
+            {
+              "player_name": "RhamondreStevenson",
+              "player_id": "4569173",
+              "position": "RB",
+              "date_iso": "2025-12-22",
+              "date": "2025-12-22",
+              "opponent": "BAL",
+              "game_id": "401772804",
+              "play_type": "rush",
+              "yards": 21,
+              "touchdown": true,
+              "quarter": 4,
+              "receiver": "",
+              "passer": ""
+            }
+          ],
+          "met_count": 3,
+          "window": 3
+        },
+        {
+          "player": "Blake Corum",
+          "matches": [
+            {
+              "player_name": "BlakeCorum",
+              "player_id": "4429096",
+              "position": "RB",
+              "date_iso": "2026-01-04",
+              "date": "2026-01-04",
+              "opponent": "ARI",
+              "game_id": "401772955",
+              "play_type": "rush",
+              "yards": 21,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "",
+              "passer": ""
+            },
+            {
+              "player_name": "BlakeCorum",
+              "player_id": "4429096",
+              "position": "RB",
+              "date_iso": "2025-12-14",
+              "date": "2025-12-14",
+              "opponent": "DET",
+              "game_id": "401772909",
+              "play_type": "rush",
+              "yards": 24,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "",
+              "passer": ""
+            },
+            {
+              "player_name": "BlakeCorum",
+              "player_id": "4429096",
+              "position": "RB",
+              "date_iso": "2025-12-07",
+              "date": "2025-12-07",
+              "opponent": "ARI",
+              "game_id": "401772901",
+              "play_type": "rush",
+              "yards": 48,
+              "touchdown": true,
+              "quarter": 4,
+              "receiver": "",
+              "passer": ""
+            }
+          ],
+          "met_count": 3,
+          "window": 3
+        },
+        {
+          "player": "Kyren Williams",
+          "matches": [
+            {
+              "player_name": "KyrenWilliams",
+              "player_id": "4430737",
+              "position": "RB",
+              "date_iso": "2026-01-04",
+              "date": "2026-01-04",
+              "opponent": "ARI",
+              "game_id": "401772955",
+              "play_type": "rush",
+              "yards": 22,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "",
+              "passer": ""
+            },
+            {
+              "player_name": "KyrenWilliams",
+              "player_id": "4430737",
+              "position": "RB",
+              "date_iso": "2025-12-30",
+              "date": "2025-12-30",
+              "opponent": "ATL",
+              "game_id": "401772825",
+              "play_type": "rush",
+              "yards": 21,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "",
+              "passer": ""
+            }
+          ],
+          "met_count": 2,
+          "window": 3
+        },
+        {
+          "player": "Tyrone Tracy Jr.",
+          "matches": [
+            {
+              "player_name": "TyroneTracyJr.",
+              "player_id": "4360516",
+              "position": "RB",
+              "date_iso": "2026-01-04",
+              "date": "2026-01-04",
+              "opponent": "DAL",
+              "game_id": "401772963",
+              "play_type": "rush",
+              "yards": 20,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "",
+              "passer": ""
+            },
+            {
+              "player_name": "TyroneTracyJr.",
+              "player_id": "4360516",
+              "position": "RB",
+              "date_iso": "2025-12-28",
+              "date": "2025-12-28",
+              "opponent": "LV",
+              "game_id": "401772950",
+              "play_type": "rush",
+              "yards": 23,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "",
+              "passer": ""
+            }
+          ],
+          "met_count": 2,
+          "window": 3
+        },
+        {
+          "player": "Bijan Robinson",
+          "matches": [
+            {
+              "player_name": "BijanRobinson",
+              "player_id": "4430807",
+              "position": "RB",
+              "date_iso": "2025-12-30",
+              "date": "2025-12-30",
+              "opponent": "LAR",
+              "game_id": "401772825",
+              "play_type": "rush",
+              "yards": 93,
+              "touchdown": true,
+              "quarter": 2,
+              "receiver": "",
+              "passer": ""
+            },
+            {
+              "player_name": "BijanRobinson",
+              "player_id": "4430807",
+              "position": "RB",
+              "date_iso": "2025-12-21",
+              "date": "2025-12-21",
+              "opponent": "ARI",
+              "game_id": "401772914",
+              "play_type": "rush",
+              "yards": 29,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "",
+              "passer": ""
+            }
+          ],
+          "met_count": 2,
+          "window": 3
+        },
+        {
+          "player": "Christian Mc Caffrey",
+          "matches": [
+            {
+              "player_name": "ChristianMcCaffrey",
+              "player_id": "3117251",
+              "position": "RB",
+              "date_iso": "2025-12-29",
+              "date": "2025-12-29",
+              "opponent": "CHI",
+              "game_id": "401772935",
+              "play_type": "rush",
+              "yards": 41,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "",
+              "passer": ""
+            },
+            {
+              "player_name": "ChristianMcCaffrey",
+              "player_id": "3117251",
+              "position": "RB",
+              "date_iso": "2025-12-23",
+              "date": "2025-12-23",
+              "opponent": "IND",
+              "game_id": "401772824",
+              "play_type": "rush",
+              "yards": 24,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "",
+              "passer": ""
+            }
+          ],
+          "met_count": 2,
+          "window": 3
+        },
+        {
+          "player": "Devin Singletary",
+          "matches": [
+            {
+              "player_name": "DevinSingletary",
+              "player_id": "4040761",
+              "position": "RB",
+              "date_iso": "2025-12-28",
+              "date": "2025-12-28",
+              "opponent": "LV",
+              "game_id": "401772950",
+              "play_type": "rush",
+              "yards": 29,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "",
+              "passer": ""
+            },
+            {
+              "player_name": "DevinSingletary",
+              "player_id": "4040761",
+              "position": "RB",
+              "date_iso": "2025-12-02",
+              "date": "2025-12-02",
+              "opponent": "NE",
+              "game_id": "401772821",
+              "play_type": "rush",
+              "yards": 22,
+              "touchdown": true,
+              "quarter": 4,
+              "receiver": "",
+              "passer": ""
+            }
+          ],
+          "met_count": 2,
+          "window": 3
+        },
+        {
+          "player": "Ashton Jeanty",
+          "matches": [
+            {
+              "player_name": "AshtonJeanty",
+              "player_id": "4890973",
+              "position": "RB",
+              "date_iso": "2025-12-28",
+              "date": "2025-12-28",
+              "opponent": "NYG",
+              "game_id": "401772950",
+              "play_type": "rush",
+              "yards": 24,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "",
+              "passer": ""
+            },
+            {
+              "player_name": "AshtonJeanty",
+              "player_id": "4890973",
+              "position": "RB",
+              "date_iso": "2025-12-21",
+              "date": "2025-12-21",
+              "opponent": "HOU",
+              "game_id": "401772805",
+              "play_type": "rush",
+              "yards": 51,
+              "touchdown": true,
+              "quarter": 4,
+              "receiver": "",
+              "passer": ""
+            }
+          ],
+          "met_count": 2,
+          "window": 3
+        },
+        {
+          "player": "Tyler Huntley",
+          "matches": [
+            {
+              "player_name": "TylerHuntley",
+              "player_id": "4035671",
+              "position": "QB",
+              "date_iso": "2025-12-28",
+              "date": "2025-12-28",
+              "opponent": "GB",
+              "game_id": "401772953",
+              "play_type": "rush",
+              "yards": 25,
+              "touchdown": false,
+              "quarter": 2,
+              "receiver": "",
+              "passer": ""
+            },
+            {
+              "player_name": "TylerHuntley",
+              "player_id": "4035671",
+              "position": "QB",
+              "date_iso": "2025-10-26",
+              "date": "2025-10-26",
+              "opponent": "CHI",
+              "game_id": "401772759",
+              "play_type": "rush",
+              "yards": 29,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "",
+              "passer": ""
+            }
+          ],
+          "met_count": 2,
+          "window": 3
+        },
+        {
+          "player": "Malik Davis",
+          "matches": [
+            {
+              "player_name": "MalikDavis",
+              "player_id": "4240603",
+              "position": "RB",
+              "date_iso": "2025-12-25",
+              "date": "2025-12-25",
+              "opponent": "WSH",
+              "game_id": "401772710",
+              "play_type": "rush",
+              "yards": 21,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "",
+              "passer": ""
+            },
+            {
+              "player_name": "MalikDavis",
+              "player_id": "4240603",
+              "position": "RB",
+              "date_iso": "2025-11-27",
+              "date": "2025-11-27",
+              "opponent": "KC",
+              "game_id": "401772694",
+              "play_type": "rush",
+              "yards": 43,
+              "touchdown": true,
+              "quarter": 2,
+              "receiver": "",
+              "passer": ""
+            },
+            {
+              "player_name": "MalikDavis",
+              "player_id": "4240603",
+              "position": "RB",
+              "date_iso": "2025-11-23",
+              "date": "2025-11-23",
+              "opponent": "PHI",
+              "game_id": "401772890",
+              "play_type": "rush",
+              "yards": 21,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "",
+              "passer": ""
+            }
+          ],
+          "met_count": 3,
+          "window": 3
+        },
+        {
+          "player": "Josh Jacobs",
+          "matches": [
+            {
+              "player_name": "JoshJacobs",
+              "player_id": "4047365",
+              "position": "RB",
+              "date_iso": "2025-12-14",
+              "date": "2025-12-14",
+              "opponent": "DEN",
+              "game_id": "401772800",
+              "play_type": "rush",
+              "yards": 40,
+              "touchdown": true,
+              "quarter": 3,
+              "receiver": "",
+              "passer": ""
+            },
+            {
+              "player_name": "JoshJacobs",
+              "player_id": "4047365",
+              "position": "RB",
+              "date_iso": "2025-12-07",
+              "date": "2025-12-07",
+              "opponent": "CHI",
+              "game_id": "401772897",
+              "play_type": "rush",
+              "yards": 21,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "",
+              "passer": ""
+            },
+            {
+              "player_name": "JoshJacobs",
+              "player_id": "4047365",
+              "position": "RB",
+              "date_iso": "2025-11-27",
+              "date": "2025-11-27",
+              "opponent": "DET",
+              "game_id": "401772891",
+              "play_type": "rush",
+              "yards": 29,
+              "touchdown": false,
+              "quarter": 1,
+              "receiver": "",
+              "passer": ""
+            }
+          ],
+          "met_count": 3,
+          "window": 3
+        },
+        {
+          "player": "Tre Veyon Henderson",
+          "matches": [
+            {
+              "player_name": "TreVeyonHenderson",
+              "player_id": "4432710",
+              "position": "RB",
+              "date_iso": "2025-12-14",
+              "date": "2025-12-14",
+              "opponent": "BUF",
+              "game_id": "401772795",
+              "play_type": "rush",
+              "yards": 52,
+              "touchdown": true,
+              "quarter": 2,
+              "receiver": "",
+              "passer": ""
+            },
+            {
+              "player_name": "TreVeyonHenderson",
+              "player_id": "4432710",
+              "position": "RB",
+              "date_iso": "2025-12-02",
+              "date": "2025-12-02",
+              "opponent": "NYG",
+              "game_id": "401772821",
+              "play_type": "rush",
+              "yards": 26,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "",
+              "passer": ""
+            }
+          ],
+          "met_count": 2,
+          "window": 3
+        },
+        {
+          "player": "Keaton Mitchell",
+          "matches": [
+            {
+              "player_name": "KeatonMitchell",
+              "player_id": "4596334",
+              "position": "RB",
+              "date_iso": "2025-12-14",
+              "date": "2025-12-14",
+              "opponent": "CIN",
+              "game_id": "401772796",
+              "play_type": "rush",
+              "yards": 22,
+              "touchdown": false,
+              "quarter": 4,
+              "receiver": "",
+              "passer": ""
+            },
+            {
+              "player_name": "KeatonMitchell",
+              "player_id": "4596334",
+              "position": "RB",
+              "date_iso": "2025-12-07",
+              "date": "2025-12-07",
+              "opponent": "PIT",
+              "game_id": "401772791",
+              "play_type": "rush",
+              "yards": 55,
+              "touchdown": false,
+              "quarter": 3,
+              "receiver": "",
+              "passer": ""
+            }
+          ],
+          "met_count": 2,
+          "window": 3
+        }]
+  },
+  {
+    "command": "nspe nba -pts30 -last4/5",
+    "caption": "NBA · pts ≥ 30 in 4 of last 5",
+    "results": [{
+          "player": "Jalen Brunson",
+          "date": "Sat 6/13",
+          "line": "",
+          "met": 4,
+          "notes": "player:JALENBRUNSON games:4",
+          "matches": [
+            {
+              "player_id": "3934672",
+              "player_name": "JalenBrunson",
+              "date": "Sat 6/13",
+              "result": "W94-90",
+              "toi": 41,
+              "three_made": 4,
+              "rebounds": 3,
+              "assists": 3,
+              "blocks": 0,
+              "steals": 2,
+              "points": 45,
+              "game_id": "401859967",
+              "seasonYear": "2026",
+              "date_iso": "2026-06-13",
+              "team": "NY",
+              "opponent": null
+            },
+            {
+              "player_id": "3934672",
+              "player_name": "JalenBrunson",
+              "date": "Wed 6/10",
+              "result": "W107-106",
+              "toi": 44,
+              "three_made": 3,
+              "rebounds": 5,
+              "assists": 7,
+              "blocks": 0,
+              "steals": 3,
+              "points": 36,
+              "game_id": "401859966",
+              "seasonYear": "2026",
+              "date_iso": "2026-06-10",
+              "team": "NY",
+              "opponent": null
+            },
+            {
+              "player_id": "3934672",
+              "player_name": "JalenBrunson",
+              "date": "Mon 6/8",
+              "result": "L115-111",
+              "toi": 35,
+              "three_made": 3,
+              "rebounds": 5,
+              "assists": 5,
+              "blocks": 0,
+              "steals": 0,
+              "points": 32,
+              "game_id": "401859965",
+              "seasonYear": "2026",
+              "date_iso": "2026-06-08",
+              "team": "NY",
+              "opponent": null
+            },
+            {
+              "player_id": "3934672",
+              "player_name": "JalenBrunson",
+              "date": "Wed 6/3",
+              "result": "W105-95",
+              "toi": 37,
+              "three_made": 2,
+              "rebounds": 3,
+              "assists": 2,
+              "blocks": 0,
+              "steals": 0,
+              "points": 30,
+              "game_id": "401859963",
+              "seasonYear": "2026",
+              "date_iso": "2026-06-03",
+              "team": "NY",
+              "opponent": null
+            }
+          ]
+        },
+        {
+          "player": "Luka Doncic",
+          "date": "Tue 3/31",
+          "line": "",
+          "met": 4,
+          "notes": "player:LUKADONCIC games:4",
+          "matches": [
+            {
+              "player_id": "3945274",
+              "player_name": "LukaDoncic",
+              "date": "Tue 3/31",
+              "result": 127,
+              "toi": 34,
+              "three_made": 6,
+              "rebounds": 5,
+              "assists": 12,
+              "blocks": 0,
+              "steals": 2,
+              "points": 42,
+              "game_id": "401810958",
+              "seasonYear": "2026",
+              "date_iso": "2026-03-31",
+              "team": "LAL",
+              "opponent": null
+            },
+            {
+              "player_id": "3945274",
+              "player_name": "LukaDoncic",
+              "date": "Fri 3/27",
+              "result": 116,
+              "toi": 39,
+              "three_made": 5,
+              "rebounds": 8,
+              "assists": 3,
+              "blocks": 1,
+              "steals": 3,
+              "points": 41,
+              "game_id": "401810930",
+              "seasonYear": "2026",
+              "date_iso": "2026-03-27",
+              "team": "LAL",
+              "opponent": null
+            },
+            {
+              "player_id": "3945274",
+              "player_name": "LukaDoncic",
+              "date": "Wed 3/25",
+              "result": 137,
+              "toi": 38,
+              "three_made": 4,
+              "rebounds": 6,
+              "assists": 7,
+              "blocks": 0,
+              "steals": 1,
+              "points": 43,
+              "game_id": "401810907",
+              "seasonYear": "2026",
+              "date_iso": "2026-03-25",
+              "team": "LAL",
+              "opponent": null
+            },
+            {
+              "player_id": "3945274",
+              "player_name": "LukaDoncic",
+              "date": "Mon 3/23",
+              "result": 113,
+              "toi": 39,
+              "three_made": 3,
+              "rebounds": 7,
+              "assists": 6,
+              "blocks": 0,
+              "steals": 3,
+              "points": 32,
+              "game_id": "401810893",
+              "seasonYear": "2026",
+              "date_iso": "2026-03-23",
+              "team": "LAL",
+              "opponent": null
+            }
+          ]
+        }]
+  },
+  {
+    "command": "nspe nba q1 -pts10 -last2/5",
+    "caption": "NBA · Q1 pts ≥ 10 in 2 of last 5",
+    "results": [{
+          "player": "Luka Doncic",
+          "stat": "pts",
+          "threshold": 10,
+          "req_met": 2,
+          "window": 5,
+          "met": 4,
+          "values": [
+            14,
+            14,
+            21,
+            17
+          ],
+          "met_dates": [
+            "2026-03-31",
+            "2026-03-27",
+            "2026-03-25",
+            "2026-03-23"
+          ],
+          "match": [
+            {
+              "val": 14,
+              "date_raw": "2026-03-31"
+            },
+            {
+              "val": 14,
+              "date_raw": "2026-03-27"
+            },
+            {
+              "val": 21,
+              "date_raw": "2026-03-25"
+            },
+            {
+              "val": 17,
+              "date_raw": "2026-03-23"
+            }
+          ]
+        },
+        {
+          "player": "Cooper Flagg",
+          "stat": "pts",
+          "threshold": 10,
+          "req_met": 2,
+          "window": 5,
+          "met": 2,
+          "values": [
+            13,
+            19
+          ],
+          "met_dates": [
+            "2026-04-07",
+            "2026-04-05"
+          ],
+          "match": [
+            {
+              "val": 13,
+              "date_raw": "2026-04-07"
+            },
+            {
+              "val": 19,
+              "date_raw": "2026-04-05"
+            }
+          ]
+        },
+        {
+          "player": "Kevin Durant",
+          "stat": "pts",
+          "threshold": 10,
+          "req_met": 2,
+          "window": 5,
+          "met": 2,
+          "values": [
+            11,
+            14
+          ],
+          "met_dates": [
+            "2026-04-21",
+            "2026-04-10"
+          ],
+          "match": [
+            {
+              "val": 11,
+              "date_raw": "2026-04-21"
+            },
+            {
+              "val": 14,
+              "date_raw": "2026-04-10"
+            }
+          ]
+        },
+        {
+          "player": "Kawhi Leonard",
+          "stat": "pts",
+          "threshold": 10,
+          "req_met": 2,
+          "window": 5,
+          "met": 2,
+          "values": [
+            12,
+            13
+          ],
+          "met_dates": [
+            "2026-04-07",
+            "2026-04-05"
+          ],
+          "match": [
+            {
+              "val": 12,
+              "date_raw": "2026-04-07"
+            },
+            {
+              "val": 13,
+              "date_raw": "2026-04-05"
+            }
+          ]
+        },
+        {
+          "player": "Giannis Antetokounmpo",
+          "stat": "pts",
+          "threshold": 10,
+          "req_met": 2,
+          "window": 5,
+          "met": 2,
+          "values": [
+            10,
+            10
+          ],
+          "met_dates": [
+            "2026-03-12",
+            "2026-03-04"
+          ],
+          "match": [
+            {
+              "val": 10,
+              "date_raw": "2026-03-12"
+            },
+            {
+              "val": 10,
+              "date_raw": "2026-03-04"
+            }
+          ]
+        },
+        {
+          "player": "Anthony Edwards",
+          "stat": "pts",
+          "threshold": 10,
+          "req_met": 2,
+          "window": 5,
+          "met": 2,
+          "values": [
+            11,
+            13
+          ],
+          "met_dates": [
+            "2026-05-10",
+            "2026-05-08"
+          ],
+          "match": [
+            {
+              "val": 11,
+              "date_raw": "2026-05-10"
+            },
+            {
+              "val": 13,
+              "date_raw": "2026-05-08"
+            }
+          ]
+        },
+        {
+          "player": "Paolo Banchero",
+          "stat": "pts",
+          "threshold": 10,
+          "req_met": 2,
+          "window": 5,
+          "met": 2,
+          "values": [
+            11,
+            10
+          ],
+          "met_dates": [
+            "2026-05-03",
+            "2026-04-29"
+          ],
+          "match": [
+            {
+              "val": 11,
+              "date_raw": "2026-05-03"
+            },
+            {
+              "val": 10,
+              "date_raw": "2026-04-29"
+            }
+          ]
+        },
+        {
+          "player": "Paul George",
+          "stat": "pts",
+          "threshold": 10,
+          "req_met": 2,
+          "window": 5,
+          "met": 2,
+          "values": [
+            15,
+            11
+          ],
+          "met_dates": [
+            "2026-05-08",
+            "2026-05-06"
+          ],
+          "match": [
+            {
+              "val": 15,
+              "date_raw": "2026-05-08"
+            },
+            {
+              "val": 11,
+              "date_raw": "2026-05-06"
+            }
+          ]
+        },
+        {
+          "player": "Jaren Jackson Jr",
+          "stat": "pts",
+          "threshold": 10,
+          "req_met": 2,
+          "window": 5,
+          "met": 2,
+          "values": [
+            12,
+            11
+          ],
+          "met_dates": [
+            "2026-02-11",
+            "2026-02-07"
+          ],
+          "match": [
+            {
+              "val": 12,
+              "date_raw": "2026-02-11"
+            },
+            {
+              "val": 11,
+              "date_raw": "2026-02-07"
+            }
+          ]
+        }]
+  },
+  {
+    "command": "nspe nba -pts min250 -last10",
+    "caption": "NBA · pts ≥ 250 over last 10 games",
+    "results": [{
+          "player": "Luka Doncic",
+          "total": 369.0
+        },
+        {
+          "player": "Jalen Brunson",
+          "total": 287.0
+        },
+        {
+          "player": "Donovan Mitchell",
+          "total": 283.0
+        },
+        {
+          "player": "Cade Cunningham",
+          "total": 276.0
+        },
+        {
+          "player": "Nikola Jokic",
+          "total": 267.0
+        },
+        {
+          "player": "Jaylen Brown",
+          "total": 264.0
+        },
+        {
+          "player": "Shai Gilgeous-Alexander",
+          "total": 259.0
+        },
+        {
+          "player": "Victor Wembanyama",
+          "total": 259.0
+        },
+        {
+          "player": "Cooper Flagg",
+          "total": 256.0
+        },
+        {
+          "player": "Kevin Durant",
+          "total": 256.0
+        },
+        {
+          "player": "Paolo Banchero",
+          "total": 250.0
+        }]
+  },
+  {
+    "command": "nspe nhl -pts2 -last3/5",
+    "caption": "NHL · pts ≥ 2 in 3 of last 5",
+    "results": [{
+          "player": "Nathan Mac Kinnon",
+          "date": "Wed 12/31",
+          "line": "",
+          "met": 4,
+          "notes": "player:NATHANMACKINNON games:4",
+          "matches": [
+            {
+              "date": "Wed 12/31",
+              "game_id": "401802980",
+              "stats": {
+                "points": 4
+              }
+            },
+            {
+              "date": "Mon 12/29",
+              "game_id": "401802962",
+              "stats": {
+                "points": 2
+              }
+            },
+            {
+              "date": "Sat 12/27",
+              "game_id": "401802951",
+              "stats": {
+                "points": 3
+              }
+            },
+            {
+              "date": "Sun 12/21",
+              "game_id": "401802914",
+              "stats": {
+                "points": 2
+              }
+            }
+          ]
+        },
+        {
+          "player": "Jack Eichel",
+          "date": "Thu 12/11",
+          "line": "",
+          "met": 4,
+          "notes": "player:JACKEICHEL games:4",
+          "matches": [
+            {
+              "date": "Thu 12/11",
+              "game_id": "401802834",
+              "stats": {
+                "points": 2
+              }
+            },
+            {
+              "date": "Tue 12/9",
+              "game_id": "401802819",
+              "stats": {
+                "points": 2
+              }
+            },
+            {
+              "date": "Sun 12/7",
+              "game_id": "401802809",
+              "stats": {
+                "points": 2
+              }
+            },
+            {
+              "date": "Fri 12/5",
+              "game_id": "401802787",
+              "stats": {
+                "points": 2
+              }
+            }
+          ]
+        },
+        {
+          "player": "Brock Nelson",
+          "date": "Wed 12/31",
+          "line": "",
+          "met": 3,
+          "notes": "player:BROCKNELSON games:3",
+          "matches": [
+            {
+              "date": "Wed 12/31",
+              "game_id": "401802980",
+              "stats": {
+                "points": 2
+              }
+            },
+            {
+              "date": "Mon 12/29",
+              "game_id": "401802962",
+              "stats": {
+                "points": 2
+              }
+            },
+            {
+              "date": "Sun 12/21",
+              "game_id": "401802914",
+              "stats": {
+                "points": 3
+              }
+            }
+          ]
+        },
+        {
+          "player": "Dylan Larkin",
+          "date": "Sat 4/11",
+          "line": "",
+          "met": 3,
+          "notes": "player:DYLANLARKIN games:3",
+          "matches": [
+            {
+              "date": "Sat 4/11",
+              "game_id": "401803616",
+              "stats": {
+                "points": 2
+              }
+            },
+            {
+              "date": "Thu 4/9",
+              "game_id": "401803601",
+              "stats": {
+                "points": 4
+              }
+            },
+            {
+              "date": "Tue 4/7",
+              "game_id": "401803586",
+              "stats": {
+                "points": 2
+              }
+            }
+          ]
+        },
+        {
+          "player": "Connor Mc David",
+          "date": "Tue 4/28",
+          "line": "",
+          "met": 3,
+          "notes": "player:CONNORMCDAVID games:3",
+          "matches": [
+            {
+              "date": "Tue 4/28",
+              "game_id": "401869774",
+              "stats": {
+                "points": 2
+              }
+            },
+            {
+              "date": "Sun 4/26",
+              "game_id": "401869772",
+              "stats": {
+                "points": 2
+              }
+            },
+            {
+              "date": "Fri 4/24",
+              "game_id": "401869770",
+              "stats": {
+                "points": 2
+              }
+            }
+          ]
+        },
+        {
+          "player": "Leon Draisaitl",
+          "date": "Tue 4/28",
+          "line": "",
+          "met": 3,
+          "notes": "player:LEONDRAISAITL games:3",
+          "matches": [
+            {
+              "date": "Tue 4/28",
+              "game_id": "401869774",
+              "stats": {
+                "points": 2
+              }
+            },
+            {
+              "date": "Fri 4/24",
+              "game_id": "401869770",
+              "stats": {
+                "points": 2
+              }
+            },
+            {
+              "date": "Wed 4/22",
+              "game_id": "401869768",
+              "stats": {
+                "points": 2
+              }
+            }
+          ]
+        },
+        {
+          "player": "Evan Bouchard",
+          "date": "Tue 4/28",
+          "line": "",
+          "met": 3,
+          "notes": "player:EVANBOUCHARD games:3",
+          "matches": [
+            {
+              "date": "Tue 4/28",
+              "game_id": "401869774",
+              "stats": {
+                "points": 3
+              }
+            },
+            {
+              "date": "Sun 4/26",
+              "game_id": "401869772",
+              "stats": {
+                "points": 2
+              }
+            },
+            {
+              "date": "Fri 4/24",
+              "game_id": "401869770",
+              "stats": {
+                "points": 2
+              }
+            }
+          ]
+        },
+        {
+          "player": "Ivan Demidov",
+          "date": "Sun 12/28",
+          "line": "",
+          "met": 3,
+          "notes": "player:IVANDEMIDOV games:3",
+          "matches": [
+            {
+              "date": "Sun 12/28",
+              "game_id": "401802953",
+              "stats": {
+                "points": 2
+              }
+            },
+            {
+              "date": "Tue 12/23",
+              "game_id": "401802928",
+              "stats": {
+                "points": 2
+              }
+            },
+            {
+              "date": "Sun 12/21",
+              "game_id": "401802917",
+              "stats": {
+                "points": 2
+              }
+            }
+          ]
+        },
+        {
+          "player": "Juraj Slafkovsky",
+          "date": "Sun 12/28",
+          "line": "",
+          "met": 3,
+          "notes": "player:JURAJSLAFKOVSKY games:3",
+          "matches": [
+            {
+              "date": "Sun 12/28",
+              "game_id": "401802953",
+              "stats": {
+                "points": 3
+              }
+            },
+            {
+              "date": "Tue 12/23",
+              "game_id": "401802928",
+              "stats": {
+                "points": 2
+              }
+            },
+            {
+              "date": "Sun 12/21",
+              "game_id": "401802917",
+              "stats": {
+                "points": 2
+              }
+            }
+          ]
+        },
+        {
+          "player": "Macklin Celebrini",
+          "date": "Thu 4/16",
+          "line": "",
+          "met": 3,
+          "notes": "player:MACKLINCELEBRINI games:3",
+          "matches": [
+            {
+              "date": "Thu 4/16",
+              "game_id": "401803659",
+              "stats": {
+                "points": 3
+              }
+            },
+            {
+              "date": "Mon 4/13",
+              "game_id": "401803638",
+              "stats": {
+                "points": 2
+              }
+            },
+            {
+              "date": "Sat 4/11",
+              "game_id": "401803626",
+              "stats": {
+                "points": 2
+              }
+            }
+          ]
+        },
+        {
+          "player": "Mark Scheifele",
+          "date": "Tue 4/14",
+          "line": "",
+          "met": 3,
+          "notes": "player:MARKSCHEIFELE games:3",
+          "matches": [
+            {
+              "date": "Tue 4/14",
+              "game_id": "401803648",
+              "stats": {
+                "points": 2
+              }
+            },
+            {
+              "date": "Mon 4/13",
+              "game_id": "401803641",
+              "stats": {
+                "points": 2
+              }
+            },
+            {
+              "date": "Thu 4/9",
+              "game_id": "401803604",
+              "stats": {
+                "points": 2
+              }
+            }
+          ]
+        }]
+  },
+  {
+    "command": "nspe nhl -sog min290 -season",
+    "caption": "NHL · shots on goal ≥ 290 this season",
+    "results": [{
+          "player": "Nathan Mac Kinnon",
+          "total": 395.0
+        },
+        {
+          "player": "Connor Mc David",
+          "total": 326.0
+        },
+        {
+          "player": "Cutter Gauthier",
+          "total": 324.0
+        },
+        {
+          "player": "Jason Robertson",
+          "total": 324.0
+        },
+        {
+          "player": "Tage Thompson",
+          "total": 307.0
+        },
+        {
+          "player": "Matt Boldy",
+          "total": 302.0
+        },
+        {
+          "player": "Jack Eichel",
+          "total": 301.0
+        },
+        {
+          "player": "Kirill Kaprizov",
+          "total": 294.0
+        },
+        {
+          "player": "Cole Caufield",
+          "total": 294.0
+        }]
+  }
+]

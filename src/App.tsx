@@ -5,6 +5,7 @@ import madeitLogo from '@/assets/images/madeit-tech-logo-v2.jpeg'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { QueryBuilder } from '@/components/QueryBuilder'
 import { QueryBuilderTutorial } from '@/components/QueryBuilderTutorial'
+import { AutoDemo } from '@/components/AutoDemo'
 import { authHeader } from '@/lib/auth-token'
 
 function joinUrl(base: string, endpoint: string): string {
@@ -1333,6 +1334,30 @@ function extractMatchDetails(row: Record<string, unknown>, ctx: StatContext | nu
   return out
 }
 
+/** Extract a stat value from a full-game-stats match object for demo display. */
+function demoMatchValue(m: Record<string, unknown>, cmd: string): number | null {
+  if (m.val != null) return asNumber(m.val)
+  if (/\bpass\b/.test(cmd) && m.pass_yds != null) return asNumber(m.pass_yds)
+  if (/\brush\b/.test(cmd) && m.rush_yds != null) return asNumber(m.rush_yds)
+  if (/\brec\b/.test(cmd) && m.rec_yds != null) return asNumber(m.rec_yds)
+  if (m.points != null) return asNumber(m.points)
+  if (m.sog != null) return asNumber(m.sog)
+  const s = m.stats as Record<string, unknown> | undefined
+  if (s && typeof s === 'object') {
+    for (const k of ['points', 'sog', 'goals', 'assists']) {
+      if (s[k] != null) return asNumber(s[k])
+    }
+  }
+  return null
+}
+
+/** Extract a short display date from a full-game-stats match object. */
+function demoMatchDate(m: Record<string, unknown>): string {
+  const raw = typeof m.date_iso === 'string' ? m.date_iso
+            : typeof m.date === 'string' ? m.date : ''
+  return extractDateToken(raw) ?? ''
+}
+
 function normalizeQueryResults(payload: ApiPayload, fallbackQuery = ''): QueryResult[] {
   const statContext = detectStatContext(payload, fallbackQuery)
   let envelope = extractResultArray(payload)
@@ -1569,12 +1594,7 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
             </div>
             <div className="flex items-center gap-3 mt-0.5 text-[12px]">
               <span>
-                <span className="font-bold" style={{ color: 'oklch(0.85 0.15 145)' }}>{r.value}</span>
-                <span style={{ color: 'oklch(0.50 0 0)' }}> plays</span>
-              </span>
-              <span style={{ color: 'oklch(0.30 0 0)' }}>·</span>
-              <span>
-                <span style={{ color: 'oklch(0.82 0 0)' }}>{r.yards?.toLocaleString()}</span>
+                <span className="font-bold" style={{ color: 'oklch(0.85 0.15 145)' }}>{(r.yards ?? r.value)?.toLocaleString()}</span>
                 <span style={{ color: 'oklch(0.50 0 0)' }}> yds</span>
               </span>
               <span style={{ color: 'oklch(0.30 0 0)' }}>·</span>
@@ -1671,7 +1691,13 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
                       {m.receiver && (
                         <>
                           <span style={{ color: 'oklch(0.45 0 0)' }}>{' → '}</span>
-                          <span style={{ color: 'oklch(0.72 0 0)' }}>{m.receiver}</span>
+                          <span style={{ color: 'oklch(0.72 0 0)' }}>{normalizeDisplayPlayer(m.receiver)}</span>
+                        </>
+                      )}
+                      {m.passer && (
+                        <>
+                          <span style={{ color: 'oklch(0.45 0 0)' }}>{' from '}</span>
+                          <span style={{ color: 'oklch(0.72 0 0)' }}>{normalizeDisplayPlayer(m.passer)}</span>
                         </>
                       )}
                       {m.count != null && m.count > 1 && (
@@ -2713,6 +2739,7 @@ function App() {
   const [isMiniOpen, setIsMiniOpen] = useState(false)
   const [isSampleMenuOpen, setIsSampleMenuOpen] = useState(false)
   const [isTutorialOpen, setIsTutorialOpen] = useState(false)
+  const [isSampleDemoOpen, setIsSampleDemoOpen] = useState(false)
   const [miniPosition, setMiniPosition] = useState({
     x: window.innerWidth / 2 - 310,
     y: Math.max(80, Math.floor((window.innerHeight - window.innerHeight * 0.62) / 2)),
@@ -3154,11 +3181,11 @@ function App() {
         )}
         {isMobile && (
           <button
-            onClick={() => setIsTutorialOpen(true)}
+            onClick={() => setIsSampleDemoOpen(true)}
             className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-            style={{ color: 'oklch(0.78 0.18 145)' }}
+            style={{ color: 'oklch(0.65 0.12 145)' }}
           >
-            {'{tutorial}'}
+            {'{sample-commands}'}
           </button>
         )}
       </div>
@@ -3178,6 +3205,16 @@ function App() {
             style={{ color: 'oklch(0.78 0.18 145)' }}
           >
             {'{tutorial}'}
+          </button>
+        )}
+
+        {!isMobile && (
+          <button
+            onClick={() => setIsSampleDemoOpen(true)}
+            className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+            style={{ color: 'oklch(0.65 0.12 145)' }}
+          >
+            {'{sample-commands}'}
           </button>
         )}
 
@@ -3209,6 +3246,106 @@ function App() {
       </div>
 
       <QueryBuilderTutorial open={isTutorialOpen} onClose={() => setIsTutorialOpen(false)} />
+      <AutoDemo
+        open={isSampleDemoOpen}
+        onClose={() => setIsSampleDemoOpen(false)}
+        renderResults={(results, command) => {
+          const sanitized = sanitizeQueryForApi(command)
+          const sport = sanitized.split(/\s+/)[0]
+          const payload = { sport, query: sanitized, results } as Record<string, unknown>
+          const MAX_DEMO_ROWS = 7
+
+          // NFL explosive trend (contains 'long') — or NFL compute with value/games shape
+          const firstR = results[0] as Record<string, unknown> | undefined
+          const isNflCompute = sport === 'nfl' && firstR?.value != null && firstR?.games != null
+          if (isNflExplosivePayload(payload) || isNflCompute) {
+            return <NflExplosiveView payload={payload as NflExplosivePayload} />
+          }
+
+          // Shape B: matches array contains full game-stat objects (no 'val' shortcut)
+          const firstMatch = Array.isArray(firstR?.matches) && (firstR!.matches as unknown[]).length > 0
+            ? (firstR!.matches as Record<string, unknown>[])[0]
+            : null
+          const isFullGameStats = firstMatch != null && !('val' in firstMatch) && !('yards' in firstMatch)
+          if (isFullGameStats) {
+            const rows = results.slice(0, MAX_DEMO_ROWS)
+            const overflow = results.length - MAX_DEMO_ROWS
+            return (
+              <div>
+                {rows.map((row, i) => {
+                  if (!row || typeof row !== 'object') return null
+                  const r = row as Record<string, unknown>
+                  const player = normalizeDisplayPlayer(String(r.player ?? ''))
+                  const met = Number(r.met_count ?? r.met ?? 0)
+                  const window_ = r.window != null ? Number(r.window) : null
+                  const matches = Array.isArray(r.matches) ? (r.matches as Record<string, unknown>[]) : []
+                  const matchLine = matches.slice(0, 3)
+                    .map((m) => {
+                      const v = demoMatchValue(m, sanitized)
+                      const d = demoMatchDate(m)
+                      return v != null && d ? `${v} ${d}` : null
+                    })
+                    .filter(Boolean)
+                    .join('  ·  ')
+                  return (
+                    <div key={i} className="py-1.5 border-b" style={{ borderColor: 'oklch(0.22 0 0)' }}>
+                      <div className="flex items-center justify-between">
+                        <span className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>{player}</span>
+                        <span className="font-mono text-[13px]">
+                          <span className="font-bold" style={{ color: 'oklch(0.85 0.15 145)' }}>{met}</span>
+                          {window_ != null && <span style={{ color: 'oklch(0.55 0 0)' }}>/{window_}</span>}
+                        </span>
+                      </div>
+                      {matchLine && (
+                        <div className="mt-0.5 pl-2 font-mono text-[11px]" style={{ color: 'oklch(0.65 0 0)' }}>
+                          {matchLine}
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
+                {overflow > 0 && <div className="pt-1.5 font-mono text-[11px]" style={{ color: 'oklch(0.48 0 0)' }}>+ {overflow} more</div>}
+              </div>
+            )
+          }
+
+          // Standard (NBA / MLB / NHL / NFL per-game) — simplified {val,date} match shape
+          const normalized = normalizeQueryResults(payload, sanitized).slice(0, MAX_DEMO_ROWS)
+          const overflow = results.length - MAX_DEMO_ROWS
+          if (normalized.length === 0) {
+            return <div className="font-mono text-[12px]" style={{ color: 'oklch(0.48 0 0)' }}>no results</div>
+          }
+          return (
+            <div>
+              {normalized.map((result, i) => (
+                <div key={i} className="py-1.5 border-b" style={{ borderColor: 'oklch(0.22 0 0)' }}>
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+                      {result.player}
+                    </span>
+                    <span
+                      className="font-mono font-bold text-[13px] ml-4 shrink-0 px-2 py-0.5 rounded"
+                      style={{ backgroundColor: 'oklch(0.22 0 0)', color: 'oklch(0.85 0.15 145)' }}
+                    >
+                      {result.total}
+                    </span>
+                  </div>
+                  {result.matchDetails && result.matchDetails.length > 0 && (
+                    <div className="mt-0.5 pl-2 font-mono text-[11px]" style={{ color: 'oklch(0.65 0 0)' }}>
+                      {result.matchDetails.map((m) => `${m.value}${m.statLabel} ${m.date}`).join('  ·  ')}
+                    </div>
+                  )}
+                </div>
+              ))}
+              {overflow > 0 && (
+                <div className="pt-1.5 font-mono text-[11px]" style={{ color: 'oklch(0.48 0 0)' }}>
+                  + {overflow} more
+                </div>
+              )}
+            </div>
+          )
+        }}
+      />
 
       {false && isMobile && (
         <div
@@ -3496,11 +3633,13 @@ function App() {
             </div>
           )}
 
-          <div className="mt-6 text-center">
-            <p className="font-mono text-[14px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
-              try sample commands or build your own query
-            </p>
-          </div>
+          {isMobile && (
+            <div className="mt-6 text-center">
+              <p className="font-mono text-[14px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+                build your own query
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -3756,6 +3895,22 @@ function App() {
           aria-label="Open glossary"
         >
           {'{glossary}'}
+        </button>
+      )}
+
+      {isMobile && (
+        <button
+          type="button"
+          onClick={() => setIsTutorialOpen(true)}
+          className="absolute z-20 font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+          style={{
+            bottom: '46px',
+            right: leaderboard?.rows?.length > 0 ? '222px' : '106px',
+            color: 'oklch(0.78 0.18 145)',
+          }}
+          aria-label="Open tutorial"
+        >
+          {'{tutorial}'}
         </button>
       )}
 
