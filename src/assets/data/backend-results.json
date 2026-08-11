@@ -1,218 +1,183 @@
 {
-  "kind": "mlb_stat_leaderboard",
-  "generated_at": "2026-08-10T13:11:29.784650Z",
-  "query": {
-    "stat": "hits",
-    "field": "H",
-    "short": "H",
-    "threshold": 2,
-    "year": 2026,
-    "last_n": null
-  },
-  "thresholds": {
-    "min_ab_season": 20,
-    "top_n": 20
-  },
-  "rows": [
+  "sport": "nfl",
+  "query": "nfl long_pass min1000 season",
+  "total_results": 22,
+  "results": [
     {
-      "player": "Otto Lopez",
-      "team": "MIA",
-      "games_meeting": 46,
-      "window_games": null,
-      "season_ab": 462,
-      "season_hits": 147,
-      "season_avg": 0.3182,
-      "last_match": "2026-08-09"
+      "player": "Matthew Stafford",
+      "team": "UNK",
+      "position": "QB",
+      "value": 67,
+      "games": 16,
+      "yards": 2045
     },
     {
-      "player": "Nick Gonzales",
-      "team": "PIT",
-      "games_meeting": 46,
-      "window_games": null,
-      "season_ab": 434,
-      "season_hits": 133,
-      "season_avg": 0.3065,
-      "last_match": "2026-08-07"
+      "player": "Drake Maye",
+      "team": "UNK",
+      "position": "QB",
+      "value": 66,
+      "games": 17,
+      "yards": 1915
     },
     {
-      "player": "Luis Arraez",
-      "team": "SF",
-      "games_meeting": 44,
-      "window_games": null,
-      "season_ab": 447,
-      "season_hits": 143,
-      "season_avg": 0.3199,
-      "last_match": "2026-08-08"
+      "player": "Jared Goff",
+      "team": "UNK",
+      "position": "QB",
+      "value": 63,
+      "games": 16,
+      "yards": 1773
     },
     {
-      "player": "Shohei Ohtani",
-      "team": "LAD",
-      "games_meeting": 40,
-      "window_games": null,
-      "season_ab": 415,
-      "season_hits": 136,
-      "season_avg": 0.3277,
-      "last_match": "2026-08-05"
+      "player": "Josh Allen",
+      "team": "UNK",
+      "position": "QB",
+      "value": 55,
+      "games": 14,
+      "yards": 1576
     },
     {
-      "player": "Yordan Alvarez",
-      "team": "HOU",
-      "games_meeting": 40,
-      "window_games": null,
-      "season_ab": 426,
-      "season_hits": 137,
-      "season_avg": 0.3216,
-      "last_match": "2026-08-02"
+      "player": "Caleb Williams",
+      "team": "UNK",
+      "position": "QB",
+      "value": 54,
+      "games": 16,
+      "yards": 1546
     },
     {
-      "player": "Freddie Freeman",
-      "team": "LAD",
-      "games_meeting": 39,
-      "window_games": null,
-      "season_ab": 435,
-      "season_hits": 132,
-      "season_avg": 0.3034,
-      "last_match": "2026-08-01"
+      "player": "Sam Darnold",
+      "team": "UNK",
+      "position": "QB",
+      "value": 54,
+      "games": 15,
+      "yards": 1679
     },
     {
-      "player": "Chandler Simpson",
-      "team": "TB",
-      "games_meeting": 38,
-      "window_games": null,
-      "season_ab": 408,
-      "season_hits": 124,
-      "season_avg": 0.3039,
-      "last_match": "2026-08-09"
+      "player": "Trevor Lawrence",
+      "team": "UNK",
+      "position": "QB",
+      "value": 54,
+      "games": 16,
+      "yards": 1519
     },
     {
-      "player": "Brandon Nimmo",
-      "team": "TEX",
-      "games_meeting": 37,
-      "window_games": null,
-      "season_ab": 427,
-      "season_hits": 117,
-      "season_avg": 0.274,
-      "last_match": "2026-08-05"
+      "player": "Baker Mayfield",
+      "team": "UNK",
+      "position": "QB",
+      "value": 53,
+      "games": 16,
+      "yards": 1488
     },
     {
-      "player": "Yandy Diaz",
-      "team": "TB",
-      "games_meeting": 36,
-      "window_games": null,
-      "season_ab": 439,
-      "season_hits": 131,
-      "season_avg": 0.2984,
-      "last_match": "2026-08-09"
+      "player": "Dak Prescott",
+      "team": "UNK",
+      "position": "QB",
+      "value": 53,
+      "games": 17,
+      "yards": 1746
     },
     {
-      "player": "Alec Burleson",
-      "team": "STL",
-      "games_meeting": 36,
-      "window_games": null,
-      "season_ab": 446,
-      "season_hits": 126,
-      "season_avg": 0.2825,
-      "last_match": "2026-08-03"
+      "player": "Bo Nix",
+      "team": "UNK",
+      "position": "QB",
+      "value": 47,
+      "games": 16,
+      "yards": 1357
     },
     {
-      "player": "Jung Hoo Lee",
-      "team": "SF",
-      "games_meeting": 34,
-      "window_games": null,
-      "season_ab": 409,
-      "season_hits": 122,
-      "season_avg": 0.2983,
-      "last_match": "2026-08-03"
+      "player": "Jordan Love",
+      "team": "UNK",
+      "position": "QB",
+      "value": 46,
+      "games": 13,
+      "yards": 1393
     },
     {
-      "player": "CJ Abrams",
-      "team": "WSH",
-      "games_meeting": 34,
-      "window_games": null,
-      "season_ab": 439,
-      "season_hits": 126,
-      "season_avg": 0.287,
-      "last_match": "2026-08-08"
+      "player": "Patrick Mahomes",
+      "team": "UNK",
+      "position": "QB",
+      "value": 45,
+      "games": 13,
+      "yards": 1409
     },
     {
-      "player": "Jordan Walker",
-      "team": "STL",
-      "games_meeting": 34,
-      "window_games": null,
-      "season_ab": 445,
-      "season_hits": 127,
-      "season_avg": 0.2854,
-      "last_match": "2026-08-09"
+      "player": "Justin Herbert",
+      "team": "UNK",
+      "position": "QB",
+      "value": 44,
+      "games": 16,
+      "yards": 1433
     },
     {
-      "player": "Ernie Clement",
-      "team": "TOR",
-      "games_meeting": 34,
-      "window_games": null,
-      "season_ab": 450,
-      "season_hits": 128,
-      "season_avg": 0.2844,
-      "last_match": "2026-08-08"
+      "player": "Aaron Rodgers",
+      "team": "UNK",
+      "position": "QB",
+      "value": 41,
+      "games": 15,
+      "yards": 1297
     },
     {
-      "player": "Ceddanne Rafaela",
-      "team": "BOS",
-      "games_meeting": 34,
-      "window_games": null,
-      "season_ab": 443,
-      "season_hits": 126,
-      "season_avg": 0.2844,
-      "last_match": "2026-08-07"
+      "player": "Jacoby Brissett",
+      "team": "UNK",
+      "position": "QB",
+      "value": 41,
+      "games": 12,
+      "yards": 1134
     },
     {
-      "player": "Riley Greene",
-      "team": "DET",
-      "games_meeting": 34,
-      "window_games": null,
-      "season_ab": 422,
-      "season_hits": 115,
-      "season_avg": 0.2725,
-      "last_match": "2026-08-04"
+      "player": "Jalen Hurts",
+      "team": "UNK",
+      "position": "QB",
+      "value": 41,
+      "games": 15,
+      "yards": 1347
     },
     {
-      "player": "Dillon Dingler",
-      "team": "DET",
-      "games_meeting": 34,
-      "window_games": null,
-      "season_ab": 415,
-      "season_hits": 113,
-      "season_avg": 0.2723,
-      "last_match": "2026-08-06"
+      "player": "Bryce Young",
+      "team": "UNK",
+      "position": "QB",
+      "value": 40,
+      "games": 15,
+      "yards": 1131
     },
     {
-      "player": "BO Bichette",
-      "team": "NYM",
-      "games_meeting": 34,
-      "window_games": null,
-      "season_ab": 471,
-      "season_hits": 124,
-      "season_avg": 0.2633,
-      "last_match": "2026-08-09"
+      "player": "Cam Ward",
+      "team": "UNK",
+      "position": "QB",
+      "value": 39,
+      "games": 15,
+      "yards": 1143
     },
     {
-      "player": "Michael Harris II",
-      "team": "ATL",
-      "games_meeting": 33,
-      "window_games": null,
-      "season_ab": 426,
-      "season_hits": 124,
-      "season_avg": 0.2911,
-      "last_match": "2026-08-06"
+      "player": "Lamar Jackson",
+      "team": "UNK",
+      "position": "QB",
+      "value": 39,
+      "games": 12,
+      "yards": 1209
     },
     {
-      "player": "Pete Crow Armstrong",
-      "team": "CHC",
-      "games_meeting": 33,
-      "window_games": null,
-      "season_ab": 447,
-      "season_hits": 128,
-      "season_avg": 0.2864,
-      "last_match": "2026-08-06"
+      "player": "C.J.Stroud",
+      "team": "UNK",
+      "position": "QB",
+      "value": 38,
+      "games": 14,
+      "yards": 1199
+    },
+    {
+      "player": "Daniel Jones",
+      "team": "UNK",
+      "position": "QB",
+      "value": 36,
+      "games": 12,
+      "yards": 1087
+    },
+    {
+      "player": "Geno Smith",
+      "team": "UNK",
+      "position": "QB",
+      "value": 35,
+      "games": 12,
+      "yards": 1046
     }
   ]
 }

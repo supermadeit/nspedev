@@ -630,35 +630,51 @@ function extractMlbPlayerReportPayload(payload: unknown): MlbPlayerReportPayload
 
 interface NflExplosiveMatch {
   date: string
-  value: number
-  count: number
-  yards: number[]
+  date_iso?: string
+  yards: number
+  opponent?: string
+  receiver?: string
+  passer?: string
+  touchdown?: boolean
+  quarter?: number
+  play_type?: string
+  // legacy grouped shape
+  value?: number
+  count?: number
+  yards_list?: number[]
 }
 
 interface NflExplosiveResult {
   player: string
-  met: number
-  matches: NflExplosiveMatch[]
-  last: number
-  threshold: number
   team?: string
+  position?: string
+  // trend (per-game drill-down) shape
+  met?: number
+  met_count?: number
+  matches?: NflExplosiveMatch[]
+  last?: number
+  threshold?: number
+  window?: number
+  // compute (season leaderboard) shape
+  value?: number   // explosive play count
+  games?: number
+  yards?: number   // total yards on explosive plays
 }
 
 interface NflExplosivePayload {
   sport: string
-  query: string[]
+  query: string | string[]
+  total_results?: number
   results: NflExplosiveResult[]
 }
 
 function isNflExplosivePayload(payload: unknown): payload is NflExplosivePayload {
   if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
   const p = payload as Record<string, unknown>
-  return (
-    p.sport === 'nfl' &&
-    Array.isArray(p.query) &&
-    (p.query as string[]).includes('long') &&
-    Array.isArray(p.results)
-  )
+  const queryHasLong =
+    (Array.isArray(p.query) && (p.query as string[]).includes('long')) ||
+    (typeof p.query === 'string' && p.query.includes('long'))
+  return p.sport === 'nfl' && queryHasLong && Array.isArray(p.results)
 }
 
 interface StatContext {
@@ -1530,15 +1546,56 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
       return next
     })
 
+  // Compute (leaderboard) shape — results have value/games/yards, no matches array
+  const isCompute = results.length > 0 && results[0].value != null && !results[0].matches
+  if (isCompute) {
+    return (
+      <div className="space-y-0">
+        {/* header row */}
+        <div
+          className="flex items-center gap-2 pb-1 mb-1 font-mono text-[11px]"
+          style={{ color: 'oklch(0.50 0 0)', borderBottom: '1px solid oklch(0.22 0 0)' }}
+        >
+          <span className="flex-1">player</span>
+          <span className="w-10 text-right">plays</span>
+          <span className="w-12 text-right">yards</span>
+          <span className="w-10 text-right">gp</span>
+        </div>
+        {results.map((r, i) => (
+          <div
+            key={i}
+            className="flex items-center gap-2 py-1.5 border-b font-mono text-[12px]"
+            style={{ borderColor: 'oklch(0.22 0 0)' }}
+          >
+            <span className="flex-1" style={{ color: 'oklch(0.88 0.15 195)' }}>
+              {normalizeDisplayPlayer(r.player)}
+            </span>
+            <span className="w-10 text-right font-bold" style={{ color: 'oklch(0.85 0.15 145)' }}>
+              {r.value}
+            </span>
+            <span className="w-12 text-right" style={{ color: 'oklch(0.76 0 0)' }}>
+              {r.yards?.toLocaleString()}
+            </span>
+            <span className="w-10 text-right" style={{ color: 'oklch(0.50 0 0)' }}>
+              {r.games}
+            </span>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  // Trend (per-game drill-down) shape
   return (
     <div className="space-y-0">
       {results.map((r, i) => {
         const isOpen = expanded.has(i)
+        const matchList = r.matches ?? []
         return (
           <div key={i} className="py-2 border-b" style={{ borderColor: 'oklch(0.22 0 0)' }}>
             <div className="flex items-center justify-between">
               <span className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
-                {r.team && (
+                {r.team && r.team !== 'UNK' && (
                   <>
                     <span style={{ color: 'oklch(0.70 0.10 195)' }}>{r.team}</span>
                     <span style={{ color: 'oklch(0.55 0 0)' }}>{' — '}</span>
@@ -1557,23 +1614,44 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
                   cursor: 'pointer',
                 }}
               >
-                {r.met}
+                {r.met_count ?? r.met ?? matchList.length}
               </button>
             </div>
             {isOpen && (
               <div className="mt-2 space-y-1 pl-2">
-                {r.matches.map((m, j) => (
-                  <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
-                    <span style={{ color: 'oklch(0.60 0 0)' }}>{m.date}</span>
-                    <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
-                    <span style={{ color: 'oklch(0.85 0.15 145)' }}>
-                      {m.yards.join(', ')}yds
-                    </span>
-                    {m.count > 1 && (
-                      <span style={{ color: 'oklch(0.50 0 0)' }}> ({m.count} plays)</span>
-                    )}
-                  </div>
-                ))}
+                {matchList.map((m, j) => {
+                  const ydsDisplay = Array.isArray(m.yards_list)
+                    ? m.yards_list.join(', ')
+                    : String(m.yards)
+                  return (
+                    <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+                      <span style={{ color: 'oklch(0.60 0 0)' }}>{m.date_iso ?? m.date}</span>
+                      {m.opponent && (
+                        <>
+                          <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
+                          <span style={{ color: 'oklch(0.75 0.08 220)' }}>{m.opponent}</span>
+                        </>
+                      )}
+                      <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                      <span style={{ color: 'oklch(0.85 0.15 145)' }}>{ydsDisplay}yds</span>
+                      {m.quarter != null && (
+                        <span style={{ color: 'oklch(0.55 0 0)' }}> Q{m.quarter}</span>
+                      )}
+                      {m.touchdown && (
+                        <span style={{ color: 'oklch(0.80 0.18 60)' }}> TD</span>
+                      )}
+                      {m.receiver && (
+                        <>
+                          <span style={{ color: 'oklch(0.45 0 0)' }}>{' → '}</span>
+                          <span style={{ color: 'oklch(0.72 0 0)' }}>{m.receiver}</span>
+                        </>
+                      )}
+                      {m.count != null && m.count > 1 && (
+                        <span style={{ color: 'oklch(0.50 0 0)' }}> ({m.count} plays)</span>
+                      )}
+                    </div>
+                  )
+                })}
               </div>
             )}
           </div>
@@ -1582,6 +1660,7 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
     </div>
   )
 }
+
 
 function H2hView({ payload }: { payload: H2hPayload }) {
   const q = payload.query ?? {}

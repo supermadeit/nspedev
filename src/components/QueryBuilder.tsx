@@ -41,6 +41,8 @@ interface PersistedBuilderState {
   reportPosition: string
   nflPlayType: string
   nflYds: string
+  nflExplosiveSubMode: 'trend' | 'compute'
+  nflMinYds: string
 }
 
 export interface PopularPlayer {
@@ -268,6 +270,8 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
   // NFL explosive
   const [nflPlayType, setNflPlayType] = useState(initial.nflPlayType ?? '')
   const [nflYds, setNflYds] = useState(initial.nflYds ?? '')
+  const [nflExplosiveSubMode, setNflExplosiveSubMode] = useState<'trend' | 'compute'>(initial.nflExplosiveSubMode ?? 'trend')
+  const [nflMinYds, setNflMinYds] = useState(initial.nflMinYds ?? '')
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -282,13 +286,14 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       batPosition,
       reportSubMode, reportWindow, reportWindowN, reportPlayer, reportPosition,
       nflPlayType, nflYds,
+      nflExplosiveSubMode, nflMinYds,
     }
     try {
       window.localStorage.setItem(storageKey, JSON.stringify(payload))
     } catch {
       // ignore quota / unavailable storage
     }
-  }, [storageKey, mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, pitchPlayer, pitchFlag, pitchDownN, teamCode, teamFlag, batPosition, reportSubMode, reportWindow, reportWindowN, reportPlayer, reportPosition, nflPlayType, nflYds])
+  }, [storageKey, mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, pitchPlayer, pitchFlag, pitchDownN, teamCode, teamFlag, batPosition, reportSubMode, reportWindow, reportWindowN, reportPlayer, reportPosition, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds])
 
   const isNbaHalfPeriod = sport === 'nba' && period === '1h'
   const allStats = SPORT_STATS[sport] ?? []
@@ -343,9 +348,14 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
   }
 
   const builtCommand = useMemo(() => {
-    // Explosive: nspe nfl long {type} -yds{N} -last{A}/{B}
+    // Explosive: trend or compute
     if (mode === 'explosive') {
-      if (!nflPlayType || !nflYds || !lastA || !lastB) return ''
+      if (!nflPlayType) return ''
+      if (nflExplosiveSubMode === 'compute') {
+        if (!nflMinYds) return ''
+        return `nspe nfl long ${nflPlayType} -yds min${nflMinYds} -season`
+      }
+      if (!nflYds || !lastA || !lastB) return ''
       return `nspe nfl long ${nflPlayType} -yds${nflYds} -last${lastA}/${lastB}`
     }
 
@@ -482,13 +492,34 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
           : mode === 'report'
           ? '▸ nspe mlb {pos} -report {-season|-lastN}  |  nspe mlb {player} -report {-lastN}'
           : mode === 'explosive'
-          ? '▸ nspe nfl long {pass|rush|rec} -ydsN -lastA/B'
+          ? (nflExplosiveSubMode === 'compute'
+            ? '▸ nspe nfl long {pass|rush|rec} -yds minN -season'
+            : '▸ nspe nfl long {pass|rush|rec} -ydsN -lastA/B')
           : '▸ nspe mlb bat vs {TEAM} {-outs}'}
       </div>
 
       {/* Explosive: NFL play-by-play explosive plays */}
       {mode === 'explosive' && (
         <>
+          {/* sub-mode toggle */}
+          <div className="mb-3">
+            <SLabel>mode</SLabel>
+            <div className="flex gap-1.5">
+              <Pill
+                selected={nflExplosiveSubMode === 'trend'}
+                onClick={() => setNflExplosiveSubMode('trend')}
+              >
+                trend
+              </Pill>
+              <Pill
+                selected={nflExplosiveSubMode === 'compute'}
+                onClick={() => setNflExplosiveSubMode('compute')}
+              >
+                compute
+              </Pill>
+            </div>
+          </div>
+
           <div className="mb-3">
             <SLabel>play type</SLabel>
             <div className="flex gap-1.5 flex-wrap">
@@ -504,26 +535,36 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
             </div>
           </div>
 
-          <div className="mb-3 flex items-end gap-5 flex-wrap">
-            <div>
-              <SLabel>yards threshold</SLabel>
+          {nflExplosiveSubMode === 'compute' ? (
+            <div className="mb-3">
+              <SLabel>min yards</SLabel>
               <div className="flex items-center gap-2">
-                <NumInput value={nflYds} onChange={setNflYds} w={64} />
-                <span className="font-mono text-[11px]" style={{ color: C.textDim }}>yds</span>
+                <NumInput value={nflMinYds} onChange={setNflMinYds} w={72} />
+                <span className="font-mono text-[11px]" style={{ color: C.textDim }}>yds  ·  -season</span>
               </div>
             </div>
-            <div className="flex items-end gap-1.5">
+          ) : (
+            <div className="mb-3 flex items-end gap-5 flex-wrap">
               <div>
-                <SLabel>met</SLabel>
-                <NumInput value={lastA} onChange={setLastA} placeholder="N" w={54} />
+                <SLabel>yards threshold</SLabel>
+                <div className="flex items-center gap-2">
+                  <NumInput value={nflYds} onChange={setNflYds} w={64} />
+                  <span className="font-mono text-[11px]" style={{ color: C.textDim }}>yds</span>
+                </div>
               </div>
-              <span style={{ color: C.textDim, paddingBottom: '8px' }}>/</span>
-              <div>
-                <SLabel>-last</SLabel>
-                <NumInput value={lastB} onChange={setLastB} placeholder="N" w={54} />
+              <div className="flex items-end gap-1.5">
+                <div>
+                  <SLabel>met</SLabel>
+                  <NumInput value={lastA} onChange={setLastA} placeholder="N" w={54} />
+                </div>
+                <span style={{ color: C.textDim, paddingBottom: '8px' }}>/</span>
+                <div>
+                  <SLabel>-last</SLabel>
+                  <NumInput value={lastB} onChange={setLastB} placeholder="N" w={54} />
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </>
       )}
 
