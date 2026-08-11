@@ -2891,16 +2891,8 @@ function App() {
         if (typeof outputStr === 'string') {
           try {
             const inner = JSON.parse(outputStr) as Record<string, unknown>
-            const isUnsupportedNflTrend =
-              inner.sport === 'nfl' &&
-              Array.isArray(inner.query) &&
-              !(inner.query as string[]).includes('long')
-            if (isUnsupportedNflTrend) {
-              setQueryResults([])
-              setQueryError('nfl per-game trend queries are not yet supported via the api · use explosive or compute mode')
-              setIsLoading(false)
-              return
-            }
+            const _inner = inner // reserved for future envelope checks
+            void _inner
           } catch { /* output is not JSON */ }
         }
       }

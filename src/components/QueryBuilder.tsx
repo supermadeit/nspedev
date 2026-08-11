@@ -419,11 +419,6 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     else if (period === '1h') parts.push('1h')
 
     if (mode === 'trend') {
-      if (sport === 'nfl') {
-        // NFL per-game trend queries are not yet supported by the REST API.
-        // Return empty so the run button stays disabled.
-        return ''
-      }
       if (stat) parts.push(`-${stat}${thresholdN}`)
       if (lastA && lastB) parts.push(`-last${lastA}/${lastB}`)
     } else if (mode === 'compute') {
@@ -478,9 +473,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       {/* Format hint */}
       <div className="text-[10px] mb-4 leading-relaxed" style={{ color: C.textDim }}>
         {mode === 'trend'
-          ? (sport === 'nfl'
-            ? '▸ nfl per-game trend · not yet available via api · use explosive or compute mode'
-            : '▸ nspe {sport} {post} {full/q1} {stat}N -lastN/N')
+          ? '▸ nspe {sport} {post} {full/q1} {stat}N -lastN/N'
           : mode === 'compute'
           ? '▸ nspe {sport} {post} {full/q1} {stat} minN {maxN} {-window}'
           : mode === 'streak'
@@ -914,23 +907,8 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
         </div>
       )}
 
-      {/* NFL trend coming soon notice */}
-      {mode === 'trend' && sport === 'nfl' && (
-        <div className="mb-3 flex items-center gap-2">
-          <span
-            className="font-mono text-[12px] px-2.5 py-1 rounded border"
-            style={{ color: C.textDim, borderColor: C.border, backgroundColor: C.surface2 }}
-          >
-            {'{nfl.trend}'}
-          </span>
-          <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: C.textDim }}>
-            coming soon
-          </span>
-        </div>
-      )}
-
       {/* Stats */}
-      {isBuilderQuery && sport && stats.length > 0 && !(sport === 'nfl' && mode === 'trend') && (
+      {isBuilderQuery && sport && stats.length > 0 && (
         <div className="mb-3">
           <SLabel>stat</SLabel>
           <div className="flex gap-1.5 flex-wrap">
