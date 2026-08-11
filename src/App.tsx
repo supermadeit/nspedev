@@ -1534,6 +1534,13 @@ async function parseApiPayload(response: Response): Promise<ApiPayload> {
 
 // ---------------- NFL explosive view ----------------
 
+/** Extract the yards threshold from a query string like "nfl long rush ydsmin30 last5 reqmet2" */
+function parseExplosiveThreshold(query: string | string[]): number | null {
+  const q = Array.isArray(query) ? query.join(' ') : query
+  const m = q.match(/yds(?:min)?(\d+)/i)
+  return m ? parseInt(m[1], 10) : null
+}
+
 function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
   const [expanded, setExpanded] = useState<Set<number>>(new Set())
   const results = payload.results
@@ -1551,34 +1558,31 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
   if (isCompute) {
     return (
       <div className="space-y-0">
-        {/* header row */}
-        <div
-          className="flex items-center gap-2 pb-1 mb-1 font-mono text-[11px]"
-          style={{ color: 'oklch(0.50 0 0)', borderBottom: '1px solid oklch(0.22 0 0)' }}
-        >
-          <span className="flex-1">player</span>
-          <span className="w-10 text-right">plays</span>
-          <span className="w-12 text-right">yards</span>
-          <span className="w-10 text-right">gp</span>
-        </div>
         {results.map((r, i) => (
           <div
             key={i}
-            className="flex items-center gap-2 py-1.5 border-b font-mono text-[12px]"
+            className="py-2 border-b font-mono"
             style={{ borderColor: 'oklch(0.22 0 0)' }}
           >
-            <span className="flex-1" style={{ color: 'oklch(0.88 0.15 195)' }}>
+            <div className="text-[13px]" style={{ color: 'oklch(0.88 0.15 195)' }}>
               {normalizeDisplayPlayer(r.player)}
-            </span>
-            <span className="w-10 text-right font-bold" style={{ color: 'oklch(0.85 0.15 145)' }}>
-              {r.value}
-            </span>
-            <span className="w-12 text-right" style={{ color: 'oklch(0.76 0 0)' }}>
-              {r.yards?.toLocaleString()}
-            </span>
-            <span className="w-10 text-right" style={{ color: 'oklch(0.50 0 0)' }}>
-              {r.games}
-            </span>
+            </div>
+            <div className="flex items-center gap-3 mt-0.5 text-[12px]">
+              <span>
+                <span className="font-bold" style={{ color: 'oklch(0.85 0.15 145)' }}>{r.value}</span>
+                <span style={{ color: 'oklch(0.50 0 0)' }}> plays</span>
+              </span>
+              <span style={{ color: 'oklch(0.30 0 0)' }}>·</span>
+              <span>
+                <span style={{ color: 'oklch(0.82 0 0)' }}>{r.yards?.toLocaleString()}</span>
+                <span style={{ color: 'oklch(0.50 0 0)' }}> yds</span>
+              </span>
+              <span style={{ color: 'oklch(0.30 0 0)' }}>·</span>
+              <span>
+                <span style={{ color: 'oklch(0.65 0 0)' }}>{r.games}</span>
+                <span style={{ color: 'oklch(0.50 0 0)' }}> gp</span>
+              </span>
+            </div>
           </div>
         ))}
       </div>
@@ -1586,8 +1590,29 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
   }
 
   // Trend (per-game drill-down) shape
+  const threshold = parseExplosiveThreshold(payload.query)
+  // Pull window from the first result that has one
+  const globalWindow = results.find((r) => r.window != null)?.window ?? null
+
   return (
     <div className="space-y-0">
+      {/* context header */}
+      {(threshold != null || globalWindow != null) && (
+        <div
+          className="flex items-center gap-2 pb-1.5 mb-1 font-mono text-[11px]"
+          style={{ color: 'oklch(0.50 0 0)', borderBottom: '1px solid oklch(0.22 0 0)' }}
+        >
+          {threshold != null && (
+            <span>yds<span style={{ color: 'oklch(0.72 0 0)' }}>&ge;{threshold}</span></span>
+          )}
+          {threshold != null && globalWindow != null && (
+            <span style={{ color: 'oklch(0.30 0 0)' }}>·</span>
+          )}
+          {globalWindow != null && (
+            <span>last <span style={{ color: 'oklch(0.72 0 0)' }}>{globalWindow}</span> games</span>
+          )}
+        </div>
+      )}
       {results.map((r, i) => {
         const isOpen = expanded.has(i)
         const matchList = r.matches ?? []
@@ -1615,6 +1640,9 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
                 }}
               >
                 {r.met_count ?? r.met ?? matchList.length}
+                {r.window != null && (
+                  <span style={{ color: 'oklch(0.50 0 0)', fontWeight: 'normal' }}>/{r.window}</span>
+                )}
               </button>
             </div>
             {isOpen && (
@@ -3043,7 +3071,7 @@ function App() {
   }
 
   const handleRunFromBuilder = (query: string) => {
-    setSearchValue(query)
+    setSearchValue('')
     setIsBuilderOpen(false)
     runQuery(query)
     setIsMiniOpen(true)

@@ -1,183 +1,265 @@
 {
   "sport": "nfl",
-  "query": "nfl long_pass min1000 season",
-  "total_results": 22,
+  "query": "nfl long rush ydsmin30 last5 reqmet2",
   "results": [
     {
-      "player": "Matthew Stafford",
-      "team": "UNK",
-      "position": "QB",
-      "value": 67,
-      "games": 16,
-      "yards": 2045
+      "player": "De' Von Achane",
+      "matches": [
+        {
+          "player_name": "De'VonAchane",
+          "player_id": "4429160",
+          "position": "RB",
+          "date_iso": "2025-12-21",
+          "date": "2025-12-21",
+          "opponent": "CIN",
+          "game_id": "401772934",
+          "play_type": "rush",
+          "yards": 48,
+          "touchdown": true,
+          "quarter": 1,
+          "receiver": "",
+          "passer": ""
+        },
+        {
+          "player_name": "De'VonAchane",
+          "player_id": "4429160",
+          "position": "RB",
+          "date_iso": "2025-12-07",
+          "date": "2025-12-07",
+          "opponent": "NYJ",
+          "game_id": "401772790",
+          "play_type": "rush",
+          "yards": 39,
+          "touchdown": false,
+          "quarter": 1,
+          "receiver": "",
+          "passer": ""
+        }
+      ],
+      "met_count": 2,
+      "window": 5
     },
     {
-      "player": "Drake Maye",
-      "team": "UNK",
-      "position": "QB",
-      "value": 66,
-      "games": 17,
-      "yards": 1915
+      "player": "Saquon Barkley",
+      "matches": [
+        {
+          "player_name": "SaquonBarkley",
+          "player_id": "3929630",
+          "position": "RB",
+          "date_iso": "2025-12-20",
+          "date": "2025-12-20",
+          "opponent": "WSH",
+          "game_id": "401772612",
+          "play_type": "rush",
+          "yards": 48,
+          "touchdown": false,
+          "quarter": 4,
+          "receiver": "",
+          "passer": ""
+        },
+        {
+          "player_name": "SaquonBarkley",
+          "player_id": "3929630",
+          "position": "RB",
+          "date_iso": "2025-12-09",
+          "date": "2025-12-09",
+          "opponent": "LAC",
+          "game_id": "401772822",
+          "play_type": "rush",
+          "yards": 52,
+          "touchdown": true,
+          "quarter": 4,
+          "receiver": "",
+          "passer": ""
+        }
+      ],
+      "met_count": 2,
+      "window": 5
     },
     {
-      "player": "Jared Goff",
-      "team": "UNK",
-      "position": "QB",
-      "value": 63,
-      "games": 16,
-      "yards": 1773
+      "player": "Kenny Gainwell",
+      "matches": [
+        {
+          "player_name": "KennyGainwell",
+          "player_id": "4371733",
+          "position": "RB",
+          "date_iso": "2025-12-16",
+          "date": "2025-12-16",
+          "opponent": "MIA",
+          "game_id": "401772823",
+          "play_type": "rush",
+          "yards": 38,
+          "touchdown": false,
+          "quarter": 3,
+          "receiver": "",
+          "passer": ""
+        },
+        {
+          "player_name": "KennyGainwell",
+          "player_id": "4371733",
+          "position": "RB",
+          "date_iso": "2025-11-23",
+          "date": "2025-11-23",
+          "opponent": "CHI",
+          "game_id": "401772780",
+          "play_type": "rush",
+          "yards": 55,
+          "touchdown": false,
+          "quarter": 2,
+          "receiver": "",
+          "passer": ""
+        }
+      ],
+      "met_count": 2,
+      "window": 5
     },
     {
-      "player": "Josh Allen",
-      "team": "UNK",
-      "position": "QB",
-      "value": 55,
-      "games": 14,
-      "yards": 1576
+      "player": "Tre Veyon Henderson",
+      "matches": [
+        {
+          "player_name": "TreVeyonHenderson",
+          "player_id": "4432710",
+          "position": "RB",
+          "date_iso": "2025-12-14",
+          "date": "2025-12-14",
+          "opponent": "BUF",
+          "game_id": "401772795",
+          "play_type": "rush",
+          "yards": 52,
+          "touchdown": true,
+          "quarter": 2,
+          "receiver": "",
+          "passer": ""
+        },
+        {
+          "player_name": "TreVeyonHenderson",
+          "player_id": "4432710",
+          "position": "RB",
+          "date_iso": "2025-11-09",
+          "date": "2025-11-09",
+          "opponent": "TB",
+          "game_id": "401772772",
+          "play_type": "rush",
+          "yards": 55,
+          "touchdown": true,
+          "quarter": 3,
+          "receiver": "",
+          "passer": ""
+        }
+      ],
+      "met_count": 2,
+      "window": 5
     },
     {
-      "player": "Caleb Williams",
-      "team": "UNK",
-      "position": "QB",
-      "value": 54,
-      "games": 16,
-      "yards": 1546
+      "player": "Blake Corum",
+      "matches": [
+        {
+          "player_name": "BlakeCorum",
+          "player_id": "4429096",
+          "position": "RB",
+          "date_iso": "2025-12-07",
+          "date": "2025-12-07",
+          "opponent": "ARI",
+          "game_id": "401772901",
+          "play_type": "rush",
+          "yards": 48,
+          "touchdown": true,
+          "quarter": 4,
+          "receiver": "",
+          "passer": ""
+        },
+        {
+          "player_name": "BlakeCorum",
+          "player_id": "4429096",
+          "position": "RB",
+          "date_iso": "2025-11-30",
+          "date": "2025-11-30",
+          "opponent": "CAR",
+          "game_id": "401772894",
+          "play_type": "rush",
+          "yards": 34,
+          "touchdown": false,
+          "quarter": 4,
+          "receiver": "",
+          "passer": ""
+        }
+      ],
+      "met_count": 2,
+      "window": 5
     },
     {
-      "player": "Sam Darnold",
-      "team": "UNK",
-      "position": "QB",
-      "value": 54,
-      "games": 15,
-      "yards": 1679
+      "player": "Kimani Vidal",
+      "matches": [
+        {
+          "player_name": "KimaniVidal",
+          "player_id": "4430968",
+          "position": "RB",
+          "date_iso": "2025-11-30",
+          "date": "2025-11-30",
+          "opponent": "LV",
+          "game_id": "401772788",
+          "play_type": "rush",
+          "yards": 59,
+          "touchdown": true,
+          "quarter": 3,
+          "receiver": "",
+          "passer": ""
+        },
+        {
+          "player_name": "KimaniVidal",
+          "player_id": "4430968",
+          "position": "RB",
+          "date_iso": "2025-10-12",
+          "date": "2025-10-12",
+          "opponent": "MIA",
+          "game_id": "401772750",
+          "play_type": "rush",
+          "yards": 38,
+          "touchdown": false,
+          "quarter": 1,
+          "receiver": "",
+          "passer": ""
+        }
+      ],
+      "met_count": 2,
+      "window": 5
     },
     {
-      "player": "Trevor Lawrence",
-      "team": "UNK",
-      "position": "QB",
-      "value": 54,
-      "games": 16,
-      "yards": 1519
-    },
-    {
-      "player": "Baker Mayfield",
-      "team": "UNK",
-      "position": "QB",
-      "value": 53,
-      "games": 16,
-      "yards": 1488
-    },
-    {
-      "player": "Dak Prescott",
-      "team": "UNK",
-      "position": "QB",
-      "value": 53,
-      "games": 17,
-      "yards": 1746
-    },
-    {
-      "player": "Bo Nix",
-      "team": "UNK",
-      "position": "QB",
-      "value": 47,
-      "games": 16,
-      "yards": 1357
-    },
-    {
-      "player": "Jordan Love",
-      "team": "UNK",
-      "position": "QB",
-      "value": 46,
-      "games": 13,
-      "yards": 1393
-    },
-    {
-      "player": "Patrick Mahomes",
-      "team": "UNK",
-      "position": "QB",
-      "value": 45,
-      "games": 13,
-      "yards": 1409
-    },
-    {
-      "player": "Justin Herbert",
-      "team": "UNK",
-      "position": "QB",
-      "value": 44,
-      "games": 16,
-      "yards": 1433
-    },
-    {
-      "player": "Aaron Rodgers",
-      "team": "UNK",
-      "position": "QB",
-      "value": 41,
-      "games": 15,
-      "yards": 1297
-    },
-    {
-      "player": "Jacoby Brissett",
-      "team": "UNK",
-      "position": "QB",
-      "value": 41,
-      "games": 12,
-      "yards": 1134
-    },
-    {
-      "player": "Jalen Hurts",
-      "team": "UNK",
-      "position": "QB",
-      "value": 41,
-      "games": 15,
-      "yards": 1347
-    },
-    {
-      "player": "Bryce Young",
-      "team": "UNK",
-      "position": "QB",
-      "value": 40,
-      "games": 15,
-      "yards": 1131
-    },
-    {
-      "player": "Cam Ward",
-      "team": "UNK",
-      "position": "QB",
-      "value": 39,
-      "games": 15,
-      "yards": 1143
-    },
-    {
-      "player": "Lamar Jackson",
-      "team": "UNK",
-      "position": "QB",
-      "value": 39,
-      "games": 12,
-      "yards": 1209
-    },
-    {
-      "player": "C.J.Stroud",
-      "team": "UNK",
-      "position": "QB",
-      "value": 38,
-      "games": 14,
-      "yards": 1199
-    },
-    {
-      "player": "Daniel Jones",
-      "team": "UNK",
-      "position": "QB",
-      "value": 36,
-      "games": 12,
-      "yards": 1087
-    },
-    {
-      "player": "Geno Smith",
-      "team": "UNK",
-      "position": "QB",
-      "value": 35,
-      "games": 12,
-      "yards": 1046
+      "player": "Emari Demercado",
+      "matches": [
+        {
+          "player_name": "EmariDemercado",
+          "player_id": "4362478",
+          "position": "RB",
+          "date_iso": "2025-11-09",
+          "date": "2025-11-09",
+          "opponent": "SEA",
+          "game_id": "401772773",
+          "play_type": "rush",
+          "yards": 55,
+          "touchdown": false,
+          "quarter": 4,
+          "receiver": "",
+          "passer": ""
+        },
+        {
+          "player_name": "EmariDemercado",
+          "player_id": "4362478",
+          "position": "RB",
+          "date_iso": "2025-10-05",
+          "date": "2025-10-05",
+          "opponent": "TEN",
+          "game_id": "401772747",
+          "play_type": "rush",
+          "yards": 52,
+          "touchdown": false,
+          "quarter": 4,
+          "receiver": "",
+          "passer": ""
+        }
+      ],
+      "met_count": 2,
+      "window": 5
     }
   ]
 }
