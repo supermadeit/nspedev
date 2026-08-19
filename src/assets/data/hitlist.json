@@ -3,143 +3,143 @@
     "raw": "MLB 2hits+ {top20} {season}"
   },
   {
-    "team": "MIA",
-    "player": "Otto Lopez",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 46
-  },
-  {
     "team": "PIT",
     "player": "Nick Gonzales",
     "stat": "hits",
     "threshold": 2,
-    "games_meeting": 46
+    "games_meeting": 48
+  },
+  {
+    "team": "MIA",
+    "player": "Otto Lopez",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 47
   },
   {
     "team": "SF",
     "player": "Luis Arraez",
     "stat": "hits",
     "threshold": 2,
-    "games_meeting": 44
+    "games_meeting": 46
   },
   {
     "team": "LAD",
     "player": "Shohei Ohtani",
     "stat": "hits",
     "threshold": 2,
-    "games_meeting": 40
+    "games_meeting": 43
   },
   {
     "team": "HOU",
     "player": "Yordan Alvarez",
     "stat": "hits",
     "threshold": 2,
-    "games_meeting": 40
-  },
-  {
-    "team": "LAD",
-    "player": "Freddie Freeman",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 39
+    "games_meeting": 42
   },
   {
     "team": "TB",
     "player": "Chandler Simpson",
     "stat": "hits",
     "threshold": 2,
-    "games_meeting": 38
+    "games_meeting": 42
   },
   {
-    "team": "TEX",
-    "player": "Brandon Nimmo",
+    "team": "LAD",
+    "player": "Freddie Freeman",
     "stat": "hits",
     "threshold": 2,
-    "games_meeting": 37
+    "games_meeting": 42
   },
   {
     "team": "TB",
     "player": "Yandy Diaz",
     "stat": "hits",
     "threshold": 2,
-    "games_meeting": 36
+    "games_meeting": 41
   },
   {
     "team": "STL",
     "player": "Alec Burleson",
     "stat": "hits",
     "threshold": 2,
-    "games_meeting": 36
+    "games_meeting": 40
   },
   {
-    "team": "SF",
-    "player": "Jung Hoo Lee",
+    "team": "TEX",
+    "player": "Brandon Nimmo",
     "stat": "hits",
     "threshold": 2,
-    "games_meeting": 34
-  },
-  {
-    "team": "WSH",
-    "player": "CJ Abrams",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 34
+    "games_meeting": 40
   },
   {
     "team": "STL",
     "player": "Jordan Walker",
     "stat": "hits",
     "threshold": 2,
-    "games_meeting": 34
-  },
-  {
-    "team": "TOR",
-    "player": "Ernie Clement",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 34
+    "games_meeting": 37
   },
   {
     "team": "BOS",
     "player": "Ceddanne Rafaela",
     "stat": "hits",
     "threshold": 2,
-    "games_meeting": 34
+    "games_meeting": 37
   },
   {
-    "team": "DET",
-    "player": "Riley Greene",
+    "team": "SF",
+    "player": "Jung Hoo Lee",
     "stat": "hits",
     "threshold": 2,
-    "games_meeting": 34
+    "games_meeting": 36
   },
   {
-    "team": "DET",
-    "player": "Dillon Dingler",
+    "team": "TB",
+    "player": "Jonathan Aranda",
     "stat": "hits",
     "threshold": 2,
-    "games_meeting": 34
+    "games_meeting": 36
+  },
+  {
+    "team": "TOR",
+    "player": "Ernie Clement",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 36
   },
   {
     "team": "NYM",
     "player": "BO Bichette",
     "stat": "hits",
     "threshold": 2,
-    "games_meeting": 34
+    "games_meeting": 36
   },
   {
     "team": "ATL",
     "player": "Michael Harris II",
     "stat": "hits",
     "threshold": 2,
-    "games_meeting": 33
+    "games_meeting": 35
   },
   {
-    "team": "CHC",
-    "player": "Pete Crow Armstrong",
+    "team": "CLE",
+    "player": "Chase Delauter",
     "stat": "hits",
     "threshold": 2,
-    "games_meeting": 33
+    "games_meeting": 35
+  },
+  {
+    "team": "SD",
+    "player": "Fernando Tatis Jr",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 35
+  },
+  {
+    "team": "WSH",
+    "player": "CJ Abrams",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 35
   }
 ]

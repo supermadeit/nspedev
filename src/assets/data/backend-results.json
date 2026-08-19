@@ -1,265 +1,218 @@
 {
-  "sport": "nfl",
-  "query": "nfl long rush ydsmin30 last5 reqmet2",
-  "results": [
+  "kind": "mlb_stat_leaderboard",
+  "generated_at": "2026-08-19T14:21:32.923752Z",
+  "query": {
+    "stat": "hits",
+    "field": "H",
+    "short": "H",
+    "threshold": 2,
+    "year": 2026,
+    "last_n": null
+  },
+  "thresholds": {
+    "min_ab_season": 20,
+    "top_n": 20
+  },
+  "rows": [
     {
-      "player": "De' Von Achane",
-      "matches": [
-        {
-          "player_name": "De'VonAchane",
-          "player_id": "4429160",
-          "position": "RB",
-          "date_iso": "2025-12-21",
-          "date": "2025-12-21",
-          "opponent": "CIN",
-          "game_id": "401772934",
-          "play_type": "rush",
-          "yards": 48,
-          "touchdown": true,
-          "quarter": 1,
-          "receiver": "",
-          "passer": ""
-        },
-        {
-          "player_name": "De'VonAchane",
-          "player_id": "4429160",
-          "position": "RB",
-          "date_iso": "2025-12-07",
-          "date": "2025-12-07",
-          "opponent": "NYJ",
-          "game_id": "401772790",
-          "play_type": "rush",
-          "yards": 39,
-          "touchdown": false,
-          "quarter": 1,
-          "receiver": "",
-          "passer": ""
-        }
-      ],
-      "met_count": 2,
-      "window": 5
+      "player": "Nick Gonzales",
+      "team": "PIT",
+      "games_meeting": 48,
+      "window_games": null,
+      "season_ab": 448,
+      "season_hits": 138,
+      "season_avg": 0.308,
+      "last_match": "2026-08-13"
     },
     {
-      "player": "Saquon Barkley",
-      "matches": [
-        {
-          "player_name": "SaquonBarkley",
-          "player_id": "3929630",
-          "position": "RB",
-          "date_iso": "2025-12-20",
-          "date": "2025-12-20",
-          "opponent": "WSH",
-          "game_id": "401772612",
-          "play_type": "rush",
-          "yards": 48,
-          "touchdown": false,
-          "quarter": 4,
-          "receiver": "",
-          "passer": ""
-        },
-        {
-          "player_name": "SaquonBarkley",
-          "player_id": "3929630",
-          "position": "RB",
-          "date_iso": "2025-12-09",
-          "date": "2025-12-09",
-          "opponent": "LAC",
-          "game_id": "401772822",
-          "play_type": "rush",
-          "yards": 52,
-          "touchdown": true,
-          "quarter": 4,
-          "receiver": "",
-          "passer": ""
-        }
-      ],
-      "met_count": 2,
-      "window": 5
+      "player": "Otto Lopez",
+      "team": "MIA",
+      "games_meeting": 47,
+      "window_games": null,
+      "season_ab": 494,
+      "season_hits": 152,
+      "season_avg": 0.3077,
+      "last_match": "2026-08-17"
     },
     {
-      "player": "Kenny Gainwell",
-      "matches": [
-        {
-          "player_name": "KennyGainwell",
-          "player_id": "4371733",
-          "position": "RB",
-          "date_iso": "2025-12-16",
-          "date": "2025-12-16",
-          "opponent": "MIA",
-          "game_id": "401772823",
-          "play_type": "rush",
-          "yards": 38,
-          "touchdown": false,
-          "quarter": 3,
-          "receiver": "",
-          "passer": ""
-        },
-        {
-          "player_name": "KennyGainwell",
-          "player_id": "4371733",
-          "position": "RB",
-          "date_iso": "2025-11-23",
-          "date": "2025-11-23",
-          "opponent": "CHI",
-          "game_id": "401772780",
-          "play_type": "rush",
-          "yards": 55,
-          "touchdown": false,
-          "quarter": 2,
-          "receiver": "",
-          "passer": ""
-        }
-      ],
-      "met_count": 2,
-      "window": 5
+      "player": "Luis Arraez",
+      "team": "SF",
+      "games_meeting": 46,
+      "window_games": null,
+      "season_ab": 482,
+      "season_hits": 153,
+      "season_avg": 0.3174,
+      "last_match": "2026-08-18"
     },
     {
-      "player": "Tre Veyon Henderson",
-      "matches": [
-        {
-          "player_name": "TreVeyonHenderson",
-          "player_id": "4432710",
-          "position": "RB",
-          "date_iso": "2025-12-14",
-          "date": "2025-12-14",
-          "opponent": "BUF",
-          "game_id": "401772795",
-          "play_type": "rush",
-          "yards": 52,
-          "touchdown": true,
-          "quarter": 2,
-          "receiver": "",
-          "passer": ""
-        },
-        {
-          "player_name": "TreVeyonHenderson",
-          "player_id": "4432710",
-          "position": "RB",
-          "date_iso": "2025-11-09",
-          "date": "2025-11-09",
-          "opponent": "TB",
-          "game_id": "401772772",
-          "play_type": "rush",
-          "yards": 55,
-          "touchdown": true,
-          "quarter": 3,
-          "receiver": "",
-          "passer": ""
-        }
-      ],
-      "met_count": 2,
-      "window": 5
+      "player": "Shohei Ohtani",
+      "team": "LAD",
+      "games_meeting": 43,
+      "window_games": null,
+      "season_ab": 453,
+      "season_hits": 148,
+      "season_avg": 0.3267,
+      "last_match": "2026-08-17"
     },
     {
-      "player": "Blake Corum",
-      "matches": [
-        {
-          "player_name": "BlakeCorum",
-          "player_id": "4429096",
-          "position": "RB",
-          "date_iso": "2025-12-07",
-          "date": "2025-12-07",
-          "opponent": "ARI",
-          "game_id": "401772901",
-          "play_type": "rush",
-          "yards": 48,
-          "touchdown": true,
-          "quarter": 4,
-          "receiver": "",
-          "passer": ""
-        },
-        {
-          "player_name": "BlakeCorum",
-          "player_id": "4429096",
-          "position": "RB",
-          "date_iso": "2025-11-30",
-          "date": "2025-11-30",
-          "opponent": "CAR",
-          "game_id": "401772894",
-          "play_type": "rush",
-          "yards": 34,
-          "touchdown": false,
-          "quarter": 4,
-          "receiver": "",
-          "passer": ""
-        }
-      ],
-      "met_count": 2,
-      "window": 5
+      "player": "Yordan Alvarez",
+      "team": "HOU",
+      "games_meeting": 42,
+      "window_games": null,
+      "season_ab": 450,
+      "season_hits": 143,
+      "season_avg": 0.3178,
+      "last_match": "2026-08-14"
     },
     {
-      "player": "Kimani Vidal",
-      "matches": [
-        {
-          "player_name": "KimaniVidal",
-          "player_id": "4430968",
-          "position": "RB",
-          "date_iso": "2025-11-30",
-          "date": "2025-11-30",
-          "opponent": "LV",
-          "game_id": "401772788",
-          "play_type": "rush",
-          "yards": 59,
-          "touchdown": true,
-          "quarter": 3,
-          "receiver": "",
-          "passer": ""
-        },
-        {
-          "player_name": "KimaniVidal",
-          "player_id": "4430968",
-          "position": "RB",
-          "date_iso": "2025-10-12",
-          "date": "2025-10-12",
-          "opponent": "MIA",
-          "game_id": "401772750",
-          "play_type": "rush",
-          "yards": 38,
-          "touchdown": false,
-          "quarter": 1,
-          "receiver": "",
-          "passer": ""
-        }
-      ],
-      "met_count": 2,
-      "window": 5
+      "player": "Chandler Simpson",
+      "team": "TB",
+      "games_meeting": 42,
+      "window_games": null,
+      "season_ab": 434,
+      "season_hits": 134,
+      "season_avg": 0.3088,
+      "last_match": "2026-08-16"
     },
     {
-      "player": "Emari Demercado",
-      "matches": [
-        {
-          "player_name": "EmariDemercado",
-          "player_id": "4362478",
-          "position": "RB",
-          "date_iso": "2025-11-09",
-          "date": "2025-11-09",
-          "opponent": "SEA",
-          "game_id": "401772773",
-          "play_type": "rush",
-          "yards": 55,
-          "touchdown": false,
-          "quarter": 4,
-          "receiver": "",
-          "passer": ""
-        },
-        {
-          "player_name": "EmariDemercado",
-          "player_id": "4362478",
-          "position": "RB",
-          "date_iso": "2025-10-05",
-          "date": "2025-10-05",
-          "opponent": "TEN",
-          "game_id": "401772747",
-          "play_type": "rush",
-          "yards": 52,
-          "touchdown": false,
-          "quarter": 4,
-          "receiver": "",
-          "passer": ""
-        }
-      ],
-      "met_count": 2,
-      "window": 5
+      "player": "Freddie Freeman",
+      "team": "LAD",
+      "games_meeting": 42,
+      "window_games": null,
+      "season_ab": 464,
+      "season_hits": 141,
+      "season_avg": 0.3039,
+      "last_match": "2026-08-18"
+    },
+    {
+      "player": "Yandy Diaz",
+      "team": "TB",
+      "games_meeting": 41,
+      "window_games": null,
+      "season_ab": 474,
+      "season_hits": 145,
+      "season_avg": 0.3059,
+      "last_match": "2026-08-18"
+    },
+    {
+      "player": "Alec Burleson",
+      "team": "STL",
+      "games_meeting": 40,
+      "window_games": null,
+      "season_ab": 481,
+      "season_hits": 139,
+      "season_avg": 0.289,
+      "last_match": "2026-08-17"
+    },
+    {
+      "player": "Brandon Nimmo",
+      "team": "TEX",
+      "games_meeting": 40,
+      "window_games": null,
+      "season_ab": 458,
+      "season_hits": 125,
+      "season_avg": 0.2729,
+      "last_match": "2026-08-18"
+    },
+    {
+      "player": "Jordan Walker",
+      "team": "STL",
+      "games_meeting": 37,
+      "window_games": null,
+      "season_ab": 474,
+      "season_hits": 137,
+      "season_avg": 0.289,
+      "last_match": "2026-08-17"
+    },
+    {
+      "player": "Ceddanne Rafaela",
+      "team": "BOS",
+      "games_meeting": 37,
+      "window_games": null,
+      "season_ab": 477,
+      "season_hits": 137,
+      "season_avg": 0.2872,
+      "last_match": "2026-08-17"
+    },
+    {
+      "player": "Jung Hoo Lee",
+      "team": "SF",
+      "games_meeting": 36,
+      "window_games": null,
+      "season_ab": 435,
+      "season_hits": 127,
+      "season_avg": 0.292,
+      "last_match": "2026-08-15"
+    },
+    {
+      "player": "Jonathan Aranda",
+      "team": "TB",
+      "games_meeting": 36,
+      "window_games": null,
+      "season_ab": 463,
+      "season_hits": 132,
+      "season_avg": 0.2851,
+      "last_match": "2026-08-17"
+    },
+    {
+      "player": "Ernie Clement",
+      "team": "TOR",
+      "games_meeting": 36,
+      "window_games": null,
+      "season_ab": 474,
+      "season_hits": 135,
+      "season_avg": 0.2848,
+      "last_match": "2026-08-18"
+    },
+    {
+      "player": "BO Bichette",
+      "team": "NYM",
+      "games_meeting": 36,
+      "window_games": null,
+      "season_ab": 500,
+      "season_hits": 134,
+      "season_avg": 0.268,
+      "last_match": "2026-08-18"
+    },
+    {
+      "player": "Michael Harris II",
+      "team": "ATL",
+      "games_meeting": 35,
+      "window_games": null,
+      "season_ab": 456,
+      "season_hits": 133,
+      "season_avg": 0.2917,
+      "last_match": "2026-08-18"
+    },
+    {
+      "player": "Chase Delauter",
+      "team": "CLE",
+      "games_meeting": 35,
+      "window_games": null,
+      "season_ab": 403,
+      "season_hits": 115,
+      "season_avg": 0.2854,
+      "last_match": "2026-08-15"
+    },
+    {
+      "player": "Fernando Tatis Jr",
+      "team": "SD",
+      "games_meeting": 35,
+      "window_games": null,
+      "season_ab": 486,
+      "season_hits": 136,
+      "season_avg": 0.2798,
+      "last_match": "2026-08-18"
+    },
+    {
+      "player": "CJ Abrams",
+      "team": "WSH",
+      "games_meeting": 35,
+      "window_games": null,
+      "season_ab": 465,
+      "season_hits": 130,
+      "season_avg": 0.2796,
+      "last_match": "2026-08-18"
     }
   ]
 }

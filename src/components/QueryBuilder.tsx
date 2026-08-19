@@ -8,6 +8,7 @@ type ComputeWindow = '-season' | '-career' | '-last' | ''
 type TeamStat = 'runs' | 'allowed' | ''
 type ExplosiveLeague = 'mlb' | 'nfl'
 type MlbFirstPaFlag = 'xbh' | 'walk' | 'single' | 'hit' | ''
+type NflStatType = 'yds' | 'td'
 type ThresholdMode = 'min' | 'range' | 'exact'
 
 interface PersistedBuilderState {
@@ -31,6 +32,7 @@ interface PersistedBuilderState {
   teamSubMode: 'trend' | 'compute'
   batPosition: string
   mlbFirstFlag: MlbFirstPaFlag
+  nflStatType: NflStatType
   explosiveLeague: ExplosiveLeague
   nflPlayType: string
   nflYds: string
@@ -239,6 +241,8 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
   const [batPosition, setBatPosition] = useState(initial.batPosition ?? '')
   // first plate appearance (MLB trend only)
   const [mlbFirstFlag, setMlbFirstFlag] = useState<MlbFirstPaFlag>(initial.mlbFirstFlag ?? '')
+  // NFL stat type: yards or touchdowns, applies to rush/pass/rec
+  const [nflStatType, setNflStatType] = useState<NflStatType>(initial.nflStatType ?? 'yds')
   // explosive (NFL long plays / MLB long HR)
   const [explosiveLeague, setExplosiveLeague] = useState<ExplosiveLeague>(initial.explosiveLeague ?? 'nfl')
   const [nflPlayType, setNflPlayType] = useState(initial.nflPlayType ?? '')
@@ -256,7 +260,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       streakN,
       h2hPlayer, h2hOpponent,
       teamStat, teamSubMode,
-      batPosition, mlbFirstFlag,
+      batPosition, mlbFirstFlag, nflStatType,
       explosiveLeague, nflPlayType, nflYds,
       nflExplosiveSubMode, nflMinYds,
     }
@@ -265,7 +269,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     } catch {
       // ignore quota / unavailable storage
     }
-  }, [storageKey, mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds])
+  }, [storageKey, mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, nflStatType, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds])
 
   const isNbaHalfPeriod = sport === 'nba' && period === '1h'
   const allStats = SPORT_STATS[sport] ?? []
@@ -385,10 +389,24 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     else if (period === '1h') parts.push('1h')
 
     if (mode === 'trend') {
-      if (stat) parts.push(`-${stat}${thresholdN}`)
+      if (stat) {
+        if (sport === 'nfl') {
+          parts.push(stat)
+          parts.push(`-${nflStatType}${thresholdN}`)
+        } else {
+          parts.push(`-${stat}${thresholdN}`)
+        }
+      }
       if (lastA && lastB) parts.push(`-last${lastA}/${lastB}`)
     } else if (mode === 'compute') {
-      if (stat) parts.push(`-${stat}`)
+      if (stat) {
+        if (sport === 'nfl') {
+          parts.push(stat)
+          parts.push(`-${nflStatType}`)
+        } else {
+          parts.push(`-${stat}`)
+        }
+      }
       if (thresholdMode === 'min') {
         if (minN) parts.push(`min${minN}`)
       } else if (thresholdMode === 'range') {
@@ -404,12 +422,19 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       else if (computeWindow === '-career') parts.push('-career')
       else if (computeWindow === '-last' && windowN) parts.push(`-last${windowN}`)
     } else if (mode === 'streak') {
-      if (stat && streakN) parts.push(`-${stat}${thresholdN}`)
+      if (stat && streakN) {
+        if (sport === 'nfl') {
+          parts.push(stat)
+          parts.push(`-${nflStatType}${thresholdN}`)
+        } else {
+          parts.push(`-${stat}${thresholdN}`)
+        }
+      }
       if (streakN) parts.push(`-streak${streakN}`)
     }
 
     return parts.join(' ')
-  }, [mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds])
+  }, [mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds, nflStatType])
 
   const canRun = Boolean(builtCommand) && !isLoading
 
@@ -895,6 +920,21 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
                 {s.label}
               </Pill>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* NFL stat type: yards or touchdowns */}
+      {isBuilderQuery && sport === 'nfl' && stat && (
+        <div className="mb-3">
+          <SLabel>type</SLabel>
+          <div className="flex gap-1.5">
+            <Pill selected={nflStatType === 'yds'} onClick={() => setNflStatType('yds')}>
+              -yds
+            </Pill>
+            <Pill selected={nflStatType === 'td'} onClick={() => setNflStatType('td')}>
+              -td
+            </Pill>
           </div>
         </div>
       )}

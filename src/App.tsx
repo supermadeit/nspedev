@@ -1849,7 +1849,7 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
                     : String(m.yards)
                   return (
                     <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
-                      <span style={{ color: 'oklch(0.60 0 0)' }}>{m.date_iso ?? m.date}</span>
+                      <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(m.date_iso ?? m.date) ?? (m.date_iso ?? m.date)}</span>
                       {m.opponent && (
                         <>
                           <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
@@ -1934,7 +1934,7 @@ function MlbHrView({ payload }: { payload: MlbHrPayload }) {
               <div className="mt-1.5 space-y-0.5 pl-2">
                 {r.events.map((e, j) => (
                   <div key={j} className="font-mono text-[11px]" style={{ color: 'oklch(0.72 0 0)' }}>
-                    <span style={{ color: 'oklch(0.55 0 0)' }}>{e.date}</span>
+                    <span style={{ color: 'oklch(0.55 0 0)' }}>{extractDateToken(e.date) ?? e.date}</span>
                     {e.opponent && (
                       <>
                         <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
@@ -1994,7 +1994,7 @@ function MlbHrView({ payload }: { payload: MlbHrPayload }) {
                 {matchList.map((m, j) => (
                   <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
                     <div>
-                      <span style={{ color: 'oklch(0.60 0 0)' }}>{m.date}</span>
+                      <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(m.date) ?? m.date}</span>
                       {m.opponent && (
                         <>
                           <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
@@ -2070,7 +2070,7 @@ function MlbFirstPaTrendView({ payload }: { payload: MlbFirstPaTrendPayload }) {
                 {matchList.map((m, j) => (
                   <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
                     <div>
-                      <span style={{ color: 'oklch(0.60 0 0)' }}>{m.date}</span>
+                      <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(m.date) ?? m.date}</span>
                       {m.opponent && (
                         <>
                           <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
@@ -2176,7 +2176,7 @@ function MlbTeamRunsView({ payload }: { payload: MlbTeamRunsPayload }) {
               <div className="mt-2 space-y-1 pl-2">
                 {matchList.map((m, j) => (
                   <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
-                    <span style={{ color: 'oklch(0.60 0 0)' }}>{m.date_iso}</span>
+                    <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(m.date_iso) ?? m.date_iso}</span>
                     {m.opponent && (
                       <>
                         <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
@@ -2318,7 +2318,7 @@ function H2hView({ payload }: { payload: H2hPayload }) {
                   style={{ borderColor: 'oklch(0.22 0 0)' }}
                 >
                   <span style={{ color: 'oklch(0.76 0 0)' }}>
-                    <span style={{ color: 'oklch(0.55 0 0)' }}>{g.date}</span>
+                    <span style={{ color: 'oklch(0.55 0 0)' }}>{extractDateToken(g.date_iso ?? g.date) ?? g.date}</span>
                     {matchup ? (
                       <>
                         <span style={{ color: 'oklch(0.40 0 0)' }}>{'  '}</span>
@@ -2715,7 +2715,7 @@ function MlbPitchFpvView({ payload }: { payload: MlbPitchFpvPayload }) {
                   const haLabel = ha === 'HOME' ? 'vs' : ha === 'AWAY' ? '@' : ha
                   return (
                     <tr key={`${g.date_iso ?? i}`} style={{ borderBottom: '1px solid oklch(0.18 0 0)', color: PITCH_VALUE }}>
-                      <td className="py-1 pr-2" style={{ color: PITCH_LABEL }}>{g.date_iso ?? ''}</td>
+                      <td className="py-1 pr-2" style={{ color: PITCH_LABEL }}>{extractDateToken(g.date_iso) ?? g.date_iso ?? ''}</td>
                       <td className="py-1 pr-2" style={{ color: 'oklch(0.70 0.10 195)' }}>{g.opponent_team ?? ''}</td>
                       <td className="py-1 pr-2" style={{ color: PITCH_LABEL }}>{haLabel}</td>
                       <td className="py-1 pr-2 text-right" style={{ color: PITCH_ACCENT }}>{typeof g.fpv === 'number' ? g.fpv.toFixed(1) : '—'}</td>
