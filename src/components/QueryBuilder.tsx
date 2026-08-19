@@ -1,14 +1,13 @@
 import { useState, useMemo, useEffect } from 'react'
 import { useIsMobile } from '@/hooks/use-mobile'
 
-type QueryMode = 'trend' | 'compute' | 'streak' | 'h2h' | 'pitch' | 'team' | 'report' | 'explosive'
-type ReportSubMode = 'leaderboard' | 'player'
-type ReportWindow = '-season' | '-last5' | '-last10' | '-last20' | '-lastN' | ''
+type QueryMode = 'trend' | 'compute' | 'streak' | 'h2h' | 'team' | 'explosive'
 type SeasonType = 'post' | ''
 type PeriodType = 'q1' | '1h' | ''
 type ComputeWindow = '-season' | '-career' | '-last' | ''
-type PitchFlag = 'vfp' | 'outs' | 'down' | ''
-type TeamFlag = 'outs' | 'ov' | ''
+type TeamStat = 'runs' | 'allowed' | ''
+type ExplosiveLeague = 'mlb' | 'nfl'
+type MlbFirstPaFlag = 'xbh' | 'walk' | 'single' | 'hit' | ''
 type ThresholdMode = 'min' | 'range' | 'exact'
 
 interface PersistedBuilderState {
@@ -28,17 +27,11 @@ interface PersistedBuilderState {
   streakN: string
   h2hPlayer: string
   h2hOpponent: string
-  pitchPlayer: string
-  pitchFlag: PitchFlag
-  pitchDownN: string
-  teamCode: string
-  teamFlag: TeamFlag
+  teamStat: TeamStat
+  teamSubMode: 'trend' | 'compute'
   batPosition: string
-  reportSubMode: ReportSubMode
-  reportWindow: ReportWindow
-  reportWindowN: string
-  reportPlayer: string
-  reportPosition: string
+  mlbFirstFlag: MlbFirstPaFlag
+  explosiveLeague: ExplosiveLeague
   nflPlayType: string
   nflYds: string
   nflExplosiveSubMode: 'trend' | 'compute'
@@ -58,19 +51,6 @@ const MLB_POSITIONS = [
   { value: '2b', label: '2B', title: 'Second Base' },
   { value: '3b', label: '3B', title: 'Third Base' },
   { value: 'dh', label: 'DH', title: 'Designated Hitter' },
-]
-
-const REPORT_POSITIONS = [
-  { value: 'c', label: 'C' },
-  { value: '1b', label: '1B' },
-  { value: '2b', label: '2B' },
-  { value: '3b', label: '3B' },
-  { value: 'ss', label: 'SS' },
-  { value: 'lf', label: 'LF' },
-  { value: 'cf', label: 'CF' },
-  { value: 'rf', label: 'RF' },
-  { value: 'of', label: 'OF' },
-  { value: 'dh', label: 'DH' },
 ]
 
 // All 30 MLB team abbreviations matching backend codes (e.g. ATH for Athletics).
@@ -252,23 +232,17 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
   // h2h (batter)
   const [h2hPlayer, setH2hPlayer] = useState(initial.h2hPlayer ?? '')
   const [h2hOpponent, setH2hOpponent] = useState(initial.h2hOpponent ?? '')
-  // pitch (pitcher h2h)
-  const [pitchPlayer, setPitchPlayer] = useState(initial.pitchPlayer ?? '')
-  const [pitchFlag, setPitchFlag] = useState<PitchFlag>(initial.pitchFlag ?? '')
-  const [pitchDownN, setPitchDownN] = useState(initial.pitchDownN ?? '')
-  // team (bat vs TEAM)
-  const [teamCode, setTeamCode] = useState(initial.teamCode ?? '')
-  const [teamFlag, setTeamFlag] = useState<TeamFlag>(initial.teamFlag ?? '')
+  // team (runs scored/allowed)
+  const [teamStat, setTeamStat] = useState<TeamStat>(initial.teamStat ?? '')
+  const [teamSubMode, setTeamSubMode] = useState<'trend' | 'compute'>(initial.teamSubMode ?? 'trend')
   // batter position (MLB only)
   const [batPosition, setBatPosition] = useState(initial.batPosition ?? '')
-  // report mode
-  const [reportSubMode, setReportSubMode] = useState<ReportSubMode>(initial.reportSubMode ?? 'leaderboard')
-  const [reportWindow, setReportWindow] = useState<ReportWindow>(initial.reportWindow ?? '')
-  const [reportWindowN, setReportWindowN] = useState(initial.reportWindowN ?? '')
-  const [reportPlayer, setReportPlayer] = useState(initial.reportPlayer ?? '')
-  const [reportPosition, setReportPosition] = useState(initial.reportPosition ?? '')
-  // NFL explosive
+  // first plate appearance (MLB trend only)
+  const [mlbFirstFlag, setMlbFirstFlag] = useState<MlbFirstPaFlag>(initial.mlbFirstFlag ?? '')
+  // explosive (NFL long plays / MLB long HR)
+  const [explosiveLeague, setExplosiveLeague] = useState<ExplosiveLeague>(initial.explosiveLeague ?? 'nfl')
   const [nflPlayType, setNflPlayType] = useState(initial.nflPlayType ?? '')
+  // yards threshold for nfl, HR distance in feet for mlb
   const [nflYds, setNflYds] = useState(initial.nflYds ?? '')
   const [nflExplosiveSubMode, setNflExplosiveSubMode] = useState<'trend' | 'compute'>(initial.nflExplosiveSubMode ?? 'trend')
   const [nflMinYds, setNflMinYds] = useState(initial.nflMinYds ?? '')
@@ -281,11 +255,9 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       minN, maxN, thresholdMode, computeWindow, windowN,
       streakN,
       h2hPlayer, h2hOpponent,
-      pitchPlayer, pitchFlag, pitchDownN,
-      teamCode, teamFlag,
-      batPosition,
-      reportSubMode, reportWindow, reportWindowN, reportPlayer, reportPosition,
-      nflPlayType, nflYds,
+      teamStat, teamSubMode,
+      batPosition, mlbFirstFlag,
+      explosiveLeague, nflPlayType, nflYds,
       nflExplosiveSubMode, nflMinYds,
     }
     try {
@@ -293,7 +265,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     } catch {
       // ignore quota / unavailable storage
     }
-  }, [storageKey, mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, pitchPlayer, pitchFlag, pitchDownN, teamCode, teamFlag, batPosition, reportSubMode, reportWindow, reportWindowN, reportPlayer, reportPosition, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds])
+  }, [storageKey, mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds])
 
   const isNbaHalfPeriod = sport === 'nba' && period === '1h'
   const allStats = SPORT_STATS[sport] ?? []
@@ -316,23 +288,18 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     if (s !== 'mlb') {
       setBatPosition('')
     }
-    // explosive mode is NFL-only — switch to trend when leaving NFL
-    if (s !== 'nfl' && mode === 'explosive') {
-      setMode('trend')
-    }
   }
 
   const handleModeSelect = (m: QueryMode) => {
     setMode(m)
-    // h2h, pitch, team, report are MLB-only — force sport to mlb when switching in.
-    if ((m === 'h2h' || m === 'pitch' || m === 'team' || m === 'report') && sport !== 'mlb') {
+    // h2h, team are MLB-only — force sport to mlb when switching in.
+    if ((m === 'h2h' || m === 'team') && sport !== 'mlb') {
       setSport('mlb')
       setStat('')
       if (period === '1h' || period === 'q1') setPeriod('')
     }
-    // explosive is NFL-only — force sport to nfl when switching in.
+    // explosive has its own league toggle (mlb/nfl), separate from the generic sport picker.
     if (m === 'explosive') {
-      setSport('nfl')
       setStat('')
       if (period === '1h' || period === 'q1') setPeriod('')
       setBatPosition('')
@@ -348,8 +315,18 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
   }
 
   const builtCommand = useMemo(() => {
-    // Explosive: trend or compute
+    // Explosive: trend or compute, mlb (HR distance) or nfl (long plays)
     if (mode === 'explosive') {
+      if (explosiveLeague === 'mlb') {
+        if (nflExplosiveSubMode === 'compute') {
+          if (!nflMinYds) return ''
+          const parts = ['nspe', 'mlb', 'long', `-hr`, `min${nflMinYds}`]
+          if (windowN) parts.push(`-last${windowN}`)
+          return parts.join(' ')
+        }
+        if (!nflYds || !lastA || !lastB) return ''
+        return `nspe mlb long -hr${nflYds} -last${lastA}/${lastB}`
+      }
       if (!nflPlayType) return ''
       if (nflExplosiveSubMode === 'compute') {
         if (!nflMinYds) return ''
@@ -365,45 +342,34 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       return `nspe mlb ${player.toLowerCase()} vs ${h2hOpponent}`
     }
 
-    if (mode === 'pitch') {
-      const player = pitchPlayer.trim()
-      if (!player) return ''
-      const parts = ['nspe', 'mlb', 'pitch', player.toLowerCase()]
-      if (pitchFlag === 'vfp') parts.push('-vfp')
-      else if (pitchFlag === 'outs') parts.push('-outs')
-      else if (pitchFlag === 'down' && pitchDownN) parts.push(`-${pitchDownN}down`)
-      return parts.join(' ')
-    }
-
     if (mode === 'team') {
-      if (!teamCode) return ''
-      if (teamFlag === 'outs') {
-        return `nspe mlb bat ${teamCode} -outs -season`
+      if (!teamStat) return ''
+      const parts = ['nspe', 'mlb', 'team']
+      if (teamSubMode === 'trend') {
+        parts.push(`-${teamStat}${thresholdN}`)
+        if (lastA && lastB) parts.push(`-last${lastA}/${lastB}`)
+      } else {
+        parts.push(`-${teamStat}`)
+        if (thresholdMode === 'min') {
+          if (minN) parts.push(`min${minN}`)
+        } else if (thresholdMode === 'range') {
+          if (minN) parts.push(`min${minN}`)
+          if (maxN) parts.push(`max${maxN}`)
+        } else if (thresholdMode === 'exact') {
+          if (minN) {
+            parts.push(`min${minN}`)
+            parts.push(`max${minN}`)
+          }
+        }
+        if (computeWindow === '-season') parts.push('-season')
+        else if (computeWindow === '-last' && windowN) parts.push(`-last${windowN}`)
       }
-      if (teamFlag === 'ov') {
-        return `nspe mlb ${teamCode} -ov -season`
-      }
-      const parts = ['nspe', 'mlb', 'bat', 'vs', teamCode]
       return parts.join(' ')
     }
 
-    if (mode === 'report') {
-      const parts = ['nspe', 'mlb']
-      if (reportSubMode === 'player') {
-        const player = reportPlayer.trim()
-        if (!player) return ''
-        parts.push(player.toLowerCase())
-      } else {
-        // leaderboard — optional position filter
-        if (reportPosition) parts.push(reportPosition.toUpperCase())
-      }
-      parts.push('-report')
-      if (reportWindow === '-season') parts.push('-season')
-      else if (reportWindow === '-last5') parts.push('-last5')
-      else if (reportWindow === '-last10') parts.push('-last10')
-      else if (reportWindow === '-last20') parts.push('-last20')
-      else if (reportWindow === '-lastN' && reportWindowN) parts.push(`-last${reportWindowN}`)
-      return parts.join(' ')
+    if (mode === 'trend' && sport === 'mlb' && mlbFirstFlag) {
+      if (!lastA || !lastB) return ''
+      return `nspe mlb first -${mlbFirstFlag} -last${lastA}/${lastB}`
     }
 
     if (!sport) return ''
@@ -443,17 +409,18 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     }
 
     return parts.join(' ')
-  }, [mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, pitchPlayer, pitchFlag, pitchDownN, teamCode, teamFlag, batPosition, reportSubMode, reportWindow, reportWindowN, reportPlayer, reportPosition, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds])
+  }, [mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds])
 
   const canRun = Boolean(builtCommand) && !isLoading
 
   const isBuilderQuery = mode === 'trend' || mode === 'compute' || mode === 'streak'
+  const firstPaActive = mode === 'trend' && sport === 'mlb' && Boolean(mlbFirstFlag)
 
   return (
     <div className="w-full" style={{ color: C.textBright, fontFamily: 'monospace' }}>
       {/* Mode tabs */}
       <div className="flex gap-1.5 mb-4 flex-wrap">
-        {(['trend', 'compute', 'streak', 'h2h', 'pitch', 'team', 'report', 'explosive'] as QueryMode[]).map((m) => (
+        {(['trend', 'compute', 'explosive', 'team', 'h2h'] as QueryMode[]).map((m) => (
           <button
             key={m}
             type="button"
@@ -473,27 +440,50 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       {/* Format hint */}
       <div className="text-[10px] mb-4 leading-relaxed" style={{ color: C.textDim }}>
         {mode === 'trend'
-          ? '▸ nspe {sport} {post} {full/q1} {stat}N -lastN/N'
+          ? (firstPaActive
+            ? '▸ nspe mlb first {-xbh|-walk|-single|-hit} -lastN/N'
+            : '▸ nspe {sport} {full/q1} {stat} -lastN/N')
           : mode === 'compute'
-          ? '▸ nspe {sport} {post} {full/q1} {stat} minN {maxN} {-window}'
+          ? '▸ nspe {sport} {stat} minN {-window}'
           : mode === 'streak'
-          ? '▸ nspe {sport} {post} {full/q1} {stat}N -streakN'
+          ? '▸ nspe {sport} {full/q1} {stat} -streakN'
           : mode === 'h2h'
           ? '▸ nspe mlb {player name} vs {TEAM}'
-          : mode === 'pitch'
-          ? '▸ nspe mlb pitch {player} {-vfp|-outs|-Ndown} {vs TEAM}'
-          : mode === 'report'
-          ? '▸ nspe mlb {pos} -report {-season|-lastN}  |  nspe mlb {player} -report {-lastN}'
           : mode === 'explosive'
-          ? (nflExplosiveSubMode === 'compute'
-            ? '▸ nspe nfl long {pass|rush|rec} -yds minN -season'
-            : '▸ nspe nfl long {pass|rush|rec} -ydsN -lastA/B')
-          : '▸ nspe mlb bat vs {TEAM} {-outs}'}
+          ? (explosiveLeague === 'mlb'
+            ? (nflExplosiveSubMode === 'compute'
+              ? '▸ nspe mlb long -hr minN {-lastN}'
+              : '▸ nspe mlb long -hrN -lastA/B')
+            : (nflExplosiveSubMode === 'compute'
+              ? '▸ nspe nfl long {pass|rush|rec} -yds minN -season'
+              : '▸ nspe nfl long {pass|rush|rec} -ydsN -lastA/B'))
+          : (teamSubMode === 'compute'
+            ? '▸ nspe mlb team {-runs|-allowed} minN {maxN} {-season|-lastN}'
+            : '▸ nspe mlb team {-runs|-allowed}N -lastA/B')}
       </div>
 
-      {/* Explosive: NFL play-by-play explosive plays */}
+      {/* Explosive: NFL long plays / MLB long HR */}
       {mode === 'explosive' && (
         <>
+          {/* league filter */}
+          <div className="mb-3">
+            <SLabel>league</SLabel>
+            <div className="flex gap-1.5">
+              <Pill
+                selected={explosiveLeague === 'mlb'}
+                onClick={() => setExplosiveLeague('mlb')}
+              >
+                MLB
+              </Pill>
+              <Pill
+                selected={explosiveLeague === 'nfl'}
+                onClick={() => setExplosiveLeague('nfl')}
+              >
+                NFL
+              </Pill>
+            </div>
+          </div>
+
           {/* sub-mode toggle */}
           <div className="mb-3">
             <SLabel>mode</SLabel>
@@ -513,36 +503,50 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
             </div>
           </div>
 
-          <div className="mb-3">
-            <SLabel>play type</SLabel>
-            <div className="flex gap-1.5 flex-wrap">
-              {(['rush', 'pass', 'rec'] as const).map((pt) => (
-                <Pill
-                  key={pt}
-                  selected={nflPlayType === pt}
-                  onClick={() => setNflPlayType((p) => (p === pt ? '' : pt))}
-                >
-                  {pt.toUpperCase()}
-                </Pill>
-              ))}
+          {explosiveLeague === 'nfl' && (
+            <div className="mb-3">
+              <SLabel>play type</SLabel>
+              <div className="flex gap-1.5 flex-wrap">
+                {(['rush', 'pass', 'rec'] as const).map((pt) => (
+                  <Pill
+                    key={pt}
+                    selected={nflPlayType === pt}
+                    onClick={() => setNflPlayType((p) => (p === pt ? '' : pt))}
+                  >
+                    {pt.toUpperCase()}
+                  </Pill>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {nflExplosiveSubMode === 'compute' ? (
-            <div className="mb-3">
-              <SLabel>min yards</SLabel>
-              <div className="flex items-center gap-2">
-                <NumInput value={nflMinYds} onChange={setNflMinYds} w={72} />
-                <span className="font-mono text-[11px]" style={{ color: C.textDim }}>yds  ·  -season</span>
+            <div className="mb-3 flex items-end gap-5 flex-wrap">
+              <div>
+                <SLabel>{explosiveLeague === 'mlb' ? 'min distance' : 'min yards'}</SLabel>
+                <div className="flex items-center gap-2">
+                  <NumInput value={nflMinYds} onChange={setNflMinYds} w={72} />
+                  <span className="font-mono text-[11px]" style={{ color: C.textDim }}>
+                    {explosiveLeague === 'mlb' ? 'ft' : 'yds  ·  -season'}
+                  </span>
+                </div>
               </div>
+              {explosiveLeague === 'mlb' && (
+                <div>
+                  <SLabel>-last {'{optional}'}</SLabel>
+                  <NumInput value={windowN} onChange={setWindowN} placeholder="N" w={54} />
+                </div>
+              )}
             </div>
           ) : (
             <div className="mb-3 flex items-end gap-5 flex-wrap">
               <div>
-                <SLabel>yards threshold</SLabel>
+                <SLabel>{explosiveLeague === 'mlb' ? 'distance threshold' : 'yards threshold'}</SLabel>
                 <div className="flex items-center gap-2">
                   <NumInput value={nflYds} onChange={setNflYds} w={64} />
-                  <span className="font-mono text-[11px]" style={{ color: C.textDim }}>yds</span>
+                  <span className="font-mono text-[11px]" style={{ color: C.textDim }}>
+                    {explosiveLeague === 'mlb' ? 'ft' : 'yds'}
+                  </span>
                 </div>
               </div>
               <div className="flex items-end gap-1.5">
@@ -620,110 +624,142 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
         </>
       )}
 
-      {/* Pitch (pitcher h2h) */}
-      {mode === 'pitch' && (
-        <>
-          <div className="mb-3">
-            <SLabel>pitcher name</SLabel>
-            <input
-              type="text"
-              value={pitchPlayer}
-              onChange={(e) => setPitchPlayer(e.target.value)}
-              placeholder="type any MLB pitcher (e.g. wheeler, skenes)"
-              className="w-full font-mono text-[13px] rounded border px-3 py-2 outline-none"
-              style={{
-                backgroundColor: C.surface2,
-                borderColor: C.border,
-                color: C.accent,
-              }}
-            />
-          </div>
-
-          <div className="mb-3">
-            <SLabel>flag {'{optional}'}</SLabel>
-            <div className="flex gap-1.5 flex-wrap items-center">
-              <Pill
-                selected={pitchFlag === ''}
-                onClick={() => { setPitchFlag(''); setPitchDownN('') }}
-              >
-                overview
-              </Pill>
-              <Pill
-                selected={pitchFlag === 'vfp'}
-                onClick={() => setPitchFlag((p) => (p === 'vfp' ? '' : 'vfp'))}
-              >
-                -vfp
-              </Pill>
-              <Pill
-                selected={pitchFlag === 'outs'}
-                onClick={() => setPitchFlag((p) => (p === 'outs' ? '' : 'outs'))}
-              >
-                -outs
-              </Pill>
-              <div className="flex items-center gap-1.5">
-                <Pill
-                  selected={pitchFlag === 'down'}
-                  onClick={() => setPitchFlag((p) => (p === 'down' ? '' : 'down'))}
-                >
-                  -Ndown
-                </Pill>
-                {pitchFlag === 'down' && (
-                  <div className="flex gap-1">
-                    {(['3', '6', '9'] as const).map((n) => (
-                      <Pill
-                        key={n}
-                        selected={pitchDownN === n}
-                        onClick={() => setPitchDownN((prev) => (prev === n ? '' : n))}
-                      >
-                        {n}
-                      </Pill>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </>
-      )}
-
-      {/* Team (bat vs TEAM) */}
+      {/* Team: runs scored/allowed */}
       {mode === 'team' && (
         <>
           <div className="mb-3">
-            <SLabel>team</SLabel>
-            <div className="flex gap-1.5 flex-wrap">
-              {MLB_TEAMS.map((t) => (
-                <Pill
-                  key={t}
-                  selected={teamCode === t}
-                  onClick={() => setTeamCode((prev) => (prev === t ? '' : t))}
-                >
-                  {t}
-                </Pill>
-              ))}
+            <SLabel>mode</SLabel>
+            <div className="flex gap-1.5">
+              <Pill selected={teamSubMode === 'trend'} onClick={() => setTeamSubMode('trend')}>
+                trend
+              </Pill>
+              <Pill selected={teamSubMode === 'compute'} onClick={() => setTeamSubMode('compute')}>
+                compute
+              </Pill>
             </div>
           </div>
 
           <div className="mb-3">
-            <SLabel>flag {'{optional}'}</SLabel>
+            <SLabel>stat</SLabel>
             <div className="flex gap-1.5 flex-wrap">
-              <Pill selected={teamFlag === ''} onClick={() => setTeamFlag('')}>
-                none
+              <Pill
+                selected={teamStat === 'runs'}
+                onClick={() => setTeamStat((p) => (p === 'runs' ? '' : 'runs'))}
+              >
+                -runs
               </Pill>
               <Pill
-                selected={teamFlag === 'outs'}
-                onClick={() => setTeamFlag((p) => (p === 'outs' ? '' : 'outs'))}
+                selected={teamStat === 'allowed'}
+                onClick={() => setTeamStat((p) => (p === 'allowed' ? '' : 'allowed'))}
               >
-                -outs
-              </Pill>
-              <Pill
-                selected={teamFlag === 'ov'}
-                onClick={() => setTeamFlag((p) => (p === 'ov' ? '' : 'ov'))}
-              >
-                -ov
+                -allowed
               </Pill>
             </div>
           </div>
+
+          {teamSubMode === 'trend' && teamStat && (
+            <div className="mb-3 flex items-end gap-5 flex-wrap">
+              <div>
+                <SLabel>threshold</SLabel>
+                <NumInput value={thresholdN} onChange={setThresholdN} w={64} />
+              </div>
+              <div className="flex items-end gap-1.5">
+                <div>
+                  <SLabel>met</SLabel>
+                  <NumInput value={lastA} onChange={setLastA} placeholder="N" w={54} />
+                </div>
+                <span style={{ color: C.textDim, paddingBottom: '8px' }}>/</span>
+                <div>
+                  <SLabel>-last</SLabel>
+                  <NumInput value={lastB} onChange={setLastB} placeholder="N" w={54} />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {teamSubMode === 'compute' && teamStat && (
+            <div className="mb-3">
+              <div className="mb-2">
+                <SLabel>threshold mode</SLabel>
+                <div className="flex gap-1.5 flex-wrap">
+                  <Pill
+                    selected={thresholdMode === 'min'}
+                    onClick={() => {
+                      setThresholdMode('min')
+                      setMaxN('')
+                    }}
+                  >
+                    min
+                  </Pill>
+                  <Pill
+                    selected={thresholdMode === 'range'}
+                    onClick={() => {
+                      if (thresholdMode === 'exact' && minN) setMaxN(minN)
+                      setThresholdMode('range')
+                    }}
+                  >
+                    min - max
+                  </Pill>
+                  <Pill
+                    selected={thresholdMode === 'exact'}
+                    onClick={() => {
+                      setThresholdMode('exact')
+                      setMaxN('')
+                    }}
+                  >
+                    exact
+                  </Pill>
+                </div>
+              </div>
+              <div className="mb-3 flex items-end gap-2">
+                {thresholdMode === 'min' && (
+                  <div>
+                    <SLabel>min threshold</SLabel>
+                    <NumInput value={minN} onChange={setMinN} w={72} />
+                  </div>
+                )}
+                {thresholdMode === 'range' && (
+                  <>
+                    <div>
+                      <SLabel>min</SLabel>
+                      <NumInput value={minN} onChange={setMinN} w={64} />
+                    </div>
+                    <span style={{ color: C.textDim, paddingBottom: '8px' }}>—</span>
+                    <div>
+                      <SLabel>max</SLabel>
+                      <NumInput value={maxN} onChange={setMaxN} w={64} />
+                    </div>
+                  </>
+                )}
+                {thresholdMode === 'exact' && (
+                  <div>
+                    <SLabel>exact threshold</SLabel>
+                    <NumInput value={minN} onChange={setMinN} w={72} />
+                  </div>
+                )}
+              </div>
+              <SLabel>window</SLabel>
+              <div className="flex gap-2 flex-wrap items-center">
+                <Pill
+                  selected={computeWindow === '-season'}
+                  onClick={() => setComputeWindow((p) => (p === '-season' ? '' : '-season'))}
+                >
+                  -season
+                </Pill>
+                <div className="flex items-center gap-1.5">
+                  <Pill
+                    selected={computeWindow === '-last'}
+                    onClick={() => setComputeWindow((p) => (p === '-last' ? '' : '-last'))}
+                  >
+                    -last
+                  </Pill>
+                  {computeWindow === '-last' && (
+                    <NumInput value={windowN} onChange={setWindowN} placeholder="N" w={52} />
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </>
       )}
 
@@ -739,100 +775,6 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
             <NumInput value={streakN} onChange={setStreakN} placeholder="N" w={54} />
           </div>
         </div>
-      )}
-
-      {/* Report mode */}
-      {mode === 'report' && (
-        <>
-          {/* Sub-mode: leaderboard vs player */}
-          <div className="mb-3">
-            <SLabel>report type</SLabel>
-            <div className="flex gap-1.5">
-              <Pill
-                selected={reportSubMode === 'leaderboard'}
-                onClick={() => setReportSubMode('leaderboard')}
-              >
-                leaderboard
-              </Pill>
-              <Pill
-                selected={reportSubMode === 'player'}
-                onClick={() => setReportSubMode('player')}
-              >
-                player
-              </Pill>
-            </div>
-          </div>
-
-          {/* Position filter (leaderboard only, optional) */}
-          {reportSubMode === 'leaderboard' && (
-            <div className="mb-3">
-              <SLabel>position filter {'{optional}'}</SLabel>
-              <div className="flex gap-1.5 flex-wrap">
-                {REPORT_POSITIONS.map((pos) => (
-                  <Pill
-                    key={pos.value}
-                    selected={reportPosition === pos.value}
-                    onClick={() => setReportPosition((prev) => (prev === pos.value ? '' : pos.value))}
-                  >
-                    {pos.label}
-                  </Pill>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Player name (player mode only) */}
-          {reportSubMode === 'player' && (
-            <div className="mb-3">
-              <SLabel>player name</SLabel>
-              <input
-                type="text"
-                value={reportPlayer}
-                onChange={(e) => setReportPlayer(e.target.value)}
-                placeholder="e.g. juan soto, judge"
-                className="w-full font-mono text-[13px] rounded border px-3 py-2 outline-none"
-                style={{
-                  backgroundColor: C.surface2,
-                  borderColor: C.border,
-                  color: C.accent,
-                }}
-              />
-            </div>
-          )}
-
-          {/* Window */}
-          <div className="mb-3">
-            <SLabel>window</SLabel>
-            <div className="flex gap-1.5 flex-wrap items-center">
-              <Pill
-                selected={reportWindow === ''}
-                onClick={() => { setReportWindow(''); setReportWindowN('') }}
-              >
-                default
-              </Pill>
-              {(['-last5', '-last10', '-last20', '-season'] as ReportWindow[]).map((w) => (
-                <Pill
-                  key={w as string}
-                  selected={reportWindow === w}
-                  onClick={() => { setReportWindow((p) => (p === w ? '' : w)); setReportWindowN('') }}
-                >
-                  {w as string}
-                </Pill>
-              ))}
-              <div className="flex items-center gap-1.5">
-                <Pill
-                  selected={reportWindow === '-lastN'}
-                  onClick={() => setReportWindow((p) => (p === '-lastN' ? '' : '-lastN'))}
-                >
-                  -lastN
-                </Pill>
-                {reportWindow === '-lastN' && (
-                  <NumInput value={reportWindowN} onChange={setReportWindowN} placeholder="N" w={52} />
-                )}
-              </div>
-            </div>
-          </div>
-        </>
       )}
 
       {/* Sport */}
@@ -855,7 +797,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       )}
 
       {/* Season / Period */}
-      {isBuilderQuery && (
+      {isBuilderQuery && !firstPaActive && (
       <div className="flex gap-6 mb-3">
         <div>
           <SLabel>season</SLabel>
@@ -889,8 +831,40 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       </div>
       )}
 
+      {/* First plate appearance (MLB trend only — one PA per game, no threshold N) */}
+      {mode === 'trend' && sport === 'mlb' && (
+        <div className="mb-3">
+          <SLabel>first plate appearance {'{optional}'}</SLabel>
+          <div className="flex gap-1.5 flex-wrap">
+            {(['xbh', 'walk', 'single', 'hit'] as const).map((f) => (
+              <Pill
+                key={f}
+                selected={mlbFirstFlag === f}
+                onClick={() => setMlbFirstFlag((p) => (p === f ? '' : f))}
+              >
+                {`-${f}`}
+              </Pill>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {firstPaActive && (
+        <div className="mb-3 flex items-end gap-1.5">
+          <div>
+            <SLabel>met</SLabel>
+            <NumInput value={lastA} onChange={setLastA} placeholder="N" w={54} />
+          </div>
+          <span style={{ color: C.textDim, paddingBottom: '8px' }}>/</span>
+          <div>
+            <SLabel>-last</SLabel>
+            <NumInput value={lastB} onChange={setLastB} placeholder="N" w={54} />
+          </div>
+        </div>
+      )}
+
       {/* Batter position (MLB only) */}
-      {isBuilderQuery && sport === 'mlb' && (
+      {isBuilderQuery && sport === 'mlb' && !firstPaActive && (
         <div className="mb-3">
           <SLabel>batter position {'{optional}'}</SLabel>
           <div className="flex gap-1.5 flex-wrap">
@@ -908,7 +882,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       )}
 
       {/* Stats */}
-      {isBuilderQuery && sport && stats.length > 0 && (
+      {isBuilderQuery && sport && stats.length > 0 && !firstPaActive && (
         <div className="mb-3">
           <SLabel>stat</SLabel>
           <div className="flex gap-1.5 flex-wrap">
@@ -926,7 +900,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       )}
 
       {/* Trend: threshold + last */}
-      {mode === 'trend' && stat && (
+      {mode === 'trend' && stat && !firstPaActive && (
         <div className="mb-3 flex items-end gap-5 flex-wrap">
           <div>
             <SLabel>threshold</SLabel>

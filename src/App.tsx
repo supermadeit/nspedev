@@ -678,6 +678,177 @@ function isNflExplosivePayload(payload: unknown): payload is NflExplosivePayload
   return p.sport === 'nfl' && queryHasLong && Array.isArray(p.results)
 }
 
+// ---------- MLB Home Run Distance (mlb long) ----------
+
+interface MlbHrTrendMatch {
+  game_id: string
+  date: string
+  opponent: string
+  inning: number
+  half: string
+  distance_feet: number
+  description: string
+  team: string
+}
+
+interface MlbHrTrendResult {
+  player: string
+  team: string
+  met_count: number
+  window: number
+  matches: MlbHrTrendMatch[]
+}
+
+interface MlbHrComputeEvent {
+  date: string
+  distance_feet: number
+  inning: number
+  opponent: string
+}
+
+interface MlbHrComputeResult {
+  player: string
+  team: string
+  total_ft: number
+  hr_count: number
+  games: number
+  events: MlbHrComputeEvent[]
+}
+
+interface MlbHrPayload {
+  engine: 'mlb_hr_trend' | 'mlb_hr_compute'
+  query: Record<string, unknown>
+  results: (MlbHrTrendResult | MlbHrComputeResult)[]
+}
+
+function isMlbHrPayload(payload: unknown): payload is MlbHrPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return (rec.engine === 'mlb_hr_trend' || rec.engine === 'mlb_hr_compute') && Array.isArray(rec.results)
+}
+
+function extractMlbHrPayload(payload: unknown): MlbHrPayload | null {
+  if (isMlbHrPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isMlbHrPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isMlbHrPayload(v)) return v
+    }
+  }
+  return null
+}
+
+// ---------- MLB First Plate Appearance Trend (mlb first) ----------
+
+interface MlbFirstPaMatch {
+  game_id: string
+  date: string
+  opponent: string
+  inning: number
+  half: string
+  category: string
+  result: string
+  distance_feet: number | null
+  description: string
+  team: string
+}
+
+interface MlbFirstPaTrendResult {
+  player: string
+  team: string
+  met_count: number
+  window: number
+  matches: MlbFirstPaMatch[]
+}
+
+interface MlbFirstPaTrendPayload {
+  engine: 'mlb_first_pa_trend'
+  query: Record<string, unknown>
+  results: MlbFirstPaTrendResult[]
+}
+
+function isMlbFirstPaTrendPayload(payload: unknown): payload is MlbFirstPaTrendPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return rec.engine === 'mlb_first_pa_trend' && Array.isArray(rec.results)
+}
+
+function extractMlbFirstPaTrendPayload(payload: unknown): MlbFirstPaTrendPayload | null {
+  if (isMlbFirstPaTrendPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isMlbFirstPaTrendPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isMlbFirstPaTrendPayload(v)) return v
+    }
+  }
+  return null
+}
+
+// ---------- MLB Team Runs For/Allowed (mlb team) ----------
+
+interface MlbTeamRunsTrendMatch {
+  game_id: string
+  date_iso: string
+  opponent: string
+  runs_for: number
+  runs_allowed: number
+}
+
+interface MlbTeamRunsTrendResult {
+  team: string
+  met_count: number
+  window: number
+  matches: MlbTeamRunsTrendMatch[]
+}
+
+// Shape inferred from the structurally adjacent mlb_team_runs_leaderboard engine —
+// the only captured mlb_team_runs_compute example returned an empty results array,
+// so this is defensively typed with optional fields rather than verified exactly.
+interface MlbTeamRunsComputeResult {
+  team: string
+  total?: number
+  games?: number
+  avg?: number
+}
+
+interface MlbTeamRunsPayload {
+  engine: 'mlb_team_runs_trend' | 'mlb_team_runs_compute'
+  query: Record<string, unknown>
+  results: (MlbTeamRunsTrendResult | MlbTeamRunsComputeResult)[]
+}
+
+function isMlbTeamRunsPayload(payload: unknown): payload is MlbTeamRunsPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return (rec.engine === 'mlb_team_runs_trend' || rec.engine === 'mlb_team_runs_compute') && Array.isArray(rec.results)
+}
+
+function extractMlbTeamRunsPayload(payload: unknown): MlbTeamRunsPayload | null {
+  if (isMlbTeamRunsPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isMlbTeamRunsPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isMlbTeamRunsPayload(v)) return v
+    }
+  }
+  return null
+}
+
 interface StatContext {
   sport: string
   stat: string
@@ -718,6 +889,11 @@ const STAT_FIELDS: Record<string, Record<string, string | string[]>> = {
   nfl: {
     rush: 'rush_yds',
     pass: 'pass_yds',
+    rec: 'rec_yds',
+  },
+  cfb: {
+    pass: 'pass_yds',
+    rush: 'rush_yds',
     rec: 'rec_yds',
   },
 }
@@ -1706,6 +1882,315 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
                     </div>
                   )
                 })}
+              </div>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+// ---------- MLB Home Run Distance view ----------
+
+function MlbHrView({ payload }: { payload: MlbHrPayload }) {
+  const [expanded, setExpanded] = useState<Set<number>>(new Set())
+  const toggle = (i: number) =>
+    setExpanded((prev) => {
+      const next = new Set(prev)
+      if (next.has(i)) next.delete(i)
+      else next.add(i)
+      return next
+    })
+
+  if (payload.engine === 'mlb_hr_compute') {
+    const results = payload.results as MlbHrComputeResult[]
+    return (
+      <div className="space-y-0">
+        {results.map((r, i) => (
+          <div key={i} className="py-2 border-b" style={{ borderColor: PITCH_BORDER }}>
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[13px]" style={{ color: PITCH_ACCENT }}>
+                <span style={{ color: 'oklch(0.70 0.10 195)' }}>{r.team}</span>
+                <span style={{ color: 'oklch(0.55 0 0)' }}>{' — '}</span>
+                {normalizeDisplayPlayer(r.player)}
+              </span>
+              <span className="font-mono text-[12px]" style={{ color: PITCH_LABEL }}>
+                {r.games} gp
+              </span>
+            </div>
+            <div className="flex items-center gap-3 mt-1 text-[12px] font-mono">
+              <span>
+                <span className="font-bold" style={{ color: PITCH_GREEN }}>{r.hr_count}</span>
+                <span style={{ color: PITCH_LABEL }}> HR</span>
+              </span>
+              <span style={{ color: 'oklch(0.30 0 0)' }}>·</span>
+              <span>
+                <span className="font-bold" style={{ color: PITCH_GREEN }}>{r.total_ft?.toLocaleString()}</span>
+                <span style={{ color: PITCH_LABEL }}> ft total</span>
+              </span>
+            </div>
+            {r.events?.length > 0 && (
+              <div className="mt-1.5 space-y-0.5 pl-2">
+                {r.events.map((e, j) => (
+                  <div key={j} className="font-mono text-[11px]" style={{ color: 'oklch(0.72 0 0)' }}>
+                    <span style={{ color: 'oklch(0.55 0 0)' }}>{e.date}</span>
+                    {e.opponent && (
+                      <>
+                        <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                        <span style={{ color: 'oklch(0.75 0.08 220)' }}>{e.opponent}</span>
+                      </>
+                    )}
+                    <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                    <span style={{ color: PITCH_GREEN }}>{e.distance_feet}ft</span>
+                    <span style={{ color: 'oklch(0.50 0 0)' }}> Inn {e.inning}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  const results = payload.results as MlbHrTrendResult[]
+  return (
+    <div className="space-y-0">
+      {results.map((r, i) => {
+        const isOpen = expanded.has(i)
+        const matchList = r.matches ?? []
+        return (
+          <div key={i} className="py-2 border-b" style={{ borderColor: PITCH_BORDER }}>
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[13px]" style={{ color: PITCH_ACCENT }}>
+                {r.team && (
+                  <>
+                    <span style={{ color: 'oklch(0.70 0.10 195)' }}>{r.team}</span>
+                    <span style={{ color: 'oklch(0.55 0 0)' }}>{' — '}</span>
+                  </>
+                )}
+                {normalizeDisplayPlayer(r.player)}
+              </span>
+              <button
+                type="button"
+                onClick={() => toggle(i)}
+                className="font-mono font-bold text-[13px] ml-4 shrink-0 px-2 py-0.5 rounded border"
+                style={{
+                  backgroundColor: isOpen ? 'oklch(0.27 0.03 145)' : 'oklch(0.22 0 0)',
+                  color: PITCH_GREEN,
+                  borderColor: 'oklch(0.35 0 0)',
+                  cursor: 'pointer',
+                }}
+              >
+                {r.met_count ?? matchList.length}
+                {r.window != null && (
+                  <span style={{ color: PITCH_LABEL, fontWeight: 'normal' }}>/{r.window}</span>
+                )}
+              </button>
+            </div>
+            {isOpen && (
+              <div className="mt-2 space-y-1.5 pl-2">
+                {matchList.map((m, j) => (
+                  <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+                    <div>
+                      <span style={{ color: 'oklch(0.60 0 0)' }}>{m.date}</span>
+                      {m.opponent && (
+                        <>
+                          <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
+                          <span style={{ color: 'oklch(0.75 0.08 220)' }}>{m.opponent}</span>
+                        </>
+                      )}
+                      <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                      <span style={{ color: PITCH_GREEN }}>{m.distance_feet}ft</span>
+                    </div>
+                    {m.description && (
+                      <div style={{ color: 'oklch(0.60 0 0)' }}>{m.description}</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+// ---------- MLB First Plate Appearance Trend view ----------
+
+function MlbFirstPaTrendView({ payload }: { payload: MlbFirstPaTrendPayload }) {
+  const [expanded, setExpanded] = useState<Set<number>>(new Set())
+  const toggle = (i: number) =>
+    setExpanded((prev) => {
+      const next = new Set(prev)
+      if (next.has(i)) next.delete(i)
+      else next.add(i)
+      return next
+    })
+
+  const results = payload.results
+  return (
+    <div className="space-y-0">
+      {results.map((r, i) => {
+        const isOpen = expanded.has(i)
+        const matchList = r.matches ?? []
+        return (
+          <div key={i} className="py-2 border-b" style={{ borderColor: PITCH_BORDER }}>
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[13px]" style={{ color: PITCH_ACCENT }}>
+                {r.team && (
+                  <>
+                    <span style={{ color: 'oklch(0.70 0.10 195)' }}>{r.team}</span>
+                    <span style={{ color: 'oklch(0.55 0 0)' }}>{' — '}</span>
+                  </>
+                )}
+                {normalizeDisplayPlayer(r.player)}
+              </span>
+              <button
+                type="button"
+                onClick={() => toggle(i)}
+                className="font-mono font-bold text-[13px] ml-4 shrink-0 px-2 py-0.5 rounded border"
+                style={{
+                  backgroundColor: isOpen ? 'oklch(0.27 0.03 145)' : 'oklch(0.22 0 0)',
+                  color: PITCH_GREEN,
+                  borderColor: 'oklch(0.35 0 0)',
+                  cursor: 'pointer',
+                }}
+              >
+                {r.met_count ?? matchList.length}
+                {r.window != null && (
+                  <span style={{ color: PITCH_LABEL, fontWeight: 'normal' }}>/{r.window}</span>
+                )}
+              </button>
+            </div>
+            {isOpen && (
+              <div className="mt-2 space-y-1.5 pl-2">
+                {matchList.map((m, j) => (
+                  <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+                    <div>
+                      <span style={{ color: 'oklch(0.60 0 0)' }}>{m.date}</span>
+                      {m.opponent && (
+                        <>
+                          <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
+                          <span style={{ color: 'oklch(0.75 0.08 220)' }}>{m.opponent}</span>
+                        </>
+                      )}
+                      <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                      <span style={{ color: PITCH_GREEN }}>{m.result}</span>
+                      {m.distance_feet != null && (
+                        <span style={{ color: PITCH_LABEL }}> ({m.distance_feet}ft)</span>
+                      )}
+                    </div>
+                    {m.description && (
+                      <div style={{ color: 'oklch(0.60 0 0)' }}>{m.description}</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+// ---------- MLB Team Runs For/Allowed view ----------
+
+function MlbTeamRunsView({ payload }: { payload: MlbTeamRunsPayload }) {
+  const [expanded, setExpanded] = useState<Set<number>>(new Set())
+  const toggle = (i: number) =>
+    setExpanded((prev) => {
+      const next = new Set(prev)
+      if (next.has(i)) next.delete(i)
+      else next.add(i)
+      return next
+    })
+
+  if (payload.engine === 'mlb_team_runs_compute') {
+    const results = payload.results as MlbTeamRunsComputeResult[]
+    if (results.length === 0) {
+      return (
+        <div className="text-center py-8 font-mono text-[13px]" style={{ color: PITCH_LABEL }}>
+          No teams matched this window
+        </div>
+      )
+    }
+    return (
+      <div className="space-y-0">
+        {results.map((r, i) => (
+          <div key={i} className="py-2 border-b flex items-center justify-between" style={{ borderColor: PITCH_BORDER }}>
+            <span className="font-mono text-[13px]" style={{ color: 'oklch(0.70 0.10 195)' }}>{r.team}</span>
+            <div className="flex items-center gap-3 text-[12px] font-mono">
+              <span>
+                <span className="font-bold" style={{ color: PITCH_GREEN }}>{r.total ?? '—'}</span>
+                <span style={{ color: PITCH_LABEL }}> total</span>
+              </span>
+              <span style={{ color: 'oklch(0.30 0 0)' }}>·</span>
+              <span>
+                <span style={{ color: PITCH_VALUE }}>{r.avg ?? '—'}</span>
+                <span style={{ color: PITCH_LABEL }}> avg</span>
+              </span>
+              <span style={{ color: 'oklch(0.30 0 0)' }}>·</span>
+              <span>
+                <span style={{ color: PITCH_VALUE }}>{r.games ?? '—'}</span>
+                <span style={{ color: PITCH_LABEL }}> gp</span>
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  const results = payload.results as MlbTeamRunsTrendResult[]
+  return (
+    <div className="space-y-0">
+      {results.map((r, i) => {
+        const isOpen = expanded.has(i)
+        const matchList = r.matches ?? []
+        return (
+          <div key={i} className="py-2 border-b" style={{ borderColor: PITCH_BORDER }}>
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[13px]" style={{ color: 'oklch(0.70 0.10 195)' }}>{r.team}</span>
+              <button
+                type="button"
+                onClick={() => toggle(i)}
+                className="font-mono font-bold text-[13px] ml-4 shrink-0 px-2 py-0.5 rounded border"
+                style={{
+                  backgroundColor: isOpen ? 'oklch(0.27 0.03 145)' : 'oklch(0.22 0 0)',
+                  color: PITCH_GREEN,
+                  borderColor: 'oklch(0.35 0 0)',
+                  cursor: 'pointer',
+                }}
+              >
+                {r.met_count ?? matchList.length}
+                {r.window != null && (
+                  <span style={{ color: PITCH_LABEL, fontWeight: 'normal' }}>/{r.window}</span>
+                )}
+              </button>
+            </div>
+            {isOpen && (
+              <div className="mt-2 space-y-1 pl-2">
+                {matchList.map((m, j) => (
+                  <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+                    <span style={{ color: 'oklch(0.60 0 0)' }}>{m.date_iso}</span>
+                    {m.opponent && (
+                      <>
+                        <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
+                        <span style={{ color: 'oklch(0.75 0.08 220)' }}>{m.opponent}</span>
+                      </>
+                    )}
+                    <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                    <span style={{ color: PITCH_GREEN }}>{m.runs_for}</span>
+                    <span style={{ color: PITCH_LABEL }}> runs for</span>
+                    <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                    <span style={{ color: 'oklch(0.80 0.15 30)' }}>{m.runs_allowed}</span>
+                    <span style={{ color: PITCH_LABEL }}> allowed</span>
+                  </div>
+                ))}
               </div>
             )}
           </div>
@@ -2755,6 +3240,9 @@ function App() {
   const [reportLeaderboardResult, setReportLeaderboardResult] = useState<MlbReportLeaderboardPayload | null>(null)
   const [playerReportResult, setPlayerReportResult] = useState<MlbPlayerReportPayload | null>(null)
   const [nflExplosiveResult, setNflExplosiveResult] = useState<NflExplosivePayload | null>(null)
+  const [hrResult, setHrResult] = useState<MlbHrPayload | null>(null)
+  const [firstPaResult, setFirstPaResult] = useState<MlbFirstPaTrendPayload | null>(null)
+  const [teamRunsResult, setTeamRunsResult] = useState<MlbTeamRunsPayload | null>(null)
   const [lastQuery, setLastQuery] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [queryError, setQueryError] = useState<string | null>(null)
@@ -2824,6 +3312,9 @@ function App() {
     setReportLeaderboardResult(null)
     setPlayerReportResult(null)
     setNflExplosiveResult(null)
+    setHrResult(null)
+    setFirstPaResult(null)
+    setTeamRunsResult(null)
 
     if (!sanitizedQuery) {
       setQueryResults([])
@@ -2898,6 +3389,27 @@ function App() {
       const playerReportPayload = extractMlbPlayerReportPayload(payload)
       if (playerReportPayload) {
         setPlayerReportResult(playerReportPayload)
+        setQueryResults([])
+        return
+      }
+
+      const hrPayload = extractMlbHrPayload(payload)
+      if (hrPayload) {
+        setHrResult(hrPayload)
+        setQueryResults([])
+        return
+      }
+
+      const firstPaPayload = extractMlbFirstPaTrendPayload(payload)
+      if (firstPaPayload) {
+        setFirstPaResult(firstPaPayload)
+        setQueryResults([])
+        return
+      }
+
+      const teamRunsPayload = extractMlbTeamRunsPayload(payload)
+      if (teamRunsPayload) {
+        setTeamRunsResult(teamRunsPayload)
         setQueryResults([])
         return
       }
@@ -3452,6 +3964,12 @@ function App() {
                 ? `${lastQuery} — player report`
                 : nflExplosiveResult
                 ? `${lastQuery} — explosive`
+                : hrResult
+                ? `${lastQuery} — hr`
+                : firstPaResult
+                ? `${lastQuery} — first pa`
+                : teamRunsResult
+                ? `${lastQuery} — team runs`
                 : queryResults
                 ? `${lastQuery} — ${queryResults.length}results`
                 : 'NSPE — Command Legend'}
@@ -3486,6 +4004,12 @@ function App() {
               <MlbPlayerReportView payload={playerReportResult} />
             ) : nflExplosiveResult ? (
               <NflExplosiveView payload={nflExplosiveResult} />
+            ) : hrResult ? (
+              <MlbHrView payload={hrResult} />
+            ) : firstPaResult ? (
+              <MlbFirstPaTrendView payload={firstPaResult} />
+            ) : teamRunsResult ? (
+              <MlbTeamRunsView payload={teamRunsResult} />
             ) : queryResults === null ? (
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
                 Build a query to begin

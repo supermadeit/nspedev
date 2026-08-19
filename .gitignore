@@ -32,3 +32,5 @@ pids
 .devcontainer/
 
 .spark-workbench-id
+
+src/assets/data/nspe_new_syntax_examples.json
