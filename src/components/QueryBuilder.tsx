@@ -122,6 +122,8 @@ export const SPORT_STATS: Record<string, Array<{ value: string; label: string }>
     { value: 'rush', label: 'RUSH' },
     { value: 'pass', label: 'PASS' },
     { value: 'rec', label: 'REC' },
+    { value: 'pass+rush', label: 'PASS+RUSH' },
+    { value: 'rush+rec', label: 'RUSH+REC' },
   ],
 }
 

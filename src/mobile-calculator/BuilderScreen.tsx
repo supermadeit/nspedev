@@ -478,13 +478,14 @@ function ThresholdModeBlock({
   return (
     <>
       <SectionLabel>threshold</SectionLabel>
-      <ButtonGrid cols={3}>
+      <div className="grid grid-cols-3 gap-1.5 mb-3">
         <CalcButton
           selected={thresholdMode === 'min'}
           onClick={() => {
             setThresholdMode('min')
             setMaxN('')
           }}
+          className="w-full min-h-[36px] text-[12px]"
         >
           min
         </CalcButton>
@@ -494,6 +495,7 @@ function ThresholdModeBlock({
             if (thresholdMode === 'exact' && minN) setMaxN(minN)
             setThresholdMode('range')
           }}
+          className="w-full min-h-[36px] text-[12px]"
         >
           min-max
         </CalcButton>
@@ -503,10 +505,11 @@ function ThresholdModeBlock({
             setThresholdMode('exact')
             setMaxN('')
           }}
+          className="w-full min-h-[36px] text-[12px]"
         >
           exact
         </CalcButton>
-      </ButtonGrid>
+      </div>
 
       <div className="mb-3">
         {thresholdMode === 'min' && (
@@ -540,6 +543,7 @@ function ThresholdModeBlock({
         <CalcButton
           selected={computeWindow === '-season'}
           onClick={() => setComputeWindow(computeWindow === '-season' ? '' : '-season')}
+          className="w-full min-h-[36px] text-[12px]"
         >
           -season
         </CalcButton>
@@ -547,6 +551,7 @@ function ThresholdModeBlock({
           <CalcButton
             selected={computeWindow === '-career'}
             onClick={() => setComputeWindow(computeWindow === '-career' ? '' : '-career')}
+            className="w-full min-h-[36px] text-[12px]"
           >
             -career
           </CalcButton>
@@ -554,6 +559,7 @@ function ThresholdModeBlock({
         <CalcButton
           selected={computeWindow === '-last'}
           onClick={() => setComputeWindow(computeWindow === '-last' ? '' : '-last')}
+          className="w-full min-h-[36px] text-[12px]"
         >
           -last
         </CalcButton>

@@ -24,6 +24,12 @@ interface LeaderboardRowLike {
 export function MobileCalculatorApp() {
   const [screen, setScreen] = useState<Screen>('builder')
   const [lastQuery, setLastQuery] = useState('')
+  // Captured at run time (not read live during results view) — the unit
+  // label for the generic case's bare compute total, e.g. "27hits" instead
+  // of just "27". NFL uses its yds/td type as the unit since "pass"/"rush"
+  // alone isn't a unit; every other sport's stat code already reads fine
+  // as one (hits, pts, runs, ...).
+  const [lastStatLabel, setLastStatLabel] = useState('')
   const calc = useCalculatorQuery()
   const { run, isLoading, error, result } = useNspeQuery()
   const popularPlayers = useMemo(() => {
@@ -34,6 +40,7 @@ export function MobileCalculatorApp() {
   const handleRun = () => {
     if (!calc.builtCommand) return
     setLastQuery(calc.builtCommand)
+    setLastStatLabel(calc.sport === 'nfl' ? calc.nflStatType : calc.stat)
     setScreen('results')
     void run(calc.builtCommand)
   }
@@ -62,6 +69,7 @@ export function MobileCalculatorApp() {
           isLoading={isLoading}
           query={lastQuery}
           onBack={handleBack}
+          statLabel={lastStatLabel}
         />
       )}
     </div>

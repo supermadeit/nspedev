@@ -12,6 +12,8 @@ export interface ResultsScreenProps {
   isLoading: boolean
   query: string
   onBack: () => void
+  /** Unit label for the generic case's bare compute totals, e.g. "hits". */
+  statLabel?: string
 }
 
 function CalcLogo() {
@@ -26,7 +28,7 @@ function CalcLogo() {
   )
 }
 
-export function ResultsScreen({ result, error, isLoading, query, onBack }: ResultsScreenProps) {
+export function ResultsScreen({ result, error, isLoading, query, onBack, statLabel }: ResultsScreenProps) {
   return (
     <div
       className="w-full h-full flex flex-col fixed inset-0 z-50"
@@ -68,7 +70,7 @@ export function ResultsScreen({ result, error, isLoading, query, onBack }: Resul
           </div>
         )}
 
-        {!isLoading && result && <LeaderboardList result={result} />}
+        {!isLoading && result && <LeaderboardList result={result} statLabel={statLabel} />}
 
         {!isLoading && !result && !error && (
           <div className="font-mono text-[12px] text-center py-10" style={{ color: C.textDim }}>

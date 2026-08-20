@@ -30,7 +30,10 @@ function fmt(n: unknown): string {
 
 // Best-effort adapter from a raw NspeResult payload into flat display rows.
 // Every branch guards against missing/odd shapes rather than throwing.
-export function deriveRows(result: NspeResult): ListRow[] {
+// `statLabel` is the unit for the *generic* (nba/mlb/nhl/nfl trend/compute)
+// case only — every other kind already carries its own labels/units inline
+// on the payload (HR, ft, K, etc.), so this is unused there.
+export function deriveRows(result: NspeResult, statLabel?: string): ListRow[] {
   try {
     switch (result.kind) {
       case 'h2h': {
@@ -155,13 +158,28 @@ export function deriveRows(result: NspeResult): ListRow[] {
       }
       case 'generic':
       default: {
-        return (result.rows ?? []).map((r, i) => ({
-          id: `${i}`,
-          primary: r.player,
-          secondary: r.team,
-          value: fmt(r.total),
-          meta: r.streakDetails?.length ? `${r.streakDetails.length} streak(s)` : undefined,
-        }))
+        return (result.rows ?? []).map((r, i) => {
+          // Trend rows carry a per-game breakdown (date + value + label per
+          // match, date already disambiguated with a year suffix upstream
+          // in extractDateToken); compute rows are a bare season/window
+          // total with no per-game detail — label that total with the unit
+          // so it reads as "27 hits", not just "27".
+          const matches = r.matchDetails ?? []
+          const unit = matches[0]?.statLabel ?? statLabel ?? ''
+          const meta =
+            matches.length > 0
+              ? matches.map((m) => `${m.value}${m.statLabel} ${m.date}`).join(' · ')
+              : r.streakDetails?.length
+              ? `${r.streakDetails.length} streak(s)`
+              : undefined
+          return {
+            id: `${i}`,
+            primary: r.player,
+            secondary: r.team,
+            value: `${fmt(r.total)}${unit}`,
+            meta,
+          }
+        })
       }
     }
   } catch (err) {
@@ -179,11 +197,13 @@ function defaultShowRank(kind: NspeResult['kind']): boolean {
 export interface LeaderboardListProps {
   result: NspeResult
   showRank?: boolean
+  /** Unit label for the generic case's bare compute totals, e.g. "hits". */
+  statLabel?: string
 }
 
-export function LeaderboardList({ result, showRank }: LeaderboardListProps) {
+export function LeaderboardList({ result, showRank, statLabel }: LeaderboardListProps) {
   const [expanded, setExpanded] = useState(false)
-  const rows = deriveRows(result)
+  const rows = deriveRows(result, statLabel)
   const rank = showRank ?? defaultShowRank(result.kind)
   const visible = expanded ? rows : rows.slice(0, INITIAL_VISIBLE)
   const hiddenCount = rows.length - visible.length

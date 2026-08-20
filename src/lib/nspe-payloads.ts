@@ -729,6 +729,12 @@ export const STAT_FIELDS: Record<string, Record<string, string | string[]>> = {
     rush: 'rush_yds',
     pass: 'pass_yds',
     rec: 'rec_yds',
+    // Combo stats — computeMatchValue() checks match.val first, so this
+    // array-sum is only a fallback for whichever field(s) it uses when val
+    // is absent. No captured example for these yet; flag/fix if the real
+    // per-match field names differ once tested against the live backend.
+    'pass+rush': ['pass_yds', 'rush_yds'],
+    'rush+rec': ['rush_yds', 'rec_yds'],
   },
   cfb: {
     pass: 'pass_yds',
