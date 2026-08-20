@@ -14,7 +14,12 @@
 // deliberate duplication rather than a shared hook.
 
 import { useEffect, useMemo, useState } from 'react'
-import { CURATED_COMPUTE_DEFAULTS, CURATED_EXPLOSIVE_TREND_DEFAULTS, CURATED_TREND_DEFAULTS } from './curatedDefaults'
+import {
+  CURATED_COMPUTE_DEFAULTS,
+  CURATED_EXPLOSIVE_TREND_DEFAULTS,
+  CURATED_TEAM_COMPUTE_DEFAULTS,
+  CURATED_TREND_DEFAULTS,
+} from './curatedDefaults'
 import {
   EXPLOSIVE_MLB_COMPUTE_PRESETS,
   EXPLOSIVE_MLB_TREND_PRESETS,
@@ -353,10 +358,18 @@ export function useCalculatorQuery() {
         setLastA('3')
         setLastB('5')
       } else {
-        setThresholdMode('min')
-        setMinN(String(TEAM_RUNS_COMPUTE_PRESETS[0]))
-        setComputeWindow('-last')
-        setWindowN('10')
+        const curated = CURATED_TEAM_COMPUTE_DEFAULTS[teamStat]
+        if (curated) {
+          setThresholdMode('min')
+          setMinN(String(curated.min))
+          setComputeWindow(curated.window)
+          setWindowN(curated.windowN != null ? String(curated.windowN) : '')
+        } else {
+          setThresholdMode('min')
+          setMinN(String(TEAM_RUNS_COMPUTE_PRESETS[0]))
+          setComputeWindow('-last')
+          setWindowN('10')
+        }
       }
     } else if (mode === 'explosive') {
       const trendPresets = explosiveLeague === 'mlb' ? EXPLOSIVE_MLB_TREND_PRESETS : EXPLOSIVE_NFL_TREND_PRESETS

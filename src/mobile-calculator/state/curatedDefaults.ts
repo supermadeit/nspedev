@@ -54,3 +54,11 @@ export const CURATED_EXPLOSIVE_TREND_DEFAULTS: Record<string, Record<string, [th
     pass: [30, 3, 5],
   },
 }
+
+// Team mode compute defaults, keyed by teamStat ('runs' | 'allowed') — same
+// shape as CURATED_COMPUTE_DEFAULTS above, just not sport-nested since team
+// mode is MLB-only.
+export const CURATED_TEAM_COMPUTE_DEFAULTS: Record<string, { min: number; window: '-last' | '-season'; windowN?: number }> = {
+  runs: { min: 120, window: '-last', windowN: 25 },
+  allowed: { min: 500, window: '-season' },
+}

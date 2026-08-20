@@ -21,8 +21,15 @@ export interface CalcNumSelectProps {
   accentTextColor?: string
 }
 
-const SHEET_HEIGHT = '22vh'
+// Preset grid is short enough at 22vh (small list, rarely needs its own
+// scroll). The numpad needs real room — 4 digit rows plus the value
+// readout don't fit in 22vh without an inner scroll of their own, which
+// defeats the point of the sheet. ~50vh reaches roughly to where "min
+// value" sits on the builder screen behind it.
+const PRESET_SHEET_HEIGHT = '22vh'
+const NUMPAD_SHEET_HEIGHT = '50vh'
 const SHEET_MIN_HEIGHT = '210px'
+const NUMPAD_SHEET_MIN_HEIGHT = '380px'
 
 export function CalcNumSelect({
   value,
@@ -74,8 +81,8 @@ export function CalcNumSelect({
           <div
             className="fixed inset-x-0 bottom-0 z-[60] flex flex-col px-3 pt-3"
             style={{
-              height: SHEET_HEIGHT,
-              minHeight: SHEET_MIN_HEIGHT,
+              height: customEntry ? NUMPAD_SHEET_HEIGHT : PRESET_SHEET_HEIGHT,
+              minHeight: customEntry ? NUMPAD_SHEET_MIN_HEIGHT : SHEET_MIN_HEIGHT,
               backgroundColor: 'oklch(0.12 0 0)',
               borderTop: `1px solid ${C.border}`,
               borderTopLeftRadius: '18px',
