@@ -11,6 +11,12 @@
 // until the query actually runs). Implementing this with press/release
 // state instead of controlled `selected` will silently break that
 // requirement, so don't do it.
+//
+// SIZING: `className`, when passed, REPLACES the default sizing classes
+// entirely (not just appends) — so a caller that wants a non-full-width
+// button (e.g. a flex-wrap chip) must be explicit and NOT rely on any
+// default leaking through. If a custom className needs the button to still
+// fill its grid cell, include `w-full` in it explicitly.
 import type { ReactNode } from 'react'
 import { C } from './theme'
 
@@ -40,7 +46,7 @@ export function CalcButton({
       type="button"
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
-      className={`w-full font-mono text-[15px] rounded-xl border px-2 select-none transition-colors ${className || 'min-h-[52px]'}`}
+      className={`font-mono rounded-xl border select-none transition-colors ${className || 'w-full text-[15px] px-2 min-h-[52px]'}`}
       style={{
         backgroundColor: selected ? accentColor : C.surface2,
         color: selected ? accentTextColor : disabled ? C.textDim : C.textBright,

@@ -4,7 +4,8 @@
 // ('builder' | 'results') and mounts useNspeQuery(), following the same
 // "separate top-level component, own file, own local state" precedent
 // WorldCupApp.tsx already sets in this codebase.
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
+import leaderboardData from '@/assets/data/leaderboard.json'
 import { useNspeQuery } from '@/hooks/useNspeQuery'
 import { BuilderScreen } from './BuilderScreen'
 import { ResultsScreen } from './ResultsScreen'
@@ -12,11 +13,23 @@ import { useCalculatorQuery } from './state/useCalculatorQuery'
 
 type Screen = 'builder' | 'results'
 
+// Same source/shape as desktop QueryBuilder's popularPlayers prop
+// (App.tsx: leaderboard.rows, top 20, {player, team}) — kept identical so
+// the "popular players" list matches between desktop and mobile.
+interface LeaderboardRowLike {
+  player: string
+  team: string
+}
+
 export function MobileCalculatorApp() {
   const [screen, setScreen] = useState<Screen>('builder')
   const [lastQuery, setLastQuery] = useState('')
   const calc = useCalculatorQuery()
   const { run, isLoading, error, result } = useNspeQuery()
+  const popularPlayers = useMemo(() => {
+    const rows = (leaderboardData as { rows?: LeaderboardRowLike[] })?.rows ?? []
+    return rows.slice(0, 20).map((r) => ({ player: r.player, team: r.team }))
+  }, [])
 
   const handleRun = () => {
     if (!calc.builtCommand) return
@@ -41,7 +54,7 @@ export function MobileCalculatorApp() {
     // that inner scroll never engages and content (including the run
     // button) can end up pushed below the reachable viewport.
     <div className="w-full h-dvh overflow-hidden relative" style={{ backgroundColor: 'oklch(0.08 0 0)' }}>
-      <BuilderScreen state={calc} onRun={handleRun} isLoading={isLoading} />
+      <BuilderScreen state={calc} onRun={handleRun} isLoading={isLoading} popularPlayers={popularPlayers} />
       {screen === 'results' && (
         <ResultsScreen
           result={result}

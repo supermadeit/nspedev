@@ -29,11 +29,11 @@ import { ModeChip } from './components/ModeChip'
 import { C } from './components/theme'
 import {
   CALC_MODES,
-  MLB_POSITIONS,
   MLB_TEAMS,
   type CalcMode,
   type CalculatorQueryState,
 } from './state/useCalculatorQuery'
+import type { PopularPlayer } from '@/components/QueryBuilder'
 
 function SectionLabel({ children }: { children: ReactNode }) {
   return (
@@ -58,9 +58,10 @@ export interface BuilderScreenProps {
   state: CalculatorQueryState
   onRun: () => void
   isLoading: boolean
+  popularPlayers?: PopularPlayer[]
 }
 
-export function BuilderScreen({ state, onRun, isLoading }: BuilderScreenProps) {
+export function BuilderScreen({ state, onRun, isLoading, popularPlayers = [] }: BuilderScreenProps) {
   const {
     mode, setMode,
     sport, setSport,
@@ -68,7 +69,6 @@ export function BuilderScreen({ state, onRun, isLoading }: BuilderScreenProps) {
     period, setPeriod,
     stat, setStat,
     stats,
-    batPosition, setBatPosition,
     thresholdN, setThresholdN,
     lastA, setLastA,
     lastB, setLastB,
@@ -201,7 +201,7 @@ export function BuilderScreen({ state, onRun, isLoading }: BuilderScreenProps) {
                   key={t}
                   selected={h2hOpponent === t}
                   onClick={() => setH2hOpponent(h2hOpponent === t ? '' : t)}
-                  className="text-[12px] min-h-[40px]"
+                  className="w-full text-[12px] min-h-[40px]"
                 >
                   {t}
                 </CalcButton>
@@ -217,6 +217,27 @@ export function BuilderScreen({ state, onRun, isLoading }: BuilderScreenProps) {
               className="w-full font-mono text-[14px] rounded-xl border px-3 py-3.5 outline-none mb-3"
               style={{ backgroundColor: C.surface2, borderColor: C.border, color: C.accent }}
             />
+
+            {popularPlayers.length > 0 && (
+              <>
+                <SectionLabel>popular {'{'}top {popularPlayers.length}{'}'}</SectionLabel>
+                <div className="flex gap-1.5 flex-wrap mb-3">
+                  {popularPlayers.map((p) => {
+                    const selected = h2hPlayer.trim().toLowerCase() === p.player.toLowerCase()
+                    return (
+                      <CalcButton
+                        key={`${p.team}-${p.player}`}
+                        selected={selected}
+                        onClick={() => setH2hPlayer(selected ? '' : p.player)}
+                        className="w-auto flex-none px-3 min-h-[36px] text-[11px]"
+                      >
+                        {`${p.team} ${p.player}`}
+                      </CalcButton>
+                    )
+                  })}
+                </div>
+              </>
+            )}
           </>
         )}
 
@@ -285,50 +306,44 @@ export function BuilderScreen({ state, onRun, isLoading }: BuilderScreenProps) {
               ))}
             </ButtonGrid>
 
-            <div className="mb-3 grid grid-cols-2 gap-3">
-              <div>
-                <SectionLabel>season</SectionLabel>
+            {/* "post" is a small optional toggle, not a full section — and
+                there's no explicit "reg"/"full" button anymore, since not
+                selecting a period already means regular season by default;
+                q1/1h/p1 (when applicable) toggle themselves on/off directly
+                since there's no separate "reg" button to fall back to. */}
+            <div className="mb-3 flex items-center gap-2 flex-wrap">
+              <div className="w-24">
                 <CalcButton
                   selected={seasonType === 'post'}
                   onClick={() => setSeasonType(seasonType === 'post' ? '' : 'post')}
+                  className="w-full min-h-[36px] text-[12px]"
                 >
                   post
                 </CalcButton>
               </div>
-              <div>
-                <SectionLabel>{sport === 'mlb' ? 'season' : 'period'}</SectionLabel>
-                <div className="grid grid-cols-3 gap-1.5">
-                  <CalcButton selected={period === ''} onClick={() => setPeriod('')}>
-                    {sport === 'mlb' ? 'reg' : 'full'}
+              {sport !== 'mlb' && sport !== 'nfl' && (
+                <div className="w-20">
+                  <CalcButton
+                    selected={period === 'q1'}
+                    onClick={() => setPeriod(period === 'q1' ? '' : 'q1')}
+                    className="w-full min-h-[36px] text-[12px]"
+                  >
+                    {sport === 'nhl' ? 'p1' : 'q1'}
                   </CalcButton>
-                  {sport !== 'mlb' && sport !== 'nfl' && (
-                    <CalcButton selected={period === 'q1'} onClick={() => setPeriod('q1')}>
-                      {sport === 'nhl' ? 'p1' : 'q1'}
-                    </CalcButton>
-                  )}
-                  {sport === 'nba' && (
-                    <CalcButton selected={period === '1h'} onClick={() => setPeriod('1h')}>1h</CalcButton>
-                  )}
                 </div>
-              </div>
+              )}
+              {sport === 'nba' && (
+                <div className="w-20">
+                  <CalcButton
+                    selected={period === '1h'}
+                    onClick={() => setPeriod(period === '1h' ? '' : '1h')}
+                    className="w-full min-h-[36px] text-[12px]"
+                  >
+                    1h
+                  </CalcButton>
+                </div>
+              )}
             </div>
-
-            {sport === 'mlb' && (
-              <>
-                <SectionLabel>batter position {'{optional}'}</SectionLabel>
-                <ButtonGrid cols={4}>
-                  {MLB_POSITIONS.map((pos) => (
-                    <CalcButton
-                      key={pos.value}
-                      selected={batPosition === pos.value}
-                      onClick={() => setBatPosition(batPosition === pos.value ? '' : pos.value)}
-                    >
-                      {pos.label}
-                    </CalcButton>
-                  ))}
-                </ButtonGrid>
-              </>
-            )}
 
             {sport && stats.length > 0 && (
               <>
