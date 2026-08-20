@@ -21,14 +21,22 @@ export interface CalcNumSelectProps {
   accentTextColor?: string
 }
 
-// Preset grid is short enough at 22vh (small list, rarely needs its own
-// scroll). The numpad needs real room — 4 digit rows plus the value
-// readout don't fit in 22vh without an inner scroll of their own, which
-// defeats the point of the sheet. ~50vh reaches roughly to where "min
-// value" sits on the builder screen behind it.
-const PRESET_SHEET_HEIGHT = '22vh'
-const NUMPAD_SHEET_HEIGHT = '50vh'
+// The preset grid's height is derived from options.length rather than a
+// fixed vh — a flat 22vh fit short lists (5-6 presets) but longer ones
+// (NFL yds, nba pts, met/last — 8 presets + "Other…" = 9 cells = 3 rows)
+// overflowed it and needed an inner scroll, which is exactly what the
+// sheet is meant to avoid. Sized to always fit every row without scrolling
+// for any preset list currently in the app; a genuinely huge future list
+// still has overflow-y-auto as a fallback, it just won't be the common case.
+const PRESET_HEADER_PX = 96
+const PRESET_ROW_PX = 64
+const PRESET_COLUMNS = 4
 const SHEET_MIN_HEIGHT = '210px'
+// The numpad needs real room — 4 digit rows plus the value readout don't
+// fit in the preset grid's height without an inner scroll of their own.
+// ~50vh reaches roughly to where "min value" sits on the builder screen
+// behind it.
+const NUMPAD_SHEET_HEIGHT = '50vh'
 const NUMPAD_SHEET_MIN_HEIGHT = '380px'
 
 export function CalcNumSelect({
@@ -45,6 +53,9 @@ export function CalcNumSelect({
 
   const accent = accentColor ?? C.accent
   const accentText = accentTextColor ?? C.accentDark
+
+  const presetRows = Math.ceil((options.length + 1) / PRESET_COLUMNS)
+  const presetSheetHeight = `${PRESET_HEADER_PX + presetRows * PRESET_ROW_PX}px`
 
   const close = () => setExpanded(false)
   const open = () => {
@@ -81,8 +92,9 @@ export function CalcNumSelect({
           <div
             className="fixed inset-x-0 bottom-0 z-[60] flex flex-col px-3 pt-3"
             style={{
-              height: customEntry ? NUMPAD_SHEET_HEIGHT : PRESET_SHEET_HEIGHT,
+              height: customEntry ? NUMPAD_SHEET_HEIGHT : presetSheetHeight,
               minHeight: customEntry ? NUMPAD_SHEET_MIN_HEIGHT : SHEET_MIN_HEIGHT,
+              maxHeight: '70vh',
               backgroundColor: 'oklch(0.12 0 0)',
               borderTop: `1px solid ${C.border}`,
               borderTopLeftRadius: '18px',

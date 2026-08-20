@@ -30,6 +30,7 @@ export const CURATED_TREND_DEFAULTS: Record<string, Record<string, [threshold: n
   },
   nfl: {
     pass_yds: [300, 3, 5],
+    rush_yds: [100, 2, 5],
   },
 }
 

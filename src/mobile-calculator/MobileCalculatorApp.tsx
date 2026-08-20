@@ -9,6 +9,7 @@ import leaderboardData from '@/assets/data/leaderboard.json'
 import { useNspeQuery } from '@/hooks/useNspeQuery'
 import { BuilderScreen } from './BuilderScreen'
 import { ResultsScreen } from './ResultsScreen'
+import { SampleQueriesScreen } from './SampleQueriesScreen'
 import { useCalculatorQuery } from './state/useCalculatorQuery'
 
 type Screen = 'builder' | 'results'
@@ -23,6 +24,7 @@ interface LeaderboardRowLike {
 
 export function MobileCalculatorApp() {
   const [screen, setScreen] = useState<Screen>('builder')
+  const [isSampleQueriesOpen, setIsSampleQueriesOpen] = useState(false)
   const [lastQuery, setLastQuery] = useState('')
   // Captured at run time (not read live during results view) — the unit
   // label for the generic case's bare compute total, e.g. "27hits" instead
@@ -61,7 +63,13 @@ export function MobileCalculatorApp() {
     // that inner scroll never engages and content (including the run
     // button) can end up pushed below the reachable viewport.
     <div className="w-full h-dvh overflow-hidden relative" style={{ backgroundColor: 'oklch(0.08 0 0)' }}>
-      <BuilderScreen state={calc} onRun={handleRun} isLoading={isLoading} popularPlayers={popularPlayers} />
+      <BuilderScreen
+        state={calc}
+        onRun={handleRun}
+        isLoading={isLoading}
+        popularPlayers={popularPlayers}
+        onOpenSampleQueries={() => setIsSampleQueriesOpen(true)}
+      />
       {screen === 'results' && (
         <ResultsScreen
           result={result}
@@ -72,6 +80,7 @@ export function MobileCalculatorApp() {
           statLabel={lastStatLabel}
         />
       )}
+      {isSampleQueriesOpen && <SampleQueriesScreen onBack={() => setIsSampleQueriesOpen(false)} />}
     </div>
   )
 }

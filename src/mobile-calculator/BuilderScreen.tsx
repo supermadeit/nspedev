@@ -59,9 +59,10 @@ export interface BuilderScreenProps {
   onRun: () => void
   isLoading: boolean
   popularPlayers?: PopularPlayer[]
+  onOpenSampleQueries: () => void
 }
 
-export function BuilderScreen({ state, onRun, isLoading, popularPlayers = [] }: BuilderScreenProps) {
+export function BuilderScreen({ state, onRun, isLoading, popularPlayers = [], onOpenSampleQueries }: BuilderScreenProps) {
   const {
     mode, setMode,
     sport, setSport,
@@ -106,6 +107,32 @@ export function BuilderScreen({ state, onRun, isLoading, popularPlayers = [] }: 
 
   return (
     <div className="w-full h-full flex flex-col" style={{ color: C.textBright, fontFamily: 'monospace' }}>
+      {/* Header — sits above the scroll region so it never scrolls away.
+          Left: branding (same as desktop's old top-left mobile mark). Right:
+          login entry point + sample-queries review list, one line. */}
+      <div className="flex items-center justify-between px-3 pt-2 pb-2 flex-none" style={{ borderBottom: `1px solid ${C.border}` }}>
+        <span className="font-mono text-[11px] font-bold whitespace-nowrap" style={{ color: 'oklch(0.95 0 0)' }}>
+          nspe.dev <span style={{ color: 'oklch(0.75 0.15 145)' }}>{'{preview}'}</span>
+        </span>
+        <div className="flex items-center gap-2.5 whitespace-nowrap">
+          <a
+            href="/login"
+            className="font-mono text-[11px] font-bold underline"
+            style={{ color: C.accent }}
+          >
+            {'{log-in}'}
+          </a>
+          <button
+            type="button"
+            onClick={onOpenSampleQueries}
+            className="font-mono text-[11px] font-bold underline"
+            style={{ color: C.accent }}
+          >
+            {'{sample queries}'}
+          </button>
+        </div>
+      </div>
+
       <div className="flex-1 overflow-y-auto px-3 pt-3 pb-2">
         {/* Mode chips — the one row that's genuinely a tab bar, not a keypad */}
         <div className="flex gap-1.5 mb-3 flex-wrap">
