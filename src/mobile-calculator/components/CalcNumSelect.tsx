@@ -61,7 +61,7 @@ export function CalcNumSelect({
   }
 
   return (
-    <div className="flex gap-1.5 flex-wrap">
+    <div className="flex gap-2 flex-wrap">
       {options.map((n) => (
         <CalcButton
           key={n}
@@ -69,7 +69,7 @@ export function CalcNumSelect({
           onClick={() => onChange(String(n))}
           accentColor={accentColor}
           accentTextColor={accentTextColor}
-          className="min-w-[52px] flex-none px-2.5 py-2"
+          className="min-w-[58px] min-h-[48px] flex-none px-3"
         >
           {n}
         </CalcButton>
@@ -79,7 +79,7 @@ export function CalcNumSelect({
         onClick={() => setShowCustom(true)}
         accentColor={accentColor}
         accentTextColor={accentTextColor}
-        className="min-w-[64px] flex-none px-2.5 py-2 text-[11px]"
+        className="min-w-[70px] min-h-[48px] flex-none px-3 text-[12px]"
       >
         {isCustomValue ? value : 'Other…'}
       </CalcButton>

@@ -33,7 +33,14 @@ export function MobileCalculatorApp() {
   }
 
   return (
-    <div className="w-full h-full min-h-screen" style={{ backgroundColor: 'oklch(0.08 0 0)' }}>
+    // Fixed to the real viewport height (not min-h-screen, which has no
+    // ceiling) and overflow-hidden at this level — the global `body` rule
+    // (src/index.css) is `overflow: hidden`, so the page itself never
+    // scrolls. BuilderScreen's own inner overflow-y-auto region is the only
+    // thing that's allowed to scroll; without a hard-capped ancestor height,
+    // that inner scroll never engages and content (including the run
+    // button) can end up pushed below the reachable viewport.
+    <div className="w-full h-dvh overflow-hidden relative" style={{ backgroundColor: 'oklch(0.08 0 0)' }}>
       <BuilderScreen state={calc} onRun={handleRun} isLoading={isLoading} />
       {screen === 'results' && (
         <ResultsScreen

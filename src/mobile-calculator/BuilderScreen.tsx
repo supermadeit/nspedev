@@ -1,5 +1,10 @@
 // Calculator-style builder screen: mode chips, live query-preview line,
 // button grid, numpad-as-fallback (via CalcNumSelect), run button.
+//
+// Deliberately calculator-shaped, not a ported form: button ROWS are fixed
+// CSS grids (uniform cell size, like a real keypad) rather than flex-wrap
+// pills that shrink to their text — and section labels are kept small and
+// secondary so the buttons themselves stay the dominant visual element.
 import type { ReactNode } from 'react'
 import {
   COMPUTE_WINDOW_N_PRESETS,
@@ -32,7 +37,18 @@ import {
 
 function SectionLabel({ children }: { children: ReactNode }) {
   return (
-    <div className="font-mono text-[10px] uppercase tracking-widest mb-1.5" style={{ color: C.textDim }}>
+    <div className="font-mono text-[9px] uppercase tracking-widest mb-1 opacity-70" style={{ color: C.textDim }}>
+      {children}
+    </div>
+  )
+}
+
+// Fixed-column button grid — the calculator-keypad primitive every button
+// row in this screen uses, instead of flex-wrap pills that shrink to fit
+// their own text. Uniform cell size is what makes this read as a keypad.
+function ButtonGrid({ cols, children }: { cols: number; children: ReactNode }) {
+  return (
+    <div className="grid gap-2 mb-3" style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}>
       {children}
     </div>
   )
@@ -84,11 +100,15 @@ export function BuilderScreen({ state, onRun, isLoading }: BuilderScreenProps) {
   const nflThresholdPresets = nflStatType === 'td' ? NFL_TD_PRESETS : NFL_YDS_PRESETS
   const nflComputePresets = nflStatType === 'td' ? NFL_TD_COMPUTE_PRESETS : NFL_YDS_COMPUTE_PRESETS
 
+  // Stat grid: enough columns that MLB's 9/NBA's 10 options still read as a
+  // keypad (3 short rows) rather than a long single-column list.
+  const statCols = stats.length > 6 ? 3 : Math.min(stats.length, 3) || 2
+
   return (
     <div className="w-full h-full flex flex-col" style={{ color: C.textBright, fontFamily: 'monospace' }}>
-      <div className="flex-1 overflow-y-auto px-4 pt-4 pb-2">
-        {/* Mode chips */}
-        <div className="flex gap-1.5 mb-4 flex-wrap">
+      <div className="flex-1 overflow-y-auto px-3 pt-3 pb-2">
+        {/* Mode chips — the one row that's genuinely a tab bar, not a keypad */}
+        <div className="flex gap-1.5 mb-3 flex-wrap">
           {CALC_MODES.map((m: CalcMode) => (
             <ModeChip
               key={m}
@@ -104,33 +124,29 @@ export function BuilderScreen({ state, onRun, isLoading }: BuilderScreenProps) {
         {/* Explosive mode */}
         {mode === 'explosive' && (
           <>
-            <div className="mb-3">
-              <SectionLabel>league</SectionLabel>
-              <div className="flex gap-1.5">
-                <CalcButton selected={explosiveLeague === 'mlb'} onClick={() => setExplosiveLeague('mlb')}>MLB</CalcButton>
-                <CalcButton selected={explosiveLeague === 'nfl'} onClick={() => setExplosiveLeague('nfl')}>NFL</CalcButton>
-              </div>
-            </div>
+            <SectionLabel>league</SectionLabel>
+            <ButtonGrid cols={2}>
+              <CalcButton selected={explosiveLeague === 'mlb'} onClick={() => setExplosiveLeague('mlb')}>MLB</CalcButton>
+              <CalcButton selected={explosiveLeague === 'nfl'} onClick={() => setExplosiveLeague('nfl')}>NFL</CalcButton>
+            </ButtonGrid>
 
-            <div className="mb-3">
-              <SectionLabel>mode</SectionLabel>
-              <div className="flex gap-1.5">
-                <CalcButton selected={nflExplosiveSubMode === 'trend'} onClick={() => setNflExplosiveSubMode('trend')}>trend</CalcButton>
-                <CalcButton selected={nflExplosiveSubMode === 'compute'} onClick={() => setNflExplosiveSubMode('compute')}>compute</CalcButton>
-              </div>
-            </div>
+            <SectionLabel>mode</SectionLabel>
+            <ButtonGrid cols={2}>
+              <CalcButton selected={nflExplosiveSubMode === 'trend'} onClick={() => setNflExplosiveSubMode('trend')}>trend</CalcButton>
+              <CalcButton selected={nflExplosiveSubMode === 'compute'} onClick={() => setNflExplosiveSubMode('compute')}>compute</CalcButton>
+            </ButtonGrid>
 
             {explosiveLeague === 'nfl' && (
-              <div className="mb-3">
+              <>
                 <SectionLabel>play type</SectionLabel>
-                <div className="flex gap-1.5 flex-wrap">
+                <ButtonGrid cols={3}>
                   {(['rush', 'pass', 'rec'] as const).map((pt) => (
                     <CalcButton key={pt} selected={nflPlayType === pt} onClick={() => setNflPlayType(nflPlayType === pt ? '' : pt)}>
                       {pt.toUpperCase()}
                     </CalcButton>
                   ))}
-                </div>
-              </div>
+                </ButtonGrid>
+              </>
             )}
 
             {nflExplosiveSubMode === 'trend' ? (
@@ -142,7 +158,7 @@ export function BuilderScreen({ state, onRun, isLoading }: BuilderScreenProps) {
                   <SectionLabel>single play ≥ {isExplosiveMlb ? '(ft)' : '(yds)'}</SectionLabel>
                   <CalcNumSelect value={nflYds} onChange={setNflYds} options={explosiveTrendPresets} />
                 </div>
-                <div className="mb-3 flex gap-4">
+                <div className="mb-3 grid grid-cols-2 gap-3">
                   <div>
                     <SectionLabel>met</SectionLabel>
                     <CalcNumSelect value={lastA} onChange={setLastA} options={WINDOW_MET_PRESETS} />
@@ -178,54 +194,46 @@ export function BuilderScreen({ state, onRun, isLoading }: BuilderScreenProps) {
         {/* H2H mode */}
         {mode === 'h2h' && (
           <>
-            <div className="mb-3">
-              <SectionLabel>opponent team</SectionLabel>
-              <div className="grid grid-cols-5 gap-1.5">
-                {MLB_TEAMS.map((t) => (
-                  <CalcButton
-                    key={t}
-                    selected={h2hOpponent === t}
-                    onClick={() => setH2hOpponent(h2hOpponent === t ? '' : t)}
-                    className="px-1.5 py-2 text-[11px]"
-                  >
-                    {t}
-                  </CalcButton>
-                ))}
-              </div>
+            <SectionLabel>opponent team</SectionLabel>
+            <div className="grid grid-cols-6 gap-1.5 mb-3">
+              {MLB_TEAMS.map((t) => (
+                <CalcButton
+                  key={t}
+                  selected={h2hOpponent === t}
+                  onClick={() => setH2hOpponent(h2hOpponent === t ? '' : t)}
+                  className="text-[12px] min-h-[40px]"
+                >
+                  {t}
+                </CalcButton>
+              ))}
             </div>
 
-            <div className="mb-3">
-              <SectionLabel>player name</SectionLabel>
-              <input
-                type="text"
-                value={h2hPlayer}
-                onChange={(e) => setH2hPlayer(e.target.value)}
-                placeholder="type any MLB player (e.g. ketel marte)"
-                className="w-full font-mono text-[13px] rounded-lg border px-3 py-2.5 outline-none"
-                style={{ backgroundColor: C.surface2, borderColor: C.border, color: C.accent }}
-              />
-            </div>
+            <SectionLabel>player name</SectionLabel>
+            <input
+              type="text"
+              value={h2hPlayer}
+              onChange={(e) => setH2hPlayer(e.target.value)}
+              placeholder="type any MLB player (e.g. ketel marte)"
+              className="w-full font-mono text-[14px] rounded-xl border px-3 py-3.5 outline-none mb-3"
+              style={{ backgroundColor: C.surface2, borderColor: C.border, color: C.accent }}
+            />
           </>
         )}
 
         {/* Team mode */}
         {mode === 'team' && (
           <>
-            <div className="mb-3">
-              <SectionLabel>mode</SectionLabel>
-              <div className="flex gap-1.5">
-                <CalcButton selected={teamSubMode === 'trend'} onClick={() => setTeamSubMode('trend')}>trend</CalcButton>
-                <CalcButton selected={teamSubMode === 'compute'} onClick={() => setTeamSubMode('compute')}>compute</CalcButton>
-              </div>
-            </div>
+            <SectionLabel>mode</SectionLabel>
+            <ButtonGrid cols={2}>
+              <CalcButton selected={teamSubMode === 'trend'} onClick={() => setTeamSubMode('trend')}>trend</CalcButton>
+              <CalcButton selected={teamSubMode === 'compute'} onClick={() => setTeamSubMode('compute')}>compute</CalcButton>
+            </ButtonGrid>
 
-            <div className="mb-3">
-              <SectionLabel>stat</SectionLabel>
-              <div className="flex gap-1.5">
-                <CalcButton selected={teamStat === 'runs'} onClick={() => setTeamStat(teamStat === 'runs' ? '' : 'runs')}>-runs</CalcButton>
-                <CalcButton selected={teamStat === 'allowed'} onClick={() => setTeamStat(teamStat === 'allowed' ? '' : 'allowed')}>-allowed</CalcButton>
-              </div>
-            </div>
+            <SectionLabel>stat</SectionLabel>
+            <ButtonGrid cols={2}>
+              <CalcButton selected={teamStat === 'runs'} onClick={() => setTeamStat(teamStat === 'runs' ? '' : 'runs')}>-runs</CalcButton>
+              <CalcButton selected={teamStat === 'allowed'} onClick={() => setTeamStat(teamStat === 'allowed' ? '' : 'allowed')}>-allowed</CalcButton>
+            </ButtonGrid>
 
             {teamSubMode === 'trend' && teamStat && (
               <>
@@ -233,7 +241,7 @@ export function BuilderScreen({ state, onRun, isLoading }: BuilderScreenProps) {
                   <SectionLabel>threshold</SectionLabel>
                   <CalcNumSelect value={thresholdN} onChange={setThresholdN} options={TEAM_RUNS_TREND_PRESETS} />
                 </div>
-                <div className="mb-3 flex gap-4">
+                <div className="mb-3 grid grid-cols-2 gap-3">
                   <div>
                     <SectionLabel>met</SectionLabel>
                     <CalcNumSelect value={lastA} onChange={setLastA} options={WINDOW_MET_PRESETS} />
@@ -268,18 +276,16 @@ export function BuilderScreen({ state, onRun, isLoading }: BuilderScreenProps) {
         {/* Shared builder fields: trend / compute */}
         {isBuilderQuery && (
           <>
-            <div className="mb-3">
-              <SectionLabel>sport</SectionLabel>
-              <div className="flex gap-1.5 flex-wrap">
-                {SPORTS.map((s) => (
-                  <CalcButton key={s.value} selected={sport === s.value} onClick={() => setSport(s.value)}>
-                    {s.label}
-                  </CalcButton>
-                ))}
-              </div>
-            </div>
+            <SectionLabel>sport</SectionLabel>
+            <ButtonGrid cols={4}>
+              {SPORTS.map((s) => (
+                <CalcButton key={s.value} selected={sport === s.value} onClick={() => setSport(s.value)}>
+                  {s.label}
+                </CalcButton>
+              ))}
+            </ButtonGrid>
 
-            <div className="mb-3 flex gap-4 flex-wrap">
+            <div className="mb-3 grid grid-cols-2 gap-3">
               <div>
                 <SectionLabel>season</SectionLabel>
                 <CalcButton
@@ -291,7 +297,7 @@ export function BuilderScreen({ state, onRun, isLoading }: BuilderScreenProps) {
               </div>
               <div>
                 <SectionLabel>{sport === 'mlb' ? 'season' : 'period'}</SectionLabel>
-                <div className="flex gap-1.5 flex-wrap">
+                <div className="grid grid-cols-3 gap-1.5">
                   <CalcButton selected={period === ''} onClick={() => setPeriod('')}>
                     {sport === 'mlb' ? 'reg' : 'full'}
                   </CalcButton>
@@ -308,9 +314,9 @@ export function BuilderScreen({ state, onRun, isLoading }: BuilderScreenProps) {
             </div>
 
             {sport === 'mlb' && (
-              <div className="mb-3">
+              <>
                 <SectionLabel>batter position {'{optional}'}</SectionLabel>
-                <div className="flex gap-1.5 flex-wrap">
+                <ButtonGrid cols={4}>
                   {MLB_POSITIONS.map((pos) => (
                     <CalcButton
                       key={pos.value}
@@ -320,31 +326,31 @@ export function BuilderScreen({ state, onRun, isLoading }: BuilderScreenProps) {
                       {pos.label}
                     </CalcButton>
                   ))}
-                </div>
-              </div>
+                </ButtonGrid>
+              </>
             )}
 
             {sport && stats.length > 0 && (
-              <div className="mb-3">
+              <>
                 <SectionLabel>stat</SectionLabel>
-                <div className="flex gap-1.5 flex-wrap">
+                <ButtonGrid cols={statCols}>
                   {stats.map((s) => (
                     <CalcButton key={s.value} selected={stat === s.value} onClick={() => setStat(stat === s.value ? '' : s.value)}>
                       {s.label}
                     </CalcButton>
                   ))}
-                </div>
-              </div>
+                </ButtonGrid>
+              </>
             )}
 
             {sport === 'nfl' && stat && (
-              <div className="mb-3">
+              <>
                 <SectionLabel>type</SectionLabel>
-                <div className="flex gap-1.5">
+                <ButtonGrid cols={2}>
                   <CalcButton selected={nflStatType === 'yds'} onClick={() => setNflStatType('yds')}>-yds</CalcButton>
                   <CalcButton selected={nflStatType === 'td'} onClick={() => setNflStatType('td')}>-td</CalcButton>
-                </div>
-              </div>
+                </ButtonGrid>
+              </>
             )}
 
             {mode === 'trend' && stat && (
@@ -357,7 +363,7 @@ export function BuilderScreen({ state, onRun, isLoading }: BuilderScreenProps) {
                     options={sport === 'nfl' ? nflThresholdPresets : thresholdPresetsFor(sport, stat)}
                   />
                 </div>
-                <div className="mb-3 flex gap-4">
+                <div className="mb-3 grid grid-cols-2 gap-3">
                   <div>
                     <SectionLabel>met</SectionLabel>
                     <CalcNumSelect value={lastA} onChange={setLastA} options={WINDOW_MET_PRESETS} />
@@ -390,32 +396,36 @@ export function BuilderScreen({ state, onRun, isLoading }: BuilderScreenProps) {
         )}
       </div>
 
-      {/* Command preview + run — pinned to the bottom, like a calculator's display */}
-      <div className="px-4 pb-4 pt-2" style={{ borderTop: `1px solid ${C.border}` }}>
-        <div
-          className="px-3 py-2.5 rounded-lg text-[12px] break-all min-h-[38px] flex items-center mb-3"
-          style={{ backgroundColor: 'oklch(0.10 0 0)', border: `1px solid ${C.border}` }}
-        >
-          {builtCommand ? (
-            <span style={{ color: C.accent }}>{builtCommand}</span>
-          ) : (
-            <span style={{ color: C.textDim }}>select options to build query</span>
-          )}
+      {/* Command preview + run — pinned to the bottom like a calculator's
+          display+equals row. Run sits bottom-right at a fixed width, not a
+          full-width bar, matching where "=" sits on a real calculator. */}
+      <div className="px-3 pb-3 pt-2" style={{ borderTop: `1px solid ${C.border}` }}>
+        <div className="flex items-stretch gap-2">
+          <div
+            className="flex-1 min-w-0 px-3 py-2.5 rounded-xl text-[12px] break-all flex items-center"
+            style={{ backgroundColor: 'oklch(0.10 0 0)', border: `1px solid ${C.border}` }}
+          >
+            {builtCommand ? (
+              <span style={{ color: C.accent }}>{builtCommand}</span>
+            ) : (
+              <span style={{ color: C.textDim }}>select options</span>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={() => canRun && onRun()}
+            disabled={!canRun || isLoading}
+            className="flex-none w-24 rounded-xl font-mono font-bold text-[15px] uppercase tracking-wide border transition-colors"
+            style={{
+              backgroundColor: canRun ? C.accent : C.surface2,
+              color: canRun ? C.accentDark : C.textDim,
+              borderColor: canRun ? C.accent : C.border,
+              cursor: canRun && !isLoading ? 'pointer' : 'not-allowed',
+            }}
+          >
+            {isLoading ? '…' : 'run'}
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={() => canRun && onRun()}
-          disabled={!canRun || isLoading}
-          className="w-full py-3.5 rounded-lg font-mono font-bold text-[14px] uppercase tracking-wide border transition-colors"
-          style={{
-            backgroundColor: canRun ? C.accent : C.surface2,
-            color: canRun ? C.accentDark : C.textDim,
-            borderColor: canRun ? C.accent : C.border,
-            cursor: canRun && !isLoading ? 'pointer' : 'not-allowed',
-          }}
-        >
-          {isLoading ? 'running...' : 'run'}
-        </button>
       </div>
     </div>
   )
@@ -451,39 +461,37 @@ function ThresholdModeBlock({
   allowCareer: boolean
 }) {
   return (
-    <div className="mb-3">
-      <div className="mb-2">
-        <SectionLabel>threshold</SectionLabel>
-        <div className="flex gap-1.5 flex-wrap">
-          <CalcButton
-            selected={thresholdMode === 'min'}
-            onClick={() => {
-              setThresholdMode('min')
-              setMaxN('')
-            }}
-          >
-            min
-          </CalcButton>
-          <CalcButton
-            selected={thresholdMode === 'range'}
-            onClick={() => {
-              if (thresholdMode === 'exact' && minN) setMaxN(minN)
-              setThresholdMode('range')
-            }}
-          >
-            min-max
-          </CalcButton>
-          <CalcButton
-            selected={thresholdMode === 'exact'}
-            onClick={() => {
-              setThresholdMode('exact')
-              setMaxN('')
-            }}
-          >
-            exact
-          </CalcButton>
-        </div>
-      </div>
+    <>
+      <SectionLabel>threshold</SectionLabel>
+      <ButtonGrid cols={3}>
+        <CalcButton
+          selected={thresholdMode === 'min'}
+          onClick={() => {
+            setThresholdMode('min')
+            setMaxN('')
+          }}
+        >
+          min
+        </CalcButton>
+        <CalcButton
+          selected={thresholdMode === 'range'}
+          onClick={() => {
+            if (thresholdMode === 'exact' && minN) setMaxN(minN)
+            setThresholdMode('range')
+          }}
+        >
+          min-max
+        </CalcButton>
+        <CalcButton
+          selected={thresholdMode === 'exact'}
+          onClick={() => {
+            setThresholdMode('exact')
+            setMaxN('')
+          }}
+        >
+          exact
+        </CalcButton>
+      </ButtonGrid>
 
       <div className="mb-3">
         {thresholdMode === 'min' && (
@@ -493,7 +501,7 @@ function ThresholdModeBlock({
           </>
         )}
         {thresholdMode === 'range' && (
-          <div className="flex flex-col gap-2">
+          <div className="grid grid-cols-2 gap-3">
             <div>
               <SectionLabel>min</SectionLabel>
               <CalcNumSelect value={minN} onChange={setMinN} options={presets} />
@@ -513,7 +521,7 @@ function ThresholdModeBlock({
       </div>
 
       <SectionLabel>window</SectionLabel>
-      <div className="flex gap-1.5 flex-wrap items-center">
+      <div className="grid grid-cols-3 gap-1.5 items-stretch mb-1">
         <CalcButton
           selected={computeWindow === '-season'}
           onClick={() => setComputeWindow(computeWindow === '-season' ? '' : '-season')}
@@ -534,10 +542,12 @@ function ThresholdModeBlock({
         >
           -last
         </CalcButton>
-        {computeWindow === '-last' && (
-          <CalcNumSelect value={windowN} onChange={setWindowN} options={COMPUTE_WINDOW_N_PRESETS} />
-        )}
       </div>
-    </div>
+      {computeWindow === '-last' && (
+        <div className="mb-3">
+          <CalcNumSelect value={windowN} onChange={setWindowN} options={COMPUTE_WINDOW_N_PRESETS} />
+        </div>
+      )}
+    </>
   )
 }

@@ -712,6 +712,10 @@ export const STAT_FIELDS: Record<string, Record<string, string | string[]>> = {
     k: 'k',
     bb: 'bb',
     tb: 'total_bases',
+    // Assumed field name (no captured example yet) — matches this table's
+    // established "full lowercase word" convention (hits/doubles/triples).
+    // Only affects per-match value extraction for -runs; flag/fix if wrong.
+    runs: 'runs',
   },
   nhl: {
     g: 'goals',

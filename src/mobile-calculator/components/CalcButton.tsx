@@ -40,7 +40,7 @@ export function CalcButton({
       type="button"
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
-      className={`font-mono text-[13px] rounded-lg border px-3 py-3 select-none transition-colors ${className}`}
+      className={`w-full font-mono text-[15px] rounded-xl border px-2 select-none transition-colors ${className || 'min-h-[52px]'}`}
       style={{
         backgroundColor: selected ? accentColor : C.surface2,
         color: selected ? accentTextColor : disabled ? C.textDim : C.textBright,

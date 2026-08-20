@@ -34,7 +34,7 @@ export function Numpad({ value, onChange, maxLength = 5 }: NumpadProps) {
           key={key}
           type="button"
           onClick={() => handlePress(key)}
-          className="font-mono text-[15px] rounded-lg border py-2.5 select-none"
+          className="font-mono text-[18px] rounded-xl border min-h-[52px] select-none"
           style={{
             backgroundColor: C.surface2,
             color: key === 'C' || key === '⌫' ? C.textDim : C.textBright,
