@@ -687,6 +687,12 @@ export function extractMlbTeamRunsPayload(payload: unknown): MlbTeamRunsPayload 
 export interface StatContext {
   sport: string
   stat: string
+  // Raw period-prefixed field candidate (e.g. "q1_points") when the query
+  // was period-scoped — kept as a fallback lookup key for computeMatchValue,
+  // since STAT_FIELDS only maps the *unprefixed* short code to its plain
+  // field name, and some period-scoped responses may not include the
+  // sport-agnostic `val` field computeMatchValue otherwise prefers.
+  periodField?: string
 }
 
 export const STAT_FIELDS: Record<string, Record<string, string | string[]>> = {
@@ -701,6 +707,7 @@ export const STAT_FIELDS: Record<string, Record<string, string | string[]>> = {
     'pts+ast': ['points', 'assists'],
     'pts+reb': ['points', 'rebounds'],
     'reb+ast': ['rebounds', 'assists'],
+    'stl+blk': ['steals', 'blocks'],
   },
   mlb: {
     hits: 'hits',
@@ -1085,15 +1092,19 @@ export function detectStatContext(payload: ApiPayload, fallbackQuery: string): S
 
   // Period-prefixed stats like "q1_points", "1h_points", "p1_goals": strip the
   // prefix and reverse-map the canonical field name back to its short code.
+  // Keep the original prefixed string as `periodField` too — STAT_FIELDS
+  // only knows the unprefixed field name, but the actual per-match object
+  // for a period-scoped query may use the prefixed key, so computeMatchValue
+  // needs both candidates to fall back on.
   if (queryStat) {
     const stripped = queryStat.replace(/^(q1|1h|p1|h1|h2|q2|q3|q4)_/, '')
     if (knownStats.includes(stripped)) {
-      return { sport, stat: stripped }
+      return { sport, stat: stripped, periodField: queryStat }
     }
     const fields = STAT_FIELDS[sport]
     for (const [short, fld] of Object.entries(fields)) {
       if (typeof fld === 'string' && fld === stripped) {
-        return { sport, stat: short }
+        return { sport, stat: short, periodField: queryStat }
       }
     }
   }
@@ -1114,7 +1125,6 @@ export function computeMatchValue(match: Record<string, unknown>, ctx: StatConte
     return asNumber(match.val)
   }
   const field = STAT_FIELDS[ctx.sport]?.[ctx.stat]
-  if (!field) return null
   if (Array.isArray(field)) {
     let sum = 0
     let anyPresent = false
@@ -1122,10 +1132,28 @@ export function computeMatchValue(match: Record<string, unknown>, ctx: StatConte
       if (match[f] !== undefined) anyPresent = true
       sum += asNumber(match[f])
     }
-    return anyPresent ? sum : null
+    if (anyPresent) return sum
+  } else if (field && match[field] !== undefined) {
+    return asNumber(match[field])
   }
-  if (match[field] === undefined) return null
-  return asNumber(match[field])
+  // Period-scoped query (e.g. "q1 -pts") whose match object uses a
+  // prefixed field name directly (e.g. "q1_points") rather than the plain
+  // one STAT_FIELDS maps to. `periodField` covers the case where
+  // detectStatContext saw the prefix in payload.query; if the query came
+  // through as a plain token array instead (no object-form query.stat), that
+  // never gets set, so also brute-force every known period prefix against
+  // the plain field name before giving up — cheap, and only runs once val
+  // and the plain field have both already failed.
+  if (ctx.periodField && match[ctx.periodField] !== undefined) {
+    return asNumber(match[ctx.periodField])
+  }
+  if (typeof field === 'string') {
+    for (const prefix of ['q1', '1h', 'p1', 'h1', 'h2', 'q2', 'q3', 'q4']) {
+      const key = `${prefix}_${field}`
+      if (match[key] !== undefined) return asNumber(match[key])
+    }
+  }
+  return null
 }
 
 export function extractTeamFromRow(row: Record<string, unknown>): string {

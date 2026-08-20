@@ -1,10 +1,11 @@
-// Mobile preset selector: CLOSED by default (a single compact button showing
-// the current value, or a placeholder), same width as everything else on
-// screen — tapping it opens either the preset grid or, if the current value
-// is already custom, straight back into the numpad. Selecting a preset
-// auto-collapses. The open preset grid is height-capped and scrolls instead
-// of pushing the rest of the screen down, since a long option list
-// (WINDOW_LAST_PRESETS etc.) shouldn't dominate a screen this size.
+// Mobile preset selector. The closed pill is always in normal document
+// flow, at its original small size, unchanged whether or not it's expanded
+// — layout never shifts. Tapping it opens a bottom-sheet OVERLAY (fixed to
+// the viewport, ~22% of screen height, with a tap-to-close backdrop) rather
+// than expanding inline — the old inline-expand pushed everything below it
+// down the page, which meant the sheet itself could end up needing a
+// scroll to reach. The overlay is shared by both sub-states: the preset
+// grid, and (via "Other…") the numpad fallback.
 import { useState } from 'react'
 import { CalcButton } from './CalcButton'
 import { Numpad } from './Numpad'
@@ -19,6 +20,9 @@ export interface CalcNumSelectProps {
   accentColor?: string
   accentTextColor?: string
 }
+
+const SHEET_HEIGHT = '22vh'
+const SHEET_MIN_HEIGHT = '210px'
 
 export function CalcNumSelect({
   value,
@@ -35,14 +39,18 @@ export function CalcNumSelect({
   const accent = accentColor ?? C.accent
   const accentText = accentTextColor ?? C.accentDark
 
-  if (!expanded) {
-    return (
+  const close = () => setExpanded(false)
+  const open = () => {
+    setCustomEntry(isCustomValue)
+    setExpanded(true)
+  }
+
+  return (
+    <>
+      {/* Closed pill — same size/position whether or not the sheet is open. */}
       <button
         type="button"
-        onClick={() => {
-          setCustomEntry(isCustomValue)
-          setExpanded(true)
-        }}
+        onClick={open}
         className="w-full flex items-center justify-between font-mono text-[15px] rounded-xl border px-4 min-h-[48px]"
         style={{
           backgroundColor: value ? accent : C.surface2,
@@ -54,77 +62,100 @@ export function CalcNumSelect({
         <span>{value || 'select'}</span>
         <span style={{ opacity: 0.6, fontWeight: 400 }}>▾</span>
       </button>
-    )
-  }
 
-  if (customEntry) {
-    return (
-      <div>
-        <div className="flex items-center justify-between mb-1.5">
-          <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: C.textDim }}>
-            {label ?? 'custom value'}
-          </span>
-          <button
-            type="button"
-            onClick={() => setExpanded(false)}
-            className="font-mono text-[10px] px-2 py-1 rounded border"
-            style={{ backgroundColor: C.surface2, borderColor: C.border, color: accent }}
-          >
-            done ✓
-          </button>
-        </div>
-        <div
-          className="font-mono text-[20px] text-center mb-2 rounded border py-2"
-          style={{ backgroundColor: 'oklch(0.10 0 0)', borderColor: C.border, color: accent }}
-        >
-          {value || '—'}
-        </div>
-        <Numpad value={value} onChange={onChange} />
-      </div>
-    )
-  }
-
-  return (
-    <div className="rounded-xl border p-2" style={{ borderColor: C.border, backgroundColor: 'oklch(0.10 0 0)' }}>
-      <div className="flex items-center justify-between mb-1.5 px-1">
-        <span className="font-mono text-[9px] uppercase tracking-widest" style={{ color: C.textDim }}>
-          select
-        </span>
-        <button
-          type="button"
-          onClick={() => setExpanded(false)}
-          className="font-mono text-[10px]"
-          style={{ color: C.textDim }}
-        >
-          close ✕
-        </button>
-      </div>
-      <div className="grid grid-cols-4 gap-1.5 max-h-[124px] overflow-y-auto pr-0.5">
-        {options.map((n) => (
-          <CalcButton
-            key={n}
-            selected={String(n) === value}
-            onClick={() => {
-              onChange(String(n))
-              setExpanded(false)
+      {expanded && (
+        <>
+          <div
+            className="fixed inset-0 z-[55]"
+            style={{ backgroundColor: 'oklch(0 0 0 / 0.55)' }}
+            onClick={close}
+            aria-hidden="true"
+          />
+          <div
+            className="fixed inset-x-0 bottom-0 z-[60] flex flex-col px-3 pt-3"
+            style={{
+              height: SHEET_HEIGHT,
+              minHeight: SHEET_MIN_HEIGHT,
+              backgroundColor: 'oklch(0.12 0 0)',
+              borderTop: `1px solid ${C.border}`,
+              borderTopLeftRadius: '18px',
+              borderTopRightRadius: '18px',
+              paddingBottom: 'max(12px, env(safe-area-inset-bottom))',
             }}
-            accentColor={accentColor}
-            accentTextColor={accentTextColor}
-            className="w-full min-h-[40px] text-[13px]"
           >
-            {n}
-          </CalcButton>
-        ))}
-        <CalcButton
-          selected={isCustomValue}
-          onClick={() => setCustomEntry(true)}
-          accentColor={accentColor}
-          accentTextColor={accentTextColor}
-          className="w-full min-h-[40px] text-[11px]"
-        >
-          Other…
-        </CalcButton>
-      </div>
-    </div>
+            {customEntry ? (
+              <div className="flex flex-col h-full min-h-0">
+                <div className="flex items-center justify-between mb-2 flex-none">
+                  <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: C.textDim }}>
+                    {label ?? 'custom value'}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={close}
+                    className="font-mono text-[11px] px-2.5 py-1.5 rounded border"
+                    style={{ backgroundColor: C.surface2, borderColor: C.border, color: accent }}
+                  >
+                    done ✓
+                  </button>
+                </div>
+                <div
+                  className="font-mono text-[22px] text-center mb-2 rounded border py-2 flex-none"
+                  style={{ backgroundColor: 'oklch(0.10 0 0)', borderColor: C.border, color: accent }}
+                >
+                  {value || '—'}
+                </div>
+                <div className="flex-1 min-h-0 overflow-y-auto">
+                  <Numpad value={value} onChange={onChange} />
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col h-full min-h-0">
+                <div className="flex items-center justify-between mb-2 flex-none">
+                  <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: C.textDim }}>
+                    select
+                  </span>
+                  <button
+                    type="button"
+                    onClick={close}
+                    className="font-mono text-[11px] px-2.5 py-1.5 rounded border"
+                    style={{ backgroundColor: C.surface2, borderColor: C.border, color: C.textDim }}
+                  >
+                    close ✕
+                  </button>
+                </div>
+                <div className="flex-1 min-h-0 overflow-y-auto grid grid-cols-4 gap-2 content-start pb-1">
+                  {options.map((n) => (
+                    <CalcButton
+                      key={n}
+                      selected={String(n) === value}
+                      onClick={() => {
+                        onChange(String(n))
+                        close()
+                      }}
+                      accentColor={accentColor}
+                      accentTextColor={accentTextColor}
+                      rounded="rounded-md"
+                      className="w-full min-h-[56px] text-[16px]"
+                    >
+                      {n}
+                    </CalcButton>
+                  ))}
+                  <CalcButton
+                    selected={isCustomValue}
+                    onClick={() => setCustomEntry(true)}
+                    accentColor={accentColor}
+                    accentTextColor={accentTextColor}
+                    rounded="rounded-md"
+                    className="w-full min-h-[56px] text-[12px]"
+                  >
+                    Other…
+                  </CalcButton>
+                </div>
+              </div>
+            )}
+          </div>
+        </>
+      )}
+    </>
   )
 }

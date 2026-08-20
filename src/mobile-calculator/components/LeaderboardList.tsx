@@ -132,6 +132,8 @@ export function deriveRows(result: NspeResult, statLabel?: string): ListRow[] {
         }))
       }
       case 'mlb_team_runs': {
+        const statField = (result.payload.query as { stat?: string })?.stat
+        const unit = statField === 'runs_allowed' ? 'allowed' : 'runs'
         return (result.payload.results ?? []).map((r, i) => {
           const trend = r as { met_count?: number; window?: number }
           const compute = r as { total?: number; games?: number; avg?: number }
@@ -139,20 +141,32 @@ export function deriveRows(result: NspeResult, statLabel?: string): ListRow[] {
           return {
             id: `${i}`,
             primary: r.team,
-            value: isTrend ? `${fmt(trend.met_count)}/${fmt(trend.window)}` : fmt(compute.total),
+            value: isTrend ? `${fmt(trend.met_count)}/${fmt(trend.window)}` : `${fmt(compute.total)} ${unit}`,
             meta: isTrend ? undefined : compute.games != null ? `${fmt(compute.games)}g · avg ${fmt(compute.avg)}` : undefined,
           }
         })
       }
       case 'nfl_explosive': {
+        // Trend: `met` is a count of qualifying games (unitless, shown as
+        // met/window already). Compute: `value` is the count of qualifying
+        // explosive plays for the season — "plays", not yards (total yards
+        // on those plays is a separate `yards` field, surfaced in meta).
         return (result.payload.results ?? []).map((r, i) => {
+          const isCompute = r.value != null && !r.matches
           const count = r.met ?? r.met_count ?? r.value
           return {
             id: `${i}`,
             primary: r.player,
             secondary: r.team,
-            value: count != null ? fmt(count) : '—',
-            meta: r.games != null ? `${fmt(r.games)}g` : r.window != null ? `window ${fmt(r.window)}` : undefined,
+            value: count != null ? (isCompute ? `${fmt(count)} plays` : fmt(count)) : '—',
+            meta:
+              isCompute && r.yards != null
+                ? `${fmt(r.yards)} total yds${r.games != null ? ` · ${fmt(r.games)}g` : ''}`
+                : r.games != null
+                ? `${fmt(r.games)}g`
+                : r.window != null
+                ? `window ${fmt(r.window)}`
+                : undefined,
           }
         })
       }
@@ -176,7 +190,7 @@ export function deriveRows(result: NspeResult, statLabel?: string): ListRow[] {
             id: `${i}`,
             primary: r.player,
             secondary: r.team,
-            value: `${fmt(r.total)}${unit}`,
+            value: unit ? `${fmt(r.total)} ${unit}` : fmt(r.total),
             meta,
           }
         })

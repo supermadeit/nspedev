@@ -14,6 +14,7 @@
 // deliberate duplication rather than a shared hook.
 
 import { useEffect, useMemo, useState } from 'react'
+import { CURATED_COMPUTE_DEFAULTS, CURATED_EXPLOSIVE_TREND_DEFAULTS, CURATED_TREND_DEFAULTS } from './curatedDefaults'
 import {
   EXPLOSIVE_MLB_COMPUTE_PRESETS,
   EXPLOSIVE_MLB_TREND_PRESETS,
@@ -162,8 +163,16 @@ export function useCalculatorQuery() {
   const stats = isNbaHalfPeriod ? allStats.filter((s) => NBA_HALF_STATS.has(s.value)) : allStats
 
   const handleSportSelect = (s: string) => {
-    setSport((prev) => (prev === s ? '' : s))
-    setStat('')
+    const next = sport === s ? '' : s
+    setSport(next)
+    // Pre-select the sport's first stat rather than clearing to blank —
+    // that cascades into the existing auto-default effect below (which
+    // fires on `stat` changing) to also fill threshold/window, so picking a
+    // sport alone gets you a complete, runnable command with zero extra
+    // taps. Deliberate: this is meant as a frictionless worked example of
+    // the calculator's own syntax, not just a convenience — customize from
+    // there, or run as-is.
+    setStat(next ? (SPORT_STATS[next]?.[0]?.value ?? '') : '')
     if (s !== 'nba' && period === '1h') setPeriod('')
     if (s === 'mlb' && period === 'q1') setPeriod('')
     if (s !== 'mlb') setBatPosition('')
@@ -203,7 +212,9 @@ export function useCalculatorQuery() {
       if (!nflPlayType) return ''
       if (nflExplosiveSubMode === 'compute') {
         if (!nflMinYds) return ''
-        return `nspe nfl long ${nflPlayType} -yds min${nflMinYds} -season`
+        const parts = ['nspe', 'nfl', 'long', nflPlayType, '-yds', `min${nflMinYds}`]
+        parts.push(windowN ? `-last${windowN}` : '-season')
+        return parts.join(' ')
       }
       if (!nflYds || !lastA || !lastB) return ''
       return `nspe nfl long ${nflPlayType} -yds${nflYds} -last${lastA}/${lastB}`
@@ -297,6 +308,23 @@ export function useCalculatorQuery() {
   useEffect(() => {
     if (mode === 'trend') {
       if (!stat) return
+      // Period-specific curated default (e.g. "pts_1h") wins over the plain
+      // stat key, since a period-scoped stat can reasonably want a
+      // different threshold/window than its full-game counterpart. NFL is
+      // additionally split by yds/td type ("pass_yds"), since a yards
+      // threshold and a touchdown threshold for the same category are wildly
+      // different scales.
+      const curated =
+        (period && CURATED_TREND_DEFAULTS[sport]?.[`${stat}_${period}`]) ||
+        (sport === 'nfl' && CURATED_TREND_DEFAULTS.nfl?.[`${stat}_${nflStatType}`]) ||
+        CURATED_TREND_DEFAULTS[sport]?.[stat]
+      if (curated) {
+        const [threshold, met, last] = curated
+        setThresholdN(String(threshold))
+        setLastA(String(met))
+        setLastB(String(last))
+        return
+      }
       const presets =
         sport === 'nfl' ? (nflStatType === 'td' ? NFL_TD_PRESETS : NFL_YDS_PRESETS) : thresholdPresetsFor(sport, stat)
       setThresholdN(String(presets[0]))
@@ -304,6 +332,14 @@ export function useCalculatorQuery() {
       setLastB('5')
     } else if (mode === 'compute') {
       if (!stat) return
+      const curated = CURATED_COMPUTE_DEFAULTS[sport]?.[stat]
+      if (curated) {
+        setThresholdMode('min')
+        setMinN(String(curated.min))
+        setComputeWindow(curated.window)
+        setWindowN(curated.windowN != null ? String(curated.windowN) : '')
+        return
+      }
       const presets =
         sport === 'nfl' ? (nflStatType === 'td' ? NFL_TD_COMPUTE_PRESETS : NFL_YDS_COMPUTE_PRESETS) : computeThresholdPresetsFor(sport, stat)
       setThresholdMode('min')
@@ -326,6 +362,14 @@ export function useCalculatorQuery() {
       const trendPresets = explosiveLeague === 'mlb' ? EXPLOSIVE_MLB_TREND_PRESETS : EXPLOSIVE_NFL_TREND_PRESETS
       const computePresets = explosiveLeague === 'mlb' ? EXPLOSIVE_MLB_COMPUTE_PRESETS : EXPLOSIVE_NFL_COMPUTE_PRESETS
       if (nflExplosiveSubMode === 'trend') {
+        const curated = CURATED_EXPLOSIVE_TREND_DEFAULTS[explosiveLeague]?.[nflPlayType]
+        if (curated) {
+          const [threshold, met, last] = curated
+          setNflYds(String(threshold))
+          setLastA(String(met))
+          setLastB(String(last))
+          return
+        }
         setNflYds(String(trendPresets[0]))
         setLastA('3')
         setLastB('5')
@@ -335,7 +379,7 @@ export function useCalculatorQuery() {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode, sport, stat, nflStatType, teamStat, teamSubMode, explosiveLeague, nflExplosiveSubMode])
+  }, [mode, sport, stat, period, nflStatType, teamStat, teamSubMode, explosiveLeague, nflExplosiveSubMode, nflPlayType])
 
   return {
     // mode

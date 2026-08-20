@@ -175,17 +175,10 @@ export function BuilderScreen({ state, onRun, isLoading, popularPlayers = [] }: 
                   <SectionLabel>single play, min ≥ {isExplosiveMlb ? '(ft)' : '(yds)'}</SectionLabel>
                   <CalcNumSelect value={nflMinYds} onChange={setNflMinYds} options={explosiveComputePresets} />
                 </div>
-                {isExplosiveMlb && (
-                  <div className="mb-3">
-                    <SectionLabel>-last {'{optional}'}</SectionLabel>
-                    <CalcNumSelect value={windowN} onChange={setWindowN} options={COMPUTE_WINDOW_N_PRESETS} />
-                  </div>
-                )}
-                {!isExplosiveMlb && (
-                  <div className="font-mono text-[10px] mb-3" style={{ color: C.textDim }}>
-                    ▸ -season (fixed for NFL compute)
-                  </div>
-                )}
+                <div className="mb-3">
+                  <SectionLabel>-last {'{optional — defaults to -season}'}</SectionLabel>
+                  <CalcNumSelect value={windowN} onChange={setWindowN} options={COMPUTE_WINDOW_N_PRESETS} />
+                </div>
               </>
             )}
           </>

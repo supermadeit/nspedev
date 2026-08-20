@@ -30,6 +30,10 @@ export interface CalcButtonProps {
   accentColor?: string
   accentTextColor?: string
   className?: string
+  /** Corner radius class. Defaults to the standard rounded-xl look used
+   * everywhere else — override only where a flatter, more rectangular look
+   * is specifically wanted (e.g. the numeric preset grid in CalcNumSelect). */
+  rounded?: string
 }
 
 export function CalcButton({
@@ -40,13 +44,14 @@ export function CalcButton({
   accentColor = C.accent,
   accentTextColor = C.accentDark,
   className = '',
+  rounded = 'rounded-xl',
 }: CalcButtonProps) {
   return (
     <button
       type="button"
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
-      className={`font-mono rounded-xl border select-none transition-colors ${className || 'w-full text-[15px] px-2 min-h-[52px]'}`}
+      className={`font-mono ${rounded} border select-none transition-colors ${className || 'w-full text-[15px] px-2 min-h-[52px]'}`}
       style={{
         backgroundColor: selected ? accentColor : C.surface2,
         color: selected ? accentTextColor : disabled ? C.textDim : C.textBright,

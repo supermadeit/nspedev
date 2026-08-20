@@ -98,6 +98,7 @@ export const SPORT_STATS: Record<string, Array<{ value: string; label: string }>
     { value: 'pts+ast', label: 'PTS+AST' },
     { value: 'pts+reb', label: 'PTS+REB' },
     { value: 'reb+ast', label: 'REB+AST' },
+    { value: 'stl+blk', label: 'STL+BLK' },
     { value: 'total', label: 'TOTAL' },
   ],
   mlb: [
@@ -140,9 +141,10 @@ export const THRESHOLD_PRESETS: Record<string, Record<string, number[]>> = {
     stl: [1, 2, 3, 4, 5],
     blk: [1, 2, 3, 4, 5],
     tpm: [2, 3, 4, 5, 6, 8],
-    'pts+ast': [20, 25, 30, 35, 40],
-    'pts+reb': [20, 25, 30, 35, 40],
-    'reb+ast': [15, 20, 25, 30],
+    'pts+ast': [20, 25, 30, 35, 40, 45, 50],
+    'pts+reb': [20, 25, 30, 35, 40, 45, 50],
+    'reb+ast': [10, 15, 20, 25, 30],
+    'stl+blk': [2, 3, 4, 5, 6],
     total: [30, 35, 40, 45, 50],
   },
   mlb: {
@@ -182,15 +184,26 @@ export const NFL_TD_COMPUTE_PRESETS = NFL_TD_PRESETS.map((n) => n * COMPUTE_SCAL
 export const TEAM_RUNS_TREND_PRESETS = [3, 4, 5, 6, 7, 8, 10]
 export const TEAM_RUNS_COMPUTE_PRESETS = [200, 300, 400, 500, 600, 700, 800]
 export const EXPLOSIVE_NFL_TREND_PRESETS = [20, 25, 30, 40, 50, 60, 75, 100]
-export const EXPLOSIVE_NFL_COMPUTE_PRESETS = [200, 400, 600, 800, 1000, 1500, 2000]
+export const EXPLOSIVE_NFL_COMPUTE_PRESETS = [200, 300, 400, 500, 600, 700, 800]
 export const EXPLOSIVE_MLB_TREND_PRESETS = [350, 375, 400, 425, 450, 475, 500, 525]
 export const EXPLOSIVE_MLB_COMPUTE_PRESETS = [600, 800, 1000, 1200, 1500, 2000]
+// Per-stat overrides for compute mode, when the generic COMPUTE_SCALE ×5
+// rule doesn't land on a sensible range (e.g. "total" points+rebounds+
+// assists is naturally larger-scale than a single stat, so ×5 overshoots).
+// Checked before the generic scaling in computeThresholdPresetsFor below.
+export const COMPUTE_PRESET_OVERRIDES: Record<string, Record<string, number[]>> = {
+  nba: {
+    total: [80, 100, 120, 140, 160],
+  },
+}
 
 export function thresholdPresetsFor(sport: string, stat: string): number[] {
   return THRESHOLD_PRESETS[sport]?.[stat] ?? GENERIC_THRESHOLD
 }
 
 export function computeThresholdPresetsFor(sport: string, stat: string): number[] {
+  const override = COMPUTE_PRESET_OVERRIDES[sport]?.[stat]
+  if (override) return override
   return thresholdPresetsFor(sport, stat).map((n) => n * COMPUTE_SCALE)
 }
 
