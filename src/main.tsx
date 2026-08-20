@@ -4,6 +4,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import App from './App.tsx'
 import WorldCupApp from './WorldCupApp.tsx'
+import { MobileCalculatorApp } from './mobile-calculator/MobileCalculatorApp.tsx'
+import { useIsMobile } from './hooks/use-mobile.ts'
 import { ErrorFallback } from './ErrorFallback.tsx'
 import { AuthProvider } from './context/AuthContext.tsx'
 import { ProtectedRoute } from './pages/ProtectedRoute.tsx'
@@ -17,6 +19,15 @@ import AccountPage from './pages/AccountPage.tsx'
 import "./main.css"
 import "./styles/theme.css"
 import "./index.css"
+
+// Hooks can't be called conditionally inside route config directly, so the
+// mobile/desktop split at the catch-all route lives in this tiny wrapper.
+// Mobile users automatically get the calculator-style UI — this isn't a URL
+// anyone navigates to on purpose.
+function RootRoute() {
+  const isMobile = useIsMobile()
+  return isMobile ? <MobileCalculatorApp /> : <App />
+}
 
 createRoot(document.getElementById('root')!).render(
   <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -48,7 +59,7 @@ createRoot(document.getElementById('root')!).render(
             }
           />
 
-          <Route path="*" element={<App />} />
+          <Route path="*" element={<RootRoute />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

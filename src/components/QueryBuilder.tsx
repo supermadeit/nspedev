@@ -1,21 +1,22 @@
 import { useState, useMemo, useEffect } from 'react'
 import { useIsMobile } from '@/hooks/use-mobile'
 
-type QueryMode = 'trend' | 'compute' | 'streak' | 'h2h' | 'team' | 'explosive'
-type SeasonType = 'post' | ''
-type PeriodType = 'q1' | '1h' | ''
-type ComputeWindow = '-season' | '-career' | '-last' | ''
-type TeamStat = 'runs' | 'allowed' | ''
-type ExplosiveLeague = 'mlb' | 'nfl'
-type MlbFirstPaFlag = 'xbh' | 'walk' | 'single' | 'hit' | ''
-type NflStatType = 'yds' | 'td'
-type ThresholdMode = 'min' | 'range' | 'exact'
+export type QueryMode = 'trend' | 'compute' | 'streak' | 'h2h' | 'team' | 'explosive'
+export type SeasonType = 'post' | ''
+export type PeriodType = 'q1' | '1h' | ''
+export type ComputeWindow = '-season' | '-career' | '-last' | ''
+export type TeamStat = 'runs' | 'allowed' | ''
+export type ExplosiveLeague = 'mlb' | 'nfl'
+export type MlbFirstPaFlag = 'xbh' | 'walk' | 'single' | 'hit' | ''
+export type NflStatType = 'yds' | 'td'
+export type ThresholdMode = 'min' | 'range' | 'exact'
 
 interface PersistedBuilderState {
   mode: QueryMode
   sport: string
   seasonType: SeasonType
   period: PeriodType
+  yearFilter: string
   stat: string
   thresholdN: string
   lastA: string
@@ -79,14 +80,14 @@ function loadPersistedState(key: string): Partial<PersistedBuilderState> | null 
 
 const NBA_HALF_STATS = new Set(['pts', 'tpm'])
 
-const SPORTS = [
+export const SPORTS = [
   { value: 'nba', label: 'NBA', comingSoon: false },
   { value: 'mlb', label: 'MLB', comingSoon: false },
   { value: 'nhl', label: 'NHL', comingSoon: false },
   { value: 'nfl', label: 'NFL', comingSoon: false },
 ]
 
-const SPORT_STATS: Record<string, Array<{ value: string; label: string }>> = {
+export const SPORT_STATS: Record<string, Array<{ value: string; label: string }>> = {
   nba: [
     { value: 'pts', label: 'PTS' },
     { value: 'reb', label: 'REB' },
@@ -123,7 +124,80 @@ const SPORT_STATS: Record<string, Array<{ value: string; label: string }>> = {
   ],
 }
 
-const C = {
+// Preset dropdown values per sport+stat for the trend/streak threshold and
+// compute min/max. Anything not covered here falls back to GENERIC_THRESHOLD.
+// These are starting points, not tuned against real usage — easy to retune
+// later, NumSelect's "Other…" fallback covers anything missed.
+export const GENERIC_THRESHOLD = [1, 2, 3, 5, 8, 10]
+export const THRESHOLD_PRESETS: Record<string, Record<string, number[]>> = {
+  nba: {
+    pts: [10, 15, 20, 25, 30, 35, 40, 50],
+    reb: [5, 8, 10, 12, 15],
+    ast: [5, 8, 10, 12, 15],
+    stl: [1, 2, 3, 4, 5],
+    blk: [1, 2, 3, 4, 5],
+    tpm: [2, 3, 4, 5, 6, 8],
+    'pts+ast': [20, 25, 30, 35, 40],
+    'pts+reb': [20, 25, 30, 35, 40],
+    'reb+ast': [15, 20, 25, 30],
+    total: [30, 35, 40, 45, 50],
+  },
+  mlb: {
+    hits: [1, 2, 3, 4],
+    hr: [1, 2, 3],
+    rbi: [1, 2, 3, 4, 5],
+    dub: [1, 2],
+    trp: [1],
+    sb: [1, 2, 3],
+    bb: [1, 2, 3],
+    tb: [2, 3, 4, 5, 6],
+  },
+  nhl: {
+    g: [1, 2, 3],
+    a: [1, 2, 3],
+    pts: [1, 2, 3, 4],
+    sog: [3, 4, 5, 6, 8],
+    blk: [1, 2, 3, 4],
+  },
+}
+export const NFL_YDS_PRESETS = [50, 100, 150, 200, 250, 300, 350, 400]
+export const NFL_TD_PRESETS = [1, 2, 3, 4, 5]
+export const STREAK_N_PRESETS = [2, 3, 4, 5, 6, 8, 10]
+export const WINDOW_MET_PRESETS = [1, 2, 3, 4, 5, 6, 8, 10]
+export const WINDOW_LAST_PRESETS = [1, 3, 5, 10, 15, 20, 25, 30]
+export const COMPUTE_WINDOW_N_PRESETS = [3, 5, 10, 15, 20, 25, 30]
+// Compute asks for a TOTAL over the window (e.g. every stat over the last 10
+// games), not a per-game amount — reusing the trend per-game presets here
+// made queries like "min2 -last10" trivially match almost the whole roster,
+// since a couple of games with the stat is nothing over a 10-game stretch.
+// Scale up so the range (and the default, which uses the smallest value)
+// reflects a genuinely selective total instead of a floor everyone clears.
+export const COMPUTE_SCALE = 5
+export const NFL_YDS_COMPUTE_PRESETS = NFL_YDS_PRESETS.map((n) => n * COMPUTE_SCALE)
+export const NFL_TD_COMPUTE_PRESETS = NFL_TD_PRESETS.map((n) => n * COMPUTE_SCALE)
+export const TEAM_RUNS_TREND_PRESETS = [3, 4, 5, 6, 7, 8, 10]
+export const TEAM_RUNS_COMPUTE_PRESETS = [200, 300, 400, 500, 600, 700, 800]
+export const EXPLOSIVE_NFL_TREND_PRESETS = [20, 25, 30, 40, 50, 60, 75, 100]
+export const EXPLOSIVE_NFL_COMPUTE_PRESETS = [200, 400, 600, 800, 1000, 1500, 2000]
+export const EXPLOSIVE_MLB_TREND_PRESETS = [350, 375, 400, 425, 450, 475, 500, 525]
+export const EXPLOSIVE_MLB_COMPUTE_PRESETS = [600, 800, 1000, 1200, 1500, 2000]
+
+export function thresholdPresetsFor(sport: string, stat: string): number[] {
+  return THRESHOLD_PRESETS[sport]?.[stat] ?? GENERIC_THRESHOLD
+}
+
+export function computeThresholdPresetsFor(sport: string, stat: string): number[] {
+  return thresholdPresetsFor(sport, stat).map((n) => n * COMPUTE_SCALE)
+}
+
+// YYYY filter: NFL/NBA only for now, fixed 2005–2025 until the new seasons
+// actually kick off/tip off — bump the end year by hand at that point rather
+// than deriving it from the current date, since season-start timing doesn't
+// map cleanly to a calendar cutoff.
+export const YEAR_OPTIONS: number[] = []
+for (let y = 2025; y >= 2005; y -= 1) YEAR_OPTIONS.push(y)
+
+export const C = {
   accent: 'oklch(0.85 0.15 195)',
   accentDark: 'oklch(0.10 0.02 195)',
   accentDim: 'oklch(0.55 0.12 195)',
@@ -203,6 +277,78 @@ function NumInput({
   )
 }
 
+const selectClass =
+  'font-mono text-[13px] rounded border px-2 py-1.5 outline-none appearance-none'
+const selectStyle = {
+  backgroundColor: C.surface2,
+  borderColor: C.border,
+  color: C.accent,
+}
+
+// Dropdown of common preset values with a "custom" escape hatch that reveals
+// a plain NumInput — mobile-friendly by default (native <select>), but never
+// blocks an unusual value the presets didn't anticipate.
+function NumSelect({
+  value,
+  onChange,
+  options,
+  placeholder = 'N',
+  w = 90,
+}: {
+  value: string
+  onChange: (v: string) => void
+  options: number[]
+  placeholder?: string
+  w?: number
+}) {
+  const isCustom = value !== '' && !options.includes(Number(value))
+  const [showCustom, setShowCustom] = useState(isCustom)
+
+  if (showCustom) {
+    return (
+      <div className="flex items-center gap-1">
+        <NumInput value={value} onChange={onChange} placeholder={placeholder} w={w - 24} />
+        <button
+          type="button"
+          onClick={() => {
+            setShowCustom(false)
+            onChange('')
+          }}
+          className="font-mono text-[11px] px-1.5 py-1.5 rounded border"
+          style={{ ...selectStyle, cursor: 'pointer' }}
+          title="Back to presets"
+        >
+          ✕
+        </button>
+      </div>
+    )
+  }
+
+  return (
+    <select
+      value={value}
+      onChange={(e) => {
+        if (e.target.value === '__custom__') {
+          setShowCustom(true)
+          onChange('')
+        } else {
+          onChange(e.target.value)
+        }
+      }}
+      className={selectClass}
+      style={{ ...selectStyle, width: `${w}px` }}
+    >
+      <option value="">{placeholder}</option>
+      {options.map((n) => (
+        <option key={n} value={n}>
+          {n}
+        </option>
+      ))}
+      <option value="__custom__">Other…</option>
+    </select>
+  )
+}
+
 export interface QueryBuilderProps {
   onRunQuery: (query: string) => void
   isLoading: boolean
@@ -218,6 +364,8 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
   const [sport, setSport] = useState(initial.sport ?? '')
   const [seasonType, setSeasonType] = useState<SeasonType>(initial.seasonType ?? '')
   const [period, setPeriod] = useState<PeriodType>(initial.period ?? '')
+  // Explicit season year (NFL/NBA only for now) — blank means current season.
+  const [yearFilter, setYearFilter] = useState(initial.yearFilter ?? '')
   const [stat, setStat] = useState(initial.stat ?? '')
   // trend
   const [thresholdN, setThresholdN] = useState(initial.thresholdN ?? '')
@@ -254,7 +402,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
   useEffect(() => {
     if (typeof window === 'undefined') return
     const payload: PersistedBuilderState = {
-      mode, sport, seasonType, period, stat,
+      mode, sport, seasonType, period, yearFilter, stat,
       thresholdN, lastA, lastB,
       minN, maxN, thresholdMode, computeWindow, windowN,
       streakN,
@@ -269,7 +417,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     } catch {
       // ignore quota / unavailable storage
     }
-  }, [storageKey, mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, nflStatType, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds])
+  }, [storageKey, mode, sport, seasonType, period, yearFilter, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, nflStatType, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds])
 
   const isNbaHalfPeriod = sport === 'nba' && period === '1h'
   const allStats = SPORT_STATS[sport] ?? []
@@ -433,13 +581,78 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       if (streakN) parts.push(`-streak${streakN}`)
     }
 
+    // Explicit season year — NFL/NBA only for now, appended as a trailing
+    // bare token (matches the backend's `... -first3/5 2020` form). Blank
+    // means "current season," the backend's own default.
+    if (yearFilter && (sport === 'nfl' || sport === 'nba')) parts.push(yearFilter)
+
     return parts.join(' ')
-  }, [mode, sport, seasonType, period, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds, nflStatType])
+  }, [mode, sport, seasonType, period, yearFilter, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds, nflStatType])
 
   const canRun = Boolean(builtCommand) && !isLoading
 
   const isBuilderQuery = mode === 'trend' || mode === 'compute' || mode === 'streak'
   const firstPaActive = mode === 'trend' && sport === 'mlb' && Boolean(mlbFirstFlag)
+
+  // Pre-fill threshold/window with a sensible default the moment a stat is
+  // picked (or the mode changes), so the command preview always shows a
+  // complete, valid example — teaching the syntax visually instead of
+  // requiring a first-time user to fill in every field by hand.
+  useEffect(() => {
+    if (mode === 'trend' || mode === 'streak') {
+      if (!stat || firstPaActive) return
+      const presets =
+        sport === 'nfl' ? (nflStatType === 'td' ? NFL_TD_PRESETS : NFL_YDS_PRESETS) : thresholdPresetsFor(sport, stat)
+      setThresholdN(String(presets[0]))
+      if (mode === 'trend') {
+        setLastA('3')
+        setLastB('5')
+      } else {
+        setStreakN('3')
+      }
+    } else if (mode === 'compute') {
+      if (!stat) return
+      const presets =
+        sport === 'nfl' ? (nflStatType === 'td' ? NFL_TD_COMPUTE_PRESETS : NFL_YDS_COMPUTE_PRESETS) : computeThresholdPresetsFor(sport, stat)
+      setThresholdMode('min')
+      setMinN(String(presets[0]))
+      setComputeWindow('-last')
+      setWindowN('10')
+    } else if (mode === 'team') {
+      if (!teamStat) return
+      if (teamSubMode === 'trend') {
+        setThresholdN(String(TEAM_RUNS_TREND_PRESETS[0]))
+        setLastA('3')
+        setLastB('5')
+      } else {
+        setThresholdMode('min')
+        setMinN(String(TEAM_RUNS_COMPUTE_PRESETS[0]))
+        setComputeWindow('-last')
+        setWindowN('10')
+      }
+    } else if (mode === 'explosive') {
+      const trendPresets = explosiveLeague === 'mlb' ? EXPLOSIVE_MLB_TREND_PRESETS : EXPLOSIVE_NFL_TREND_PRESETS
+      const computePresets = explosiveLeague === 'mlb' ? EXPLOSIVE_MLB_COMPUTE_PRESETS : EXPLOSIVE_NFL_COMPUTE_PRESETS
+      if (nflExplosiveSubMode === 'trend') {
+        setNflYds(String(trendPresets[0]))
+        setLastA('3')
+        setLastB('5')
+      } else {
+        setNflMinYds(String(computePresets[0]))
+        if (explosiveLeague === 'mlb') setWindowN('10')
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode, sport, stat, nflStatType, firstPaActive, teamStat, teamSubMode, explosiveLeague, nflExplosiveSubMode])
+
+  // Same idea for MLB first plate appearance — picking a category fills in
+  // the met/last window right away.
+  useEffect(() => {
+    if (!firstPaActive) return
+    setLastA('3')
+    setLastB('5')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [firstPaActive])
 
   return (
     <div className="w-full" style={{ color: C.textBright, fontFamily: 'monospace' }}>
@@ -550,7 +763,12 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
               <div>
                 <SLabel>{explosiveLeague === 'mlb' ? 'min distance' : 'min yards'}</SLabel>
                 <div className="flex items-center gap-2">
-                  <NumInput value={nflMinYds} onChange={setNflMinYds} w={72} />
+                  <NumSelect
+                    value={nflMinYds}
+                    onChange={setNflMinYds}
+                    options={explosiveLeague === 'mlb' ? EXPLOSIVE_MLB_COMPUTE_PRESETS : EXPLOSIVE_NFL_COMPUTE_PRESETS}
+                    w={80}
+                  />
                   <span className="font-mono text-[11px]" style={{ color: C.textDim }}>
                     {explosiveLeague === 'mlb' ? 'ft' : 'yds  ·  -season'}
                   </span>
@@ -559,7 +777,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
               {explosiveLeague === 'mlb' && (
                 <div>
                   <SLabel>-last {'{optional}'}</SLabel>
-                  <NumInput value={windowN} onChange={setWindowN} placeholder="N" w={54} />
+                  <NumSelect value={windowN} onChange={setWindowN} options={COMPUTE_WINDOW_N_PRESETS} w={70} />
                 </div>
               )}
             </div>
@@ -568,7 +786,12 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
               <div>
                 <SLabel>{explosiveLeague === 'mlb' ? 'distance threshold' : 'yards threshold'}</SLabel>
                 <div className="flex items-center gap-2">
-                  <NumInput value={nflYds} onChange={setNflYds} w={64} />
+                  <NumSelect
+                    value={nflYds}
+                    onChange={setNflYds}
+                    options={explosiveLeague === 'mlb' ? EXPLOSIVE_MLB_TREND_PRESETS : EXPLOSIVE_NFL_TREND_PRESETS}
+                    w={80}
+                  />
                   <span className="font-mono text-[11px]" style={{ color: C.textDim }}>
                     {explosiveLeague === 'mlb' ? 'ft' : 'yds'}
                   </span>
@@ -577,12 +800,12 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
               <div className="flex items-end gap-1.5">
                 <div>
                   <SLabel>met</SLabel>
-                  <NumInput value={lastA} onChange={setLastA} placeholder="N" w={54} />
+                  <NumSelect value={lastA} onChange={setLastA} options={WINDOW_MET_PRESETS} w={64} />
                 </div>
                 <span style={{ color: C.textDim, paddingBottom: '8px' }}>/</span>
                 <div>
                   <SLabel>-last</SLabel>
-                  <NumInput value={lastB} onChange={setLastB} placeholder="N" w={54} />
+                  <NumSelect value={lastB} onChange={setLastB} options={WINDOW_LAST_PRESETS} w={64} />
                 </div>
               </div>
             </div>
@@ -686,17 +909,17 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
             <div className="mb-3 flex items-end gap-5 flex-wrap">
               <div>
                 <SLabel>threshold</SLabel>
-                <NumInput value={thresholdN} onChange={setThresholdN} w={64} />
+                <NumSelect value={thresholdN} onChange={setThresholdN} options={TEAM_RUNS_TREND_PRESETS} w={64} />
               </div>
               <div className="flex items-end gap-1.5">
                 <div>
                   <SLabel>met</SLabel>
-                  <NumInput value={lastA} onChange={setLastA} placeholder="N" w={54} />
+                  <NumSelect value={lastA} onChange={setLastA} options={WINDOW_MET_PRESETS} w={64} />
                 </div>
                 <span style={{ color: C.textDim, paddingBottom: '8px' }}>/</span>
                 <div>
                   <SLabel>-last</SLabel>
-                  <NumInput value={lastB} onChange={setLastB} placeholder="N" w={54} />
+                  <NumSelect value={lastB} onChange={setLastB} options={WINDOW_LAST_PRESETS} w={64} />
                 </div>
               </div>
             </div>
@@ -705,7 +928,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
           {teamSubMode === 'compute' && teamStat && (
             <div className="mb-3">
               <div className="mb-2">
-                <SLabel>threshold mode</SLabel>
+                <SLabel>threshold</SLabel>
                 <div className="flex gap-1.5 flex-wrap">
                   <Pill
                     selected={thresholdMode === 'min'}
@@ -739,27 +962,27 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
               <div className="mb-3 flex items-end gap-2">
                 {thresholdMode === 'min' && (
                   <div>
-                    <SLabel>min threshold</SLabel>
-                    <NumInput value={minN} onChange={setMinN} w={72} />
+                    <SLabel>min value</SLabel>
+                    <NumSelect value={minN} onChange={setMinN} options={TEAM_RUNS_COMPUTE_PRESETS} w={80} />
                   </div>
                 )}
                 {thresholdMode === 'range' && (
                   <>
                     <div>
                       <SLabel>min</SLabel>
-                      <NumInput value={minN} onChange={setMinN} w={64} />
+                      <NumSelect value={minN} onChange={setMinN} options={TEAM_RUNS_COMPUTE_PRESETS} w={80} />
                     </div>
                     <span style={{ color: C.textDim, paddingBottom: '8px' }}>—</span>
                     <div>
                       <SLabel>max</SLabel>
-                      <NumInput value={maxN} onChange={setMaxN} w={64} />
+                      <NumSelect value={maxN} onChange={setMaxN} options={TEAM_RUNS_COMPUTE_PRESETS} w={80} />
                     </div>
                   </>
                 )}
                 {thresholdMode === 'exact' && (
                   <div>
                     <SLabel>exact threshold</SLabel>
-                    <NumInput value={minN} onChange={setMinN} w={72} />
+                    <NumSelect value={minN} onChange={setMinN} options={TEAM_RUNS_COMPUTE_PRESETS} w={80} />
                   </div>
                 )}
               </div>
@@ -779,7 +1002,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
                     -last
                   </Pill>
                   {computeWindow === '-last' && (
-                    <NumInput value={windowN} onChange={setWindowN} placeholder="N" w={52} />
+                    <NumSelect value={windowN} onChange={setWindowN} options={COMPUTE_WINDOW_N_PRESETS} w={64} />
                   )}
                 </div>
               </div>
@@ -793,11 +1016,11 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
         <div className="mb-3 flex items-end gap-5 flex-wrap">
           <div>
             <SLabel>threshold</SLabel>
-            <NumInput value={thresholdN} onChange={setThresholdN} w={64} />
+            <NumSelect value={thresholdN} onChange={setThresholdN} options={thresholdPresetsFor(sport, stat)} w={64} />
           </div>
           <div>
             <SLabel>min streak</SLabel>
-            <NumInput value={streakN} onChange={setStreakN} placeholder="N" w={54} />
+            <NumSelect value={streakN} onChange={setStreakN} options={STREAK_N_PRESETS} w={64} />
           </div>
         </div>
       )}
@@ -853,6 +1076,24 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
             )}
           </div>
         </div>
+        {(sport === 'nfl' || sport === 'nba') && (
+          <div>
+            <SLabel>year {'{optional}'}</SLabel>
+            <select
+              value={yearFilter}
+              onChange={(e) => setYearFilter(e.target.value)}
+              className={selectClass}
+              style={{ ...selectStyle, width: '84px' }}
+            >
+              <option value="">current</option>
+              {YEAR_OPTIONS.map((y) => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
       )}
 
@@ -878,12 +1119,12 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
         <div className="mb-3 flex items-end gap-1.5">
           <div>
             <SLabel>met</SLabel>
-            <NumInput value={lastA} onChange={setLastA} placeholder="N" w={54} />
+            <NumSelect value={lastA} onChange={setLastA} options={WINDOW_MET_PRESETS} w={64} />
           </div>
           <span style={{ color: C.textDim, paddingBottom: '8px' }}>/</span>
           <div>
             <SLabel>-last</SLabel>
-            <NumInput value={lastB} onChange={setLastB} placeholder="N" w={54} />
+            <NumSelect value={lastB} onChange={setLastB} options={WINDOW_LAST_PRESETS} w={64} />
           </div>
         </div>
       )}
@@ -944,17 +1185,28 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
         <div className="mb-3 flex items-end gap-5 flex-wrap">
           <div>
             <SLabel>threshold</SLabel>
-            <NumInput value={thresholdN} onChange={setThresholdN} w={64} />
+            <NumSelect
+              value={thresholdN}
+              onChange={setThresholdN}
+              options={
+                sport === 'nfl'
+                  ? nflStatType === 'td'
+                    ? NFL_TD_PRESETS
+                    : NFL_YDS_PRESETS
+                  : thresholdPresetsFor(sport, stat)
+              }
+              w={sport === 'nfl' && nflStatType === 'yds' ? 80 : 64}
+            />
           </div>
           <div className="flex items-end gap-1.5">
             <div>
               <SLabel>met</SLabel>
-              <NumInput value={lastA} onChange={setLastA} placeholder="N" w={54} />
+              <NumSelect value={lastA} onChange={setLastA} options={WINDOW_MET_PRESETS} w={64} />
             </div>
             <span style={{ color: C.textDim, paddingBottom: '8px' }}>/</span>
             <div>
               <SLabel>-last</SLabel>
-              <NumInput value={lastB} onChange={setLastB} placeholder="N" w={54} />
+              <NumSelect value={lastB} onChange={setLastB} options={WINDOW_LAST_PRESETS} w={64} />
             </div>
           </div>
         </div>
@@ -964,7 +1216,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       {mode === 'compute' && stat && (
         <div className="mb-3">
           <div className="mb-2">
-            <SLabel>threshold mode</SLabel>
+            <SLabel>threshold</SLabel>
             <div className="flex gap-1.5 flex-wrap">
               <Pill
                 selected={thresholdMode === 'min'}
@@ -998,27 +1250,47 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
           <div className="mb-3 flex items-end gap-2">
             {thresholdMode === 'min' && (
               <div>
-                <SLabel>min threshold</SLabel>
-                <NumInput value={minN} onChange={setMinN} w={72} />
+                <SLabel>min value</SLabel>
+                <NumSelect
+                  value={minN}
+                  onChange={setMinN}
+                  options={sport === 'nfl' ? (nflStatType === 'td' ? NFL_TD_COMPUTE_PRESETS : NFL_YDS_COMPUTE_PRESETS) : computeThresholdPresetsFor(sport, stat)}
+                  w={80}
+                />
               </div>
             )}
             {thresholdMode === 'range' && (
               <>
                 <div>
                   <SLabel>min</SLabel>
-                  <NumInput value={minN} onChange={setMinN} w={64} />
+                  <NumSelect
+                    value={minN}
+                    onChange={setMinN}
+                    options={sport === 'nfl' ? (nflStatType === 'td' ? NFL_TD_COMPUTE_PRESETS : NFL_YDS_COMPUTE_PRESETS) : computeThresholdPresetsFor(sport, stat)}
+                    w={80}
+                  />
                 </div>
                 <span style={{ color: C.textDim, paddingBottom: '8px' }}>—</span>
                 <div>
                   <SLabel>max</SLabel>
-                  <NumInput value={maxN} onChange={setMaxN} w={64} />
+                  <NumSelect
+                    value={maxN}
+                    onChange={setMaxN}
+                    options={sport === 'nfl' ? (nflStatType === 'td' ? NFL_TD_COMPUTE_PRESETS : NFL_YDS_COMPUTE_PRESETS) : computeThresholdPresetsFor(sport, stat)}
+                    w={80}
+                  />
                 </div>
               </>
             )}
             {thresholdMode === 'exact' && (
               <div>
                 <SLabel>exact threshold</SLabel>
-                <NumInput value={minN} onChange={setMinN} w={72} />
+                <NumSelect
+                  value={minN}
+                  onChange={setMinN}
+                  options={sport === 'nfl' ? (nflStatType === 'td' ? NFL_TD_COMPUTE_PRESETS : NFL_YDS_COMPUTE_PRESETS) : computeThresholdPresetsFor(sport, stat)}
+                  w={80}
+                />
               </div>
             )}
           </div>
@@ -1041,7 +1313,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
                 -last
               </Pill>
               {computeWindow === '-last' && (
-                <NumInput value={windowN} onChange={setWindowN} placeholder="N" w={52} />
+                <NumSelect value={windowN} onChange={setWindowN} options={COMPUTE_WINDOW_N_PRESETS} w={64} />
               )}
             </div>
           </div>
