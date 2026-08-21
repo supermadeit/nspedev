@@ -17,6 +17,16 @@ export interface QueryResult {
   team?: string
   streakDetails?: StreakDetail[]
   matchDetails?: MatchDetail[]
+  // Whether the raw row had a per-game match/matches array at all — distinct
+  // from matchDetails.length>0, which only reflects entries that could
+  // actually be parsed (value + date both resolved). A trend row from an
+  // engine shape extractMatchDetails doesn't fully understand yet (e.g. one
+  // whose per-match value lives under a field name STAT_FIELDS doesn't map)
+  // still has a match array, just an empty matchDetails — display code that
+  // decides "trend vs compute" formatting should key off THIS, not
+  // matchDetails, so a parsing gap degrades to "no per-game breakdown shown"
+  // rather than "this looks like a compute row, drop the met=N formatting."
+  hasMatchArray?: boolean
 }
 
 export interface StreakDetail {
@@ -704,15 +714,14 @@ export interface StatContext {
   unitLabel?: string
 }
 
-// NFL only has two real per-play units: yds or td. -total is yds-flavored
-// (it's a combined-yardage stat — see NFL_TOTAL_TREND_DEFAULT). Reads the
-// flag directly off the query string rather than anything the backend
-// echoes back, since that's the one source guaranteed to reflect what was
+// NFL only has two real per-play units: yds or td — every other case (an
+// explicit -yds/-total flag, OR no type flag at all, which the backend
+// treats as an implicit yards default) reads as yds. Reads the flag
+// directly off the query string rather than anything the backend echoes
+// back, since that's the one source guaranteed to reflect what was
 // actually asked for.
-function resolveNflUnitLabel(query: string): string | undefined {
-  const m = query.match(/-(yds|td|total)(?=\d|\s|$)/)
-  if (!m) return undefined
-  return m[1] === 'td' ? 'td' : 'yds'
+function resolveNflUnitLabel(query: string): string {
+  return /-td(?=\d|\s|$)/.test(query) ? 'td' : 'yds'
 }
 
 export const STAT_FIELDS: Record<string, Record<string, string | string[]>> = {
@@ -1249,7 +1258,7 @@ export function normalizeQueryResults(payload: ApiPayload, fallbackQuery = ''): 
   const streakDetailsByPlayer = outputText ? parseStreakDetailsFromOutput(outputText) : {}
 
   return envelope
-    .map((item) => {
+    .map((item): QueryResult | null => {
       if (Array.isArray(item)) {
         const [playerCandidate, totalCandidate] = item
         if (typeof playerCandidate === 'string' && playerCandidate.trim()) {
@@ -1319,6 +1328,7 @@ export function normalizeQueryResults(payload: ApiPayload, fallbackQuery = ''): 
         team: team || undefined,
         streakDetails: streakDetails.length > 0 ? streakDetails : undefined,
         matchDetails: matchDetails.length > 0 ? matchDetails : undefined,
+        hasMatchArray: matchesCount != null,
       }
     })
     .filter((row): row is QueryResult => row !== null)

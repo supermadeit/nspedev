@@ -2417,8 +2417,8 @@ function App() {
           return (
             <div>
               {normalized.map((result, i) => {
-                const hasMatchDetails = Boolean(result.matchDetails && result.matchDetails.length > 0)
-                const badge = hasMatchDetails
+                const isTrendRow = result.hasMatchArray ?? Boolean(result.matchDetails && result.matchDetails.length > 0)
+                const badge = isTrendRow
                   ? `met=${result.total}`
                   : demoStatLabel
                   ? `${result.total}${demoStatLabel}`
@@ -2620,11 +2620,16 @@ function App() {
                 const hasMatchDetails = Boolean(result.matchDetails && result.matchDetails.length > 0)
                 const canExpand = hasStreakDetails || hasMatchDetails
                 const isExpanded = canExpand ? !collapsedPlayers[result.player] : false
-                // Trend rows (per-game breakdown present) report how many
-                // games met the threshold — "met=N", never a stat unit
-                // (that number isn't a stat total). Only a bare compute
-                // total (no match breakdown at all) gets "N unit".
-                const resultBadge = hasMatchDetails
+                // Trend rows report how many games met the threshold —
+                // "met=N", never a stat unit (that number isn't a stat
+                // total). Only a bare compute total gets "N unit". Keyed off
+                // hasMatchArray (did the raw row have a per-game match array
+                // at all), NOT hasMatchDetails — some trend-shaped engines'
+                // per-match values don't parse yet (see QueryResult's
+                // hasMatchArray doc), and a parsing gap must never make a
+                // trend row look like a compute row.
+                const isTrendRow = result.hasMatchArray ?? hasMatchDetails
+                const resultBadge = isTrendRow
                   ? `met=${result.total}`
                   : queryResultsStatLabel
                   ? `${result.total}${queryResultsStatLabel}`

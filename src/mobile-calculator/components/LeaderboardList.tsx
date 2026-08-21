@@ -182,8 +182,13 @@ export function deriveRows(result: NspeResult, statLabel?: string): ListRow[] {
           // games"). Compute rows have no per-game breakdown at all — a bare
           // season/window total is the correct and only reading there, so
           // that's the one case that gets the "N unit" label.
+          // isTrend is keyed off hasMatchArray (did the raw row have a
+          // per-game match array at all), not matches.length — some
+          // trend-shaped engines' per-match values don't parse yet (see
+          // QueryResult's hasMatchArray doc in nspe-payloads.ts), and a
+          // parsing gap must never make a trend row look like a compute row.
           const matches = r.matchDetails ?? []
-          const isTrend = matches.length > 0
+          const isTrend = r.hasMatchArray ?? matches.length > 0
           const unit = matches[0]?.statLabel ?? statLabel ?? ''
           const meta =
             matches.length > 0
