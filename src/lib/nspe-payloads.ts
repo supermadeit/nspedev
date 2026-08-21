@@ -736,10 +736,12 @@ export const STAT_FIELDS: Record<string, Record<string, string | string[]>> = {
     rush: 'rush_yds',
     pass: 'pass_yds',
     rec: 'rec_yds',
-    // Combo stats — computeMatchValue() checks match.val first, so this
-    // array-sum is only a fallback for whichever field(s) it uses when val
-    // is absent. No captured example for these yet; flag/fix if the real
-    // per-match field names differ once tested against the live backend.
+    // Combo stats (the `-total` type: pass+rush for the pass category,
+    // rush+rec for rush/rec). Confirmed against a real `combo-trend` engine
+    // response: `query.short` is literally "pass+rush"/"rush+rec" (what
+    // detectStatContext matches against), and each match object already
+    // carries a summed `val` — computeMatchValue checks that first, so this
+    // array-sum is a fallback that in practice is never exercised.
     'pass+rush': ['pass_yds', 'rush_yds'],
     'rush+rec': ['rush_yds', 'rec_yds'],
   },
@@ -754,6 +756,8 @@ export const STAT_DISPLAY_LABELS: Record<string, string> = {
   tpm: '3pm',
   total: 'tot',
   tb: 'tb',
+  'pass+rush': 'yds',
+  'rush+rec': 'yds',
 }
 
 // Insert a space before any internal capital (e.g. "AaronJudge" -> "Aaron Judge").

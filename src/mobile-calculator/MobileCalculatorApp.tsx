@@ -42,7 +42,11 @@ export function MobileCalculatorApp() {
   const handleRun = () => {
     if (!calc.builtCommand) return
     setLastQuery(calc.builtCommand)
-    setLastStatLabel(calc.sport === 'nfl' ? calc.nflStatType : calc.stat)
+    // "total" (the pass+rush / rush+rec combo type) isn't itself a unit —
+    // the underlying stat is yardage, so label compute totals "N yds", not
+    // the literal, confusing "N total".
+    const nflLabel = calc.nflStatType === 'total' ? 'yds' : calc.nflStatType
+    setLastStatLabel(calc.sport === 'nfl' ? nflLabel : calc.stat)
     setScreen('results')
     void run(calc.builtCommand)
   }

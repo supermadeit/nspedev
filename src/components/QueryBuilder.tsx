@@ -8,7 +8,14 @@ export type ComputeWindow = '-season' | '-career' | '-last' | ''
 export type TeamStat = 'runs' | 'allowed' | ''
 export type ExplosiveLeague = 'mlb' | 'nfl'
 export type MlbFirstPaFlag = 'xbh' | 'walk' | 'single' | 'hit' | ''
-export type NflStatType = 'yds' | 'td'
+export type NflStatType = 'yds' | 'td' | 'total'
+
+// "total" combines the selected category with its partner (pass+rush when
+// the category is pass; rush+rec when it's rush or rec) — a combined-yardage
+// stat that only pairs with -yds-style thresholds, never -td. Trend default
+// thresholds, curated per category (rush and rec share the same underlying
+// rush+rec combo, hence the same default).
+export const NFL_TOTAL_TREND_DEFAULT: Record<string, number> = { pass: 250, rush: 100, rec: 100 }
 export type ThresholdMode = 'min' | 'range' | 'exact'
 
 interface PersistedBuilderState {
@@ -105,9 +112,9 @@ export const SPORT_STATS: Record<string, Array<{ value: string; label: string }>
     { value: 'hits', label: 'HITS' },
     { value: 'hr', label: 'HR' },
     { value: 'rbi', label: 'RBI' },
-    { value: 'runs', label: 'R' },
-    { value: 'dub', label: '2B' },
-    { value: 'trp', label: '3B' },
+    { value: 'runs', label: 'RUN' },
+    { value: 'dub', label: 'DUB' },
+    { value: 'trp', label: 'TRIP' },
     { value: 'sb', label: 'SB' },
     { value: 'bb', label: 'BB' },
     { value: 'tb', label: 'TB' },
@@ -123,8 +130,6 @@ export const SPORT_STATS: Record<string, Array<{ value: string; label: string }>
     { value: 'rush', label: 'RUSH' },
     { value: 'pass', label: 'PASS' },
     { value: 'rec', label: 'REC' },
-    { value: 'pass+rush', label: 'PASS+RUSH' },
-    { value: 'rush+rec', label: 'RUSH+REC' },
   ],
 }
 
@@ -618,6 +623,12 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
   useEffect(() => {
     if (mode === 'trend' || mode === 'streak') {
       if (!stat || firstPaActive) return
+      if (mode === 'trend' && sport === 'nfl' && nflStatType === 'total') {
+        setThresholdN(String(NFL_TOTAL_TREND_DEFAULT[stat] ?? NFL_YDS_PRESETS[0]))
+        setLastA('3')
+        setLastB('5')
+        return
+      }
       const presets =
         sport === 'nfl' ? (nflStatType === 'td' ? NFL_TD_PRESETS : NFL_YDS_PRESETS) : thresholdPresetsFor(sport, stat)
       setThresholdN(String(presets[0]))
@@ -1182,7 +1193,9 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
         </div>
       )}
 
-      {/* NFL stat type: yards or touchdowns */}
+      {/* NFL stat type: yards, touchdowns, or the combined total (pass+rush /
+          rush+rec) — total never pairs with -td, so that Pill is disabled
+          while total is selected rather than allowing an invalid combo. */}
       {isBuilderQuery && sport === 'nfl' && stat && (
         <div className="mb-3">
           <SLabel>type</SLabel>
@@ -1190,8 +1203,15 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
             <Pill selected={nflStatType === 'yds'} onClick={() => setNflStatType('yds')}>
               -yds
             </Pill>
-            <Pill selected={nflStatType === 'td'} onClick={() => setNflStatType('td')}>
+            <Pill
+              selected={nflStatType === 'td'}
+              onClick={() => setNflStatType('td')}
+              disabled={nflStatType === 'total'}
+            >
               -td
+            </Pill>
+            <Pill selected={nflStatType === 'total'} onClick={() => setNflStatType('total')}>
+              -total
             </Pill>
           </div>
         </div>
@@ -1212,7 +1232,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
                     : NFL_YDS_PRESETS
                   : thresholdPresetsFor(sport, stat)
               }
-              w={sport === 'nfl' && nflStatType === 'yds' ? 80 : 64}
+              w={sport === 'nfl' && nflStatType !== 'td' ? 80 : 64}
             />
           </div>
           <div className="flex items-end gap-1.5">

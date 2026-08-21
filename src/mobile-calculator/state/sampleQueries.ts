@@ -28,9 +28,9 @@ function parseTrendKey(sport: string, key: string): { stat: string; period?: '1h
   return { stat: key }
 }
 
-function parseNflTrendKey(key: string): { stat: string; nflStatType: 'yds' | 'td' } | null {
-  const m = key.match(/^(.+)_(yds|td)$/)
-  return m ? { stat: m[1], nflStatType: m[2] as 'yds' | 'td' } : null
+function parseNflTrendKey(key: string): { stat: string; nflStatType: 'yds' | 'td' | 'total' } | null {
+  const m = key.match(/^(.+)_(yds|td|total)$/)
+  return m ? { stat: m[1], nflStatType: m[2] as 'yds' | 'td' | 'total' } : null
 }
 
 function windowSuffix(window: '-last' | '-season', windowN?: number): string {

@@ -31,6 +31,12 @@ export const CURATED_TREND_DEFAULTS: Record<string, Record<string, [threshold: n
   nfl: {
     pass_yds: [300, 3, 5],
     rush_yds: [100, 2, 5],
+    // "-total" (pass+rush / rush+rec combo) — met/last use the generic 3/5
+    // default, only the threshold is curated. rush and rec share the same
+    // threshold since they both resolve to the same rush+rec combo stat.
+    pass_total: [250, 3, 5],
+    rush_total: [100, 3, 5],
+    rec_total: [100, 3, 5],
   },
 }
 

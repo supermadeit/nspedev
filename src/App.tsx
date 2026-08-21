@@ -17,6 +17,7 @@ import {
   sanitizeQueryForApi,
 } from '@/lib/nspe-api'
 import {
+  detectStatContext,
   extractDateToken,
   extractH2hPayload,
   extractMlbBatTeamPayload,
@@ -32,6 +33,7 @@ import {
   normalizeDisplayPlayer,
   normalizeQueryResults,
   PLAYER_TEAM_MAP,
+  STAT_DISPLAY_LABELS,
   type H2hPayload,
   type MlbBatTeamPayload,
   type MlbFirstPaTrendPayload,
@@ -425,10 +427,7 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
                   cursor: 'pointer',
                 }}
               >
-                {r.met_count ?? r.met ?? matchList.length}
-                {r.window != null && (
-                  <span style={{ color: 'oklch(0.50 0 0)', fontWeight: 'normal' }}>/{r.window}</span>
-                )}
+                met={r.met_count ?? r.met ?? matchList.length}
               </button>
             </div>
             {isOpen && (
@@ -573,10 +572,7 @@ function MlbHrView({ payload }: { payload: MlbHrPayload }) {
                   cursor: 'pointer',
                 }}
               >
-                {r.met_count ?? matchList.length}
-                {r.window != null && (
-                  <span style={{ color: PITCH_LABEL, fontWeight: 'normal' }}>/{r.window}</span>
-                )}
+                met={r.met_count ?? matchList.length}
               </button>
             </div>
             {isOpen && (
@@ -649,10 +645,7 @@ function MlbFirstPaTrendView({ payload }: { payload: MlbFirstPaTrendPayload }) {
                   cursor: 'pointer',
                 }}
               >
-                {r.met_count ?? matchList.length}
-                {r.window != null && (
-                  <span style={{ color: PITCH_LABEL, fontWeight: 'normal' }}>/{r.window}</span>
-                )}
+                met={r.met_count ?? matchList.length}
               </button>
             </div>
             {isOpen && (
@@ -756,10 +749,7 @@ function MlbTeamRunsView({ payload }: { payload: MlbTeamRunsPayload }) {
                   cursor: 'pointer',
                 }}
               >
-                {r.met_count ?? matchList.length}
-                {r.window != null && (
-                  <span style={{ color: PITCH_LABEL, fontWeight: 'normal' }}>/{r.window}</span>
-                )}
+                met={r.met_count ?? matchList.length}
               </button>
             </div>
             {isOpen && (
@@ -1822,6 +1812,11 @@ function App() {
   const [isDragging, setIsDragging] = useState(false)
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const [queryResults, setQueryResults] = useState<QueryResult[] | null>(null)
+  // Unit label for the generic path's bare compute totals (e.g. "yds"),
+  // derived from the query itself — App.tsx only gets a command string back
+  // from QueryBuilder, not typed sport/stat state, so this is resolved fresh
+  // per query the same way extractMatchDetails resolves match statLabels.
+  const [queryResultsStatLabel, setQueryResultsStatLabel] = useState('')
   const [h2hResult, setH2hResult] = useState<H2hPayload | null>(null)
   const [pitchResult, setPitchResult] = useState<MlbPitchH2hPayload | null>(null)
   const [fpvResult, setFpvResult] = useState<MlbPitchFpvPayload | null>(null)
@@ -2031,6 +2026,8 @@ function App() {
         r.team ? r : { ...r, team: PLAYER_TEAM_MAP.get(r.player.toLowerCase()) || undefined }
       )
       const payloadError = getPayloadError(payload)
+      const statCtx = detectStatContext(payload, sanitizedQuery)
+      setQueryResultsStatLabel(statCtx ? STAT_DISPLAY_LABELS[statCtx.stat] ?? statCtx.stat : '')
       setQueryResults(enriched)
 
       if (payloadError) {
@@ -2379,7 +2376,6 @@ function App() {
                   const r = row as Record<string, unknown>
                   const player = normalizeDisplayPlayer(String(r.player ?? ''))
                   const met = Number(r.met_count ?? r.met ?? 0)
-                  const window_ = r.window != null ? Number(r.window) : null
                   const matches = Array.isArray(r.matches) ? (r.matches as Record<string, unknown>[]) : []
                   const matchLine = matches.slice(0, 3)
                     .map((m) => {
@@ -2394,8 +2390,7 @@ function App() {
                       <div className="flex items-center justify-between">
                         <span className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>{player}</span>
                         <span className="font-mono text-[13px]">
-                          <span className="font-bold" style={{ color: 'oklch(0.85 0.15 145)' }}>{met}</span>
-                          {window_ != null && <span style={{ color: 'oklch(0.55 0 0)' }}>/{window_}</span>}
+                          <span className="font-bold" style={{ color: 'oklch(0.85 0.15 145)' }}>met={met}</span>
                         </span>
                       </div>
                       {matchLine && (
@@ -2417,9 +2412,18 @@ function App() {
           if (normalized.length === 0) {
             return <div className="font-mono text-[12px]" style={{ color: 'oklch(0.48 0 0)' }}>no results</div>
           }
+          const demoStatCtx = detectStatContext(payload, sanitized)
+          const demoStatLabel = demoStatCtx ? STAT_DISPLAY_LABELS[demoStatCtx.stat] ?? demoStatCtx.stat : ''
           return (
             <div>
-              {normalized.map((result, i) => (
+              {normalized.map((result, i) => {
+                const hasMatchDetails = Boolean(result.matchDetails && result.matchDetails.length > 0)
+                const badge = hasMatchDetails
+                  ? `met=${result.total}`
+                  : demoStatLabel
+                  ? `${result.total} ${demoStatLabel}`
+                  : result.total
+                return (
                 <div key={i} className="py-1.5 border-b" style={{ borderColor: 'oklch(0.22 0 0)' }}>
                   <div className="flex items-center justify-between">
                     <span className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
@@ -2429,7 +2433,7 @@ function App() {
                       className="font-mono font-bold text-[13px] ml-4 shrink-0 px-2 py-0.5 rounded"
                       style={{ backgroundColor: 'oklch(0.22 0 0)', color: 'oklch(0.85 0.15 145)' }}
                     >
-                      {result.total}
+                      {badge}
                     </span>
                   </div>
                   {result.matchDetails && result.matchDetails.length > 0 && (
@@ -2438,7 +2442,8 @@ function App() {
                     </div>
                   )}
                 </div>
-              ))}
+                )
+              })}
               {overflow > 0 && (
                 <div className="pt-1.5 font-mono text-[11px]" style={{ color: 'oklch(0.48 0 0)' }}>
                   + {overflow} more
@@ -2615,6 +2620,15 @@ function App() {
                 const hasMatchDetails = Boolean(result.matchDetails && result.matchDetails.length > 0)
                 const canExpand = hasStreakDetails || hasMatchDetails
                 const isExpanded = canExpand ? !collapsedPlayers[result.player] : false
+                // Trend rows (per-game breakdown present) report how many
+                // games met the threshold — "met=N", never a stat unit
+                // (that number isn't a stat total). Only a bare compute
+                // total (no match breakdown at all) gets "N unit".
+                const resultBadge = hasMatchDetails
+                  ? `met=${result.total}`
+                  : queryResultsStatLabel
+                  ? `${result.total} ${queryResultsStatLabel}`
+                  : result.total
 
                 return (
                   <div
@@ -2646,14 +2660,14 @@ function App() {
                           aria-expanded={isExpanded}
                           aria-label={`Toggle details for ${result.player}`}
                         >
-                          {result.total}
+                          {resultBadge}
                         </button>
                       ) : (
                         <span
                           className="font-mono font-bold text-[13px] ml-4 shrink-0 px-2 py-0.5 rounded"
                           style={{ backgroundColor: 'oklch(0.22 0 0)', color: 'oklch(0.85 0.15 145)' }}
                         >
-                          {result.total}
+                          {resultBadge}
                         </span>
                       )}
                     </div>

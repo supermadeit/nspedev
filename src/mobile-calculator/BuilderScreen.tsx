@@ -381,9 +381,18 @@ export function BuilderScreen({ state, onRun, isLoading, popularPlayers = [], on
             {sport === 'nfl' && stat && (
               <>
                 <SectionLabel>type</SectionLabel>
-                <ButtonGrid cols={2}>
+                <ButtonGrid cols={3}>
                   <CalcButton selected={nflStatType === 'yds'} onClick={() => setNflStatType('yds')}>-yds</CalcButton>
-                  <CalcButton selected={nflStatType === 'td'} onClick={() => setNflStatType('td')}>-td</CalcButton>
+                  {/* total (pass+rush / rush+rec) never pairs with -td, so
+                      -td is disabled rather than allowing an invalid combo. */}
+                  <CalcButton
+                    selected={nflStatType === 'td'}
+                    onClick={() => setNflStatType('td')}
+                    disabled={nflStatType === 'total'}
+                  >
+                    -td
+                  </CalcButton>
+                  <CalcButton selected={nflStatType === 'total'} onClick={() => setNflStatType('total')}>-total</CalcButton>
                 </ButtonGrid>
               </>
             )}

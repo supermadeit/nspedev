@@ -118,7 +118,7 @@ export function deriveRows(result: NspeResult, statLabel?: string): ListRow[] {
             id: `${i}`,
             primary: r.player,
             secondary: r.team,
-            value: isTrend ? `${fmt(trend.met_count)}/${fmt(trend.window)}` : `${fmt(compute.hr_count)} HR`,
+            value: isTrend ? `met=${fmt(trend.met_count)}` : `${fmt(compute.hr_count)} HR`,
             meta: isTrend ? undefined : `${fmt(compute.total_ft)} ft · ${fmt(compute.games)}g`,
           }
         })
@@ -128,7 +128,7 @@ export function deriveRows(result: NspeResult, statLabel?: string): ListRow[] {
           id: `${i}`,
           primary: r.player,
           secondary: r.team,
-          value: `${fmt(r.met_count)}/${fmt(r.window)}`,
+          value: `met=${fmt(r.met_count)}`,
         }))
       }
       case 'mlb_team_runs': {
@@ -141,7 +141,7 @@ export function deriveRows(result: NspeResult, statLabel?: string): ListRow[] {
           return {
             id: `${i}`,
             primary: r.team,
-            value: isTrend ? `${fmt(trend.met_count)}/${fmt(trend.window)}` : `${fmt(compute.total)} ${unit}`,
+            value: isTrend ? `met=${fmt(trend.met_count)}` : `${fmt(compute.total)} ${unit}`,
             meta: isTrend ? undefined : compute.games != null ? `${fmt(compute.games)}g · avg ${fmt(compute.avg)}` : undefined,
           }
         })
@@ -158,7 +158,7 @@ export function deriveRows(result: NspeResult, statLabel?: string): ListRow[] {
             id: `${i}`,
             primary: r.player,
             secondary: r.team,
-            value: count != null ? (isCompute ? `${fmt(count)} plays` : fmt(count)) : '—',
+            value: count != null ? (isCompute ? `${fmt(count)} plays` : `met=${fmt(count)}`) : '—',
             meta:
               isCompute && r.yards != null
                 ? `${fmt(r.yards)} total yds${r.games != null ? ` · ${fmt(r.games)}g` : ''}`
@@ -174,11 +174,16 @@ export function deriveRows(result: NspeResult, statLabel?: string): ListRow[] {
       default: {
         return (result.rows ?? []).map((r, i) => {
           // Trend rows carry a per-game breakdown (date + value + label per
-          // match, date already disambiguated with a year suffix upstream
-          // in extractDateToken); compute rows are a bare season/window
-          // total with no per-game detail — label that total with the unit
-          // so it reads as "27 hits", not just "27".
+          // match, date already disambiguated with a year suffix upstream in
+          // extractDateToken) — `total` there is the met-count (how many
+          // games satisfied the threshold), NOT a stat total, so it must
+          // NEVER be labeled with the stat unit ("4 hits" reads as a compute
+          // total of 4 hits, which is wrong — it's "met the threshold in 4
+          // games"). Compute rows have no per-game breakdown at all — a bare
+          // season/window total is the correct and only reading there, so
+          // that's the one case that gets the "N unit" label.
           const matches = r.matchDetails ?? []
+          const isTrend = matches.length > 0
           const unit = matches[0]?.statLabel ?? statLabel ?? ''
           const meta =
             matches.length > 0
@@ -190,7 +195,7 @@ export function deriveRows(result: NspeResult, statLabel?: string): ListRow[] {
             id: `${i}`,
             primary: r.player,
             secondary: r.team,
-            value: unit ? `${fmt(r.total)} ${unit}` : fmt(r.total),
+            value: isTrend ? `met=${fmt(r.total)}` : unit ? `${fmt(r.total)} ${unit}` : fmt(r.total),
             meta,
           }
         })

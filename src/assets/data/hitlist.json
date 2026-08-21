@@ -1,145 +1,145 @@
 [
   {
-    "raw": "MLB 2hits+ {top20} {season}"
-  },
-  {
-    "team": "PIT",
-    "player": "Nick Gonzales",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 48
-  },
-  {
-    "team": "MIA",
-    "player": "Otto Lopez",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 47
-  },
-  {
-    "team": "SF",
-    "player": "Luis Arraez",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 46
-  },
-  {
-    "team": "LAD",
-    "player": "Shohei Ohtani",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 43
-  },
-  {
-    "team": "HOU",
-    "player": "Yordan Alvarez",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 42
-  },
-  {
-    "team": "TB",
-    "player": "Chandler Simpson",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 42
-  },
-  {
-    "team": "LAD",
-    "player": "Freddie Freeman",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 42
-  },
-  {
-    "team": "TB",
-    "player": "Yandy Diaz",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 41
-  },
-  {
-    "team": "STL",
-    "player": "Alec Burleson",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 40
-  },
-  {
-    "team": "TEX",
-    "player": "Brandon Nimmo",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 40
-  },
-  {
-    "team": "STL",
-    "player": "Jordan Walker",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 37
-  },
-  {
-    "team": "BOS",
-    "player": "Ceddanne Rafaela",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 37
-  },
-  {
-    "team": "SF",
-    "player": "Jung Hoo Lee",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 36
-  },
-  {
-    "team": "TB",
-    "player": "Jonathan Aranda",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 36
-  },
-  {
-    "team": "TOR",
-    "player": "Ernie Clement",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 36
-  },
-  {
-    "team": "NYM",
-    "player": "BO Bichette",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 36
-  },
-  {
-    "team": "ATL",
-    "player": "Michael Harris II",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 35
-  },
-  {
-    "team": "CLE",
-    "player": "Chase Delauter",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 35
-  },
-  {
-    "team": "SD",
-    "player": "Fernando Tatis Jr",
-    "stat": "hits",
-    "threshold": 2,
-    "games_meeting": 35
+    "raw": "MLB 2rbi+ {top20} {season}"
   },
   {
     "team": "WSH",
     "player": "CJ Abrams",
-    "stat": "hits",
+    "stat": "rbi",
     "threshold": 2,
-    "games_meeting": 35
+    "games_meeting": 24
+  },
+  {
+    "team": "BAL",
+    "player": "Pete Alonso",
+    "stat": "rbi",
+    "threshold": 2,
+    "games_meeting": 24
+  },
+  {
+    "team": "CHC",
+    "player": "Seiya Suzuki",
+    "stat": "rbi",
+    "threshold": 2,
+    "games_meeting": 24
+  },
+  {
+    "team": "MIL",
+    "player": "Brice Turang",
+    "stat": "rbi",
+    "threshold": 2,
+    "games_meeting": 24
+  },
+  {
+    "team": "HOU",
+    "player": "Yordan Alvarez",
+    "stat": "rbi",
+    "threshold": 2,
+    "games_meeting": 23
+  },
+  {
+    "team": "CHC",
+    "player": "Pete Crow Armstrong",
+    "stat": "rbi",
+    "threshold": 2,
+    "games_meeting": 23
+  },
+  {
+    "team": "CIN",
+    "player": "Sal Stewart",
+    "stat": "rbi",
+    "threshold": 2,
+    "games_meeting": 23
+  },
+  {
+    "team": "STL",
+    "player": "Alec Burleson",
+    "stat": "rbi",
+    "threshold": 2,
+    "games_meeting": 22
+  },
+  {
+    "team": "STL",
+    "player": "Jordan Walker",
+    "stat": "rbi",
+    "threshold": 2,
+    "games_meeting": 22
+  },
+  {
+    "team": "BOS",
+    "player": "Willson Contreras",
+    "stat": "rbi",
+    "threshold": 2,
+    "games_meeting": 22
+  },
+  {
+    "team": "MIA",
+    "player": "Liam Hicks",
+    "stat": "rbi",
+    "threshold": 2,
+    "games_meeting": 22
+  },
+  {
+    "team": "WSH",
+    "player": "Luis Garcia Jr",
+    "stat": "rbi",
+    "threshold": 2,
+    "games_meeting": 22
+  },
+  {
+    "team": "LAD",
+    "player": "Andy Pages",
+    "stat": "rbi",
+    "threshold": 2,
+    "games_meeting": 22
+  },
+  {
+    "team": "NYY",
+    "player": "Ben Rice",
+    "stat": "rbi",
+    "threshold": 2,
+    "games_meeting": 22
+  },
+  {
+    "team": "TEX",
+    "player": "Jake Burger",
+    "stat": "rbi",
+    "threshold": 2,
+    "games_meeting": 22
+  },
+  {
+    "team": "TB",
+    "player": "Junior Caminero",
+    "stat": "rbi",
+    "threshold": 2,
+    "games_meeting": 21
+  },
+  {
+    "team": "ATL",
+    "player": "Michael Harris II",
+    "stat": "rbi",
+    "threshold": 2,
+    "games_meeting": 20
+  },
+  {
+    "team": "TB",
+    "player": "Jonathan Aranda",
+    "stat": "rbi",
+    "threshold": 2,
+    "games_meeting": 20
+  },
+  {
+    "team": "HOU",
+    "player": "Isaac Paredes",
+    "stat": "rbi",
+    "threshold": 2,
+    "games_meeting": 20
+  },
+  {
+    "team": "MIN",
+    "player": "Josh Bell",
+    "stat": "rbi",
+    "threshold": 2,
+    "games_meeting": 20
   }
 ]
