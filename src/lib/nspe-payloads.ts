@@ -693,6 +693,26 @@ export interface StatContext {
   // field name, and some period-scoped responses may not include the
   // sport-agnostic `val` field computeMatchValue otherwise prefers.
   periodField?: string
+  // Display-unit override, currently NFL-only. NFL's "stat" is really a
+  // category (pass/rush/rec) rather than a unit — unlike every other sport,
+  // where the stat code itself IS the unit (hits, pts, hr). The backend
+  // sometimes echoes that raw category back in query.stat/query.short, which
+  // would otherwise leak straight into display labels ("342 rec" instead of
+  // "342yds"). Resolved from the literal -yds/-td/-total flag in the query
+  // string we sent (always present, regardless of what the backend echoes
+  // back) rather than trusting the response — see resolveNflUnitLabel().
+  unitLabel?: string
+}
+
+// NFL only has two real per-play units: yds or td. -total is yds-flavored
+// (it's a combined-yardage stat — see NFL_TOTAL_TREND_DEFAULT). Reads the
+// flag directly off the query string rather than anything the backend
+// echoes back, since that's the one source guaranteed to reflect what was
+// actually asked for.
+function resolveNflUnitLabel(query: string): string | undefined {
+  const m = query.match(/-(yds|td|total)(?=\d|\s|$)/)
+  if (!m) return undefined
+  return m[1] === 'td' ? 'td' : 'yds'
 }
 
 export const STAT_FIELDS: Record<string, Record<string, string | string[]>> = {
@@ -1089,9 +1109,11 @@ export function detectStatContext(payload: ApiPayload, fallbackQuery: string): S
   }
   if (!STAT_FIELDS[sport]) return null
 
+  const unitLabel = sport === 'nfl' ? resolveNflUnitLabel(fallbackQuery) : undefined
+
   const knownStats = Object.keys(STAT_FIELDS[sport]).sort((a, b) => b.length - a.length)
   if (queryStat && knownStats.includes(queryStat)) {
-    return { sport, stat: queryStat }
+    return { sport, stat: queryStat, unitLabel }
   }
 
   // Period-prefixed stats like "q1_points", "1h_points", "p1_goals": strip the
@@ -1103,12 +1125,12 @@ export function detectStatContext(payload: ApiPayload, fallbackQuery: string): S
   if (queryStat) {
     const stripped = queryStat.replace(/^(q1|1h|p1|h1|h2|q2|q3|q4)_/, '')
     if (knownStats.includes(stripped)) {
-      return { sport, stat: stripped, periodField: queryStat }
+      return { sport, stat: stripped, periodField: queryStat, unitLabel }
     }
     const fields = STAT_FIELDS[sport]
     for (const [short, fld] of Object.entries(fields)) {
       if (typeof fld === 'string' && fld === stripped) {
-        return { sport, stat: short, periodField: queryStat }
+        return { sport, stat: short, periodField: queryStat, unitLabel }
       }
     }
   }
@@ -1116,7 +1138,7 @@ export function detectStatContext(payload: ApiPayload, fallbackQuery: string): S
     const lower = tok.toLowerCase()
     for (const s of knownStats) {
       if (lower.startsWith(s) && /^[a-z]+/i.test(lower)) {
-        return { sport, stat: s }
+        return { sport, stat: s, unitLabel }
       }
     }
   }
@@ -1187,7 +1209,7 @@ export function extractMatchDetails(row: Record<string, unknown>, ctx: StatConte
     ? row.match
     : []
   const out: MatchDetail[] = []
-  const label = STAT_DISPLAY_LABELS[ctx.stat] ?? ctx.stat
+  const label = ctx.unitLabel ?? STAT_DISPLAY_LABELS[ctx.stat] ?? ctx.stat
 
   for (const m of matches) {
     if (!m || typeof m !== 'object' || Array.isArray(m)) continue

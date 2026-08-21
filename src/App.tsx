@@ -2027,7 +2027,7 @@ function App() {
       )
       const payloadError = getPayloadError(payload)
       const statCtx = detectStatContext(payload, sanitizedQuery)
-      setQueryResultsStatLabel(statCtx ? STAT_DISPLAY_LABELS[statCtx.stat] ?? statCtx.stat : '')
+      setQueryResultsStatLabel(statCtx ? statCtx.unitLabel ?? STAT_DISPLAY_LABELS[statCtx.stat] ?? statCtx.stat : '')
       setQueryResults(enriched)
 
       if (payloadError) {
@@ -2413,7 +2413,7 @@ function App() {
             return <div className="font-mono text-[12px]" style={{ color: 'oklch(0.48 0 0)' }}>no results</div>
           }
           const demoStatCtx = detectStatContext(payload, sanitized)
-          const demoStatLabel = demoStatCtx ? STAT_DISPLAY_LABELS[demoStatCtx.stat] ?? demoStatCtx.stat : ''
+          const demoStatLabel = demoStatCtx ? demoStatCtx.unitLabel ?? STAT_DISPLAY_LABELS[demoStatCtx.stat] ?? demoStatCtx.stat : ''
           return (
             <div>
               {normalized.map((result, i) => {
@@ -2421,7 +2421,7 @@ function App() {
                 const badge = hasMatchDetails
                   ? `met=${result.total}`
                   : demoStatLabel
-                  ? `${result.total} ${demoStatLabel}`
+                  ? `${result.total}${demoStatLabel}`
                   : result.total
                 return (
                 <div key={i} className="py-1.5 border-b" style={{ borderColor: 'oklch(0.22 0 0)' }}>
@@ -2627,7 +2627,7 @@ function App() {
                 const resultBadge = hasMatchDetails
                   ? `met=${result.total}`
                   : queryResultsStatLabel
-                  ? `${result.total} ${queryResultsStatLabel}`
+                  ? `${result.total}${queryResultsStatLabel}`
                   : result.total
 
                 return (

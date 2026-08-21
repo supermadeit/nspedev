@@ -141,7 +141,7 @@ export function deriveRows(result: NspeResult, statLabel?: string): ListRow[] {
           return {
             id: `${i}`,
             primary: r.team,
-            value: isTrend ? `met=${fmt(trend.met_count)}` : `${fmt(compute.total)} ${unit}`,
+            value: isTrend ? `met=${fmt(trend.met_count)}` : `${fmt(compute.total)}${unit}`,
             meta: isTrend ? undefined : compute.games != null ? `${fmt(compute.games)}g · avg ${fmt(compute.avg)}` : undefined,
           }
         })
@@ -195,7 +195,7 @@ export function deriveRows(result: NspeResult, statLabel?: string): ListRow[] {
             id: `${i}`,
             primary: r.player,
             secondary: r.team,
-            value: isTrend ? `met=${fmt(r.total)}` : unit ? `${fmt(r.total)} ${unit}` : fmt(r.total),
+            value: isTrend ? `met=${fmt(r.total)}` : unit ? `${fmt(r.total)}${unit}` : fmt(r.total),
             meta,
           }
         })
