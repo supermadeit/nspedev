@@ -16,6 +16,7 @@ import CheckoutPage from './pages/CheckoutPage.tsx'
 import SuccessPage from './pages/SuccessPage.tsx'
 import AccountPage from './pages/AccountPage.tsx'
 import QbChartsPage from './pages/QbChartsPage.tsx'
+import PlayerProfilePage from './pages/PlayerProfilePage.tsx'
 
 import "./main.css"
 import "./styles/theme.css"
@@ -44,6 +45,11 @@ createRoot(document.getElementById('root')!).render(
 
           <Route path="/calculator" element={<CalculatorRoute />} />
           <Route path="/charts" element={<QbChartsPage />} />
+          {/* Prototype only — hardcoded to the one sample player payload we
+              have. No live per-player endpoint exists yet, so this isn't a
+              real dynamic /database/:slug route (nor linked from anywhere)
+              until that exists. */}
+          <Route path="/database/dak-prescott" element={<PlayerProfilePage />} />
 
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />

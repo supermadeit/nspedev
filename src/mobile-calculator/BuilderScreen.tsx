@@ -109,19 +109,28 @@ export function BuilderScreen({ state, onRun, isLoading, popularPlayers = [], on
     <div className="w-full h-full flex flex-col" style={{ color: C.textBright, fontFamily: 'monospace' }}>
       {/* Header — sits above the scroll region so it never scrolls away.
           Left: branding (same as desktop's old top-left mobile mark). Right:
-          homepage escape hatch + login entry point + sample-queries review
-          list, one line. */}
-      <div className="flex items-center justify-between px-3 pt-2 pb-2 flex-none" style={{ borderBottom: `1px solid ${C.border}` }}>
-        <span className="font-mono text-[11px] font-bold whitespace-nowrap" style={{ color: 'oklch(0.95 0 0)' }}>
+          homepage/charts escape hatches + login entry point + sample-queries
+          review list — four links now, so this wraps to a second line on
+          narrow phones (items-start, not items-center, so it aligns cleanly
+          with the branding above rather than looking vertically off). */}
+      <div className="flex items-start justify-between px-3 pt-2 pb-2 flex-none gap-2" style={{ borderBottom: `1px solid ${C.border}` }}>
+        <span className="font-mono text-[11px] font-bold whitespace-nowrap pt-0.5" style={{ color: 'oklch(0.95 0 0)' }}>
           nspe.dev <span style={{ color: 'oklch(0.75 0.15 145)' }}>{'{preview}'}</span>
         </span>
-        <div className="flex items-center gap-2.5 whitespace-nowrap">
+        <div className="flex items-center flex-wrap justify-end gap-x-2.5 gap-y-1">
           <a
             href="/"
             className="font-mono text-[11px] font-bold underline"
             style={{ color: C.accent }}
           >
             {'{homepage}'}
+          </a>
+          <a
+            href="/charts"
+            className="font-mono text-[11px] font-bold underline"
+            style={{ color: C.accent }}
+          >
+            {'{charts}'}
           </a>
           <a
             href="/login"
