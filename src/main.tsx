@@ -20,11 +20,14 @@ import "./main.css"
 import "./styles/theme.css"
 import "./index.css"
 
-// Hooks can't be called conditionally inside route config directly, so the
-// mobile/desktop split at the catch-all route lives in this tiny wrapper.
-// Mobile users automatically get the calculator-style UI — this isn't a URL
-// anyone navigates to on purpose.
-function RootRoute() {
+// The calculator-style UI lives at its own URL (/calculator) now, reached
+// via a {calculator} button on the homepage rather than being shown
+// automatically — mobile visitors land on the same App homepage desktop
+// gets (App.tsx already has its own isMobile-aware layout for that). Only
+// mobile viewports actually get the calculator at /calculator; a desktop
+// viewport hitting that URL directly falls back to the homepage, since the
+// calculator's layout is purpose-built for narrow screens.
+function CalculatorRoute() {
   const isMobile = useIsMobile()
   return isMobile ? <MobileCalculatorApp /> : <App />
 }
@@ -37,6 +40,8 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/world-cup" element={<WorldCupApp />} />
           <Route path="/world.cup" element={<WorldCupApp />} />
           <Route path="/nfl.season" element={<WorldCupApp />} />
+
+          <Route path="/calculator" element={<CalculatorRoute />} />
 
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
@@ -59,7 +64,7 @@ createRoot(document.getElementById('root')!).render(
             }
           />
 
-          <Route path="*" element={<RootRoute />} />
+          <Route path="*" element={<App />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

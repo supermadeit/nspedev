@@ -6,6 +6,7 @@ import { useIsMobile } from '@/hooks/use-mobile'
 import { QueryBuilder } from '@/components/QueryBuilder'
 import { QueryBuilderTutorial } from '@/components/QueryBuilderTutorial'
 import { AutoDemo } from '@/components/AutoDemo'
+import { SampleQueriesModal } from '@/components/SampleQueriesModal'
 import { authHeader } from '@/lib/auth-token'
 import {
   asNumber,
@@ -1805,6 +1806,7 @@ function App() {
   const [isSampleMenuOpen, setIsSampleMenuOpen] = useState(false)
   const [isTutorialOpen, setIsTutorialOpen] = useState(false)
   const [isSampleDemoOpen, setIsSampleDemoOpen] = useState(false)
+  const [isSampleQueriesOpen, setIsSampleQueriesOpen] = useState(false)
   const [miniPosition, setMiniPosition] = useState({
     x: window.innerWidth / 2 - 310,
     y: Math.max(80, Math.floor((window.innerHeight - window.innerHeight * 0.62) / 2)),
@@ -2309,11 +2311,11 @@ function App() {
 
         {!isMobile && (
           <button
-            onClick={() => setIsSampleDemoOpen(true)}
+            onClick={() => setIsSampleQueriesOpen(true)}
             className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
             style={{ color: 'oklch(0.65 0.12 145)' }}
           >
-            {'{sample-commands}'}
+            {'{sample-queries}'}
           </button>
         )}
 
@@ -2345,6 +2347,10 @@ function App() {
       </div>
 
       <QueryBuilderTutorial open={isTutorialOpen} onClose={() => setIsTutorialOpen(false)} />
+      <SampleQueriesModal open={isSampleQueriesOpen} onClose={() => setIsSampleQueriesOpen(false)} />
+      {/* {sample-commands}'s scripted-typing demo is shelved (not deleted) in
+          favor of {sample-queries} above — no entry point triggers this open
+          anymore, kept mounted only so it's easy to revisit later. */}
       <AutoDemo
         open={isSampleDemoOpen}
         onClose={() => setIsSampleDemoOpen(false)}
@@ -2711,14 +2717,17 @@ function App() {
         <div className="w-[65%] max-w-4xl min-w-[320px] px-4">
           {isMobile ? (
             <div className="flex items-center justify-center">
-              <button
-                type="button"
-                onClick={() => setIsBuilderOpen(true)}
-                className="h-[52px] rounded-lg border px-8 font-mono text-[14px] hover:opacity-80 transition-opacity"
+              {/* Entry point into the mobile calculator UI (/calculator) —
+                  a real navigation, not a local bottom-sheet toggle, so the
+                  calculator lives at its own URL instead of being shown
+                  automatically to every mobile visitor. */}
+              <a
+                href="/calculator"
+                className="h-[52px] flex items-center rounded-lg border px-8 font-mono text-[14px] hover:opacity-80 transition-opacity"
                 style={{ color: 'oklch(0.85 0.15 195)', borderColor: 'oklch(0.85 0.15 195)' }}
               >
-                build
-              </button>
+                {'{calculator}'}
+              </a>
             </div>
           ) : (
             <div className="flex items-center gap-3">

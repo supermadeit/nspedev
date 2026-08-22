@@ -1,9 +1,11 @@
-// Generates the "sample queries" list shown on mobile from the SAME curated
-// tables that drive auto-default pre-fill (curatedDefaults.ts) — not a
-// hand-duplicated list. That way the sample list can never drift from the
-// actual pre-fill values: tune a threshold in curatedDefaults.ts and this
-// list picks it up automatically, which is the whole point (cross-checking
-// curated values against real command output).
+// Generates the "sample-queries" list shown on both desktop and mobile from
+// the SAME curated tables that drive the mobile calculator's auto-default
+// pre-fill (curatedDefaults.ts) — not a hand-duplicated list. That way the
+// sample list can never drift from the actual pre-fill values: tune a
+// threshold in curatedDefaults.ts and this list picks it up automatically,
+// which is the whole point (cross-checking curated values against real
+// command output). Lives in src/lib (not mobile-calculator/) since it's
+// shared cross-platform, same rationale as nspe-api.ts/nspe-payloads.ts.
 //
 // Command-building logic here mirrors useCalculatorQuery.ts's `builtCommand`
 // exactly, restricted to the shapes curated data can produce.
@@ -12,7 +14,7 @@ import {
   CURATED_EXPLOSIVE_TREND_DEFAULTS,
   CURATED_TEAM_COMPUTE_DEFAULTS,
   CURATED_TREND_DEFAULTS,
-} from './curatedDefaults'
+} from '@/mobile-calculator/state/curatedDefaults'
 
 export interface SampleQuery {
   /** Short scannable label, e.g. "nba trend · pts (1h)". */

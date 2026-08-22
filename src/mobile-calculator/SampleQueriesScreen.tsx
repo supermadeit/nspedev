@@ -1,9 +1,11 @@
 // Full-screen takeover listing every curated sample command, generated live
-// from curatedDefaults.ts (see state/sampleQueries.ts) — a review surface for
+// from curatedDefaults.ts (see @/lib/sampleQueries.ts) — a review surface for
 // cross-checking curated threshold/window values against the actual command
 // they produce, not a polished "what would you press" tutorial yet (that's a
-// later design pass).
-import { buildSampleQueries } from './state/sampleQueries'
+// later design pass). Desktop's equivalent is SampleQueriesModal.tsx, sharing
+// the same buildSampleQueries() data — content is uniform, only the chrome
+// (full-screen takeover vs. centered modal) differs per platform.
+import { buildSampleQueries } from '@/lib/sampleQueries'
 import { C } from './components/theme'
 
 export interface SampleQueriesScreenProps {
@@ -42,7 +44,7 @@ export function SampleQueriesScreen({ onBack }: SampleQueriesScreenProps) {
         <CalcLogo />
         <div className="flex-1 min-w-0">
           <div className="font-mono text-[10px] uppercase tracking-widest" style={{ color: C.textDim }}>
-            sample queries
+            sample-queries
           </div>
           <div className="font-mono text-[11px]" style={{ color: C.textDim }}>
             {queries.length} curated commands

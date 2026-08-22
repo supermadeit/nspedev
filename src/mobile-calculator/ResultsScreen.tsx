@@ -3,7 +3,7 @@
 // state until the user explicitly changes it, so navigating back must not
 // clear anything in useCalculatorQuery.
 import type { NspeResult } from '@/hooks/useNspeQuery'
-import { LeaderboardList } from './components/LeaderboardList'
+import { deriveRows, LeaderboardList } from './components/LeaderboardList'
 import { C } from './components/theme'
 
 export interface ResultsScreenProps {
@@ -29,6 +29,10 @@ function CalcLogo() {
 }
 
 export function ResultsScreen({ result, error, isLoading, query, onBack, statLabel }: ResultsScreenProps) {
+  // Matches desktop's "{query} — {N}results" convention (App.tsx's mini
+  // results panel title) — mobile had the query line but never the count.
+  const rowCount = !isLoading && result ? deriveRows(result, statLabel).length : null
+
   return (
     <div
       className="w-full h-full flex flex-col fixed inset-0 z-50"
@@ -50,6 +54,7 @@ export function ResultsScreen({ result, error, isLoading, query, onBack, statLab
           </div>
           <div className="font-mono text-[11px] truncate" style={{ color: C.accent }}>
             {query || '—'}
+            {rowCount != null && <span style={{ color: C.textDim }}>{' — '}{rowCount}results</span>}
           </div>
         </div>
       </div>
