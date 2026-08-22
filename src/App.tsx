@@ -2782,6 +2782,21 @@ function App() {
               </p>
             </div>
           )}
+
+          {/* {database} intentionally omitted — holding off until the
+              database feature itself exists. {chart} is desktop-first;
+              mobile doesn't have its own condensed chart layout yet. */}
+          {!isMobile && (
+            <div className="mt-4 flex items-center justify-center">
+              <a
+                href="/charts"
+                className="h-[52px] flex items-center rounded-lg border px-5 font-mono text-[14px] hover:opacity-80 transition-opacity"
+                style={{ color: 'oklch(0.85 0.15 195)', borderColor: 'oklch(0.85 0.15 195)' }}
+              >
+                {'{chart}'}
+              </a>
+            </div>
+          )}
         </div>
       </div>
 

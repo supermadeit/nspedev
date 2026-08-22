@@ -148,9 +148,12 @@ export function deriveRows(result: NspeResult, statLabel?: string): ListRow[] {
       }
       case 'nfl_explosive': {
         // Trend: `met` is a count of qualifying games (unitless, shown as
-        // met/window already). Compute: `value` is the count of qualifying
-        // explosive plays for the season — "plays", not yards (total yards
-        // on those plays is a separate `yards` field, surfaced in meta).
+        // met=N already). Compute: explosive compute is always a -yds
+        // threshold query (see useCalculatorQuery's builtCommand — explosive
+        // never emits -td), so `yards` — the total yardage from qualifying
+        // big plays, the thing the query actually filtered on — is the
+        // primary number, matching desktop's NflExplosiveView. `value` (the
+        // play count) is secondary detail, not the headline.
         return (result.payload.results ?? []).map((r, i) => {
           const isCompute = r.value != null && !r.matches
           const count = r.met ?? r.met_count ?? r.value
@@ -158,10 +161,18 @@ export function deriveRows(result: NspeResult, statLabel?: string): ListRow[] {
             id: `${i}`,
             primary: r.player,
             secondary: r.team,
-            value: count != null ? (isCompute ? `${fmt(count)} plays` : `met=${fmt(count)}`) : '—',
+            value: isCompute
+              ? r.yards != null
+                ? `${fmt(r.yards)}yds`
+                : count != null
+                ? `${fmt(count)} plays`
+                : '—'
+              : count != null
+              ? `met=${fmt(count)}`
+              : '—',
             meta:
-              isCompute && r.yards != null
-                ? `${fmt(r.yards)} total yds${r.games != null ? ` · ${fmt(r.games)}g` : ''}`
+              isCompute
+                ? `${fmt(count)} plays${r.games != null ? ` · ${fmt(r.games)}g` : ''}`
                 : r.games != null
                 ? `${fmt(r.games)}g`
                 : r.window != null

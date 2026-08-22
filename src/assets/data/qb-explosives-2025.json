@@ -1,0 +1,2114 @@
+{
+  "generated_at": "2026-08-22T05:23:28.800691Z",
+  "season": 2025,
+  "players": [
+    {
+      "player_name": "MatthewStafford",
+      "team": "LAR",
+      "quarter_yards": {
+        "q1": 1173,
+        "q2": 1273,
+        "q3": 1200,
+        "q4": 1066,
+        "1h": 2446,
+        "2h": 2266
+      },
+      "explosive": {
+        "20-29": {
+          "count": 40,
+          "td": 7,
+          "yards": 948
+        },
+        "30-39": {
+          "count": 18,
+          "td": 3,
+          "yards": 615
+        },
+        "40-49": {
+          "count": 4,
+          "td": 2,
+          "yards": 173
+        },
+        "50+": {
+          "count": 5,
+          "td": 1,
+          "yards": 309
+        }
+      }
+    },
+    {
+      "player_name": "DrakeMaye",
+      "team": "NE",
+      "quarter_yards": {
+        "q1": 876,
+        "q2": 1609,
+        "q3": 1123,
+        "q4": 878,
+        "1h": 2485,
+        "2h": 2001
+      },
+      "explosive": {
+        "20-29": {
+          "count": 41,
+          "td": 3,
+          "yards": 942
+        },
+        "30-39": {
+          "count": 19,
+          "td": 5,
+          "yards": 637
+        },
+        "40-49": {
+          "count": 1,
+          "td": 0,
+          "yards": 44
+        },
+        "50+": {
+          "count": 5,
+          "td": 2,
+          "yards": 292
+        }
+      }
+    },
+    {
+      "player_name": "JaredGoff",
+      "team": "DET",
+      "quarter_yards": {
+        "q1": 1141,
+        "q2": 1296,
+        "q3": 1072,
+        "q4": 1101,
+        "1h": 2437,
+        "2h": 2173
+      },
+      "explosive": {
+        "20-29": {
+          "count": 43,
+          "td": 5,
+          "yards": 1017
+        },
+        "30-39": {
+          "count": 13,
+          "td": 2,
+          "yards": 429
+        },
+        "40-49": {
+          "count": 5,
+          "td": 2,
+          "yards": 211
+        },
+        "50+": {
+          "count": 2,
+          "td": 0,
+          "yards": 116
+        }
+      }
+    },
+    {
+      "player_name": "JoshAllen",
+      "team": "BUF",
+      "quarter_yards": {
+        "q1": 650,
+        "q2": 829,
+        "q3": 947,
+        "q4": 1215,
+        "1h": 1479,
+        "2h": 2162
+      },
+      "explosive": {
+        "20-29": {
+          "count": 36,
+          "td": 5,
+          "yards": 822
+        },
+        "30-39": {
+          "count": 10,
+          "td": 1,
+          "yards": 326
+        },
+        "40-49": {
+          "count": 5,
+          "td": 2,
+          "yards": 221
+        },
+        "50+": {
+          "count": 4,
+          "td": 2,
+          "yards": 207
+        }
+      }
+    },
+    {
+      "player_name": "CalebWilliams",
+      "team": "CHI",
+      "quarter_yards": {
+        "q1": 940,
+        "q2": 875,
+        "q3": 924,
+        "q4": 1057,
+        "1h": 1815,
+        "2h": 1981
+      },
+      "explosive": {
+        "20-29": {
+          "count": 38,
+          "td": 6,
+          "yards": 922
+        },
+        "30-39": {
+          "count": 10,
+          "td": 3,
+          "yards": 332
+        },
+        "40-49": {
+          "count": 4,
+          "td": 1,
+          "yards": 169
+        },
+        "50+": {
+          "count": 2,
+          "td": 2,
+          "yards": 123
+        }
+      }
+    },
+    {
+      "player_name": "SamDarnold",
+      "team": "SEA",
+      "quarter_yards": {
+        "q1": 819,
+        "q2": 1264,
+        "q3": 1153,
+        "q4": 944,
+        "1h": 2083,
+        "2h": 2097
+      },
+      "explosive": {
+        "20-29": {
+          "count": 35,
+          "td": 6,
+          "yards": 842
+        },
+        "30-39": {
+          "count": 8,
+          "td": 0,
+          "yards": 269
+        },
+        "40-49": {
+          "count": 5,
+          "td": 1,
+          "yards": 213
+        },
+        "50+": {
+          "count": 6,
+          "td": 2,
+          "yards": 355
+        }
+      }
+    },
+    {
+      "player_name": "TrevorLawrence",
+      "team": "JAX",
+      "quarter_yards": {
+        "q1": 1030,
+        "q2": 1093,
+        "q3": 1135,
+        "q4": 688,
+        "1h": 2123,
+        "2h": 1823
+      },
+      "explosive": {
+        "20-29": {
+          "count": 37,
+          "td": 3,
+          "yards": 846
+        },
+        "30-39": {
+          "count": 11,
+          "td": 1,
+          "yards": 385
+        },
+        "40-49": {
+          "count": 4,
+          "td": 1,
+          "yards": 175
+        },
+        "50+": {
+          "count": 2,
+          "td": 0,
+          "yards": 113
+        }
+      }
+    },
+    {
+      "player_name": "BakerMayfield",
+      "team": "TB",
+      "quarter_yards": {
+        "q1": 723,
+        "q2": 977,
+        "q3": 1024,
+        "q4": 1103,
+        "1h": 1700,
+        "2h": 2127
+      },
+      "explosive": {
+        "20-29": {
+          "count": 39,
+          "td": 7,
+          "yards": 889
+        },
+        "30-39": {
+          "count": 8,
+          "td": 1,
+          "yards": 249
+        },
+        "40-49": {
+          "count": 2,
+          "td": 0,
+          "yards": 85
+        },
+        "50+": {
+          "count": 4,
+          "td": 2,
+          "yards": 265
+        }
+      }
+    },
+    {
+      "player_name": "DakPrescott",
+      "team": "DAL",
+      "quarter_yards": {
+        "q1": 983,
+        "q2": 1440,
+        "q3": 964,
+        "q4": 1177,
+        "1h": 2423,
+        "2h": 2141
+      },
+      "explosive": {
+        "20-29": {
+          "count": 26,
+          "td": 2,
+          "yards": 629
+        },
+        "30-39": {
+          "count": 15,
+          "td": 2,
+          "yards": 507
+        },
+        "40-49": {
+          "count": 9,
+          "td": 2,
+          "yards": 399
+        },
+        "50+": {
+          "count": 3,
+          "td": 2,
+          "yards": 211
+        }
+      }
+    },
+    {
+      "player_name": "BoNix",
+      "team": "DEN",
+      "quarter_yards": {
+        "q1": 682,
+        "q2": 1312,
+        "q3": 793,
+        "q4": 1123,
+        "1h": 1994,
+        "2h": 1916
+      },
+      "explosive": {
+        "20-29": {
+          "count": 29,
+          "td": 8,
+          "yards": 675
+        },
+        "30-39": {
+          "count": 11,
+          "td": 1,
+          "yards": 366
+        },
+        "40-49": {
+          "count": 6,
+          "td": 0,
+          "yards": 264
+        },
+        "50+": {
+          "count": 1,
+          "td": 1,
+          "yards": 52
+        }
+      }
+    },
+    {
+      "player_name": "JordanLove",
+      "team": "GB",
+      "quarter_yards": {
+        "q1": 958,
+        "q2": 987,
+        "q3": 769,
+        "q4": 744,
+        "1h": 1945,
+        "2h": 1513
+      },
+      "explosive": {
+        "20-29": {
+          "count": 29,
+          "td": 3,
+          "yards": 697
+        },
+        "30-39": {
+          "count": 9,
+          "td": 0,
+          "yards": 297
+        },
+        "40-49": {
+          "count": 4,
+          "td": 2,
+          "yards": 180
+        },
+        "50+": {
+          "count": 4,
+          "td": 1,
+          "yards": 219
+        }
+      }
+    },
+    {
+      "player_name": "PatrickMahomes",
+      "team": "KC",
+      "quarter_yards": {
+        "q1": 669,
+        "q2": 1049,
+        "q3": 1055,
+        "q4": 946,
+        "1h": 1718,
+        "2h": 2001
+      },
+      "explosive": {
+        "20-29": {
+          "count": 24,
+          "td": 2,
+          "yards": 576
+        },
+        "30-39": {
+          "count": 12,
+          "td": 1,
+          "yards": 418
+        },
+        "40-49": {
+          "count": 8,
+          "td": 1,
+          "yards": 354
+        },
+        "50+": {
+          "count": 1,
+          "td": 0,
+          "yards": 61
+        }
+      }
+    },
+    {
+      "player_name": "JustinHerbert",
+      "team": "LAC",
+      "quarter_yards": {
+        "q1": 793,
+        "q2": 1224,
+        "q3": 1026,
+        "q4": 821,
+        "1h": 2017,
+        "2h": 1847
+      },
+      "explosive": {
+        "20-29": {
+          "count": 23,
+          "td": 4,
+          "yards": 544
+        },
+        "30-39": {
+          "count": 11,
+          "td": 1,
+          "yards": 366
+        },
+        "40-49": {
+          "count": 3,
+          "td": 0,
+          "yards": 126
+        },
+        "50+": {
+          "count": 7,
+          "td": 1,
+          "yards": 397
+        }
+      }
+    },
+    {
+      "player_name": "JacobyBrissett",
+      "team": "ARI",
+      "quarter_yards": {
+        "q1": 619,
+        "q2": 808,
+        "q3": 965,
+        "q4": 965,
+        "1h": 1427,
+        "2h": 1930
+      },
+      "explosive": {
+        "20-29": {
+          "count": 28,
+          "td": 1,
+          "yards": 627
+        },
+        "30-39": {
+          "count": 9,
+          "td": 3,
+          "yards": 307
+        },
+        "40-49": {
+          "count": 2,
+          "td": 1,
+          "yards": 86
+        },
+        "50+": {
+          "count": 2,
+          "td": 0,
+          "yards": 114
+        }
+      }
+    },
+    {
+      "player_name": "JalenHurts",
+      "team": "PHI",
+      "quarter_yards": {
+        "q1": 631,
+        "q2": 917,
+        "q3": 734,
+        "q4": 1063,
+        "1h": 1548,
+        "2h": 1797
+      },
+      "explosive": {
+        "20-29": {
+          "count": 22,
+          "td": 2,
+          "yards": 534
+        },
+        "30-39": {
+          "count": 9,
+          "td": 4,
+          "yards": 305
+        },
+        "40-49": {
+          "count": 6,
+          "td": 2,
+          "yards": 258
+        },
+        "50+": {
+          "count": 4,
+          "td": 1,
+          "yards": 250
+        }
+      }
+    },
+    {
+      "player_name": "AaronRodgers",
+      "team": "PIT",
+      "quarter_yards": {
+        "q1": 729,
+        "q2": 989,
+        "q3": 792,
+        "q4": 913,
+        "1h": 1718,
+        "2h": 1705
+      },
+      "explosive": {
+        "20-29": {
+          "count": 25,
+          "td": 6,
+          "yards": 597
+        },
+        "30-39": {
+          "count": 9,
+          "td": 1,
+          "yards": 304
+        },
+        "40-49": {
+          "count": 3,
+          "td": 1,
+          "yards": 131
+        },
+        "50+": {
+          "count": 4,
+          "td": 2,
+          "yards": 265
+        }
+      }
+    },
+    {
+      "player_name": "BryceYoung",
+      "team": "CAR",
+      "quarter_yards": {
+        "q1": 651,
+        "q2": 664,
+        "q3": 799,
+        "q4": 909,
+        "1h": 1315,
+        "2h": 1708
+      },
+      "explosive": {
+        "20-29": {
+          "count": 27,
+          "td": 3,
+          "yards": 641
+        },
+        "30-39": {
+          "count": 9,
+          "td": 5,
+          "yards": 313
+        },
+        "40-49": {
+          "count": 3,
+          "td": 1,
+          "yards": 123
+        },
+        "50+": {
+          "count": 1,
+          "td": 0,
+          "yards": 54
+        }
+      }
+    },
+    {
+      "player_name": "CamWard",
+      "team": "TEN",
+      "quarter_yards": {
+        "q1": 790,
+        "q2": 806,
+        "q3": 527,
+        "q4": 1161,
+        "1h": 1596,
+        "2h": 1688
+      },
+      "explosive": {
+        "20-29": {
+          "count": 24,
+          "td": 0,
+          "yards": 577
+        },
+        "30-39": {
+          "count": 11,
+          "td": 2,
+          "yards": 389
+        },
+        "40-49": {
+          "count": 4,
+          "td": 1,
+          "yards": 177
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    },
+    {
+      "player_name": "LamarJackson",
+      "team": "BAL",
+      "quarter_yards": {
+        "q1": 523,
+        "q2": 600,
+        "q3": 677,
+        "q4": 735,
+        "1h": 1123,
+        "2h": 1412
+      },
+      "explosive": {
+        "20-29": {
+          "count": 19,
+          "td": 7,
+          "yards": 447
+        },
+        "30-39": {
+          "count": 15,
+          "td": 2,
+          "yards": 518
+        },
+        "40-49": {
+          "count": 3,
+          "td": 0,
+          "yards": 130
+        },
+        "50+": {
+          "count": 2,
+          "td": 2,
+          "yards": 114
+        }
+      }
+    },
+    {
+      "player_name": "C.J.Stroud",
+      "team": "HOU",
+      "quarter_yards": {
+        "q1": 902,
+        "q2": 935,
+        "q3": 539,
+        "q4": 625,
+        "1h": 1837,
+        "2h": 1164
+      },
+      "explosive": {
+        "20-29": {
+          "count": 24,
+          "td": 2,
+          "yards": 565
+        },
+        "30-39": {
+          "count": 5,
+          "td": 1,
+          "yards": 169
+        },
+        "40-49": {
+          "count": 4,
+          "td": 1,
+          "yards": 180
+        },
+        "50+": {
+          "count": 5,
+          "td": 3,
+          "yards": 285
+        }
+      }
+    },
+    {
+      "player_name": "DanielJones",
+      "team": "IND",
+      "quarter_yards": {
+        "q1": 905,
+        "q2": 911,
+        "q3": 754,
+        "q4": 514,
+        "1h": 1816,
+        "2h": 1268
+      },
+      "explosive": {
+        "20-29": {
+          "count": 23,
+          "td": 3,
+          "yards": 546
+        },
+        "30-39": {
+          "count": 6,
+          "td": 1,
+          "yards": 211
+        },
+        "40-49": {
+          "count": 5,
+          "td": 0,
+          "yards": 224
+        },
+        "50+": {
+          "count": 2,
+          "td": 0,
+          "yards": 106
+        }
+      }
+    },
+    {
+      "player_name": "GenoSmith",
+      "team": "LV",
+      "quarter_yards": {
+        "q1": 813,
+        "q2": 689,
+        "q3": 735,
+        "q4": 904,
+        "1h": 1502,
+        "2h": 1639
+      },
+      "explosive": {
+        "20-29": {
+          "count": 22,
+          "td": 2,
+          "yards": 528
+        },
+        "30-39": {
+          "count": 9,
+          "td": 0,
+          "yards": 305
+        },
+        "40-49": {
+          "count": 2,
+          "td": 0,
+          "yards": 92
+        },
+        "50+": {
+          "count": 2,
+          "td": 2,
+          "yards": 121
+        }
+      }
+    },
+    {
+      "player_name": "TuaTagovailoa",
+      "team": "MIA",
+      "quarter_yards": {
+        "q1": 551,
+        "q2": 701,
+        "q3": 479,
+        "q4": 821,
+        "1h": 1252,
+        "2h": 1300
+      },
+      "explosive": {
+        "20-29": {
+          "count": 27,
+          "td": 2,
+          "yards": 627
+        },
+        "30-39": {
+          "count": 4,
+          "td": 1,
+          "yards": 137
+        },
+        "40-49": {
+          "count": 4,
+          "td": 2,
+          "yards": 181
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    },
+    {
+      "player_name": "BrockPurdy",
+      "team": "SF",
+      "quarter_yards": {
+        "q1": 533,
+        "q2": 614,
+        "q3": 510,
+        "q4": 547,
+        "1h": 1147,
+        "2h": 1057
+      },
+      "explosive": {
+        "20-29": {
+          "count": 23,
+          "td": 2,
+          "yards": 534
+        },
+        "30-39": {
+          "count": 7,
+          "td": 2,
+          "yards": 230
+        },
+        "40-49": {
+          "count": 1,
+          "td": 0,
+          "yards": 45
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    },
+    {
+      "player_name": "JaxsonDart",
+      "team": "NYG",
+      "quarter_yards": {
+        "q1": 544,
+        "q2": 792,
+        "q3": 512,
+        "q4": 547,
+        "1h": 1336,
+        "2h": 1059
+      },
+      "explosive": {
+        "20-29": {
+          "count": 17,
+          "td": 2,
+          "yards": 416
+        },
+        "30-39": {
+          "count": 7,
+          "td": 2,
+          "yards": 238
+        },
+        "40-49": {
+          "count": 3,
+          "td": 2,
+          "yards": 127
+        },
+        "50+": {
+          "count": 1,
+          "td": 0,
+          "yards": 55
+        }
+      }
+    },
+    {
+      "player_name": "JoeFlacco",
+      "team": "CIN",
+      "quarter_yards": {
+        "q1": 329,
+        "q2": 680,
+        "q3": 496,
+        "q4": 880,
+        "1h": 1009,
+        "2h": 1376
+      },
+      "explosive": {
+        "20-29": {
+          "count": 18,
+          "td": 3,
+          "yards": 440
+        },
+        "30-39": {
+          "count": 6,
+          "td": 0,
+          "yards": 208
+        },
+        "40-49": {
+          "count": 2,
+          "td": 2,
+          "yards": 88
+        },
+        "50+": {
+          "count": 1,
+          "td": 0,
+          "yards": 61
+        }
+      }
+    },
+    {
+      "player_name": "MarcusMariota",
+      "team": "WSH",
+      "quarter_yards": {
+        "q1": 306,
+        "q2": 450,
+        "q3": 395,
+        "q4": 467,
+        "1h": 756,
+        "2h": 862
+      },
+      "explosive": {
+        "20-29": {
+          "count": 14,
+          "td": 2,
+          "yards": 337
+        },
+        "30-39": {
+          "count": 4,
+          "td": 0,
+          "yards": 141
+        },
+        "40-49": {
+          "count": 3,
+          "td": 1,
+          "yards": 124
+        },
+        "50+": {
+          "count": 2,
+          "td": 1,
+          "yards": 107
+        }
+      }
+    },
+    {
+      "player_name": "MichaelPenixJr.",
+      "team": "ATL",
+      "quarter_yards": {
+        "q1": 588,
+        "q2": 562,
+        "q3": 483,
+        "q4": 381,
+        "1h": 1150,
+        "2h": 864
+      },
+      "explosive": {
+        "20-29": {
+          "count": 13,
+          "td": 0,
+          "yards": 299
+        },
+        "30-39": {
+          "count": 3,
+          "td": 0,
+          "yards": 98
+        },
+        "40-49": {
+          "count": 3,
+          "td": 0,
+          "yards": 124
+        },
+        "50+": {
+          "count": 3,
+          "td": 1,
+          "yards": 173
+        }
+      }
+    },
+    {
+      "player_name": "J.J.McCarthy",
+      "team": "MIN",
+      "quarter_yards": {
+        "q1": 439,
+        "q2": 624,
+        "q3": 194,
+        "q4": 395,
+        "1h": 1063,
+        "2h": 589
+      },
+      "explosive": {
+        "20-29": {
+          "count": 18,
+          "td": 2,
+          "yards": 431
+        },
+        "30-39": {
+          "count": 1,
+          "td": 0,
+          "yards": 31
+        },
+        "40-49": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "50+": {
+          "count": 3,
+          "td": 0,
+          "yards": 170
+        }
+      }
+    },
+    {
+      "player_name": "JoeBurrow",
+      "team": "CIN",
+      "quarter_yards": {
+        "q1": 495,
+        "q2": 547,
+        "q3": 400,
+        "q4": 468,
+        "1h": 1042,
+        "2h": 868
+      },
+      "explosive": {
+        "20-29": {
+          "count": 15,
+          "td": 3,
+          "yards": 346
+        },
+        "30-39": {
+          "count": 6,
+          "td": 0,
+          "yards": 213
+        },
+        "40-49": {
+          "count": 1,
+          "td": 0,
+          "yards": 43
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    },
+    {
+      "player_name": "TylerShough",
+      "team": "NO",
+      "quarter_yards": {
+        "q1": 350,
+        "q2": 656,
+        "q3": 465,
+        "q4": 965,
+        "1h": 1006,
+        "2h": 1430
+      },
+      "explosive": {
+        "20-29": {
+          "count": 10,
+          "td": 1,
+          "yards": 245
+        },
+        "30-39": {
+          "count": 6,
+          "td": 1,
+          "yards": 204
+        },
+        "40-49": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "50+": {
+          "count": 4,
+          "td": 1,
+          "yards": 233
+        }
+      }
+    },
+    {
+      "player_name": "ShedeurSanders",
+      "team": "CLE",
+      "quarter_yards": {
+        "q1": 438,
+        "q2": 330,
+        "q3": 250,
+        "q4": 397,
+        "1h": 768,
+        "2h": 647
+      },
+      "explosive": {
+        "20-29": {
+          "count": 7,
+          "td": 1,
+          "yards": 173
+        },
+        "30-39": {
+          "count": 5,
+          "td": 1,
+          "yards": 167
+        },
+        "40-49": {
+          "count": 3,
+          "td": 0,
+          "yards": 131
+        },
+        "50+": {
+          "count": 4,
+          "td": 2,
+          "yards": 236
+        }
+      }
+    },
+    {
+      "player_name": "KirkCousins",
+      "team": "ATL",
+      "quarter_yards": {
+        "q1": 347,
+        "q2": 409,
+        "q3": 437,
+        "q4": 505,
+        "1h": 756,
+        "2h": 942
+      },
+      "explosive": {
+        "20-29": {
+          "count": 12,
+          "td": 0,
+          "yards": 271
+        },
+        "30-39": {
+          "count": 5,
+          "td": 0,
+          "yards": 166
+        },
+        "40-49": {
+          "count": 2,
+          "td": 1,
+          "yards": 90
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    },
+    {
+      "player_name": "CarsonWentz",
+      "team": "MIN",
+      "quarter_yards": {
+        "q1": 261,
+        "q2": 318,
+        "q3": 230,
+        "q4": 395,
+        "1h": 579,
+        "2h": 625
+      },
+      "explosive": {
+        "20-29": {
+          "count": 10,
+          "td": 0,
+          "yards": 228
+        },
+        "30-39": {
+          "count": 3,
+          "td": 0,
+          "yards": 108
+        },
+        "40-49": {
+          "count": 1,
+          "td": 0,
+          "yards": 40
+        },
+        "50+": {
+          "count": 1,
+          "td": 0,
+          "yards": 81
+        }
+      }
+    },
+    {
+      "player_name": "SpencerRattler",
+      "team": "NO",
+      "quarter_yards": {
+        "q1": 390,
+        "q2": 621,
+        "q3": 313,
+        "q4": 344,
+        "1h": 1011,
+        "2h": 657
+      },
+      "explosive": {
+        "20-29": {
+          "count": 9,
+          "td": 1,
+          "yards": 211
+        },
+        "30-39": {
+          "count": 2,
+          "td": 0,
+          "yards": 77
+        },
+        "40-49": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "50+": {
+          "count": 3,
+          "td": 1,
+          "yards": 197
+        }
+      }
+    },
+    {
+      "player_name": "MacJones",
+      "team": "SF",
+      "quarter_yards": {
+        "q1": 346,
+        "q2": 721,
+        "q3": 483,
+        "q4": 573,
+        "1h": 1067,
+        "2h": 1056
+      },
+      "explosive": {
+        "20-29": {
+          "count": 10,
+          "td": 0,
+          "yards": 225
+        },
+        "30-39": {
+          "count": 3,
+          "td": 0,
+          "yards": 108
+        },
+        "40-49": {
+          "count": 1,
+          "td": 1,
+          "yards": 42
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    },
+    {
+      "player_name": "JameisWinston",
+      "team": "NYG",
+      "quarter_yards": {
+        "q1": 177,
+        "q2": 121,
+        "q3": 96,
+        "q4": 155,
+        "1h": 298,
+        "2h": 251
+      },
+      "explosive": {
+        "20-29": {
+          "count": 8,
+          "td": 0,
+          "yards": 173
+        },
+        "30-39": {
+          "count": 4,
+          "td": 2,
+          "yards": 141
+        },
+        "40-49": {
+          "count": 2,
+          "td": 0,
+          "yards": 82
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    },
+    {
+      "player_name": "JustinFields",
+      "team": "NYJ",
+      "quarter_yards": {
+        "q1": 167,
+        "q2": 336,
+        "q3": 256,
+        "q4": 439,
+        "1h": 503,
+        "2h": 695
+      },
+      "explosive": {
+        "20-29": {
+          "count": 10,
+          "td": 2,
+          "yards": 235
+        },
+        "30-39": {
+          "count": 3,
+          "td": 1,
+          "yards": 100
+        },
+        "40-49": {
+          "count": 1,
+          "td": 1,
+          "yards": 42
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    },
+    {
+      "player_name": "JaydenDaniels",
+      "team": "WSH",
+      "quarter_yards": {
+        "q1": 309,
+        "q2": 409,
+        "q3": 328,
+        "q4": 340,
+        "1h": 718,
+        "2h": 668
+      },
+      "explosive": {
+        "20-29": {
+          "count": 7,
+          "td": 1,
+          "yards": 165
+        },
+        "30-39": {
+          "count": 2,
+          "td": 0,
+          "yards": 69
+        },
+        "40-49": {
+          "count": 2,
+          "td": 0,
+          "yards": 84
+        },
+        "50+": {
+          "count": 1,
+          "td": 0,
+          "yards": 50
+        }
+      }
+    },
+    {
+      "player_name": "DillonGabriel",
+      "team": "CLE",
+      "quarter_yards": {
+        "q1": 204,
+        "q2": 348,
+        "q3": 184,
+        "q4": 285,
+        "1h": 552,
+        "2h": 469
+      },
+      "explosive": {
+        "20-29": {
+          "count": 10,
+          "td": 1,
+          "yards": 225
+        },
+        "30-39": {
+          "count": 1,
+          "td": 0,
+          "yards": 33
+        },
+        "40-49": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    },
+    {
+      "player_name": "JakeBrowning",
+      "team": "CIN",
+      "quarter_yards": {
+        "q1": 77,
+        "q2": 188,
+        "q3": 271,
+        "q4": 304,
+        "1h": 265,
+        "2h": 575
+      },
+      "explosive": {
+        "20-29": {
+          "count": 6,
+          "td": 0,
+          "yards": 147
+        },
+        "30-39": {
+          "count": 2,
+          "td": 0,
+          "yards": 69
+        },
+        "40-49": {
+          "count": 1,
+          "td": 1,
+          "yards": 42
+        },
+        "50+": {
+          "count": 1,
+          "td": 1,
+          "yards": 64
+        }
+      }
+    },
+    {
+      "player_name": "QuinnEwers",
+      "team": "MIA",
+      "quarter_yards": {
+        "q1": 166,
+        "q2": 155,
+        "q3": 76,
+        "q4": 215,
+        "1h": 321,
+        "2h": 291
+      },
+      "explosive": {
+        "20-29": {
+          "count": 8,
+          "td": 0,
+          "yards": 178
+        },
+        "30-39": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "40-49": {
+          "count": 1,
+          "td": 0,
+          "yards": 40
+        },
+        "50+": {
+          "count": 1,
+          "td": 1,
+          "yards": 63
+        }
+      }
+    },
+    {
+      "player_name": "DavisMills",
+      "team": "HOU",
+      "quarter_yards": {
+        "q1": 120,
+        "q2": 384,
+        "q3": 139,
+        "q4": 273,
+        "1h": 504,
+        "2h": 412
+      },
+      "explosive": {
+        "20-29": {
+          "count": 7,
+          "td": 0,
+          "yards": 164
+        },
+        "30-39": {
+          "count": 1,
+          "td": 0,
+          "yards": 33
+        },
+        "40-49": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "50+": {
+          "count": 1,
+          "td": 0,
+          "yards": 54
+        }
+      }
+    },
+    {
+      "player_name": "MalikWillis",
+      "team": "GB",
+      "quarter_yards": {
+        "q1": 84,
+        "q2": 61,
+        "q3": 213,
+        "q4": 27,
+        "1h": 145,
+        "2h": 240
+      },
+      "explosive": {
+        "20-29": {
+          "count": 2,
+          "td": 0,
+          "yards": 49
+        },
+        "30-39": {
+          "count": 5,
+          "td": 1,
+          "yards": 165
+        },
+        "40-49": {
+          "count": 1,
+          "td": 0,
+          "yards": 40
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    },
+    {
+      "player_name": "KylerMurray",
+      "team": "ARI",
+      "quarter_yards": {
+        "q1": 196,
+        "q2": 390,
+        "q3": 209,
+        "q4": 189,
+        "1h": 586,
+        "2h": 398
+      },
+      "explosive": {
+        "20-29": {
+          "count": 4,
+          "td": 0,
+          "yards": 101
+        },
+        "30-39": {
+          "count": 2,
+          "td": 0,
+          "yards": 63
+        },
+        "40-49": {
+          "count": 2,
+          "td": 0,
+          "yards": 88
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    },
+    {
+      "player_name": "BradyCook",
+      "team": "NYJ",
+      "quarter_yards": {
+        "q1": 97,
+        "q2": 134,
+        "q3": 134,
+        "q4": 393,
+        "1h": 231,
+        "2h": 527
+      },
+      "explosive": {
+        "20-29": {
+          "count": 7,
+          "td": 0,
+          "yards": 171
+        },
+        "30-39": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "40-49": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    },
+    {
+      "player_name": "RileyLeonard",
+      "team": "IND",
+      "quarter_yards": {
+        "q1": 79,
+        "q2": 100,
+        "q3": 132,
+        "q4": 82,
+        "1h": 179,
+        "2h": 214
+      },
+      "explosive": {
+        "20-29": {
+          "count": 3,
+          "td": 0,
+          "yards": 76
+        },
+        "30-39": {
+          "count": 1,
+          "td": 0,
+          "yards": 30
+        },
+        "40-49": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "50+": {
+          "count": 2,
+          "td": 1,
+          "yards": 119
+        }
+      }
+    },
+    {
+      "player_name": "TyrodTaylor",
+      "team": "NYJ",
+      "quarter_yards": {
+        "q1": 116,
+        "q2": 92,
+        "q3": 218,
+        "q4": 356,
+        "1h": 208,
+        "2h": 574
+      },
+      "explosive": {
+        "20-29": {
+          "count": 3,
+          "td": 0,
+          "yards": 66
+        },
+        "30-39": {
+          "count": 1,
+          "td": 0,
+          "yards": 35
+        },
+        "40-49": {
+          "count": 1,
+          "td": 0,
+          "yards": 40
+        },
+        "50+": {
+          "count": 1,
+          "td": 1,
+          "yards": 52
+        }
+      }
+    },
+    {
+      "player_name": "JoshJohnson",
+      "team": "WSH",
+      "quarter_yards": {
+        "q1": 112,
+        "q2": 104,
+        "q3": 85,
+        "q4": 82,
+        "1h": 216,
+        "2h": 167
+      },
+      "explosive": {
+        "20-29": {
+          "count": 3,
+          "td": 0,
+          "yards": 72
+        },
+        "30-39": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "40-49": {
+          "count": 1,
+          "td": 0,
+          "yards": 41
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    },
+    {
+      "player_name": "MitchellTrubisky",
+      "team": "BUF",
+      "quarter_yards": {
+        "q1": 131,
+        "q2": 70,
+        "q3": 70,
+        "q4": 42,
+        "1h": 201,
+        "2h": 112
+      },
+      "explosive": {
+        "20-29": {
+          "count": 2,
+          "td": 0,
+          "yards": 47
+        },
+        "30-39": {
+          "count": 2,
+          "td": 0,
+          "yards": 69
+        },
+        "40-49": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    },
+    {
+      "player_name": "MasonRudolph",
+      "team": "PIT",
+      "quarter_yards": {
+        "q1": 56,
+        "q2": 30,
+        "q3": 52,
+        "q4": 172,
+        "1h": 86,
+        "2h": 224
+      },
+      "explosive": {
+        "20-29": {
+          "count": 3,
+          "td": 0,
+          "yards": 69
+        },
+        "30-39": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "40-49": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    },
+    {
+      "player_name": "JoeMiltonIII",
+      "team": "DAL",
+      "quarter_yards": {
+        "q1": 0,
+        "q2": 0,
+        "q3": 59,
+        "q4": 131,
+        "1h": 0,
+        "2h": 190
+      },
+      "explosive": {
+        "20-29": {
+          "count": 1,
+          "td": 0,
+          "yards": 24
+        },
+        "30-39": {
+          "count": 2,
+          "td": 1,
+          "yards": 68
+        },
+        "40-49": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    },
+    {
+      "player_name": "TylerHuntley",
+      "team": "BAL",
+      "quarter_yards": {
+        "q1": 58,
+        "q2": 149,
+        "q3": 107,
+        "q4": 113,
+        "1h": 207,
+        "2h": 220
+      },
+      "explosive": {
+        "20-29": {
+          "count": 2,
+          "td": 0,
+          "yards": 44
+        },
+        "30-39": {
+          "count": 1,
+          "td": 0,
+          "yards": 36
+        },
+        "40-49": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    },
+    {
+      "player_name": "TannerMcKee",
+      "team": "PHI",
+      "quarter_yards": {
+        "q1": 52,
+        "q2": 124,
+        "q3": 53,
+        "q4": 73,
+        "1h": 176,
+        "2h": 126
+      },
+      "explosive": {
+        "20-29": {
+          "count": 2,
+          "td": 0,
+          "yards": 55
+        },
+        "30-39": {
+          "count": 1,
+          "td": 0,
+          "yards": 31
+        },
+        "40-49": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    },
+    {
+      "player_name": "MaxBrosmer",
+      "team": "MIN",
+      "quarter_yards": {
+        "q1": 36,
+        "q2": 43,
+        "q3": 86,
+        "q4": 165,
+        "1h": 79,
+        "2h": 251
+      },
+      "explosive": {
+        "20-29": {
+          "count": 3,
+          "td": 0,
+          "yards": 70
+        },
+        "30-39": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "40-49": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    },
+    {
+      "player_name": "ChrisOladokun",
+      "team": "KC",
+      "quarter_yards": {
+        "q1": 29,
+        "q2": 102,
+        "q3": 54,
+        "q4": 38,
+        "1h": 131,
+        "2h": 92
+      },
+      "explosive": {
+        "20-29": {
+          "count": 1,
+          "td": 0,
+          "yards": 28
+        },
+        "30-39": {
+          "count": 1,
+          "td": 0,
+          "yards": 31
+        },
+        "40-49": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    },
+    {
+      "player_name": "TreyLance",
+      "team": "LAC",
+      "quarter_yards": {
+        "q1": 15,
+        "q2": 74,
+        "q3": 5,
+        "q4": 132,
+        "1h": 89,
+        "2h": 137
+      },
+      "explosive": {
+        "20-29": {
+          "count": 2,
+          "td": 0,
+          "yards": 49
+        },
+        "30-39": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "40-49": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    },
+    {
+      "player_name": "AidanO'Connell",
+      "team": "LV",
+      "quarter_yards": {
+        "q1": 0,
+        "q2": 17,
+        "q3": 50,
+        "q4": 35,
+        "1h": 17,
+        "2h": 85
+      },
+      "explosive": {
+        "20-29": {
+          "count": 2,
+          "td": 0,
+          "yards": 44
+        },
+        "30-39": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "40-49": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    },
+    {
+      "player_name": "ShaneBuechele",
+      "team": "KC",
+      "quarter_yards": {
+        "q1": 0,
+        "q2": 0,
+        "q3": 33,
+        "q4": 63,
+        "1h": 0,
+        "2h": 96
+      },
+      "explosive": {
+        "20-29": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "30-39": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "40-49": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "50+": {
+          "count": 1,
+          "td": 0,
+          "yards": 51
+        }
+      }
+    },
+    {
+      "player_name": "BrandonAllen",
+      "team": "TEN",
+      "quarter_yards": {
+        "q1": 9,
+        "q2": 30,
+        "q3": 5,
+        "q4": -2,
+        "1h": 39,
+        "2h": 3
+      },
+      "explosive": {
+        "20-29": {
+          "count": 1,
+          "td": 0,
+          "yards": 21
+        },
+        "30-39": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "40-49": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    },
+    {
+      "player_name": "KennyPickett",
+      "team": "LV",
+      "quarter_yards": {
+        "q1": 34,
+        "q2": 26,
+        "q3": 14,
+        "q4": 115,
+        "1h": 60,
+        "2h": 129
+      },
+      "explosive": {
+        "20-29": {
+          "count": 1,
+          "td": 1,
+          "yards": 25
+        },
+        "30-39": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "40-49": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    },
+    {
+      "player_name": "TysonBagent",
+      "team": "CHI",
+      "quarter_yards": {
+        "q1": 0,
+        "q2": 0,
+        "q3": 0,
+        "q4": 47,
+        "1h": 0,
+        "2h": 47
+      },
+      "explosive": {
+        "20-29": {
+          "count": 1,
+          "td": 0,
+          "yards": 22
+        },
+        "30-39": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "40-49": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        },
+        "50+": {
+          "count": 0,
+          "td": 0,
+          "yards": 0
+        }
+      }
+    }
+  ]
+}

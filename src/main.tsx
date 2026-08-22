@@ -15,6 +15,7 @@ import RefillPage from './pages/RefillPage.tsx'
 import CheckoutPage from './pages/CheckoutPage.tsx'
 import SuccessPage from './pages/SuccessPage.tsx'
 import AccountPage from './pages/AccountPage.tsx'
+import QbChartsPage from './pages/QbChartsPage.tsx'
 
 import "./main.css"
 import "./styles/theme.css"
@@ -42,6 +43,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/nfl.season" element={<WorldCupApp />} />
 
           <Route path="/calculator" element={<CalculatorRoute />} />
+          <Route path="/charts" element={<QbChartsPage />} />
 
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
