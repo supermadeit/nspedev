@@ -2716,7 +2716,7 @@ function App() {
       <div className="relative z-10 flex flex-col items-center justify-start h-screen pt-[40vh]">
         <div className="w-[65%] max-w-4xl min-w-[320px] px-4">
           {isMobile ? (
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center gap-3">
               {/* Entry point into the mobile calculator UI (/calculator) —
                   a real navigation, not a local bottom-sheet toggle, so the
                   calculator lives at its own URL instead of being shown
@@ -2727,6 +2727,16 @@ function App() {
                 style={{ color: 'oklch(0.85 0.15 195)', borderColor: 'oklch(0.85 0.15 195)' }}
               >
                 {'{calculator}'}
+              </a>
+              {/* Points at the one real profile prototype (/database/
+                  dak-prescott) until a real searchable index exists — see
+                  the desktop {database} link below for the same treatment. */}
+              <a
+                href="/database/dak-prescott"
+                className="h-[52px] flex items-center rounded-lg border px-8 font-mono text-[14px] hover:opacity-80 transition-opacity"
+                style={{ color: 'oklch(0.85 0.15 195)', borderColor: 'oklch(0.85 0.15 195)' }}
+              >
+                {'{database}'}
               </a>
             </div>
           ) : (
@@ -2783,17 +2793,25 @@ function App() {
             </div>
           )}
 
-          {/* {database} intentionally omitted — holding off until the
-              database feature itself exists. {chart} is desktop-first;
-              mobile doesn't have its own condensed chart layout yet. */}
           {!isMobile && (
-            <div className="mt-4 flex items-center justify-center">
+            <div className="mt-4 flex items-center justify-center gap-3">
               <a
                 href="/charts"
                 className="h-[52px] flex items-center rounded-lg border px-5 font-mono text-[14px] hover:opacity-80 transition-opacity"
                 style={{ color: 'oklch(0.85 0.15 195)', borderColor: 'oklch(0.85 0.15 195)' }}
               >
                 {'{chart}'}
+              </a>
+              {/* Points at the one real profile prototype
+                  (/database/dak-prescott) until a real search index exists —
+                  honest placeholder that leads somewhere real rather than a
+                  dead end, until the searchbar work below replaces it. */}
+              <a
+                href="/database/dak-prescott"
+                className="h-[52px] flex items-center rounded-lg border px-5 font-mono text-[14px] hover:opacity-80 transition-opacity"
+                style={{ color: 'oklch(0.85 0.15 195)', borderColor: 'oklch(0.85 0.15 195)' }}
+              >
+                {'{database}'}
               </a>
             </div>
           )}
