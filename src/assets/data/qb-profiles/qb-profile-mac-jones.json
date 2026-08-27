@@ -1,0 +1,286 @@
+{
+  "player": "MacJones",
+  "player_id": "mac-jones",
+  "team": "SF",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 201,
+      "pass_att": 289,
+      "pass_yds": 2151,
+      "pass_td": 13,
+      "pass_int": 6,
+      "rush_car": 36,
+      "rush_yds": 60,
+      "rush_td": 0
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 2,
+        "games": [
+          {
+            "date": "2025-09-14",
+            "value": 3
+          },
+          {
+            "date": "2025-11-09",
+            "value": 3
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 3,
+        "games": [
+          {
+            "date": "2025-10-02",
+            "value": 347
+          },
+          {
+            "date": "2025-10-12",
+            "value": 360
+          },
+          {
+            "date": "2025-11-09",
+            "value": 322
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 346,
+      "q2": 721,
+      "q3": 483,
+      "q4": 573,
+      "1h": 1067,
+      "2h": 1056
+    },
+    "explosive": {
+      "20-29": {
+        "count": 10,
+        "td": 0,
+        "yards": 225
+      },
+      "30-39": {
+        "count": 3,
+        "td": 0,
+        "yards": 108
+      },
+      "40-49": {
+        "count": 1,
+        "td": 1,
+        "yards": 42
+      },
+      "50+": {
+        "count": 0,
+        "td": 0,
+        "yards": 0
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2025-12-22",
+        "date_iso": "2025-12-22",
+        "venue": "away",
+        "opponent": "IND",
+        "pass_yds": 0,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 0.0,
+        "rush_yds": -3,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-30",
+        "date_iso": "2025-11-30",
+        "venue": "away",
+        "opponent": "CLE",
+        "pass_yds": 0,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 0.0,
+        "rush_yds": 2,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-16",
+        "date_iso": "2025-11-16",
+        "venue": "away",
+        "opponent": "ARI",
+        "pass_yds": 0,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 0.0,
+        "rush_yds": -3,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-09",
+        "date_iso": "2025-11-09",
+        "venue": "home",
+        "opponent": "LAR",
+        "pass_yds": 319,
+        "pass_td": 3,
+        "pass_int": 1,
+        "pass_rtg": 115.7,
+        "rush_yds": 3,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-02",
+        "date_iso": "2025-11-02",
+        "venue": "away",
+        "opponent": "NYG",
+        "pass_yds": 235,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 135.2,
+        "rush_yds": 4,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-26",
+        "date_iso": "2025-10-26",
+        "venue": "away",
+        "opponent": "HOU",
+        "pass_yds": 193,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 84.5,
+        "rush_yds": 23,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-19",
+        "date_iso": "2025-10-19",
+        "venue": "home",
+        "opponent": "ATL",
+        "pass_yds": 152,
+        "pass_td": 0,
+        "pass_int": 1,
+        "pass_rtg": 64.9,
+        "rush_yds": 11,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-12",
+        "date_iso": "2025-10-12",
+        "venue": "away",
+        "opponent": "TB",
+        "pass_yds": 347,
+        "pass_td": 0,
+        "pass_int": 2,
+        "pass_rtg": 75.5,
+        "rush_yds": 13,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-02",
+        "date_iso": "2025-10-02",
+        "venue": "away",
+        "opponent": "LAR",
+        "pass_yds": 342,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 100.9,
+        "rush_yds": 5,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-09-21",
+        "date_iso": "2025-09-21",
+        "venue": "home",
+        "opponent": "ARI",
+        "pass_yds": 284,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 83.8,
+        "rush_yds": -1,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "MacJones",
+      "position": "UNK",
+      "team": "SF",
+      "stat": "pass_yds",
+      "splits_count": 5,
+      "splits": [
+        {
+          "season": 2021,
+          "total": 3801
+        },
+        {
+          "season": 2022,
+          "total": 2997
+        },
+        {
+          "season": 2023,
+          "total": 2120
+        },
+        {
+          "season": 2024,
+          "total": 1672
+        },
+        {
+          "season": 2025,
+          "total": 2151
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "MacJones",
+        "player_display": "MacJones",
+        "player_team": "SF",
+        "stat_scope": null,
+        "opponent_code": "LAR",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 661,
+        "pass_td": 5,
+        "pass_int": 1,
+        "rush_yds": 8,
+        "rush_td": 0,
+        "pass_rtg": 110.1,
+        "games": 2
+      },
+      "games": [
+        {
+          "date": "2025-10-02",
+          "date_iso": "2025-10-02",
+          "venue": "away",
+          "opponent": "LAR",
+          "pass_yds": 342,
+          "pass_td": 2,
+          "pass_int": 0,
+          "pass_rtg": 100.9,
+          "rush_yds": 5,
+          "rush_td": 0
+        },
+        {
+          "date": "2025-11-09",
+          "date_iso": "2025-11-09",
+          "venue": "home",
+          "opponent": "LAR",
+          "pass_yds": 319,
+          "pass_td": 3,
+          "pass_int": 1,
+          "pass_rtg": 115.7,
+          "rush_yds": 3,
+          "rush_td": 0
+        }
+      ],
+      "next_opponent": "LAR"
+    }
+  }
+}

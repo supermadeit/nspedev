@@ -1,0 +1,338 @@
+{
+  "player": "JoeFlacco",
+  "player_id": "joe-flacco",
+  "team": "CIN",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 251,
+      "pass_att": 416,
+      "pass_yds": 2479,
+      "pass_td": 15,
+      "pass_int": 10,
+      "rush_car": 21,
+      "rush_yds": 35,
+      "rush_td": 1
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 3,
+        "games": [
+          {
+            "date": "2025-10-16",
+            "value": 3
+          },
+          {
+            "date": "2025-10-26",
+            "value": 3
+          },
+          {
+            "date": "2025-11-02",
+            "value": 4
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 2,
+        "games": [
+          {
+            "date": "2025-10-16",
+            "value": 345
+          },
+          {
+            "date": "2025-11-02",
+            "value": 469
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 329,
+      "q2": 680,
+      "q3": 496,
+      "q4": 880,
+      "1h": 1009,
+      "2h": 1376
+    },
+    "explosive": {
+      "20-29": {
+        "count": 18,
+        "td": 3,
+        "yards": 440
+      },
+      "30-39": {
+        "count": 6,
+        "td": 0,
+        "yards": 208
+      },
+      "40-49": {
+        "count": 2,
+        "td": 2,
+        "yards": 88
+      },
+      "50+": {
+        "count": 1,
+        "td": 0,
+        "yards": 61
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-01-04",
+        "date_iso": "2026-01-04",
+        "venue": "home",
+        "opponent": "CLE",
+        "pass_yds": 0,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 0.0,
+        "rush_yds": 2,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-28",
+        "date_iso": "2025-12-28",
+        "venue": "home",
+        "opponent": "ARI",
+        "pass_yds": 24,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 72.1,
+        "rush_yds": 2,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-21",
+        "date_iso": "2025-12-21",
+        "venue": "away",
+        "opponent": "MIA",
+        "pass_yds": 4,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 83.3,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-23",
+        "date_iso": "2025-11-23",
+        "venue": "home",
+        "opponent": "NE",
+        "pass_yds": 183,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 63.2,
+        "rush_yds": 3,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-16",
+        "date_iso": "2025-11-16",
+        "venue": "away",
+        "opponent": "PIT",
+        "pass_yds": 199,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 68.6,
+        "rush_yds": -1,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-02",
+        "date_iso": "2025-11-02",
+        "venue": "home",
+        "opponent": "CHI",
+        "pass_yds": 470,
+        "pass_td": 4,
+        "pass_int": 2,
+        "pass_rtg": 109.4,
+        "rush_yds": -1,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-26",
+        "date_iso": "2025-10-26",
+        "venue": "home",
+        "opponent": "NYJ",
+        "pass_yds": 223,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 100.5,
+        "rush_yds": 14,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-10-16",
+        "date_iso": "2025-10-16",
+        "venue": "home",
+        "opponent": "PIT",
+        "pass_yds": 342,
+        "pass_td": 3,
+        "pass_int": 0,
+        "pass_rtg": 108.6,
+        "rush_yds": 3,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-12",
+        "date_iso": "2025-10-12",
+        "venue": "away",
+        "opponent": "GB",
+        "pass_yds": 219,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 90.9,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-09-28",
+        "date_iso": "2025-09-28",
+        "venue": "away",
+        "opponent": "DET",
+        "pass_yds": 184,
+        "pass_td": 0,
+        "pass_int": 2,
+        "pass_rtg": 39.3,
+        "rush_yds": -1,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "JoeFlacco",
+      "position": "UNK",
+      "team": "CIN",
+      "stat": "pass_yds",
+      "splits_count": 18,
+      "splits": [
+        {
+          "season": 2008,
+          "total": 2971
+        },
+        {
+          "season": 2009,
+          "total": 3613
+        },
+        {
+          "season": 2010,
+          "total": 3622
+        },
+        {
+          "season": 2011,
+          "total": 3610
+        },
+        {
+          "season": 2012,
+          "total": 3817
+        },
+        {
+          "season": 2013,
+          "total": 3912
+        },
+        {
+          "season": 2014,
+          "total": 3986
+        },
+        {
+          "season": 2015,
+          "total": 2791
+        },
+        {
+          "season": 2016,
+          "total": 4317
+        },
+        {
+          "season": 2017,
+          "total": 3141
+        },
+        {
+          "season": 2018,
+          "total": 2465
+        },
+        {
+          "season": 2019,
+          "total": 1822
+        },
+        {
+          "season": 2020,
+          "total": 864
+        },
+        {
+          "season": 2021,
+          "total": 338
+        },
+        {
+          "season": 2022,
+          "total": 1051
+        },
+        {
+          "season": 2023,
+          "total": 1616
+        },
+        {
+          "season": 2024,
+          "total": 1761
+        },
+        {
+          "season": 2025,
+          "total": 2479
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "JoeFlacco",
+        "player_display": "JoeFlacco",
+        "player_team": "CIN",
+        "stat_scope": null,
+        "opponent_code": "TB",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 595,
+        "pass_td": 7,
+        "pass_int": 1,
+        "rush_yds": -2,
+        "rush_td": 0,
+        "pass_rtg": 132.7,
+        "games": 2
+      },
+      "games": [
+        {
+          "date": "2010-11-28",
+          "date_iso": "2010-11-28",
+          "venue": "home",
+          "opponent": "TB",
+          "pass_yds": 289,
+          "pass_td": 2,
+          "pass_int": 1,
+          "pass_rtg": 103.2,
+          "rush_yds": -2,
+          "rush_td": 0
+        },
+        {
+          "date": "2014-10-12",
+          "date_iso": "2014-10-12",
+          "venue": "away",
+          "opponent": "TB",
+          "pass_yds": 306,
+          "pass_td": 5,
+          "pass_int": 0,
+          "pass_rtg": 149.7,
+          "rush_yds": 0,
+          "rush_td": 0
+        }
+      ],
+      "next_opponent": "TB"
+    }
+  }
+}

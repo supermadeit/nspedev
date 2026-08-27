@@ -1,0 +1,282 @@
+{
+  "player": "BryceYoung",
+  "player_id": "bryce-young",
+  "team": "CAR",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 304,
+      "pass_att": 478,
+      "pass_yds": 3011,
+      "pass_td": 23,
+      "pass_int": 11,
+      "rush_car": 54,
+      "rush_yds": 216,
+      "rush_td": 2
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 4,
+        "games": [
+          {
+            "date": "2025-09-14",
+            "value": 3
+          },
+          {
+            "date": "2025-10-12",
+            "value": 3
+          },
+          {
+            "date": "2025-11-16",
+            "value": 3
+          },
+          {
+            "date": "2025-11-30",
+            "value": 3
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 2,
+        "games": [
+          {
+            "date": "2025-09-14",
+            "value": 330
+          },
+          {
+            "date": "2025-11-16",
+            "value": 447
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 651,
+      "q2": 664,
+      "q3": 799,
+      "q4": 909,
+      "1h": 1315,
+      "2h": 1708
+    },
+    "explosive": {
+      "20-29": {
+        "count": 27,
+        "td": 3,
+        "yards": 641
+      },
+      "30-39": {
+        "count": 9,
+        "td": 5,
+        "yards": 313
+      },
+      "40-49": {
+        "count": 3,
+        "td": 1,
+        "yards": 123
+      },
+      "50+": {
+        "count": 1,
+        "td": 0,
+        "yards": 54
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-01-03",
+        "date_iso": "2026-01-03",
+        "venue": "away",
+        "opponent": "TB",
+        "pass_yds": 266,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 98.0,
+        "rush_yds": -1,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-28",
+        "date_iso": "2025-12-28",
+        "venue": "home",
+        "opponent": "SEA",
+        "pass_yds": 54,
+        "pass_td": 0,
+        "pass_int": 1,
+        "pass_rtg": 45.8,
+        "rush_yds": 27,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-12-21",
+        "date_iso": "2025-12-21",
+        "venue": "home",
+        "opponent": "TB",
+        "pass_yds": 191,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 102.5,
+        "rush_yds": 20,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-14",
+        "date_iso": "2025-12-14",
+        "venue": "away",
+        "opponent": "NO",
+        "pass_yds": 163,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 96.4,
+        "rush_yds": 49,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-30",
+        "date_iso": "2025-11-30",
+        "venue": "home",
+        "opponent": "LAR",
+        "pass_yds": 206,
+        "pass_td": 3,
+        "pass_int": 0,
+        "pass_rtg": 147.1,
+        "rush_yds": 23,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-24",
+        "date_iso": "2025-11-24",
+        "venue": "away",
+        "opponent": "SF",
+        "pass_yds": 169,
+        "pass_td": 1,
+        "pass_int": 2,
+        "pass_rtg": 60.8,
+        "rush_yds": 15,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-16",
+        "date_iso": "2025-11-16",
+        "venue": "away",
+        "opponent": "ATL",
+        "pass_yds": 448,
+        "pass_td": 3,
+        "pass_int": 0,
+        "pass_rtg": 123.2,
+        "rush_yds": -1,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-09",
+        "date_iso": "2025-11-09",
+        "venue": "home",
+        "opponent": "NO",
+        "pass_yds": 124,
+        "pass_td": 0,
+        "pass_int": 1,
+        "pass_rtg": 62.8,
+        "rush_yds": 6,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-02",
+        "date_iso": "2025-11-02",
+        "venue": "away",
+        "opponent": "GB",
+        "pass_yds": 102,
+        "pass_td": 0,
+        "pass_int": 1,
+        "pass_rtg": 48.3,
+        "rush_yds": 9,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-19",
+        "date_iso": "2025-10-19",
+        "venue": "away",
+        "opponent": "NYJ",
+        "pass_yds": 138,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 88.4,
+        "rush_yds": 10,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "BryceYoung",
+      "position": "UNK",
+      "team": "CAR",
+      "stat": "pass_yds",
+      "splits_count": 3,
+      "splits": [
+        {
+          "season": 2023,
+          "total": 2877
+        },
+        {
+          "season": 2024,
+          "total": 2403
+        },
+        {
+          "season": 2025,
+          "total": 3011
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "BryceYoung",
+        "player_display": "BryceYoung",
+        "player_team": "CAR",
+        "stat_scope": null,
+        "opponent_code": "CHI",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 243,
+        "pass_td": 0,
+        "pass_int": 0,
+        "rush_yds": 26,
+        "rush_td": 0,
+        "pass_rtg": 70.9,
+        "games": 2
+      },
+      "games": [
+        {
+          "date": "2023-11-09",
+          "date_iso": "2023-11-09",
+          "venue": "away",
+          "opponent": "CHI",
+          "pass_yds": 185,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 68.4,
+          "rush_yds": 18,
+          "rush_td": 0
+        },
+        {
+          "date": "2024-10-06",
+          "date_iso": "2024-10-06",
+          "venue": "away",
+          "opponent": "CHI",
+          "pass_yds": 58,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 84.2,
+          "rush_yds": 8,
+          "rush_td": 0
+        }
+      ],
+      "next_opponent": "CHI"
+    }
+  }
+}

@@ -1,0 +1,382 @@
+{
+  "player": "JordanLove",
+  "player_id": "jordan-love",
+  "team": "GB",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 291,
+      "pass_att": 439,
+      "pass_yds": 3381,
+      "pass_td": 23,
+      "pass_int": 6,
+      "rush_car": 47,
+      "rush_yds": 199,
+      "rush_td": 0
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 4,
+        "games": [
+          {
+            "date": "2025-09-28",
+            "value": 3
+          },
+          {
+            "date": "2025-10-26",
+            "value": 3
+          },
+          {
+            "date": "2025-11-27",
+            "value": 4
+          },
+          {
+            "date": "2025-12-07",
+            "value": 3
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 4,
+        "games": [
+          {
+            "date": "2025-09-11",
+            "value": 304
+          },
+          {
+            "date": "2025-09-28",
+            "value": 365
+          },
+          {
+            "date": "2025-10-26",
+            "value": 359
+          },
+          {
+            "date": "2025-12-14",
+            "value": 305
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 958,
+      "q2": 987,
+      "q3": 769,
+      "q4": 744,
+      "1h": 1945,
+      "2h": 1513
+    },
+    "explosive": {
+      "20-29": {
+        "count": 29,
+        "td": 3,
+        "yards": 697
+      },
+      "30-39": {
+        "count": 9,
+        "td": 0,
+        "yards": 297
+      },
+      "40-49": {
+        "count": 4,
+        "td": 2,
+        "yards": 180
+      },
+      "50+": {
+        "count": 4,
+        "td": 1,
+        "yards": 219
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2025-12-20",
+        "date_iso": "2025-12-20",
+        "venue": "away",
+        "opponent": "CHI",
+        "pass_yds": 77,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 78.0,
+        "rush_yds": 7,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-14",
+        "date_iso": "2025-12-14",
+        "venue": "away",
+        "opponent": "DEN",
+        "pass_yds": 276,
+        "pass_td": 1,
+        "pass_int": 2,
+        "pass_rtg": 68.3,
+        "rush_yds": 29,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-07",
+        "date_iso": "2025-12-07",
+        "venue": "home",
+        "opponent": "CHI",
+        "pass_yds": 234,
+        "pass_td": 3,
+        "pass_int": 1,
+        "pass_rtg": 120.7,
+        "rush_yds": -1,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-27",
+        "date_iso": "2025-11-27",
+        "venue": "away",
+        "opponent": "DET",
+        "pass_yds": 234,
+        "pass_td": 4,
+        "pass_int": 0,
+        "pass_rtg": 124.2,
+        "rush_yds": 4,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-23",
+        "date_iso": "2025-11-23",
+        "venue": "home",
+        "opponent": "MIN",
+        "pass_yds": 139,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 85.2,
+        "rush_yds": 15,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-16",
+        "date_iso": "2025-11-16",
+        "venue": "away",
+        "opponent": "NYG",
+        "pass_yds": 174,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 105.2,
+        "rush_yds": 7,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-10",
+        "date_iso": "2025-11-10",
+        "venue": "home",
+        "opponent": "PHI",
+        "pass_yds": 176,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 68.8,
+        "rush_yds": 28,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-02",
+        "date_iso": "2025-11-02",
+        "venue": "home",
+        "opponent": "CAR",
+        "pass_yds": 273,
+        "pass_td": 0,
+        "pass_int": 1,
+        "pass_rtg": 80.1,
+        "rush_yds": 1,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-26",
+        "date_iso": "2025-10-26",
+        "venue": "away",
+        "opponent": "PIT",
+        "pass_yds": 360,
+        "pass_td": 3,
+        "pass_int": 0,
+        "pass_rtg": 134.2,
+        "rush_yds": -1,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-19",
+        "date_iso": "2025-10-19",
+        "venue": "away",
+        "opponent": "ARI",
+        "pass_yds": 179,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 93.9,
+        "rush_yds": 22,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "JordanLove",
+      "position": "UNK",
+      "team": "GB",
+      "stat": "pass_yds",
+      "splits_count": 5,
+      "splits": [
+        {
+          "season": 2021,
+          "total": 411
+        },
+        {
+          "season": 2022,
+          "total": 195
+        },
+        {
+          "season": 2023,
+          "total": 4159
+        },
+        {
+          "season": 2024,
+          "total": 3389
+        },
+        {
+          "season": 2025,
+          "total": 3381
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "JordanLove",
+        "player_display": "JordanLove",
+        "player_team": "GB",
+        "stat_scope": null,
+        "opponent_code": "MIN",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 1291,
+        "pass_td": 9,
+        "pass_int": 4,
+        "rush_yds": 70,
+        "rush_td": 1,
+        "pass_rtg": 90.0,
+        "games": 9
+      },
+      "games": [
+        {
+          "date": "2021-11-21",
+          "date_iso": "2021-11-21",
+          "venue": "away",
+          "opponent": "MIN",
+          "pass_yds": 0,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 0.0,
+          "rush_yds": -1,
+          "rush_td": 0
+        },
+        {
+          "date": "2022-01-02",
+          "date_iso": "2022-01-02",
+          "venue": "home",
+          "opponent": "MIN",
+          "pass_yds": 19,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 63.5,
+          "rush_yds": 9,
+          "rush_td": 0
+        },
+        {
+          "date": "2022-09-11",
+          "date_iso": "2022-09-11",
+          "venue": "away",
+          "opponent": "MIN",
+          "pass_yds": 65,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 118.8,
+          "rush_yds": 0,
+          "rush_td": 0
+        },
+        {
+          "date": "2023-01-01",
+          "date_iso": "2023-01-01",
+          "venue": "home",
+          "opponent": "MIN",
+          "pass_yds": 9,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 70.1,
+          "rush_yds": -1,
+          "rush_td": 0
+        },
+        {
+          "date": "2023-10-29",
+          "date_iso": "2023-10-29",
+          "venue": "home",
+          "opponent": "MIN",
+          "pass_yds": 229,
+          "pass_td": 1,
+          "pass_int": 1,
+          "pass_rtg": 72.1,
+          "rush_yds": 34,
+          "rush_td": 0
+        },
+        {
+          "date": "2023-12-31",
+          "date_iso": "2023-12-31",
+          "venue": "away",
+          "opponent": "MIN",
+          "pass_yds": 256,
+          "pass_td": 3,
+          "pass_int": 0,
+          "pass_rtg": 125.3,
+          "rush_yds": 2,
+          "rush_td": 1
+        },
+        {
+          "date": "2024-09-29",
+          "date_iso": "2024-09-29",
+          "venue": "home",
+          "opponent": "MIN",
+          "pass_yds": 389,
+          "pass_td": 4,
+          "pass_int": 3,
+          "pass_rtg": 83.0,
+          "rush_yds": 6,
+          "rush_td": 0
+        },
+        {
+          "date": "2024-12-29",
+          "date_iso": "2024-12-29",
+          "venue": "away",
+          "opponent": "MIN",
+          "pass_yds": 185,
+          "pass_td": 1,
+          "pass_int": 0,
+          "pass_rtg": 91.7,
+          "rush_yds": 6,
+          "rush_td": 0
+        },
+        {
+          "date": "2025-11-23",
+          "date_iso": "2025-11-23",
+          "venue": "home",
+          "opponent": "MIN",
+          "pass_yds": 139,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 85.2,
+          "rush_yds": 15,
+          "rush_td": 0
+        }
+      ],
+      "next_opponent": "MIN"
+    }
+  }
+}

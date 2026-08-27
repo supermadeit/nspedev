@@ -1,0 +1,226 @@
+{
+  "player": "JaydenDaniels",
+  "player_id": "jayden-daniels",
+  "team": "WSH",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 114,
+      "pass_att": 188,
+      "pass_yds": 1262,
+      "pass_td": 8,
+      "pass_int": 3,
+      "rush_car": 58,
+      "rush_yds": 278,
+      "rush_td": 2
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 1,
+        "games": [
+          {
+            "date": "2025-10-13",
+            "value": 3
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 1,
+        "games": [
+          {
+            "date": "2025-09-07",
+            "value": 301
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 309,
+      "q2": 409,
+      "q3": 328,
+      "q4": 340,
+      "1h": 718,
+      "2h": 668
+    },
+    "explosive": {
+      "20-29": {
+        "count": 7,
+        "td": 1,
+        "yards": 165
+      },
+      "30-39": {
+        "count": 2,
+        "td": 0,
+        "yards": 69
+      },
+      "40-49": {
+        "count": 2,
+        "td": 0,
+        "yards": 84
+      },
+      "50+": {
+        "count": 1,
+        "td": 0,
+        "yards": 50
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2025-12-07",
+        "date_iso": "2025-12-07",
+        "venue": "away",
+        "opponent": "MIN",
+        "pass_yds": 78,
+        "pass_td": 0,
+        "pass_int": 1,
+        "pass_rtg": 35.0,
+        "rush_yds": 16,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-02",
+        "date_iso": "2025-11-02",
+        "venue": "home",
+        "opponent": "SEA",
+        "pass_yds": 153,
+        "pass_td": 0,
+        "pass_int": 1,
+        "pass_rtg": 72.7,
+        "rush_yds": 51,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-10-19",
+        "date_iso": "2025-10-19",
+        "venue": "away",
+        "opponent": "DAL",
+        "pass_yds": 156,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 92.2,
+        "rush_yds": 35,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-10-13",
+        "date_iso": "2025-10-13",
+        "venue": "home",
+        "opponent": "CHI",
+        "pass_yds": 211,
+        "pass_td": 3,
+        "pass_int": 1,
+        "pass_rtg": 119.2,
+        "rush_yds": 52,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-05",
+        "date_iso": "2025-10-05",
+        "venue": "away",
+        "opponent": "LAC",
+        "pass_yds": 231,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 100.0,
+        "rush_yds": 39,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-09-11",
+        "date_iso": "2025-09-11",
+        "venue": "away",
+        "opponent": "GB",
+        "pass_yds": 200,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 85.4,
+        "rush_yds": 17,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-09-07",
+        "date_iso": "2025-09-07",
+        "venue": "home",
+        "opponent": "NYG",
+        "pass_yds": 233,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 98.3,
+        "rush_yds": 68,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "JaydenDaniels",
+      "position": "UNK",
+      "team": "WSH",
+      "stat": "pass_yds",
+      "splits_count": 2,
+      "splits": [
+        {
+          "season": 2024,
+          "total": 3568
+        },
+        {
+          "season": 2025,
+          "total": 1262
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "JaydenDaniels",
+        "player_display": "JaydenDaniels",
+        "player_team": "WSH",
+        "stat_scope": null,
+        "opponent_code": "PHI",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 449,
+        "pass_td": 6,
+        "pass_int": 3,
+        "rush_yds": 99,
+        "rush_td": 0,
+        "pass_rtg": 93.0,
+        "games": 2
+      },
+      "games": [
+        {
+          "date": "2024-11-14",
+          "date_iso": "2024-11-14",
+          "venue": "away",
+          "opponent": "PHI",
+          "pass_yds": 191,
+          "pass_td": 1,
+          "pass_int": 1,
+          "pass_rtg": 81.6,
+          "rush_yds": 18,
+          "rush_td": 0
+        },
+        {
+          "date": "2024-12-22",
+          "date_iso": "2024-12-22",
+          "venue": "home",
+          "opponent": "PHI",
+          "pass_yds": 258,
+          "pass_td": 5,
+          "pass_int": 2,
+          "pass_rtg": 99.1,
+          "rush_yds": 81,
+          "rush_td": 0
+        }
+      ],
+      "next_opponent": "PHI"
+    }
+  }
+}

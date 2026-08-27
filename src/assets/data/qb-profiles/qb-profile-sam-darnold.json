@@ -1,0 +1,322 @@
+{
+  "player": "SamDarnold",
+  "player_id": "sam-darnold",
+  "team": "SEA",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 323,
+      "pass_att": 477,
+      "pass_yds": 4048,
+      "pass_td": 25,
+      "pass_int": 14,
+      "rush_car": 35,
+      "rush_yds": 95,
+      "rush_td": 0
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 3,
+        "games": [
+          {
+            "date": "2025-10-05",
+            "value": 4
+          },
+          {
+            "date": "2025-11-02",
+            "value": 4
+          },
+          {
+            "date": "2025-12-07",
+            "value": 3
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 2,
+        "games": [
+          {
+            "date": "2025-10-05",
+            "value": 341
+          },
+          {
+            "date": "2025-11-02",
+            "value": 330
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 819,
+      "q2": 1264,
+      "q3": 1153,
+      "q4": 944,
+      "1h": 2083,
+      "2h": 2097
+    },
+    "explosive": {
+      "20-29": {
+        "count": 35,
+        "td": 6,
+        "yards": 842
+      },
+      "30-39": {
+        "count": 8,
+        "td": 0,
+        "yards": 269
+      },
+      "40-49": {
+        "count": 5,
+        "td": 1,
+        "yards": 213
+      },
+      "50+": {
+        "count": 6,
+        "td": 2,
+        "yards": 355
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-01-03",
+        "date_iso": "2026-01-03",
+        "venue": "away",
+        "opponent": "SF",
+        "pass_yds": 198,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 97.9,
+        "rush_yds": 9,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-28",
+        "date_iso": "2025-12-28",
+        "venue": "away",
+        "opponent": "CAR",
+        "pass_yds": 147,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 77.2,
+        "rush_yds": 2,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-18",
+        "date_iso": "2025-12-18",
+        "venue": "home",
+        "opponent": "LAR",
+        "pass_yds": 270,
+        "pass_td": 2,
+        "pass_int": 2,
+        "pass_rtg": 84.2,
+        "rush_yds": 7,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-14",
+        "date_iso": "2025-12-14",
+        "venue": "home",
+        "opponent": "IND",
+        "pass_yds": 271,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 84.4,
+        "rush_yds": 5,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-07",
+        "date_iso": "2025-12-07",
+        "venue": "away",
+        "opponent": "ATL",
+        "pass_yds": 249,
+        "pass_td": 3,
+        "pass_int": 1,
+        "pass_rtg": 111.7,
+        "rush_yds": 23,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-30",
+        "date_iso": "2025-11-30",
+        "venue": "home",
+        "opponent": "MIN",
+        "pass_yds": 128,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 67.5,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-23",
+        "date_iso": "2025-11-23",
+        "venue": "away",
+        "opponent": "TEN",
+        "pass_yds": 244,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 118.1,
+        "rush_yds": -1,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-16",
+        "date_iso": "2025-11-16",
+        "venue": "away",
+        "opponent": "LAR",
+        "pass_yds": 279,
+        "pass_td": 0,
+        "pass_int": 4,
+        "pass_rtg": 45.5,
+        "rush_yds": 11,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-09",
+        "date_iso": "2025-11-09",
+        "venue": "home",
+        "opponent": "ARI",
+        "pass_yds": 178,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 111.8,
+        "rush_yds": -2,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-02",
+        "date_iso": "2025-11-02",
+        "venue": "away",
+        "opponent": "WSH",
+        "pass_yds": 330,
+        "pass_td": 4,
+        "pass_int": 1,
+        "pass_rtg": 141.0,
+        "rush_yds": 0,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "SamDarnold",
+      "position": "UNK",
+      "team": "SEA",
+      "stat": "pass_yds",
+      "splits_count": 8,
+      "splits": [
+        {
+          "season": 2018,
+          "total": 2865
+        },
+        {
+          "season": 2019,
+          "total": 3024
+        },
+        {
+          "season": 2020,
+          "total": 2208
+        },
+        {
+          "season": 2021,
+          "total": 2527
+        },
+        {
+          "season": 2022,
+          "total": 1143
+        },
+        {
+          "season": 2023,
+          "total": 297
+        },
+        {
+          "season": 2024,
+          "total": 4319
+        },
+        {
+          "season": 2025,
+          "total": 4048
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "SamDarnold",
+        "player_display": "SamDarnold",
+        "player_team": "SEA",
+        "stat_scope": null,
+        "opponent_code": "NE",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 691,
+        "pass_td": 1,
+        "pass_int": 9,
+        "rush_yds": 39,
+        "rush_td": 0,
+        "pass_rtg": 41.2,
+        "games": 4
+      },
+      "games": [
+        {
+          "date": "2018-12-30",
+          "date_iso": "2018-12-30",
+          "venue": "away",
+          "opponent": "NE",
+          "pass_yds": 167,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 74.6,
+          "rush_yds": 28,
+          "rush_td": 0
+        },
+        {
+          "date": "2019-10-21",
+          "date_iso": "2019-10-21",
+          "venue": "home",
+          "opponent": "NE",
+          "pass_yds": 86,
+          "pass_td": 0,
+          "pass_int": 4,
+          "pass_rtg": 3.6,
+          "rush_yds": -1,
+          "rush_td": 0
+        },
+        {
+          "date": "2021-01-03",
+          "date_iso": "2021-01-03",
+          "venue": "away",
+          "opponent": "NE",
+          "pass_yds": 266,
+          "pass_td": 1,
+          "pass_int": 2,
+          "pass_rtg": 76.3,
+          "rush_yds": 3,
+          "rush_td": 0
+        },
+        {
+          "date": "2021-11-07",
+          "date_iso": "2021-11-07",
+          "venue": "home",
+          "opponent": "NE",
+          "pass_yds": 172,
+          "pass_td": 0,
+          "pass_int": 3,
+          "pass_rtg": 26.3,
+          "rush_yds": 9,
+          "rush_td": 0
+        }
+      ],
+      "next_opponent": "NE"
+    }
+  }
+}

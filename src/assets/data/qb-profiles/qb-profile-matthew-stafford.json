@@ -1,0 +1,498 @@
+{
+  "player": "MatthewStafford",
+  "player_id": "matthew-stafford",
+  "team": "LAR",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 388,
+      "pass_att": 597,
+      "pass_yds": 4707,
+      "pass_td": 46,
+      "pass_int": 8,
+      "rush_car": 29,
+      "rush_yds": 1,
+      "rush_td": 0
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 9,
+        "games": [
+          {
+            "date": "2025-09-28",
+            "value": 3
+          },
+          {
+            "date": "2025-10-02",
+            "value": 3
+          },
+          {
+            "date": "2025-10-19",
+            "value": 5
+          },
+          {
+            "date": "2025-11-02",
+            "value": 4
+          },
+          {
+            "date": "2025-11-09",
+            "value": 4
+          },
+          {
+            "date": "2025-11-23",
+            "value": 3
+          },
+          {
+            "date": "2025-12-07",
+            "value": 3
+          },
+          {
+            "date": "2025-12-18",
+            "value": 3
+          },
+          {
+            "date": "2026-01-04",
+            "value": 4
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 4,
+        "games": [
+          {
+            "date": "2025-09-28",
+            "value": 379
+          },
+          {
+            "date": "2025-10-02",
+            "value": 389
+          },
+          {
+            "date": "2025-12-14",
+            "value": 370
+          },
+          {
+            "date": "2025-12-18",
+            "value": 463
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 1173,
+      "q2": 1273,
+      "q3": 1200,
+      "q4": 1066,
+      "1h": 2446,
+      "2h": 2266
+    },
+    "explosive": {
+      "20-29": {
+        "count": 40,
+        "td": 7,
+        "yards": 948
+      },
+      "30-39": {
+        "count": 18,
+        "td": 3,
+        "yards": 615
+      },
+      "40-49": {
+        "count": 4,
+        "td": 2,
+        "yards": 173
+      },
+      "50+": {
+        "count": 5,
+        "td": 1,
+        "yards": 309
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-01-04",
+        "date_iso": "2026-01-04",
+        "venue": "home",
+        "opponent": "ARI",
+        "pass_yds": 259,
+        "pass_td": 4,
+        "pass_int": 0,
+        "pass_rtg": 114.5,
+        "rush_yds": 3,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-29",
+        "date_iso": "2025-12-29",
+        "venue": "away",
+        "opponent": "ATL",
+        "pass_yds": 269,
+        "pass_td": 2,
+        "pass_int": 3,
+        "pass_rtg": 64.5,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-18",
+        "date_iso": "2025-12-18",
+        "venue": "away",
+        "opponent": "SEA",
+        "pass_yds": 457,
+        "pass_td": 3,
+        "pass_int": 0,
+        "pass_rtg": 110.7,
+        "rush_yds": 6,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-14",
+        "date_iso": "2025-12-14",
+        "venue": "home",
+        "opponent": "DET",
+        "pass_yds": 368,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 101.6,
+        "rush_yds": 2,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-07",
+        "date_iso": "2025-12-07",
+        "venue": "away",
+        "opponent": "ARI",
+        "pass_yds": 281,
+        "pass_td": 3,
+        "pass_int": 0,
+        "pass_rtg": 131.2,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-30",
+        "date_iso": "2025-11-30",
+        "venue": "away",
+        "opponent": "CAR",
+        "pass_yds": 243,
+        "pass_td": 2,
+        "pass_int": 2,
+        "pass_rtg": 85.9,
+        "rush_yds": -1,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-23",
+        "date_iso": "2025-11-23",
+        "venue": "home",
+        "opponent": "TB",
+        "pass_yds": 273,
+        "pass_td": 3,
+        "pass_int": 0,
+        "pass_rtg": 122.7,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-16",
+        "date_iso": "2025-11-16",
+        "venue": "home",
+        "opponent": "SEA",
+        "pass_yds": 130,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 89.9,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-09",
+        "date_iso": "2025-11-09",
+        "venue": "away",
+        "opponent": "SF",
+        "pass_yds": 280,
+        "pass_td": 4,
+        "pass_int": 0,
+        "pass_rtg": 127.1,
+        "rush_yds": -3,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-02",
+        "date_iso": "2025-11-02",
+        "venue": "home",
+        "opponent": "NO",
+        "pass_yds": 281,
+        "pass_td": 4,
+        "pass_int": 0,
+        "pass_rtg": 140.8,
+        "rush_yds": -4,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "MatthewStafford",
+      "position": "UNK",
+      "team": "LAR",
+      "stat": "pass_yds",
+      "splits_count": 17,
+      "splits": [
+        {
+          "season": 2009,
+          "total": 2267
+        },
+        {
+          "season": 2010,
+          "total": 535
+        },
+        {
+          "season": 2011,
+          "total": 5038
+        },
+        {
+          "season": 2012,
+          "total": 4967
+        },
+        {
+          "season": 2013,
+          "total": 4650
+        },
+        {
+          "season": 2014,
+          "total": 4257
+        },
+        {
+          "season": 2015,
+          "total": 4262
+        },
+        {
+          "season": 2016,
+          "total": 4327
+        },
+        {
+          "season": 2017,
+          "total": 4446
+        },
+        {
+          "season": 2018,
+          "total": 3777
+        },
+        {
+          "season": 2019,
+          "total": 2499
+        },
+        {
+          "season": 2020,
+          "total": 4084
+        },
+        {
+          "season": 2021,
+          "total": 4886
+        },
+        {
+          "season": 2022,
+          "total": 2087
+        },
+        {
+          "season": 2023,
+          "total": 3965
+        },
+        {
+          "season": 2024,
+          "total": 3762
+        },
+        {
+          "season": 2025,
+          "total": 4707
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "MatthewStafford",
+        "player_display": "MatthewStafford",
+        "player_team": "LAR",
+        "stat_scope": null,
+        "opponent_code": "SF",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 3450,
+        "pass_td": 22,
+        "pass_int": 8,
+        "rush_yds": 76,
+        "rush_td": 1,
+        "pass_rtg": 91.1,
+        "games": 13
+      },
+      "games": [
+        {
+          "date": "2011-10-16",
+          "date_iso": "2011-10-16",
+          "venue": "home",
+          "opponent": "SF",
+          "pass_yds": 293,
+          "pass_td": 2,
+          "pass_int": 0,
+          "pass_rtg": 86.5,
+          "rush_yds": 9,
+          "rush_td": 0
+        },
+        {
+          "date": "2012-09-16",
+          "date_iso": "2012-09-16",
+          "venue": "away",
+          "opponent": "SF",
+          "pass_yds": 230,
+          "pass_td": 1,
+          "pass_int": 1,
+          "pass_rtg": 78.9,
+          "rush_yds": 10,
+          "rush_td": 0
+        },
+        {
+          "date": "2015-12-27",
+          "date_iso": "2015-12-27",
+          "venue": "home",
+          "opponent": "SF",
+          "pass_yds": 301,
+          "pass_td": 2,
+          "pass_int": 0,
+          "pass_rtg": 118.6,
+          "rush_yds": 11,
+          "rush_td": 0
+        },
+        {
+          "date": "2018-09-16",
+          "date_iso": "2018-09-16",
+          "venue": "away",
+          "opponent": "SF",
+          "pass_yds": 347,
+          "pass_td": 3,
+          "pass_int": 0,
+          "pass_rtg": 101.7,
+          "rush_yds": 8,
+          "rush_td": 0
+        },
+        {
+          "date": "2021-11-15",
+          "date_iso": "2021-11-15",
+          "venue": "away",
+          "opponent": "SF",
+          "pass_yds": 243,
+          "pass_td": 1,
+          "pass_int": 2,
+          "pass_rtg": 67.4,
+          "rush_yds": 1,
+          "rush_td": 0
+        },
+        {
+          "date": "2022-01-09",
+          "date_iso": "2022-01-09",
+          "venue": "home",
+          "opponent": "SF",
+          "pass_yds": 238,
+          "pass_td": 3,
+          "pass_int": 2,
+          "pass_rtg": 93.0,
+          "rush_yds": 0,
+          "rush_td": 0
+        },
+        {
+          "date": "2022-10-03",
+          "date_iso": "2022-10-03",
+          "venue": "away",
+          "opponent": "SF",
+          "pass_yds": 254,
+          "pass_td": 0,
+          "pass_int": 1,
+          "pass_rtg": 71.0,
+          "rush_yds": 6,
+          "rush_td": 0
+        },
+        {
+          "date": "2022-10-30",
+          "date_iso": "2022-10-30",
+          "venue": "home",
+          "opponent": "SF",
+          "pass_yds": 187,
+          "pass_td": 1,
+          "pass_int": 0,
+          "pass_rtg": 91.4,
+          "rush_yds": -1,
+          "rush_td": 1
+        },
+        {
+          "date": "2023-09-17",
+          "date_iso": "2023-09-17",
+          "venue": "home",
+          "opponent": "SF",
+          "pass_yds": 307,
+          "pass_td": 1,
+          "pass_int": 2,
+          "pass_rtg": 67.8,
+          "rush_yds": 17,
+          "rush_td": 0
+        },
+        {
+          "date": "2024-09-22",
+          "date_iso": "2024-09-22",
+          "venue": "home",
+          "opponent": "SF",
+          "pass_yds": 221,
+          "pass_td": 1,
+          "pass_int": 0,
+          "pass_rtg": 105.6,
+          "rush_yds": 0,
+          "rush_td": 0
+        },
+        {
+          "date": "2024-12-12",
+          "date_iso": "2024-12-12",
+          "venue": "away",
+          "opponent": "SF",
+          "pass_yds": 160,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 76.2,
+          "rush_yds": 18,
+          "rush_td": 0
+        },
+        {
+          "date": "2025-10-02",
+          "date_iso": "2025-10-02",
+          "venue": "home",
+          "opponent": "SF",
+          "pass_yds": 389,
+          "pass_td": 3,
+          "pass_int": 0,
+          "pass_rtg": 111.0,
+          "rush_yds": 0,
+          "rush_td": 0
+        },
+        {
+          "date": "2025-11-09",
+          "date_iso": "2025-11-09",
+          "venue": "away",
+          "opponent": "SF",
+          "pass_yds": 280,
+          "pass_td": 4,
+          "pass_int": 0,
+          "pass_rtg": 127.1,
+          "rush_yds": -3,
+          "rush_td": 0
+        }
+      ],
+      "next_opponent": "SF"
+    }
+  }
+}

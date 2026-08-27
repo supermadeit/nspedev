@@ -1,0 +1,414 @@
+{
+  "player": "AaronRodgers",
+  "player_id": "aaron-rodgers",
+  "team": "PIT",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 327,
+      "pass_att": 498,
+      "pass_yds": 3322,
+      "pass_td": 24,
+      "pass_int": 7,
+      "rush_car": 21,
+      "rush_yds": 61,
+      "rush_td": 1
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 2,
+        "games": [
+          {
+            "date": "2025-09-07",
+            "value": 4
+          },
+          {
+            "date": "2025-10-16",
+            "value": 4
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 1,
+        "games": [
+          {
+            "date": "2026-01-04",
+            "value": 314
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 729,
+      "q2": 989,
+      "q3": 792,
+      "q4": 913,
+      "1h": 1718,
+      "2h": 1705
+    },
+    "explosive": {
+      "20-29": {
+        "count": 25,
+        "td": 6,
+        "yards": 597
+      },
+      "30-39": {
+        "count": 9,
+        "td": 1,
+        "yards": 304
+      },
+      "40-49": {
+        "count": 3,
+        "td": 1,
+        "yards": 131
+      },
+      "50+": {
+        "count": 4,
+        "td": 2,
+        "yards": 265
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-01-04",
+        "date_iso": "2026-01-04",
+        "venue": "home",
+        "opponent": "BAL",
+        "pass_yds": 294,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 90.2,
+        "rush_yds": 20,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-28",
+        "date_iso": "2025-12-28",
+        "venue": "away",
+        "opponent": "CLE",
+        "pass_yds": 168,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 64.9,
+        "rush_yds": 6,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-21",
+        "date_iso": "2025-12-21",
+        "venue": "away",
+        "opponent": "DET",
+        "pass_yds": 266,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 92.1,
+        "rush_yds": 9,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-15",
+        "date_iso": "2025-12-15",
+        "venue": "home",
+        "opponent": "MIA",
+        "pass_yds": 224,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 125.9,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-07",
+        "date_iso": "2025-12-07",
+        "venue": "away",
+        "opponent": "BAL",
+        "pass_yds": 284,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 103.1,
+        "rush_yds": 0,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-11-30",
+        "date_iso": "2025-11-30",
+        "venue": "home",
+        "opponent": "BUF",
+        "pass_yds": 117,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 65.0,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-16",
+        "date_iso": "2025-11-16",
+        "venue": "home",
+        "opponent": "CIN",
+        "pass_yds": 116,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 106.5,
+        "rush_yds": 8,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-09",
+        "date_iso": "2025-11-09",
+        "venue": "away",
+        "opponent": "LAC",
+        "pass_yds": 161,
+        "pass_td": 1,
+        "pass_int": 2,
+        "pass_rtg": 50.6,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-02",
+        "date_iso": "2025-11-02",
+        "venue": "home",
+        "opponent": "IND",
+        "pass_yds": 203,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 95.3,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-26",
+        "date_iso": "2025-10-26",
+        "venue": "home",
+        "opponent": "GB",
+        "pass_yds": 219,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 101.5,
+        "rush_yds": 0,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "AaronRodgers",
+      "position": "UNK",
+      "team": "PIT",
+      "stat": "pass_yds",
+      "splits_count": 21,
+      "splits": [
+        {
+          "season": 2005,
+          "total": 65
+        },
+        {
+          "season": 2006,
+          "total": 46
+        },
+        {
+          "season": 2007,
+          "total": 218
+        },
+        {
+          "season": 2008,
+          "total": 4038
+        },
+        {
+          "season": 2009,
+          "total": 4434
+        },
+        {
+          "season": 2010,
+          "total": 3922
+        },
+        {
+          "season": 2011,
+          "total": 4643
+        },
+        {
+          "season": 2012,
+          "total": 4295
+        },
+        {
+          "season": 2013,
+          "total": 2536
+        },
+        {
+          "season": 2014,
+          "total": 4381
+        },
+        {
+          "season": 2015,
+          "total": 3821
+        },
+        {
+          "season": 2016,
+          "total": 4428
+        },
+        {
+          "season": 2017,
+          "total": 1675
+        },
+        {
+          "season": 2018,
+          "total": 4442
+        },
+        {
+          "season": 2019,
+          "total": 4002
+        },
+        {
+          "season": 2020,
+          "total": 4299
+        },
+        {
+          "season": 2021,
+          "total": 4115
+        },
+        {
+          "season": 2022,
+          "total": 3695
+        },
+        {
+          "season": 2023,
+          "total": 0
+        },
+        {
+          "season": 2024,
+          "total": 3897
+        },
+        {
+          "season": 2025,
+          "total": 3322
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "AaronRodgers",
+        "player_display": "AaronRodgers",
+        "player_team": "PIT",
+        "stat_scope": null,
+        "opponent_code": "ATL",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 2492,
+        "pass_td": 21,
+        "pass_int": 2,
+        "rush_yds": 199,
+        "rush_td": 1,
+        "pass_rtg": 115.6,
+        "games": 8
+      },
+      "games": [
+        {
+          "date": "2008-10-05",
+          "date_iso": "2008-10-05",
+          "venue": "home",
+          "opponent": "ATL",
+          "pass_yds": 313,
+          "pass_td": 3,
+          "pass_int": 1,
+          "pass_rtg": 109.4,
+          "rush_yds": 4,
+          "rush_td": 0
+        },
+        {
+          "date": "2010-11-28",
+          "date_iso": "2010-11-28",
+          "venue": "away",
+          "opponent": "ATL",
+          "pass_yds": 344,
+          "pass_td": 1,
+          "pass_int": 0,
+          "pass_rtg": 114.5,
+          "rush_yds": 51,
+          "rush_td": 1
+        },
+        {
+          "date": "2011-10-09",
+          "date_iso": "2011-10-09",
+          "venue": "away",
+          "opponent": "ATL",
+          "pass_yds": 396,
+          "pass_td": 2,
+          "pass_int": 0,
+          "pass_rtg": 117.0,
+          "rush_yds": -1,
+          "rush_td": 0
+        },
+        {
+          "date": "2014-12-08",
+          "date_iso": "2014-12-08",
+          "venue": "home",
+          "opponent": "ATL",
+          "pass_yds": 327,
+          "pass_td": 3,
+          "pass_int": 0,
+          "pass_rtg": 123.3,
+          "rush_yds": 28,
+          "rush_td": 0
+        },
+        {
+          "date": "2016-10-30",
+          "date_iso": "2016-10-30",
+          "venue": "away",
+          "opponent": "ATL",
+          "pass_yds": 246,
+          "pass_td": 4,
+          "pass_int": 0,
+          "pass_rtg": 125.5,
+          "rush_yds": 60,
+          "rush_td": 0
+        },
+        {
+          "date": "2017-09-17",
+          "date_iso": "2017-09-17",
+          "venue": "away",
+          "opponent": "ATL",
+          "pass_yds": 343,
+          "pass_td": 2,
+          "pass_int": 1,
+          "pass_rtg": 90.7,
+          "rush_yds": 8,
+          "rush_td": 0
+        },
+        {
+          "date": "2018-12-09",
+          "date_iso": "2018-12-09",
+          "venue": "home",
+          "opponent": "ATL",
+          "pass_yds": 196,
+          "pass_td": 2,
+          "pass_int": 0,
+          "pass_rtg": 103.1,
+          "rush_yds": 44,
+          "rush_td": 0
+        },
+        {
+          "date": "2020-10-05",
+          "date_iso": "2020-10-05",
+          "venue": "home",
+          "opponent": "ATL",
+          "pass_yds": 327,
+          "pass_td": 4,
+          "pass_int": 0,
+          "pass_rtg": 147.5,
+          "rush_yds": 5,
+          "rush_td": 0
+        }
+      ],
+      "next_opponent": "ATL"
+    }
+  }
+}

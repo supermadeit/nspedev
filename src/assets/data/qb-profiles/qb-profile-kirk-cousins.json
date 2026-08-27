@@ -1,0 +1,338 @@
+{
+  "player": "KirkCousins",
+  "player_id": "kirk-cousins",
+  "team": "LV",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 166,
+      "pass_att": 269,
+      "pass_yds": 1721,
+      "pass_td": 10,
+      "pass_int": 5,
+      "rush_car": 14,
+      "rush_yds": 7,
+      "rush_td": 1
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 2,
+        "games": [
+          {
+            "date": "2025-12-11",
+            "value": 3
+          },
+          {
+            "date": "2025-12-21",
+            "value": 3
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 1,
+        "games": [
+          {
+            "date": "2025-12-11",
+            "value": 373
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 347,
+      "q2": 409,
+      "q3": 437,
+      "q4": 505,
+      "1h": 756,
+      "2h": 942
+    },
+    "explosive": {
+      "20-29": {
+        "count": 12,
+        "td": 0,
+        "yards": 271
+      },
+      "30-39": {
+        "count": 5,
+        "td": 0,
+        "yards": 166
+      },
+      "40-49": {
+        "count": 2,
+        "td": 1,
+        "yards": 90
+      },
+      "50+": {
+        "count": 0,
+        "td": 0,
+        "yards": 0
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-01-04",
+        "date_iso": "2026-01-04",
+        "venue": "home",
+        "opponent": "NO",
+        "pass_yds": 180,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 69.8,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-29",
+        "date_iso": "2025-12-29",
+        "venue": "home",
+        "opponent": "LAR",
+        "pass_yds": 126,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 99.2,
+        "rush_yds": 1,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-21",
+        "date_iso": "2025-12-21",
+        "venue": "away",
+        "opponent": "ARI",
+        "pass_yds": 197,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 82.7,
+        "rush_yds": -3,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-12-11",
+        "date_iso": "2025-12-11",
+        "venue": "away",
+        "opponent": "TB",
+        "pass_yds": 373,
+        "pass_td": 3,
+        "pass_int": 0,
+        "pass_rtg": 117.0,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-07",
+        "date_iso": "2025-12-07",
+        "venue": "home",
+        "opponent": "SEA",
+        "pass_yds": 162,
+        "pass_td": 0,
+        "pass_int": 2,
+        "pass_rtg": 38.5,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-30",
+        "date_iso": "2025-11-30",
+        "venue": "away",
+        "opponent": "NYJ",
+        "pass_yds": 234,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 94.8,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-23",
+        "date_iso": "2025-11-23",
+        "venue": "away",
+        "opponent": "NO",
+        "pass_yds": 199,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 107.0,
+        "rush_yds": 5,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-16",
+        "date_iso": "2025-11-16",
+        "venue": "home",
+        "opponent": "CAR",
+        "pass_yds": 48,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 52.1,
+        "rush_yds": 2,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-26",
+        "date_iso": "2025-10-26",
+        "venue": "home",
+        "opponent": "MIA",
+        "pass_yds": 173,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 81.8,
+        "rush_yds": 2,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-09-21",
+        "date_iso": "2025-09-21",
+        "venue": "away",
+        "opponent": "CAR",
+        "pass_yds": 29,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 78.9,
+        "rush_yds": 0,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "KirkCousins",
+      "position": "UNK",
+      "team": "LV",
+      "stat": "pass_yds",
+      "splits_count": 14,
+      "splits": [
+        {
+          "season": 2012,
+          "total": 466
+        },
+        {
+          "season": 2013,
+          "total": 854
+        },
+        {
+          "season": 2014,
+          "total": 1710
+        },
+        {
+          "season": 2015,
+          "total": 4166
+        },
+        {
+          "season": 2016,
+          "total": 4917
+        },
+        {
+          "season": 2017,
+          "total": 4093
+        },
+        {
+          "season": 2018,
+          "total": 4298
+        },
+        {
+          "season": 2019,
+          "total": 3603
+        },
+        {
+          "season": 2020,
+          "total": 4265
+        },
+        {
+          "season": 2021,
+          "total": 4221
+        },
+        {
+          "season": 2022,
+          "total": 4547
+        },
+        {
+          "season": 2023,
+          "total": 2331
+        },
+        {
+          "season": 2024,
+          "total": 3508
+        },
+        {
+          "season": 2025,
+          "total": 1721
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "KirkCousins",
+        "player_display": "KirkCousins",
+        "player_team": "ATL",
+        "stat_scope": null,
+        "opponent_code": "MIA",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 759,
+        "pass_td": 5,
+        "pass_int": 3,
+        "rush_yds": 3,
+        "rush_td": 0,
+        "pass_rtg": 89.8,
+        "games": 4
+      },
+      "games": [
+        {
+          "date": "2015-09-13",
+          "date_iso": "2015-09-13",
+          "venue": "home",
+          "opponent": "MIA",
+          "pass_yds": 196,
+          "pass_td": 1,
+          "pass_int": 2,
+          "pass_rtg": 68.8,
+          "rush_yds": -1,
+          "rush_td": 0
+        },
+        {
+          "date": "2018-12-16",
+          "date_iso": "2018-12-16",
+          "venue": "home",
+          "opponent": "MIA",
+          "pass_yds": 215,
+          "pass_td": 2,
+          "pass_int": 1,
+          "pass_rtg": 112.2,
+          "rush_yds": 7,
+          "rush_td": 0
+        },
+        {
+          "date": "2022-10-16",
+          "date_iso": "2022-10-16",
+          "venue": "away",
+          "opponent": "MIA",
+          "pass_yds": 175,
+          "pass_td": 2,
+          "pass_int": 0,
+          "pass_rtg": 104.2,
+          "rush_yds": -5,
+          "rush_td": 0
+        },
+        {
+          "date": "2025-10-26",
+          "date_iso": "2025-10-26",
+          "venue": "home",
+          "opponent": "MIA",
+          "pass_yds": 173,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 81.8,
+          "rush_yds": 2,
+          "rush_td": 0
+        }
+      ],
+      "next_opponent": "MIA"
+    }
+  }
+}

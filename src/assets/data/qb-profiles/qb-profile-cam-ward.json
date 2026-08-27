@@ -1,0 +1,223 @@
+{
+  "player": "CamWard",
+  "player_id": "cam-ward",
+  "team": "TEN",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 323,
+      "pass_att": 540,
+      "pass_yds": 3169,
+      "pass_td": 15,
+      "pass_int": 7,
+      "rush_car": 39,
+      "rush_yds": 159,
+      "rush_td": 2
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 0,
+        "games": []
+      },
+      "pass_rush_yds_300plus": {
+        "count": 0,
+        "games": []
+      }
+    },
+    "per_quarter": {
+      "q1": 790,
+      "q2": 806,
+      "q3": 527,
+      "q4": 1161,
+      "1h": 1596,
+      "2h": 1688
+    },
+    "explosive": {
+      "20-29": {
+        "count": 24,
+        "td": 0,
+        "yards": 577
+      },
+      "30-39": {
+        "count": 11,
+        "td": 2,
+        "yards": 389
+      },
+      "40-49": {
+        "count": 4,
+        "td": 1,
+        "yards": 177
+      },
+      "50+": {
+        "count": 0,
+        "td": 0,
+        "yards": 0
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-01-04",
+        "date_iso": "2026-01-04",
+        "venue": "away",
+        "opponent": "JAX",
+        "pass_yds": 52,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 118.8,
+        "rush_yds": 11,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-12-28",
+        "date_iso": "2025-12-28",
+        "venue": "home",
+        "opponent": "NO",
+        "pass_yds": 251,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 88.6,
+        "rush_yds": 10,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-21",
+        "date_iso": "2025-12-21",
+        "venue": "home",
+        "opponent": "KC",
+        "pass_yds": 228,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 122.3,
+        "rush_yds": 9,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-14",
+        "date_iso": "2025-12-14",
+        "venue": "away",
+        "opponent": "SF",
+        "pass_yds": 170,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 101.2,
+        "rush_yds": 2,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-07",
+        "date_iso": "2025-12-07",
+        "venue": "away",
+        "opponent": "CLE",
+        "pass_yds": 117,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 70.1,
+        "rush_yds": 4,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-30",
+        "date_iso": "2025-11-30",
+        "venue": "home",
+        "opponent": "JAX",
+        "pass_yds": 141,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 70.2,
+        "rush_yds": 7,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-23",
+        "date_iso": "2025-11-23",
+        "venue": "home",
+        "opponent": "SEA",
+        "pass_yds": 256,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 91.0,
+        "rush_yds": 37,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-11-16",
+        "date_iso": "2025-11-16",
+        "venue": "home",
+        "opponent": "HOU",
+        "pass_yds": 194,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 87.0,
+        "rush_yds": 33,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-02",
+        "date_iso": "2025-11-02",
+        "venue": "home",
+        "opponent": "LAC",
+        "pass_yds": 145,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 78.5,
+        "rush_yds": 6,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-26",
+        "date_iso": "2025-10-26",
+        "venue": "away",
+        "opponent": "IND",
+        "pass_yds": 259,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 76.5,
+        "rush_yds": 4,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "CamWard",
+      "position": "UNK",
+      "team": "TEN",
+      "stat": "pass_yds",
+      "splits_count": 1,
+      "splits": [
+        {
+          "season": 2025,
+          "total": 3169
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "CamWard",
+        "player_display": "CamWard",
+        "player_team": "TEN",
+        "stat_scope": null,
+        "opponent_code": "NYJ",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 0,
+        "pass_td": 0,
+        "pass_int": 0,
+        "rush_yds": 0,
+        "rush_td": 0,
+        "pass_rtg": 0.0,
+        "games": 0
+      },
+      "games": [],
+      "next_opponent": "NYJ"
+    }
+  }
+}

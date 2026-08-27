@@ -1,0 +1,254 @@
+{
+  "player": "JoeBurrow",
+  "player_id": "joe-burrow",
+  "team": "CIN",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 173,
+      "pass_att": 259,
+      "pass_yds": 1809,
+      "pass_td": 17,
+      "pass_int": 5,
+      "rush_car": 14,
+      "rush_yds": 41,
+      "rush_td": 0
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 3,
+        "games": [
+          {
+            "date": "2025-12-07",
+            "value": 4
+          },
+          {
+            "date": "2025-12-21",
+            "value": 4
+          },
+          {
+            "date": "2026-01-04",
+            "value": 3
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 2,
+        "games": [
+          {
+            "date": "2025-12-21",
+            "value": 315
+          },
+          {
+            "date": "2025-12-28",
+            "value": 307
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 495,
+      "q2": 547,
+      "q3": 400,
+      "q4": 468,
+      "1h": 1042,
+      "2h": 868
+    },
+    "explosive": {
+      "20-29": {
+        "count": 15,
+        "td": 3,
+        "yards": 346
+      },
+      "30-39": {
+        "count": 6,
+        "td": 0,
+        "yards": 213
+      },
+      "40-49": {
+        "count": 1,
+        "td": 0,
+        "yards": 43
+      },
+      "50+": {
+        "count": 0,
+        "td": 0,
+        "yards": 0
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-01-04",
+        "date_iso": "2026-01-04",
+        "venue": "home",
+        "opponent": "CLE",
+        "pass_yds": 236,
+        "pass_td": 3,
+        "pass_int": 1,
+        "pass_rtg": 104.2,
+        "rush_yds": 17,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-28",
+        "date_iso": "2025-12-28",
+        "venue": "home",
+        "opponent": "ARI",
+        "pass_yds": 305,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 129.1,
+        "rush_yds": 2,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-21",
+        "date_iso": "2025-12-21",
+        "venue": "away",
+        "opponent": "MIA",
+        "pass_yds": 309,
+        "pass_td": 4,
+        "pass_int": 0,
+        "pass_rtg": 146.5,
+        "rush_yds": 6,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-14",
+        "date_iso": "2025-12-14",
+        "venue": "home",
+        "opponent": "BAL",
+        "pass_yds": 225,
+        "pass_td": 0,
+        "pass_int": 2,
+        "pass_rtg": 58.2,
+        "rush_yds": 5,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-07",
+        "date_iso": "2025-12-07",
+        "venue": "away",
+        "opponent": "BUF",
+        "pass_yds": 284,
+        "pass_td": 4,
+        "pass_int": 2,
+        "pass_rtg": 106.7,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-27",
+        "date_iso": "2025-11-27",
+        "venue": "away",
+        "opponent": "BAL",
+        "pass_yds": 261,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 83.7,
+        "rush_yds": 8,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-09-14",
+        "date_iso": "2025-09-14",
+        "venue": "home",
+        "opponent": "JAX",
+        "pass_yds": 76,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 97.0,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-09-07",
+        "date_iso": "2025-09-07",
+        "venue": "away",
+        "opponent": "CLE",
+        "pass_yds": 113,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 87.8,
+        "rush_yds": 3,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "JoeBurrow",
+      "position": "UNK",
+      "team": "CIN",
+      "stat": "pass_yds",
+      "splits_count": 6,
+      "splits": [
+        {
+          "season": 2020,
+          "total": 2688
+        },
+        {
+          "season": 2021,
+          "total": 4611
+        },
+        {
+          "season": 2022,
+          "total": 4475
+        },
+        {
+          "season": 2023,
+          "total": 2309
+        },
+        {
+          "season": 2024,
+          "total": 4918
+        },
+        {
+          "season": 2025,
+          "total": 1809
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "JoeBurrow",
+        "player_display": "JoeBurrow",
+        "player_team": "CIN",
+        "stat_scope": null,
+        "opponent_code": "TB",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 200,
+        "pass_td": 4,
+        "pass_int": 1,
+        "rush_yds": 8,
+        "rush_td": 0,
+        "pass_rtg": 104.6,
+        "games": 1
+      },
+      "games": [
+        {
+          "date": "2022-12-18",
+          "date_iso": "2022-12-18",
+          "venue": "away",
+          "opponent": "TB",
+          "pass_yds": 200,
+          "pass_td": 4,
+          "pass_int": 1,
+          "pass_rtg": 104.6,
+          "rush_yds": 8,
+          "rush_td": 0
+        }
+      ],
+      "next_opponent": "TB"
+    }
+  }
+}

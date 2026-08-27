@@ -1,0 +1,209 @@
+{
+  "player": "ShedeurSanders",
+  "player_id": "shedeur-sanders",
+  "team": "CLE",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 120,
+      "pass_att": 212,
+      "pass_yds": 1400,
+      "pass_td": 7,
+      "pass_int": 10,
+      "rush_car": 21,
+      "rush_yds": 169,
+      "rush_td": 1
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 1,
+        "games": [
+          {
+            "date": "2025-12-07",
+            "value": 4
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 1,
+        "games": [
+          {
+            "date": "2025-12-07",
+            "value": 393
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 438,
+      "q2": 330,
+      "q3": 250,
+      "q4": 397,
+      "1h": 768,
+      "2h": 647
+    },
+    "explosive": {
+      "20-29": {
+        "count": 7,
+        "td": 1,
+        "yards": 173
+      },
+      "30-39": {
+        "count": 5,
+        "td": 1,
+        "yards": 167
+      },
+      "40-49": {
+        "count": 3,
+        "td": 0,
+        "yards": 131
+      },
+      "50+": {
+        "count": 4,
+        "td": 2,
+        "yards": 236
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-01-04",
+        "date_iso": "2026-01-04",
+        "venue": "away",
+        "opponent": "CIN",
+        "pass_yds": 111,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 64.8,
+        "rush_yds": 26,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-28",
+        "date_iso": "2025-12-28",
+        "venue": "home",
+        "opponent": "PIT",
+        "pass_yds": 186,
+        "pass_td": 1,
+        "pass_int": 2,
+        "pass_rtg": 75.6,
+        "rush_yds": 20,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-21",
+        "date_iso": "2025-12-21",
+        "venue": "home",
+        "opponent": "BUF",
+        "pass_yds": 157,
+        "pass_td": 1,
+        "pass_int": 2,
+        "pass_rtg": 64.9,
+        "rush_yds": 49,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-14",
+        "date_iso": "2025-12-14",
+        "venue": "away",
+        "opponent": "CHI",
+        "pass_yds": 177,
+        "pass_td": 0,
+        "pass_int": 3,
+        "pass_rtg": 30.3,
+        "rush_yds": 24,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-07",
+        "date_iso": "2025-12-07",
+        "venue": "home",
+        "opponent": "TEN",
+        "pass_yds": 364,
+        "pass_td": 3,
+        "pass_int": 1,
+        "pass_rtg": 97.7,
+        "rush_yds": 29,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-11-30",
+        "date_iso": "2025-11-30",
+        "venue": "home",
+        "opponent": "SF",
+        "pass_yds": 149,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 93.6,
+        "rush_yds": 6,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-23",
+        "date_iso": "2025-11-23",
+        "venue": "away",
+        "opponent": "LV",
+        "pass_yds": 209,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 87.3,
+        "rush_yds": -1,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-16",
+        "date_iso": "2025-11-16",
+        "venue": "home",
+        "opponent": "BAL",
+        "pass_yds": 47,
+        "pass_td": 0,
+        "pass_int": 1,
+        "pass_rtg": 13.5,
+        "rush_yds": 16,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "ShedeurSanders",
+      "position": "UNK",
+      "team": "CLE",
+      "stat": "pass_yds",
+      "splits_count": 1,
+      "splits": [
+        {
+          "season": 2025,
+          "total": 1400
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "ShedeurSanders",
+        "player_display": "ShedeurSanders",
+        "player_team": "CLE",
+        "stat_scope": null,
+        "opponent_code": "JAX",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 0,
+        "pass_td": 0,
+        "pass_int": 0,
+        "rush_yds": 0,
+        "rush_td": 0,
+        "pass_rtg": 0.0,
+        "games": 0
+      },
+      "games": [],
+      "next_opponent": "JAX"
+    }
+  }
+}

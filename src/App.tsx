@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import hitlistData from '@/assets/data/hitlist.json'
 import leaderboardData from '@/assets/data/leaderboard.json'
 import madeitLogo from '@/assets/images/madeit-tech-logo-v2.jpeg'
@@ -7,6 +8,8 @@ import { QueryBuilder } from '@/components/QueryBuilder'
 import { QueryBuilderTutorial } from '@/components/QueryBuilderTutorial'
 import { AutoDemo } from '@/components/AutoDemo'
 import { SampleQueriesModal } from '@/components/SampleQueriesModal'
+import { PlayerSearchDropdown } from '@/components/PlayerSearchDropdown'
+import { searchPlayers } from '@/lib/playerSearch'
 import { authHeader } from '@/lib/auth-token'
 import {
   asNumber,
@@ -1797,6 +1800,22 @@ function MlbPlayerReportView({ payload }: { payload: MlbPlayerReportPayload }) {
   )
 }
 
+// Distinguishes "typing a player name" from "typing an nspe command" in the
+// same free-text input, so the CLI can double as the player search without a
+// separate input. Real nspe queries always open with a sport token and/or
+// contain a hyphenated flag (`-yds300`) very early on — a bare word or two
+// with no hyphen and no leading sport keyword is what a name search looks
+// like instead. Checked before running `searchPlayers`, which is the actual
+// arbiter of whether anything matches.
+const NSPE_SPORT_TOKENS = ['mlb', 'nfl', 'nba', 'nhl', 'cfb', 'help']
+function looksLikePlayerSearch(value: string): boolean {
+  const trimmed = value.trim().toLowerCase()
+  if (!trimmed || trimmed.includes('-')) return false
+  const firstToken = trimmed.split(/\s+/)[0]
+  if (NSPE_SPORT_TOKENS.includes(firstToken)) return false
+  return true
+}
+
 function App() {
   const [stars, setStars] = useState<Star[]>([])
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
@@ -1838,7 +1857,11 @@ function App() {
   const [isBuilderOpen, setIsBuilderOpen] = useState(false)
   const [builderPosition, setBuilderPosition] = useState({
     x: Math.max(16, Math.floor(window.innerWidth / 2 - 320)),
-    y: 96,
+    // ~16% down from the top — center/top-half of the screen rather than
+    // hugging the very top edge. Safe to push down because the panel's own
+    // maxHeight (below) now actually accounts for this offset instead of
+    // assuming the panel starts at y=0.
+    y: Math.max(48, Math.floor(window.innerHeight * 0.16)),
   })
   const [isBuilderDragging, setIsBuilderDragging] = useState(false)
   const [builderDragOffset, setBuilderDragOffset] = useState({ x: 0, y: 0 })
@@ -1847,6 +1870,15 @@ function App() {
   const [isGlossaryOpen, setIsGlossaryOpen] = useState(false)
   const leaderboard = leaderboardData as unknown as LeaderboardPayload
   const isMobile = useIsMobile()
+  const navigate = useNavigate()
+  // Player-search dropdown, doubled up on the same input as the CLI (see
+  // looksLikePlayerSearch above) — {database} has no static nav entry point,
+  // this is the only way to reach a player's page short of a direct URL.
+  const [playerSearchActiveIndex, setPlayerSearchActiveIndex] = useState(0)
+  const playerMatches = useMemo(
+    () => (looksLikePlayerSearch(searchValue) ? searchPlayers(searchValue, 8) : []),
+    [searchValue],
+  )
   const searchInputRef = useRef<HTMLInputElement>(null)
   const sampleMenuRef = useRef<HTMLDivElement>(null)
   const miniRef = useRef<HTMLDivElement>(null)
@@ -2197,7 +2229,34 @@ function App() {
     setIsMiniOpen(true)
   }
 
+  const goToPlayerProfile = (slug: string) => {
+    setSearchValue('')
+    navigate(`/database/${slug}`)
+  }
+
   const handleSearchSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (playerMatches.length > 0) {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault()
+        setPlayerSearchActiveIndex((i) => (i + 1) % playerMatches.length)
+        return
+      }
+      if (e.key === 'ArrowUp') {
+        e.preventDefault()
+        setPlayerSearchActiveIndex((i) => (i - 1 + playerMatches.length) % playerMatches.length)
+        return
+      }
+      if (e.key === 'Enter') {
+        e.preventDefault()
+        const match = playerMatches[playerSearchActiveIndex] ?? playerMatches[0]
+        goToPlayerProfile(match.entry.slug)
+        return
+      }
+      if (e.key === 'Escape') {
+        setSearchValue('')
+        return
+      }
+    }
     if (e.key === 'Enter') {
       e.preventDefault()
       runSearchFromInput()
@@ -2282,11 +2341,11 @@ function App() {
         )}
         {isMobile && (
           <button
-            onClick={() => setIsSampleDemoOpen(true)}
+            onClick={() => setIsSampleQueriesOpen(true)}
             className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
             style={{ color: 'oklch(0.65 0.12 145)' }}
           >
-            {'{sample-commands}'}
+            {'{sample-queries}'}
           </button>
         )}
       </div>
@@ -2299,26 +2358,8 @@ function App() {
         }
         ref={sampleMenuRef}
       >
-        {!isMobile && (
-          <button
-            onClick={() => setIsTutorialOpen(true)}
-            className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-            style={{ color: 'oklch(0.78 0.18 145)' }}
-          >
-            {'{tutorial}'}
-          </button>
-        )}
-
-        {!isMobile && (
-          <button
-            onClick={() => setIsSampleQueriesOpen(true)}
-            className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-            style={{ color: 'oklch(0.65 0.12 145)' }}
-          >
-            {'{sample-queries}'}
-          </button>
-        )}
-
+        {/* {tutorial} and {sample-queries} moved down next to {glossary} —
+            see the bottom-row group near the leaderboard panel. */}
         {!isMobile && (
           <a
             href="/nfl.season"
@@ -2424,7 +2465,10 @@ function App() {
             <div>
               {normalized.map((result, i) => {
                 const isTrendRow = result.hasMatchArray ?? Boolean(result.matchDetails && result.matchDetails.length > 0)
-                const badge = isTrendRow
+                const isSingleDayWindow = isTrendRow && result.windowSize === 1 && result.matchDetails?.length === 1
+                const badge = isSingleDayWindow
+                  ? `${result.matchDetails![0].value}${result.matchDetails![0].statLabel} ${result.matchDetails![0].date}`
+                  : isTrendRow
                   ? `met=${result.total}`
                   : demoStatLabel
                   ? `${result.total}${demoStatLabel}`
@@ -2624,8 +2668,6 @@ function App() {
               queryResults.map((result, index) => {
                 const hasStreakDetails = Boolean(result.streakDetails && result.streakDetails.length > 0)
                 const hasMatchDetails = Boolean(result.matchDetails && result.matchDetails.length > 0)
-                const canExpand = hasStreakDetails || hasMatchDetails
-                const isExpanded = canExpand ? !collapsedPlayers[result.player] : false
                 // Trend rows report how many games met the threshold —
                 // "met=N", never a stat unit (that number isn't a stat
                 // total). Only a bare compute total gets "N unit". Keyed off
@@ -2635,7 +2677,17 @@ function App() {
                 // hasMatchArray doc), and a parsing gap must never make a
                 // trend row look like a compute row.
                 const isTrendRow = result.hasMatchArray ?? hasMatchDetails
-                const resultBadge = isTrendRow
+                // A single-day window (-yst) only ever has one possible
+                // match — "met=1" is meaningless (there was only one day to
+                // check). Show that match's value+date directly instead, and
+                // skip the expand affordance since there's nothing further
+                // to drill into beyond what the badge already shows.
+                const isSingleDayWindow = isTrendRow && result.windowSize === 1 && result.matchDetails?.length === 1
+                const canExpand = !isSingleDayWindow && (hasStreakDetails || hasMatchDetails)
+                const isExpanded = canExpand ? !collapsedPlayers[result.player] : false
+                const resultBadge = isSingleDayWindow
+                  ? `${result.matchDetails![0].value}${result.matchDetails![0].statLabel} ${result.matchDetails![0].date}`
+                  : isTrendRow
                   ? `met=${result.total}`
                   : queryResultsStatLabel
                   ? `${result.total}${queryResultsStatLabel}`
@@ -2716,37 +2768,93 @@ function App() {
       <div className="relative z-10 flex flex-col items-center justify-start h-screen pt-[40vh]">
         <div className="w-[65%] max-w-4xl min-w-[320px] px-4">
           {isMobile ? (
-            <div className="flex items-center justify-center gap-3">
-              {/* Entry point into the mobile calculator UI (/calculator) —
-                  a real navigation, not a local bottom-sheet toggle, so the
-                  calculator lives at its own URL instead of being shown
-                  automatically to every mobile visitor. */}
-              <a
-                href="/calculator"
-                className="h-[52px] flex items-center rounded-lg border px-8 font-mono text-[14px] hover:opacity-80 transition-opacity"
-                style={{ color: 'oklch(0.85 0.15 195)', borderColor: 'oklch(0.85 0.15 195)' }}
-              >
-                {'{calculator}'}
-              </a>
-              {/* Points at the one real profile prototype (/database/
-                  dak-prescott) until a real searchable index exists — see
-                  the desktop {database} link below for the same treatment. */}
-              <a
-                href="/database/dak-prescott"
-                className="h-[52px] flex items-center rounded-lg border px-8 font-mono text-[14px] hover:opacity-80 transition-opacity"
-                style={{ color: 'oklch(0.85 0.15 195)', borderColor: 'oklch(0.85 0.15 195)' }}
-              >
-                {'{database}'}
-              </a>
+            <div className="flex flex-col items-center gap-3">
+              {/* Same CLI-doubling input as desktop (searchValue,
+                  looksLikePlayerSearch, playerMatches) — mobile no longer
+                  gets a player-search-only input, nspe commands run here
+                  too, same as desktop. Stacked layout instead of desktop's
+                  single row: input+run on one line, {calculator}/{charts}
+                  below. */}
+              <div className="relative w-full">
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={searchValue}
+                  onChange={(e) => {
+                    setSearchValue(e.target.value)
+                    setPlayerSearchActiveIndex(0)
+                  }}
+                  onKeyDown={handleSearchSubmit}
+                  className="w-full h-[52px] px-5 py-3 bg-card text-foreground font-mono text-[16px] rounded-lg border border-border outline-none focus:border-primary transition-colors duration-200"
+                />
+                {!searchValue && (
+                  <div
+                    className="absolute inset-0 flex items-center px-5 pointer-events-none font-mono text-[16px] text-muted-foreground transition-opacity duration-300"
+                    style={{
+                      opacity: placeholderOpacity * 0.5,
+                    }}
+                  >
+                    {PLACEHOLDER_TEXTS[placeholderIndex]}
+                  </div>
+                )}
+                {playerMatches.length > 0 && (
+                  <div className="absolute top-[60px] left-0 right-0 z-20">
+                    <PlayerSearchDropdown
+                      matches={playerMatches}
+                      activeIndex={playerSearchActiveIndex}
+                      onHoverIndex={setPlayerSearchActiveIndex}
+                      onSelect={(entry) => goToPlayerProfile(entry.slug)}
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div className="flex items-center justify-center gap-3 flex-wrap">
+                <button
+                  type="button"
+                  onClick={runSearchFromInput}
+                  className="h-[52px] shrink-0 rounded-lg border border-border px-6 font-mono text-[14px] hover:opacity-80 transition-opacity"
+                  style={{ color: 'oklch(0.90 0.18 195)' }}
+                >
+                  search
+                </button>
+                {/* Entry point into the mobile calculator UI (/calculator) —
+                    a real navigation, not a local bottom-sheet toggle, so the
+                    calculator lives at its own URL instead of being shown
+                    automatically to every mobile visitor. */}
+                <a
+                  href="/calculator"
+                  className="h-[52px] flex items-center rounded-lg border px-6 font-mono text-[14px] hover:opacity-80 transition-opacity"
+                  style={{ color: 'oklch(0.85 0.15 195)', borderColor: 'oklch(0.85 0.15 195)' }}
+                >
+                  {'{calculator}'}
+                </a>
+                <a
+                  href="/charts"
+                  className="h-[52px] flex items-center rounded-lg border px-6 font-mono text-[14px] hover:opacity-80 transition-opacity"
+                  style={{ color: 'oklch(0.85 0.15 195)', borderColor: 'oklch(0.85 0.15 195)' }}
+                >
+                  {'{charts}'}
+                </a>
+              </div>
             </div>
           ) : (
+            // {cli}{search}{build}{charts} in one symmetric row — {database}
+            // has no static nav entry point, this input doubles as the
+            // player search (see looksLikePlayerSearch): typing a name
+            // opens a dropdown of matches below the input instead of
+            // sending anything to the backend; typing actual nspe syntax
+            // behaves exactly as before.
             <div className="flex items-center gap-3">
               <div className="relative flex-1">
                 <input
                   ref={searchInputRef}
                   type="text"
                   value={searchValue}
-                  onChange={(e) => setSearchValue(e.target.value)}
+                  onChange={(e) => {
+                    setSearchValue(e.target.value)
+                    setPlayerSearchActiveIndex(0)
+                  }}
                   onKeyDown={handleSearchSubmit}
                   className="w-full h-[52px] px-5 py-3 bg-card text-foreground font-mono text-[16px] rounded-lg border border-border outline-none focus:border-primary transition-colors duration-200"
                   style={{
@@ -2761,6 +2869,16 @@ function App() {
                     }}
                   >
                     {PLACEHOLDER_TEXTS[placeholderIndex]}
+                  </div>
+                )}
+                {playerMatches.length > 0 && (
+                  <div className="absolute top-[60px] left-0 right-0 z-20">
+                    <PlayerSearchDropdown
+                      matches={playerMatches}
+                      activeIndex={playerSearchActiveIndex}
+                      onHoverIndex={setPlayerSearchActiveIndex}
+                      onSelect={(entry) => goToPlayerProfile(entry.slug)}
+                    />
                   </div>
                 )}
               </div>
@@ -2782,6 +2900,14 @@ function App() {
               >
                 build
               </button>
+
+              <a
+                href="/charts"
+                className="h-[52px] shrink-0 flex items-center rounded-lg border px-5 font-mono text-[14px] hover:opacity-80 transition-opacity"
+                style={{ color: 'oklch(0.85 0.15 195)', borderColor: 'oklch(0.85 0.15 195)' }}
+              >
+                {'{chart}'}
+              </a>
             </div>
           )}
 
@@ -2790,29 +2916,6 @@ function App() {
               <p className="font-mono text-[14px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
                 build your own query
               </p>
-            </div>
-          )}
-
-          {!isMobile && (
-            <div className="mt-4 flex items-center justify-center gap-3">
-              <a
-                href="/charts"
-                className="h-[52px] flex items-center rounded-lg border px-5 font-mono text-[14px] hover:opacity-80 transition-opacity"
-                style={{ color: 'oklch(0.85 0.15 195)', borderColor: 'oklch(0.85 0.15 195)' }}
-              >
-                {'{chart}'}
-              </a>
-              {/* Points at the one real profile prototype
-                  (/database/dak-prescott) until a real search index exists —
-                  honest placeholder that leads somewhere real rather than a
-                  dead end, until the searchbar work below replaces it. */}
-              <a
-                href="/database/dak-prescott"
-                className="h-[52px] flex items-center rounded-lg border px-5 font-mono text-[14px] hover:opacity-80 transition-opacity"
-                style={{ color: 'oklch(0.85 0.15 195)', borderColor: 'oklch(0.85 0.15 195)' }}
-              >
-                {'{database}'}
-              </a>
             </div>
           )}
         </div>
@@ -2872,7 +2975,15 @@ function App() {
             left: `${builderPosition.x}px`,
             top: `${builderPosition.y}px`,
             width: '640px',
-            maxHeight: 'calc(100vh - 40px)',
+            // Was a flat `calc(100vh - 40px)` regardless of where the panel
+            // actually sits — on a viewport where the panel opens well below
+            // y=0 (as it always has, and now does even more deliberately),
+            // that let the panel claim more height than the space actually
+            // remaining below it, which is exactly what forced an internal
+            // scroll to reach the run button even when the content itself
+            // was short enough to fit. Now genuinely bounded by the
+            // remaining viewport space below the panel's own top offset.
+            maxHeight: `calc(100vh - ${builderPosition.y}px - 20px)`,
             backgroundColor: 'oklch(0.13 0 0)',
             border: '1px solid oklch(0.30 0 0)',
           }}
@@ -2905,7 +3016,7 @@ function App() {
               ✕
             </button>
           </div>
-          <div className="overflow-y-auto px-5 py-4" style={{ maxHeight: 'calc(100vh - 100px)' }}>
+          <div className="overflow-y-auto px-5 py-4" style={{ maxHeight: `calc(100vh - ${builderPosition.y}px - 64px)` }}>
             <QueryBuilder
               onRunQuery={handleRunFromBuilder}
               isLoading={isLoading}
@@ -2928,20 +3039,38 @@ function App() {
         }}
       />
 
+      {/* {tutorial} and {sample-queries}, formerly in the top-right nav,
+          grouped here next to {glossary} — a flex group with gap rather
+          than individually guessed pixel offsets per label, so it doesn't
+          need re-tuning if any of these three labels change length. */}
       {!isMobile && (
-        <button
-          type="button"
-          onClick={() => setIsGlossaryOpen(true)}
-          className="absolute z-20 font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-          style={{
-            bottom: '52px',
-            right: '440px',
-            color: 'oklch(0.85 0.15 195)',
-          }}
-          aria-label="Open glossary"
-        >
-          {'{glossary}'}
-        </button>
+        <div className="absolute z-20 flex items-center gap-4" style={{ bottom: '52px', right: '440px' }}>
+          <button
+            type="button"
+            onClick={() => setIsTutorialOpen(true)}
+            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+            style={{ color: 'oklch(0.78 0.18 145)' }}
+          >
+            {'{tutorial}'}
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsSampleQueriesOpen(true)}
+            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+            style={{ color: 'oklch(0.65 0.12 145)' }}
+          >
+            {'{sample-queries}'}
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsGlossaryOpen(true)}
+            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+            style={{ color: 'oklch(0.85 0.15 195)' }}
+            aria-label="Open glossary"
+          >
+            {'{glossary}'}
+          </button>
+        </div>
       )}
 
       {!isMobile && leaderboard?.rows?.length > 0 && (

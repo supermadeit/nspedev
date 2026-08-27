@@ -1,0 +1,314 @@
+{
+  "player": "LamarJackson",
+  "player_id": "lamar-jackson",
+  "team": "BAL",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 192,
+      "pass_att": 302,
+      "pass_yds": 2549,
+      "pass_td": 21,
+      "pass_int": 7,
+      "rush_car": 67,
+      "rush_yds": 349,
+      "rush_td": 2
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 5,
+        "games": [
+          {
+            "date": "2025-09-07",
+            "value": 3
+          },
+          {
+            "date": "2025-09-14",
+            "value": 4
+          },
+          {
+            "date": "2025-09-22",
+            "value": 3
+          },
+          {
+            "date": "2025-10-30",
+            "value": 4
+          },
+          {
+            "date": "2026-01-04",
+            "value": 3
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 1,
+        "games": [
+          {
+            "date": "2025-09-22",
+            "value": 323
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 523,
+      "q2": 600,
+      "q3": 677,
+      "q4": 735,
+      "1h": 1123,
+      "2h": 1412
+    },
+    "explosive": {
+      "20-29": {
+        "count": 19,
+        "td": 7,
+        "yards": 447
+      },
+      "30-39": {
+        "count": 15,
+        "td": 2,
+        "yards": 518
+      },
+      "40-49": {
+        "count": 3,
+        "td": 0,
+        "yards": 130
+      },
+      "50+": {
+        "count": 2,
+        "td": 2,
+        "yards": 114
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-01-04",
+        "date_iso": "2026-01-04",
+        "venue": "away",
+        "opponent": "PIT",
+        "pass_yds": 238,
+        "pass_td": 3,
+        "pass_int": 1,
+        "pass_rtg": 121.5,
+        "rush_yds": 9,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-21",
+        "date_iso": "2025-12-21",
+        "venue": "home",
+        "opponent": "NE",
+        "pass_yds": 101,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 102.5,
+        "rush_yds": 7,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-14",
+        "date_iso": "2025-12-14",
+        "venue": "away",
+        "opponent": "CIN",
+        "pass_yds": 150,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 114.6,
+        "rush_yds": 26,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-07",
+        "date_iso": "2025-12-07",
+        "venue": "home",
+        "opponent": "PIT",
+        "pass_yds": 219,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 71.0,
+        "rush_yds": 43,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-11-27",
+        "date_iso": "2025-11-27",
+        "venue": "home",
+        "opponent": "CIN",
+        "pass_yds": 246,
+        "pass_td": 0,
+        "pass_int": 1,
+        "pass_rtg": 65.4,
+        "rush_yds": 27,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-23",
+        "date_iso": "2025-11-23",
+        "venue": "home",
+        "opponent": "NYJ",
+        "pass_yds": 153,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 76.9,
+        "rush_yds": 11,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-16",
+        "date_iso": "2025-11-16",
+        "venue": "away",
+        "opponent": "CLE",
+        "pass_yds": 193,
+        "pass_td": 0,
+        "pass_int": 2,
+        "pass_rtg": 47.6,
+        "rush_yds": 10,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-09",
+        "date_iso": "2025-11-09",
+        "venue": "away",
+        "opponent": "MIN",
+        "pass_yds": 176,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 87.7,
+        "rush_yds": 36,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-30",
+        "date_iso": "2025-10-30",
+        "venue": "away",
+        "opponent": "MIA",
+        "pass_yds": 204,
+        "pass_td": 4,
+        "pass_int": 0,
+        "pass_rtg": 143.2,
+        "rush_yds": 14,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-09-28",
+        "date_iso": "2025-09-28",
+        "venue": "away",
+        "opponent": "KC",
+        "pass_yds": 147,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 86.9,
+        "rush_yds": 48,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "LamarJackson",
+      "position": "UNK",
+      "team": "BAL",
+      "stat": "pass_yds",
+      "splits_count": 8,
+      "splits": [
+        {
+          "season": 2018,
+          "total": 1201
+        },
+        {
+          "season": 2019,
+          "total": 3127
+        },
+        {
+          "season": 2020,
+          "total": 2757
+        },
+        {
+          "season": 2021,
+          "total": 2882
+        },
+        {
+          "season": 2022,
+          "total": 2242
+        },
+        {
+          "season": 2023,
+          "total": 3678
+        },
+        {
+          "season": 2024,
+          "total": 4172
+        },
+        {
+          "season": 2025,
+          "total": 2549
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "LamarJackson",
+        "player_display": "LamarJackson",
+        "player_team": "BAL",
+        "stat_scope": null,
+        "opponent_code": "IND",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 814,
+        "pass_td": 4,
+        "pass_int": 0,
+        "rush_yds": 221,
+        "rush_td": 3,
+        "pass_rtg": 115.4,
+        "games": 3
+      },
+      "games": [
+        {
+          "date": "2020-11-08",
+          "date_iso": "2020-11-08",
+          "venue": "away",
+          "opponent": "IND",
+          "pass_yds": 170,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 97.5,
+          "rush_yds": 58,
+          "rush_td": 1
+        },
+        {
+          "date": "2021-10-11",
+          "date_iso": "2021-10-11",
+          "venue": "home",
+          "opponent": "IND",
+          "pass_yds": 442,
+          "pass_td": 4,
+          "pass_int": 0,
+          "pass_rtg": 140.5,
+          "rush_yds": 62,
+          "rush_td": 0
+        },
+        {
+          "date": "2023-09-24",
+          "date_iso": "2023-09-24",
+          "venue": "home",
+          "opponent": "IND",
+          "pass_yds": 202,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 88.4,
+          "rush_yds": 101,
+          "rush_td": 2
+        }
+      ],
+      "next_opponent": "IND"
+    }
+  }
+}

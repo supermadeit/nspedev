@@ -201,8 +201,14 @@ export function deriveRows(result: NspeResult, statLabel?: string): ListRow[] {
           const matches = r.matchDetails ?? []
           const isTrend = r.hasMatchArray ?? matches.length > 0
           const unit = matches[0]?.statLabel ?? statLabel ?? ''
+          // A single-day window (-yst, "yesterday") only ever has one
+          // possible match — "met=1" is meaningless there (of course it's
+          // 1, there was only one day to check). Show that one match's
+          // value+date directly instead, same as it'd read in the meta line
+          // anyway, so it isn't duplicated below.
+          const isSingleDayWindow = isTrend && r.windowSize === 1 && matches.length === 1
           const meta =
-            matches.length > 0
+            matches.length > 0 && !isSingleDayWindow
               ? matches.map((m) => `${m.value}${m.statLabel} ${m.date}`).join(' · ')
               : r.streakDetails?.length
               ? `${r.streakDetails.length} streak(s)`
@@ -211,7 +217,13 @@ export function deriveRows(result: NspeResult, statLabel?: string): ListRow[] {
             id: `${i}`,
             primary: r.player,
             secondary: r.team,
-            value: isTrend ? `met=${fmt(r.total)}` : unit ? `${fmt(r.total)}${unit}` : fmt(r.total),
+            value: isSingleDayWindow
+              ? `${matches[0].value}${matches[0].statLabel} ${matches[0].date}`
+              : isTrend
+              ? `met=${fmt(r.total)}`
+              : unit
+              ? `${fmt(r.total)}${unit}`
+              : fmt(r.total),
             meta,
           }
         })

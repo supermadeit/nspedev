@@ -1,0 +1,322 @@
+{
+  "player": "BoNix",
+  "player_id": "bo-nix",
+  "team": "DEN",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 388,
+      "pass_att": 612,
+      "pass_yds": 3931,
+      "pass_td": 25,
+      "pass_int": 11,
+      "rush_car": 83,
+      "rush_yds": 356,
+      "rush_td": 5
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 5,
+        "games": [
+          {
+            "date": "2025-09-14",
+            "value": 3
+          },
+          {
+            "date": "2025-09-29",
+            "value": 3
+          },
+          {
+            "date": "2025-10-19",
+            "value": 4
+          },
+          {
+            "date": "2025-10-26",
+            "value": 4
+          },
+          {
+            "date": "2025-12-14",
+            "value": 4
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 6,
+        "games": [
+          {
+            "date": "2025-09-29",
+            "value": 333
+          },
+          {
+            "date": "2025-10-19",
+            "value": 327
+          },
+          {
+            "date": "2025-11-16",
+            "value": 303
+          },
+          {
+            "date": "2025-11-30",
+            "value": 337
+          },
+          {
+            "date": "2025-12-14",
+            "value": 312
+          },
+          {
+            "date": "2025-12-21",
+            "value": 363
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 682,
+      "q2": 1312,
+      "q3": 793,
+      "q4": 1123,
+      "1h": 1994,
+      "2h": 1916
+    },
+    "explosive": {
+      "20-29": {
+        "count": 29,
+        "td": 8,
+        "yards": 675
+      },
+      "30-39": {
+        "count": 11,
+        "td": 1,
+        "yards": 366
+      },
+      "40-49": {
+        "count": 6,
+        "td": 0,
+        "yards": 264
+      },
+      "50+": {
+        "count": 1,
+        "td": 1,
+        "yards": 52
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-01-04",
+        "date_iso": "2026-01-04",
+        "venue": "home",
+        "opponent": "LAC",
+        "pass_yds": 141,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 78.4,
+        "rush_yds": 49,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-25",
+        "date_iso": "2025-12-25",
+        "venue": "away",
+        "opponent": "KC",
+        "pass_yds": 182,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 76.9,
+        "rush_yds": 42,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-12-21",
+        "date_iso": "2025-12-21",
+        "venue": "home",
+        "opponent": "JAX",
+        "pass_yds": 352,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 81.2,
+        "rush_yds": 11,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-14",
+        "date_iso": "2025-12-14",
+        "venue": "home",
+        "opponent": "GB",
+        "pass_yds": 302,
+        "pass_td": 4,
+        "pass_int": 0,
+        "pass_rtg": 134.7,
+        "rush_yds": 10,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-07",
+        "date_iso": "2025-12-07",
+        "venue": "away",
+        "opponent": "LV",
+        "pass_yds": 212,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 89.9,
+        "rush_yds": 15,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-11-30",
+        "date_iso": "2025-11-30",
+        "venue": "away",
+        "opponent": "WSH",
+        "pass_yds": 321,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 83.7,
+        "rush_yds": 16,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-16",
+        "date_iso": "2025-11-16",
+        "venue": "home",
+        "opponent": "KC",
+        "pass_yds": 295,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 89.4,
+        "rush_yds": 8,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-06",
+        "date_iso": "2025-11-06",
+        "venue": "home",
+        "opponent": "LV",
+        "pass_yds": 150,
+        "pass_td": 1,
+        "pass_int": 2,
+        "pass_rtg": 54.2,
+        "rush_yds": -2,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-02",
+        "date_iso": "2025-11-02",
+        "venue": "away",
+        "opponent": "HOU",
+        "pass_yds": 173,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 68.9,
+        "rush_yds": 36,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-26",
+        "date_iso": "2025-10-26",
+        "venue": "home",
+        "opponent": "DAL",
+        "pass_yds": 247,
+        "pass_td": 4,
+        "pass_int": 1,
+        "pass_rtg": 117.4,
+        "rush_yds": -1,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "BoNix",
+      "position": "UNK",
+      "team": "DEN",
+      "stat": "pass_yds",
+      "splits_count": 2,
+      "splits": [
+        {
+          "season": 2024,
+          "total": 3775
+        },
+        {
+          "season": 2025,
+          "total": 3931
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "BoNix",
+        "player_display": "BoNix",
+        "player_team": "DEN",
+        "stat_scope": null,
+        "opponent_code": "KC",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 1013,
+        "pass_td": 7,
+        "pass_int": 1,
+        "rush_yds": 92,
+        "rush_td": 1,
+        "pass_rtg": 108.8,
+        "games": 4
+      },
+      "games": [
+        {
+          "date": "2024-11-10",
+          "date_iso": "2024-11-10",
+          "venue": "away",
+          "opponent": "KC",
+          "pass_yds": 215,
+          "pass_td": 2,
+          "pass_int": 0,
+          "pass_rtg": 115.3,
+          "rush_yds": -5,
+          "rush_td": 0
+        },
+        {
+          "date": "2025-01-05",
+          "date_iso": "2025-01-05",
+          "venue": "home",
+          "opponent": "KC",
+          "pass_yds": 321,
+          "pass_td": 4,
+          "pass_int": 0,
+          "pass_rtg": 152.4,
+          "rush_yds": 47,
+          "rush_td": 0
+        },
+        {
+          "date": "2025-11-16",
+          "date_iso": "2025-11-16",
+          "venue": "home",
+          "opponent": "KC",
+          "pass_yds": 295,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 89.4,
+          "rush_yds": 8,
+          "rush_td": 0
+        },
+        {
+          "date": "2025-12-25",
+          "date_iso": "2025-12-25",
+          "venue": "away",
+          "opponent": "KC",
+          "pass_yds": 182,
+          "pass_td": 1,
+          "pass_int": 1,
+          "pass_rtg": 76.9,
+          "rush_yds": 42,
+          "rush_td": 1
+        }
+      ],
+      "next_opponent": "KC"
+    }
+  }
+}

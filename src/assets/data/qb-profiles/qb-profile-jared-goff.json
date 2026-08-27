@@ -1,0 +1,366 @@
+{
+  "player": "JaredGoff",
+  "player_id": "jared-goff",
+  "team": "DET",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 393,
+      "pass_att": 578,
+      "pass_yds": 4564,
+      "pass_td": 34,
+      "pass_int": 8,
+      "rush_car": 19,
+      "rush_yds": 45,
+      "rush_td": 0
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 5,
+        "games": [
+          {
+            "date": "2025-09-14",
+            "value": 5
+          },
+          {
+            "date": "2025-10-05",
+            "value": 3
+          },
+          {
+            "date": "2025-11-09",
+            "value": 3
+          },
+          {
+            "date": "2025-12-14",
+            "value": 3
+          },
+          {
+            "date": "2025-12-21",
+            "value": 3
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 6,
+        "games": [
+          {
+            "date": "2025-09-14",
+            "value": 340
+          },
+          {
+            "date": "2025-11-09",
+            "value": 320
+          },
+          {
+            "date": "2025-12-04",
+            "value": 307
+          },
+          {
+            "date": "2025-12-14",
+            "value": 338
+          },
+          {
+            "date": "2025-12-21",
+            "value": 363
+          },
+          {
+            "date": "2026-01-04",
+            "value": 331
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 1141,
+      "q2": 1296,
+      "q3": 1072,
+      "q4": 1101,
+      "1h": 2437,
+      "2h": 2173
+    },
+    "explosive": {
+      "20-29": {
+        "count": 43,
+        "td": 5,
+        "yards": 1017
+      },
+      "30-39": {
+        "count": 13,
+        "td": 2,
+        "yards": 429
+      },
+      "40-49": {
+        "count": 5,
+        "td": 2,
+        "yards": 211
+      },
+      "50+": {
+        "count": 2,
+        "td": 0,
+        "yards": 116
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-01-04",
+        "date_iso": "2026-01-04",
+        "venue": "away",
+        "opponent": "CHI",
+        "pass_yds": 331,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 86.5,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-25",
+        "date_iso": "2025-12-25",
+        "venue": "away",
+        "opponent": "MIN",
+        "pass_yds": 197,
+        "pass_td": 1,
+        "pass_int": 2,
+        "pass_rtg": 64.9,
+        "rush_yds": 2,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-21",
+        "date_iso": "2025-12-21",
+        "venue": "home",
+        "opponent": "PIT",
+        "pass_yds": 364,
+        "pass_td": 3,
+        "pass_int": 0,
+        "pass_rtg": 101.2,
+        "rush_yds": -1,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-14",
+        "date_iso": "2025-12-14",
+        "venue": "away",
+        "opponent": "LAR",
+        "pass_yds": 338,
+        "pass_td": 3,
+        "pass_int": 0,
+        "pass_rtg": 111.6,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-04",
+        "date_iso": "2025-12-04",
+        "venue": "home",
+        "opponent": "DAL",
+        "pass_yds": 309,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 111.0,
+        "rush_yds": -2,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-27",
+        "date_iso": "2025-11-27",
+        "venue": "home",
+        "opponent": "GB",
+        "pass_yds": 256,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 132.9,
+        "rush_yds": 24,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-23",
+        "date_iso": "2025-11-23",
+        "venue": "home",
+        "opponent": "NYG",
+        "pass_yds": 279,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 91.3,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-16",
+        "date_iso": "2025-11-16",
+        "venue": "away",
+        "opponent": "PHI",
+        "pass_yds": 255,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 60.1,
+        "rush_yds": -1,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-09",
+        "date_iso": "2025-11-09",
+        "venue": "away",
+        "opponent": "WSH",
+        "pass_yds": 320,
+        "pass_td": 3,
+        "pass_int": 0,
+        "pass_rtg": 135.9,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-02",
+        "date_iso": "2025-11-02",
+        "venue": "home",
+        "opponent": "MIN",
+        "pass_yds": 284,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 108.4,
+        "rush_yds": 0,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "JaredGoff",
+      "position": "UNK",
+      "team": "DET",
+      "stat": "pass_yds",
+      "splits_count": 10,
+      "splits": [
+        {
+          "season": 2016,
+          "total": 1089
+        },
+        {
+          "season": 2017,
+          "total": 3804
+        },
+        {
+          "season": 2018,
+          "total": 4688
+        },
+        {
+          "season": 2019,
+          "total": 4638
+        },
+        {
+          "season": 2020,
+          "total": 3952
+        },
+        {
+          "season": 2021,
+          "total": 3245
+        },
+        {
+          "season": 2022,
+          "total": 4438
+        },
+        {
+          "season": 2023,
+          "total": 4575
+        },
+        {
+          "season": 2024,
+          "total": 4629
+        },
+        {
+          "season": 2025,
+          "total": 4564
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "JaredGoff",
+        "player_display": "JaredGoff",
+        "player_team": "DET",
+        "stat_scope": null,
+        "opponent_code": "NO",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 1455,
+        "pass_td": 11,
+        "pass_int": 3,
+        "rush_yds": 10,
+        "rush_td": 1,
+        "pass_rtg": 107.6,
+        "games": 5
+      },
+      "games": [
+        {
+          "date": "2016-11-27",
+          "date_iso": "2016-11-27",
+          "venue": "away",
+          "opponent": "NO",
+          "pass_yds": 214,
+          "pass_td": 3,
+          "pass_int": 1,
+          "pass_rtg": 100.3,
+          "rush_yds": 0,
+          "rush_td": 0
+        },
+        {
+          "date": "2017-11-26",
+          "date_iso": "2017-11-26",
+          "venue": "home",
+          "opponent": "NO",
+          "pass_yds": 354,
+          "pass_td": 2,
+          "pass_int": 1,
+          "pass_rtg": 96.5,
+          "rush_yds": -3,
+          "rush_td": 0
+        },
+        {
+          "date": "2018-11-04",
+          "date_iso": "2018-11-04",
+          "venue": "away",
+          "opponent": "NO",
+          "pass_yds": 391,
+          "pass_td": 3,
+          "pass_int": 1,
+          "pass_rtg": 115.7,
+          "rush_yds": 17,
+          "rush_td": 0
+        },
+        {
+          "date": "2019-09-15",
+          "date_iso": "2019-09-15",
+          "venue": "home",
+          "opponent": "NO",
+          "pass_yds": 283,
+          "pass_td": 1,
+          "pass_int": 0,
+          "pass_rtg": 112.6,
+          "rush_yds": -2,
+          "rush_td": 1
+        },
+        {
+          "date": "2023-12-03",
+          "date_iso": "2023-12-03",
+          "venue": "away",
+          "opponent": "NO",
+          "pass_yds": 213,
+          "pass_td": 2,
+          "pass_int": 0,
+          "pass_rtg": 117.6,
+          "rush_yds": -2,
+          "rush_td": 0
+        }
+      ],
+      "next_opponent": "NO"
+    }
+  }
+}

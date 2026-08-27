@@ -1,0 +1,370 @@
+{
+  "player": "BakerMayfield",
+  "player_id": "baker-mayfield",
+  "team": "TB",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 343,
+      "pass_att": 543,
+      "pass_yds": 3693,
+      "pass_td": 26,
+      "pass_int": 11,
+      "rush_car": 55,
+      "rush_yds": 382,
+      "rush_td": 1
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 2,
+        "games": [
+          {
+            "date": "2025-09-07",
+            "value": 3
+          },
+          {
+            "date": "2025-11-09",
+            "value": 3
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 3,
+        "games": [
+          {
+            "date": "2025-09-28",
+            "value": 302
+          },
+          {
+            "date": "2025-10-05",
+            "value": 394
+          },
+          {
+            "date": "2025-12-28",
+            "value": 362
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 723,
+      "q2": 977,
+      "q3": 1024,
+      "q4": 1103,
+      "1h": 1700,
+      "2h": 2127
+    },
+    "explosive": {
+      "20-29": {
+        "count": 39,
+        "td": 7,
+        "yards": 889
+      },
+      "30-39": {
+        "count": 8,
+        "td": 1,
+        "yards": 249
+      },
+      "40-49": {
+        "count": 2,
+        "td": 0,
+        "yards": 85
+      },
+      "50+": {
+        "count": 4,
+        "td": 2,
+        "yards": 265
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-01-03",
+        "date_iso": "2026-01-03",
+        "venue": "home",
+        "opponent": "CAR",
+        "pass_yds": 203,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 97.3,
+        "rush_yds": 31,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-28",
+        "date_iso": "2025-12-28",
+        "venue": "away",
+        "opponent": "MIA",
+        "pass_yds": 346,
+        "pass_td": 2,
+        "pass_int": 2,
+        "pass_rtg": 93.6,
+        "rush_yds": 16,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-21",
+        "date_iso": "2025-12-21",
+        "venue": "away",
+        "opponent": "CAR",
+        "pass_yds": 145,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 79.8,
+        "rush_yds": 49,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-11",
+        "date_iso": "2025-12-11",
+        "venue": "home",
+        "opponent": "ATL",
+        "pass_yds": 277,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 90.0,
+        "rush_yds": 1,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-07",
+        "date_iso": "2025-12-07",
+        "venue": "home",
+        "opponent": "NO",
+        "pass_yds": 122,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 55.1,
+        "rush_yds": 42,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-30",
+        "date_iso": "2025-11-30",
+        "venue": "home",
+        "opponent": "ARI",
+        "pass_yds": 194,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 96.4,
+        "rush_yds": 27,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-23",
+        "date_iso": "2025-11-23",
+        "venue": "away",
+        "opponent": "LAR",
+        "pass_yds": 41,
+        "pass_td": 1,
+        "pass_int": 2,
+        "pass_rtg": 32.0,
+        "rush_yds": 19,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-16",
+        "date_iso": "2025-11-16",
+        "venue": "away",
+        "opponent": "BUF",
+        "pass_yds": 173,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 72.5,
+        "rush_yds": 39,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-11-09",
+        "date_iso": "2025-11-09",
+        "venue": "home",
+        "opponent": "NE",
+        "pass_yds": 273,
+        "pass_td": 3,
+        "pass_int": 0,
+        "pass_rtg": 106.1,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-26",
+        "date_iso": "2025-10-26",
+        "venue": "away",
+        "opponent": "NO",
+        "pass_yds": 152,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 80.6,
+        "rush_yds": 0,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "BakerMayfield",
+      "position": "UNK",
+      "team": "TB",
+      "stat": "pass_yds",
+      "splits_count": 8,
+      "splits": [
+        {
+          "season": 2018,
+          "total": 3725
+        },
+        {
+          "season": 2019,
+          "total": 3827
+        },
+        {
+          "season": 2020,
+          "total": 3563
+        },
+        {
+          "season": 2021,
+          "total": 3010
+        },
+        {
+          "season": 2022,
+          "total": 2163
+        },
+        {
+          "season": 2023,
+          "total": 4044
+        },
+        {
+          "season": 2024,
+          "total": 4500
+        },
+        {
+          "season": 2025,
+          "total": 3693
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "BakerMayfield",
+        "player_display": "BakerMayfield",
+        "player_team": "TB",
+        "stat_scope": null,
+        "opponent_code": "CIN",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 1902,
+        "pass_td": 21,
+        "pass_int": 7,
+        "rush_yds": 58,
+        "rush_td": 1,
+        "pass_rtg": 115.0,
+        "games": 8
+      },
+      "games": [
+        {
+          "date": "2018-11-25",
+          "date_iso": "2018-11-25",
+          "venue": "away",
+          "opponent": "CIN",
+          "pass_yds": 258,
+          "pass_td": 4,
+          "pass_int": 0,
+          "pass_rtg": 143.9,
+          "rush_yds": -4,
+          "rush_td": 0
+        },
+        {
+          "date": "2018-12-23",
+          "date_iso": "2018-12-23",
+          "venue": "home",
+          "opponent": "CIN",
+          "pass_yds": 284,
+          "pass_td": 3,
+          "pass_int": 0,
+          "pass_rtg": 121.9,
+          "rush_yds": 16,
+          "rush_td": 0
+        },
+        {
+          "date": "2019-12-08",
+          "date_iso": "2019-12-08",
+          "venue": "home",
+          "opponent": "CIN",
+          "pass_yds": 192,
+          "pass_td": 0,
+          "pass_int": 2,
+          "pass_rtg": 38.9,
+          "rush_yds": 13,
+          "rush_td": 1
+        },
+        {
+          "date": "2019-12-29",
+          "date_iso": "2019-12-29",
+          "venue": "away",
+          "opponent": "CIN",
+          "pass_yds": 279,
+          "pass_td": 3,
+          "pass_int": 3,
+          "pass_rtg": 79.6,
+          "rush_yds": 29,
+          "rush_td": 0
+        },
+        {
+          "date": "2020-09-17",
+          "date_iso": "2020-09-17",
+          "venue": "home",
+          "opponent": "CIN",
+          "pass_yds": 219,
+          "pass_td": 2,
+          "pass_int": 1,
+          "pass_rtg": 110.6,
+          "rush_yds": 5,
+          "rush_td": 0
+        },
+        {
+          "date": "2020-10-25",
+          "date_iso": "2020-10-25",
+          "venue": "away",
+          "opponent": "CIN",
+          "pass_yds": 297,
+          "pass_td": 5,
+          "pass_int": 1,
+          "pass_rtg": 135.6,
+          "rush_yds": -1,
+          "rush_td": 0
+        },
+        {
+          "date": "2021-11-07",
+          "date_iso": "2021-11-07",
+          "venue": "away",
+          "opponent": "CIN",
+          "pass_yds": 218,
+          "pass_td": 2,
+          "pass_int": 0,
+          "pass_rtg": 132.6,
+          "rush_yds": 0,
+          "rush_td": 0
+        },
+        {
+          "date": "2022-11-06",
+          "date_iso": "2022-11-06",
+          "venue": "away",
+          "opponent": "CIN",
+          "pass_yds": 155,
+          "pass_td": 2,
+          "pass_int": 0,
+          "pass_rtg": 126.0,
+          "rush_yds": 0,
+          "rush_td": 0
+        }
+      ],
+      "next_opponent": "CIN"
+    }
+  }
+}

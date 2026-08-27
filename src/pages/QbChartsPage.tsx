@@ -10,14 +10,34 @@
 // backups alike). Swap this import for the real 2026 starters-only feed once
 // the backend ships it; nothing else about this page should need to change,
 // since the column defs read off the same shape.
+//
+// Filtered down to just the QBs we actually have a /database profile for
+// (glob-imported so this stays correct automatically as more profiles land —
+// no hardcoded roster to maintain here). Matched by a punctuation-stripped
+// key rather than an exact string, since the two datasets don't always agree
+// on formatting (chart data has "MichaelPenixJr." with a trailing period,
+// the profile has "MichaelPenixJr" without one). A player with a profile but
+// no games in the chart source (e.g. Deshaun Watson, who didn't play in
+// 2025) naturally drops out on its own — nothing special-cased for that.
 import { useMemo, useState } from 'react'
 import qbData from '@/assets/data/qb-explosives-2025.json'
 import { normalizeDisplayPlayer } from '@/lib/nspe-payloads'
 
+function normalizePlayerKey(name: string): string {
+  return name.toLowerCase().replace(/[^a-z0-9]/g, '')
+}
+
+const profileModules = import.meta.glob('../assets/data/qb-profiles/*.json', { eager: true }) as Record<
+  string,
+  { default: { player: string } }
+>
+const PROFILED_PLAYER_KEYS = new Set(
+  Object.values(profileModules).map((m) => normalizePlayerKey(m.default.player)),
+)
+
 const C = {
   accent: 'oklch(0.85 0.15 195)',
   green: 'oklch(0.85 0.15 145)',
-  amber: 'oklch(0.80 0.18 60)',
   surface: 'oklch(0.10 0 0)',
   surface2: 'oklch(0.15 0 0)',
   border: 'oklch(0.25 0 0)',
@@ -38,7 +58,9 @@ interface QbRow {
   explosive: { '20-29': ExplosiveBand; '30-39': ExplosiveBand; '40-49': ExplosiveBand; '50+': ExplosiveBand }
 }
 
-const RAW_PLAYERS = (qbData as { season: number; players: QbRow[] }).players
+const RAW_PLAYERS = (qbData as { season: number; players: QbRow[] }).players.filter((p) =>
+  PROFILED_PLAYER_KEYS.has(normalizePlayerKey(p.player_name)),
+)
 const SEASON = (qbData as { season: number }).season
 const BANDS: Array<keyof QbRow['explosive']> = ['20-29', '30-39', '40-49', '50+']
 
@@ -239,7 +261,7 @@ export default function QbChartsPage() {
                       className={`px-2 py-1.5 whitespace-nowrap ${col.numeric ? 'text-right' : 'text-left'}`}
                       style={{
                         borderBottom: `1px solid ${C.border}`,
-                        color: col.key === 'player' ? C.accent : isTdCol && typeof v === 'number' && v > 0 ? C.amber : C.textBright,
+                        color: col.key === 'player' ? C.accent : isTdCol && typeof v === 'number' && v > 0 ? C.green : C.textBright,
                         ...dividerStyle(col.key),
                       }}
                     >

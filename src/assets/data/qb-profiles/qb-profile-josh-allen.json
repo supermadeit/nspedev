@@ -1,0 +1,354 @@
+{
+  "player": "JoshAllen",
+  "player_id": "josh-allen",
+  "team": "BUF",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 319,
+      "pass_att": 460,
+      "pass_yds": 3668,
+      "pass_td": 25,
+      "pass_int": 10,
+      "rush_car": 112,
+      "rush_yds": 579,
+      "rush_td": 14
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 8,
+        "games": [
+          {
+            "date": "2025-09-07",
+            "value": 4
+          },
+          {
+            "date": "2025-09-18",
+            "value": 3
+          },
+          {
+            "date": "2025-09-28",
+            "value": 3
+          },
+          {
+            "date": "2025-10-26",
+            "value": 3
+          },
+          {
+            "date": "2025-11-02",
+            "value": 3
+          },
+          {
+            "date": "2025-11-16",
+            "value": 6
+          },
+          {
+            "date": "2025-12-07",
+            "value": 4
+          },
+          {
+            "date": "2025-12-14",
+            "value": 3
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 5,
+        "games": [
+          {
+            "date": "2025-09-07",
+            "value": 424
+          },
+          {
+            "date": "2025-10-05",
+            "value": 306
+          },
+          {
+            "date": "2025-11-09",
+            "value": 337
+          },
+          {
+            "date": "2025-11-16",
+            "value": 357
+          },
+          {
+            "date": "2025-12-07",
+            "value": 329
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 650,
+      "q2": 829,
+      "q3": 947,
+      "q4": 1215,
+      "1h": 1479,
+      "2h": 2162
+    },
+    "explosive": {
+      "20-29": {
+        "count": 36,
+        "td": 5,
+        "yards": 822
+      },
+      "30-39": {
+        "count": 10,
+        "td": 1,
+        "yards": 326
+      },
+      "40-49": {
+        "count": 5,
+        "td": 2,
+        "yards": 221
+      },
+      "50+": {
+        "count": 4,
+        "td": 2,
+        "yards": 207
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-01-04",
+        "date_iso": "2026-01-04",
+        "venue": "home",
+        "opponent": "NYJ",
+        "pass_yds": 0,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 0.0,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-28",
+        "date_iso": "2025-12-28",
+        "venue": "home",
+        "opponent": "PHI",
+        "pass_yds": 262,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 88.0,
+        "rush_yds": 27,
+        "rush_td": 2
+      },
+      {
+        "date": "2025-12-21",
+        "date_iso": "2025-12-21",
+        "venue": "away",
+        "opponent": "CLE",
+        "pass_yds": 130,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 83.2,
+        "rush_yds": 17,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-14",
+        "date_iso": "2025-12-14",
+        "venue": "away",
+        "opponent": "NE",
+        "pass_yds": 193,
+        "pass_td": 3,
+        "pass_int": 0,
+        "pass_rtg": 123.1,
+        "rush_yds": 48,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-07",
+        "date_iso": "2025-12-07",
+        "venue": "home",
+        "opponent": "CIN",
+        "pass_yds": 251,
+        "pass_td": 3,
+        "pass_int": 0,
+        "pass_rtg": 139.7,
+        "rush_yds": 78,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-11-30",
+        "date_iso": "2025-11-30",
+        "venue": "away",
+        "opponent": "PIT",
+        "pass_yds": 123,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 75.1,
+        "rush_yds": 38,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-11-20",
+        "date_iso": "2025-11-20",
+        "venue": "away",
+        "opponent": "HOU",
+        "pass_yds": 253,
+        "pass_td": 0,
+        "pass_int": 2,
+        "pass_rtg": 67.4,
+        "rush_yds": 20,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-16",
+        "date_iso": "2025-11-16",
+        "venue": "home",
+        "opponent": "TB",
+        "pass_yds": 317,
+        "pass_td": 3,
+        "pass_int": 2,
+        "pass_rtg": 104.4,
+        "rush_yds": 40,
+        "rush_td": 3
+      },
+      {
+        "date": "2025-11-09",
+        "date_iso": "2025-11-09",
+        "venue": "away",
+        "opponent": "MIA",
+        "pass_yds": 306,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 98.5,
+        "rush_yds": 31,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-02",
+        "date_iso": "2025-11-02",
+        "venue": "home",
+        "opponent": "KC",
+        "pass_yds": 273,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 123.2,
+        "rush_yds": 19,
+        "rush_td": 2
+      }
+    ],
+    "career_splits": {
+      "player_name": "JoshAllen",
+      "position": "UNK",
+      "team": "BUF",
+      "stat": "pass_yds",
+      "splits_count": 8,
+      "splits": [
+        {
+          "season": 2018,
+          "total": 2074
+        },
+        {
+          "season": 2019,
+          "total": 3089
+        },
+        {
+          "season": 2020,
+          "total": 4546
+        },
+        {
+          "season": 2021,
+          "total": 4407
+        },
+        {
+          "season": 2022,
+          "total": 4283
+        },
+        {
+          "season": 2023,
+          "total": 4306
+        },
+        {
+          "season": 2024,
+          "total": 3731
+        },
+        {
+          "season": 2025,
+          "total": 3668
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "JoshAllen",
+        "player_display": "JoshAllen",
+        "player_team": "BUF",
+        "stat_scope": null,
+        "opponent_code": "HOU",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 716,
+        "pass_td": 3,
+        "pass_int": 3,
+        "rush_yds": 135,
+        "rush_td": 0,
+        "pass_rtg": 74.0,
+        "games": 4
+      },
+      "games": [
+        {
+          "date": "2018-10-14",
+          "date_iso": "2018-10-14",
+          "venue": "away",
+          "opponent": "HOU",
+          "pass_yds": 84,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 71.7,
+          "rush_yds": 20,
+          "rush_td": 0
+        },
+        {
+          "date": "2021-10-03",
+          "date_iso": "2021-10-03",
+          "venue": "home",
+          "opponent": "HOU",
+          "pass_yds": 248,
+          "pass_td": 2,
+          "pass_int": 1,
+          "pass_rtg": 100.4,
+          "rush_yds": 41,
+          "rush_td": 0
+        },
+        {
+          "date": "2024-10-06",
+          "date_iso": "2024-10-06",
+          "venue": "away",
+          "opponent": "HOU",
+          "pass_yds": 131,
+          "pass_td": 1,
+          "pass_int": 0,
+          "pass_rtg": 56.4,
+          "rush_yds": 54,
+          "rush_td": 0
+        },
+        {
+          "date": "2025-11-20",
+          "date_iso": "2025-11-20",
+          "venue": "away",
+          "opponent": "HOU",
+          "pass_yds": 253,
+          "pass_td": 0,
+          "pass_int": 2,
+          "pass_rtg": 67.4,
+          "rush_yds": 20,
+          "rush_td": 0
+        }
+      ],
+      "next_opponent": "HOU"
+    }
+  }
+}

@@ -1,0 +1,229 @@
+{
+  "player": "MichaelPenixJr",
+  "player_id": "michael-penix-jr",
+  "team": "ATL",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 166,
+      "pass_att": 276,
+      "pass_yds": 1982,
+      "pass_td": 9,
+      "pass_int": 3,
+      "rush_car": 21,
+      "rush_yds": 70,
+      "rush_td": 1
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 1,
+        "games": [
+          {
+            "date": "2025-11-02",
+            "value": 3
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 2,
+        "games": [
+          {
+            "date": "2025-09-07",
+            "value": 319
+          },
+          {
+            "date": "2025-09-28",
+            "value": 315
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 588,
+      "q2": 562,
+      "q3": 483,
+      "q4": 381,
+      "1h": 1150,
+      "2h": 864
+    },
+    "explosive": {
+      "20-29": {
+        "count": 13,
+        "td": 0,
+        "yards": 299
+      },
+      "30-39": {
+        "count": 3,
+        "td": 0,
+        "yards": 98
+      },
+      "40-49": {
+        "count": 3,
+        "td": 0,
+        "yards": 124
+      },
+      "50+": {
+        "count": 3,
+        "td": 1,
+        "yards": 173
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2025-11-16",
+        "date_iso": "2025-11-16",
+        "venue": "home",
+        "opponent": "CAR",
+        "pass_yds": 175,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 112.2,
+        "rush_yds": 9,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-09",
+        "date_iso": "2025-11-09",
+        "venue": "home",
+        "opponent": "IND",
+        "pass_yds": 177,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 76.0,
+        "rush_yds": -1,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-02",
+        "date_iso": "2025-11-02",
+        "venue": "away",
+        "opponent": "NE",
+        "pass_yds": 221,
+        "pass_td": 3,
+        "pass_int": 0,
+        "pass_rtg": 103.5,
+        "rush_yds": 19,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-19",
+        "date_iso": "2025-10-19",
+        "venue": "away",
+        "opponent": "SF",
+        "pass_yds": 241,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 83.3,
+        "rush_yds": 6,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-13",
+        "date_iso": "2025-10-13",
+        "venue": "home",
+        "opponent": "BUF",
+        "pass_yds": 250,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 97.1,
+        "rush_yds": 6,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-09-28",
+        "date_iso": "2025-09-28",
+        "venue": "home",
+        "opponent": "WSH",
+        "pass_yds": 313,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 126.0,
+        "rush_yds": 2,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-09-21",
+        "date_iso": "2025-09-21",
+        "venue": "away",
+        "opponent": "CAR",
+        "pass_yds": 172,
+        "pass_td": 0,
+        "pass_int": 2,
+        "pass_rtg": 40.5,
+        "rush_yds": 9,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-09-14",
+        "date_iso": "2025-09-14",
+        "venue": "away",
+        "opponent": "MIN",
+        "pass_yds": 135,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 80.5,
+        "rush_yds": -1,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-09-07",
+        "date_iso": "2025-09-07",
+        "venue": "home",
+        "opponent": "TB",
+        "pass_yds": 298,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 93.2,
+        "rush_yds": 21,
+        "rush_td": 1
+      }
+    ],
+    "career_splits": {
+      "player_name": "MichaelPenixJr",
+      "position": "UNK",
+      "team": "ATL",
+      "stat": "pass_yds",
+      "splits_count": 2,
+      "splits": [
+        {
+          "season": 2024,
+          "total": 775
+        },
+        {
+          "season": 2025,
+          "total": 1982
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "MichaelPenixJr",
+        "player_display": "MichaelPenixJr",
+        "player_team": "ATL",
+        "stat_scope": null,
+        "opponent_code": "PIT",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 0,
+        "pass_td": 0,
+        "pass_int": 0,
+        "rush_yds": 0,
+        "rush_td": 0,
+        "pass_rtg": 0.0,
+        "games": 0
+      },
+      "games": [],
+      "next_opponent": "PIT"
+    }
+  }
+}

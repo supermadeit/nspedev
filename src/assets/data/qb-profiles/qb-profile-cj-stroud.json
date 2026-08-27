@@ -1,0 +1,258 @@
+{
+  "player": "CJStroud",
+  "player_id": "cj-stroud",
+  "team": "HOU",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 273,
+      "pass_att": 423,
+      "pass_yds": 3041,
+      "pass_td": 19,
+      "pass_int": 8,
+      "rush_car": 48,
+      "rush_yds": 209,
+      "rush_td": 1
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 2,
+        "games": [
+          {
+            "date": "2025-10-05",
+            "value": 4
+          },
+          {
+            "date": "2025-12-14",
+            "value": 3
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 1,
+        "games": [
+          {
+            "date": "2025-10-26",
+            "value": 348
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 902,
+      "q2": 935,
+      "q3": 539,
+      "q4": 625,
+      "1h": 1837,
+      "2h": 1164
+    },
+    "explosive": {
+      "20-29": {
+        "count": 24,
+        "td": 2,
+        "yards": 565
+      },
+      "30-39": {
+        "count": 5,
+        "td": 1,
+        "yards": 169
+      },
+      "40-49": {
+        "count": 4,
+        "td": 1,
+        "yards": 180
+      },
+      "50+": {
+        "count": 5,
+        "td": 3,
+        "yards": 285
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-01-04",
+        "date_iso": "2026-01-04",
+        "venue": "home",
+        "opponent": "IND",
+        "pass_yds": 169,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 97.9,
+        "rush_yds": 5,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-12-27",
+        "date_iso": "2025-12-27",
+        "venue": "away",
+        "opponent": "LAC",
+        "pass_yds": 244,
+        "pass_td": 2,
+        "pass_int": 2,
+        "pass_rtg": 80.1,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-21",
+        "date_iso": "2025-12-21",
+        "venue": "home",
+        "opponent": "LV",
+        "pass_yds": 187,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 88.6,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-14",
+        "date_iso": "2025-12-14",
+        "venue": "home",
+        "opponent": "ARI",
+        "pass_yds": 260,
+        "pass_td": 3,
+        "pass_int": 0,
+        "pass_rtg": 137.1,
+        "rush_yds": 10,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-07",
+        "date_iso": "2025-12-07",
+        "venue": "away",
+        "opponent": "KC",
+        "pass_yds": 203,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 80.4,
+        "rush_yds": 5,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-30",
+        "date_iso": "2025-11-30",
+        "venue": "away",
+        "opponent": "IND",
+        "pass_yds": 276,
+        "pass_td": 0,
+        "pass_int": 1,
+        "pass_rtg": 75.4,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-02",
+        "date_iso": "2025-11-02",
+        "venue": "home",
+        "opponent": "DEN",
+        "pass_yds": 79,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 85.0,
+        "rush_yds": 12,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-26",
+        "date_iso": "2025-10-26",
+        "venue": "home",
+        "opponent": "SF",
+        "pass_yds": 318,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 106.6,
+        "rush_yds": 30,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-20",
+        "date_iso": "2025-10-20",
+        "venue": "away",
+        "opponent": "SEA",
+        "pass_yds": 229,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 59.0,
+        "rush_yds": 25,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-05",
+        "date_iso": "2025-10-05",
+        "venue": "away",
+        "opponent": "BAL",
+        "pass_yds": 244,
+        "pass_td": 4,
+        "pass_int": 0,
+        "pass_rtg": 143.9,
+        "rush_yds": 30,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "CJStroud",
+      "position": "UNK",
+      "team": "HOU",
+      "stat": "pass_yds",
+      "splits_count": 3,
+      "splits": [
+        {
+          "season": 2023,
+          "total": 4108
+        },
+        {
+          "season": 2024,
+          "total": 3727
+        },
+        {
+          "season": 2025,
+          "total": 3041
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "CJStroud",
+        "player_display": "CJStroud",
+        "player_team": "HOU",
+        "stat_scope": null,
+        "opponent_code": "BUF",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 331,
+        "pass_td": 1,
+        "pass_int": 1,
+        "rush_yds": 27,
+        "rush_td": 0,
+        "pass_rtg": 97.6,
+        "games": 1
+      },
+      "games": [
+        {
+          "date": "2024-10-06",
+          "date_iso": "2024-10-06",
+          "venue": "home",
+          "opponent": "BUF",
+          "pass_yds": 331,
+          "pass_td": 1,
+          "pass_int": 1,
+          "pass_rtg": 97.6,
+          "rush_yds": 27,
+          "rush_td": 0
+        }
+      ],
+      "next_opponent": "BUF"
+    }
+  }
+}

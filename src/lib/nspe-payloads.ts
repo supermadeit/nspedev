@@ -27,6 +27,12 @@ export interface QueryResult {
   // matchDetails, so a parsing gap degrades to "no per-game breakdown shown"
   // rather than "this looks like a compute row, drop the met=N formatting."
   hasMatchArray?: boolean
+  // The trend window size (e.g. 5 for "-last3/5"), read off the row's
+  // window/last field when present. Exists specifically to detect a
+  // single-day window (-yst, "yesterday") — met=N is meaningless when there
+  // was only ever one possible day to check, so display code should show
+  // the one match's value+date directly instead, keyed off windowSize === 1.
+  windowSize?: number
 }
 
 export interface StreakDetail {
@@ -1305,6 +1311,8 @@ export function normalizeQueryResults(payload: ApiPayload, fallbackQuery = ''): 
       const streakDetails = rowStreakDetails.length > 0 ? rowStreakDetails : outputStreakDetails
       const matchDetails = extractMatchDetails(row, statContext)
       const team = extractTeamFromRow(row)
+      const windowRaw = row.window ?? row.last
+      const windowSize = typeof windowRaw === 'number' ? windowRaw : windowRaw != null ? asNumber(windowRaw) : undefined
 
       const totalCandidate =
         row.total ??
@@ -1329,6 +1337,7 @@ export function normalizeQueryResults(payload: ApiPayload, fallbackQuery = ''): 
         streakDetails: streakDetails.length > 0 ? streakDetails : undefined,
         matchDetails: matchDetails.length > 0 ? matchDetails : undefined,
         hasMatchArray: matchesCount != null,
+        windowSize,
       }
     })
     .filter((row): row is QueryResult => row !== null)

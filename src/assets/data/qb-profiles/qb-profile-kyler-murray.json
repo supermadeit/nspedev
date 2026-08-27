@@ -1,0 +1,212 @@
+{
+  "player": "KylerMurray",
+  "player_id": "kyler-murray",
+  "team": "MIN",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 110,
+      "pass_att": 161,
+      "pass_yds": 962,
+      "pass_td": 6,
+      "pass_int": 3,
+      "rush_car": 29,
+      "rush_yds": 173,
+      "rush_td": 1
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 0,
+        "games": []
+      },
+      "pass_rush_yds_300plus": {
+        "count": 0,
+        "games": []
+      }
+    },
+    "per_quarter": {
+      "q1": 196,
+      "q2": 390,
+      "q3": 209,
+      "q4": 189,
+      "1h": 586,
+      "2h": 398
+    },
+    "explosive": {
+      "20-29": {
+        "count": 4,
+        "td": 0,
+        "yards": 101
+      },
+      "30-39": {
+        "count": 2,
+        "td": 0,
+        "yards": 63
+      },
+      "40-49": {
+        "count": 2,
+        "td": 0,
+        "yards": 88
+      },
+      "50+": {
+        "count": 0,
+        "td": 0,
+        "yards": 0
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2025-10-05",
+        "date_iso": "2025-10-05",
+        "venue": "home",
+        "opponent": "TEN",
+        "pass_yds": 220,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 93.5,
+        "rush_yds": 25,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-09-25",
+        "date_iso": "2025-09-25",
+        "venue": "home",
+        "opponent": "SEA",
+        "pass_yds": 200,
+        "pass_td": 2,
+        "pass_int": 2,
+        "pass_rtg": 73.2,
+        "rush_yds": 41,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-09-21",
+        "date_iso": "2025-09-21",
+        "venue": "away",
+        "opponent": "SF",
+        "pass_yds": 159,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 82.9,
+        "rush_yds": 37,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-09-14",
+        "date_iso": "2025-09-14",
+        "venue": "home",
+        "opponent": "CAR",
+        "pass_yds": 220,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 92.1,
+        "rush_yds": 32,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-09-07",
+        "date_iso": "2025-09-07",
+        "venue": "away",
+        "opponent": "NO",
+        "pass_yds": 163,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 108.8,
+        "rush_yds": 38,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "KylerMurray",
+      "position": "UNK",
+      "team": "MIN",
+      "stat": "pass_yds",
+      "splits_count": 7,
+      "splits": [
+        {
+          "season": 2019,
+          "total": 3722
+        },
+        {
+          "season": 2020,
+          "total": 3971
+        },
+        {
+          "season": 2021,
+          "total": 3787
+        },
+        {
+          "season": 2022,
+          "total": 2368
+        },
+        {
+          "season": 2023,
+          "total": 1799
+        },
+        {
+          "season": 2024,
+          "total": 3851
+        },
+        {
+          "season": 2025,
+          "total": 962
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "KylerMurray",
+        "player_display": "KylerMurray",
+        "player_team": "ARI",
+        "stat_scope": null,
+        "opponent_code": "GB",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 488,
+        "pass_td": 1,
+        "pass_int": 2,
+        "rush_yds": 35,
+        "rush_td": 0,
+        "pass_rtg": 82.1,
+        "games": 2
+      },
+      "games": [
+        {
+          "date": "2021-10-28",
+          "date_iso": "2021-10-28",
+          "venue": "home",
+          "opponent": "GB",
+          "pass_yds": 274,
+          "pass_td": 0,
+          "pass_int": 2,
+          "pass_rtg": 67.0,
+          "rush_yds": 21,
+          "rush_td": 0
+        },
+        {
+          "date": "2024-10-13",
+          "date_iso": "2024-10-13",
+          "venue": "away",
+          "opponent": "GB",
+          "pass_yds": 214,
+          "pass_td": 1,
+          "pass_int": 0,
+          "pass_rtg": 97.7,
+          "rush_yds": 14,
+          "rush_td": 0
+        }
+      ],
+      "next_opponent": "GB"
+    }
+  }
+}

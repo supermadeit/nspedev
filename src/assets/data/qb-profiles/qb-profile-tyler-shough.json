@@ -1,0 +1,236 @@
+{
+  "player": "TylerShough",
+  "player_id": "tyler-shough",
+  "team": "NO",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 221,
+      "pass_att": 327,
+      "pass_yds": 2384,
+      "pass_td": 10,
+      "pass_int": 6,
+      "rush_car": 45,
+      "rush_yds": 186,
+      "rush_td": 3
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 0,
+        "games": []
+      },
+      "pass_rush_yds_300plus": {
+        "count": 3,
+        "games": [
+          {
+            "date": "2025-12-14",
+            "value": 304
+          },
+          {
+            "date": "2025-12-21",
+            "value": 316
+          },
+          {
+            "date": "2025-12-28",
+            "value": 339
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 350,
+      "q2": 656,
+      "q3": 465,
+      "q4": 965,
+      "1h": 1006,
+      "2h": 1430
+    },
+    "explosive": {
+      "20-29": {
+        "count": 10,
+        "td": 1,
+        "yards": 245
+      },
+      "30-39": {
+        "count": 6,
+        "td": 1,
+        "yards": 204
+      },
+      "40-49": {
+        "count": 0,
+        "td": 0,
+        "yards": 0
+      },
+      "50+": {
+        "count": 4,
+        "td": 1,
+        "yards": 233
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-01-04",
+        "date_iso": "2026-01-04",
+        "venue": "away",
+        "opponent": "ATL",
+        "pass_yds": 259,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 85.3,
+        "rush_yds": 34,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-12-28",
+        "date_iso": "2025-12-28",
+        "venue": "away",
+        "opponent": "TEN",
+        "pass_yds": 333,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 142.7,
+        "rush_yds": 6,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-21",
+        "date_iso": "2025-12-21",
+        "venue": "home",
+        "opponent": "NYJ",
+        "pass_yds": 308,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 89.5,
+        "rush_yds": 8,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-14",
+        "date_iso": "2025-12-14",
+        "venue": "home",
+        "opponent": "CAR",
+        "pass_yds": 272,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 110.4,
+        "rush_yds": 32,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-07",
+        "date_iso": "2025-12-07",
+        "venue": "away",
+        "opponent": "TB",
+        "pass_yds": 144,
+        "pass_td": 0,
+        "pass_int": 1,
+        "pass_rtg": 65.4,
+        "rush_yds": 55,
+        "rush_td": 2
+      },
+      {
+        "date": "2025-11-30",
+        "date_iso": "2025-11-30",
+        "venue": "away",
+        "opponent": "MIA",
+        "pass_yds": 239,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 91.9,
+        "rush_yds": 18,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-23",
+        "date_iso": "2025-11-23",
+        "venue": "home",
+        "opponent": "ATL",
+        "pass_yds": 243,
+        "pass_td": 0,
+        "pass_int": 1,
+        "pass_rtg": 74.1,
+        "rush_yds": 22,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-09",
+        "date_iso": "2025-11-09",
+        "venue": "away",
+        "opponent": "CAR",
+        "pass_yds": 282,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 128.9,
+        "rush_yds": -3,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-02",
+        "date_iso": "2025-11-02",
+        "venue": "away",
+        "opponent": "LAR",
+        "pass_yds": 176,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 81.2,
+        "rush_yds": 2,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-26",
+        "date_iso": "2025-10-26",
+        "venue": "home",
+        "opponent": "TB",
+        "pass_yds": 128,
+        "pass_td": 0,
+        "pass_int": 1,
+        "pass_rtg": 53.2,
+        "rush_yds": 12,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "TylerShough",
+      "position": "UNK",
+      "team": "NO",
+      "stat": "pass_yds",
+      "splits_count": 1,
+      "splits": [
+        {
+          "season": 2025,
+          "total": 2384
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "TylerShough",
+        "player_display": "TylerShough",
+        "player_team": "NO",
+        "stat_scope": null,
+        "opponent_code": "DET",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 0,
+        "pass_td": 0,
+        "pass_int": 0,
+        "rush_yds": 0,
+        "rush_td": 0,
+        "pass_rtg": 0.0,
+        "games": 0
+      },
+      "games": [],
+      "next_opponent": "DET"
+    }
+  }
+}

@@ -1,0 +1,270 @@
+{
+  "player": "CalebWilliams",
+  "player_id": "caleb-williams",
+  "team": "CHI",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 330,
+      "pass_att": 568,
+      "pass_yds": 3942,
+      "pass_td": 27,
+      "pass_int": 7,
+      "rush_car": 77,
+      "rush_yds": 388,
+      "rush_td": 3
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 3,
+        "games": [
+          {
+            "date": "2025-09-21",
+            "value": 4
+          },
+          {
+            "date": "2025-11-02",
+            "value": 3
+          },
+          {
+            "date": "2025-11-23",
+            "value": 3
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 4,
+        "games": [
+          {
+            "date": "2025-09-21",
+            "value": 310
+          },
+          {
+            "date": "2025-10-26",
+            "value": 309
+          },
+          {
+            "date": "2025-11-02",
+            "value": 333
+          },
+          {
+            "date": "2025-12-28",
+            "value": 348
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 940,
+      "q2": 875,
+      "q3": 924,
+      "q4": 1057,
+      "1h": 1815,
+      "2h": 1981
+    },
+    "explosive": {
+      "20-29": {
+        "count": 38,
+        "td": 6,
+        "yards": 922
+      },
+      "30-39": {
+        "count": 10,
+        "td": 3,
+        "yards": 332
+      },
+      "40-49": {
+        "count": 4,
+        "td": 1,
+        "yards": 169
+      },
+      "50+": {
+        "count": 2,
+        "td": 2,
+        "yards": 123
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-01-04",
+        "date_iso": "2026-01-04",
+        "venue": "home",
+        "opponent": "DET",
+        "pass_yds": 212,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 86.9,
+        "rush_yds": 1,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-28",
+        "date_iso": "2025-12-28",
+        "venue": "away",
+        "opponent": "SF",
+        "pass_yds": 330,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 100.3,
+        "rush_yds": 18,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-20",
+        "date_iso": "2025-12-20",
+        "venue": "home",
+        "opponent": "GB",
+        "pass_yds": 250,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 98.9,
+        "rush_yds": 30,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-14",
+        "date_iso": "2025-12-14",
+        "venue": "home",
+        "opponent": "CLE",
+        "pass_yds": 242,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 112.5,
+        "rush_yds": 13,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-07",
+        "date_iso": "2025-12-07",
+        "venue": "away",
+        "opponent": "GB",
+        "pass_yds": 186,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 76.6,
+        "rush_yds": 15,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-28",
+        "date_iso": "2025-11-28",
+        "venue": "away",
+        "opponent": "PHI",
+        "pass_yds": 154,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 56.9,
+        "rush_yds": 13,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-23",
+        "date_iso": "2025-11-23",
+        "venue": "home",
+        "opponent": "PIT",
+        "pass_yds": 239,
+        "pass_td": 3,
+        "pass_int": 0,
+        "pass_rtg": 104.3,
+        "rush_yds": 21,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-16",
+        "date_iso": "2025-11-16",
+        "venue": "away",
+        "opponent": "MIN",
+        "pass_yds": 193,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 68.9,
+        "rush_yds": 26,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-09",
+        "date_iso": "2025-11-09",
+        "venue": "home",
+        "opponent": "NYG",
+        "pass_yds": 220,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 83.1,
+        "rush_yds": 63,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-11-02",
+        "date_iso": "2025-11-02",
+        "venue": "away",
+        "opponent": "CIN",
+        "pass_yds": 280,
+        "pass_td": 3,
+        "pass_int": 0,
+        "pass_rtg": 114.8,
+        "rush_yds": 53,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "CalebWilliams",
+      "position": "UNK",
+      "team": "CHI",
+      "stat": "pass_yds",
+      "splits_count": 2,
+      "splits": [
+        {
+          "season": 2024,
+          "total": 3541
+        },
+        {
+          "season": 2025,
+          "total": 3942
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "CalebWilliams",
+        "player_display": "CalebWilliams",
+        "player_team": "CHI",
+        "stat_scope": null,
+        "opponent_code": "CAR",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 304,
+        "pass_td": 2,
+        "pass_int": 0,
+        "rush_yds": 34,
+        "rush_td": 0,
+        "pass_rtg": 126.2,
+        "games": 1
+      },
+      "games": [
+        {
+          "date": "2024-10-06",
+          "date_iso": "2024-10-06",
+          "venue": "home",
+          "opponent": "CAR",
+          "pass_yds": 304,
+          "pass_td": 2,
+          "pass_int": 0,
+          "pass_rtg": 126.2,
+          "rush_yds": 34,
+          "rush_td": 0
+        }
+      ],
+      "next_opponent": "CAR"
+    }
+  }
+}

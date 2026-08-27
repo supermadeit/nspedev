@@ -1,221 +1,218 @@
 {
-  "player": "DakPrescott",
-  "player_id": "dak-prescott",
-  "team": "DAL",
-  "position": "QB",
-  "season": 2025,
-  "sections": {
-    "season_totals": {
-      "pass_cmp": 404,
-      "pass_att": 600,
-      "pass_yds": 4552,
-      "pass_td": 30,
-      "pass_int": 10,
-      "rush_car": 53,
-      "rush_yds": 177,
-      "rush_td": 2
+  "kind": "mlb_stat_leaderboard",
+  "generated_at": "2026-08-27T10:08:03.197688Z",
+  "query": {
+    "stat": "hits",
+    "field": "H",
+    "short": "H",
+    "threshold": 3,
+    "year": 2026,
+    "last_n": null
+  },
+  "thresholds": {
+    "min_ab_season": 20,
+    "top_n": 20
+  },
+  "rows": [
+    {
+      "player": "Luis Arraez",
+      "team": "SF",
+      "games_meeting": 16,
+      "window_games": null,
+      "season_ab": 506,
+      "season_hits": 161,
+      "season_avg": 0.3182,
+      "last_match": "2026-08-21"
     },
-    "per_quarter": {
-      "q1": 983,
-      "q2": 1440,
-      "q3": 964,
-      "q4": 1177,
-      "1h": 2423,
-      "2h": 2141
+    {
+      "player": "Yordan Alvarez",
+      "team": "HOU",
+      "games_meeting": 14,
+      "window_games": null,
+      "season_ab": 472,
+      "season_hits": 152,
+      "season_avg": 0.322,
+      "last_match": "2026-08-25"
     },
-    "explosive": {
-      "20-29": {
-        "count": 26,
-        "td": 2,
-        "yards": 629
-      },
-      "30-39": {
-        "count": 15,
-        "td": 2,
-        "yards": 507
-      },
-      "40-49": {
-        "count": 9,
-        "td": 2,
-        "yards": 399
-      },
-      "50+": {
-        "count": 3,
-        "td": 2,
-        "yards": 211
-      }
+    {
+      "player": "Shohei Ohtani",
+      "team": "LAD",
+      "games_meeting": 13,
+      "window_games": null,
+      "season_ab": 476,
+      "season_hits": 152,
+      "season_avg": 0.3193,
+      "last_match": "2026-08-17"
     },
-    "recent_games": [
-      {
-        "date": "2026-01-04",
-        "date_iso": "2026-01-04",
-        "venue": "away",
-        "opponent": "NYG",
-        "pass_yds": 70,
-        "pass_td": 0,
-        "pass_int": 0,
-        "pass_rtg": 81.6,
-        "rush_yds": -1,
-        "rush_td": 0
-      },
-      {
-        "date": "2025-12-25",
-        "date_iso": "2025-12-25",
-        "venue": "away",
-        "opponent": "WSH",
-        "pass_yds": 307,
-        "pass_td": 2,
-        "pass_int": 0,
-        "pass_rtg": 97.5,
-        "rush_yds": 24,
-        "rush_td": 0
-      },
-      {
-        "date": "2025-12-21",
-        "date_iso": "2025-12-21",
-        "venue": "home",
-        "opponent": "LAC",
-        "pass_yds": 244,
-        "pass_td": 2,
-        "pass_int": 0,
-        "pass_rtg": 116.5,
-        "rush_yds": 14,
-        "rush_td": 0
-      },
-      {
-        "date": "2025-12-14",
-        "date_iso": "2025-12-14",
-        "venue": "home",
-        "opponent": "MIN",
-        "pass_yds": 294,
-        "pass_td": 0,
-        "pass_int": 0,
-        "pass_rtg": 84.8,
-        "rush_yds": 2,
-        "rush_td": 0
-      },
-      {
-        "date": "2025-12-04",
-        "date_iso": "2025-12-04",
-        "venue": "away",
-        "opponent": "DET",
-        "pass_yds": 376,
-        "pass_td": 1,
-        "pass_int": 2,
-        "pass_rtg": 79.7,
-        "rush_yds": 14,
-        "rush_td": 0
-      },
-      {
-        "date": "2025-11-27",
-        "date_iso": "2025-11-27",
-        "venue": "home",
-        "opponent": "KC",
-        "pass_yds": 320,
-        "pass_td": 2,
-        "pass_int": 1,
-        "pass_rtg": 100.4,
-        "rush_yds": -2,
-        "rush_td": 0
-      },
-      {
-        "date": "2025-11-23",
-        "date_iso": "2025-11-23",
-        "venue": "home",
-        "opponent": "PHI",
-        "pass_yds": 354,
-        "pass_td": 2,
-        "pass_int": 1,
-        "pass_rtg": 103.2,
-        "rush_yds": 9,
-        "rush_td": 1
-      },
-      {
-        "date": "2025-11-17",
-        "date_iso": "2025-11-17",
-        "venue": "away",
-        "opponent": "LV",
-        "pass_yds": 268,
-        "pass_td": 4,
-        "pass_int": 0,
-        "pass_rtg": 138.6,
-        "rush_yds": -4,
-        "rush_td": 0
-      },
-      {
-        "date": "2025-11-03",
-        "date_iso": "2025-11-03",
-        "venue": "home",
-        "opponent": "ARI",
-        "pass_yds": 250,
-        "pass_td": 1,
-        "pass_int": 1,
-        "pass_rtg": 77.9,
-        "rush_yds": 34,
-        "rush_td": 0
-      },
-      {
-        "date": "2025-10-26",
-        "date_iso": "2025-10-26",
-        "venue": "away",
-        "opponent": "DEN",
-        "pass_yds": 188,
-        "pass_td": 0,
-        "pass_int": 2,
-        "pass_rtg": 51.5,
-        "rush_yds": 31,
-        "rush_td": 0
-      }
-    ],
-    "career_splits": {
-      "player_name": "DakPrescott",
-      "position": "UNK",
-      "team": "DAL",
-      "stat": "pass_yds",
-      "splits_count": 10,
-      "splits": [
-        {
-          "season": 2016,
-          "total": 3667
-        },
-        {
-          "season": 2017,
-          "total": 3324
-        },
-        {
-          "season": 2018,
-          "total": 3885
-        },
-        {
-          "season": 2019,
-          "total": 4902
-        },
-        {
-          "season": 2020,
-          "total": 1856
-        },
-        {
-          "season": 2021,
-          "total": 4449
-        },
-        {
-          "season": 2022,
-          "total": 2860
-        },
-        {
-          "season": 2023,
-          "total": 4516
-        },
-        {
-          "season": 2024,
-          "total": 1978
-        },
-        {
-          "season": 2025,
-          "total": 4552
-        }
-      ],
-      "splits_single_season": false
+    {
+      "player": "Otto Lopez",
+      "team": "MIA",
+      "games_meeting": 13,
+      "window_games": null,
+      "season_ab": 516,
+      "season_hits": 158,
+      "season_avg": 0.3062,
+      "last_match": "2026-07-27"
+    },
+    {
+      "player": "Michael Harris II",
+      "team": "ATL",
+      "games_meeting": 13,
+      "window_games": null,
+      "season_ab": 484,
+      "season_hits": 141,
+      "season_avg": 0.2913,
+      "last_match": "2026-08-18"
+    },
+    {
+      "player": "Fernando Tatis Jr",
+      "team": "SD",
+      "games_meeting": 13,
+      "window_games": null,
+      "season_ab": 516,
+      "season_hits": 147,
+      "season_avg": 0.2849,
+      "last_match": "2026-08-23"
+    },
+    {
+      "player": "Yandy Diaz",
+      "team": "TB",
+      "games_meeting": 12,
+      "window_games": null,
+      "season_ab": 501,
+      "season_hits": 152,
+      "season_avg": 0.3034,
+      "last_match": "2026-08-10"
+    },
+    {
+      "player": "Luis Garcia Jr",
+      "team": "WSH",
+      "games_meeting": 12,
+      "window_games": null,
+      "season_ab": 429,
+      "season_hits": 123,
+      "season_avg": 0.2867,
+      "last_match": "2026-08-26"
+    },
+    {
+      "player": "Andy Pages",
+      "team": "LAD",
+      "games_meeting": 12,
+      "window_games": null,
+      "season_ab": 493,
+      "season_hits": 134,
+      "season_avg": 0.2718,
+      "last_match": "2026-08-17"
+    },
+    {
+      "player": "Gunnar Henderson",
+      "team": "BAL",
+      "games_meeting": 12,
+      "window_games": null,
+      "season_ab": 531,
+      "season_hits": 116,
+      "season_avg": 0.2185,
+      "last_match": "2026-08-14"
+    },
+    {
+      "player": "Freddie Freeman",
+      "team": "LAD",
+      "games_meeting": 11,
+      "window_games": null,
+      "season_ab": 489,
+      "season_hits": 147,
+      "season_avg": 0.3006,
+      "last_match": "2026-08-17"
+    },
+    {
+      "player": "Alec Burleson",
+      "team": "STL",
+      "games_meeting": 11,
+      "window_games": null,
+      "season_ab": 506,
+      "season_hits": 147,
+      "season_avg": 0.2905,
+      "last_match": "2026-08-16"
+    },
+    {
+      "player": "Carson Benge",
+      "team": "NYM",
+      "games_meeting": 11,
+      "window_games": null,
+      "season_ab": 480,
+      "season_hits": 135,
+      "season_avg": 0.2812,
+      "last_match": "2026-08-25"
+    },
+    {
+      "player": "BO Bichette",
+      "team": "NYM",
+      "games_meeting": 11,
+      "window_games": null,
+      "season_ab": 521,
+      "season_hits": 138,
+      "season_avg": 0.2649,
+      "last_match": "2026-08-16"
+    },
+    {
+      "player": "Nico Hoerner",
+      "team": "CHC",
+      "games_meeting": 11,
+      "window_games": null,
+      "season_ab": 516,
+      "season_hits": 134,
+      "season_avg": 0.2597,
+      "last_match": "2026-08-17"
+    },
+    {
+      "player": "Brice Turang",
+      "team": "MIL",
+      "games_meeting": 11,
+      "window_games": null,
+      "season_ab": 482,
+      "season_hits": 124,
+      "season_avg": 0.2573,
+      "last_match": "2026-08-08"
+    },
+    {
+      "player": "Jung Hoo Lee",
+      "team": "SF",
+      "games_meeting": 10,
+      "window_games": null,
+      "season_ab": 461,
+      "season_hits": 133,
+      "season_avg": 0.2885,
+      "last_match": "2026-08-03"
+    },
+    {
+      "player": "TJ Rumfield",
+      "team": "COL",
+      "games_meeting": 10,
+      "window_games": null,
+      "season_ab": 455,
+      "season_hits": 131,
+      "season_avg": 0.2879,
+      "last_match": "2026-08-07"
+    },
+    {
+      "player": "Ceddanne Rafaela",
+      "team": "BOS",
+      "games_meeting": 10,
+      "window_games": null,
+      "season_ab": 504,
+      "season_hits": 145,
+      "season_avg": 0.2877,
+      "last_match": "2026-08-23"
+    },
+    {
+      "player": "Pete Crow Armstrong",
+      "team": "CHC",
+      "games_meeting": 10,
+      "window_games": null,
+      "season_ab": 511,
+      "season_hits": 141,
+      "season_avg": 0.2759,
+      "last_match": "2026-08-17"
     }
-  }
+  ]
 }

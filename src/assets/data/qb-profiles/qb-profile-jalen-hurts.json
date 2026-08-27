@@ -1,0 +1,394 @@
+{
+  "player": "JalenHurts",
+  "player_id": "jalen-hurts",
+  "team": "PHI",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 294,
+      "pass_att": 454,
+      "pass_yds": 3224,
+      "pass_td": 25,
+      "pass_int": 6,
+      "rush_car": 105,
+      "rush_yds": 421,
+      "rush_td": 8
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 5,
+        "games": [
+          {
+            "date": "2025-09-21",
+            "value": 4
+          },
+          {
+            "date": "2025-10-19",
+            "value": 3
+          },
+          {
+            "date": "2025-10-26",
+            "value": 4
+          },
+          {
+            "date": "2025-11-23",
+            "value": 3
+          },
+          {
+            "date": "2025-12-14",
+            "value": 3
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 2,
+        "games": [
+          {
+            "date": "2025-10-19",
+            "value": 316
+          },
+          {
+            "date": "2025-11-23",
+            "value": 322
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 631,
+      "q2": 917,
+      "q3": 734,
+      "q4": 1063,
+      "1h": 1548,
+      "2h": 1797
+    },
+    "explosive": {
+      "20-29": {
+        "count": 22,
+        "td": 2,
+        "yards": 534
+      },
+      "30-39": {
+        "count": 9,
+        "td": 4,
+        "yards": 305
+      },
+      "40-49": {
+        "count": 6,
+        "td": 2,
+        "yards": 258
+      },
+      "50+": {
+        "count": 4,
+        "td": 1,
+        "yards": 250
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2025-12-28",
+        "date_iso": "2025-12-28",
+        "venue": "away",
+        "opponent": "BUF",
+        "pass_yds": 110,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 71.5,
+        "rush_yds": 5,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-20",
+        "date_iso": "2025-12-20",
+        "venue": "away",
+        "opponent": "WSH",
+        "pass_yds": 185,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 111.1,
+        "rush_yds": 40,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-14",
+        "date_iso": "2025-12-14",
+        "venue": "home",
+        "opponent": "LV",
+        "pass_yds": 175,
+        "pass_td": 3,
+        "pass_int": 0,
+        "pass_rtg": 154.9,
+        "rush_yds": 39,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-08",
+        "date_iso": "2025-12-08",
+        "venue": "away",
+        "opponent": "LAC",
+        "pass_yds": 240,
+        "pass_td": 0,
+        "pass_int": 4,
+        "pass_rtg": 31.2,
+        "rush_yds": 8,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-28",
+        "date_iso": "2025-11-28",
+        "venue": "home",
+        "opponent": "CHI",
+        "pass_yds": 230,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 84.2,
+        "rush_yds": 31,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-23",
+        "date_iso": "2025-11-23",
+        "venue": "away",
+        "opponent": "DAL",
+        "pass_yds": 289,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 99.2,
+        "rush_yds": 33,
+        "rush_td": 2
+      },
+      {
+        "date": "2025-11-16",
+        "date_iso": "2025-11-16",
+        "venue": "home",
+        "opponent": "DET",
+        "pass_yds": 135,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 63.8,
+        "rush_yds": 31,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-11-10",
+        "date_iso": "2025-11-10",
+        "venue": "away",
+        "opponent": "GB",
+        "pass_yds": 183,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 92.3,
+        "rush_yds": 27,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-26",
+        "date_iso": "2025-10-26",
+        "venue": "home",
+        "opponent": "NYG",
+        "pass_yds": 179,
+        "pass_td": 4,
+        "pass_int": 0,
+        "pass_rtg": 141.5,
+        "rush_yds": 22,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-19",
+        "date_iso": "2025-10-19",
+        "venue": "away",
+        "opponent": "MIN",
+        "pass_yds": 326,
+        "pass_td": 3,
+        "pass_int": 0,
+        "pass_rtg": 158.3,
+        "rush_yds": -10,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "JalenHurts",
+      "position": "UNK",
+      "team": "PHI",
+      "stat": "pass_yds",
+      "splits_count": 6,
+      "splits": [
+        {
+          "season": 2020,
+          "total": 1061
+        },
+        {
+          "season": 2021,
+          "total": 3144
+        },
+        {
+          "season": 2022,
+          "total": 3701
+        },
+        {
+          "season": 2023,
+          "total": 3858
+        },
+        {
+          "season": 2024,
+          "total": 2903
+        },
+        {
+          "season": 2025,
+          "total": 3224
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "JalenHurts",
+        "player_display": "JalenHurts",
+        "player_team": "PHI",
+        "stat_scope": null,
+        "opponent_code": "WSH",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 2152,
+        "pass_td": 14,
+        "pass_int": 3,
+        "rush_yds": 324,
+        "rush_td": 6,
+        "pass_rtg": 102.9,
+        "games": 10
+      },
+      "games": [
+        {
+          "date": "2021-01-03",
+          "date_iso": "2021-01-03",
+          "venue": "home",
+          "opponent": "WSH",
+          "pass_yds": 72,
+          "pass_td": 0,
+          "pass_int": 1,
+          "pass_rtg": 25.4,
+          "rush_yds": 34,
+          "rush_td": 2
+        },
+        {
+          "date": "2021-12-21",
+          "date_iso": "2021-12-21",
+          "venue": "home",
+          "opponent": "WSH",
+          "pass_yds": 296,
+          "pass_td": 1,
+          "pass_int": 1,
+          "pass_rtg": 110.4,
+          "rush_yds": 38,
+          "rush_td": 2
+        },
+        {
+          "date": "2022-01-02",
+          "date_iso": "2022-01-02",
+          "venue": "away",
+          "opponent": "WSH",
+          "pass_yds": 214,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 90.9,
+          "rush_yds": 44,
+          "rush_td": 0
+        },
+        {
+          "date": "2022-09-25",
+          "date_iso": "2022-09-25",
+          "venue": "away",
+          "opponent": "WSH",
+          "pass_yds": 340,
+          "pass_td": 3,
+          "pass_int": 0,
+          "pass_rtg": 123.5,
+          "rush_yds": 20,
+          "rush_td": 0
+        },
+        {
+          "date": "2022-11-14",
+          "date_iso": "2022-11-14",
+          "venue": "home",
+          "opponent": "WSH",
+          "pass_yds": 175,
+          "pass_td": 2,
+          "pass_int": 1,
+          "pass_rtg": 94.2,
+          "rush_yds": 28,
+          "rush_td": 1
+        },
+        {
+          "date": "2023-10-01",
+          "date_iso": "2023-10-01",
+          "venue": "home",
+          "opponent": "WSH",
+          "pass_yds": 319,
+          "pass_td": 2,
+          "pass_int": 0,
+          "pass_rtg": 112.3,
+          "rush_yds": 34,
+          "rush_td": 0
+        },
+        {
+          "date": "2023-10-29",
+          "date_iso": "2023-10-29",
+          "venue": "away",
+          "opponent": "WSH",
+          "pass_yds": 319,
+          "pass_td": 4,
+          "pass_int": 0,
+          "pass_rtg": 135.7,
+          "rush_yds": 6,
+          "rush_td": 0
+        },
+        {
+          "date": "2024-11-14",
+          "date_iso": "2024-11-14",
+          "venue": "home",
+          "opponent": "WSH",
+          "pass_yds": 221,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 88.5,
+          "rush_yds": 39,
+          "rush_td": 1
+        },
+        {
+          "date": "2024-12-22",
+          "date_iso": "2024-12-22",
+          "venue": "away",
+          "opponent": "WSH",
+          "pass_yds": 11,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 39.6,
+          "rush_yds": 41,
+          "rush_td": 0
+        },
+        {
+          "date": "2025-12-20",
+          "date_iso": "2025-12-20",
+          "venue": "away",
+          "opponent": "WSH",
+          "pass_yds": 185,
+          "pass_td": 2,
+          "pass_int": 0,
+          "pass_rtg": 111.1,
+          "rush_yds": 40,
+          "rush_td": 0
+        }
+      ],
+      "next_opponent": "WSH"
+    }
+  }
+}

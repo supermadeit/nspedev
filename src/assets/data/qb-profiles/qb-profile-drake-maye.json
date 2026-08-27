@@ -1,0 +1,265 @@
+{
+  "player": "DrakeMaye",
+  "player_id": "drake-maye",
+  "team": "NE",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 354,
+      "pass_att": 492,
+      "pass_yds": 4394,
+      "pass_td": 31,
+      "pass_int": 8,
+      "rush_car": 103,
+      "rush_yds": 450,
+      "rush_td": 4
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 5,
+        "games": [
+          {
+            "date": "2025-09-14",
+            "value": 3
+          },
+          {
+            "date": "2025-09-28",
+            "value": 3
+          },
+          {
+            "date": "2025-10-12",
+            "value": 3
+          },
+          {
+            "date": "2025-10-26",
+            "value": 3
+          },
+          {
+            "date": "2025-12-28",
+            "value": 5
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 4,
+        "games": [
+          {
+            "date": "2025-09-21",
+            "value": 313
+          },
+          {
+            "date": "2025-10-26",
+            "value": 332
+          },
+          {
+            "date": "2025-11-23",
+            "value": 316
+          },
+          {
+            "date": "2025-12-21",
+            "value": 405
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 876,
+      "q2": 1609,
+      "q3": 1123,
+      "q4": 878,
+      "1h": 2485,
+      "2h": 2001
+    },
+    "explosive": {
+      "20-29": {
+        "count": 41,
+        "td": 3,
+        "yards": 942
+      },
+      "30-39": {
+        "count": 19,
+        "td": 5,
+        "yards": 637
+      },
+      "40-49": {
+        "count": 1,
+        "td": 0,
+        "yards": 44
+      },
+      "50+": {
+        "count": 5,
+        "td": 2,
+        "yards": 292
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-01-04",
+        "date_iso": "2026-01-04",
+        "venue": "home",
+        "opponent": "MIA",
+        "pass_yds": 191,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 129.4,
+        "rush_yds": 41,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-28",
+        "date_iso": "2025-12-28",
+        "venue": "away",
+        "opponent": "NYJ",
+        "pass_yds": 256,
+        "pass_td": 5,
+        "pass_int": 0,
+        "pass_rtg": 157.0,
+        "rush_yds": 22,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-21",
+        "date_iso": "2025-12-21",
+        "venue": "away",
+        "opponent": "BAL",
+        "pass_yds": 380,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 102.5,
+        "rush_yds": 25,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-14",
+        "date_iso": "2025-12-14",
+        "venue": "home",
+        "opponent": "BUF",
+        "pass_yds": 155,
+        "pass_td": 0,
+        "pass_int": 1,
+        "pass_rtg": 62.8,
+        "rush_yds": 43,
+        "rush_td": 2
+      },
+      {
+        "date": "2025-12-01",
+        "date_iso": "2025-12-01",
+        "venue": "home",
+        "opponent": "NYG",
+        "pass_yds": 282,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 126.0,
+        "rush_yds": 12,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-23",
+        "date_iso": "2025-11-23",
+        "venue": "away",
+        "opponent": "CIN",
+        "pass_yds": 294,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 87.1,
+        "rush_yds": 22,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-13",
+        "date_iso": "2025-11-13",
+        "venue": "home",
+        "opponent": "NYJ",
+        "pass_yds": 281,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 107.6,
+        "rush_yds": 2,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-09",
+        "date_iso": "2025-11-09",
+        "venue": "away",
+        "opponent": "TB",
+        "pass_yds": 270,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 89.4,
+        "rush_yds": 13,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-02",
+        "date_iso": "2025-11-02",
+        "venue": "home",
+        "opponent": "ATL",
+        "pass_yds": 259,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 102.5,
+        "rush_yds": 20,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-26",
+        "date_iso": "2025-10-26",
+        "venue": "home",
+        "opponent": "CLE",
+        "pass_yds": 282,
+        "pass_td": 3,
+        "pass_int": 1,
+        "pass_rtg": 135.8,
+        "rush_yds": 50,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "DrakeMaye",
+      "position": "UNK",
+      "team": "NE",
+      "stat": "pass_yds",
+      "splits_count": 2,
+      "splits": [
+        {
+          "season": 2024,
+          "total": 2276
+        },
+        {
+          "season": 2025,
+          "total": 4394
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "DrakeMaye",
+        "player_display": "DrakeMaye",
+        "player_team": "NE",
+        "stat_scope": null,
+        "opponent_code": "SEA",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 0,
+        "pass_td": 0,
+        "pass_int": 0,
+        "rush_yds": 0,
+        "rush_td": 0,
+        "pass_rtg": 0.0,
+        "games": 0
+      },
+      "games": [],
+      "next_opponent": "SEA"
+    }
+  }
+}

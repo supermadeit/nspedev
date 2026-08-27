@@ -1,0 +1,226 @@
+{
+  "player": "DavisMills",
+  "player_id": "davis-mills",
+  "team": "HOU",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 91,
+      "pass_att": 159,
+      "pass_yds": 915,
+      "pass_td": 5,
+      "pass_int": 1,
+      "rush_car": 13,
+      "rush_yds": 60,
+      "rush_td": 1
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 1,
+        "games": [
+          {
+            "date": "2025-11-09",
+            "value": 3
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 1,
+        "games": [
+          {
+            "date": "2025-11-09",
+            "value": 312
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 120,
+      "q2": 384,
+      "q3": 139,
+      "q4": 273,
+      "1h": 504,
+      "2h": 412
+    },
+    "explosive": {
+      "20-29": {
+        "count": 7,
+        "td": 0,
+        "yards": 164
+      },
+      "30-39": {
+        "count": 1,
+        "td": 0,
+        "yards": 33
+      },
+      "40-49": {
+        "count": 0,
+        "td": 0,
+        "yards": 0
+      },
+      "50+": {
+        "count": 1,
+        "td": 0,
+        "yards": 54
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-01-04",
+        "date_iso": "2026-01-04",
+        "venue": "home",
+        "opponent": "IND",
+        "pass_yds": 36,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 46.5,
+        "rush_yds": 12,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-20",
+        "date_iso": "2025-11-20",
+        "venue": "home",
+        "opponent": "BUF",
+        "pass_yds": 153,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 90.0,
+        "rush_yds": 4,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-16",
+        "date_iso": "2025-11-16",
+        "venue": "away",
+        "opponent": "TEN",
+        "pass_yds": 274,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 90.9,
+        "rush_yds": 14,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-09",
+        "date_iso": "2025-11-09",
+        "venue": "home",
+        "opponent": "JAX",
+        "pass_yds": 292,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 84.7,
+        "rush_yds": 20,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-11-02",
+        "date_iso": "2025-11-02",
+        "venue": "home",
+        "opponent": "DEN",
+        "pass_yds": 137,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 68.3,
+        "rush_yds": 7,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-05",
+        "date_iso": "2025-10-05",
+        "venue": "away",
+        "opponent": "BAL",
+        "pass_yds": 23,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 67.7,
+        "rush_yds": 3,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "DavisMills",
+      "position": "UNK",
+      "team": "HOU",
+      "stat": "pass_yds",
+      "splits_count": 5,
+      "splits": [
+        {
+          "season": 2021,
+          "total": 2664
+        },
+        {
+          "season": 2022,
+          "total": 3118
+        },
+        {
+          "season": 2023,
+          "total": 173
+        },
+        {
+          "season": 2024,
+          "total": 212
+        },
+        {
+          "season": 2025,
+          "total": 915
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "DavisMills",
+        "player_display": "DavisMills",
+        "player_team": "HOU",
+        "stat_scope": null,
+        "opponent_code": "BUF",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 240,
+        "pass_td": 2,
+        "pass_int": 4,
+        "rush_yds": 6,
+        "rush_td": 0,
+        "pass_rtg": 46.2,
+        "games": 2
+      },
+      "games": [
+        {
+          "date": "2021-10-03",
+          "date_iso": "2021-10-03",
+          "venue": "away",
+          "opponent": "BUF",
+          "pass_yds": 87,
+          "pass_td": 0,
+          "pass_int": 4,
+          "pass_rtg": 23.4,
+          "rush_yds": 2,
+          "rush_td": 0
+        },
+        {
+          "date": "2025-11-20",
+          "date_iso": "2025-11-20",
+          "venue": "home",
+          "opponent": "BUF",
+          "pass_yds": 153,
+          "pass_td": 2,
+          "pass_int": 0,
+          "pass_rtg": 90.0,
+          "rush_yds": 4,
+          "rush_td": 0
+        }
+      ],
+      "next_opponent": "BUF"
+    }
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "player": "MalikWillis",
+  "player_id": "malik-willis",
+  "team": "MIA",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 30,
+      "pass_att": 35,
+      "pass_yds": 422,
+      "pass_td": 3,
+      "pass_int": 0,
+      "rush_car": 22,
+      "rush_yds": 123,
+      "rush_td": 2
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 1,
+        "games": [
+          {
+            "date": "2025-12-27",
+            "value": 3
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 1,
+        "games": [
+          {
+            "date": "2025-12-27",
+            "value": 348
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 84,
+      "q2": 61,
+      "q3": 213,
+      "q4": 27,
+      "1h": 145,
+      "2h": 240
+    },
+    "explosive": {
+      "20-29": {
+        "count": 2,
+        "td": 0,
+        "yards": 49
+      },
+      "30-39": {
+        "count": 5,
+        "td": 1,
+        "yards": 165
+      },
+      "40-49": {
+        "count": 1,
+        "td": 0,
+        "yards": 40
+      },
+      "50+": {
+        "count": 0,
+        "td": 0,
+        "yards": 0
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2025-12-27",
+        "date_iso": "2025-12-27",
+        "venue": "home",
+        "opponent": "BAL",
+        "pass_yds": 288,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 134.6,
+        "rush_yds": 60,
+        "rush_td": 2
+      },
+      {
+        "date": "2025-12-20",
+        "date_iso": "2025-12-20",
+        "venue": "away",
+        "opponent": "CHI",
+        "pass_yds": 121,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 142.8,
+        "rush_yds": 44,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-23",
+        "date_iso": "2025-11-23",
+        "venue": "home",
+        "opponent": "MIN",
+        "pass_yds": 7,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 95.8,
+        "rush_yds": 3,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-16",
+        "date_iso": "2025-11-16",
+        "venue": "away",
+        "opponent": "NYG",
+        "pass_yds": 6,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 118.8,
+        "rush_yds": 16,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "MalikWillis",
+      "position": "UNK",
+      "team": "MIA",
+      "stat": "pass_yds",
+      "splits_count": 4,
+      "splits": [
+        {
+          "season": 2022,
+          "total": 276
+        },
+        {
+          "season": 2023,
+          "total": 74
+        },
+        {
+          "season": 2024,
+          "total": 550
+        },
+        {
+          "season": 2025,
+          "total": 422
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "MalikWillis",
+        "player_display": "MalikWillis",
+        "player_team": "GB",
+        "stat_scope": null,
+        "opponent_code": "LV",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 0,
+        "pass_td": 0,
+        "pass_int": 0,
+        "rush_yds": 0,
+        "rush_td": 0,
+        "pass_rtg": 0.0,
+        "games": 0
+      },
+      "games": [],
+      "next_opponent": "LV"
+    }
+  }
+}

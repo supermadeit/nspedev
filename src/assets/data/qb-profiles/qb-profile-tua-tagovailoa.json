@@ -1,0 +1,282 @@
+{
+  "player": "TuaTagovailoa",
+  "player_id": "tua-tagovailoa",
+  "team": "ATL",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 260,
+      "pass_att": 384,
+      "pass_yds": 2660,
+      "pass_td": 20,
+      "pass_int": 15,
+      "rush_car": 20,
+      "rush_yds": 43,
+      "rush_td": 0
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 2,
+        "games": [
+          {
+            "date": "2025-10-05",
+            "value": 3
+          },
+          {
+            "date": "2025-10-26",
+            "value": 4
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 1,
+        "games": [
+          {
+            "date": "2025-09-14",
+            "value": 315
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 551,
+      "q2": 701,
+      "q3": 479,
+      "q4": 821,
+      "1h": 1252,
+      "2h": 1300
+    },
+    "explosive": {
+      "20-29": {
+        "count": 27,
+        "td": 2,
+        "yards": 627
+      },
+      "30-39": {
+        "count": 4,
+        "td": 1,
+        "yards": 137
+      },
+      "40-49": {
+        "count": 4,
+        "td": 2,
+        "yards": 181
+      },
+      "50+": {
+        "count": 0,
+        "td": 0,
+        "yards": 0
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2025-12-15",
+        "date_iso": "2025-12-15",
+        "venue": "away",
+        "opponent": "PIT",
+        "pass_yds": 253,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 113.2,
+        "rush_yds": 1,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-07",
+        "date_iso": "2025-12-07",
+        "venue": "away",
+        "opponent": "NYJ",
+        "pass_yds": 127,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 94.7,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-30",
+        "date_iso": "2025-11-30",
+        "venue": "home",
+        "opponent": "NO",
+        "pass_yds": 157,
+        "pass_td": 0,
+        "pass_int": 1,
+        "pass_rtg": 55.9,
+        "rush_yds": 4,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-16",
+        "date_iso": "2025-11-16",
+        "venue": "home",
+        "opponent": "WSH",
+        "pass_yds": 171,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 96.0,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-09",
+        "date_iso": "2025-11-09",
+        "venue": "home",
+        "opponent": "BUF",
+        "pass_yds": 173,
+        "pass_td": 2,
+        "pass_int": 2,
+        "pass_rtg": 88.1,
+        "rush_yds": -1,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-30",
+        "date_iso": "2025-10-30",
+        "venue": "home",
+        "opponent": "BAL",
+        "pass_yds": 261,
+        "pass_td": 0,
+        "pass_int": 1,
+        "pass_rtg": 70.9,
+        "rush_yds": 1,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-26",
+        "date_iso": "2025-10-26",
+        "venue": "away",
+        "opponent": "ATL",
+        "pass_yds": 205,
+        "pass_td": 4,
+        "pass_int": 0,
+        "pass_rtg": 138.6,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-19",
+        "date_iso": "2025-10-19",
+        "venue": "away",
+        "opponent": "CLE",
+        "pass_yds": 100,
+        "pass_td": 0,
+        "pass_int": 3,
+        "pass_rtg": 24.1,
+        "rush_yds": 6,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-12",
+        "date_iso": "2025-10-12",
+        "venue": "home",
+        "opponent": "LAC",
+        "pass_yds": 205,
+        "pass_td": 1,
+        "pass_int": 3,
+        "pass_rtg": 54.8,
+        "rush_yds": 4,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-05",
+        "date_iso": "2025-10-05",
+        "venue": "away",
+        "opponent": "CAR",
+        "pass_yds": 256,
+        "pass_td": 3,
+        "pass_int": 0,
+        "pass_rtg": 122.0,
+        "rush_yds": 5,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "TuaTagovailoa",
+      "position": "UNK",
+      "team": "ATL",
+      "stat": "pass_yds",
+      "splits_count": 6,
+      "splits": [
+        {
+          "season": 2020,
+          "total": 1814
+        },
+        {
+          "season": 2021,
+          "total": 2653
+        },
+        {
+          "season": 2022,
+          "total": 3548
+        },
+        {
+          "season": 2023,
+          "total": 4624
+        },
+        {
+          "season": 2024,
+          "total": 2867
+        },
+        {
+          "season": 2025,
+          "total": 2660
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "TuaTagovailoa",
+        "player_display": "TuaTagovailoa",
+        "player_team": "MIA",
+        "stat_scope": null,
+        "opponent_code": "PIT",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 514,
+        "pass_td": 3,
+        "pass_int": 1,
+        "rush_yds": 16,
+        "rush_td": 0,
+        "pass_rtg": 102.2,
+        "games": 2
+      },
+      "games": [
+        {
+          "date": "2022-10-23",
+          "date_iso": "2022-10-23",
+          "venue": "home",
+          "opponent": "PIT",
+          "pass_yds": 261,
+          "pass_td": 1,
+          "pass_int": 0,
+          "pass_rtg": 92.7,
+          "rush_yds": 15,
+          "rush_td": 0
+        },
+        {
+          "date": "2025-12-15",
+          "date_iso": "2025-12-15",
+          "venue": "away",
+          "opponent": "PIT",
+          "pass_yds": 253,
+          "pass_td": 2,
+          "pass_int": 1,
+          "pass_rtg": 113.2,
+          "rush_yds": 1,
+          "rush_td": 0
+        }
+      ],
+      "next_opponent": "PIT"
+    }
+  }
+}

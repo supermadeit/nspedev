@@ -1,0 +1,330 @@
+{
+  "player": "GenoSmith",
+  "player_id": "geno-smith",
+  "team": "NYJ",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 302,
+      "pass_att": 448,
+      "pass_yds": 3025,
+      "pass_td": 19,
+      "pass_int": 17,
+      "rush_car": 41,
+      "rush_yds": 109,
+      "rush_td": 0
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 2,
+        "games": [
+          {
+            "date": "2025-09-21",
+            "value": 3
+          },
+          {
+            "date": "2025-11-02",
+            "value": 4
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 1,
+        "games": [
+          {
+            "date": "2025-09-07",
+            "value": 372
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 813,
+      "q2": 689,
+      "q3": 735,
+      "q4": 904,
+      "1h": 1502,
+      "2h": 1639
+    },
+    "explosive": {
+      "20-29": {
+        "count": 22,
+        "td": 2,
+        "yards": 528
+      },
+      "30-39": {
+        "count": 9,
+        "td": 0,
+        "yards": 305
+      },
+      "40-49": {
+        "count": 2,
+        "td": 0,
+        "yards": 92
+      },
+      "50+": {
+        "count": 2,
+        "td": 2,
+        "yards": 121
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2025-12-28",
+        "date_iso": "2025-12-28",
+        "venue": "home",
+        "opponent": "NYG",
+        "pass_yds": 176,
+        "pass_td": 1,
+        "pass_int": 2,
+        "pass_rtg": 69.9,
+        "rush_yds": 1,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-21",
+        "date_iso": "2025-12-21",
+        "venue": "away",
+        "opponent": "HOU",
+        "pass_yds": 201,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 107.3,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-07",
+        "date_iso": "2025-12-07",
+        "venue": "home",
+        "opponent": "DEN",
+        "pass_yds": 116,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 92.6,
+        "rush_yds": 4,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-30",
+        "date_iso": "2025-11-30",
+        "venue": "away",
+        "opponent": "LAC",
+        "pass_yds": 165,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 107.4,
+        "rush_yds": -6,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-23",
+        "date_iso": "2025-11-23",
+        "venue": "home",
+        "opponent": "CLE",
+        "pass_yds": 285,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 93.5,
+        "rush_yds": 8,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-17",
+        "date_iso": "2025-11-17",
+        "venue": "home",
+        "opponent": "DAL",
+        "pass_yds": 238,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 77.3,
+        "rush_yds": 14,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-06",
+        "date_iso": "2025-11-06",
+        "venue": "away",
+        "opponent": "DEN",
+        "pass_yds": 143,
+        "pass_td": 0,
+        "pass_int": 1,
+        "pass_rtg": 60.3,
+        "rush_yds": 7,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-02",
+        "date_iso": "2025-11-02",
+        "venue": "home",
+        "opponent": "JAX",
+        "pass_yds": 284,
+        "pass_td": 4,
+        "pass_int": 1,
+        "pass_rtg": 117.9,
+        "rush_yds": 9,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-19",
+        "date_iso": "2025-10-19",
+        "venue": "away",
+        "opponent": "KC",
+        "pass_yds": 67,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 71.6,
+        "rush_yds": 1,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-12",
+        "date_iso": "2025-10-12",
+        "venue": "home",
+        "opponent": "TEN",
+        "pass_yds": 174,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 91.6,
+        "rush_yds": -3,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "GenoSmith",
+      "position": "UNK",
+      "team": "NYJ",
+      "stat": "pass_yds",
+      "splits_count": 12,
+      "splits": [
+        {
+          "season": 2013,
+          "total": 3046
+        },
+        {
+          "season": 2014,
+          "total": 2525
+        },
+        {
+          "season": 2015,
+          "total": 265
+        },
+        {
+          "season": 2016,
+          "total": 126
+        },
+        {
+          "season": 2017,
+          "total": 212
+        },
+        {
+          "season": 2018,
+          "total": 8
+        },
+        {
+          "season": 2020,
+          "total": 33
+        },
+        {
+          "season": 2021,
+          "total": 702
+        },
+        {
+          "season": 2022,
+          "total": 4282
+        },
+        {
+          "season": 2023,
+          "total": 3624
+        },
+        {
+          "season": 2024,
+          "total": 4320
+        },
+        {
+          "season": 2025,
+          "total": 3025
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "GenoSmith",
+        "player_display": "GenoSmith",
+        "player_team": "LV",
+        "stat_scope": null,
+        "opponent_code": "TEN",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 869,
+        "pass_td": 5,
+        "pass_int": 3,
+        "rush_yds": 22,
+        "rush_td": 0,
+        "pass_rtg": 91.2,
+        "games": 4
+      },
+      "games": [
+        {
+          "date": "2013-09-29",
+          "date_iso": "2013-09-29",
+          "venue": "away",
+          "opponent": "TEN",
+          "pass_yds": 289,
+          "pass_td": 1,
+          "pass_int": 2,
+          "pass_rtg": 60.4,
+          "rush_yds": 7,
+          "rush_td": 0
+        },
+        {
+          "date": "2014-12-14",
+          "date_iso": "2014-12-14",
+          "venue": "away",
+          "opponent": "TEN",
+          "pass_yds": 179,
+          "pass_td": 1,
+          "pass_int": 0,
+          "pass_rtg": 88.2,
+          "rush_yds": 16,
+          "rush_td": 0
+        },
+        {
+          "date": "2023-12-24",
+          "date_iso": "2023-12-24",
+          "venue": "away",
+          "opponent": "TEN",
+          "pass_yds": 227,
+          "pass_td": 2,
+          "pass_int": 0,
+          "pass_rtg": 104.7,
+          "rush_yds": 2,
+          "rush_td": 0
+        },
+        {
+          "date": "2025-10-12",
+          "date_iso": "2025-10-12",
+          "venue": "home",
+          "opponent": "TEN",
+          "pass_yds": 174,
+          "pass_td": 1,
+          "pass_int": 1,
+          "pass_rtg": 91.6,
+          "rush_yds": -3,
+          "rush_td": 0
+        }
+      ],
+      "next_opponent": "TEN"
+    }
+  }
+}

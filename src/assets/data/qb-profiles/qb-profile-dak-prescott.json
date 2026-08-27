@@ -1,0 +1,514 @@
+{
+  "player": "DakPrescott",
+  "player_id": "dak-prescott",
+  "team": "DAL",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 404,
+      "pass_att": 600,
+      "pass_yds": 4552,
+      "pass_td": 30,
+      "pass_int": 10,
+      "rush_car": 53,
+      "rush_yds": 177,
+      "rush_td": 2
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 6,
+        "games": [
+          {
+            "date": "2025-09-28",
+            "value": 4
+          },
+          {
+            "date": "2025-10-05",
+            "value": 4
+          },
+          {
+            "date": "2025-10-12",
+            "value": 3
+          },
+          {
+            "date": "2025-10-19",
+            "value": 3
+          },
+          {
+            "date": "2025-11-17",
+            "value": 4
+          },
+          {
+            "date": "2025-11-23",
+            "value": 3
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 6,
+        "games": [
+          {
+            "date": "2025-09-14",
+            "value": 378
+          },
+          {
+            "date": "2025-09-28",
+            "value": 321
+          },
+          {
+            "date": "2025-11-23",
+            "value": 363
+          },
+          {
+            "date": "2025-11-27",
+            "value": 318
+          },
+          {
+            "date": "2025-12-04",
+            "value": 390
+          },
+          {
+            "date": "2025-12-25",
+            "value": 331
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 983,
+      "q2": 1440,
+      "q3": 964,
+      "q4": 1177,
+      "1h": 2423,
+      "2h": 2141
+    },
+    "explosive": {
+      "20-29": {
+        "count": 26,
+        "td": 2,
+        "yards": 629
+      },
+      "30-39": {
+        "count": 15,
+        "td": 2,
+        "yards": 507
+      },
+      "40-49": {
+        "count": 9,
+        "td": 2,
+        "yards": 399
+      },
+      "50+": {
+        "count": 3,
+        "td": 2,
+        "yards": 211
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-01-04",
+        "date_iso": "2026-01-04",
+        "venue": "away",
+        "opponent": "NYG",
+        "pass_yds": 70,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 81.6,
+        "rush_yds": -1,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-25",
+        "date_iso": "2025-12-25",
+        "venue": "away",
+        "opponent": "WSH",
+        "pass_yds": 307,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 97.5,
+        "rush_yds": 24,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-21",
+        "date_iso": "2025-12-21",
+        "venue": "home",
+        "opponent": "LAC",
+        "pass_yds": 244,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 116.5,
+        "rush_yds": 14,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-14",
+        "date_iso": "2025-12-14",
+        "venue": "home",
+        "opponent": "MIN",
+        "pass_yds": 294,
+        "pass_td": 0,
+        "pass_int": 0,
+        "pass_rtg": 84.8,
+        "rush_yds": 2,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-04",
+        "date_iso": "2025-12-04",
+        "venue": "away",
+        "opponent": "DET",
+        "pass_yds": 376,
+        "pass_td": 1,
+        "pass_int": 2,
+        "pass_rtg": 79.7,
+        "rush_yds": 14,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-27",
+        "date_iso": "2025-11-27",
+        "venue": "home",
+        "opponent": "KC",
+        "pass_yds": 320,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 100.4,
+        "rush_yds": -2,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-23",
+        "date_iso": "2025-11-23",
+        "venue": "home",
+        "opponent": "PHI",
+        "pass_yds": 354,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 103.2,
+        "rush_yds": 9,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-11-17",
+        "date_iso": "2025-11-17",
+        "venue": "away",
+        "opponent": "LV",
+        "pass_yds": 268,
+        "pass_td": 4,
+        "pass_int": 0,
+        "pass_rtg": 138.6,
+        "rush_yds": -4,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-03",
+        "date_iso": "2025-11-03",
+        "venue": "home",
+        "opponent": "ARI",
+        "pass_yds": 250,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 77.9,
+        "rush_yds": 34,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-26",
+        "date_iso": "2025-10-26",
+        "venue": "away",
+        "opponent": "DEN",
+        "pass_yds": 188,
+        "pass_td": 0,
+        "pass_int": 2,
+        "pass_rtg": 51.5,
+        "rush_yds": 31,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "DakPrescott",
+      "position": "UNK",
+      "team": "DAL",
+      "stat": "pass_yds",
+      "splits_count": 10,
+      "splits": [
+        {
+          "season": 2016,
+          "total": 3667
+        },
+        {
+          "season": 2017,
+          "total": 3324
+        },
+        {
+          "season": 2018,
+          "total": 3885
+        },
+        {
+          "season": 2019,
+          "total": 4902
+        },
+        {
+          "season": 2020,
+          "total": 1856
+        },
+        {
+          "season": 2021,
+          "total": 4449
+        },
+        {
+          "season": 2022,
+          "total": 2860
+        },
+        {
+          "season": 2023,
+          "total": 4516
+        },
+        {
+          "season": 2024,
+          "total": 1978
+        },
+        {
+          "season": 2025,
+          "total": 4552
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "DakPrescott",
+        "player_display": "DakPrescott",
+        "player_team": "DAL",
+        "stat_scope": null,
+        "opponent_code": "NYG",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 4346,
+        "pass_td": 31,
+        "pass_int": 9,
+        "rush_yds": 173,
+        "rush_td": 1,
+        "pass_rtg": 101.5,
+        "games": 17
+      },
+      "games": [
+        {
+          "date": "2016-09-11",
+          "date_iso": "2016-09-11",
+          "venue": "home",
+          "opponent": "NYG",
+          "pass_yds": 227,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 69.4,
+          "rush_yds": 12,
+          "rush_td": 0
+        },
+        {
+          "date": "2016-12-11",
+          "date_iso": "2016-12-11",
+          "venue": "away",
+          "opponent": "NYG",
+          "pass_yds": 165,
+          "pass_td": 1,
+          "pass_int": 2,
+          "pass_rtg": 45.4,
+          "rush_yds": 1,
+          "rush_td": 0
+        },
+        {
+          "date": "2017-09-10",
+          "date_iso": "2017-09-10",
+          "venue": "home",
+          "opponent": "NYG",
+          "pass_yds": 268,
+          "pass_td": 1,
+          "pass_int": 0,
+          "pass_rtg": 90.5,
+          "rush_yds": 24,
+          "rush_td": 0
+        },
+        {
+          "date": "2017-12-10",
+          "date_iso": "2017-12-10",
+          "venue": "away",
+          "opponent": "NYG",
+          "pass_yds": 332,
+          "pass_td": 3,
+          "pass_int": 0,
+          "pass_rtg": 137.1,
+          "rush_yds": 13,
+          "rush_td": 0
+        },
+        {
+          "date": "2018-09-16",
+          "date_iso": "2018-09-16",
+          "venue": "home",
+          "opponent": "NYG",
+          "pass_yds": 160,
+          "pass_td": 1,
+          "pass_int": 0,
+          "pass_rtg": 95.4,
+          "rush_yds": 45,
+          "rush_td": 0
+        },
+        {
+          "date": "2018-12-30",
+          "date_iso": "2018-12-30",
+          "venue": "away",
+          "opponent": "NYG",
+          "pass_yds": 387,
+          "pass_td": 4,
+          "pass_int": 0,
+          "pass_rtg": 120.2,
+          "rush_yds": 0,
+          "rush_td": 0
+        },
+        {
+          "date": "2019-09-08",
+          "date_iso": "2019-09-08",
+          "venue": "home",
+          "opponent": "NYG",
+          "pass_yds": 405,
+          "pass_td": 4,
+          "pass_int": 0,
+          "pass_rtg": 158.3,
+          "rush_yds": 12,
+          "rush_td": 0
+        },
+        {
+          "date": "2019-11-04",
+          "date_iso": "2019-11-04",
+          "venue": "away",
+          "opponent": "NYG",
+          "pass_yds": 257,
+          "pass_td": 3,
+          "pass_int": 1,
+          "pass_rtg": 101.7,
+          "rush_yds": 12,
+          "rush_td": 0
+        },
+        {
+          "date": "2020-10-11",
+          "date_iso": "2020-10-11",
+          "venue": "home",
+          "opponent": "NYG",
+          "pass_yds": 166,
+          "pass_td": 0,
+          "pass_int": 1,
+          "pass_rtg": 70.7,
+          "rush_yds": 7,
+          "rush_td": 0
+        },
+        {
+          "date": "2021-10-10",
+          "date_iso": "2021-10-10",
+          "venue": "home",
+          "opponent": "NYG",
+          "pass_yds": 302,
+          "pass_td": 3,
+          "pass_int": 1,
+          "pass_rtg": 116.9,
+          "rush_yds": 6,
+          "rush_td": 0
+        },
+        {
+          "date": "2021-12-19",
+          "date_iso": "2021-12-19",
+          "venue": "away",
+          "opponent": "NYG",
+          "pass_yds": 217,
+          "pass_td": 1,
+          "pass_int": 0,
+          "pass_rtg": 98.6,
+          "rush_yds": -1,
+          "rush_td": 0
+        },
+        {
+          "date": "2022-11-24",
+          "date_iso": "2022-11-24",
+          "venue": "home",
+          "opponent": "NYG",
+          "pass_yds": 261,
+          "pass_td": 2,
+          "pass_int": 2,
+          "pass_rtg": 91.1,
+          "rush_yds": 4,
+          "rush_td": 0
+        },
+        {
+          "date": "2023-09-10",
+          "date_iso": "2023-09-10",
+          "venue": "away",
+          "opponent": "NYG",
+          "pass_yds": 143,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 72.0,
+          "rush_yds": 6,
+          "rush_td": 0
+        },
+        {
+          "date": "2023-11-12",
+          "date_iso": "2023-11-12",
+          "venue": "home",
+          "opponent": "NYG",
+          "pass_yds": 404,
+          "pass_td": 4,
+          "pass_int": 1,
+          "pass_rtg": 138.3,
+          "rush_yds": 17,
+          "rush_td": 1
+        },
+        {
+          "date": "2024-09-26",
+          "date_iso": "2024-09-26",
+          "venue": "away",
+          "opponent": "NYG",
+          "pass_yds": 221,
+          "pass_td": 2,
+          "pass_int": 0,
+          "pass_rtg": 125.5,
+          "rush_yds": -1,
+          "rush_td": 0
+        },
+        {
+          "date": "2025-09-14",
+          "date_iso": "2025-09-14",
+          "venue": "home",
+          "opponent": "NYG",
+          "pass_yds": 361,
+          "pass_td": 2,
+          "pass_int": 1,
+          "pass_rtg": 96.7,
+          "rush_yds": 17,
+          "rush_td": 0
+        },
+        {
+          "date": "2026-01-04",
+          "date_iso": "2026-01-04",
+          "venue": "away",
+          "opponent": "NYG",
+          "pass_yds": 70,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 81.6,
+          "rush_yds": -1,
+          "rush_td": 0
+        }
+      ],
+      "next_opponent": "NYG"
+    }
+  }
+}

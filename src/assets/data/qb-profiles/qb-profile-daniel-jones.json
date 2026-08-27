@@ -1,0 +1,298 @@
+{
+  "player": "DanielJones",
+  "player_id": "daniel-jones",
+  "team": "IND",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 261,
+      "pass_att": 384,
+      "pass_yds": 3101,
+      "pass_td": 19,
+      "pass_int": 8,
+      "rush_car": 45,
+      "rush_yds": 164,
+      "rush_td": 5
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 3,
+        "games": [
+          {
+            "date": "2025-09-07",
+            "value": 3
+          },
+          {
+            "date": "2025-10-12",
+            "value": 3
+          },
+          {
+            "date": "2025-10-26",
+            "value": 3
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 3,
+        "games": [
+          {
+            "date": "2025-09-14",
+            "value": 318
+          },
+          {
+            "date": "2025-11-02",
+            "value": 346
+          },
+          {
+            "date": "2025-11-09",
+            "value": 308
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 905,
+      "q2": 911,
+      "q3": 754,
+      "q4": 514,
+      "1h": 1816,
+      "2h": 1268
+    },
+    "explosive": {
+      "20-29": {
+        "count": 23,
+        "td": 3,
+        "yards": 546
+      },
+      "30-39": {
+        "count": 6,
+        "td": 1,
+        "yards": 211
+      },
+      "40-49": {
+        "count": 5,
+        "td": 0,
+        "yards": 224
+      },
+      "50+": {
+        "count": 2,
+        "td": 0,
+        "yards": 106
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2025-12-07",
+        "date_iso": "2025-12-07",
+        "venue": "away",
+        "opponent": "JAX",
+        "pass_yds": 60,
+        "pass_td": 0,
+        "pass_int": 1,
+        "pass_rtg": 57.7,
+        "rush_yds": 4,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-30",
+        "date_iso": "2025-11-30",
+        "venue": "home",
+        "opponent": "HOU",
+        "pass_yds": 201,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 101.0,
+        "rush_yds": 1,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-23",
+        "date_iso": "2025-11-23",
+        "venue": "away",
+        "opponent": "KC",
+        "pass_yds": 181,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 99.0,
+        "rush_yds": 16,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-09",
+        "date_iso": "2025-11-09",
+        "venue": "home",
+        "opponent": "ATL",
+        "pass_yds": 255,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 100.6,
+        "rush_yds": 53,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-02",
+        "date_iso": "2025-11-02",
+        "venue": "away",
+        "opponent": "PIT",
+        "pass_yds": 342,
+        "pass_td": 1,
+        "pass_int": 3,
+        "pass_rtg": 63.9,
+        "rush_yds": 4,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-10-26",
+        "date_iso": "2025-10-26",
+        "venue": "home",
+        "opponent": "TEN",
+        "pass_yds": 272,
+        "pass_td": 3,
+        "pass_int": 0,
+        "pass_rtg": 136.0,
+        "rush_yds": 3,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-19",
+        "date_iso": "2025-10-19",
+        "venue": "away",
+        "opponent": "LAC",
+        "pass_yds": 288,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 113.4,
+        "rush_yds": 7,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-10-12",
+        "date_iso": "2025-10-12",
+        "venue": "home",
+        "opponent": "ARI",
+        "pass_yds": 212,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 101.0,
+        "rush_yds": 20,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-10-05",
+        "date_iso": "2025-10-05",
+        "venue": "home",
+        "opponent": "LV",
+        "pass_yds": 212,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 113.0,
+        "rush_yds": 2,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-09-28",
+        "date_iso": "2025-09-28",
+        "venue": "away",
+        "opponent": "LAR",
+        "pass_yds": 262,
+        "pass_td": 1,
+        "pass_int": 2,
+        "pass_rtg": 80.6,
+        "rush_yds": -1,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "DanielJones",
+      "position": "UNK",
+      "team": "IND",
+      "stat": "pass_yds",
+      "splits_count": 7,
+      "splits": [
+        {
+          "season": 2019,
+          "total": 3027
+        },
+        {
+          "season": 2020,
+          "total": 2943
+        },
+        {
+          "season": 2021,
+          "total": 2428
+        },
+        {
+          "season": 2022,
+          "total": 3205
+        },
+        {
+          "season": 2023,
+          "total": 909
+        },
+        {
+          "season": 2024,
+          "total": 2070
+        },
+        {
+          "season": 2025,
+          "total": 3101
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "DanielJones",
+        "player_display": "DanielJones",
+        "player_team": "IND",
+        "stat_scope": null,
+        "opponent_code": "BAL",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 425,
+        "pass_td": 3,
+        "pass_int": 0,
+        "rush_yds": 9,
+        "rush_td": 0,
+        "pass_rtg": 95.5,
+        "games": 2
+      },
+      "games": [
+        {
+          "date": "2020-12-27",
+          "date_iso": "2020-12-27",
+          "venue": "away",
+          "opponent": "BAL",
+          "pass_yds": 252,
+          "pass_td": 1,
+          "pass_int": 0,
+          "pass_rtg": 84.6,
+          "rush_yds": 3,
+          "rush_td": 0
+        },
+        {
+          "date": "2022-10-16",
+          "date_iso": "2022-10-16",
+          "venue": "home",
+          "opponent": "BAL",
+          "pass_yds": 173,
+          "pass_td": 2,
+          "pass_int": 0,
+          "pass_rtg": 112.1,
+          "rush_yds": 6,
+          "rush_td": 0
+        }
+      ],
+      "next_opponent": "BAL"
+    }
+  }
+}

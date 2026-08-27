@@ -1,0 +1,294 @@
+{
+  "player": "BrockPurdy",
+  "player_id": "brock-purdy",
+  "team": "SF",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 197,
+      "pass_att": 284,
+      "pass_yds": 2167,
+      "pass_td": 20,
+      "pass_int": 10,
+      "rush_car": 33,
+      "rush_yds": 147,
+      "rush_td": 3
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 4,
+        "games": [
+          {
+            "date": "2025-11-16",
+            "value": 3
+          },
+          {
+            "date": "2025-12-14",
+            "value": 3
+          },
+          {
+            "date": "2025-12-22",
+            "value": 5
+          },
+          {
+            "date": "2025-12-28",
+            "value": 5
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 4,
+        "games": [
+          {
+            "date": "2025-09-28",
+            "value": 322
+          },
+          {
+            "date": "2025-12-14",
+            "value": 339
+          },
+          {
+            "date": "2025-12-22",
+            "value": 306
+          },
+          {
+            "date": "2025-12-28",
+            "value": 331
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 533,
+      "q2": 614,
+      "q3": 510,
+      "q4": 547,
+      "1h": 1147,
+      "2h": 1057
+    },
+    "explosive": {
+      "20-29": {
+        "count": 23,
+        "td": 2,
+        "yards": 534
+      },
+      "30-39": {
+        "count": 7,
+        "td": 2,
+        "yards": 230
+      },
+      "40-49": {
+        "count": 1,
+        "td": 0,
+        "yards": 45
+      },
+      "50+": {
+        "count": 0,
+        "td": 0,
+        "yards": 0
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-01-03",
+        "date_iso": "2026-01-03",
+        "venue": "home",
+        "opponent": "SEA",
+        "pass_yds": 127,
+        "pass_td": 0,
+        "pass_int": 1,
+        "pass_rtg": 64.9,
+        "rush_yds": 21,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-28",
+        "date_iso": "2025-12-28",
+        "venue": "home",
+        "opponent": "CHI",
+        "pass_yds": 303,
+        "pass_td": 3,
+        "pass_int": 1,
+        "pass_rtg": 118.6,
+        "rush_yds": 28,
+        "rush_td": 2
+      },
+      {
+        "date": "2025-12-22",
+        "date_iso": "2025-12-22",
+        "venue": "away",
+        "opponent": "IND",
+        "pass_yds": 295,
+        "pass_td": 5,
+        "pass_int": 1,
+        "pass_rtg": 126.8,
+        "rush_yds": 11,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-14",
+        "date_iso": "2025-12-14",
+        "venue": "home",
+        "opponent": "TEN",
+        "pass_yds": 295,
+        "pass_td": 3,
+        "pass_int": 0,
+        "pass_rtg": 140.3,
+        "rush_yds": 44,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-30",
+        "date_iso": "2025-11-30",
+        "venue": "away",
+        "opponent": "CLE",
+        "pass_yds": 168,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 83.7,
+        "rush_yds": 4,
+        "rush_td": 1
+      },
+      {
+        "date": "2025-11-24",
+        "date_iso": "2025-11-24",
+        "venue": "home",
+        "opponent": "CAR",
+        "pass_yds": 193,
+        "pass_td": 1,
+        "pass_int": 3,
+        "pass_rtg": 58.5,
+        "rush_yds": 16,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-16",
+        "date_iso": "2025-11-16",
+        "venue": "away",
+        "opponent": "ARI",
+        "pass_yds": 200,
+        "pass_td": 3,
+        "pass_int": 0,
+        "pass_rtg": 133.5,
+        "rush_yds": -7,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-09-28",
+        "date_iso": "2025-09-28",
+        "venue": "home",
+        "opponent": "JAX",
+        "pass_yds": 309,
+        "pass_td": 2,
+        "pass_int": 2,
+        "pass_rtg": 79.8,
+        "rush_yds": 13,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-09-07",
+        "date_iso": "2025-09-07",
+        "venue": "away",
+        "opponent": "SEA",
+        "pass_yds": 277,
+        "pass_td": 2,
+        "pass_int": 2,
+        "pass_rtg": 92.2,
+        "rush_yds": 17,
+        "rush_td": 0
+      }
+    ],
+    "career_splits": {
+      "player_name": "BrockPurdy",
+      "position": "UNK",
+      "team": "SF",
+      "stat": "pass_yds",
+      "splits_count": 4,
+      "splits": [
+        {
+          "season": 2022,
+          "total": 1374
+        },
+        {
+          "season": 2023,
+          "total": 4280
+        },
+        {
+          "season": 2024,
+          "total": 3864
+        },
+        {
+          "season": 2025,
+          "total": 2167
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "BrockPurdy",
+        "player_display": "BrockPurdy",
+        "player_team": "SF",
+        "stat_scope": null,
+        "opponent_code": "LAR",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 640,
+        "pass_td": 3,
+        "pass_int": 1,
+        "rush_yds": 49,
+        "rush_td": 1,
+        "pass_rtg": 91.2,
+        "games": 3
+      },
+      "games": [
+        {
+          "date": "2023-09-17",
+          "date_iso": "2023-09-17",
+          "venue": "away",
+          "opponent": "LAR",
+          "pass_yds": 206,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 93.1,
+          "rush_yds": 5,
+          "rush_td": 1
+        },
+        {
+          "date": "2024-09-22",
+          "date_iso": "2024-09-22",
+          "venue": "away",
+          "opponent": "LAR",
+          "pass_yds": 292,
+          "pass_td": 3,
+          "pass_int": 0,
+          "pass_rtg": 137.1,
+          "rush_yds": 41,
+          "rush_td": 0
+        },
+        {
+          "date": "2024-12-12",
+          "date_iso": "2024-12-12",
+          "venue": "home",
+          "opponent": "LAR",
+          "pass_yds": 142,
+          "pass_td": 0,
+          "pass_int": 1,
+          "pass_rtg": 45.4,
+          "rush_yds": 3,
+          "rush_td": 0
+        }
+      ],
+      "next_opponent": "LAR"
+    }
+  }
+}

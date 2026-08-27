@@ -1,0 +1,223 @@
+{
+  "player": "DeshaunWatson",
+  "player_id": "deshaun-watson",
+  "team": "CLE",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 0,
+      "pass_att": 0,
+      "pass_yds": 0,
+      "pass_td": 0,
+      "pass_int": 0,
+      "rush_car": 0,
+      "rush_yds": 0,
+      "rush_td": 0
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 0,
+        "games": []
+      },
+      "pass_rush_yds_300plus": {
+        "count": 0,
+        "games": []
+      }
+    },
+    "per_quarter": {
+      "q1": 0,
+      "q2": 0,
+      "q3": 0,
+      "q4": 0,
+      "1h": 0,
+      "2h": 0
+    },
+    "explosive": {
+      "20-29": {
+        "count": 0,
+        "td": 0,
+        "yards": 0
+      },
+      "30-39": {
+        "count": 0,
+        "td": 0,
+        "yards": 0
+      },
+      "40-49": {
+        "count": 0,
+        "td": 0,
+        "yards": 0
+      },
+      "50+": {
+        "count": 0,
+        "td": 0,
+        "yards": 0
+      }
+    },
+    "recent_games": [],
+    "career_splits": {
+      "player_name": "DeshaunWatson",
+      "position": "UNK",
+      "team": "CLE",
+      "stat": "pass_yds",
+      "splits_count": 7,
+      "splits": [
+        {
+          "season": 2017,
+          "total": 1699
+        },
+        {
+          "season": 2018,
+          "total": 4165
+        },
+        {
+          "season": 2019,
+          "total": 3852
+        },
+        {
+          "season": 2020,
+          "total": 4823
+        },
+        {
+          "season": 2022,
+          "total": 1102
+        },
+        {
+          "season": 2023,
+          "total": 1115
+        },
+        {
+          "season": 2024,
+          "total": 1148
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "DeshaunWatson",
+        "player_display": "DeshaunWatson",
+        "player_team": "CLE",
+        "stat_scope": null,
+        "opponent_code": "JAX",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 1661,
+        "pass_td": 9,
+        "pass_int": 3,
+        "rush_yds": 232,
+        "rush_td": 3,
+        "pass_rtg": 91.3,
+        "games": 8
+      },
+      "games": [
+        {
+          "date": "2017-09-10",
+          "date_iso": "2017-09-10",
+          "venue": "home",
+          "opponent": "JAX",
+          "pass_yds": 102,
+          "pass_td": 1,
+          "pass_int": 1,
+          "pass_rtg": 60.4,
+          "rush_yds": 16,
+          "rush_td": 0
+        },
+        {
+          "date": "2018-10-21",
+          "date_iso": "2018-10-21",
+          "venue": "away",
+          "opponent": "JAX",
+          "pass_yds": 139,
+          "pass_td": 1,
+          "pass_int": 0,
+          "pass_rtg": 81.8,
+          "rush_yds": 13,
+          "rush_td": 0
+        },
+        {
+          "date": "2018-12-30",
+          "date_iso": "2018-12-30",
+          "venue": "home",
+          "opponent": "JAX",
+          "pass_yds": 234,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 89.5,
+          "rush_yds": 66,
+          "rush_td": 1
+        },
+        {
+          "date": "2019-09-15",
+          "date_iso": "2019-09-15",
+          "venue": "home",
+          "opponent": "JAX",
+          "pass_yds": 159,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 70.9,
+          "rush_yds": 5,
+          "rush_td": 1
+        },
+        {
+          "date": "2019-11-03",
+          "date_iso": "2019-11-03",
+          "venue": "home",
+          "opponent": "JAX",
+          "pass_yds": 201,
+          "pass_td": 2,
+          "pass_int": 0,
+          "pass_rtg": 120.4,
+          "rush_yds": 37,
+          "rush_td": 0
+        },
+        {
+          "date": "2020-10-11",
+          "date_iso": "2020-10-11",
+          "venue": "home",
+          "opponent": "JAX",
+          "pass_yds": 359,
+          "pass_td": 3,
+          "pass_int": 2,
+          "pass_rtg": 109.1,
+          "rush_yds": 25,
+          "rush_td": 0
+        },
+        {
+          "date": "2020-11-08",
+          "date_iso": "2020-11-08",
+          "venue": "away",
+          "opponent": "JAX",
+          "pass_yds": 281,
+          "pass_td": 2,
+          "pass_int": 0,
+          "pass_rtg": 109.0,
+          "rush_yds": 50,
+          "rush_td": 0
+        },
+        {
+          "date": "2024-09-15",
+          "date_iso": "2024-09-15",
+          "venue": "away",
+          "opponent": "JAX",
+          "pass_yds": 186,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 78.8,
+          "rush_yds": 20,
+          "rush_td": 1
+        }
+      ],
+      "next_opponent": "JAX"
+    }
+  }
+}

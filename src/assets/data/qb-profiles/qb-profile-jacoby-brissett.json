@@ -1,0 +1,326 @@
+{
+  "player": "JacobyBrissett",
+  "player_id": "jacoby-brissett",
+  "team": "ARI",
+  "position": "QB",
+  "season": 2025,
+  "sections": {
+    "season_totals": {
+      "pass_cmp": 315,
+      "pass_att": 485,
+      "pass_yds": 3366,
+      "pass_td": 23,
+      "pass_int": 8,
+      "rush_car": 38,
+      "rush_yds": 168,
+      "rush_td": 1
+    },
+    "season_splits": {
+      "pass_rush_td_3plus": {
+        "count": 2,
+        "games": [
+          {
+            "date": "2025-11-03",
+            "value": 3
+          },
+          {
+            "date": "2025-12-14",
+            "value": 3
+          }
+        ]
+      },
+      "pass_rush_yds_300plus": {
+        "count": 5,
+        "games": [
+          {
+            "date": "2025-10-12",
+            "value": 339
+          },
+          {
+            "date": "2025-10-19",
+            "value": 305
+          },
+          {
+            "date": "2025-11-16",
+            "value": 450
+          },
+          {
+            "date": "2025-11-23",
+            "value": 337
+          },
+          {
+            "date": "2025-11-30",
+            "value": 317
+          }
+        ]
+      }
+    },
+    "per_quarter": {
+      "q1": 619,
+      "q2": 808,
+      "q3": 965,
+      "q4": 965,
+      "1h": 1427,
+      "2h": 1930
+    },
+    "explosive": {
+      "20-29": {
+        "count": 28,
+        "td": 1,
+        "yards": 627
+      },
+      "30-39": {
+        "count": 9,
+        "td": 3,
+        "yards": 307
+      },
+      "40-49": {
+        "count": 2,
+        "td": 1,
+        "yards": 86
+      },
+      "50+": {
+        "count": 2,
+        "td": 0,
+        "yards": 114
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-01-04",
+        "date_iso": "2026-01-04",
+        "venue": "away",
+        "opponent": "LAR",
+        "pass_yds": 243,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 101.9,
+        "rush_yds": 19,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-28",
+        "date_iso": "2025-12-28",
+        "venue": "away",
+        "opponent": "CIN",
+        "pass_yds": 212,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 91.3,
+        "rush_yds": 0,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-21",
+        "date_iso": "2025-12-21",
+        "venue": "home",
+        "opponent": "ATL",
+        "pass_yds": 203,
+        "pass_td": 1,
+        "pass_int": 1,
+        "pass_rtg": 69.7,
+        "rush_yds": 5,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-14",
+        "date_iso": "2025-12-14",
+        "venue": "away",
+        "opponent": "HOU",
+        "pass_yds": 249,
+        "pass_td": 3,
+        "pass_int": 1,
+        "pass_rtg": 98.9,
+        "rush_yds": 6,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-12-07",
+        "date_iso": "2025-12-07",
+        "venue": "home",
+        "opponent": "LAR",
+        "pass_yds": 271,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 80.8,
+        "rush_yds": 22,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-30",
+        "date_iso": "2025-11-30",
+        "venue": "away",
+        "opponent": "TB",
+        "pass_yds": 301,
+        "pass_td": 2,
+        "pass_int": 1,
+        "pass_rtg": 100.1,
+        "rush_yds": 16,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-23",
+        "date_iso": "2025-11-23",
+        "venue": "home",
+        "opponent": "JAX",
+        "pass_yds": 317,
+        "pass_td": 1,
+        "pass_int": 0,
+        "pass_rtg": 92.0,
+        "rush_yds": 20,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-16",
+        "date_iso": "2025-11-16",
+        "venue": "home",
+        "opponent": "SF",
+        "pass_yds": 452,
+        "pass_td": 2,
+        "pass_int": 2,
+        "pass_rtg": 96.8,
+        "rush_yds": -2,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-09",
+        "date_iso": "2025-11-09",
+        "venue": "away",
+        "opponent": "SEA",
+        "pass_yds": 258,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 83.3,
+        "rush_yds": 31,
+        "rush_td": 0
+      },
+      {
+        "date": "2025-11-03",
+        "date_iso": "2025-11-03",
+        "venue": "away",
+        "opponent": "DAL",
+        "pass_yds": 261,
+        "pass_td": 2,
+        "pass_int": 0,
+        "pass_rtg": 115.1,
+        "rush_yds": 4,
+        "rush_td": 1
+      }
+    ],
+    "career_splits": {
+      "player_name": "JacobyBrissett",
+      "position": "UNK",
+      "team": "ARI",
+      "stat": "pass_yds",
+      "splits_count": 10,
+      "splits": [
+        {
+          "season": 2016,
+          "total": 400
+        },
+        {
+          "season": 2017,
+          "total": 3098
+        },
+        {
+          "season": 2018,
+          "total": 2
+        },
+        {
+          "season": 2019,
+          "total": 2942
+        },
+        {
+          "season": 2020,
+          "total": 17
+        },
+        {
+          "season": 2021,
+          "total": 1283
+        },
+        {
+          "season": 2022,
+          "total": 2608
+        },
+        {
+          "season": 2023,
+          "total": 224
+        },
+        {
+          "season": 2024,
+          "total": 826
+        },
+        {
+          "season": 2025,
+          "total": 3366
+        }
+      ],
+      "splits_single_season": false
+    },
+    "next_matchup_h2h": {
+      "engine": "nfl-h2h",
+      "query": {
+        "player_query": "JacobyBrissett",
+        "player_display": "JacobyBrissett",
+        "player_team": "ARI",
+        "stat_scope": null,
+        "opponent_code": "LAC",
+        "home_away": "both",
+        "source": "regular",
+        "last_n": null,
+        "season": false,
+        "career": false,
+        "year_window": null,
+        "window_label": ""
+      },
+      "totals": {
+        "pass_yds": 418,
+        "pass_td": 3,
+        "pass_int": 1,
+        "rush_yds": 41,
+        "rush_td": 0,
+        "pass_rtg": 95.9,
+        "games": 3
+      },
+      "games": [
+        {
+          "date": "2019-09-08",
+          "date_iso": "2019-09-08",
+          "venue": "away",
+          "opponent": "LAC",
+          "pass_yds": 190,
+          "pass_td": 2,
+          "pass_int": 0,
+          "pass_rtg": 120.7,
+          "rush_yds": 9,
+          "rush_td": 0
+        },
+        {
+          "date": "2022-10-09",
+          "date_iso": "2022-10-09",
+          "venue": "home",
+          "opponent": "LAC",
+          "pass_yds": 230,
+          "pass_td": 1,
+          "pass_int": 1,
+          "pass_rtg": 79.3,
+          "rush_yds": 32,
+          "rush_td": 0
+        },
+        {
+          "date": "2024-12-28",
+          "date_iso": "2024-12-28",
+          "venue": "home",
+          "opponent": "LAC",
+          "pass_yds": -2,
+          "pass_td": 0,
+          "pass_int": 0,
+          "pass_rtg": 56.2,
+          "rush_yds": 0,
+          "rush_td": 0
+        }
+      ],
+      "next_opponent": "LAC"
+    }
+  }
+}
