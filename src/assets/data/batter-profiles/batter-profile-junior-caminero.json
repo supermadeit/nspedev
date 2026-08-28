@@ -1,0 +1,1226 @@
+{
+  "player": "JuniorCaminero",
+  "player_id": "junior-caminero",
+  "team": "TB",
+  "position": "3B",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 507,
+      "R": 81,
+      "H": 142,
+      "2B": 20,
+      "3B": 1,
+      "HR": 35,
+      "RBI": 84,
+      "BB": 68,
+      "SO": 106,
+      "SB": 3,
+      "TB": 269,
+      "avg": 0.28,
+      "obp": 0.366,
+      "slg": 0.531,
+      "ops": 0.897
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 38,
+        "games": [
+          {
+            "date": "2026-03-30",
+            "value": 2
+          },
+          {
+            "date": "2026-04-03",
+            "value": 2
+          },
+          {
+            "date": "2026-04-12",
+            "value": 2
+          },
+          {
+            "date": "2026-04-16",
+            "value": 2
+          },
+          {
+            "date": "2026-04-18",
+            "value": 2
+          },
+          {
+            "date": "2026-04-21",
+            "value": 2
+          },
+          {
+            "date": "2026-04-24",
+            "value": 2
+          },
+          {
+            "date": "2026-05-07",
+            "value": 2
+          },
+          {
+            "date": "2026-05-12",
+            "value": 2
+          },
+          {
+            "date": "2026-05-16",
+            "value": 2
+          },
+          {
+            "date": "2026-05-18",
+            "value": 2
+          },
+          {
+            "date": "2026-05-20",
+            "value": 2
+          },
+          {
+            "date": "2026-05-29",
+            "value": 2
+          },
+          {
+            "date": "2026-05-30",
+            "value": 2
+          },
+          {
+            "date": "2026-05-31",
+            "value": 2
+          },
+          {
+            "date": "2026-06-05",
+            "value": 3
+          },
+          {
+            "date": "2026-06-15",
+            "value": 2
+          },
+          {
+            "date": "2026-06-19",
+            "value": 2
+          },
+          {
+            "date": "2026-06-20",
+            "value": 3
+          },
+          {
+            "date": "2026-06-23",
+            "value": 3
+          },
+          {
+            "date": "2026-06-25",
+            "value": 3
+          },
+          {
+            "date": "2026-06-28",
+            "value": 3
+          },
+          {
+            "date": "2026-06-30",
+            "value": 2
+          },
+          {
+            "date": "2026-07-04",
+            "value": 2
+          },
+          {
+            "date": "2026-07-10",
+            "value": 2
+          },
+          {
+            "date": "2026-07-17",
+            "value": 2
+          },
+          {
+            "date": "2026-07-20",
+            "value": 3
+          },
+          {
+            "date": "2026-07-21",
+            "value": 2
+          },
+          {
+            "date": "2026-07-22",
+            "value": 2
+          },
+          {
+            "date": "2026-07-28",
+            "value": 2
+          },
+          {
+            "date": "2026-08-02",
+            "value": 2
+          },
+          {
+            "date": "2026-08-03",
+            "value": 2
+          },
+          {
+            "date": "2026-08-04",
+            "value": 2
+          },
+          {
+            "date": "2026-08-12",
+            "value": 2
+          },
+          {
+            "date": "2026-08-18",
+            "value": 2
+          },
+          {
+            "date": "2026-08-21",
+            "value": 2
+          },
+          {
+            "date": "2026-08-25",
+            "value": 2
+          },
+          {
+            "date": "2026-08-26",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 31,
+        "games": [
+          {
+            "date": "2026-04-05",
+            "value": 1
+          },
+          {
+            "date": "2026-04-06",
+            "value": 1
+          },
+          {
+            "date": "2026-04-15",
+            "value": 1
+          },
+          {
+            "date": "2026-04-16",
+            "value": 1
+          },
+          {
+            "date": "2026-04-19",
+            "value": 1
+          },
+          {
+            "date": "2026-04-22",
+            "value": 1
+          },
+          {
+            "date": "2026-04-24",
+            "value": 2
+          },
+          {
+            "date": "2026-05-01",
+            "value": 1
+          },
+          {
+            "date": "2026-05-07",
+            "value": 1
+          },
+          {
+            "date": "2026-05-10",
+            "value": 1
+          },
+          {
+            "date": "2026-05-17",
+            "value": 1
+          },
+          {
+            "date": "2026-05-18",
+            "value": 1
+          },
+          {
+            "date": "2026-06-01",
+            "value": 1
+          },
+          {
+            "date": "2026-06-14",
+            "value": 1
+          },
+          {
+            "date": "2026-06-23",
+            "value": 1
+          },
+          {
+            "date": "2026-06-25",
+            "value": 3
+          },
+          {
+            "date": "2026-06-26",
+            "value": 1
+          },
+          {
+            "date": "2026-06-27",
+            "value": 1
+          },
+          {
+            "date": "2026-06-28",
+            "value": 1
+          },
+          {
+            "date": "2026-06-30",
+            "value": 1
+          },
+          {
+            "date": "2026-07-01",
+            "value": 1
+          },
+          {
+            "date": "2026-07-03",
+            "value": 1
+          },
+          {
+            "date": "2026-07-04",
+            "value": 1
+          },
+          {
+            "date": "2026-07-09",
+            "value": 1
+          },
+          {
+            "date": "2026-07-10",
+            "value": 1
+          },
+          {
+            "date": "2026-07-17",
+            "value": 1
+          },
+          {
+            "date": "2026-07-31",
+            "value": 1
+          },
+          {
+            "date": "2026-08-03",
+            "value": 2
+          },
+          {
+            "date": "2026-08-05",
+            "value": 1
+          },
+          {
+            "date": "2026-08-10",
+            "value": 1
+          },
+          {
+            "date": "2026-08-11",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 8,
+        "games": [
+          {
+            "date": "2026-04-24",
+            "value": 3
+          },
+          {
+            "date": "2026-05-18",
+            "value": 4
+          },
+          {
+            "date": "2026-06-23",
+            "value": 3
+          },
+          {
+            "date": "2026-06-25",
+            "value": 6
+          },
+          {
+            "date": "2026-06-26",
+            "value": 3
+          },
+          {
+            "date": "2026-06-30",
+            "value": 3
+          },
+          {
+            "date": "2026-08-03",
+            "value": 3
+          },
+          {
+            "date": "2026-08-10",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-26",
+        "date_iso": "2026-08-26",
+        "opponent": "@DET",
+        "AB": 4,
+        "R": 0,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "@DET",
+        "AB": 4,
+        "R": 1,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-24",
+        "date_iso": "2026-08-24",
+        "opponent": "@DET",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "@BAL",
+        "AB": 3,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "@BAL",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "@BAL",
+        "AB": 4,
+        "R": 1,
+        "H": 2,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 3
+      },
+      {
+        "date": "2026-08-20",
+        "date_iso": "2026-08-20",
+        "opponent": "vsTOR",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "vsTOR",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "vsTOR",
+        "AB": 5,
+        "R": 0,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "vsBAL",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 4,
+      "splits": [
+        {
+          "season": 2023,
+          "total": 8.0
+        },
+        {
+          "season": 2024,
+          "total": 41.0
+        },
+        {
+          "season": 2025,
+          "total": 159.0
+        },
+        {
+          "season": 2026,
+          "total": 142.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 14423,
+      "hr_count": 35,
+      "games": 134,
+      "events": [
+        {
+          "date": "2026-04-05",
+          "distance_feet": 397,
+          "inning": 4,
+          "opponent": "@MIN"
+        },
+        {
+          "date": "2026-04-06",
+          "distance_feet": 401,
+          "inning": 3,
+          "opponent": "vsCHC"
+        },
+        {
+          "date": "2026-04-15",
+          "distance_feet": 393,
+          "inning": 3,
+          "opponent": "@CHW"
+        },
+        {
+          "date": "2026-04-16",
+          "distance_feet": 375,
+          "inning": 9,
+          "opponent": "@CHW"
+        },
+        {
+          "date": "2026-04-19",
+          "distance_feet": 398,
+          "inning": 9,
+          "opponent": "@PIT"
+        },
+        {
+          "date": "2026-04-22",
+          "distance_feet": 404,
+          "inning": 3,
+          "opponent": "vsCIN"
+        },
+        {
+          "date": "2026-04-24",
+          "distance_feet": 450,
+          "inning": 1,
+          "opponent": "vsMIN"
+        },
+        {
+          "date": "2026-04-24",
+          "distance_feet": 435,
+          "inning": 7,
+          "opponent": "vsMIN"
+        },
+        {
+          "date": "2026-05-01",
+          "distance_feet": 432,
+          "inning": 4,
+          "opponent": "vsSF"
+        },
+        {
+          "date": "2026-05-07",
+          "distance_feet": 449,
+          "inning": 9,
+          "opponent": "@BOS"
+        },
+        {
+          "date": "2026-05-10",
+          "distance_feet": 404,
+          "inning": 1,
+          "opponent": "@BOS"
+        },
+        {
+          "date": "2026-05-17",
+          "distance_feet": 372,
+          "inning": 1,
+          "opponent": "vsMIA"
+        },
+        {
+          "date": "2026-05-18",
+          "distance_feet": 380,
+          "inning": 5,
+          "opponent": "vsBAL"
+        },
+        {
+          "date": "2026-06-01",
+          "distance_feet": 422,
+          "inning": 4,
+          "opponent": "vsDET"
+        },
+        {
+          "date": "2026-06-14",
+          "distance_feet": 374,
+          "inning": 8,
+          "opponent": "@LAA"
+        },
+        {
+          "date": "2026-06-23",
+          "distance_feet": 416,
+          "inning": 8,
+          "opponent": "vsKC"
+        },
+        {
+          "date": "2026-06-25",
+          "distance_feet": 372,
+          "inning": 1,
+          "opponent": "vsKC"
+        },
+        {
+          "date": "2026-06-25",
+          "distance_feet": 387,
+          "inning": 5,
+          "opponent": "vsKC"
+        },
+        {
+          "date": "2026-06-25",
+          "distance_feet": 393,
+          "inning": 8,
+          "opponent": "vsKC"
+        },
+        {
+          "date": "2026-06-26",
+          "distance_feet": 437,
+          "inning": 1,
+          "opponent": "vsARI"
+        },
+        {
+          "date": "2026-06-27",
+          "distance_feet": 361,
+          "inning": 1,
+          "opponent": "vsARI"
+        },
+        {
+          "date": "2026-06-28",
+          "distance_feet": 463,
+          "inning": 5,
+          "opponent": "vsARI"
+        },
+        {
+          "date": "2026-06-30",
+          "distance_feet": 438,
+          "inning": 3,
+          "opponent": "@KC"
+        },
+        {
+          "date": "2026-07-01",
+          "distance_feet": 425,
+          "inning": 1,
+          "opponent": "@KC"
+        },
+        {
+          "date": "2026-07-03",
+          "distance_feet": 374,
+          "inning": 7,
+          "opponent": "@HOU"
+        },
+        {
+          "date": "2026-07-04",
+          "distance_feet": 437,
+          "inning": 1,
+          "opponent": "@HOU"
+        },
+        {
+          "date": "2026-07-09",
+          "distance_feet": 438,
+          "inning": 1,
+          "opponent": "vsNYY"
+        },
+        {
+          "date": "2026-07-10",
+          "distance_feet": 385,
+          "inning": 7,
+          "opponent": "vsSEA"
+        },
+        {
+          "date": "2026-07-17",
+          "distance_feet": 423,
+          "inning": 3,
+          "opponent": "@BOS"
+        },
+        {
+          "date": "2026-07-31",
+          "distance_feet": 453,
+          "inning": 4,
+          "opponent": "vsCHW"
+        },
+        {
+          "date": "2026-08-03",
+          "distance_feet": 422,
+          "inning": 1,
+          "opponent": "@COL"
+        },
+        {
+          "date": "2026-08-03",
+          "distance_feet": 442,
+          "inning": 4,
+          "opponent": "@COL"
+        },
+        {
+          "date": "2026-08-05",
+          "distance_feet": 449,
+          "inning": 3,
+          "opponent": "@COL"
+        },
+        {
+          "date": "2026-08-10",
+          "distance_feet": 410,
+          "inning": 8,
+          "opponent": "@ATH"
+        },
+        {
+          "date": "2026-08-11",
+          "distance_feet": 412,
+          "inning": 1,
+          "opponent": "@ATH"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 39,
+      "games_in_window": 134,
+      "matches": [
+        {
+          "game_id": "401814745",
+          "date": "2026-03-30",
+          "opponent": "@MIL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caminero singled to center, Aranda to second.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401814791",
+          "date": "2026-04-03",
+          "opponent": "@MIN",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Caminero doubled to left, D\u00edaz to third.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401814805",
+          "date": "2026-04-04",
+          "opponent": "@MIN",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caminero singled to left, Fraley to second.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401814897",
+          "date": "2026-04-11",
+          "opponent": "vsNYY",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Caminero doubled to center.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401814912",
+          "date": "2026-04-12",
+          "opponent": "vsNYY",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caminero singled to center, Simpson to third.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401814992",
+          "date": "2026-04-18",
+          "opponent": "@PIT",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caminero singled to left.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815017",
+          "date": "2026-04-20",
+          "opponent": "vsCIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caminero singled to left, Simpson to second.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815069",
+          "date": "2026-04-24",
+          "opponent": "vsMIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 450,
+          "description": "Caminero homered to center (450 feet).",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815192",
+          "date": "2026-05-03",
+          "opponent": "vsSF",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caminero singled to left.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815219",
+          "date": "2026-05-05",
+          "opponent": "vsTOR",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caminero singled to left.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815288",
+          "date": "2026-05-10",
+          "opponent": "@BOS",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 404,
+          "description": "Caminero homered to left center (404 feet).",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815300",
+          "date": "2026-05-11",
+          "opponent": "@TOR",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caminero singled to right, Simpson to third.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815310",
+          "date": "2026-05-12",
+          "opponent": "@TOR",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caminero singled to center, Aranda to second.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815378",
+          "date": "2026-05-17",
+          "opponent": "vsMIA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 372,
+          "description": "Caminero homered to left (372 feet).",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815477",
+          "date": "2026-05-24",
+          "opponent": "@NYY",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caminero singled to center.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815565",
+          "date": "2026-05-31",
+          "opponent": "vsLAA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caminero reached on infield single to second.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815606",
+          "date": "2026-06-03",
+          "opponent": "vsDET",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caminero singled to left.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815633",
+          "date": "2026-06-05",
+          "opponent": "@MIA",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Caminero doubled to right.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815682",
+          "date": "2026-06-09",
+          "opponent": "vsBOS",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Caminero doubled to center, D\u00edaz to third.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815773",
+          "date": "2026-06-15",
+          "opponent": "@LAD",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Caminero doubled to right.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815802",
+          "date": "2026-06-17",
+          "opponent": "@LAD",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caminero singled to center.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815816",
+          "date": "2026-06-19",
+          "opponent": "vsWSH",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caminero singled to left.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815869",
+          "date": "2026-06-23",
+          "opponent": "vsKC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caminero singled to center, D\u00edaz scored, Aranda to second.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815899",
+          "date": "2026-06-25",
+          "opponent": "vsKC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 372,
+          "description": "Caminero homered to left (372 feet), Aranda scored.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815906",
+          "date": "2026-06-26",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 437,
+          "description": "Caminero homered to center (437 feet), D\u00edaz scored and Aranda scored.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815921",
+          "date": "2026-06-27",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 361,
+          "description": "Caminero homered to left (361 feet).",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815936",
+          "date": "2026-06-28",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caminero singled to left, D\u00edaz scored, Aranda to second.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815989",
+          "date": "2026-07-01",
+          "opponent": "@KC",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 425,
+          "description": "Caminero homered to left (425 feet), Aranda scored.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816023",
+          "date": "2026-07-04",
+          "opponent": "@HOU",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 437,
+          "description": "Caminero homered to left center (437 feet).",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816087",
+          "date": "2026-07-09",
+          "opponent": "vsNYY",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 438,
+          "description": "Caminero homered to right center (438 feet).",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816118",
+          "date": "2026-07-11",
+          "opponent": "vsSEA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Caminero doubled to left.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816145",
+          "date": "2026-07-17",
+          "opponent": "@BOS",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caminero singled to right.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816175",
+          "date": "2026-07-19",
+          "opponent": "@BOS",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caminero reached on infield single to third, Aranda to second.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816191",
+          "date": "2026-07-20",
+          "opponent": "@TOR",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Caminero doubled to center.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816383",
+          "date": "2026-08-03",
+          "opponent": "@COL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 422,
+          "description": "Caminero homered to right center (422 feet), Aranda scored.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816492",
+          "date": "2026-08-11",
+          "opponent": "@ATH",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 412,
+          "description": "Caminero homered to center (412 feet), D\u00edaz scored.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816593",
+          "date": "2026-08-19",
+          "opponent": "vsTOR",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "GRD",
+          "distance_feet": null,
+          "description": "Caminero hit a ground rule double.  Umpire review: call on the field was upheld.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816612",
+          "date": "2026-08-21",
+          "opponent": "@BAL",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Caminero doubled to left.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816671",
+          "date": "2026-08-25",
+          "opponent": "@DET",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caminero reached on infield single to shortstop.",
+          "team": "TB"
+        }
+      ]
+    }
+  }
+}

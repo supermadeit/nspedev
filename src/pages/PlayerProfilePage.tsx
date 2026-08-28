@@ -1,109 +1,30 @@
-// {database} player profile — reads /database/:slug. Renders a generic
-// section-driven contract (SectionType + ProfileSection below) rather than
-// a QB-specific layout: every section is explicitly tagged with a `type`
-// naming which of a small fixed set of renderers to use — NOT inferred from
-// the data's shape, since duck-typing breaks the moment two section types
-// happen to structurally overlap. New sports/positions reuse whichever
-// types fit their data (a pitcher's game log is still `match_list`, a
-// batter's season totals are still `flat_totals`) — a new page is only
-// needed for a shape that genuinely doesn't fit any of these, same escape
-// hatch /charts already uses for its own bespoke layout.
+// {database} player profile — reads /database/:slug. Renders the shared
+// section-driven contract from @/components/ProfileSections (also used by
+// H2hStaffOverlay for {h2h -staff}) rather than a sport-specific layout.
 //
-// No live per-player endpoint exists yet, so PROFILES_BY_SLUG is still
-// built from the bundled qb-profiles/*.json glob, run through adaptQbProfile
-// below. That adapter is temporary scaffolding: it exists only because the
-// 36 bundled files predate this section-type contract. Once a live endpoint
-// ships a payload already shaped as ProfilePayload, delete adaptQbProfile
-// and the raw glob/interfaces above it — nothing else in this file changes.
-import type { ReactNode } from 'react'
+// No live per-player endpoint exists yet, so PROFILES_BY_SLUG is still built
+// from two bundled globs (qb-profiles/*.json, batter-profiles/*.json), each
+// run through its own adapter (adaptQbProfile / adaptBatterProfile) below.
+// Both adapters are temporary scaffolding: they exist only because the
+// bundled files predate this section-type contract. Once a live endpoint
+// ships a payload already shaped as ProfilePayload, delete both adapters and
+// their raw globs/interfaces — nothing else in this file changes. Confirmed
+// both sports' raw data map onto the same 6 section types (flat_totals,
+// keyed_entries, match_list) with zero new types needed — only the field
+// names/labels differ per sport, which is exactly what an adapter is for.
 import { useParams } from 'react-router-dom'
-import { extractDateToken, normalizeDisplayPlayer } from '@/lib/nspe-payloads'
-
-const C = {
-  accent: 'oklch(0.85 0.15 195)',
-  green: 'oklch(0.85 0.15 145)',
-  surface: 'oklch(0.10 0 0)',
-  surface2: 'oklch(0.15 0 0)',
-  border: 'oklch(0.25 0 0)',
-  textDim: 'oklch(0.50 0 0)',
-  textBright: 'oklch(0.90 0 0)',
-}
-
-// ---------------------------------------------------------------------------
-// Generic section-driven profile contract — this is the shape a live
-// per-player backend endpoint should send directly.
-// ---------------------------------------------------------------------------
-
-export type SectionType = 'flat_totals' | 'stat_chips' | 'keyed_entries' | 'band_breakdown' | 'match_list'
-
-export interface StatEntry {
-  key: string
-  label: string
-  value: string | number
-  accent?: boolean
-}
-
-// `width` only matters on desktop (md:) — two consecutive 'half' sections
-// pair up side by side (see groupSections), anything else (including a lone
-// 'half' with no partner) renders full width. Purely a layout hint, not tied
-// to any specific section pairing, so any two sections can opt into it.
-export interface FlatTotalsSection {
-  type: 'flat_totals'
-  label: string
-  entries: StatEntry[]
-  width?: 'full' | 'half'
-}
-
-export interface StatChipsSection {
-  type: 'stat_chips'
-  label: string
-  entries: StatEntry[]
-}
-
-export interface KeyedEntry {
-  key: string
-  label: string
-  count: number
-  games: { date: string; value: number }[]
-}
-
-export interface KeyedEntriesSection {
-  type: 'keyed_entries'
-  label: string
-  entries: KeyedEntry[]
-  width?: 'full' | 'half'
-}
-
-export interface BandEntry {
-  key: string
-  groupLabel: string
-  shortLabel: string
-  count: number
-  yards: number
-  td?: number
-}
-
-export interface BandBreakdownSection {
-  type: 'band_breakdown'
-  label: string
-  entries: BandEntry[]
-  width?: 'full' | 'half'
-}
-
-export interface MatchListRow {
-  date: string
-  opponent?: string
-  fields: { label: string; value: string | number }[]
-}
-
-export interface MatchListSection {
-  type: 'match_list'
-  label: string
-  rows: MatchListRow[]
-  width?: 'full' | 'half'
-}
-
-export type ProfileSection = FlatTotalsSection | KeyedEntriesSection | BandBreakdownSection | MatchListSection
+import { formatBattingAvg, normalizeDisplayPlayer } from '@/lib/nspe-payloads'
+import {
+  C,
+  MiniStat,
+  SectionStack,
+  type BandBreakdownSection,
+  type FlatTotalsSection,
+  type KeyedEntriesSection,
+  type MatchListSection,
+  type ProfileSection,
+  type StatChipsSection,
+} from '@/components/ProfileSections'
 
 export interface ProfilePayload {
   player: string
@@ -262,200 +183,265 @@ function adaptQbProfile(raw: RawQbProfile): ProfilePayload {
   }
 }
 
-const profileModules = import.meta.glob('../assets/data/qb-profiles/*.json', { eager: true }) as Record<
+const qbProfileModules = import.meta.glob('../assets/data/qb-profiles/*.json', { eager: true }) as Record<
   string,
   { default: RawQbProfile }
 >
-const PROFILES_BY_SLUG: Record<string, ProfilePayload> = Object.fromEntries(
-  Object.values(profileModules).map((m) => [m.default.player_id, adaptQbProfile(m.default)]),
-)
 
 // ---------------------------------------------------------------------------
-// Generic renderers — one per SectionType, dispatched by SectionView. These
-// know nothing about QBs or any other sport; they only know the 5 shapes.
+// Temporary adapter: bundled batter-profiles/*.json -> ProfilePayload. Same
+// deal as adaptQbProfile above — delete once a live endpoint sends the
+// tagged shape directly.
 // ---------------------------------------------------------------------------
 
-function SectionLabel({ children }: { children: ReactNode }) {
-  return (
-    <div className="font-mono text-[12px] font-bold uppercase tracking-widest mb-2" style={{ color: C.textBright }}>
-      {children}
-    </div>
-  )
+interface RawSeasonSplitEntryGeneric {
+  count: number
+  games: { date: string; value: number }[]
 }
 
-function StatCard({ label, value, accent }: { label: string; value: string | number; accent?: boolean }) {
-  return (
-    <div className="rounded px-3 py-2 min-w-[76px]" style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}` }}>
-      <div className="font-mono text-[9px] uppercase tracking-widest" style={{ color: C.textDim }}>
-        {label}
-      </div>
-      <div className="font-mono text-[18px] font-bold" style={{ color: accent ? C.green : C.textBright }}>
-        {value}
-      </div>
-    </div>
-  )
+interface RawBatterRecentGame {
+  date: string
+  date_iso?: string
+  opponent?: string
+  AB?: number
+  R?: number
+  H?: number
+  '2B'?: number
+  '3B'?: number
+  HR?: number
+  RBI?: number
+  BB?: number
+  SO?: number
+  SB?: number
+  TB?: number
 }
 
-// Smaller than StatCard — used for header chips, where full-size cards
-// wouldn't fit squeezed in next to the player name.
-function MiniStat({ label, value, accent }: { label: string; value: string | number; accent?: boolean }) {
-  return (
-    <div className="rounded px-2 py-1" style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}` }}>
-      <div className="font-mono text-[8px] uppercase tracking-widest" style={{ color: C.textDim }}>
-        {label}
-      </div>
-      <div className="font-mono text-[13px] font-bold" style={{ color: accent ? C.green : C.textBright }}>
-        {value}
-      </div>
-    </div>
-  )
+interface RawHrEvent {
+  date: string
+  distance_feet: number
+  inning?: number
+  opponent?: string
 }
 
-function FlatTotalsView({ section }: { section: FlatTotalsSection }) {
-  return (
-    <div>
-      <SectionLabel>{section.label}</SectionLabel>
-      <div className="flex flex-wrap gap-2">
-        {section.entries.map((e) => (
-          <StatCard key={e.key} label={e.label} value={e.value} accent={e.accent} />
-        ))}
-      </div>
-    </div>
-  )
+interface RawFirstPaMatch {
+  date: string
+  opponent?: string
+  inning?: number
+  category?: string
+  result?: string
+  distance_feet?: number | null
+  description?: string
 }
 
-function KeyedEntriesView({ section }: { section: KeyedEntriesSection }) {
-  return (
-    <div>
-      <SectionLabel>{section.label}</SectionLabel>
-      <div className="flex flex-wrap gap-3">
-        {section.entries.map((entry) => (
-          <div key={entry.key} className="rounded px-3 py-2 max-w-[420px]" style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}` }}>
-            <div className="flex items-center justify-between gap-3 mb-1.5">
-              <span className="font-mono text-[11px] uppercase tracking-widest" style={{ color: C.textDim }}>
-                {entry.label}
-              </span>
-              <span className="font-mono text-[16px] font-bold" style={{ color: C.accent }}>
-                {entry.count}
-              </span>
-            </div>
-            <div className="flex flex-wrap gap-x-2 gap-y-0.5 font-mono text-[11px]" style={{ color: C.textDim }}>
-              {entry.games.map((g, i) => (
-                <span key={i}>
-                  <span style={{ color: C.textBright }}>{g.value}</span> {extractDateToken(g.date) ?? g.date}
-                  {i < entry.games.length - 1 ? ' ·' : ''}
-                </span>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function BandBreakdownView({ section }: { section: BandBreakdownSection }) {
-  return (
-    <div>
-      <SectionLabel>{section.label}</SectionLabel>
-      {/* Sized down from StatCard-scale so all bands sit on one row within
-          a half-width column instead of wrapping to their own line. */}
-      <div className="flex flex-wrap gap-2">
-        {section.entries.map((band) => (
-          <div key={band.key} className="rounded px-2 py-1.5" style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}` }}>
-            <div className="font-mono text-[9px] uppercase tracking-widest mb-1" style={{ color: C.textDim }}>
-              {band.groupLabel}
-            </div>
-            <div className="flex items-end gap-2">
-              <div>
-                <div className="font-mono text-[8px] uppercase" style={{ color: C.textDim }}>
-                  {band.shortLabel}
-                </div>
-                <div className="font-mono text-[14px] font-bold" style={{ color: C.textBright }}>
-                  {band.count}
-                </div>
-              </div>
-              <div>
-                <div className="font-mono text-[8px] uppercase" style={{ color: C.textDim }}>
-                  Yds
-                </div>
-                <div className="font-mono text-[14px] font-bold" style={{ color: C.textBright }}>
-                  {band.yards}
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function MatchListView({ section }: { section: MatchListSection }) {
-  return (
-    <div>
-      <SectionLabel>{section.label}</SectionLabel>
-      <div className="flex flex-col gap-1.5">
-        {section.rows.map((row, i) => (
-          <div
-            key={i}
-            className="flex items-center gap-3 rounded px-3 py-2"
-            style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}` }}
-          >
-            <span className="font-mono text-[11px]" style={{ color: C.textDim }}>
-              {extractDateToken(row.date) ?? row.date}
-            </span>
-            {row.opponent && (
-              <span className="font-mono text-[11px]" style={{ color: C.textDim }}>
-                {row.opponent}
-              </span>
-            )}
-            <div className="flex gap-2 ml-auto">
-              {row.fields.map((f, j) => (
-                <span key={j} className="font-mono text-[11px] font-bold" style={{ color: C.textBright }}>
-                  {f.value}
-                  {f.label}
-                </span>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function SectionView({ section }: { section: ProfileSection }) {
-  switch (section.type) {
-    case 'flat_totals':
-      return <FlatTotalsView section={section} />
-    case 'keyed_entries':
-      return <KeyedEntriesView section={section} />
-    case 'band_breakdown':
-      return <BandBreakdownView section={section} />
-    case 'match_list':
-      return <MatchListView section={section} />
-  }
-}
-
-// Consecutive 'half'-width sections pair up into a side-by-side row (desktop
-// only, via md: on the wrapper) — anything else, including an unpaired
-// trailing 'half', renders full width on its own row.
-function groupSections(sections: ProfileSection[]): ProfileSection[][] {
-  const groups: ProfileSection[][] = []
-  let i = 0
-  while (i < sections.length) {
-    const current = sections[i]
-    const next = sections[i + 1]
-    if (current.width === 'half' && next?.width === 'half') {
-      groups.push([current, next])
-      i += 2
-    } else {
-      groups.push([current])
-      i += 1
+interface RawBatterProfile {
+  player: string
+  player_id: string
+  team: string
+  position: string
+  season: number
+  sections: {
+    season_totals: {
+      AB: number
+      R: number
+      H: number
+      '2B': number
+      '3B': number
+      HR: number
+      RBI: number
+      BB: number
+      SO: number
+      SB: number
+      TB: number
+      avg: number
+      obp: number
+      slg: number
+      ops: number
     }
+    season_splits: Record<string, RawSeasonSplitEntryGeneric>
+    recent_games: RawBatterRecentGame[]
+    career_splits: { splits_single_season: boolean; splits_count: number; splits: { season: number; total: number }[] }
+    // Both ship as a real object for most players, but a handful of real
+    // files have `hr_distance: {}` / `first_pa: {}` outright (no qualifying
+    // events recorded) rather than a zeroed-out shape — Partial reflects
+    // that instead of asserting fields that aren't actually always there.
+    hr_distance: Partial<{ total_ft: number; hr_count: number; games: number; events: RawHrEvent[] }>
+    first_pa: Partial<{ count: number; games_in_window: number; matches: RawFirstPaMatch[] }>
   }
-  return groups
+}
+
+// Batter split keys look like "hr_games", "multi_hit_games",
+// "rbi_3plus_games" — strip the "_games" suffix (redundant once the count is
+// already shown next to the label), then reuse the QB "_Nplus" convention
+// for threshold splits. Kept separate from formatSplitLabel (QB's ordering
+// puts the threshold first, e.g. "3+ pass rush TD") since there's no
+// existing convention to match here and no reason to force one.
+const BATTER_SPLIT_ABBR = new Set(['hr', 'rbi', 'bb', 'so', 'sb', 'ab', 'xbh', 'tb'])
+function formatBatterSplitLabel(key: string): string {
+  const stripped = key.replace(/_games$/, '')
+  const m = stripped.match(/^(.+)_(\d+)plus$/)
+  if (m) {
+    const [, statPart, threshold] = m
+    const words = statPart.split('_').map((w) => (BATTER_SPLIT_ABBR.has(w) ? w.toUpperCase() : w))
+    return `${words.join(' ')} ${threshold}+`
+  }
+  const words = stripped.split('_').map((w) => (BATTER_SPLIT_ABBR.has(w) ? w.toUpperCase() : w))
+  return words.join(' ')
+}
+
+function adaptBatterProfile(raw: RawBatterProfile): ProfilePayload {
+  const { season_totals: t, season_splits, recent_games, career_splits, hr_distance: hr, first_pa } = raw.sections
+
+  const seasonTotals: FlatTotalsSection = {
+    type: 'flat_totals',
+    label: 'Season totals',
+    entries: [
+      { key: 'avg', label: 'AVG', value: formatBattingAvg(t.avg) },
+      { key: 'obp', label: 'OBP', value: formatBattingAvg(t.obp) },
+      { key: 'slg', label: 'SLG', value: formatBattingAvg(t.slg) },
+      { key: 'ops', label: 'OPS', value: formatBattingAvg(t.ops) },
+      { key: 'ab', label: 'AB', value: t.AB },
+      { key: 'r', label: 'R', value: t.R },
+      { key: 'h', label: 'H', value: t.H },
+      { key: '2b', label: '2B', value: t['2B'] },
+      { key: '3b', label: '3B', value: t['3B'] },
+      { key: 'hr', label: 'HR', value: t.HR, accent: t.HR > 0 },
+      { key: 'rbi', label: 'RBI', value: t.RBI },
+      { key: 'bb', label: 'BB', value: t.BB },
+      { key: 'so', label: 'SO', value: t.SO },
+      { key: 'sb', label: 'SB', value: t.SB },
+      { key: 'tb', label: 'TB', value: t.TB },
+    ],
+  }
+
+  const seasonSplits: KeyedEntriesSection = {
+    type: 'keyed_entries',
+    label: 'Season splits',
+    entries: Object.entries(season_splits).map(([key, split]) => ({
+      key,
+      label: formatBatterSplitLabel(key),
+      count: split.count,
+      games: split.games,
+    })),
+  }
+
+  // No per-season backend concept the QB shape has an equivalent for — a
+  // straight season-by-season series reuses flat_totals directly (label =
+  // year, value = that season's total for whatever stat this split tracks).
+  const careerBySeason: FlatTotalsSection = {
+    type: 'flat_totals',
+    label: 'Career totals by season',
+    entries: career_splits.splits.map((s) => ({
+      key: String(s.season),
+      label: String(s.season),
+      value: s.total,
+    })),
+  }
+
+  // First-PA outcomes pair side-by-side with the HR-distance summary below,
+  // mirroring the QB layout's "Pass yds/quarter | Explosive pass plays"
+  // half-width row — first_pa is this sport's equivalent "per-something
+  // breakdown" slot. Both sections are genuinely absent for some real
+  // players (a handful of batter files ship `first_pa: {}` / `hr_distance:
+  // {}` — no matches recorded rather than a zeroed shape), so both are
+  // built conditionally and dropped from the section list entirely rather
+  // than rendering an empty/undefined section. groupSections already
+  // handles an unpaired lone 'half' by rendering it full-width, so leaving
+  // one out when the other is missing needs no extra layout logic.
+  const firstPaOutcomes: MatchListSection | null = Array.isArray(first_pa?.matches)
+    ? {
+        type: 'match_list',
+        label: 'First PA outcomes',
+        width: 'half',
+        rows: first_pa.matches.map((m) => ({
+          date: m.date,
+          opponent: m.opponent,
+          fields: [
+            { label: '', value: m.result ?? m.category ?? '—' },
+            ...(m.distance_feet ? [{ label: ' ft', value: m.distance_feet }] : []),
+          ],
+        })),
+      }
+    : null
+
+  const hrDistanceSummary: FlatTotalsSection | null =
+    typeof hr?.total_ft === 'number'
+      ? {
+          type: 'flat_totals',
+          label: 'HR distance',
+          width: 'half',
+          entries: [
+            { key: 'total_ft', label: 'Total Ft', value: hr.total_ft.toLocaleString() },
+            { key: 'hr_count', label: 'HR Count', value: hr.hr_count ?? 0, accent: (hr.hr_count ?? 0) > 0 },
+            { key: 'games', label: 'Games', value: hr.games ?? 0 },
+          ],
+        }
+      : null
+
+  const hrLog: MatchListSection | null = Array.isArray(hr?.events)
+    ? {
+        type: 'match_list',
+        label: 'HR log',
+        rows: hr.events.map((e) => ({
+          date: e.date,
+          opponent: e.opponent,
+          fields: [
+            { label: ' ft', value: e.distance_feet },
+            ...(e.inning ? [{ label: ' inn', value: e.inning }] : []),
+          ],
+        })),
+      }
+    : null
+
+  const recentGamesLog: MatchListSection = {
+    type: 'match_list',
+    label: 'Recent games',
+    rows: recent_games.map((g) => ({
+      date: g.date_iso ?? g.date,
+      opponent: g.opponent,
+      fields: [
+        { label: ' AB', value: g.AB ?? 0 },
+        { label: ' H', value: g.H ?? 0 },
+        ...(g.HR ? [{ label: ' HR', value: g.HR }] : []),
+        ...(g.RBI ? [{ label: ' RBI', value: g.RBI }] : []),
+        ...(g['2B'] ? [{ label: ' 2B', value: g['2B'] }] : []),
+        ...(g['3B'] ? [{ label: ' 3B', value: g['3B'] }] : []),
+        ...(g.BB ? [{ label: ' BB', value: g.BB }] : []),
+        ...(g.SO ? [{ label: ' SO', value: g.SO }] : []),
+        ...(g.SB ? [{ label: ' SB', value: g.SB }] : []),
+      ],
+    })),
+  }
+
+  return {
+    player: normalizeDisplayPlayer(raw.player),
+    player_id: raw.player_id,
+    team: raw.team,
+    position: raw.position,
+    season: raw.season,
+    sections: (
+      [
+        seasonTotals,
+        seasonSplits,
+        careerBySeason,
+        firstPaOutcomes,
+        hrDistanceSummary,
+        hrLog,
+        recentGamesLog,
+      ] as Array<ProfileSection | null>
+    ).filter((s): s is ProfileSection => s !== null),
+  }
+}
+
+const batterProfileModules = import.meta.glob('../assets/data/batter-profiles/*.json', { eager: true }) as Record<
+  string,
+  { default: RawBatterProfile }
+>
+
+const PROFILES_BY_SLUG: Record<string, ProfilePayload> = {
+  ...Object.fromEntries(Object.values(qbProfileModules).map((m) => [m.default.player_id, adaptQbProfile(m.default)])),
+  ...Object.fromEntries(
+    Object.values(batterProfileModules).map((m) => [m.default.player_id, adaptBatterProfile(m.default)]),
+  ),
 }
 
 export default function PlayerProfilePage() {
@@ -527,22 +513,8 @@ export default function PlayerProfilePage() {
           )}
         </div>
 
-        <div className="px-6 py-6 space-y-8 max-w-[1100px]">
-          {groupSections(DATA.sections).map((group, i) =>
-            group.length === 2 ? (
-              <div key={i} className="flex flex-col md:flex-row gap-8">
-                {group.map((s) => (
-                  <div key={s.label} className="md:flex-1">
-                    <SectionView section={s} />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div key={i}>
-                <SectionView section={group[0]} />
-              </div>
-            ),
-          )}
+        <div className="px-6 py-6 max-w-[1100px]">
+          <SectionStack sections={DATA.sections} />
         </div>
       </div>
     </div>

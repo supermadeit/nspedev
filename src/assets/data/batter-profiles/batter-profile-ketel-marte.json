@@ -1,0 +1,936 @@
+{
+  "player": "KetelMarte",
+  "player_id": "ketel-marte",
+  "team": "ARI",
+  "position": "2B",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 469,
+      "R": 65,
+      "H": 117,
+      "2B": 23,
+      "3B": 3,
+      "HR": 21,
+      "RBI": 67,
+      "BB": 41,
+      "SO": 78,
+      "SB": 4,
+      "TB": 209,
+      "avg": 0.249,
+      "obp": 0.314,
+      "slg": 0.446,
+      "ops": 0.76
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 33,
+        "games": [
+          {
+            "date": "2026-03-27",
+            "value": 2
+          },
+          {
+            "date": "2026-04-05",
+            "value": 2
+          },
+          {
+            "date": "2026-04-07",
+            "value": 2
+          },
+          {
+            "date": "2026-04-13",
+            "value": 2
+          },
+          {
+            "date": "2026-04-17",
+            "value": 2
+          },
+          {
+            "date": "2026-04-22",
+            "value": 2
+          },
+          {
+            "date": "2026-04-23",
+            "value": 2
+          },
+          {
+            "date": "2026-04-29",
+            "value": 2
+          },
+          {
+            "date": "2026-05-05",
+            "value": 2
+          },
+          {
+            "date": "2026-05-13",
+            "value": 2
+          },
+          {
+            "date": "2026-05-16",
+            "value": 2
+          },
+          {
+            "date": "2026-05-18",
+            "value": 2
+          },
+          {
+            "date": "2026-05-20",
+            "value": 3
+          },
+          {
+            "date": "2026-05-21",
+            "value": 2
+          },
+          {
+            "date": "2026-05-23",
+            "value": 3
+          },
+          {
+            "date": "2026-05-24",
+            "value": 3
+          },
+          {
+            "date": "2026-05-25",
+            "value": 4
+          },
+          {
+            "date": "2026-05-27",
+            "value": 2
+          },
+          {
+            "date": "2026-06-09",
+            "value": 3
+          },
+          {
+            "date": "2026-06-13",
+            "value": 2
+          },
+          {
+            "date": "2026-06-14",
+            "value": 2
+          },
+          {
+            "date": "2026-06-17",
+            "value": 2
+          },
+          {
+            "date": "2026-06-21",
+            "value": 2
+          },
+          {
+            "date": "2026-06-22",
+            "value": 2
+          },
+          {
+            "date": "2026-06-24",
+            "value": 2
+          },
+          {
+            "date": "2026-06-30",
+            "value": 2
+          },
+          {
+            "date": "2026-07-01",
+            "value": 2
+          },
+          {
+            "date": "2026-07-03",
+            "value": 2
+          },
+          {
+            "date": "2026-07-18",
+            "value": 2
+          },
+          {
+            "date": "2026-07-22",
+            "value": 2
+          },
+          {
+            "date": "2026-08-10",
+            "value": 2
+          },
+          {
+            "date": "2026-08-11",
+            "value": 2
+          },
+          {
+            "date": "2026-08-12",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 20,
+        "games": [
+          {
+            "date": "2026-03-27",
+            "value": 1
+          },
+          {
+            "date": "2026-04-11",
+            "value": 1
+          },
+          {
+            "date": "2026-04-13",
+            "value": 2
+          },
+          {
+            "date": "2026-04-29",
+            "value": 1
+          },
+          {
+            "date": "2026-05-19",
+            "value": 1
+          },
+          {
+            "date": "2026-05-20",
+            "value": 1
+          },
+          {
+            "date": "2026-05-23",
+            "value": 1
+          },
+          {
+            "date": "2026-05-26",
+            "value": 1
+          },
+          {
+            "date": "2026-06-01",
+            "value": 1
+          },
+          {
+            "date": "2026-06-04",
+            "value": 1
+          },
+          {
+            "date": "2026-06-19",
+            "value": 1
+          },
+          {
+            "date": "2026-06-24",
+            "value": 1
+          },
+          {
+            "date": "2026-06-27",
+            "value": 1
+          },
+          {
+            "date": "2026-06-28",
+            "value": 1
+          },
+          {
+            "date": "2026-06-29",
+            "value": 1
+          },
+          {
+            "date": "2026-06-30",
+            "value": 1
+          },
+          {
+            "date": "2026-07-20",
+            "value": 1
+          },
+          {
+            "date": "2026-07-26",
+            "value": 1
+          },
+          {
+            "date": "2026-08-09",
+            "value": 1
+          },
+          {
+            "date": "2026-08-11",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 5,
+        "games": [
+          {
+            "date": "2026-05-19",
+            "value": 3
+          },
+          {
+            "date": "2026-05-24",
+            "value": 3
+          },
+          {
+            "date": "2026-05-25",
+            "value": 3
+          },
+          {
+            "date": "2026-06-09",
+            "value": 3
+          },
+          {
+            "date": "2026-06-30",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "@ATL",
+        "AB": 3,
+        "R": 1,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-14",
+        "date_iso": "2026-08-14",
+        "opponent": "@ATL",
+        "AB": 1,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-12",
+        "date_iso": "2026-08-12",
+        "opponent": "vsCOL",
+        "AB": 3,
+        "R": 1,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 2,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-11",
+        "date_iso": "2026-08-11",
+        "opponent": "vsCOL",
+        "AB": 4,
+        "R": 1,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 5
+      },
+      {
+        "date": "2026-08-10",
+        "date_iso": "2026-08-10",
+        "opponent": "vsCOL",
+        "AB": 4,
+        "R": 1,
+        "H": 2,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 3
+      },
+      {
+        "date": "2026-08-09",
+        "date_iso": "2026-08-09",
+        "opponent": "vsLAD",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 2,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-08",
+        "date_iso": "2026-08-08",
+        "opponent": "vsLAD",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 2,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-07",
+        "date_iso": "2026-08-07",
+        "opponent": "vsLAD",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-06",
+        "date_iso": "2026-08-06",
+        "opponent": "vsSD",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-04",
+        "date_iso": "2026-08-04",
+        "opponent": "vsSD",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 12,
+      "splits": [
+        {
+          "season": 2015,
+          "total": 62.0
+        },
+        {
+          "season": 2016,
+          "total": 113.0
+        },
+        {
+          "season": 2017,
+          "total": 65.0
+        },
+        {
+          "season": 2018,
+          "total": 137.0
+        },
+        {
+          "season": 2019,
+          "total": 187.0
+        },
+        {
+          "season": 2020,
+          "total": 52.0
+        },
+        {
+          "season": 2021,
+          "total": 108.0
+        },
+        {
+          "season": 2022,
+          "total": 118.0
+        },
+        {
+          "season": 2023,
+          "total": 181.0
+        },
+        {
+          "season": 2024,
+          "total": 147.0
+        },
+        {
+          "season": 2025,
+          "total": 136.0
+        },
+        {
+          "season": 2026,
+          "total": 117.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 9882,
+      "hr_count": 24,
+      "games": 118,
+      "events": [
+        {
+          "date": "2026-03-27",
+          "distance_feet": 391,
+          "inning": 3,
+          "opponent": "@LAD"
+        },
+        {
+          "date": "2026-04-11",
+          "distance_feet": 406,
+          "inning": 1,
+          "opponent": "@PHI"
+        },
+        {
+          "date": "2026-04-13",
+          "distance_feet": 443,
+          "inning": 1,
+          "opponent": "@BAL"
+        },
+        {
+          "date": "2026-04-13",
+          "distance_feet": 405,
+          "inning": 3,
+          "opponent": "@BAL"
+        },
+        {
+          "date": "2026-04-29",
+          "distance_feet": 409,
+          "inning": 9,
+          "opponent": "@MIL"
+        },
+        {
+          "date": "2026-05-19",
+          "distance_feet": 391,
+          "inning": 9,
+          "opponent": "vsSF"
+        },
+        {
+          "date": "2026-05-20",
+          "distance_feet": 415,
+          "inning": 3,
+          "opponent": "vsSF"
+        },
+        {
+          "date": "2026-05-23",
+          "distance_feet": 424,
+          "inning": 4,
+          "opponent": "vsCOL"
+        },
+        {
+          "date": "2026-05-26",
+          "distance_feet": 452,
+          "inning": 7,
+          "opponent": "@SF"
+        },
+        {
+          "date": "2026-06-01",
+          "distance_feet": 409,
+          "inning": 8,
+          "opponent": "vsLAD"
+        },
+        {
+          "date": "2026-06-04",
+          "distance_feet": 431,
+          "inning": 9,
+          "opponent": "vsLAD"
+        },
+        {
+          "date": "2026-06-12",
+          "distance_feet": 427,
+          "inning": 2,
+          "opponent": "@CIN"
+        },
+        {
+          "date": "2026-06-13",
+          "distance_feet": 413,
+          "inning": 8,
+          "opponent": "@CIN"
+        },
+        {
+          "date": "2026-06-14",
+          "distance_feet": 448,
+          "inning": 6,
+          "opponent": "@CIN"
+        },
+        {
+          "date": "2026-06-19",
+          "distance_feet": 375,
+          "inning": 6,
+          "opponent": "vsMIN"
+        },
+        {
+          "date": "2026-06-24",
+          "distance_feet": 416,
+          "inning": 4,
+          "opponent": "@STL"
+        },
+        {
+          "date": "2026-06-27",
+          "distance_feet": 430,
+          "inning": 8,
+          "opponent": "@TB"
+        },
+        {
+          "date": "2026-06-28",
+          "distance_feet": 424,
+          "inning": 8,
+          "opponent": "@TB"
+        },
+        {
+          "date": "2026-06-29",
+          "distance_feet": 367,
+          "inning": 1,
+          "opponent": "vsSF"
+        },
+        {
+          "date": "2026-06-30",
+          "distance_feet": 431,
+          "inning": 6,
+          "opponent": "vsSF"
+        },
+        {
+          "date": "2026-07-20",
+          "distance_feet": 402,
+          "inning": 6,
+          "opponent": "vsATH"
+        },
+        {
+          "date": "2026-07-26",
+          "distance_feet": 411,
+          "inning": 4,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-08-09",
+          "distance_feet": 385,
+          "inning": 1,
+          "opponent": "vsLAD"
+        },
+        {
+          "date": "2026-08-11",
+          "distance_feet": 377,
+          "inning": 1,
+          "opponent": "vsCOL"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 24,
+      "games_in_window": 118,
+      "matches": [
+        {
+          "game_id": "401814747",
+          "date": "2026-03-30",
+          "opponent": "vsDET",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marte singled to center.",
+          "team": "ARI"
+        },
+        {
+          "game_id": "401814823",
+          "date": "2026-04-05",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Marte doubled to left.",
+          "team": "ARI"
+        },
+        {
+          "game_id": "401814840",
+          "date": "2026-04-07",
+          "opponent": "@NYM",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marte singled to center.",
+          "team": "ARI"
+        },
+        {
+          "game_id": "401814892",
+          "date": "2026-04-11",
+          "opponent": "@PHI",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 406,
+          "description": "Marte homered to right center (406 feet).",
+          "team": "ARI"
+        },
+        {
+          "game_id": "401814922",
+          "date": "2026-04-13",
+          "opponent": "@BAL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 443,
+          "description": "Marte homered to right (443 feet).",
+          "team": "ARI"
+        },
+        {
+          "game_id": "401815038",
+          "date": "2026-04-21",
+          "opponent": "vsCHW",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marte singled to right.",
+          "team": "ARI"
+        },
+        {
+          "game_id": "401815063",
+          "date": "2026-04-23",
+          "opponent": "vsCHW",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marte reached on infield single to first.",
+          "team": "ARI"
+        },
+        {
+          "game_id": "401815227",
+          "date": "2026-05-05",
+          "opponent": "vsPIT",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "3B",
+          "distance_feet": null,
+          "description": "Marte tripled to left.",
+          "team": "ARI"
+        },
+        {
+          "game_id": "401815327",
+          "date": "2026-05-13",
+          "opponent": "@TEX",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marte singled to center.",
+          "team": "ARI"
+        },
+        {
+          "game_id": "401815371",
+          "date": "2026-05-16",
+          "opponent": "@COL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marte singled to right.",
+          "team": "ARI"
+        },
+        {
+          "game_id": "401815403",
+          "date": "2026-05-18",
+          "opponent": "vsSF",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marte singled to right.",
+          "team": "ARI"
+        },
+        {
+          "game_id": "401815433",
+          "date": "2026-05-20",
+          "opponent": "vsSF",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Marte doubled to right.",
+          "team": "ARI"
+        },
+        {
+          "game_id": "401815469",
+          "date": "2026-05-23",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marte singled to right.",
+          "team": "ARI"
+        },
+        {
+          "game_id": "401815484",
+          "date": "2026-05-24",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Marte doubled to right.",
+          "team": "ARI"
+        },
+        {
+          "game_id": "401815799",
+          "date": "2026-06-17",
+          "opponent": "vsLAA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marte singled to left.",
+          "team": "ARI"
+        },
+        {
+          "game_id": "401815875",
+          "date": "2026-06-23",
+          "opponent": "@STL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Marte doubled to left.",
+          "team": "ARI"
+        },
+        {
+          "game_id": "401815963",
+          "date": "2026-06-29",
+          "opponent": "vsSF",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 367,
+          "description": "Marte homered to right (367 feet).",
+          "team": "ARI"
+        },
+        {
+          "game_id": "401816050",
+          "date": "2026-07-06",
+          "opponent": "@SD",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "3B",
+          "distance_feet": null,
+          "description": "Marte tripled to center.",
+          "team": "ARI"
+        },
+        {
+          "game_id": "401816065",
+          "date": "2026-07-07",
+          "opponent": "@SD",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Marte doubled to right.",
+          "team": "ARI"
+        },
+        {
+          "game_id": "401816108",
+          "date": "2026-07-10",
+          "opponent": "@LAD",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marte singled to center.",
+          "team": "ARI"
+        },
+        {
+          "game_id": "401816228",
+          "date": "2026-07-22",
+          "opponent": "vsATH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marte reached on infield single to shortstop.",
+          "team": "ARI"
+        },
+        {
+          "game_id": "401816467",
+          "date": "2026-08-09",
+          "opponent": "vsLAD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 385,
+          "description": "Marte homered to left (385 feet), Moreno scored.",
+          "team": "ARI"
+        },
+        {
+          "game_id": "401816488",
+          "date": "2026-08-11",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 377,
+          "description": "Marte homered to right center (377 feet).",
+          "team": "ARI"
+        },
+        {
+          "game_id": "401816503",
+          "date": "2026-08-12",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marte singled to right, Carroll scored, Moreno to second.",
+          "team": "ARI"
+        }
+      ]
+    }
+  }
+}

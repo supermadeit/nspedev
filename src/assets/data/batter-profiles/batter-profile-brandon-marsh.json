@@ -1,0 +1,854 @@
+{
+  "player": "BrandonMarsh",
+  "player_id": "brandon-marsh",
+  "team": "PHI",
+  "position": "LF",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 463,
+      "R": 67,
+      "H": 126,
+      "2B": 18,
+      "3B": 2,
+      "HR": 17,
+      "RBI": 55,
+      "BB": 31,
+      "SO": 126,
+      "SB": 11,
+      "TB": 199,
+      "avg": 0.272,
+      "obp": 0.318,
+      "slg": 0.43,
+      "ops": 0.748
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 31,
+        "games": [
+          {
+            "date": "2026-03-26",
+            "value": 2
+          },
+          {
+            "date": "2026-03-30",
+            "value": 2
+          },
+          {
+            "date": "2026-04-12",
+            "value": 2
+          },
+          {
+            "date": "2026-04-13",
+            "value": 3
+          },
+          {
+            "date": "2026-04-21",
+            "value": 2
+          },
+          {
+            "date": "2026-04-23",
+            "value": 3
+          },
+          {
+            "date": "2026-04-25",
+            "value": 2
+          },
+          {
+            "date": "2026-05-03",
+            "value": 2
+          },
+          {
+            "date": "2026-05-05",
+            "value": 3
+          },
+          {
+            "date": "2026-05-06",
+            "value": 3
+          },
+          {
+            "date": "2026-05-10",
+            "value": 4
+          },
+          {
+            "date": "2026-05-20",
+            "value": 2
+          },
+          {
+            "date": "2026-05-26",
+            "value": 2
+          },
+          {
+            "date": "2026-06-02",
+            "value": 4
+          },
+          {
+            "date": "2026-06-03",
+            "value": 2
+          },
+          {
+            "date": "2026-06-06",
+            "value": 2
+          },
+          {
+            "date": "2026-06-07",
+            "value": 2
+          },
+          {
+            "date": "2026-06-13",
+            "value": 3
+          },
+          {
+            "date": "2026-06-15",
+            "value": 2
+          },
+          {
+            "date": "2026-06-23",
+            "value": 3
+          },
+          {
+            "date": "2026-06-24",
+            "value": 3
+          },
+          {
+            "date": "2026-06-25",
+            "value": 2
+          },
+          {
+            "date": "2026-06-28",
+            "value": 2
+          },
+          {
+            "date": "2026-06-29",
+            "value": 2
+          },
+          {
+            "date": "2026-07-01",
+            "value": 2
+          },
+          {
+            "date": "2026-07-09",
+            "value": 2
+          },
+          {
+            "date": "2026-08-01",
+            "value": 2
+          },
+          {
+            "date": "2026-08-06",
+            "value": 2
+          },
+          {
+            "date": "2026-08-13",
+            "value": 2
+          },
+          {
+            "date": "2026-08-19",
+            "value": 2
+          },
+          {
+            "date": "2026-08-21",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 15,
+        "games": [
+          {
+            "date": "2026-04-03",
+            "value": 1
+          },
+          {
+            "date": "2026-04-10",
+            "value": 1
+          },
+          {
+            "date": "2026-04-23",
+            "value": 2
+          },
+          {
+            "date": "2026-05-25",
+            "value": 1
+          },
+          {
+            "date": "2026-06-05",
+            "value": 1
+          },
+          {
+            "date": "2026-06-06",
+            "value": 1
+          },
+          {
+            "date": "2026-06-07",
+            "value": 1
+          },
+          {
+            "date": "2026-06-16",
+            "value": 1
+          },
+          {
+            "date": "2026-06-22",
+            "value": 1
+          },
+          {
+            "date": "2026-06-23",
+            "value": 1
+          },
+          {
+            "date": "2026-06-25",
+            "value": 1
+          },
+          {
+            "date": "2026-06-29",
+            "value": 2
+          },
+          {
+            "date": "2026-07-01",
+            "value": 1
+          },
+          {
+            "date": "2026-07-20",
+            "value": 1
+          },
+          {
+            "date": "2026-08-13",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 4,
+        "games": [
+          {
+            "date": "2026-04-03",
+            "value": 3
+          },
+          {
+            "date": "2026-04-10",
+            "value": 3
+          },
+          {
+            "date": "2026-04-23",
+            "value": 3
+          },
+          {
+            "date": "2026-06-25",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-26",
+        "date_iso": "2026-08-26",
+        "opponent": "@SEA",
+        "AB": 3,
+        "R": 1,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "@SEA",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-24",
+        "date_iso": "2026-08-24",
+        "opponent": "@SEA",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "vsSTL",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "vsSTL",
+        "AB": 1,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "vsSTL",
+        "AB": 3,
+        "R": 2,
+        "H": 2,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 3
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "vsMIA",
+        "AB": 4,
+        "R": 0,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "vsMIA",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "vsMIA",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "@MIN",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 1,
+      "splits": [
+        {
+          "season": 2026,
+          "total": 126.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 6646,
+      "hr_count": 17,
+      "games": 128,
+      "events": [
+        {
+          "date": "2026-04-03",
+          "distance_feet": 454,
+          "inning": 1,
+          "opponent": "@COL"
+        },
+        {
+          "date": "2026-04-10",
+          "distance_feet": 372,
+          "inning": 1,
+          "opponent": "vsARI"
+        },
+        {
+          "date": "2026-04-23",
+          "distance_feet": 425,
+          "inning": 2,
+          "opponent": "@CHC"
+        },
+        {
+          "date": "2026-04-23",
+          "distance_feet": 339,
+          "inning": 7,
+          "opponent": "@CHC"
+        },
+        {
+          "date": "2026-05-25",
+          "distance_feet": 368,
+          "inning": 7,
+          "opponent": "@SD"
+        },
+        {
+          "date": "2026-06-05",
+          "distance_feet": 401,
+          "inning": 2,
+          "opponent": "vsCHW"
+        },
+        {
+          "date": "2026-06-06",
+          "distance_feet": 389,
+          "inning": 6,
+          "opponent": "vsCHW"
+        },
+        {
+          "date": "2026-06-07",
+          "distance_feet": 383,
+          "inning": 3,
+          "opponent": "vsCHW"
+        },
+        {
+          "date": "2026-06-16",
+          "distance_feet": 402,
+          "inning": 2,
+          "opponent": "vsMIA"
+        },
+        {
+          "date": "2026-06-22",
+          "distance_feet": 376,
+          "inning": 7,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-06-23",
+          "distance_feet": 400,
+          "inning": 9,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-06-25",
+          "distance_feet": 420,
+          "inning": 6,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-06-29",
+          "distance_feet": 389,
+          "inning": 1,
+          "opponent": "vsPIT"
+        },
+        {
+          "date": "2026-06-29",
+          "distance_feet": 416,
+          "inning": 8,
+          "opponent": "vsPIT"
+        },
+        {
+          "date": "2026-07-01",
+          "distance_feet": 351,
+          "inning": 3,
+          "opponent": "vsPIT"
+        },
+        {
+          "date": "2026-07-20",
+          "distance_feet": 396,
+          "inning": 6,
+          "opponent": "vsLAD"
+        },
+        {
+          "date": "2026-08-13",
+          "distance_feet": 365,
+          "inning": 7,
+          "opponent": "vsMIN"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 27,
+      "games_in_window": 128,
+      "matches": [
+        {
+          "game_id": "401814755",
+          "date": "2026-03-31",
+          "opponent": "vsWSH",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marsh singled to left, Bohm to second.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401814769",
+          "date": "2026-04-01",
+          "opponent": "vsWSH",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marsh singled to center.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401814792",
+          "date": "2026-04-03",
+          "opponent": "@COL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 454,
+          "description": "Marsh homered to right center (454 feet), Bohm scored and Stott scored.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401814822",
+          "date": "2026-04-05",
+          "opponent": "@COL",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Marsh doubled to center.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401814877",
+          "date": "2026-04-10",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 372,
+          "description": "Marsh homered to left center (372 feet), Schwarber scored and Harper scored.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401814923",
+          "date": "2026-04-13",
+          "opponent": "vsCHC",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marsh singled to right.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401814933",
+          "date": "2026-04-14",
+          "opponent": "vsCHC",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marsh singled to center.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815060",
+          "date": "2026-04-23",
+          "opponent": "@CHC",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 425,
+          "description": "Marsh homered to right center (425 feet).",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815204",
+          "date": "2026-05-04",
+          "opponent": "@MIA",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marsh singled to right.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815214",
+          "date": "2026-05-05",
+          "opponent": "vsATH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marsh singled to center, Garc\u00eda to second, Harper to third.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815229",
+          "date": "2026-05-06",
+          "opponent": "vsATH",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marsh reached on bunt single to third, Realmuto to second.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815244",
+          "date": "2026-05-07",
+          "opponent": "vsATH",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marsh singled to center.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815285",
+          "date": "2026-05-10",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marsh singled to center.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815309",
+          "date": "2026-05-12",
+          "opponent": "@BOS",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marsh singled to right.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815512",
+          "date": "2026-05-26",
+          "opponent": "@SD",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marsh singled to right.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815594",
+          "date": "2026-06-02",
+          "opponent": "vsSD",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marsh singled to center.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815609",
+          "date": "2026-06-03",
+          "opponent": "vsSD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marsh singled to right, Harper to third.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815630",
+          "date": "2026-06-05",
+          "opponent": "vsCHW",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 401,
+          "description": "Marsh homered to center (401 feet), Realmuto scored.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815686",
+          "date": "2026-06-09",
+          "opponent": "@TOR",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Marsh doubled to right, Turner scored.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815765",
+          "date": "2026-06-15",
+          "opponent": "vsMIA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marsh singled to left, Harper to second.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815791",
+          "date": "2026-06-17",
+          "opponent": "vsMIA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marsh singled to right, Turner scored, Harper to third.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815887",
+          "date": "2026-06-24",
+          "opponent": "@WSH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marsh reached on infield single to second.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815925",
+          "date": "2026-06-27",
+          "opponent": "@NYM",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marsh singled to right, Schwarber to third.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815954",
+          "date": "2026-06-29",
+          "opponent": "vsPIT",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 389,
+          "description": "Marsh homered to left center (389 feet).",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401816350",
+          "date": "2026-08-01",
+          "opponent": "@BAL",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marsh singled to left.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401816472",
+          "date": "2026-08-10",
+          "opponent": "@STL",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marsh singled to right.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401816611",
+          "date": "2026-08-21",
+          "opponent": "vsSTL",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Marsh doubled to right, Stott scored.",
+          "team": "PHI"
+        }
+      ]
+    }
+  }
+}

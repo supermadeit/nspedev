@@ -1,0 +1,1122 @@
+{
+  "player": "PeteAlonso",
+  "player_id": "pete-alonso",
+  "team": "BAL",
+  "position": "1B",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 500,
+      "R": 82,
+      "H": 138,
+      "2B": 24,
+      "3B": 0,
+      "HR": 32,
+      "RBI": 91,
+      "BB": 64,
+      "SO": 136,
+      "SB": 5,
+      "TB": 258,
+      "avg": 0.276,
+      "obp": 0.365,
+      "slg": 0.516,
+      "ops": 0.881
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 37,
+        "games": [
+          {
+            "date": "2026-03-29",
+            "value": 2
+          },
+          {
+            "date": "2026-03-31",
+            "value": 2
+          },
+          {
+            "date": "2026-04-12",
+            "value": 2
+          },
+          {
+            "date": "2026-04-13",
+            "value": 2
+          },
+          {
+            "date": "2026-04-17",
+            "value": 2
+          },
+          {
+            "date": "2026-04-21",
+            "value": 2
+          },
+          {
+            "date": "2026-05-03",
+            "value": 2
+          },
+          {
+            "date": "2026-05-05",
+            "value": 2
+          },
+          {
+            "date": "2026-05-13",
+            "value": 2
+          },
+          {
+            "date": "2026-05-16",
+            "value": 2
+          },
+          {
+            "date": "2026-05-18",
+            "value": 3
+          },
+          {
+            "date": "2026-05-20",
+            "value": 2
+          },
+          {
+            "date": "2026-05-25",
+            "value": 3
+          },
+          {
+            "date": "2026-05-31",
+            "value": 2
+          },
+          {
+            "date": "2026-06-02",
+            "value": 2
+          },
+          {
+            "date": "2026-06-04",
+            "value": 2
+          },
+          {
+            "date": "2026-06-10",
+            "value": 2
+          },
+          {
+            "date": "2026-06-13",
+            "value": 3
+          },
+          {
+            "date": "2026-06-21",
+            "value": 2
+          },
+          {
+            "date": "2026-06-24",
+            "value": 3
+          },
+          {
+            "date": "2026-07-04",
+            "value": 3
+          },
+          {
+            "date": "2026-07-11",
+            "value": 2
+          },
+          {
+            "date": "2026-07-22",
+            "value": 2
+          },
+          {
+            "date": "2026-07-24",
+            "value": 2
+          },
+          {
+            "date": "2026-07-26",
+            "value": 2
+          },
+          {
+            "date": "2026-07-27",
+            "value": 2
+          },
+          {
+            "date": "2026-07-31",
+            "value": 2
+          },
+          {
+            "date": "2026-08-09",
+            "value": 3
+          },
+          {
+            "date": "2026-08-11",
+            "value": 3
+          },
+          {
+            "date": "2026-08-12",
+            "value": 2
+          },
+          {
+            "date": "2026-08-14",
+            "value": 2
+          },
+          {
+            "date": "2026-08-15",
+            "value": 3
+          },
+          {
+            "date": "2026-08-17",
+            "value": 2
+          },
+          {
+            "date": "2026-08-20",
+            "value": 2
+          },
+          {
+            "date": "2026-08-21",
+            "value": 2
+          },
+          {
+            "date": "2026-08-22",
+            "value": 2
+          },
+          {
+            "date": "2026-08-25",
+            "value": 4
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 31,
+        "games": [
+          {
+            "date": "2026-03-31",
+            "value": 1
+          },
+          {
+            "date": "2026-04-13",
+            "value": 1
+          },
+          {
+            "date": "2026-04-22",
+            "value": 1
+          },
+          {
+            "date": "2026-04-28",
+            "value": 1
+          },
+          {
+            "date": "2026-05-01",
+            "value": 1
+          },
+          {
+            "date": "2026-05-02",
+            "value": 1
+          },
+          {
+            "date": "2026-05-06",
+            "value": 1
+          },
+          {
+            "date": "2026-05-08",
+            "value": 1
+          },
+          {
+            "date": "2026-05-20",
+            "value": 1
+          },
+          {
+            "date": "2026-05-22",
+            "value": 1
+          },
+          {
+            "date": "2026-05-29",
+            "value": 1
+          },
+          {
+            "date": "2026-06-02",
+            "value": 1
+          },
+          {
+            "date": "2026-06-06",
+            "value": 1
+          },
+          {
+            "date": "2026-06-10",
+            "value": 1
+          },
+          {
+            "date": "2026-06-11",
+            "value": 1
+          },
+          {
+            "date": "2026-06-13",
+            "value": 1
+          },
+          {
+            "date": "2026-06-19",
+            "value": 1
+          },
+          {
+            "date": "2026-06-21",
+            "value": 1
+          },
+          {
+            "date": "2026-06-28",
+            "value": 1
+          },
+          {
+            "date": "2026-07-08",
+            "value": 1
+          },
+          {
+            "date": "2026-07-11",
+            "value": 1
+          },
+          {
+            "date": "2026-07-26",
+            "value": 1
+          },
+          {
+            "date": "2026-07-31",
+            "value": 1
+          },
+          {
+            "date": "2026-08-09",
+            "value": 2
+          },
+          {
+            "date": "2026-08-11",
+            "value": 1
+          },
+          {
+            "date": "2026-08-15",
+            "value": 1
+          },
+          {
+            "date": "2026-08-17",
+            "value": 1
+          },
+          {
+            "date": "2026-08-19",
+            "value": 1
+          },
+          {
+            "date": "2026-08-21",
+            "value": 1
+          },
+          {
+            "date": "2026-08-25",
+            "value": 1
+          },
+          {
+            "date": "2026-08-26",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 6,
+        "games": [
+          {
+            "date": "2026-05-06",
+            "value": 3
+          },
+          {
+            "date": "2026-05-22",
+            "value": 4
+          },
+          {
+            "date": "2026-06-21",
+            "value": 3
+          },
+          {
+            "date": "2026-08-09",
+            "value": 4
+          },
+          {
+            "date": "2026-08-21",
+            "value": 3
+          },
+          {
+            "date": "2026-08-25",
+            "value": 4
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-26",
+        "date_iso": "2026-08-26",
+        "opponent": "@STL",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 2,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "@STL",
+        "AB": 4,
+        "R": 2,
+        "H": 4,
+        "2B": 1,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 4,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 8
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "vsTB",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "vsTB",
+        "AB": 4,
+        "R": 0,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "vsTB",
+        "AB": 4,
+        "R": 1,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 3,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 5
+      },
+      {
+        "date": "2026-08-20",
+        "date_iso": "2026-08-20",
+        "opponent": "vsNYY",
+        "AB": 4,
+        "R": 0,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "vsNYY",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "vsNYY",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "@TB",
+        "AB": 5,
+        "R": 1,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 5
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "@TB",
+        "AB": 1,
+        "R": 1,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 2,
+        "BB": 2,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 8,
+      "splits": [
+        {
+          "season": 2019,
+          "total": 155.0
+        },
+        {
+          "season": 2020,
+          "total": 48.0
+        },
+        {
+          "season": 2021,
+          "total": 147.0
+        },
+        {
+          "season": 2022,
+          "total": 165.0
+        },
+        {
+          "season": 2023,
+          "total": 123.0
+        },
+        {
+          "season": 2024,
+          "total": 158.0
+        },
+        {
+          "season": 2025,
+          "total": 170.0
+        },
+        {
+          "season": 2026,
+          "total": 138.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 12490,
+      "hr_count": 31,
+      "games": 133,
+      "events": [
+        {
+          "date": "2026-03-31",
+          "distance_feet": 400,
+          "inning": 4,
+          "opponent": "vsTEX"
+        },
+        {
+          "date": "2026-04-13",
+          "distance_feet": 399,
+          "inning": 7,
+          "opponent": "vsARI"
+        },
+        {
+          "date": "2026-04-22",
+          "distance_feet": 410,
+          "inning": 1,
+          "opponent": "@KC"
+        },
+        {
+          "date": "2026-04-28",
+          "distance_feet": 380,
+          "inning": 5,
+          "opponent": "vsHOU"
+        },
+        {
+          "date": "2026-05-01",
+          "distance_feet": 367,
+          "inning": 2,
+          "opponent": "@NYY"
+        },
+        {
+          "date": "2026-05-02",
+          "distance_feet": 413,
+          "inning": 4,
+          "opponent": "@NYY"
+        },
+        {
+          "date": "2026-05-06",
+          "distance_feet": 407,
+          "inning": 1,
+          "opponent": "@MIA"
+        },
+        {
+          "date": "2026-05-08",
+          "distance_feet": 373,
+          "inning": 4,
+          "opponent": "vsATH"
+        },
+        {
+          "date": "2026-05-20",
+          "distance_feet": 374,
+          "inning": 6,
+          "opponent": "@TB"
+        },
+        {
+          "date": "2026-05-22",
+          "distance_feet": 391,
+          "inning": 3,
+          "opponent": "vsDET"
+        },
+        {
+          "date": "2026-05-29",
+          "distance_feet": 403,
+          "inning": 5,
+          "opponent": "vsTOR"
+        },
+        {
+          "date": "2026-06-02",
+          "distance_feet": 400,
+          "inning": 3,
+          "opponent": "@BOS"
+        },
+        {
+          "date": "2026-06-06",
+          "distance_feet": 421,
+          "inning": 6,
+          "opponent": "@TOR"
+        },
+        {
+          "date": "2026-06-10",
+          "distance_feet": 402,
+          "inning": 6,
+          "opponent": "vsSEA"
+        },
+        {
+          "date": "2026-06-11",
+          "distance_feet": 439,
+          "inning": 3,
+          "opponent": "vsSEA"
+        },
+        {
+          "date": "2026-06-13",
+          "distance_feet": 392,
+          "inning": 1,
+          "opponent": "vsSD"
+        },
+        {
+          "date": "2026-06-19",
+          "distance_feet": 375,
+          "inning": 6,
+          "opponent": "@LAD"
+        },
+        {
+          "date": "2026-06-21",
+          "distance_feet": 398,
+          "inning": 7,
+          "opponent": "@LAD"
+        },
+        {
+          "date": "2026-06-28",
+          "distance_feet": 437,
+          "inning": 1,
+          "opponent": "vsWSH"
+        },
+        {
+          "date": "2026-07-08",
+          "distance_feet": 411,
+          "inning": 4,
+          "opponent": "vsCHC"
+        },
+        {
+          "date": "2026-07-11",
+          "distance_feet": 420,
+          "inning": 4,
+          "opponent": "vsKC"
+        },
+        {
+          "date": "2026-07-26",
+          "distance_feet": 419,
+          "inning": 8,
+          "opponent": "vsATL"
+        },
+        {
+          "date": "2026-07-31",
+          "distance_feet": 394,
+          "inning": 1,
+          "opponent": "vsPHI"
+        },
+        {
+          "date": "2026-08-09",
+          "distance_feet": 393,
+          "inning": 2,
+          "opponent": "@TEX"
+        },
+        {
+          "date": "2026-08-09",
+          "distance_feet": 404,
+          "inning": 4,
+          "opponent": "@TEX"
+        },
+        {
+          "date": "2026-08-11",
+          "distance_feet": 418,
+          "inning": 1,
+          "opponent": "@MIN"
+        },
+        {
+          "date": "2026-08-15",
+          "distance_feet": 392,
+          "inning": 5,
+          "opponent": "@TB"
+        },
+        {
+          "date": "2026-08-17",
+          "distance_feet": 357,
+          "inning": 5,
+          "opponent": "@TB"
+        },
+        {
+          "date": "2026-08-19",
+          "distance_feet": 423,
+          "inning": 3,
+          "opponent": "vsNYY"
+        },
+        {
+          "date": "2026-08-21",
+          "distance_feet": 443,
+          "inning": 5,
+          "opponent": "vsTB"
+        },
+        {
+          "date": "2026-08-25",
+          "distance_feet": 435,
+          "inning": 3,
+          "opponent": "@STL"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 32,
+      "games_in_window": 133,
+      "matches": [
+        {
+          "game_id": "401814711",
+          "date": "2026-03-28",
+          "opponent": "vsMIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Alonso singled to center.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401814754",
+          "date": "2026-03-31",
+          "opponent": "vsTEX",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Alonso singled to center.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401814768",
+          "date": "2026-04-01",
+          "opponent": "vsTEX",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Alonso reached on infield single to third.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401814972",
+          "date": "2026-04-17",
+          "opponent": "@CLE",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Alonso singled to left.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401815048",
+          "date": "2026-04-22",
+          "opponent": "@KC",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 410,
+          "description": "Alonso homered to right center (410 feet), Ward scored.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401815157",
+          "date": "2026-05-01",
+          "opponent": "@NYY",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 367,
+          "description": "Alonso homered to right (367 feet).",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401815215",
+          "date": "2026-05-05",
+          "opponent": "@MIA",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Alonso doubled to left, Beavers scored on error and Ward scored, Alonso safe at third on fielding error by left fielder Stowers.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401815230",
+          "date": "2026-05-06",
+          "opponent": "@MIA",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 407,
+          "description": "Alonso homered to left center (407 feet), Ward scored and Rutschman scored.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401815323",
+          "date": "2026-05-13",
+          "opponent": "vsNYY",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Alonso singled to right.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401815360",
+          "date": "2026-05-16",
+          "opponent": "@WSH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Alonso singled to center, Ward to second.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401815391",
+          "date": "2026-05-18",
+          "opponent": "@TB",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Alonso singled to right.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401815519",
+          "date": "2026-05-27",
+          "opponent": "vsTB",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Alonso singled to left, Rutschman to second.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401815571",
+          "date": "2026-05-31",
+          "opponent": "vsTOR",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Alonso singled to center.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401815687",
+          "date": "2026-06-09",
+          "opponent": "vsSEA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Alonso singled to right, Ward to second.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401815739",
+          "date": "2026-06-13",
+          "opponent": "vsSD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 392,
+          "description": "Alonso homered to right center (392 feet).",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401815754",
+          "date": "2026-06-14",
+          "opponent": "vsSD",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Alonso singled to center.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401815896",
+          "date": "2026-06-24",
+          "opponent": "@LAA",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Alonso singled to left.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401815943",
+          "date": "2026-06-28",
+          "opponent": "vsWSH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 437,
+          "description": "Alonso homered to center (437 feet), Rutschman scored.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401816114",
+          "date": "2026-07-11",
+          "opponent": "vsKC",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Alonso doubled to center.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401816216",
+          "date": "2026-07-22",
+          "opponent": "@BOS",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "GRD",
+          "distance_feet": null,
+          "description": "Alonso hit a ground rule double.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401816266",
+          "date": "2026-07-26",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Alonso singled to right.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401816282",
+          "date": "2026-07-27",
+          "opponent": "@DET",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Alonso doubled to left.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401816309",
+          "date": "2026-07-29",
+          "opponent": "@DET",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Alonso singled to center, Alonso safe at second on fielding error by center fielder B\u00e1ez.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401816335",
+          "date": "2026-07-31",
+          "opponent": "vsPHI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 394,
+          "description": "Alonso homered to right center (394 feet), Beavers scored.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401816365",
+          "date": "2026-08-02",
+          "opponent": "vsPHI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Alonso singled to center.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401816460",
+          "date": "2026-08-09",
+          "opponent": "@TEX",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Alonso singled to center.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401816485",
+          "date": "2026-08-11",
+          "opponent": "@MIN",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 418,
+          "description": "Alonso homered to left center (418 feet), Henderson scored.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401816500",
+          "date": "2026-08-12",
+          "opponent": "@MIN",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Alonso singled to center, Henderson to third.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401816601",
+          "date": "2026-08-20",
+          "opponent": "vsNYY",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Alonso singled to right.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401816612",
+          "date": "2026-08-21",
+          "opponent": "vsTB",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Alonso singled to center, Holliday scored.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401816627",
+          "date": "2026-08-22",
+          "opponent": "vsTB",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Alonso singled to center.",
+          "team": "BAL"
+        },
+        {
+          "game_id": "401816672",
+          "date": "2026-08-25",
+          "opponent": "@STL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Alonso singled to left, Holliday to third.",
+          "team": "BAL"
+        }
+      ]
+    }
+  }
+}

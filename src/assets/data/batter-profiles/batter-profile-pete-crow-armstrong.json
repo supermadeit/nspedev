@@ -1,0 +1,974 @@
+{
+  "player": "PeteCrowArmstrong",
+  "player_id": "pete-crow-armstrong",
+  "team": "CHC",
+  "position": "CF",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 511,
+      "R": 93,
+      "H": 141,
+      "2B": 27,
+      "3B": 7,
+      "HR": 33,
+      "RBI": 83,
+      "BB": 71,
+      "SO": 158,
+      "SB": 32,
+      "TB": 281,
+      "avg": 0.276,
+      "obp": 0.374,
+      "slg": 0.55,
+      "ops": 0.924
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 35,
+        "games": [
+          {
+            "date": "2026-03-26",
+            "value": 2
+          },
+          {
+            "date": "2026-03-28",
+            "value": 2
+          },
+          {
+            "date": "2026-04-07",
+            "value": 3
+          },
+          {
+            "date": "2026-04-14",
+            "value": 2
+          },
+          {
+            "date": "2026-04-15",
+            "value": 2
+          },
+          {
+            "date": "2026-04-21",
+            "value": 2
+          },
+          {
+            "date": "2026-04-22",
+            "value": 3
+          },
+          {
+            "date": "2026-05-06",
+            "value": 2
+          },
+          {
+            "date": "2026-05-08",
+            "value": 2
+          },
+          {
+            "date": "2026-05-30",
+            "value": 4
+          },
+          {
+            "date": "2026-06-02",
+            "value": 2
+          },
+          {
+            "date": "2026-06-04",
+            "value": 2
+          },
+          {
+            "date": "2026-06-06",
+            "value": 4
+          },
+          {
+            "date": "2026-06-11",
+            "value": 2
+          },
+          {
+            "date": "2026-06-13",
+            "value": 3
+          },
+          {
+            "date": "2026-06-14",
+            "value": 2
+          },
+          {
+            "date": "2026-06-15",
+            "value": 4
+          },
+          {
+            "date": "2026-06-19",
+            "value": 3
+          },
+          {
+            "date": "2026-06-20",
+            "value": 2
+          },
+          {
+            "date": "2026-06-24",
+            "value": 2
+          },
+          {
+            "date": "2026-06-25",
+            "value": 2
+          },
+          {
+            "date": "2026-06-29",
+            "value": 2
+          },
+          {
+            "date": "2026-07-01",
+            "value": 2
+          },
+          {
+            "date": "2026-07-05",
+            "value": 2
+          },
+          {
+            "date": "2026-07-07",
+            "value": 2
+          },
+          {
+            "date": "2026-07-08",
+            "value": 2
+          },
+          {
+            "date": "2026-07-21",
+            "value": 2
+          },
+          {
+            "date": "2026-07-24",
+            "value": 2
+          },
+          {
+            "date": "2026-07-25",
+            "value": 4
+          },
+          {
+            "date": "2026-07-30",
+            "value": 2
+          },
+          {
+            "date": "2026-08-04",
+            "value": 2
+          },
+          {
+            "date": "2026-08-05",
+            "value": 3
+          },
+          {
+            "date": "2026-08-06",
+            "value": 2
+          },
+          {
+            "date": "2026-08-17",
+            "value": 4
+          },
+          {
+            "date": "2026-08-23",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 29,
+        "games": [
+          {
+            "date": "2026-04-07",
+            "value": 1
+          },
+          {
+            "date": "2026-04-28",
+            "value": 1
+          },
+          {
+            "date": "2026-04-29",
+            "value": 1
+          },
+          {
+            "date": "2026-05-06",
+            "value": 1
+          },
+          {
+            "date": "2026-05-16",
+            "value": 1
+          },
+          {
+            "date": "2026-05-22",
+            "value": 1
+          },
+          {
+            "date": "2026-05-30",
+            "value": 1
+          },
+          {
+            "date": "2026-06-03",
+            "value": 1
+          },
+          {
+            "date": "2026-06-04",
+            "value": 1
+          },
+          {
+            "date": "2026-06-06",
+            "value": 2
+          },
+          {
+            "date": "2026-06-13",
+            "value": 1
+          },
+          {
+            "date": "2026-06-15",
+            "value": 1
+          },
+          {
+            "date": "2026-06-16",
+            "value": 1
+          },
+          {
+            "date": "2026-06-17",
+            "value": 1
+          },
+          {
+            "date": "2026-06-20",
+            "value": 1
+          },
+          {
+            "date": "2026-06-23",
+            "value": 1
+          },
+          {
+            "date": "2026-06-30",
+            "value": 1
+          },
+          {
+            "date": "2026-07-01",
+            "value": 1
+          },
+          {
+            "date": "2026-07-08",
+            "value": 2
+          },
+          {
+            "date": "2026-07-24",
+            "value": 1
+          },
+          {
+            "date": "2026-07-25",
+            "value": 1
+          },
+          {
+            "date": "2026-07-29",
+            "value": 1
+          },
+          {
+            "date": "2026-08-05",
+            "value": 2
+          },
+          {
+            "date": "2026-08-11",
+            "value": 1
+          },
+          {
+            "date": "2026-08-16",
+            "value": 1
+          },
+          {
+            "date": "2026-08-17",
+            "value": 2
+          },
+          {
+            "date": "2026-08-18",
+            "value": 1
+          },
+          {
+            "date": "2026-08-21",
+            "value": 1
+          },
+          {
+            "date": "2026-08-23",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 8,
+        "games": [
+          {
+            "date": "2026-04-28",
+            "value": 3
+          },
+          {
+            "date": "2026-04-29",
+            "value": 3
+          },
+          {
+            "date": "2026-06-23",
+            "value": 3
+          },
+          {
+            "date": "2026-07-01",
+            "value": 3
+          },
+          {
+            "date": "2026-07-25",
+            "value": 3
+          },
+          {
+            "date": "2026-08-05",
+            "value": 4
+          },
+          {
+            "date": "2026-08-17",
+            "value": 3
+          },
+          {
+            "date": "2026-08-23",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-26",
+        "date_iso": "2026-08-26",
+        "opponent": "@ARI",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 3,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "@ARI",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-24",
+        "date_iso": "2026-08-24",
+        "opponent": "@ARI",
+        "AB": 5,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "@SEA",
+        "AB": 4,
+        "R": 2,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 3,
+        "BB": 1,
+        "SO": 1,
+        "SB": 1,
+        "TB": 5
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "@SEA",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "@SEA",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 1,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "vsCHW",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "vsCHW",
+        "AB": 3,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 1,
+        "BB": 2,
+        "SO": 1,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "vsCHW",
+        "AB": 5,
+        "R": 2,
+        "H": 4,
+        "2B": 1,
+        "3B": 0,
+        "HR": 2,
+        "RBI": 3,
+        "BB": 1,
+        "SO": 1,
+        "SB": 1,
+        "TB": 11
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "vsSTL",
+        "AB": 5,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 2,
+        "BB": 0,
+        "SO": 3,
+        "SB": 0,
+        "TB": 4
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 3,
+      "splits": [
+        {
+          "season": 2024,
+          "total": 88.0
+        },
+        {
+          "season": 2025,
+          "total": 151.0
+        },
+        {
+          "season": 2026,
+          "total": 141.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 12972,
+      "hr_count": 33,
+      "games": 135,
+      "events": [
+        {
+          "date": "2026-04-07",
+          "distance_feet": 389,
+          "inning": 7,
+          "opponent": "@TB"
+        },
+        {
+          "date": "2026-04-28",
+          "distance_feet": 410,
+          "inning": 7,
+          "opponent": "@SD"
+        },
+        {
+          "date": "2026-04-29",
+          "distance_feet": 357,
+          "inning": 4,
+          "opponent": "@SD"
+        },
+        {
+          "date": "2026-05-06",
+          "distance_feet": 375,
+          "inning": 9,
+          "opponent": "vsCIN"
+        },
+        {
+          "date": "2026-05-16",
+          "distance_feet": 380,
+          "inning": 9,
+          "opponent": "@CHW"
+        },
+        {
+          "date": "2026-05-22",
+          "distance_feet": 406,
+          "inning": 6,
+          "opponent": "vsHOU"
+        },
+        {
+          "date": "2026-05-30",
+          "distance_feet": 444,
+          "inning": 8,
+          "opponent": "@STL"
+        },
+        {
+          "date": "2026-06-03",
+          "distance_feet": 378,
+          "inning": 3,
+          "opponent": "vsATH"
+        },
+        {
+          "date": "2026-06-04",
+          "distance_feet": 383,
+          "inning": 6,
+          "opponent": "vsATH"
+        },
+        {
+          "date": "2026-06-06",
+          "distance_feet": 386,
+          "inning": 6,
+          "opponent": "vsSF"
+        },
+        {
+          "date": "2026-06-06",
+          "distance_feet": 403,
+          "inning": 9,
+          "opponent": "vsSF"
+        },
+        {
+          "date": "2026-06-13",
+          "distance_feet": 385,
+          "inning": 1,
+          "opponent": "@SF"
+        },
+        {
+          "date": "2026-06-15",
+          "distance_feet": 434,
+          "inning": 1,
+          "opponent": "vsCOL"
+        },
+        {
+          "date": "2026-06-16",
+          "distance_feet": 386,
+          "inning": 1,
+          "opponent": "vsCOL"
+        },
+        {
+          "date": "2026-06-17",
+          "distance_feet": 364,
+          "inning": 4,
+          "opponent": "vsCOL"
+        },
+        {
+          "date": "2026-06-20",
+          "distance_feet": 400,
+          "inning": 6,
+          "opponent": "vsTOR"
+        },
+        {
+          "date": "2026-06-23",
+          "distance_feet": 409,
+          "inning": 2,
+          "opponent": "@NYM"
+        },
+        {
+          "date": "2026-06-30",
+          "distance_feet": 377,
+          "inning": 6,
+          "opponent": "vsSD"
+        },
+        {
+          "date": "2026-07-01",
+          "distance_feet": 390,
+          "inning": 5,
+          "opponent": "vsSD"
+        },
+        {
+          "date": "2026-07-08",
+          "distance_feet": 370,
+          "inning": 3,
+          "opponent": "@BAL"
+        },
+        {
+          "date": "2026-07-08",
+          "distance_feet": 419,
+          "inning": 5,
+          "opponent": "@BAL"
+        },
+        {
+          "date": "2026-07-24",
+          "distance_feet": 375,
+          "inning": 6,
+          "opponent": "@PIT"
+        },
+        {
+          "date": "2026-07-25",
+          "distance_feet": 390,
+          "inning": 7,
+          "opponent": "@PIT"
+        },
+        {
+          "date": "2026-07-29",
+          "distance_feet": 424,
+          "inning": 10,
+          "opponent": "@STL"
+        },
+        {
+          "date": "2026-08-05",
+          "distance_feet": 420,
+          "inning": 1,
+          "opponent": "vsLAD"
+        },
+        {
+          "date": "2026-08-05",
+          "distance_feet": 405,
+          "inning": 4,
+          "opponent": "vsLAD"
+        },
+        {
+          "date": "2026-08-11",
+          "distance_feet": 437,
+          "inning": 3,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-08-16",
+          "distance_feet": 408,
+          "inning": 3,
+          "opponent": "vsSTL"
+        },
+        {
+          "date": "2026-08-17",
+          "distance_feet": 376,
+          "inning": 1,
+          "opponent": "vsCHW"
+        },
+        {
+          "date": "2026-08-17",
+          "distance_feet": 391,
+          "inning": 10,
+          "opponent": "vsCHW"
+        },
+        {
+          "date": "2026-08-18",
+          "distance_feet": 379,
+          "inning": 1,
+          "opponent": "vsCHW"
+        },
+        {
+          "date": "2026-08-21",
+          "distance_feet": 367,
+          "inning": 1,
+          "opponent": "@SEA"
+        },
+        {
+          "date": "2026-08-23",
+          "distance_feet": 355,
+          "inning": 8,
+          "opponent": "@SEA"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 21,
+      "games_in_window": 135,
+      "matches": [
+        {
+          "game_id": "401814784",
+          "date": "2026-04-03",
+          "opponent": "@CLE",
+          "inning": 3,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Crow-Armstrong doubled to shortstop.",
+          "team": "CHC"
+        },
+        {
+          "game_id": "401814933",
+          "date": "2026-04-14",
+          "opponent": "@PHI",
+          "inning": 3,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Crow-Armstrong doubled to right.",
+          "team": "CHC"
+        },
+        {
+          "game_id": "401815009",
+          "date": "2026-04-19",
+          "opponent": "vsNYM",
+          "inning": 3,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "3B",
+          "distance_feet": null,
+          "description": "Crow-Armstrong tripled to right.",
+          "team": "CHC"
+        },
+        {
+          "game_id": "401815049",
+          "date": "2026-04-22",
+          "opponent": "vsPHI",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Crow-Armstrong doubled to center, Amaya scored.",
+          "team": "CHC"
+        },
+        {
+          "game_id": "401815194",
+          "date": "2026-05-03",
+          "opponent": "vsARI",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Crow-Armstrong doubled to right, Kelly to third.",
+          "team": "CHC"
+        },
+        {
+          "game_id": "401815334",
+          "date": "2026-05-14",
+          "opponent": "@ATL",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Crow-Armstrong singled to left, Amaya to second.",
+          "team": "CHC"
+        },
+        {
+          "game_id": "401815572",
+          "date": "2026-05-31",
+          "opponent": "@STL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Crow-Armstrong singled to center, Hoerner to second.",
+          "team": "CHC"
+        },
+        {
+          "game_id": "401815596",
+          "date": "2026-06-02",
+          "opponent": "vsATH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Crow-Armstrong singled to left, Crow-Armstrong to second, Hoerner to third.",
+          "team": "CHC"
+        },
+        {
+          "game_id": "401815746",
+          "date": "2026-06-13",
+          "opponent": "@SF",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 385,
+          "description": "Crow-Armstrong homered to left center (385 feet).",
+          "team": "CHC"
+        },
+        {
+          "game_id": "401815767",
+          "date": "2026-06-15",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 434,
+          "description": "Crow-Armstrong homered to center (434 feet).",
+          "team": "CHC"
+        },
+        {
+          "game_id": "401815781",
+          "date": "2026-06-16",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 386,
+          "description": "Crow-Armstrong homered to right (386 feet).",
+          "team": "CHC"
+        },
+        {
+          "game_id": "401815897",
+          "date": "2026-06-25",
+          "opponent": "@NYM",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Crow-Armstrong singled to right.",
+          "team": "CHC"
+        },
+        {
+          "game_id": "401815988",
+          "date": "2026-07-01",
+          "opponent": "vsSD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Crow-Armstrong singled to center.",
+          "team": "CHC"
+        },
+        {
+          "game_id": "401816037",
+          "date": "2026-07-05",
+          "opponent": "vsSTL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Crow-Armstrong reached on infield single to third.",
+          "team": "CHC"
+        },
+        {
+          "game_id": "401816208",
+          "date": "2026-07-21",
+          "opponent": "vsDET",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "3B",
+          "distance_feet": null,
+          "description": "Crow-Armstrong tripled to right.",
+          "team": "CHC"
+        },
+        {
+          "game_id": "401816252",
+          "date": "2026-07-25",
+          "opponent": "@PIT",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Crow-Armstrong singled to left.",
+          "team": "CHC"
+        },
+        {
+          "game_id": "401816379",
+          "date": "2026-08-03",
+          "opponent": "vsLAD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Crow-Armstrong singled to right.",
+          "team": "CHC"
+        },
+        {
+          "game_id": "401816406",
+          "date": "2026-08-05",
+          "opponent": "vsLAD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 420,
+          "description": "Crow-Armstrong homered to center (420 feet).",
+          "team": "CHC"
+        },
+        {
+          "game_id": "401816569",
+          "date": "2026-08-17",
+          "opponent": "vsCHW",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 376,
+          "description": "Crow-Armstrong homered to right (376 feet).",
+          "team": "CHC"
+        },
+        {
+          "game_id": "401816582",
+          "date": "2026-08-18",
+          "opponent": "vsCHW",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 379,
+          "description": "Crow-Armstrong homered to right center (379 feet).",
+          "team": "CHC"
+        },
+        {
+          "game_id": "401816621",
+          "date": "2026-08-21",
+          "opponent": "@SEA",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 367,
+          "description": "Crow-Armstrong homered to right center (367 feet).",
+          "team": "CHC"
+        }
+      ]
+    }
+  }
+}

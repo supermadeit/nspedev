@@ -1,0 +1,942 @@
+{
+  "player": "BrandonNimmo",
+  "player_id": "brandon-nimmo",
+  "team": "TEX",
+  "position": "RF",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 490,
+      "R": 53,
+      "H": 127,
+      "2B": 30,
+      "3B": 4,
+      "HR": 13,
+      "RBI": 49,
+      "BB": 43,
+      "SO": 116,
+      "SB": 6,
+      "TB": 204,
+      "avg": 0.259,
+      "obp": 0.326,
+      "slg": 0.416,
+      "ops": 0.742
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 40,
+        "games": [
+          {
+            "date": "2026-03-28",
+            "value": 2
+          },
+          {
+            "date": "2026-03-29",
+            "value": 2
+          },
+          {
+            "date": "2026-03-30",
+            "value": 3
+          },
+          {
+            "date": "2026-03-31",
+            "value": 2
+          },
+          {
+            "date": "2026-04-03",
+            "value": 2
+          },
+          {
+            "date": "2026-04-05",
+            "value": 2
+          },
+          {
+            "date": "2026-04-08",
+            "value": 2
+          },
+          {
+            "date": "2026-04-11",
+            "value": 3
+          },
+          {
+            "date": "2026-04-12",
+            "value": 2
+          },
+          {
+            "date": "2026-04-19",
+            "value": 2
+          },
+          {
+            "date": "2026-04-23",
+            "value": 2
+          },
+          {
+            "date": "2026-04-28",
+            "value": 2
+          },
+          {
+            "date": "2026-05-01",
+            "value": 2
+          },
+          {
+            "date": "2026-05-07",
+            "value": 2
+          },
+          {
+            "date": "2026-05-12",
+            "value": 3
+          },
+          {
+            "date": "2026-05-19",
+            "value": 3
+          },
+          {
+            "date": "2026-05-22",
+            "value": 2
+          },
+          {
+            "date": "2026-06-09",
+            "value": 2
+          },
+          {
+            "date": "2026-06-10",
+            "value": 2
+          },
+          {
+            "date": "2026-06-11",
+            "value": 2
+          },
+          {
+            "date": "2026-06-14",
+            "value": 2
+          },
+          {
+            "date": "2026-06-16",
+            "value": 2
+          },
+          {
+            "date": "2026-06-19",
+            "value": 2
+          },
+          {
+            "date": "2026-06-20",
+            "value": 2
+          },
+          {
+            "date": "2026-06-22",
+            "value": 3
+          },
+          {
+            "date": "2026-06-23",
+            "value": 2
+          },
+          {
+            "date": "2026-07-09",
+            "value": 2
+          },
+          {
+            "date": "2026-07-10",
+            "value": 2
+          },
+          {
+            "date": "2026-07-12",
+            "value": 3
+          },
+          {
+            "date": "2026-07-18",
+            "value": 2
+          },
+          {
+            "date": "2026-07-21",
+            "value": 4
+          },
+          {
+            "date": "2026-07-24",
+            "value": 2
+          },
+          {
+            "date": "2026-07-27",
+            "value": 2
+          },
+          {
+            "date": "2026-08-01",
+            "value": 2
+          },
+          {
+            "date": "2026-08-02",
+            "value": 2
+          },
+          {
+            "date": "2026-08-04",
+            "value": 3
+          },
+          {
+            "date": "2026-08-05",
+            "value": 2
+          },
+          {
+            "date": "2026-08-10",
+            "value": 2
+          },
+          {
+            "date": "2026-08-11",
+            "value": 2
+          },
+          {
+            "date": "2026-08-18",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 12,
+        "games": [
+          {
+            "date": "2026-03-29",
+            "value": 1
+          },
+          {
+            "date": "2026-04-11",
+            "value": 2
+          },
+          {
+            "date": "2026-04-17",
+            "value": 1
+          },
+          {
+            "date": "2026-05-19",
+            "value": 1
+          },
+          {
+            "date": "2026-05-22",
+            "value": 1
+          },
+          {
+            "date": "2026-05-29",
+            "value": 1
+          },
+          {
+            "date": "2026-06-23",
+            "value": 1
+          },
+          {
+            "date": "2026-07-09",
+            "value": 1
+          },
+          {
+            "date": "2026-07-21",
+            "value": 1
+          },
+          {
+            "date": "2026-08-02",
+            "value": 1
+          },
+          {
+            "date": "2026-08-05",
+            "value": 1
+          },
+          {
+            "date": "2026-08-09",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 4,
+        "games": [
+          {
+            "date": "2026-04-11",
+            "value": 3
+          },
+          {
+            "date": "2026-05-19",
+            "value": 3
+          },
+          {
+            "date": "2026-07-18",
+            "value": 3
+          },
+          {
+            "date": "2026-08-09",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-26",
+        "date_iso": "2026-08-26",
+        "opponent": "@CHW",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "@CHW",
+        "AB": 5,
+        "R": 0,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-24",
+        "date_iso": "2026-08-24",
+        "opponent": "@CHW",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "vsLAA",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "vsLAA",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "vsLAA",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-20",
+        "date_iso": "2026-08-20",
+        "opponent": "vsWSH",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "vsWSH",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "vsWSH",
+        "AB": 4,
+        "R": 1,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "@ATH",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 1
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 11,
+      "splits": [
+        {
+          "season": 2016,
+          "total": 20.0
+        },
+        {
+          "season": 2017,
+          "total": 46.0
+        },
+        {
+          "season": 2018,
+          "total": 114.0
+        },
+        {
+          "season": 2019,
+          "total": 44.0
+        },
+        {
+          "season": 2020,
+          "total": 52.0
+        },
+        {
+          "season": 2021,
+          "total": 95.0
+        },
+        {
+          "season": 2022,
+          "total": 163.0
+        },
+        {
+          "season": 2023,
+          "total": 162.0
+        },
+        {
+          "season": 2024,
+          "total": 139.0
+        },
+        {
+          "season": 2025,
+          "total": 154.0
+        },
+        {
+          "season": 2026,
+          "total": 127.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 5234,
+      "hr_count": 13,
+      "games": 128,
+      "events": [
+        {
+          "date": "2026-03-29",
+          "distance_feet": 410,
+          "inning": 3,
+          "opponent": "@PHI"
+        },
+        {
+          "date": "2026-04-11",
+          "distance_feet": 405,
+          "inning": 1,
+          "opponent": "@LAD"
+        },
+        {
+          "date": "2026-04-11",
+          "distance_feet": 396,
+          "inning": 6,
+          "opponent": "@LAD"
+        },
+        {
+          "date": "2026-04-17",
+          "distance_feet": 372,
+          "inning": 1,
+          "opponent": "@SEA"
+        },
+        {
+          "date": "2026-05-19",
+          "distance_feet": 425,
+          "inning": 4,
+          "opponent": "@COL"
+        },
+        {
+          "date": "2026-05-22",
+          "distance_feet": 436,
+          "inning": 4,
+          "opponent": "@LAA"
+        },
+        {
+          "date": "2026-05-29",
+          "distance_feet": 435,
+          "inning": 5,
+          "opponent": "vsKC"
+        },
+        {
+          "date": "2026-06-23",
+          "distance_feet": 412,
+          "inning": 8,
+          "opponent": "@MIA"
+        },
+        {
+          "date": "2026-07-09",
+          "distance_feet": 394,
+          "inning": 1,
+          "opponent": "vsLAA"
+        },
+        {
+          "date": "2026-07-21",
+          "distance_feet": 351,
+          "inning": 1,
+          "opponent": "vsCHW"
+        },
+        {
+          "date": "2026-08-02",
+          "distance_feet": 414,
+          "inning": 7,
+          "opponent": "@HOU"
+        },
+        {
+          "date": "2026-08-05",
+          "distance_feet": 350,
+          "inning": 5,
+          "opponent": "vsSF"
+        },
+        {
+          "date": "2026-08-09",
+          "distance_feet": 434,
+          "inning": 3,
+          "opponent": "vsBAL"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 31,
+      "games_in_window": 128,
+      "matches": [
+        {
+          "game_id": "401814739",
+          "date": "2026-03-30",
+          "opponent": "@BAL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Nimmo singled to center.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401814866",
+          "date": "2026-04-08",
+          "opponent": "vsSEA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Nimmo reached on infield single to third.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401814905",
+          "date": "2026-04-11",
+          "opponent": "@LAD",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 405,
+          "description": "Nimmo homered to center (405 feet).",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401814920",
+          "date": "2026-04-12",
+          "opponent": "@LAD",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Nimmo singled to right.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401814945",
+          "date": "2026-04-14",
+          "opponent": "@ATH",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Nimmo doubled to right.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401814984",
+          "date": "2026-04-17",
+          "opponent": "@SEA",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 372,
+          "description": "Nimmo homered to right (372 feet).",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815014",
+          "date": "2026-04-19",
+          "opponent": "@SEA",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Nimmo singled to right.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815061",
+          "date": "2026-04-23",
+          "opponent": "vsPIT",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Nimmo singled to center.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815102",
+          "date": "2026-04-26",
+          "opponent": "vsATH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Nimmo reached on infield single to pitcher.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815114",
+          "date": "2026-04-27",
+          "opponent": "vsNYY",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Nimmo reached on infield single to third.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815163",
+          "date": "2026-05-01",
+          "opponent": "@DET",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Nimmo singled to left.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815193",
+          "date": "2026-05-03",
+          "opponent": "@DET",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Nimmo singled to right.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815301",
+          "date": "2026-05-11",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Nimmo singled to left.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815312",
+          "date": "2026-05-12",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Nimmo singled to right.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815506",
+          "date": "2026-05-26",
+          "opponent": "vsHOU",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Nimmo singled to right, Osuna to second.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815521",
+          "date": "2026-05-27",
+          "opponent": "vsHOU",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Nimmo singled to right, Pederson scored.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815705",
+          "date": "2026-06-10",
+          "opponent": "@KC",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Nimmo singled to center.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815717",
+          "date": "2026-06-11",
+          "opponent": "@KC",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Nimmo doubled to right, Seager scored, Nimmo out at third on runner's fielder's choice.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815783",
+          "date": "2026-06-16",
+          "opponent": "vsMIN",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "GRD",
+          "distance_feet": null,
+          "description": "Nimmo hit a ground rule double.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815808",
+          "date": "2026-06-18",
+          "opponent": "vsMIN",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Nimmo singled to right.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815818",
+          "date": "2026-06-19",
+          "opponent": "vsSD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Nimmo doubled to center, Pederson scored, Jung to third.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815860",
+          "date": "2026-06-22",
+          "opponent": "@MIA",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Nimmo singled to right.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815912",
+          "date": "2026-06-26",
+          "opponent": "@TOR",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Nimmo doubled to right, Langford scored, Jung to third.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401816090",
+          "date": "2026-07-09",
+          "opponent": "vsLAA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 394,
+          "description": "Nimmo homered to left center (394 feet).",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401816107",
+          "date": "2026-07-10",
+          "opponent": "vsHOU",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Nimmo doubled to left, Langford scored, Jung to third.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401816207",
+          "date": "2026-07-21",
+          "opponent": "vsCHW",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 351,
+          "description": "Nimmo homered to left (351 feet), Langford scored.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401816248",
+          "date": "2026-07-24",
+          "opponent": "vsSEA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Nimmo doubled to right.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401816288",
+          "date": "2026-07-27",
+          "opponent": "vsSEA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Nimmo doubled to center.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401816394",
+          "date": "2026-08-04",
+          "opponent": "vsSF",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Nimmo doubled to right, Pederson scored, Seager to third.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401816430",
+          "date": "2026-08-07",
+          "opponent": "vsBAL",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Nimmo singled to center.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401816493",
+          "date": "2026-08-11",
+          "opponent": "@LAA",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Nimmo singled to right.",
+          "team": "TEX"
+        }
+      ]
+    }
+  }
+}

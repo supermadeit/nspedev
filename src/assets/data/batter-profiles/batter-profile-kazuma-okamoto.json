@@ -1,0 +1,944 @@
+{
+  "player": "KazumaOkamoto",
+  "player_id": "kazuma-okamoto",
+  "team": "TOR",
+  "position": "3B",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 474,
+      "R": 69,
+      "H": 108,
+      "2B": 20,
+      "3B": 0,
+      "HR": 26,
+      "RBI": 74,
+      "BB": 45,
+      "SO": 159,
+      "SB": 1,
+      "TB": 206,
+      "avg": 0.228,
+      "obp": 0.302,
+      "slg": 0.435,
+      "ops": 0.736
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 27,
+        "games": [
+          {
+            "date": "2026-03-27",
+            "value": 2
+          },
+          {
+            "date": "2026-04-06",
+            "value": 2
+          },
+          {
+            "date": "2026-04-14",
+            "value": 2
+          },
+          {
+            "date": "2026-04-18",
+            "value": 2
+          },
+          {
+            "date": "2026-04-19",
+            "value": 2
+          },
+          {
+            "date": "2026-04-24",
+            "value": 2
+          },
+          {
+            "date": "2026-04-25",
+            "value": 2
+          },
+          {
+            "date": "2026-05-01",
+            "value": 2
+          },
+          {
+            "date": "2026-05-02",
+            "value": 2
+          },
+          {
+            "date": "2026-05-05",
+            "value": 2
+          },
+          {
+            "date": "2026-06-02",
+            "value": 2
+          },
+          {
+            "date": "2026-06-04",
+            "value": 2
+          },
+          {
+            "date": "2026-06-05",
+            "value": 2
+          },
+          {
+            "date": "2026-06-06",
+            "value": 2
+          },
+          {
+            "date": "2026-06-14",
+            "value": 2
+          },
+          {
+            "date": "2026-06-22",
+            "value": 2
+          },
+          {
+            "date": "2026-06-23",
+            "value": 3
+          },
+          {
+            "date": "2026-06-25",
+            "value": 2
+          },
+          {
+            "date": "2026-06-26",
+            "value": 2
+          },
+          {
+            "date": "2026-07-01",
+            "value": 2
+          },
+          {
+            "date": "2026-07-08",
+            "value": 2
+          },
+          {
+            "date": "2026-07-12",
+            "value": 2
+          },
+          {
+            "date": "2026-07-24",
+            "value": 2
+          },
+          {
+            "date": "2026-07-29",
+            "value": 3
+          },
+          {
+            "date": "2026-08-03",
+            "value": 2
+          },
+          {
+            "date": "2026-08-12",
+            "value": 2
+          },
+          {
+            "date": "2026-08-20",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 25,
+        "games": [
+          {
+            "date": "2026-03-29",
+            "value": 1
+          },
+          {
+            "date": "2026-03-30",
+            "value": 1
+          },
+          {
+            "date": "2026-04-19",
+            "value": 1
+          },
+          {
+            "date": "2026-04-24",
+            "value": 1
+          },
+          {
+            "date": "2026-04-25",
+            "value": 1
+          },
+          {
+            "date": "2026-05-01",
+            "value": 2
+          },
+          {
+            "date": "2026-05-02",
+            "value": 1
+          },
+          {
+            "date": "2026-05-03",
+            "value": 1
+          },
+          {
+            "date": "2026-05-05",
+            "value": 1
+          },
+          {
+            "date": "2026-05-27",
+            "value": 1
+          },
+          {
+            "date": "2026-05-29",
+            "value": 1
+          },
+          {
+            "date": "2026-06-02",
+            "value": 1
+          },
+          {
+            "date": "2026-06-12",
+            "value": 1
+          },
+          {
+            "date": "2026-06-13",
+            "value": 1
+          },
+          {
+            "date": "2026-06-20",
+            "value": 1
+          },
+          {
+            "date": "2026-06-22",
+            "value": 1
+          },
+          {
+            "date": "2026-06-25",
+            "value": 1
+          },
+          {
+            "date": "2026-06-26",
+            "value": 1
+          },
+          {
+            "date": "2026-07-06",
+            "value": 1
+          },
+          {
+            "date": "2026-07-08",
+            "value": 1
+          },
+          {
+            "date": "2026-07-10",
+            "value": 1
+          },
+          {
+            "date": "2026-07-24",
+            "value": 1
+          },
+          {
+            "date": "2026-07-28",
+            "value": 1
+          },
+          {
+            "date": "2026-08-18",
+            "value": 1
+          },
+          {
+            "date": "2026-08-20",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 7,
+        "games": [
+          {
+            "date": "2026-04-19",
+            "value": 3
+          },
+          {
+            "date": "2026-05-01",
+            "value": 3
+          },
+          {
+            "date": "2026-06-20",
+            "value": 3
+          },
+          {
+            "date": "2026-06-23",
+            "value": 3
+          },
+          {
+            "date": "2026-07-08",
+            "value": 4
+          },
+          {
+            "date": "2026-07-10",
+            "value": 3
+          },
+          {
+            "date": "2026-07-24",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-26",
+        "date_iso": "2026-08-26",
+        "opponent": "vsKC",
+        "AB": 2,
+        "R": 1,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "vsKC",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "@NYY",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "@NYY",
+        "AB": 5,
+        "R": 1,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "@NYY",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-20",
+        "date_iso": "2026-08-20",
+        "opponent": "@TB",
+        "AB": 5,
+        "R": 1,
+        "H": 2,
+        "2B": 1,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 6
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "@TB",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "@TB",
+        "AB": 5,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "vsNYY",
+        "AB": 4,
+        "R": 2,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-15",
+        "date_iso": "2026-08-15",
+        "opponent": "vsNYY",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 1,
+      "splits": [
+        {
+          "season": 2026,
+          "total": 108.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 10396,
+      "hr_count": 26,
+      "games": 128,
+      "events": [
+        {
+          "date": "2026-03-29",
+          "distance_feet": 420,
+          "inning": 4,
+          "opponent": "vsATH"
+        },
+        {
+          "date": "2026-03-30",
+          "distance_feet": 399,
+          "inning": 9,
+          "opponent": "vsCOL"
+        },
+        {
+          "date": "2026-04-19",
+          "distance_feet": 406,
+          "inning": 3,
+          "opponent": "@ARI"
+        },
+        {
+          "date": "2026-04-24",
+          "distance_feet": 430,
+          "inning": 2,
+          "opponent": "vsCLE"
+        },
+        {
+          "date": "2026-04-25",
+          "distance_feet": 425,
+          "inning": 4,
+          "opponent": "vsCLE"
+        },
+        {
+          "date": "2026-05-01",
+          "distance_feet": 390,
+          "inning": 4,
+          "opponent": "@MIN"
+        },
+        {
+          "date": "2026-05-01",
+          "distance_feet": 374,
+          "inning": 5,
+          "opponent": "@MIN"
+        },
+        {
+          "date": "2026-05-02",
+          "distance_feet": 453,
+          "inning": 6,
+          "opponent": "@MIN"
+        },
+        {
+          "date": "2026-05-03",
+          "distance_feet": 401,
+          "inning": 9,
+          "opponent": "@MIN"
+        },
+        {
+          "date": "2026-05-05",
+          "distance_feet": 409,
+          "inning": 1,
+          "opponent": "@TB"
+        },
+        {
+          "date": "2026-05-27",
+          "distance_feet": 393,
+          "inning": 6,
+          "opponent": "vsMIA"
+        },
+        {
+          "date": "2026-05-29",
+          "distance_feet": 397,
+          "inning": 7,
+          "opponent": "@BAL"
+        },
+        {
+          "date": "2026-06-02",
+          "distance_feet": 364,
+          "inning": 2,
+          "opponent": "@ATL"
+        },
+        {
+          "date": "2026-06-12",
+          "distance_feet": 423,
+          "inning": 1,
+          "opponent": "vsNYY"
+        },
+        {
+          "date": "2026-06-13",
+          "distance_feet": 352,
+          "inning": 3,
+          "opponent": "vsNYY"
+        },
+        {
+          "date": "2026-06-20",
+          "distance_feet": 377,
+          "inning": 8,
+          "opponent": "@CHC"
+        },
+        {
+          "date": "2026-06-22",
+          "distance_feet": 388,
+          "inning": 2,
+          "opponent": "vsHOU"
+        },
+        {
+          "date": "2026-06-25",
+          "distance_feet": 420,
+          "inning": 9,
+          "opponent": "vsTEX"
+        },
+        {
+          "date": "2026-06-26",
+          "distance_feet": 378,
+          "inning": 8,
+          "opponent": "vsTEX"
+        },
+        {
+          "date": "2026-07-06",
+          "distance_feet": 412,
+          "inning": 6,
+          "opponent": "@SF"
+        },
+        {
+          "date": "2026-07-08",
+          "distance_feet": 328,
+          "inning": 1,
+          "opponent": "@SF"
+        },
+        {
+          "date": "2026-07-10",
+          "distance_feet": 377,
+          "inning": 5,
+          "opponent": "@SD"
+        },
+        {
+          "date": "2026-07-24",
+          "distance_feet": 408,
+          "inning": 7,
+          "opponent": "@BOS"
+        },
+        {
+          "date": "2026-07-28",
+          "distance_feet": 415,
+          "inning": 5,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-08-18",
+          "distance_feet": 442,
+          "inning": 5,
+          "opponent": "@TB"
+        },
+        {
+          "date": "2026-08-20",
+          "distance_feet": 415,
+          "inning": 2,
+          "opponent": "@TB"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 27,
+      "games_in_window": 128,
+      "matches": [
+        {
+          "game_id": "401814707",
+          "date": "2026-03-28",
+          "opponent": "vsATH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Okamoto singled to left, Guerrero Jr. thrown out at third.",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401814766",
+          "date": "2026-04-01",
+          "opponent": "vsCOL",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Okamoto singled to left.",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401814830",
+          "date": "2026-04-06",
+          "opponent": "vsLAD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Okamoto singled to left, Springer to second.",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401815000",
+          "date": "2026-04-18",
+          "opponent": "@ARI",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Okamoto singled to right.",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401815015",
+          "date": "2026-04-19",
+          "opponent": "@ARI",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Okamoto doubled to left, S\u00e1nchez scored and Jim\u00e9nez scored, Gim\u00e9nez to third.",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401815066",
+          "date": "2026-04-24",
+          "opponent": "vsCLE",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 430,
+          "description": "Okamoto homered to center (430 feet).",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401815219",
+          "date": "2026-05-05",
+          "opponent": "@TB",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 409,
+          "description": "Okamoto homered to right center (409 feet).",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401815234",
+          "date": "2026-05-06",
+          "opponent": "@TB",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Okamoto doubled to left.",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401815283",
+          "date": "2026-05-10",
+          "opponent": "vsLAA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Okamoto doubled to left, Varsho scored.",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401815300",
+          "date": "2026-05-11",
+          "opponent": "vsTB",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Okamoto singled to left.",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401815351",
+          "date": "2026-05-15",
+          "opponent": "@DET",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Okamoto doubled to right.",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401815475",
+          "date": "2026-05-24",
+          "opponent": "vsPIT",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Okamoto doubled to center.",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401815595",
+          "date": "2026-06-02",
+          "opponent": "@ATL",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 364,
+          "description": "Okamoto homered to right (364 feet), Pinango scored.",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401815628",
+          "date": "2026-06-05",
+          "opponent": "vsBAL",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Okamoto singled to left.",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401815643",
+          "date": "2026-06-06",
+          "opponent": "vsBAL",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Okamoto singled to left, Clement scored, Valenzuela to third.",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401815686",
+          "date": "2026-06-09",
+          "opponent": "vsPHI",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Okamoto doubled to right.",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401815723",
+          "date": "2026-06-12",
+          "opponent": "vsNYY",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 423,
+          "description": "Okamoto homered to left (423 feet), Kirk scored.",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401815753",
+          "date": "2026-06-14",
+          "opponent": "vsNYY",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Okamoto doubled to left.",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401815806",
+          "date": "2026-06-18",
+          "opponent": "@BOS",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Okamoto doubled to left.",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401815855",
+          "date": "2026-06-22",
+          "opponent": "vsHOU",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 388,
+          "description": "Okamoto homered to left center (388 feet).",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401815981",
+          "date": "2026-07-01",
+          "opponent": "vsNYM",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Okamoto reached on infield single to shortstop, Lukes scored.",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401816082",
+          "date": "2026-07-08",
+          "opponent": "@SF",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 328,
+          "description": "Okamoto homered to right (328 feet), Lukes scored, Springer scored and Varsho scored.  Umpire review: call on the field was upheld.",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401816140",
+          "date": "2026-07-12",
+          "opponent": "@SD",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Okamoto doubled to center.",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401816313",
+          "date": "2026-07-29",
+          "opponent": "@WSH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Okamoto singled to right, Lukes to third.",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401816382",
+          "date": "2026-08-03",
+          "opponent": "@HOU",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Okamoto singled to left.",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401816494",
+          "date": "2026-08-12",
+          "opponent": "vsBOS",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Okamoto doubled to left.",
+          "team": "TOR"
+        },
+        {
+          "game_id": "401816604",
+          "date": "2026-08-20",
+          "opponent": "@TB",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 415,
+          "description": "Okamoto homered to left (415 feet).",
+          "team": "TOR"
+        }
+      ]
+    }
+  }
+}

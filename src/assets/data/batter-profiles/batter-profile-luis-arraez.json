@@ -1,0 +1,1008 @@
+{
+  "player": "LuisArraez",
+  "player_id": "luis-arraez",
+  "team": "SF",
+  "position": "2B",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 506,
+      "R": 63,
+      "H": 161,
+      "2B": 28,
+      "3B": 7,
+      "HR": 6,
+      "RBI": 54,
+      "BB": 27,
+      "SO": 24,
+      "SB": 10,
+      "TB": 221,
+      "avg": 0.318,
+      "obp": 0.351,
+      "slg": 0.437,
+      "ops": 0.788
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 48,
+        "games": [
+          {
+            "date": "2026-03-28",
+            "value": 2
+          },
+          {
+            "date": "2026-04-01",
+            "value": 3
+          },
+          {
+            "date": "2026-04-02",
+            "value": 2
+          },
+          {
+            "date": "2026-04-06",
+            "value": 2
+          },
+          {
+            "date": "2026-04-08",
+            "value": 2
+          },
+          {
+            "date": "2026-04-14",
+            "value": 3
+          },
+          {
+            "date": "2026-04-17",
+            "value": 2
+          },
+          {
+            "date": "2026-04-18",
+            "value": 2
+          },
+          {
+            "date": "2026-04-24",
+            "value": 3
+          },
+          {
+            "date": "2026-04-25",
+            "value": 2
+          },
+          {
+            "date": "2026-04-30",
+            "value": 2
+          },
+          {
+            "date": "2026-05-02",
+            "value": 3
+          },
+          {
+            "date": "2026-05-04",
+            "value": 2
+          },
+          {
+            "date": "2026-05-11",
+            "value": 2
+          },
+          {
+            "date": "2026-05-13",
+            "value": 2
+          },
+          {
+            "date": "2026-05-15",
+            "value": 4
+          },
+          {
+            "date": "2026-05-17",
+            "value": 3
+          },
+          {
+            "date": "2026-05-22",
+            "value": 2
+          },
+          {
+            "date": "2026-05-23",
+            "value": 2
+          },
+          {
+            "date": "2026-05-27",
+            "value": 3
+          },
+          {
+            "date": "2026-05-29",
+            "value": 2
+          },
+          {
+            "date": "2026-06-02",
+            "value": 2
+          },
+          {
+            "date": "2026-06-04",
+            "value": 2
+          },
+          {
+            "date": "2026-06-05",
+            "value": 2
+          },
+          {
+            "date": "2026-06-08",
+            "value": 2
+          },
+          {
+            "date": "2026-06-09",
+            "value": 2
+          },
+          {
+            "date": "2026-06-10",
+            "value": 2
+          },
+          {
+            "date": "2026-06-16",
+            "value": 3
+          },
+          {
+            "date": "2026-06-17",
+            "value": 2
+          },
+          {
+            "date": "2026-06-28",
+            "value": 2
+          },
+          {
+            "date": "2026-06-29",
+            "value": 2
+          },
+          {
+            "date": "2026-06-30",
+            "value": 3
+          },
+          {
+            "date": "2026-07-04",
+            "value": 3
+          },
+          {
+            "date": "2026-07-07",
+            "value": 2
+          },
+          {
+            "date": "2026-07-09",
+            "value": 2
+          },
+          {
+            "date": "2026-07-10",
+            "value": 3
+          },
+          {
+            "date": "2026-07-11",
+            "value": 2
+          },
+          {
+            "date": "2026-07-24",
+            "value": 3
+          },
+          {
+            "date": "2026-07-25",
+            "value": 2
+          },
+          {
+            "date": "2026-07-26",
+            "value": 2
+          },
+          {
+            "date": "2026-07-29",
+            "value": 4
+          },
+          {
+            "date": "2026-08-04",
+            "value": 2
+          },
+          {
+            "date": "2026-08-06",
+            "value": 2
+          },
+          {
+            "date": "2026-08-08",
+            "value": 2
+          },
+          {
+            "date": "2026-08-13",
+            "value": 3
+          },
+          {
+            "date": "2026-08-18",
+            "value": 3
+          },
+          {
+            "date": "2026-08-19",
+            "value": 2
+          },
+          {
+            "date": "2026-08-21",
+            "value": 3
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 6,
+        "games": [
+          {
+            "date": "2026-05-15",
+            "value": 1
+          },
+          {
+            "date": "2026-05-17",
+            "value": 1
+          },
+          {
+            "date": "2026-06-17",
+            "value": 1
+          },
+          {
+            "date": "2026-06-30",
+            "value": 1
+          },
+          {
+            "date": "2026-08-05",
+            "value": 1
+          },
+          {
+            "date": "2026-08-19",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 2,
+        "games": [
+          {
+            "date": "2026-05-31",
+            "value": 3
+          },
+          {
+            "date": "2026-06-17",
+            "value": 4
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-26",
+        "date_iso": "2026-08-26",
+        "opponent": "@SEA",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "@SEA",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-24",
+        "date_iso": "2026-08-24",
+        "opponent": "@SEA",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "vsSTL",
+        "AB": 1,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "vsSTL",
+        "AB": 2,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "vsSTL",
+        "AB": 5,
+        "R": 1,
+        "H": 3,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "vsMIA",
+        "AB": 4,
+        "R": 2,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 2,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 5
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "vsMIA",
+        "AB": 4,
+        "R": 1,
+        "H": 3,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 3
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "vsMIA",
+        "AB": 5,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "@MIN",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 8,
+      "splits": [
+        {
+          "season": 2019,
+          "total": 114.0
+        },
+        {
+          "season": 2020,
+          "total": 36.0
+        },
+        {
+          "season": 2021,
+          "total": 126.0
+        },
+        {
+          "season": 2022,
+          "total": 173.0
+        },
+        {
+          "season": 2023,
+          "total": 204.0
+        },
+        {
+          "season": 2024,
+          "total": 207.0
+        },
+        {
+          "season": 2025,
+          "total": 183.0
+        },
+        {
+          "season": 2026,
+          "total": 161.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 2230,
+      "hr_count": 6,
+      "games": 127,
+      "events": [
+        {
+          "date": "2026-05-15",
+          "distance_feet": 350,
+          "inning": 4,
+          "opponent": "@ATH"
+        },
+        {
+          "date": "2026-05-17",
+          "distance_feet": 340,
+          "inning": 3,
+          "opponent": "@ATH"
+        },
+        {
+          "date": "2026-06-17",
+          "distance_feet": 380,
+          "inning": 2,
+          "opponent": "@ATL"
+        },
+        {
+          "date": "2026-06-30",
+          "distance_feet": 399,
+          "inning": 6,
+          "opponent": "@ARI"
+        },
+        {
+          "date": "2026-08-05",
+          "distance_feet": 385,
+          "inning": 2,
+          "opponent": "vsWSH"
+        },
+        {
+          "date": "2026-08-19",
+          "distance_feet": 376,
+          "inning": 3,
+          "opponent": "vsMIA"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 41,
+      "games_in_window": 127,
+      "matches": [
+        {
+          "game_id": "401814734",
+          "date": "2026-03-28",
+          "opponent": "vsNYY",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to center.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401814778",
+          "date": "2026-04-01",
+          "opponent": "@SD",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to center.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401814782",
+          "date": "2026-04-02",
+          "opponent": "vsNYM",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "3B",
+          "distance_feet": null,
+          "description": "Arraez tripled to right, Ramos scored.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401814839",
+          "date": "2026-04-06",
+          "opponent": "vsPHI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to right.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401814869",
+          "date": "2026-04-08",
+          "opponent": "vsPHI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "3B",
+          "distance_feet": null,
+          "description": "Arraez tripled to right.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401814976",
+          "date": "2026-04-17",
+          "opponent": "@WSH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to left.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401814991",
+          "date": "2026-04-18",
+          "opponent": "@WSH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to left.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815039",
+          "date": "2026-04-21",
+          "opponent": "vsLAD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to left, Adames to third.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815054",
+          "date": "2026-04-22",
+          "opponent": "vsLAD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to left.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815078",
+          "date": "2026-04-24",
+          "opponent": "vsMIA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to left.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815093",
+          "date": "2026-04-25",
+          "opponent": "vsMIA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to center.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815177",
+          "date": "2026-05-02",
+          "opponent": "@TB",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to center.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815213",
+          "date": "2026-05-04",
+          "opponent": "vsSD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Arraez doubled to left.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815281",
+          "date": "2026-05-09",
+          "opponent": "vsPIT",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to left.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815525",
+          "date": "2026-05-27",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to left.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815546",
+          "date": "2026-05-29",
+          "opponent": "@COL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to left.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815599",
+          "date": "2026-06-02",
+          "opponent": "@MIL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "3B",
+          "distance_feet": null,
+          "description": "Arraez tripled to right.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815626",
+          "date": "2026-06-04",
+          "opponent": "@MIL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to left.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815638",
+          "date": "2026-06-05",
+          "opponent": "@CHC",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Arraez doubled to right.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815653",
+          "date": "2026-06-06",
+          "opponent": "@CHC",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to right.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815668",
+          "date": "2026-06-07",
+          "opponent": "@CHC",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to right, Devers to second.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815680",
+          "date": "2026-06-08",
+          "opponent": "vsWSH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to center, Schmitt to second.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815695",
+          "date": "2026-06-09",
+          "opponent": "vsWSH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "3B",
+          "distance_feet": null,
+          "description": "Arraez tripled to left.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815731",
+          "date": "2026-06-12",
+          "opponent": "vsCHC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to left.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815778",
+          "date": "2026-06-16",
+          "opponent": "@ATL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Arraez doubled to left.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815919",
+          "date": "2026-06-26",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Arraez doubled to right.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815949",
+          "date": "2026-06-28",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to right.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815978",
+          "date": "2026-06-30",
+          "opponent": "@ARI",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to center.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816024",
+          "date": "2026-07-04",
+          "opponent": "@COL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to left.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816052",
+          "date": "2026-07-06",
+          "opponent": "vsTOR",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez reached on infield single to catcher.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816249",
+          "date": "2026-07-24",
+          "opponent": "vsLAA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to center.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816279",
+          "date": "2026-07-26",
+          "opponent": "vsLAA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to left, Arraez out stretching at second.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816390",
+          "date": "2026-08-04",
+          "opponent": "vsWSH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to center, Turner scored, Harper to second.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816405",
+          "date": "2026-08-05",
+          "opponent": "vsWSH",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 385,
+          "description": "Arraez homered to right (385 feet).",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816419",
+          "date": "2026-08-06",
+          "opponent": "vsWSH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Arraez doubled to right, Turner scored, Harper to third.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816525",
+          "date": "2026-08-13",
+          "opponent": "vsMIN",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to center, Harper to third.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816540",
+          "date": "2026-08-15",
+          "opponent": "@MIN",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to center.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816573",
+          "date": "2026-08-18",
+          "opponent": "vsMIA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to center, Harper to second.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816588",
+          "date": "2026-08-19",
+          "opponent": "vsMIA",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to center.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816611",
+          "date": "2026-08-21",
+          "opponent": "vsSTL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to center, Harper to third.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816663",
+          "date": "2026-08-24",
+          "opponent": "@SEA",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to left, Harper to second, Schwarber to third.",
+          "team": "SF"
+        }
+      ]
+    }
+  }
+}

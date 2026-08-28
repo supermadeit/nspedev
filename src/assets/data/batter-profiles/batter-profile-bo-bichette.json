@@ -1,0 +1,940 @@
+{
+  "player": "BoBichette",
+  "player_id": "bo-bichette",
+  "team": "NYM",
+  "position": "3B",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 521,
+      "R": 64,
+      "H": 138,
+      "2B": 21,
+      "3B": 2,
+      "HR": 14,
+      "RBI": 66,
+      "BB": 36,
+      "SO": 103,
+      "SB": 1,
+      "TB": 205,
+      "avg": 0.265,
+      "obp": 0.311,
+      "slg": 0.393,
+      "ops": 0.704
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 37,
+        "games": [
+          {
+            "date": "2026-04-03",
+            "value": 3
+          },
+          {
+            "date": "2026-04-04",
+            "value": 2
+          },
+          {
+            "date": "2026-04-08",
+            "value": 2
+          },
+          {
+            "date": "2026-04-11",
+            "value": 2
+          },
+          {
+            "date": "2026-04-23",
+            "value": 3
+          },
+          {
+            "date": "2026-05-01",
+            "value": 2
+          },
+          {
+            "date": "2026-05-03",
+            "value": 2
+          },
+          {
+            "date": "2026-05-06",
+            "value": 2
+          },
+          {
+            "date": "2026-05-18",
+            "value": 3
+          },
+          {
+            "date": "2026-05-19",
+            "value": 2
+          },
+          {
+            "date": "2026-05-25",
+            "value": 3
+          },
+          {
+            "date": "2026-06-03",
+            "value": 4
+          },
+          {
+            "date": "2026-06-05",
+            "value": 2
+          },
+          {
+            "date": "2026-06-07",
+            "value": 2
+          },
+          {
+            "date": "2026-06-12",
+            "value": 2
+          },
+          {
+            "date": "2026-06-13",
+            "value": 2
+          },
+          {
+            "date": "2026-06-14",
+            "value": 2
+          },
+          {
+            "date": "2026-06-15",
+            "value": 3
+          },
+          {
+            "date": "2026-06-16",
+            "value": 2
+          },
+          {
+            "date": "2026-06-17",
+            "value": 3
+          },
+          {
+            "date": "2026-06-23",
+            "value": 2
+          },
+          {
+            "date": "2026-06-24",
+            "value": 2
+          },
+          {
+            "date": "2026-07-03",
+            "value": 2
+          },
+          {
+            "date": "2026-07-05",
+            "value": 3
+          },
+          {
+            "date": "2026-07-06",
+            "value": 2
+          },
+          {
+            "date": "2026-07-19",
+            "value": 2
+          },
+          {
+            "date": "2026-07-20",
+            "value": 2
+          },
+          {
+            "date": "2026-07-25",
+            "value": 2
+          },
+          {
+            "date": "2026-07-26",
+            "value": 2
+          },
+          {
+            "date": "2026-07-27",
+            "value": 3
+          },
+          {
+            "date": "2026-07-30",
+            "value": 2
+          },
+          {
+            "date": "2026-08-04",
+            "value": 2
+          },
+          {
+            "date": "2026-08-06",
+            "value": 2
+          },
+          {
+            "date": "2026-08-09",
+            "value": 5
+          },
+          {
+            "date": "2026-08-16",
+            "value": 3
+          },
+          {
+            "date": "2026-08-18",
+            "value": 2
+          },
+          {
+            "date": "2026-08-22",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 12,
+        "games": [
+          {
+            "date": "2026-04-11",
+            "value": 1
+          },
+          {
+            "date": "2026-04-28",
+            "value": 1
+          },
+          {
+            "date": "2026-05-18",
+            "value": 1
+          },
+          {
+            "date": "2026-05-19",
+            "value": 2
+          },
+          {
+            "date": "2026-06-11",
+            "value": 1
+          },
+          {
+            "date": "2026-06-12",
+            "value": 2
+          },
+          {
+            "date": "2026-06-23",
+            "value": 1
+          },
+          {
+            "date": "2026-06-24",
+            "value": 1
+          },
+          {
+            "date": "2026-08-04",
+            "value": 1
+          },
+          {
+            "date": "2026-08-12",
+            "value": 1
+          },
+          {
+            "date": "2026-08-21",
+            "value": 1
+          },
+          {
+            "date": "2026-08-22",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 8,
+        "games": [
+          {
+            "date": "2026-04-11",
+            "value": 3
+          },
+          {
+            "date": "2026-04-23",
+            "value": 3
+          },
+          {
+            "date": "2026-05-18",
+            "value": 3
+          },
+          {
+            "date": "2026-05-19",
+            "value": 4
+          },
+          {
+            "date": "2026-06-03",
+            "value": 3
+          },
+          {
+            "date": "2026-06-12",
+            "value": 6
+          },
+          {
+            "date": "2026-07-05",
+            "value": 3
+          },
+          {
+            "date": "2026-08-09",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "vsMIL",
+        "AB": 5,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "@CHW",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "@CHW",
+        "AB": 5,
+        "R": 1,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 5
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "@CHW",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "vsSD",
+        "AB": 3,
+        "R": 2,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "vsSD",
+        "AB": 5,
+        "R": 0,
+        "H": 2,
+        "2B": 2,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "vsSD",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "vsWSH",
+        "AB": 3,
+        "R": 0,
+        "H": 3,
+        "2B": 0,
+        "3B": 1,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 5
+      },
+      {
+        "date": "2026-08-15",
+        "date_iso": "2026-08-15",
+        "opponent": "vsWSH",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-14",
+        "date_iso": "2026-08-14",
+        "opponent": "vsWSH",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 8,
+      "splits": [
+        {
+          "season": 2019,
+          "total": 61.0
+        },
+        {
+          "season": 2020,
+          "total": 37.0
+        },
+        {
+          "season": 2021,
+          "total": 191.0
+        },
+        {
+          "season": 2022,
+          "total": 191.0
+        },
+        {
+          "season": 2023,
+          "total": 179.0
+        },
+        {
+          "season": 2024,
+          "total": 70.0
+        },
+        {
+          "season": 2025,
+          "total": 189.0
+        },
+        {
+          "season": 2026,
+          "total": 138.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 5396,
+      "hr_count": 14,
+      "games": 131,
+      "events": [
+        {
+          "date": "2026-04-11",
+          "distance_feet": 344,
+          "inning": 5,
+          "opponent": "vsATH"
+        },
+        {
+          "date": "2026-04-28",
+          "distance_feet": 386,
+          "inning": 1,
+          "opponent": "vsWSH"
+        },
+        {
+          "date": "2026-05-18",
+          "distance_feet": 409,
+          "inning": 7,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-05-19",
+          "distance_feet": 406,
+          "inning": 1,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-05-19",
+          "distance_feet": 400,
+          "inning": 2,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-06-11",
+          "distance_feet": 378,
+          "inning": 1,
+          "opponent": "vsSTL"
+        },
+        {
+          "date": "2026-06-12",
+          "distance_feet": 383,
+          "inning": 1,
+          "opponent": "vsATL"
+        },
+        {
+          "date": "2026-06-12",
+          "distance_feet": 341,
+          "inning": 2,
+          "opponent": "vsATL"
+        },
+        {
+          "date": "2026-06-23",
+          "distance_feet": 388,
+          "inning": 9,
+          "opponent": "vsCHC"
+        },
+        {
+          "date": "2026-06-24",
+          "distance_feet": 411,
+          "inning": 6,
+          "opponent": "vsCHC"
+        },
+        {
+          "date": "2026-08-04",
+          "distance_feet": 422,
+          "inning": 3,
+          "opponent": "@CLE"
+        },
+        {
+          "date": "2026-08-12",
+          "distance_feet": 405,
+          "inning": 9,
+          "opponent": "@ATL"
+        },
+        {
+          "date": "2026-08-21",
+          "distance_feet": 345,
+          "inning": 5,
+          "opponent": "@CHW"
+        },
+        {
+          "date": "2026-08-22",
+          "distance_feet": 378,
+          "inning": 3,
+          "opponent": "@CHW"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 31,
+      "games_in_window": 131,
+      "matches": [
+        {
+          "game_id": "401814782",
+          "date": "2026-04-02",
+          "opponent": "@SF",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Bichette doubled to left, Soto scored.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401814795",
+          "date": "2026-04-03",
+          "opponent": "@SF",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Bichette singled to center, Lindor scored, Soto to third.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401814840",
+          "date": "2026-04-07",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Bichette singled to right, Lindor to second.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401814893",
+          "date": "2026-04-11",
+          "opponent": "vsATH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Bichette singled to center, Robert Jr. scored.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815030",
+          "date": "2026-04-21",
+          "opponent": "vsMIN",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Bichette singled to right.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815045",
+          "date": "2026-04-22",
+          "opponent": "vsMIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Bichette doubled to left.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815058",
+          "date": "2026-04-23",
+          "opponent": "vsMIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Bichette singled to center.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815125",
+          "date": "2026-04-28",
+          "opponent": "vsWSH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 386,
+          "description": "Bichette homered to right center (386 feet).",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815408",
+          "date": "2026-05-19",
+          "opponent": "@WSH",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 406,
+          "description": "Bichette homered to center (406 feet), Benge scored.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815538",
+          "date": "2026-05-29",
+          "opponent": "vsMIA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Bichette singled to right.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815618",
+          "date": "2026-06-03",
+          "opponent": "@SEA",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Bichette singled to right.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815671",
+          "date": "2026-06-07",
+          "opponent": "@SD",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Bichette doubled to left, Benge to third.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815715",
+          "date": "2026-06-11",
+          "opponent": "vsSTL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 378,
+          "description": "Bichette homered to left center (378 feet), Benge scored.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815720",
+          "date": "2026-06-12",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 383,
+          "description": "Bichette homered to left center (383 feet).",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815735",
+          "date": "2026-06-13",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Bichette singled to left.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815750",
+          "date": "2026-06-14",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Bichette singled to left, Benge to second.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815766",
+          "date": "2026-06-15",
+          "opponent": "@CIN",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Bichette doubled to left.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815792",
+          "date": "2026-06-17",
+          "opponent": "@CIN",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Bichette singled to right.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401816033",
+          "date": "2026-07-05",
+          "opponent": "@ATL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Bichette singled to left, Lindor scored.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401816057",
+          "date": "2026-07-07",
+          "opponent": "vsKC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Bichette singled to center, Ewing to second.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401816195",
+          "date": "2026-07-20",
+          "opponent": "@MIL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Bichette reached on infield single to third.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401816225",
+          "date": "2026-07-22",
+          "opponent": "@MIL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Bichette reached on infield single to pitcher, Bichette safe at second on throwing error by pitcher Henderson.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401816255",
+          "date": "2026-07-25",
+          "opponent": "vsLAD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Bichette singled to right.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401816270",
+          "date": "2026-07-26",
+          "opponent": "vsLAD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Bichette singled to left, Lindor to second.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401816388",
+          "date": "2026-08-04",
+          "opponent": "@CLE",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Bichette singled to center.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401816428",
+          "date": "2026-08-07",
+          "opponent": "@PIT",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Bichette reached on infield single to third, Ewing to third.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401816458",
+          "date": "2026-08-09",
+          "opponent": "@PIT",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Bichette singled to center, Lindor to second, Ewing to third.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401816470",
+          "date": "2026-08-10",
+          "opponent": "@ATL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Bichette singled to left, Ewing scored.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401816554",
+          "date": "2026-08-16",
+          "opponent": "vsWSH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Bichette singled to right, Lindor to second.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401816566",
+          "date": "2026-08-17",
+          "opponent": "vsSD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Bichette singled to right, Ewing scored, Lindor to third.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401816575",
+          "date": "2026-08-18",
+          "opponent": "vsSD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Bichette doubled to left.",
+          "team": "NYM"
+        }
+      ]
+    }
+  }
+}

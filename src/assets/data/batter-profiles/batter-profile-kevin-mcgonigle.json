@@ -1,0 +1,864 @@
+{
+  "player": "KevinMcgonigle",
+  "player_id": "kevin-mcgonigle",
+  "team": "DET",
+  "position": "SS",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 496,
+      "R": 84,
+      "H": 138,
+      "2B": 24,
+      "3B": 3,
+      "HR": 14,
+      "RBI": 56,
+      "BB": 79,
+      "SO": 80,
+      "SB": 12,
+      "TB": 210,
+      "avg": 0.278,
+      "obp": 0.379,
+      "slg": 0.423,
+      "ops": 0.802
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 34,
+        "games": [
+          {
+            "date": "2026-03-26",
+            "value": 4
+          },
+          {
+            "date": "2026-04-01",
+            "value": 2
+          },
+          {
+            "date": "2026-04-07",
+            "value": 2
+          },
+          {
+            "date": "2026-04-12",
+            "value": 3
+          },
+          {
+            "date": "2026-04-18",
+            "value": 2
+          },
+          {
+            "date": "2026-04-20",
+            "value": 2
+          },
+          {
+            "date": "2026-04-21",
+            "value": 2
+          },
+          {
+            "date": "2026-04-25",
+            "value": 3
+          },
+          {
+            "date": "2026-04-29",
+            "value": 2
+          },
+          {
+            "date": "2026-05-03",
+            "value": 2
+          },
+          {
+            "date": "2026-05-12",
+            "value": 2
+          },
+          {
+            "date": "2026-05-16",
+            "value": 2
+          },
+          {
+            "date": "2026-05-26",
+            "value": 3
+          },
+          {
+            "date": "2026-05-27",
+            "value": 2
+          },
+          {
+            "date": "2026-06-03",
+            "value": 2
+          },
+          {
+            "date": "2026-06-07",
+            "value": 2
+          },
+          {
+            "date": "2026-06-15",
+            "value": 2
+          },
+          {
+            "date": "2026-06-22",
+            "value": 2
+          },
+          {
+            "date": "2026-06-24",
+            "value": 2
+          },
+          {
+            "date": "2026-06-29",
+            "value": 2
+          },
+          {
+            "date": "2026-07-02",
+            "value": 2
+          },
+          {
+            "date": "2026-07-05",
+            "value": 2
+          },
+          {
+            "date": "2026-07-07",
+            "value": 2
+          },
+          {
+            "date": "2026-07-18",
+            "value": 2
+          },
+          {
+            "date": "2026-07-26",
+            "value": 2
+          },
+          {
+            "date": "2026-07-27",
+            "value": 2
+          },
+          {
+            "date": "2026-07-28",
+            "value": 4
+          },
+          {
+            "date": "2026-08-01",
+            "value": 3
+          },
+          {
+            "date": "2026-08-06",
+            "value": 2
+          },
+          {
+            "date": "2026-08-07",
+            "value": 3
+          },
+          {
+            "date": "2026-08-11",
+            "value": 2
+          },
+          {
+            "date": "2026-08-17",
+            "value": 2
+          },
+          {
+            "date": "2026-08-21",
+            "value": 2
+          },
+          {
+            "date": "2026-08-23",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 14,
+        "games": [
+          {
+            "date": "2026-04-12",
+            "value": 1
+          },
+          {
+            "date": "2026-04-25",
+            "value": 1
+          },
+          {
+            "date": "2026-05-22",
+            "value": 1
+          },
+          {
+            "date": "2026-06-07",
+            "value": 1
+          },
+          {
+            "date": "2026-06-15",
+            "value": 1
+          },
+          {
+            "date": "2026-06-17",
+            "value": 1
+          },
+          {
+            "date": "2026-07-01",
+            "value": 1
+          },
+          {
+            "date": "2026-07-10",
+            "value": 1
+          },
+          {
+            "date": "2026-07-19",
+            "value": 1
+          },
+          {
+            "date": "2026-07-31",
+            "value": 1
+          },
+          {
+            "date": "2026-08-01",
+            "value": 1
+          },
+          {
+            "date": "2026-08-06",
+            "value": 1
+          },
+          {
+            "date": "2026-08-17",
+            "value": 1
+          },
+          {
+            "date": "2026-08-23",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 3,
+        "games": [
+          {
+            "date": "2026-06-07",
+            "value": 3
+          },
+          {
+            "date": "2026-08-11",
+            "value": 3
+          },
+          {
+            "date": "2026-08-23",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-26",
+        "date_iso": "2026-08-26",
+        "opponent": "vsTB",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "vsTB",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-24",
+        "date_iso": "2026-08-24",
+        "opponent": "vsTB",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "@KC",
+        "AB": 4,
+        "R": 1,
+        "H": 2,
+        "2B": 1,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 3,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 6
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "@KC",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "@KC",
+        "AB": 4,
+        "R": 0,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "@PIT",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 2,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "@PIT",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "@PIT",
+        "AB": 6,
+        "R": 2,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 2,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 5
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "vsCHW",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 1,
+      "splits": [
+        {
+          "season": 2026,
+          "total": 138.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 5554,
+      "hr_count": 14,
+      "games": 130,
+      "events": [
+        {
+          "date": "2026-04-12",
+          "distance_feet": 408,
+          "inning": 5,
+          "opponent": "vsMIA"
+        },
+        {
+          "date": "2026-04-25",
+          "distance_feet": 405,
+          "inning": 1,
+          "opponent": "@CIN"
+        },
+        {
+          "date": "2026-05-22",
+          "distance_feet": 394,
+          "inning": 1,
+          "opponent": "@BAL"
+        },
+        {
+          "date": "2026-06-07",
+          "distance_feet": 420,
+          "inning": 4,
+          "opponent": "vsSEA"
+        },
+        {
+          "date": "2026-06-15",
+          "distance_feet": 383,
+          "inning": 2,
+          "opponent": "@HOU"
+        },
+        {
+          "date": "2026-06-17",
+          "distance_feet": 340,
+          "inning": 9,
+          "opponent": "@HOU"
+        },
+        {
+          "date": "2026-07-01",
+          "distance_feet": 422,
+          "inning": 3,
+          "opponent": "@NYY"
+        },
+        {
+          "date": "2026-07-10",
+          "distance_feet": 414,
+          "inning": 3,
+          "opponent": "vsPHI"
+        },
+        {
+          "date": "2026-07-19",
+          "distance_feet": 402,
+          "inning": 1,
+          "opponent": "@LAA"
+        },
+        {
+          "date": "2026-07-31",
+          "distance_feet": 415,
+          "inning": 3,
+          "opponent": "@ATH"
+        },
+        {
+          "date": "2026-08-01",
+          "distance_feet": 386,
+          "inning": 1,
+          "opponent": "@ATH"
+        },
+        {
+          "date": "2026-08-06",
+          "distance_feet": 368,
+          "inning": 7,
+          "opponent": "@SEA"
+        },
+        {
+          "date": "2026-08-17",
+          "distance_feet": 405,
+          "inning": 2,
+          "opponent": "@PIT"
+        },
+        {
+          "date": "2026-08-23",
+          "distance_feet": 392,
+          "inning": 5,
+          "opponent": "@KC"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 29,
+      "games_in_window": 130,
+      "matches": [
+        {
+          "game_id": "401814701",
+          "date": "2026-03-26",
+          "opponent": "@SD",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "McGonigle doubled to right, Keith scored and Greene scored, Torkelson to third.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401814880",
+          "date": "2026-04-10",
+          "opponent": "vsMIA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "McGonigle singled to right.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401814895",
+          "date": "2026-04-11",
+          "opponent": "vsMIA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "McGonigle doubled to right.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401814973",
+          "date": "2026-04-17",
+          "opponent": "@BOS",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "McGonigle singled to center.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401814988",
+          "date": "2026-04-18",
+          "opponent": "@BOS",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "McGonigle singled to right.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401815018",
+          "date": "2026-04-20",
+          "opponent": "@BOS",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "McGonigle singled to center.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401815057",
+          "date": "2026-04-23",
+          "opponent": "vsMIL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "McGonigle doubled to left.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401815083",
+          "date": "2026-04-25",
+          "opponent": "@CIN",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 405,
+          "description": "McGonigle homered to center (405 feet).",
+          "team": "DET"
+        },
+        {
+          "game_id": "401815307",
+          "date": "2026-05-12",
+          "opponent": "@NYM",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "McGonigle reached on infield single to shortstop.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401815393",
+          "date": "2026-05-18",
+          "opponent": "vsCLE",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "McGonigle reached on infield single to second.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401815435",
+          "date": "2026-05-21",
+          "opponent": "vsCLE",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "McGonigle singled to right.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401815442",
+          "date": "2026-05-22",
+          "opponent": "@BAL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 394,
+          "description": "McGonigle homered to right center (394 feet).",
+          "team": "DET"
+        },
+        {
+          "game_id": "401815499",
+          "date": "2026-05-26",
+          "opponent": "vsLAA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "McGonigle singled to center.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401815514",
+          "date": "2026-05-27",
+          "opponent": "vsLAA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "McGonigle singled to center, Keith to third.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401815573",
+          "date": "2026-05-31",
+          "opponent": "@CHW",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "McGonigle singled to right.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401815580",
+          "date": "2026-06-01",
+          "opponent": "@TB",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "McGonigle singled to right.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401815713",
+          "date": "2026-06-11",
+          "opponent": "vsMIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "McGonigle doubled to left.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401815782",
+          "date": "2026-06-16",
+          "opponent": "@HOU",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "McGonigle singled to right.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401815858",
+          "date": "2026-06-22",
+          "opponent": "vsNYY",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "McGonigle singled to center.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401815923",
+          "date": "2026-06-27",
+          "opponent": "vsHOU",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "McGonigle singled to right.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401816035",
+          "date": "2026-07-05",
+          "opponent": "@TEX",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "McGonigle singled to center.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401816167",
+          "date": "2026-07-18",
+          "opponent": "@LAA",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "McGonigle doubled to center.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401816182",
+          "date": "2026-07-19",
+          "opponent": "@LAA",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 402,
+          "description": "McGonigle homered to left center (402 feet).",
+          "team": "DET"
+        },
+        {
+          "game_id": "401816282",
+          "date": "2026-07-27",
+          "opponent": "vsBAL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "McGonigle singled to left.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401816294",
+          "date": "2026-07-28",
+          "opponent": "vsBAL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "McGonigle singled to right.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401816358",
+          "date": "2026-08-01",
+          "opponent": "@ATH",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 386,
+          "description": "McGonigle homered to left (386 feet).",
+          "team": "DET"
+        },
+        {
+          "game_id": "401816435",
+          "date": "2026-08-07",
+          "opponent": "@SF",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "McGonigle singled to right.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401816618",
+          "date": "2026-08-21",
+          "opponent": "@KC",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "McGonigle singled to right.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401816648",
+          "date": "2026-08-23",
+          "opponent": "@KC",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "McGonigle doubled to center, Torres scored.",
+          "team": "DET"
+        }
+      ]
+    }
+  }
+}

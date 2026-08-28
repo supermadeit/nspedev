@@ -8,6 +8,7 @@ import { QueryBuilder } from '@/components/QueryBuilder'
 import { QueryBuilderTutorial } from '@/components/QueryBuilderTutorial'
 import { AutoDemo } from '@/components/AutoDemo'
 import { SampleQueriesModal } from '@/components/SampleQueriesModal'
+import { H2hStaffOverlay } from '@/components/H2hStaffOverlay'
 import { PlayerSearchDropdown } from '@/components/PlayerSearchDropdown'
 import { searchPlayers } from '@/lib/playerSearch'
 import { authHeader } from '@/lib/auth-token'
@@ -1807,6 +1808,11 @@ function MlbPlayerReportView({ payload }: { payload: MlbPlayerReportPayload }) {
 // with no hyphen and no leading sport keyword is what a name search looks
 // like instead. Checked before running `searchPlayers`, which is the actual
 // arbiter of whether anything matches.
+// Static neon glow on the {search} button — same cyan as its text, two
+// layers (tight+bright, wide+soft) rather than an animated pulse, so it
+// reads as "the button that matters" without being distracting.
+const SEARCH_GLOW = '0 0 8px 1px oklch(0.90 0.18 195 / 0.55), 0 0 20px 4px oklch(0.90 0.18 195 / 0.25)'
+
 const NSPE_SPORT_TOKENS = ['mlb', 'nfl', 'nba', 'nhl', 'cfb', 'help']
 function looksLikePlayerSearch(value: string): boolean {
   const trimmed = value.trim().toLowerCase()
@@ -1868,6 +1874,7 @@ function App() {
   const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(true)
   const [isMobileLeaderboardOpen, setIsMobileLeaderboardOpen] = useState(false)
   const [isGlossaryOpen, setIsGlossaryOpen] = useState(false)
+  const [isH2hStaffOpen, setIsH2hStaffOpen] = useState(false)
   const leaderboard = leaderboardData as unknown as LeaderboardPayload
   const isMobile = useIsMobile()
   const navigate = useNavigate()
@@ -1923,6 +1930,7 @@ function App() {
     setLastQuery(sanitizedQuery || query.trim())
     setQueryError(null)
     setCollapsedPlayers({})
+    setIsH2hStaffOpen(false)
     setH2hResult(null)
     setPitchResult(null)
     setFpvResult(null)
@@ -1967,6 +1975,15 @@ function App() {
       if (h2hPayload) {
         setH2hResult(h2hPayload)
         setQueryResults([])
+        // -staff carries a real table's worth of extra data (a pitcher-by-
+        // pitcher breakdown) that doesn't fit the compact floating results
+        // panel — escalate to the full-screen overlay instead. Plain h2h
+        // (no staff_breakdown) keeps using the panel unchanged, since it
+        // already reads fine there.
+        if (h2hPayload.staff_breakdown) {
+          setIsMiniOpen(false)
+          setIsH2hStaffOpen(true)
+        }
         return
       }
 
@@ -2389,6 +2406,7 @@ function App() {
 
       <QueryBuilderTutorial open={isTutorialOpen} onClose={() => setIsTutorialOpen(false)} />
       <SampleQueriesModal open={isSampleQueriesOpen} onClose={() => setIsSampleQueriesOpen(false)} />
+      <H2hStaffOverlay open={isH2hStaffOpen} onClose={() => setIsH2hStaffOpen(false)} payload={h2hResult} />
       {/* {sample-commands}'s scripted-typing demo is shelved (not deleted) in
           favor of {sample-queries} above — no entry point triggers this open
           anymore, kept mounted only so it's easy to revisit later. */}
@@ -2814,7 +2832,7 @@ function App() {
                   type="button"
                   onClick={runSearchFromInput}
                   className="h-[52px] shrink-0 rounded-lg border border-border px-6 font-mono text-[14px] hover:opacity-80 transition-opacity"
-                  style={{ color: 'oklch(0.90 0.18 195)' }}
+                  style={{ color: 'oklch(0.90 0.18 195)', boxShadow: SEARCH_GLOW }}
                 >
                   search
                 </button>
@@ -2829,22 +2847,16 @@ function App() {
                 >
                   {'{calculator}'}
                 </a>
-                <a
-                  href="/charts"
-                  className="h-[52px] flex items-center rounded-lg border px-6 font-mono text-[14px] hover:opacity-80 transition-opacity"
-                  style={{ color: 'oklch(0.85 0.15 195)', borderColor: 'oklch(0.85 0.15 195)' }}
-                >
-                  {'{charts}'}
-                </a>
               </div>
             </div>
           ) : (
-            // {cli}{search}{build}{charts} in one symmetric row — {database}
-            // has no static nav entry point, this input doubles as the
-            // player search (see looksLikePlayerSearch): typing a name
-            // opens a dropdown of matches below the input instead of
-            // sending anything to the backend; typing actual nspe syntax
-            // behaves exactly as before.
+            // {cli}{search}{build} in one symmetric row — {database} has no
+            // static nav entry point, this input doubles as the player
+            // search (see looksLikePlayerSearch): typing a name opens a
+            // dropdown of matches below the input instead of sending
+            // anything to the backend; typing actual nspe syntax behaves
+            // exactly as before. {charts} removed from this row (still live
+            // at /charts, just not linked from the homepage).
             <div className="flex items-center gap-3">
               <div className="relative flex-1">
                 <input
@@ -2887,7 +2899,7 @@ function App() {
                 type="button"
                 onClick={runSearchFromInput}
                 className="h-[52px] shrink-0 rounded-lg border border-border px-5 font-mono text-[14px] hover:opacity-80 transition-opacity"
-                style={{ color: 'oklch(0.90 0.18 195)' }}
+                style={{ color: 'oklch(0.90 0.18 195)', boxShadow: SEARCH_GLOW }}
               >
                 search
               </button>
@@ -2900,14 +2912,6 @@ function App() {
               >
                 build
               </button>
-
-              <a
-                href="/charts"
-                className="h-[52px] shrink-0 flex items-center rounded-lg border px-5 font-mono text-[14px] hover:opacity-80 transition-opacity"
-                style={{ color: 'oklch(0.85 0.15 195)', borderColor: 'oklch(0.85 0.15 195)' }}
-              >
-                {'{chart}'}
-              </a>
             </div>
           )}
 
@@ -3039,10 +3043,13 @@ function App() {
         }}
       />
 
-      {/* {tutorial} and {sample-queries}, formerly in the top-right nav,
-          grouped here next to {glossary} — a flex group with gap rather
-          than individually guessed pixel offsets per label, so it doesn't
-          need re-tuning if any of these three labels change length. */}
+      {/* {tutorial} and {sample-queries}, formerly in the top-right nav —
+          a flex group with gap rather than individually guessed pixel
+          offsets per label, so it doesn't need re-tuning if either label
+          changes length. {glossary} removed (nav entry only — its modal/
+          state is still in this file, just unreachable, same shelve pattern
+          as {sample-commands}/{database} until the tutorial/howto rework
+          replaces it). */}
       {!isMobile && (
         <div className="absolute z-20 flex items-center gap-4" style={{ bottom: '52px', right: '440px' }}>
           <button
@@ -3060,15 +3067,6 @@ function App() {
             style={{ color: 'oklch(0.65 0.12 145)' }}
           >
             {'{sample-queries}'}
-          </button>
-          <button
-            type="button"
-            onClick={() => setIsGlossaryOpen(true)}
-            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-            style={{ color: 'oklch(0.85 0.15 195)' }}
-            aria-label="Open glossary"
-          >
-            {'{glossary}'}
           </button>
         </div>
       )}
@@ -3186,22 +3184,8 @@ function App() {
         </button>
       )}
 
-      {isMobile && (
-        <button
-          type="button"
-          onClick={() => setIsGlossaryOpen(true)}
-          className="absolute z-20 font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-          style={{
-            bottom: '46px',
-            right: leaderboard?.rows?.length > 0 ? '128px' : '12px',
-            color: 'oklch(0.85 0.15 195)',
-          }}
-          aria-label="Open glossary"
-        >
-          {'{glossary}'}
-        </button>
-      )}
-
+      {/* {glossary} removed (nav entry only, same shelve pattern noted in
+          the desktop group above) — {tutorial} takes its old slot. */}
       {isMobile && (
         <button
           type="button"
@@ -3209,7 +3193,7 @@ function App() {
           className="absolute z-20 font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
           style={{
             bottom: '46px',
-            right: leaderboard?.rows?.length > 0 ? '222px' : '106px',
+            right: leaderboard?.rows?.length > 0 ? '128px' : '12px',
             color: 'oklch(0.78 0.18 145)',
           }}
           aria-label="Open tutorial"

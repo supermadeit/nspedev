@@ -1,0 +1,1072 @@
+{
+  "player": "SalStewart",
+  "player_id": "sal-stewart",
+  "team": "CIN",
+  "position": "1B",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 510,
+      "R": 74,
+      "H": 134,
+      "2B": 24,
+      "3B": 0,
+      "HR": 28,
+      "RBI": 99,
+      "BB": 55,
+      "SO": 126,
+      "SB": 12,
+      "TB": 242,
+      "avg": 0.263,
+      "obp": 0.335,
+      "slg": 0.475,
+      "ops": 0.81
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 33,
+        "games": [
+          {
+            "date": "2026-03-26",
+            "value": 3
+          },
+          {
+            "date": "2026-03-28",
+            "value": 2
+          },
+          {
+            "date": "2026-03-29",
+            "value": 2
+          },
+          {
+            "date": "2026-04-04",
+            "value": 2
+          },
+          {
+            "date": "2026-04-08",
+            "value": 2
+          },
+          {
+            "date": "2026-04-15",
+            "value": 2
+          },
+          {
+            "date": "2026-04-20",
+            "value": 2
+          },
+          {
+            "date": "2026-04-21",
+            "value": 2
+          },
+          {
+            "date": "2026-04-25",
+            "value": 3
+          },
+          {
+            "date": "2026-05-12",
+            "value": 3
+          },
+          {
+            "date": "2026-05-17",
+            "value": 2
+          },
+          {
+            "date": "2026-05-18",
+            "value": 2
+          },
+          {
+            "date": "2026-05-20",
+            "value": 4
+          },
+          {
+            "date": "2026-05-26",
+            "value": 2
+          },
+          {
+            "date": "2026-05-29",
+            "value": 3
+          },
+          {
+            "date": "2026-06-05",
+            "value": 2
+          },
+          {
+            "date": "2026-06-16",
+            "value": 2
+          },
+          {
+            "date": "2026-06-20",
+            "value": 2
+          },
+          {
+            "date": "2026-06-24",
+            "value": 2
+          },
+          {
+            "date": "2026-06-27",
+            "value": 2
+          },
+          {
+            "date": "2026-06-28",
+            "value": 2
+          },
+          {
+            "date": "2026-06-30",
+            "value": 2
+          },
+          {
+            "date": "2026-07-08",
+            "value": 2
+          },
+          {
+            "date": "2026-07-10",
+            "value": 2
+          },
+          {
+            "date": "2026-07-24",
+            "value": 2
+          },
+          {
+            "date": "2026-07-28",
+            "value": 2
+          },
+          {
+            "date": "2026-07-31",
+            "value": 2
+          },
+          {
+            "date": "2026-08-06",
+            "value": 2
+          },
+          {
+            "date": "2026-08-12",
+            "value": 2
+          },
+          {
+            "date": "2026-08-13",
+            "value": 2
+          },
+          {
+            "date": "2026-08-15",
+            "value": 2
+          },
+          {
+            "date": "2026-08-22",
+            "value": 3
+          },
+          {
+            "date": "2026-08-23",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 26,
+        "games": [
+          {
+            "date": "2026-03-28",
+            "value": 1
+          },
+          {
+            "date": "2026-03-31",
+            "value": 1
+          },
+          {
+            "date": "2026-04-08",
+            "value": 1
+          },
+          {
+            "date": "2026-04-09",
+            "value": 1
+          },
+          {
+            "date": "2026-04-14",
+            "value": 1
+          },
+          {
+            "date": "2026-04-15",
+            "value": 2
+          },
+          {
+            "date": "2026-04-20",
+            "value": 1
+          },
+          {
+            "date": "2026-04-25",
+            "value": 1
+          },
+          {
+            "date": "2026-05-07",
+            "value": 1
+          },
+          {
+            "date": "2026-05-18",
+            "value": 1
+          },
+          {
+            "date": "2026-05-20",
+            "value": 1
+          },
+          {
+            "date": "2026-06-09",
+            "value": 1
+          },
+          {
+            "date": "2026-06-16",
+            "value": 1
+          },
+          {
+            "date": "2026-06-27",
+            "value": 1
+          },
+          {
+            "date": "2026-06-30",
+            "value": 1
+          },
+          {
+            "date": "2026-07-02",
+            "value": 1
+          },
+          {
+            "date": "2026-07-08",
+            "value": 2
+          },
+          {
+            "date": "2026-07-19",
+            "value": 1
+          },
+          {
+            "date": "2026-07-22",
+            "value": 1
+          },
+          {
+            "date": "2026-07-28",
+            "value": 1
+          },
+          {
+            "date": "2026-07-31",
+            "value": 1
+          },
+          {
+            "date": "2026-08-02",
+            "value": 1
+          },
+          {
+            "date": "2026-08-06",
+            "value": 1
+          },
+          {
+            "date": "2026-08-13",
+            "value": 1
+          },
+          {
+            "date": "2026-08-19",
+            "value": 1
+          },
+          {
+            "date": "2026-08-25",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 11,
+        "games": [
+          {
+            "date": "2026-04-15",
+            "value": 6
+          },
+          {
+            "date": "2026-04-21",
+            "value": 3
+          },
+          {
+            "date": "2026-04-25",
+            "value": 5
+          },
+          {
+            "date": "2026-06-16",
+            "value": 4
+          },
+          {
+            "date": "2026-06-20",
+            "value": 6
+          },
+          {
+            "date": "2026-07-08",
+            "value": 3
+          },
+          {
+            "date": "2026-07-19",
+            "value": 3
+          },
+          {
+            "date": "2026-07-22",
+            "value": 3
+          },
+          {
+            "date": "2026-07-28",
+            "value": 3
+          },
+          {
+            "date": "2026-07-31",
+            "value": 4
+          },
+          {
+            "date": "2026-08-19",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "@SF",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-24",
+        "date_iso": "2026-08-24",
+        "opponent": "@SF",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "@ARI",
+        "AB": 5,
+        "R": 1,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "@ARI",
+        "AB": 6,
+        "R": 2,
+        "H": 3,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 3
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "@ARI",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-20",
+        "date_iso": "2026-08-20",
+        "opponent": "vsSTL",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 2,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "vsSTL",
+        "AB": 3,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 3,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "vsSTL",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "vsSTL",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "vsSTL",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 2
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 1,
+      "splits": [
+        {
+          "season": 2026,
+          "total": 134.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 11079,
+      "hr_count": 28,
+      "games": 134,
+      "events": [
+        {
+          "date": "2026-03-28",
+          "distance_feet": 399,
+          "inning": 3,
+          "opponent": "vsBOS"
+        },
+        {
+          "date": "2026-03-31",
+          "distance_feet": 376,
+          "inning": 8,
+          "opponent": "vsPIT"
+        },
+        {
+          "date": "2026-04-08",
+          "distance_feet": 381,
+          "inning": 5,
+          "opponent": "@MIA"
+        },
+        {
+          "date": "2026-04-09",
+          "distance_feet": 409,
+          "inning": 5,
+          "opponent": "@MIA"
+        },
+        {
+          "date": "2026-04-14",
+          "distance_feet": 390,
+          "inning": 4,
+          "opponent": "vsSF"
+        },
+        {
+          "date": "2026-04-15",
+          "distance_feet": 387,
+          "inning": 1,
+          "opponent": "vsSF"
+        },
+        {
+          "date": "2026-04-15",
+          "distance_feet": 383,
+          "inning": 2,
+          "opponent": "vsSF"
+        },
+        {
+          "date": "2026-04-20",
+          "distance_feet": 424,
+          "inning": 1,
+          "opponent": "@TB"
+        },
+        {
+          "date": "2026-04-25",
+          "distance_feet": 366,
+          "inning": 1,
+          "opponent": "vsDET"
+        },
+        {
+          "date": "2026-05-07",
+          "distance_feet": 393,
+          "inning": 6,
+          "opponent": "@CHC"
+        },
+        {
+          "date": "2026-05-18",
+          "distance_feet": 361,
+          "inning": 7,
+          "opponent": "@PHI"
+        },
+        {
+          "date": "2026-05-20",
+          "distance_feet": 441,
+          "inning": 9,
+          "opponent": "@PHI"
+        },
+        {
+          "date": "2026-06-09",
+          "distance_feet": 407,
+          "inning": 11,
+          "opponent": "@SD"
+        },
+        {
+          "date": "2026-06-16",
+          "distance_feet": 410,
+          "inning": 1,
+          "opponent": "vsNYM"
+        },
+        {
+          "date": "2026-06-27",
+          "distance_feet": 372,
+          "inning": 1,
+          "opponent": "@PIT"
+        },
+        {
+          "date": "2026-06-30",
+          "distance_feet": 382,
+          "inning": 1,
+          "opponent": "@MIL"
+        },
+        {
+          "date": "2026-07-02",
+          "distance_feet": 402,
+          "inning": 1,
+          "opponent": "@MIL"
+        },
+        {
+          "date": "2026-07-08",
+          "distance_feet": 356,
+          "inning": 3,
+          "opponent": "vsPHI"
+        },
+        {
+          "date": "2026-07-08",
+          "distance_feet": 358,
+          "inning": 4,
+          "opponent": "vsPHI"
+        },
+        {
+          "date": "2026-07-19",
+          "distance_feet": 456,
+          "inning": 2,
+          "opponent": "@COL"
+        },
+        {
+          "date": "2026-07-22",
+          "distance_feet": 369,
+          "inning": 7,
+          "opponent": "@SEA"
+        },
+        {
+          "date": "2026-07-28",
+          "distance_feet": 416,
+          "inning": 3,
+          "opponent": "vsCLE"
+        },
+        {
+          "date": "2026-07-31",
+          "distance_feet": 409,
+          "inning": 4,
+          "opponent": "vsPIT"
+        },
+        {
+          "date": "2026-08-02",
+          "distance_feet": 420,
+          "inning": 1,
+          "opponent": "vsPIT"
+        },
+        {
+          "date": "2026-08-06",
+          "distance_feet": 416,
+          "inning": 4,
+          "opponent": "vsATH"
+        },
+        {
+          "date": "2026-08-13",
+          "distance_feet": 419,
+          "inning": 1,
+          "opponent": "@CHW"
+        },
+        {
+          "date": "2026-08-19",
+          "distance_feet": 422,
+          "inning": 6,
+          "opponent": "vsSTL"
+        },
+        {
+          "date": "2026-08-25",
+          "distance_feet": 355,
+          "inning": 9,
+          "opponent": "@SF"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 33,
+      "games_in_window": 134,
+      "matches": [
+        {
+          "game_id": "401814689",
+          "date": "2026-03-26",
+          "opponent": "vsBOS",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Stewart doubled to center.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401814708",
+          "date": "2026-03-28",
+          "opponent": "vsBOS",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Stewart singled to right, Friedl scored, McLain to third.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401814738",
+          "date": "2026-03-30",
+          "opponent": "vsPIT",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Stewart singled to center, De La Cruz to third.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401814803",
+          "date": "2026-04-04",
+          "opponent": "@TEX",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Stewart singled to right, De La Cruz scored.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401814951",
+          "date": "2026-04-15",
+          "opponent": "vsSF",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 387,
+          "description": "Stewart homered to right center (387 feet), Friedl scored and McLain scored.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401814978",
+          "date": "2026-04-17",
+          "opponent": "@MIN",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Stewart singled to right.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401815017",
+          "date": "2026-04-20",
+          "opponent": "@TB",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 424,
+          "description": "Stewart homered to center (424 feet), McLain scored.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401815083",
+          "date": "2026-04-25",
+          "opponent": "vsDET",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 366,
+          "description": "Stewart homered to left (366 feet), McLain scored and De La Cruz scored.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401815134",
+          "date": "2026-04-29",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Stewart reached on infield single to shortstop, McLain out at home on runner's fielder's choice.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401815206",
+          "date": "2026-05-04",
+          "opponent": "@CHC",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Stewart singled to left, De La Cruz to second.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401815220",
+          "date": "2026-05-05",
+          "opponent": "@CHC",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Stewart singled to center.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401815311",
+          "date": "2026-05-12",
+          "opponent": "vsWSH",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Stewart singled to left.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401815377",
+          "date": "2026-05-17",
+          "opponent": "@CLE",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Stewart singled to left, Steer to second.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401815392",
+          "date": "2026-05-18",
+          "opponent": "@PHI",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Stewart singled to center.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401815421",
+          "date": "2026-05-20",
+          "opponent": "@PHI",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Stewart doubled to right.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401815502",
+          "date": "2026-05-26",
+          "opponent": "@NYM",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Stewart singled to center.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401815635",
+          "date": "2026-06-05",
+          "opponent": "@STL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Stewart doubled to center, Steer scored and Dunn scored.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401815777",
+          "date": "2026-06-16",
+          "opponent": "vsNYM",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 410,
+          "description": "Stewart homered to left (410 feet), Dunn and Bleday scored.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401815922",
+          "date": "2026-06-27",
+          "opponent": "@PIT",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 372,
+          "description": "Stewart homered to right (372 feet).",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401815971",
+          "date": "2026-06-30",
+          "opponent": "@MIL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 382,
+          "description": "Stewart homered to right (382 feet).",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401815986",
+          "date": "2026-07-01",
+          "opponent": "@MIL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Stewart singled to left.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401815996",
+          "date": "2026-07-02",
+          "opponent": "@MIL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 402,
+          "description": "Stewart homered to right center (402 feet).",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401816015",
+          "date": "2026-07-04",
+          "opponent": "vsBAL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "GRD",
+          "distance_feet": null,
+          "description": "Stewart hit a ground rule double.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401816097",
+          "date": "2026-07-10",
+          "opponent": "vsCHC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Stewart singled to left.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401816112",
+          "date": "2026-07-11",
+          "opponent": "vsCHC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Stewart singled to center, De La Cruz to third.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401816151",
+          "date": "2026-07-17",
+          "opponent": "@COL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Stewart doubled to left, De La Cruz scored.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401816310",
+          "date": "2026-07-29",
+          "opponent": "vsCLE",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Stewart singled to right.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401816366",
+          "date": "2026-08-02",
+          "opponent": "vsPIT",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 420,
+          "description": "Stewart homered to left (420 feet).",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401816385",
+          "date": "2026-08-04",
+          "opponent": "vsATH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Stewart singled to center.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401816501",
+          "date": "2026-08-12",
+          "opponent": "@CHW",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Stewart singled to right.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401816514",
+          "date": "2026-08-13",
+          "opponent": "@CHW",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 419,
+          "description": "Stewart homered to left (419 feet).",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401816567",
+          "date": "2026-08-17",
+          "opponent": "vsSTL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Stewart singled to center, De La Cruz to second.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401816577",
+          "date": "2026-08-18",
+          "opponent": "vsSTL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Stewart singled to center.",
+          "team": "CIN"
+        }
+      ]
+    }
+  }
+}

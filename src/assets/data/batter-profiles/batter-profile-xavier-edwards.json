@@ -1,0 +1,796 @@
+{
+  "player": "XavierEdwards",
+  "player_id": "xavier-edwards",
+  "team": "MIA",
+  "position": "2B",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 486,
+      "R": 59,
+      "H": 139,
+      "2B": 17,
+      "3B": 6,
+      "HR": 6,
+      "RBI": 50,
+      "BB": 64,
+      "SO": 75,
+      "SB": 19,
+      "TB": 186,
+      "avg": 0.286,
+      "obp": 0.365,
+      "slg": 0.383,
+      "ops": 0.748
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 36,
+        "games": [
+          {
+            "date": "2026-03-29",
+            "value": 2
+          },
+          {
+            "date": "2026-03-30",
+            "value": 2
+          },
+          {
+            "date": "2026-03-31",
+            "value": 2
+          },
+          {
+            "date": "2026-04-03",
+            "value": 2
+          },
+          {
+            "date": "2026-04-04",
+            "value": 3
+          },
+          {
+            "date": "2026-04-05",
+            "value": 2
+          },
+          {
+            "date": "2026-04-08",
+            "value": 2
+          },
+          {
+            "date": "2026-04-13",
+            "value": 2
+          },
+          {
+            "date": "2026-04-17",
+            "value": 2
+          },
+          {
+            "date": "2026-04-21",
+            "value": 2
+          },
+          {
+            "date": "2026-04-24",
+            "value": 3
+          },
+          {
+            "date": "2026-04-25",
+            "value": 2
+          },
+          {
+            "date": "2026-05-02",
+            "value": 2
+          },
+          {
+            "date": "2026-05-13",
+            "value": 2
+          },
+          {
+            "date": "2026-05-15",
+            "value": 2
+          },
+          {
+            "date": "2026-05-17",
+            "value": 2
+          },
+          {
+            "date": "2026-05-18",
+            "value": 2
+          },
+          {
+            "date": "2026-05-24",
+            "value": 2
+          },
+          {
+            "date": "2026-05-27",
+            "value": 3
+          },
+          {
+            "date": "2026-05-29",
+            "value": 2
+          },
+          {
+            "date": "2026-06-03",
+            "value": 2
+          },
+          {
+            "date": "2026-06-09",
+            "value": 2
+          },
+          {
+            "date": "2026-06-22",
+            "value": 2
+          },
+          {
+            "date": "2026-06-23",
+            "value": 2
+          },
+          {
+            "date": "2026-06-27",
+            "value": 3
+          },
+          {
+            "date": "2026-06-30",
+            "value": 4
+          },
+          {
+            "date": "2026-07-05",
+            "value": 2
+          },
+          {
+            "date": "2026-07-08",
+            "value": 2
+          },
+          {
+            "date": "2026-07-12",
+            "value": 2
+          },
+          {
+            "date": "2026-07-24",
+            "value": 2
+          },
+          {
+            "date": "2026-07-27",
+            "value": 2
+          },
+          {
+            "date": "2026-08-08",
+            "value": 2
+          },
+          {
+            "date": "2026-08-15",
+            "value": 2
+          },
+          {
+            "date": "2026-08-17",
+            "value": 2
+          },
+          {
+            "date": "2026-08-19",
+            "value": 2
+          },
+          {
+            "date": "2026-08-25",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 6,
+        "games": [
+          {
+            "date": "2026-04-03",
+            "value": 1
+          },
+          {
+            "date": "2026-05-02",
+            "value": 1
+          },
+          {
+            "date": "2026-05-08",
+            "value": 1
+          },
+          {
+            "date": "2026-05-09",
+            "value": 1
+          },
+          {
+            "date": "2026-05-18",
+            "value": 1
+          },
+          {
+            "date": "2026-05-19",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 2,
+        "games": [
+          {
+            "date": "2026-04-05",
+            "value": 3
+          },
+          {
+            "date": "2026-08-08",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "vsBOS",
+        "AB": 4,
+        "R": 0,
+        "H": 2,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 3
+      },
+      {
+        "date": "2026-08-24",
+        "date_iso": "2026-08-24",
+        "opponent": "vsBOS",
+        "AB": 5,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "vsWSH",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 2,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "vsWSH",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "vsWSH",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "@PHI",
+        "AB": 4,
+        "R": 0,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "@PHI",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 1,
+        "SO": 2,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "@PHI",
+        "AB": 5,
+        "R": 2,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "@CIN",
+        "AB": 3,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 2,
+        "SO": 0,
+        "SB": 1,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-15",
+        "date_iso": "2026-08-15",
+        "opponent": "@CIN",
+        "AB": 4,
+        "R": 1,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 3,
+      "splits": [
+        {
+          "season": 2023,
+          "total": 24.0
+        },
+        {
+          "season": 2025,
+          "total": 159.0
+        },
+        {
+          "season": 2026,
+          "total": 139.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 2373,
+      "hr_count": 6,
+      "games": 131,
+      "events": [
+        {
+          "date": "2026-04-03",
+          "distance_feet": 377,
+          "inning": 1,
+          "opponent": "@NYY"
+        },
+        {
+          "date": "2026-05-02",
+          "distance_feet": 392,
+          "inning": 5,
+          "opponent": "vsPHI"
+        },
+        {
+          "date": "2026-05-08",
+          "distance_feet": 400,
+          "inning": 1,
+          "opponent": "vsWSH"
+        },
+        {
+          "date": "2026-05-09",
+          "distance_feet": 422,
+          "inning": 7,
+          "opponent": "vsWSH"
+        },
+        {
+          "date": "2026-05-18",
+          "distance_feet": 397,
+          "inning": 5,
+          "opponent": "vsATL"
+        },
+        {
+          "date": "2026-05-19",
+          "distance_feet": 385,
+          "inning": 1,
+          "opponent": "vsATL"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 29,
+      "games_in_window": 131,
+      "matches": [
+        {
+          "game_id": "401814690",
+          "date": "2026-03-27",
+          "opponent": "vsCOL",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Edwards singled to center.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401814724",
+          "date": "2026-03-29",
+          "opponent": "vsCOL",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Edwards reached on infield single to first.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401814736",
+          "date": "2026-03-30",
+          "opponent": "vsCHW",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "GRD",
+          "distance_feet": null,
+          "description": "Edwards hit a ground rule double.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401814786",
+          "date": "2026-04-03",
+          "opponent": "@NYY",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 377,
+          "description": "Edwards homered to right center (377 feet).",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401814800",
+          "date": "2026-04-04",
+          "opponent": "@NYY",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Edwards singled to center.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401814858",
+          "date": "2026-04-08",
+          "opponent": "vsCIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Edwards reached on infield single to second.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401814872",
+          "date": "2026-04-09",
+          "opponent": "vsCIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "3B",
+          "distance_feet": null,
+          "description": "Edwards tripled to right.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401814880",
+          "date": "2026-04-10",
+          "opponent": "@DET",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "3B",
+          "distance_feet": null,
+          "description": "Edwards tripled to right.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401815005",
+          "date": "2026-04-19",
+          "opponent": "vsMIL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Edwards singled to right, Marsee to second.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401815032",
+          "date": "2026-04-21",
+          "opponent": "vsSTL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Edwards singled to center.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401815078",
+          "date": "2026-04-24",
+          "opponent": "@SF",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Edwards doubled to right, Marsee scored.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401815161",
+          "date": "2026-05-01",
+          "opponent": "vsPHI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Edwards doubled to right, Lopez scored.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401815191",
+          "date": "2026-05-03",
+          "opponent": "vsPHI",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Edwards singled to left.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401815215",
+          "date": "2026-05-05",
+          "opponent": "vsBAL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Edwards reached on infield single to second.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401815259",
+          "date": "2026-05-08",
+          "opponent": "vsWSH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 400,
+          "description": "Edwards homered to left center (400 feet).",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401815404",
+          "date": "2026-05-19",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 385,
+          "description": "Edwards homered to left (385 feet).",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401815419",
+          "date": "2026-05-20",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Edwards singled to left.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401815434",
+          "date": "2026-05-21",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Edwards singled to center.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401815474",
+          "date": "2026-05-24",
+          "opponent": "vsNYM",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Edwards doubled to left.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401815488",
+          "date": "2026-05-25",
+          "opponent": "@TOR",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Edwards doubled to right.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401815518",
+          "date": "2026-05-27",
+          "opponent": "@TOR",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Edwards doubled to right.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401815608",
+          "date": "2026-06-03",
+          "opponent": "@WSH",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Edwards singled to center.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401815681",
+          "date": "2026-06-09",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Edwards singled to right, Lopez scored.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401815860",
+          "date": "2026-06-22",
+          "opponent": "vsTEX",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Edwards singled to left.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401815874",
+          "date": "2026-06-23",
+          "opponent": "vsTEX",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Edwards singled to left, Lopez to second.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401816089",
+          "date": "2026-07-09",
+          "opponent": "vsSEA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Edwards reached on infield single to pitcher, Lopez to second.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401816128",
+          "date": "2026-07-12",
+          "opponent": "vsCLE",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Edwards singled to right.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401816242",
+          "date": "2026-07-24",
+          "opponent": "vsSD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Edwards reached on bunt single to third, Lopez to third. Miami Marlins challenged: call on the field was overturned.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401816521",
+          "date": "2026-08-14",
+          "opponent": "@CIN",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Edwards singled to right.",
+          "team": "MIA"
+        }
+      ]
+    }
+  }
+}

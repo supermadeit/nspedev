@@ -1,0 +1,868 @@
+{
+  "player": "CeddanneRafaela",
+  "player_id": "ceddanne-rafaela",
+  "team": "BOS",
+  "position": "CF",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 504,
+      "R": 67,
+      "H": 145,
+      "2B": 32,
+      "3B": 3,
+      "HR": 16,
+      "RBI": 66,
+      "BB": 21,
+      "SO": 108,
+      "SB": 17,
+      "TB": 231,
+      "avg": 0.288,
+      "obp": 0.325,
+      "slg": 0.458,
+      "ops": 0.784
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 39,
+        "games": [
+          {
+            "date": "2026-03-26",
+            "value": 2
+          },
+          {
+            "date": "2026-04-04",
+            "value": 2
+          },
+          {
+            "date": "2026-04-08",
+            "value": 2
+          },
+          {
+            "date": "2026-04-25",
+            "value": 3
+          },
+          {
+            "date": "2026-04-26",
+            "value": 2
+          },
+          {
+            "date": "2026-05-04",
+            "value": 2
+          },
+          {
+            "date": "2026-05-05",
+            "value": 3
+          },
+          {
+            "date": "2026-05-08",
+            "value": 3
+          },
+          {
+            "date": "2026-05-15",
+            "value": 2
+          },
+          {
+            "date": "2026-05-19",
+            "value": 2
+          },
+          {
+            "date": "2026-05-27",
+            "value": 3
+          },
+          {
+            "date": "2026-06-02",
+            "value": 2
+          },
+          {
+            "date": "2026-06-03",
+            "value": 3
+          },
+          {
+            "date": "2026-06-07",
+            "value": 2
+          },
+          {
+            "date": "2026-06-12",
+            "value": 3
+          },
+          {
+            "date": "2026-06-13",
+            "value": 2
+          },
+          {
+            "date": "2026-06-16",
+            "value": 2
+          },
+          {
+            "date": "2026-06-24",
+            "value": 3
+          },
+          {
+            "date": "2026-06-27",
+            "value": 2
+          },
+          {
+            "date": "2026-06-29",
+            "value": 2
+          },
+          {
+            "date": "2026-07-01",
+            "value": 2
+          },
+          {
+            "date": "2026-07-03",
+            "value": 2
+          },
+          {
+            "date": "2026-07-07",
+            "value": 2
+          },
+          {
+            "date": "2026-07-08",
+            "value": 2
+          },
+          {
+            "date": "2026-07-19",
+            "value": 2
+          },
+          {
+            "date": "2026-07-22",
+            "value": 2
+          },
+          {
+            "date": "2026-07-24",
+            "value": 2
+          },
+          {
+            "date": "2026-07-29",
+            "value": 2
+          },
+          {
+            "date": "2026-07-30",
+            "value": 2
+          },
+          {
+            "date": "2026-07-31",
+            "value": 3
+          },
+          {
+            "date": "2026-08-01",
+            "value": 2
+          },
+          {
+            "date": "2026-08-02",
+            "value": 2
+          },
+          {
+            "date": "2026-08-06",
+            "value": 2
+          },
+          {
+            "date": "2026-08-07",
+            "value": 2
+          },
+          {
+            "date": "2026-08-10",
+            "value": 2
+          },
+          {
+            "date": "2026-08-13",
+            "value": 2
+          },
+          {
+            "date": "2026-08-17",
+            "value": 3
+          },
+          {
+            "date": "2026-08-21",
+            "value": 2
+          },
+          {
+            "date": "2026-08-23",
+            "value": 3
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 15,
+        "games": [
+          {
+            "date": "2026-03-31",
+            "value": 1
+          },
+          {
+            "date": "2026-05-05",
+            "value": 1
+          },
+          {
+            "date": "2026-05-08",
+            "value": 1
+          },
+          {
+            "date": "2026-05-13",
+            "value": 1
+          },
+          {
+            "date": "2026-05-26",
+            "value": 1
+          },
+          {
+            "date": "2026-06-10",
+            "value": 1
+          },
+          {
+            "date": "2026-06-12",
+            "value": 1
+          },
+          {
+            "date": "2026-07-07",
+            "value": 1
+          },
+          {
+            "date": "2026-07-22",
+            "value": 1
+          },
+          {
+            "date": "2026-07-24",
+            "value": 1
+          },
+          {
+            "date": "2026-07-27",
+            "value": 1
+          },
+          {
+            "date": "2026-07-31",
+            "value": 1
+          },
+          {
+            "date": "2026-08-01",
+            "value": 2
+          },
+          {
+            "date": "2026-08-02",
+            "value": 1
+          },
+          {
+            "date": "2026-08-11",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 4,
+        "games": [
+          {
+            "date": "2026-05-05",
+            "value": 4
+          },
+          {
+            "date": "2026-06-10",
+            "value": 3
+          },
+          {
+            "date": "2026-06-12",
+            "value": 3
+          },
+          {
+            "date": "2026-07-27",
+            "value": 4
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "@MIA",
+        "AB": 5,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-24",
+        "date_iso": "2026-08-24",
+        "opponent": "@MIA",
+        "AB": 5,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "vsSF",
+        "AB": 4,
+        "R": 0,
+        "H": 3,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 2,
+        "BB": 0,
+        "SO": 0,
+        "SB": 1,
+        "TB": 3
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "vsSF",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 2,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "vsSF",
+        "AB": 5,
+        "R": 0,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "vsARI",
+        "AB": 5,
+        "R": 1,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "vsARI",
+        "AB": 5,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "vsARI",
+        "AB": 5,
+        "R": 2,
+        "H": 3,
+        "2B": 3,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 6
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "@PIT",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-15",
+        "date_iso": "2026-08-15",
+        "opponent": "@PIT",
+        "AB": 5,
+        "R": 0,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 3,
+        "SB": 0,
+        "TB": 2
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 4,
+      "splits": [
+        {
+          "season": 2023,
+          "total": 20.0
+        },
+        {
+          "season": 2024,
+          "total": 134.0
+        },
+        {
+          "season": 2025,
+          "total": 136.0
+        },
+        {
+          "season": 2026,
+          "total": 145.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 6104,
+      "hr_count": 16,
+      "games": 126,
+      "events": [
+        {
+          "date": "2026-03-31",
+          "distance_feet": 337,
+          "inning": 8,
+          "opponent": "@HOU"
+        },
+        {
+          "date": "2026-05-05",
+          "distance_feet": 362,
+          "inning": 1,
+          "opponent": "@DET"
+        },
+        {
+          "date": "2026-05-08",
+          "distance_feet": 379,
+          "inning": 4,
+          "opponent": "vsTB"
+        },
+        {
+          "date": "2026-05-13",
+          "distance_feet": 376,
+          "inning": 6,
+          "opponent": "vsPHI"
+        },
+        {
+          "date": "2026-05-26",
+          "distance_feet": 368,
+          "inning": 1,
+          "opponent": "vsATL"
+        },
+        {
+          "date": "2026-06-10",
+          "distance_feet": 395,
+          "inning": 8,
+          "opponent": "@TB"
+        },
+        {
+          "date": "2026-06-12",
+          "distance_feet": 374,
+          "inning": 8,
+          "opponent": "vsTEX"
+        },
+        {
+          "date": "2026-07-07",
+          "distance_feet": 383,
+          "inning": 2,
+          "opponent": "@CHW"
+        },
+        {
+          "date": "2026-07-22",
+          "distance_feet": 377,
+          "inning": 4,
+          "opponent": "vsBAL"
+        },
+        {
+          "date": "2026-07-24",
+          "distance_feet": 376,
+          "inning": 3,
+          "opponent": "vsTOR"
+        },
+        {
+          "date": "2026-07-27",
+          "distance_feet": 382,
+          "inning": 6,
+          "opponent": "@ATH"
+        },
+        {
+          "date": "2026-07-31",
+          "distance_feet": 405,
+          "inning": 7,
+          "opponent": "@LAD"
+        },
+        {
+          "date": "2026-08-01",
+          "distance_feet": 389,
+          "inning": 1,
+          "opponent": "@LAD"
+        },
+        {
+          "date": "2026-08-01",
+          "distance_feet": 402,
+          "inning": 3,
+          "opponent": "@LAD"
+        },
+        {
+          "date": "2026-08-02",
+          "distance_feet": 388,
+          "inning": 3,
+          "opponent": "@LAD"
+        },
+        {
+          "date": "2026-08-11",
+          "distance_feet": 411,
+          "inning": 5,
+          "opponent": "@TOR"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 25,
+      "games_in_window": 126,
+      "matches": [
+        {
+          "game_id": "401814787",
+          "date": "2026-04-03",
+          "opponent": "vsSD",
+          "inning": 3,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rafaela singled to center, Mayer scored, Rafaela to second.",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401814801",
+          "date": "2026-04-04",
+          "opponent": "vsSD",
+          "inning": 3,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rafaela singled to center.",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401814861",
+          "date": "2026-04-08",
+          "opponent": "vsMIL",
+          "inning": 3,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rafaela singled to left.",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401815095",
+          "date": "2026-04-26",
+          "opponent": "@BAL",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Rafaela doubled to left.",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401815174",
+          "date": "2026-05-02",
+          "opponent": "vsHOU",
+          "inning": 3,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rafaela singled to right.",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401815216",
+          "date": "2026-05-05",
+          "opponent": "@DET",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 362,
+          "description": "Rafaela homered to right center (362 feet), Abreu scored and Story scored.",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401815247",
+          "date": "2026-05-07",
+          "opponent": "vsTB",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rafaela reached on infield single to shortstop, Story scored, Yoshida to second.",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401815473",
+          "date": "2026-05-24",
+          "opponent": "vsMIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rafaela reached on infield single to third, Rafaela safe at second on throwing error by third baseman Lee.",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401815500",
+          "date": "2026-05-26",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 368,
+          "description": "Rafaela homered to left (368 feet).",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401815515",
+          "date": "2026-05-27",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rafaela singled to right.",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401815659",
+          "date": "2026-06-07",
+          "opponent": "@NYY",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rafaela singled to right.",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401815741",
+          "date": "2026-06-13",
+          "opponent": "vsTEX",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rafaela singled to center.",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401815779",
+          "date": "2026-06-16",
+          "opponent": "vsTOR",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rafaela singled to right.",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401815852",
+          "date": "2026-06-21",
+          "opponent": "@SEA",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rafaela reached on infield single to second.",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401815893",
+          "date": "2026-06-24",
+          "opponent": "@COL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "3B",
+          "distance_feet": null,
+          "description": "Rafaela tripled to first.",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401815956",
+          "date": "2026-06-29",
+          "opponent": "vsWSH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rafaela reached on infield single to shortstop.",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401816010",
+          "date": "2026-07-03",
+          "opponent": "@LAA",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rafaela singled to right.",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401816062",
+          "date": "2026-07-07",
+          "opponent": "@CHW",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rafaela reached on infield single to first, Seigler to second.",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401816145",
+          "date": "2026-07-17",
+          "opponent": "vsTB",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Rafaela doubled to left.",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401898715",
+          "date": "2026-07-22",
+          "opponent": "vsBAL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rafaela reached on infield single to second, Yoshida to second.",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401816342",
+          "date": "2026-07-31",
+          "opponent": "@LAD",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rafaela singled to center.",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401816357",
+          "date": "2026-08-01",
+          "opponent": "@LAD",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 389,
+          "description": "Rafaela homered to left center (389 feet).",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401816571",
+          "date": "2026-08-18",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rafaela reached on bunt single to first, Sogard to second.",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401816610",
+          "date": "2026-08-21",
+          "opponent": "vsSF",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rafaela singled to right.",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401816640",
+          "date": "2026-08-23",
+          "opponent": "vsSF",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rafaela singled to center, Jones to second.",
+          "team": "BOS"
+        }
+      ]
+    }
+  }
+}

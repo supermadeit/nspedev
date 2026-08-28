@@ -1,0 +1,1156 @@
+{
+  "player": "ShoheiOhtani",
+  "player_id": "shohei-ohtani",
+  "team": "LAD",
+  "position": "DH",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 476,
+      "R": 91,
+      "H": 152,
+      "2B": 25,
+      "3B": 4,
+      "HR": 32,
+      "RBI": 80,
+      "BB": 83,
+      "SO": 166,
+      "SB": 10,
+      "TB": 281,
+      "avg": 0.288,
+      "obp": 0.388,
+      "slg": 0.546,
+      "ops": 0.934
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 44,
+        "games": [
+          {
+            "date": "2026-04-03",
+            "value": 2
+          },
+          {
+            "date": "2026-04-04",
+            "value": 2
+          },
+          {
+            "date": "2026-04-05",
+            "value": 2
+          },
+          {
+            "date": "2026-04-06",
+            "value": 2
+          },
+          {
+            "date": "2026-04-11",
+            "value": 2
+          },
+          {
+            "date": "2026-04-15",
+            "value": 2
+          },
+          {
+            "date": "2026-04-17",
+            "value": 2
+          },
+          {
+            "date": "2026-04-19",
+            "value": 2
+          },
+          {
+            "date": "2026-04-26",
+            "value": 3
+          },
+          {
+            "date": "2026-04-27",
+            "value": 3
+          },
+          {
+            "date": "2026-04-28",
+            "value": 5
+          },
+          {
+            "date": "2026-05-05",
+            "value": 4
+          },
+          {
+            "date": "2026-05-06",
+            "value": 2
+          },
+          {
+            "date": "2026-05-12",
+            "value": 2
+          },
+          {
+            "date": "2026-05-13",
+            "value": 4
+          },
+          {
+            "date": "2026-05-16",
+            "value": 2
+          },
+          {
+            "date": "2026-05-17",
+            "value": 3
+          },
+          {
+            "date": "2026-05-18",
+            "value": 2
+          },
+          {
+            "date": "2026-05-19",
+            "value": 2
+          },
+          {
+            "date": "2026-05-23",
+            "value": 2
+          },
+          {
+            "date": "2026-05-29",
+            "value": 3
+          },
+          {
+            "date": "2026-05-31",
+            "value": 2
+          },
+          {
+            "date": "2026-06-01",
+            "value": 3
+          },
+          {
+            "date": "2026-06-02",
+            "value": 2
+          },
+          {
+            "date": "2026-06-03",
+            "value": 3
+          },
+          {
+            "date": "2026-06-06",
+            "value": 2
+          },
+          {
+            "date": "2026-06-07",
+            "value": 2
+          },
+          {
+            "date": "2026-06-11",
+            "value": 2
+          },
+          {
+            "date": "2026-06-24",
+            "value": 2
+          },
+          {
+            "date": "2026-06-27",
+            "value": 2
+          },
+          {
+            "date": "2026-06-29",
+            "value": 2
+          },
+          {
+            "date": "2026-07-06",
+            "value": 3
+          },
+          {
+            "date": "2026-07-12",
+            "value": 2
+          },
+          {
+            "date": "2026-07-19",
+            "value": 2
+          },
+          {
+            "date": "2026-07-24",
+            "value": 2
+          },
+          {
+            "date": "2026-07-28",
+            "value": 3
+          },
+          {
+            "date": "2026-07-29",
+            "value": 2
+          },
+          {
+            "date": "2026-07-31",
+            "value": 2
+          },
+          {
+            "date": "2026-08-03",
+            "value": 2
+          },
+          {
+            "date": "2026-08-05",
+            "value": 3
+          },
+          {
+            "date": "2026-08-10",
+            "value": 2
+          },
+          {
+            "date": "2026-08-12",
+            "value": 2
+          },
+          {
+            "date": "2026-08-17",
+            "value": 4
+          },
+          {
+            "date": "2026-08-26",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 29,
+        "games": [
+          {
+            "date": "2026-04-03",
+            "value": 1
+          },
+          {
+            "date": "2026-04-05",
+            "value": 1
+          },
+          {
+            "date": "2026-04-06",
+            "value": 1
+          },
+          {
+            "date": "2026-04-11",
+            "value": 1
+          },
+          {
+            "date": "2026-04-12",
+            "value": 1
+          },
+          {
+            "date": "2026-04-26",
+            "value": 1
+          },
+          {
+            "date": "2026-05-05",
+            "value": 2
+          },
+          {
+            "date": "2026-05-12",
+            "value": 1
+          },
+          {
+            "date": "2026-05-20",
+            "value": 1
+          },
+          {
+            "date": "2026-05-27",
+            "value": 1
+          },
+          {
+            "date": "2026-05-29",
+            "value": 1
+          },
+          {
+            "date": "2026-06-06",
+            "value": 1
+          },
+          {
+            "date": "2026-06-10",
+            "value": 1
+          },
+          {
+            "date": "2026-06-11",
+            "value": 1
+          },
+          {
+            "date": "2026-06-13",
+            "value": 1
+          },
+          {
+            "date": "2026-06-16",
+            "value": 1
+          },
+          {
+            "date": "2026-06-20",
+            "value": 1
+          },
+          {
+            "date": "2026-06-22",
+            "value": 1
+          },
+          {
+            "date": "2026-06-29",
+            "value": 1
+          },
+          {
+            "date": "2026-07-06",
+            "value": 1
+          },
+          {
+            "date": "2026-07-07",
+            "value": 1
+          },
+          {
+            "date": "2026-07-10",
+            "value": 1
+          },
+          {
+            "date": "2026-07-12",
+            "value": 1
+          },
+          {
+            "date": "2026-07-28",
+            "value": 1
+          },
+          {
+            "date": "2026-07-31",
+            "value": 1
+          },
+          {
+            "date": "2026-08-05",
+            "value": 2
+          },
+          {
+            "date": "2026-08-12",
+            "value": 1
+          },
+          {
+            "date": "2026-08-17",
+            "value": 2
+          },
+          {
+            "date": "2026-08-18",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 7,
+        "games": [
+          {
+            "date": "2026-04-03",
+            "value": 4
+          },
+          {
+            "date": "2026-05-16",
+            "value": 5
+          },
+          {
+            "date": "2026-06-29",
+            "value": 3
+          },
+          {
+            "date": "2026-07-06",
+            "value": 4
+          },
+          {
+            "date": "2026-07-28",
+            "value": 3
+          },
+          {
+            "date": "2026-08-05",
+            "value": 3
+          },
+          {
+            "date": "2026-08-17",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-26",
+        "date_iso": "2026-08-26",
+        "opponent": "@ATL",
+        "AB": 5,
+        "R": 1,
+        "H": 2,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 1,
+        "TB": 3
+      },
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "@ATL",
+        "AB": 5,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 1,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 3
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "vsPIT",
+        "AB": 3,
+        "R": 1,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 1,
+        "SB": 1,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "vsPIT",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 2,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "vsPIT",
+        "AB": 3,
+        "R": 2,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 2,
+        "SO": 1,
+        "SB": 1,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "@COL",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "@COL",
+        "AB": 5,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 2,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "@COL",
+        "AB": 5,
+        "R": 4,
+        "H": 4,
+        "2B": 0,
+        "3B": 0,
+        "HR": 2,
+        "RBI": 3,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 10
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "vsMIL",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-15",
+        "date_iso": "2026-08-15",
+        "opponent": "vsMIL",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 1,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 3
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 9,
+      "splits": [
+        {
+          "season": 2018,
+          "total": 93.0
+        },
+        {
+          "season": 2019,
+          "total": 110.0
+        },
+        {
+          "season": 2020,
+          "total": 29.0
+        },
+        {
+          "season": 2021,
+          "total": 138.0
+        },
+        {
+          "season": 2022,
+          "total": 160.0
+        },
+        {
+          "season": 2023,
+          "total": 151.0
+        },
+        {
+          "season": 2024,
+          "total": 211.0
+        },
+        {
+          "season": 2025,
+          "total": 190.0
+        },
+        {
+          "season": 2026,
+          "total": 152.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 12196,
+      "hr_count": 30,
+      "games": 127,
+      "events": [
+        {
+          "date": "2026-04-03",
+          "distance_feet": 401,
+          "inning": 3,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-04-05",
+          "distance_feet": 438,
+          "inning": 3,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-04-06",
+          "distance_feet": 414,
+          "inning": 6,
+          "opponent": "@TOR"
+        },
+        {
+          "date": "2026-04-11",
+          "distance_feet": 390,
+          "inning": 1,
+          "opponent": "vsTEX"
+        },
+        {
+          "date": "2026-04-12",
+          "distance_feet": 374,
+          "inning": 1,
+          "opponent": "vsTEX"
+        },
+        {
+          "date": "2026-04-26",
+          "distance_feet": 382,
+          "inning": 7,
+          "opponent": "vsCHC"
+        },
+        {
+          "date": "2026-05-12",
+          "distance_feet": 398,
+          "inning": 3,
+          "opponent": "vsSF"
+        },
+        {
+          "date": "2026-05-20",
+          "distance_feet": 405,
+          "inning": 1,
+          "opponent": "@SD"
+        },
+        {
+          "date": "2026-05-27",
+          "distance_feet": 424,
+          "inning": 1,
+          "opponent": "vsCOL"
+        },
+        {
+          "date": "2026-05-29",
+          "distance_feet": 374,
+          "inning": 3,
+          "opponent": "vsPHI"
+        },
+        {
+          "date": "2026-06-06",
+          "distance_feet": 406,
+          "inning": 1,
+          "opponent": "vsLAA"
+        },
+        {
+          "date": "2026-06-10",
+          "distance_feet": 412,
+          "inning": 9,
+          "opponent": "@PIT"
+        },
+        {
+          "date": "2026-06-11",
+          "distance_feet": 391,
+          "inning": 3,
+          "opponent": "@PIT"
+        },
+        {
+          "date": "2026-06-13",
+          "distance_feet": 409,
+          "inning": 1,
+          "opponent": "@CHW"
+        },
+        {
+          "date": "2026-06-16",
+          "distance_feet": 427,
+          "inning": 6,
+          "opponent": "vsTB"
+        },
+        {
+          "date": "2026-06-20",
+          "distance_feet": 413,
+          "inning": 9,
+          "opponent": "vsBAL"
+        },
+        {
+          "date": "2026-06-22",
+          "distance_feet": 414,
+          "inning": 1,
+          "opponent": "@MIN"
+        },
+        {
+          "date": "2026-06-29",
+          "distance_feet": 432,
+          "inning": 6,
+          "opponent": "@ATH"
+        },
+        {
+          "date": "2026-07-06",
+          "distance_feet": 379,
+          "inning": 3,
+          "opponent": "vsCOL"
+        },
+        {
+          "date": "2026-07-07",
+          "distance_feet": 409,
+          "inning": 1,
+          "opponent": "vsCOL"
+        },
+        {
+          "date": "2026-07-10",
+          "distance_feet": 381,
+          "inning": 1,
+          "opponent": "vsARI"
+        },
+        {
+          "date": "2026-07-12",
+          "distance_feet": 437,
+          "inning": 1,
+          "opponent": "vsARI"
+        },
+        {
+          "date": "2026-07-28",
+          "distance_feet": 432,
+          "inning": 1,
+          "opponent": "vsSEA"
+        },
+        {
+          "date": "2026-07-31",
+          "distance_feet": 386,
+          "inning": 5,
+          "opponent": "vsBOS"
+        },
+        {
+          "date": "2026-08-05",
+          "distance_feet": 376,
+          "inning": 1,
+          "opponent": "@CHC"
+        },
+        {
+          "date": "2026-08-05",
+          "distance_feet": 367,
+          "inning": 8,
+          "opponent": "@CHC"
+        },
+        {
+          "date": "2026-08-12",
+          "distance_feet": 397,
+          "inning": 3,
+          "opponent": "vsKC"
+        },
+        {
+          "date": "2026-08-17",
+          "distance_feet": 428,
+          "inning": 5,
+          "opponent": "@COL"
+        },
+        {
+          "date": "2026-08-17",
+          "distance_feet": 452,
+          "inning": 6,
+          "opponent": "@COL"
+        },
+        {
+          "date": "2026-08-18",
+          "distance_feet": 448,
+          "inning": 3,
+          "opponent": "@COL"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 33,
+      "games_in_window": 127,
+      "matches": [
+        {
+          "game_id": "401814699",
+          "date": "2026-03-26",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Ohtani singled to right.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401814746",
+          "date": "2026-03-30",
+          "opponent": "vsCLE",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Ohtani singled to left.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401814905",
+          "date": "2026-04-11",
+          "opponent": "vsTEX",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 390,
+          "description": "Ohtani homered to right (390 feet).",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401814920",
+          "date": "2026-04-12",
+          "opponent": "vsTEX",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 374,
+          "description": "Ohtani homered to right center (374 feet).",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401814981",
+          "date": "2026-04-17",
+          "opponent": "@COL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Ohtani doubled to right.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815092",
+          "date": "2026-04-25",
+          "opponent": "vsCHC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Ohtani singled to left.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815117",
+          "date": "2026-04-27",
+          "opponent": "vsMIA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Ohtani singled to right.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815317",
+          "date": "2026-05-12",
+          "opponent": "vsSF",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Ohtani singled to right.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815387",
+          "date": "2026-05-17",
+          "opponent": "@LAA",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Ohtani singled to center.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815417",
+          "date": "2026-05-19",
+          "opponent": "@SD",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Ohtani doubled to left.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815432",
+          "date": "2026-05-20",
+          "opponent": "@SD",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 405,
+          "description": "Ohtani homered to center (405 feet).",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815496",
+          "date": "2026-05-25",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Ohtani doubled to right.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815526",
+          "date": "2026-05-27",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 424,
+          "description": "Ohtani homered to center (424 feet).",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815579",
+          "date": "2026-05-31",
+          "opponent": "vsPHI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Ohtani singled to right.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815602",
+          "date": "2026-06-02",
+          "opponent": "@ARI",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Ohtani doubled to right.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815617",
+          "date": "2026-06-03",
+          "opponent": "@ARI",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Ohtani reached on infield single to second.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815655",
+          "date": "2026-06-06",
+          "opponent": "vsLAA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Ohtani reached on infield single to second.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815743",
+          "date": "2026-06-13",
+          "opponent": "@CHW",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 409,
+          "description": "Ohtani homered to right (409 feet).",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815863",
+          "date": "2026-06-22",
+          "opponent": "@MIN",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 414,
+          "description": "Ohtani homered to right (414 feet).",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815920",
+          "date": "2026-06-26",
+          "opponent": "@SD",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Ohtani singled to right.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816001",
+          "date": "2026-07-02",
+          "opponent": "vsSD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Ohtani singled to right.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816066",
+          "date": "2026-07-07",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 409,
+          "description": "Ohtani homered to center (409 feet).",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816108",
+          "date": "2026-07-10",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 381,
+          "description": "Ohtani homered to left center (381 feet).",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816138",
+          "date": "2026-07-12",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 437,
+          "description": "Ohtani homered to center (437 feet).",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816240",
+          "date": "2026-07-24",
+          "opponent": "@NYM",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Ohtani singled to right.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816270",
+          "date": "2026-07-26",
+          "opponent": "@NYM",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Ohtani doubled to center.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816306",
+          "date": "2026-07-28",
+          "opponent": "vsSEA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 432,
+          "description": "Ohtani homered to center (432 feet).",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816357",
+          "date": "2026-08-01",
+          "opponent": "vsBOS",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Ohtani singled to center.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816372",
+          "date": "2026-08-02",
+          "opponent": "vsBOS",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Ohtani singled to right.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816379",
+          "date": "2026-08-03",
+          "opponent": "@CHC",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Ohtani singled to left.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816406",
+          "date": "2026-08-05",
+          "opponent": "@CHC",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 376,
+          "description": "Ohtani homered to right center (376 feet).",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816515",
+          "date": "2026-08-13",
+          "opponent": "vsMIL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Ohtani doubled to center.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816560",
+          "date": "2026-08-16",
+          "opponent": "vsMIL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Ohtani singled to right.",
+          "team": "LAD"
+        }
+      ]
+    }
+  }
+}

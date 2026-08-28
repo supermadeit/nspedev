@@ -1,0 +1,820 @@
+{
+  "player": "MookieBetts",
+  "player_id": "mookie-betts",
+  "team": "LAD",
+  "position": "SS",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 372,
+      "R": 50,
+      "H": 88,
+      "2B": 14,
+      "3B": 0,
+      "HR": 16,
+      "RBI": 47,
+      "BB": 30,
+      "SO": 45,
+      "SB": 1,
+      "TB": 150,
+      "avg": 0.237,
+      "obp": 0.296,
+      "slg": 0.403,
+      "ops": 0.7
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 20,
+        "games": [
+          {
+            "date": "2026-04-03",
+            "value": 2
+          },
+          {
+            "date": "2026-05-16",
+            "value": 2
+          },
+          {
+            "date": "2026-05-20",
+            "value": 2
+          },
+          {
+            "date": "2026-05-26",
+            "value": 3
+          },
+          {
+            "date": "2026-05-30",
+            "value": 3
+          },
+          {
+            "date": "2026-06-09",
+            "value": 2
+          },
+          {
+            "date": "2026-06-13",
+            "value": 3
+          },
+          {
+            "date": "2026-06-14",
+            "value": 2
+          },
+          {
+            "date": "2026-06-19",
+            "value": 3
+          },
+          {
+            "date": "2026-06-23",
+            "value": 2
+          },
+          {
+            "date": "2026-06-24",
+            "value": 3
+          },
+          {
+            "date": "2026-06-28",
+            "value": 2
+          },
+          {
+            "date": "2026-06-30",
+            "value": 3
+          },
+          {
+            "date": "2026-07-02",
+            "value": 2
+          },
+          {
+            "date": "2026-07-20",
+            "value": 4
+          },
+          {
+            "date": "2026-07-30",
+            "value": 2
+          },
+          {
+            "date": "2026-08-05",
+            "value": 4
+          },
+          {
+            "date": "2026-08-11",
+            "value": 3
+          },
+          {
+            "date": "2026-08-12",
+            "value": 2
+          },
+          {
+            "date": "2026-08-19",
+            "value": 3
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 14,
+        "games": [
+          {
+            "date": "2026-03-27",
+            "value": 1
+          },
+          {
+            "date": "2026-04-03",
+            "value": 1
+          },
+          {
+            "date": "2026-05-13",
+            "value": 1
+          },
+          {
+            "date": "2026-05-16",
+            "value": 1
+          },
+          {
+            "date": "2026-05-26",
+            "value": 2
+          },
+          {
+            "date": "2026-06-14",
+            "value": 1
+          },
+          {
+            "date": "2026-06-19",
+            "value": 1
+          },
+          {
+            "date": "2026-06-24",
+            "value": 1
+          },
+          {
+            "date": "2026-06-26",
+            "value": 1
+          },
+          {
+            "date": "2026-06-27",
+            "value": 1
+          },
+          {
+            "date": "2026-07-20",
+            "value": 2
+          },
+          {
+            "date": "2026-08-11",
+            "value": 1
+          },
+          {
+            "date": "2026-08-12",
+            "value": 1
+          },
+          {
+            "date": "2026-08-19",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 4,
+        "games": [
+          {
+            "date": "2026-03-27",
+            "value": 3
+          },
+          {
+            "date": "2026-05-26",
+            "value": 5
+          },
+          {
+            "date": "2026-06-27",
+            "value": 3
+          },
+          {
+            "date": "2026-07-20",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-26",
+        "date_iso": "2026-08-26",
+        "opponent": "@ATL",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 2,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "@ATL",
+        "AB": 5,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "vsPIT",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "vsPIT",
+        "AB": 3,
+        "R": 1,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "vsPIT",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 2,
+        "BB": 2,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "@COL",
+        "AB": 5,
+        "R": 2,
+        "H": 3,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 2,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 6
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "@COL",
+        "AB": 5,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "@COL",
+        "AB": 5,
+        "R": 0,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 2,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "vsMIL",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-15",
+        "date_iso": "2026-08-15",
+        "opponent": "vsMIL",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 12,
+      "splits": [
+        {
+          "season": 2014,
+          "total": 55.0
+        },
+        {
+          "season": 2015,
+          "total": 178.0
+        },
+        {
+          "season": 2016,
+          "total": 215.0
+        },
+        {
+          "season": 2017,
+          "total": 171.0
+        },
+        {
+          "season": 2018,
+          "total": 191.0
+        },
+        {
+          "season": 2019,
+          "total": 176.0
+        },
+        {
+          "season": 2020,
+          "total": 85.0
+        },
+        {
+          "season": 2021,
+          "total": 138.0
+        },
+        {
+          "season": 2022,
+          "total": 156.0
+        },
+        {
+          "season": 2023,
+          "total": 179.0
+        },
+        {
+          "season": 2024,
+          "total": 148.0
+        },
+        {
+          "season": 2026,
+          "total": 88.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 6224,
+      "hr_count": 16,
+      "games": 96,
+      "events": [
+        {
+          "date": "2026-03-27",
+          "distance_feet": 388,
+          "inning": 3,
+          "opponent": "vsARI"
+        },
+        {
+          "date": "2026-04-03",
+          "distance_feet": 380,
+          "inning": 3,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-05-13",
+          "distance_feet": 414,
+          "inning": 3,
+          "opponent": "vsSF"
+        },
+        {
+          "date": "2026-05-16",
+          "distance_feet": 366,
+          "inning": 8,
+          "opponent": "@LAA"
+        },
+        {
+          "date": "2026-05-26",
+          "distance_feet": 404,
+          "inning": 1,
+          "opponent": "vsCOL"
+        },
+        {
+          "date": "2026-05-26",
+          "distance_feet": 377,
+          "inning": 6,
+          "opponent": "vsCOL"
+        },
+        {
+          "date": "2026-06-14",
+          "distance_feet": 369,
+          "inning": 8,
+          "opponent": "@CHW"
+        },
+        {
+          "date": "2026-06-19",
+          "distance_feet": 378,
+          "inning": 9,
+          "opponent": "vsBAL"
+        },
+        {
+          "date": "2026-06-24",
+          "distance_feet": 399,
+          "inning": 2,
+          "opponent": "@MIN"
+        },
+        {
+          "date": "2026-06-26",
+          "distance_feet": 360,
+          "inning": 2,
+          "opponent": "@SD"
+        },
+        {
+          "date": "2026-06-27",
+          "distance_feet": 402,
+          "inning": 6,
+          "opponent": "@SD"
+        },
+        {
+          "date": "2026-07-20",
+          "distance_feet": 401,
+          "inning": 7,
+          "opponent": "@PHI"
+        },
+        {
+          "date": "2026-07-20",
+          "distance_feet": 421,
+          "inning": 9,
+          "opponent": "@PHI"
+        },
+        {
+          "date": "2026-08-11",
+          "distance_feet": 378,
+          "inning": 2,
+          "opponent": "vsKC"
+        },
+        {
+          "date": "2026-08-12",
+          "distance_feet": 412,
+          "inning": 2,
+          "opponent": "vsKC"
+        },
+        {
+          "date": "2026-08-19",
+          "distance_feet": 375,
+          "inning": 4,
+          "opponent": "@COL"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 25,
+      "games_in_window": 96,
+      "matches": [
+        {
+          "game_id": "401815372",
+          "date": "2026-05-16",
+          "opponent": "@LAA",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Betts singled to left, Ohtani to third.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815402",
+          "date": "2026-05-18",
+          "opponent": "@SD",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Betts singled to left.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815511",
+          "date": "2026-05-26",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 404,
+          "description": "Betts homered to center (404 feet), Freeman scored.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815564",
+          "date": "2026-05-30",
+          "opponent": "vsPHI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Betts singled to left, Freeman to second.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815587",
+          "date": "2026-06-01",
+          "opponent": "@ARI",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Betts singled to right.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815655",
+          "date": "2026-06-06",
+          "opponent": "vsLAA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Betts singled to center, Freeman to second.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815683",
+          "date": "2026-06-09",
+          "opponent": "@PIT",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Betts doubled to center.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815712",
+          "date": "2026-06-11",
+          "opponent": "@PIT",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Betts singled to center, Freeman to third.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815743",
+          "date": "2026-06-13",
+          "opponent": "@CHW",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Betts reached on infield single to second.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815773",
+          "date": "2026-06-15",
+          "opponent": "vsTB",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Betts doubled to left.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815823",
+          "date": "2026-06-19",
+          "opponent": "vsBAL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Betts doubled to right, Tucker to third.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815892",
+          "date": "2026-06-24",
+          "opponent": "@MIN",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 399,
+          "description": "Betts homered to left center (399 feet).",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815920",
+          "date": "2026-06-26",
+          "opponent": "@SD",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 360,
+          "description": "Betts homered to left (360 feet).",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815977",
+          "date": "2026-06-30",
+          "opponent": "@ATH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Betts singled to left, Pages scored, Freeman to third.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816028",
+          "date": "2026-07-04",
+          "opponent": "vsSD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Betts doubled to center, Freeman thrown out at home.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816108",
+          "date": "2026-07-10",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Betts singled to left.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816330",
+          "date": "2026-07-30",
+          "opponent": "vsSEA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Betts doubled to left, Edman scored and Pages scored.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816406",
+          "date": "2026-08-05",
+          "opponent": "@CHC",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Betts singled to left.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816475",
+          "date": "2026-08-10",
+          "opponent": "vsKC",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Betts doubled to left.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816490",
+          "date": "2026-08-11",
+          "opponent": "vsKC",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 378,
+          "description": "Betts homered to left (378 feet).",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816505",
+          "date": "2026-08-12",
+          "opponent": "vsKC",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 412,
+          "description": "Betts homered to left center (412 feet).",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816530",
+          "date": "2026-08-14",
+          "opponent": "vsMIL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Betts singled to left, Pages scored, T. Hern\u00e1ndez to second.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816560",
+          "date": "2026-08-16",
+          "opponent": "vsMIL",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Betts singled to right.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816570",
+          "date": "2026-08-17",
+          "opponent": "@COL",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Betts doubled to center, Muncy scored.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816600",
+          "date": "2026-08-19",
+          "opponent": "@COL",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Betts reached on infield single to shortstop.",
+          "team": "LAD"
+        }
+      ]
+    }
+  }
+}

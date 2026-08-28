@@ -1,0 +1,836 @@
+{
+  "player": "BriceTurang",
+  "player_id": "brice-turang",
+  "team": "MIL",
+  "position": "2B",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 482,
+      "R": 79,
+      "H": 124,
+      "2B": 28,
+      "3B": 3,
+      "HR": 17,
+      "RBI": 78,
+      "BB": 72,
+      "SO": 138,
+      "SB": 18,
+      "TB": 209,
+      "avg": 0.257,
+      "obp": 0.353,
+      "slg": 0.434,
+      "ops": 0.786
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 31,
+        "games": [
+          {
+            "date": "2026-03-26",
+            "value": 2
+          },
+          {
+            "date": "2026-03-28",
+            "value": 3
+          },
+          {
+            "date": "2026-04-12",
+            "value": 3
+          },
+          {
+            "date": "2026-04-14",
+            "value": 3
+          },
+          {
+            "date": "2026-04-18",
+            "value": 2
+          },
+          {
+            "date": "2026-04-21",
+            "value": 2
+          },
+          {
+            "date": "2026-04-28",
+            "value": 2
+          },
+          {
+            "date": "2026-04-29",
+            "value": 2
+          },
+          {
+            "date": "2026-04-30",
+            "value": 2
+          },
+          {
+            "date": "2026-05-04",
+            "value": 3
+          },
+          {
+            "date": "2026-05-10",
+            "value": 2
+          },
+          {
+            "date": "2026-05-12",
+            "value": 2
+          },
+          {
+            "date": "2026-05-19",
+            "value": 3
+          },
+          {
+            "date": "2026-06-01",
+            "value": 2
+          },
+          {
+            "date": "2026-06-02",
+            "value": 2
+          },
+          {
+            "date": "2026-06-04",
+            "value": 2
+          },
+          {
+            "date": "2026-06-06",
+            "value": 2
+          },
+          {
+            "date": "2026-06-16",
+            "value": 2
+          },
+          {
+            "date": "2026-06-19",
+            "value": 2
+          },
+          {
+            "date": "2026-06-22",
+            "value": 2
+          },
+          {
+            "date": "2026-06-28",
+            "value": 3
+          },
+          {
+            "date": "2026-07-03",
+            "value": 3
+          },
+          {
+            "date": "2026-07-04",
+            "value": 3
+          },
+          {
+            "date": "2026-07-07",
+            "value": 2
+          },
+          {
+            "date": "2026-07-09",
+            "value": 2
+          },
+          {
+            "date": "2026-07-24",
+            "value": 3
+          },
+          {
+            "date": "2026-07-25",
+            "value": 2
+          },
+          {
+            "date": "2026-07-28",
+            "value": 3
+          },
+          {
+            "date": "2026-07-29",
+            "value": 2
+          },
+          {
+            "date": "2026-08-07",
+            "value": 2
+          },
+          {
+            "date": "2026-08-08",
+            "value": 3
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 15,
+        "games": [
+          {
+            "date": "2026-04-01",
+            "value": 1
+          },
+          {
+            "date": "2026-04-12",
+            "value": 2
+          },
+          {
+            "date": "2026-04-18",
+            "value": 1
+          },
+          {
+            "date": "2026-05-04",
+            "value": 1
+          },
+          {
+            "date": "2026-05-10",
+            "value": 1
+          },
+          {
+            "date": "2026-05-19",
+            "value": 1
+          },
+          {
+            "date": "2026-06-06",
+            "value": 2
+          },
+          {
+            "date": "2026-06-08",
+            "value": 1
+          },
+          {
+            "date": "2026-06-16",
+            "value": 1
+          },
+          {
+            "date": "2026-06-29",
+            "value": 1
+          },
+          {
+            "date": "2026-07-09",
+            "value": 1
+          },
+          {
+            "date": "2026-07-12",
+            "value": 1
+          },
+          {
+            "date": "2026-07-24",
+            "value": 1
+          },
+          {
+            "date": "2026-07-31",
+            "value": 1
+          },
+          {
+            "date": "2026-08-26",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 4,
+        "games": [
+          {
+            "date": "2026-04-18",
+            "value": 3
+          },
+          {
+            "date": "2026-04-21",
+            "value": 4
+          },
+          {
+            "date": "2026-06-08",
+            "value": 3
+          },
+          {
+            "date": "2026-08-26",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-26",
+        "date_iso": "2026-08-26",
+        "opponent": "@NYM",
+        "AB": 3,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 3,
+        "BB": 2,
+        "SO": 0,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "@NYM",
+        "AB": 5,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "vsATL",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "vsATL",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "vsATL",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-20",
+        "date_iso": "2026-08-20",
+        "opponent": "vsSEA",
+        "AB": 5,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "vsSEA",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 1,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "vsSEA",
+        "AB": 2,
+        "R": 2,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 2,
+        "SO": 0,
+        "SB": 1,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-12",
+        "date_iso": "2026-08-12",
+        "opponent": "@SD",
+        "AB": 5,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 1,
+        "SO": 3,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-11",
+        "date_iso": "2026-08-11",
+        "opponent": "@SD",
+        "AB": 5,
+        "R": 0,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 2
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 4,
+      "splits": [
+        {
+          "season": 2023,
+          "total": 88.0
+        },
+        {
+          "season": 2024,
+          "total": 147.0
+        },
+        {
+          "season": 2025,
+          "total": 172.0
+        },
+        {
+          "season": 2026,
+          "total": 124.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 6519,
+      "hr_count": 16,
+      "games": 123,
+      "events": [
+        {
+          "date": "2026-04-01",
+          "distance_feet": 392,
+          "inning": 3,
+          "opponent": "vsTB"
+        },
+        {
+          "date": "2026-04-12",
+          "distance_feet": 378,
+          "inning": 3,
+          "opponent": "vsWSH"
+        },
+        {
+          "date": "2026-04-12",
+          "distance_feet": 433,
+          "inning": 5,
+          "opponent": "vsWSH"
+        },
+        {
+          "date": "2026-04-18",
+          "distance_feet": 402,
+          "inning": 5,
+          "opponent": "@MIA"
+        },
+        {
+          "date": "2026-05-04",
+          "distance_feet": 414,
+          "inning": 9,
+          "opponent": "@STL"
+        },
+        {
+          "date": "2026-05-10",
+          "distance_feet": 411,
+          "inning": 9,
+          "opponent": "vsNYY"
+        },
+        {
+          "date": "2026-05-19",
+          "distance_feet": 370,
+          "inning": 8,
+          "opponent": "@CHC"
+        },
+        {
+          "date": "2026-06-06",
+          "distance_feet": 444,
+          "inning": 1,
+          "opponent": "@COL"
+        },
+        {
+          "date": "2026-06-06",
+          "distance_feet": 367,
+          "inning": 8,
+          "opponent": "@COL"
+        },
+        {
+          "date": "2026-06-08",
+          "distance_feet": 443,
+          "inning": 3,
+          "opponent": "@ATH"
+        },
+        {
+          "date": "2026-06-16",
+          "distance_feet": 409,
+          "inning": 4,
+          "opponent": "vsCLE"
+        },
+        {
+          "date": "2026-06-29",
+          "distance_feet": 418,
+          "inning": 7,
+          "opponent": "vsCIN"
+        },
+        {
+          "date": "2026-07-09",
+          "distance_feet": 419,
+          "inning": 7,
+          "opponent": "@STL"
+        },
+        {
+          "date": "2026-07-12",
+          "distance_feet": 387,
+          "inning": 8,
+          "opponent": "@PIT"
+        },
+        {
+          "date": "2026-07-24",
+          "distance_feet": 434,
+          "inning": 6,
+          "opponent": "vsCOL"
+        },
+        {
+          "date": "2026-07-31",
+          "distance_feet": 398,
+          "inning": 5,
+          "opponent": "@LAA"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 25,
+      "games_in_window": 123,
+      "matches": [
+        {
+          "game_id": "401814696",
+          "date": "2026-03-26",
+          "opponent": "vsCHW",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Turang doubled to center.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401814715",
+          "date": "2026-03-28",
+          "opponent": "vsCHW",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Turang doubled to left.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401814917",
+          "date": "2026-04-12",
+          "opponent": "vsWSH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turang singled to center.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401815127",
+          "date": "2026-04-28",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turang singled to left, Contreras to second.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401815142",
+          "date": "2026-04-29",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Turang doubled to left.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401815238",
+          "date": "2026-05-06",
+          "opponent": "@STL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turang singled to right.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401815427",
+          "date": "2026-05-20",
+          "opponent": "@CHC",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turang singled to center.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401815450",
+          "date": "2026-05-22",
+          "opponent": "vsLAD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turang singled to center, Chourio to second.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401815465",
+          "date": "2026-05-23",
+          "opponent": "vsLAD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Turang doubled to left, Chourio scored.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401815584",
+          "date": "2026-06-01",
+          "opponent": "vsSF",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Turang doubled to left.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401815626",
+          "date": "2026-06-04",
+          "opponent": "vsSF",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turang reached on infield single to shortstop, Chourio to second, Chourio safe at third on throwing error by shortstop Adames.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401815654",
+          "date": "2026-06-06",
+          "opponent": "@COL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 444,
+          "description": "Turang homered to center (444 feet).",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401815780",
+          "date": "2026-06-16",
+          "opponent": "vsCLE",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turang reached on infield single to second.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401815986",
+          "date": "2026-07-01",
+          "opponent": "vsCIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Turang doubled to right, Chourio to third.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401816027",
+          "date": "2026-07-04",
+          "opponent": "@ARI",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Turang doubled to left.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401816042",
+          "date": "2026-07-05",
+          "opponent": "@ARI",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turang singled to right.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401816064",
+          "date": "2026-07-07",
+          "opponent": "@STL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Turang doubled to right.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401816195",
+          "date": "2026-07-20",
+          "opponent": "vsNYM",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Turang doubled to right, Chourio scored.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401816246",
+          "date": "2026-07-24",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turang singled to center.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401816261",
+          "date": "2026-07-25",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turang reached on bunt single to pitcher, Chourio to second.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401816276",
+          "date": "2026-07-26",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turang reached on bunt single to pitcher, Chourio scored on throwing error by pitcher Freeland.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401816305",
+          "date": "2026-07-28",
+          "opponent": "@SF",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turang reached on infield single to first.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401816320",
+          "date": "2026-07-29",
+          "opponent": "@SF",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turang reached on bunt single to third.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401816449",
+          "date": "2026-08-08",
+          "opponent": "vsMIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Turang doubled to right.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401816608",
+          "date": "2026-08-20",
+          "opponent": "vsSEA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turang singled to left.",
+          "team": "MIL"
+        }
+      ]
+    }
+  }
+}

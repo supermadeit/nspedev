@@ -1,0 +1,840 @@
+{
+  "player": "JonathanAranda",
+  "player_id": "jonathan-aranda",
+  "team": "TB",
+  "position": "1B",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 487,
+      "R": 61,
+      "H": 135,
+      "2B": 20,
+      "3B": 0,
+      "HR": 16,
+      "RBI": 78,
+      "BB": 59,
+      "SO": 132,
+      "SB": 0,
+      "TB": 203,
+      "avg": 0.277,
+      "obp": 0.36,
+      "slg": 0.417,
+      "ops": 0.777
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 36,
+        "games": [
+          {
+            "date": "2026-03-26",
+            "value": 2
+          },
+          {
+            "date": "2026-03-29",
+            "value": 3
+          },
+          {
+            "date": "2026-04-07",
+            "value": 2
+          },
+          {
+            "date": "2026-04-08",
+            "value": 2
+          },
+          {
+            "date": "2026-04-18",
+            "value": 2
+          },
+          {
+            "date": "2026-04-24",
+            "value": 2
+          },
+          {
+            "date": "2026-05-02",
+            "value": 2
+          },
+          {
+            "date": "2026-05-03",
+            "value": 4
+          },
+          {
+            "date": "2026-05-04",
+            "value": 3
+          },
+          {
+            "date": "2026-05-05",
+            "value": 2
+          },
+          {
+            "date": "2026-05-11",
+            "value": 2
+          },
+          {
+            "date": "2026-05-12",
+            "value": 2
+          },
+          {
+            "date": "2026-05-25",
+            "value": 2
+          },
+          {
+            "date": "2026-05-26",
+            "value": 3
+          },
+          {
+            "date": "2026-05-27",
+            "value": 2
+          },
+          {
+            "date": "2026-05-29",
+            "value": 2
+          },
+          {
+            "date": "2026-06-12",
+            "value": 2
+          },
+          {
+            "date": "2026-06-14",
+            "value": 2
+          },
+          {
+            "date": "2026-06-15",
+            "value": 2
+          },
+          {
+            "date": "2026-06-17",
+            "value": 2
+          },
+          {
+            "date": "2026-06-23",
+            "value": 2
+          },
+          {
+            "date": "2026-06-24",
+            "value": 2
+          },
+          {
+            "date": "2026-06-25",
+            "value": 3
+          },
+          {
+            "date": "2026-06-30",
+            "value": 2
+          },
+          {
+            "date": "2026-07-01",
+            "value": 2
+          },
+          {
+            "date": "2026-07-08",
+            "value": 2
+          },
+          {
+            "date": "2026-07-09",
+            "value": 2
+          },
+          {
+            "date": "2026-07-10",
+            "value": 3
+          },
+          {
+            "date": "2026-07-11",
+            "value": 3
+          },
+          {
+            "date": "2026-07-21",
+            "value": 2
+          },
+          {
+            "date": "2026-07-28",
+            "value": 2
+          },
+          {
+            "date": "2026-08-03",
+            "value": 4
+          },
+          {
+            "date": "2026-08-07",
+            "value": 2
+          },
+          {
+            "date": "2026-08-10",
+            "value": 2
+          },
+          {
+            "date": "2026-08-15",
+            "value": 3
+          },
+          {
+            "date": "2026-08-17",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 15,
+        "games": [
+          {
+            "date": "2026-03-26",
+            "value": 1
+          },
+          {
+            "date": "2026-03-31",
+            "value": 1
+          },
+          {
+            "date": "2026-04-06",
+            "value": 1
+          },
+          {
+            "date": "2026-04-21",
+            "value": 1
+          },
+          {
+            "date": "2026-04-24",
+            "value": 2
+          },
+          {
+            "date": "2026-04-27",
+            "value": 1
+          },
+          {
+            "date": "2026-05-11",
+            "value": 1
+          },
+          {
+            "date": "2026-05-25",
+            "value": 1
+          },
+          {
+            "date": "2026-05-29",
+            "value": 1
+          },
+          {
+            "date": "2026-05-31",
+            "value": 1
+          },
+          {
+            "date": "2026-06-19",
+            "value": 1
+          },
+          {
+            "date": "2026-06-27",
+            "value": 1
+          },
+          {
+            "date": "2026-07-12",
+            "value": 1
+          },
+          {
+            "date": "2026-08-07",
+            "value": 1
+          },
+          {
+            "date": "2026-08-24",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 6,
+        "games": [
+          {
+            "date": "2026-04-21",
+            "value": 3
+          },
+          {
+            "date": "2026-05-11",
+            "value": 3
+          },
+          {
+            "date": "2026-06-12",
+            "value": 3
+          },
+          {
+            "date": "2026-06-19",
+            "value": 3
+          },
+          {
+            "date": "2026-07-08",
+            "value": 3
+          },
+          {
+            "date": "2026-08-04",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "@DET",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-24",
+        "date_iso": "2026-08-24",
+        "opponent": "@DET",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 2,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "@BAL",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "@BAL",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "@BAL",
+        "AB": 1,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-20",
+        "date_iso": "2026-08-20",
+        "opponent": "vsTOR",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "vsTOR",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "vsTOR",
+        "AB": 5,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "vsBAL",
+        "AB": 5,
+        "R": 1,
+        "H": 2,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 3
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "vsBAL",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 3,
+        "SB": 0,
+        "TB": 0
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 1,
+      "splits": [
+        {
+          "season": 2026,
+          "total": 135.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 6171,
+      "hr_count": 16,
+      "games": 129,
+      "events": [
+        {
+          "date": "2026-03-26",
+          "distance_feet": 405,
+          "inning": 5,
+          "opponent": "@STL"
+        },
+        {
+          "date": "2026-03-31",
+          "distance_feet": 388,
+          "inning": 1,
+          "opponent": "@MIL"
+        },
+        {
+          "date": "2026-04-06",
+          "distance_feet": 403,
+          "inning": 7,
+          "opponent": "vsCHC"
+        },
+        {
+          "date": "2026-04-21",
+          "distance_feet": 366,
+          "inning": 6,
+          "opponent": "vsCIN"
+        },
+        {
+          "date": "2026-04-24",
+          "distance_feet": 402,
+          "inning": 4,
+          "opponent": "vsMIN"
+        },
+        {
+          "date": "2026-04-24",
+          "distance_feet": 414,
+          "inning": 6,
+          "opponent": "vsMIN"
+        },
+        {
+          "date": "2026-04-27",
+          "distance_feet": 373,
+          "inning": 8,
+          "opponent": "@CLE"
+        },
+        {
+          "date": "2026-05-11",
+          "distance_feet": 415,
+          "inning": 5,
+          "opponent": "@TOR"
+        },
+        {
+          "date": "2026-05-25",
+          "distance_feet": 371,
+          "inning": 6,
+          "opponent": "@BAL"
+        },
+        {
+          "date": "2026-05-29",
+          "distance_feet": 410,
+          "inning": 7,
+          "opponent": "vsLAA"
+        },
+        {
+          "date": "2026-05-31",
+          "distance_feet": 409,
+          "inning": 1,
+          "opponent": "vsLAA"
+        },
+        {
+          "date": "2026-06-19",
+          "distance_feet": 334,
+          "inning": 3,
+          "opponent": "vsWSH"
+        },
+        {
+          "date": "2026-06-27",
+          "distance_feet": 391,
+          "inning": 5,
+          "opponent": "vsARI"
+        },
+        {
+          "date": "2026-07-12",
+          "distance_feet": 337,
+          "inning": 8,
+          "opponent": "vsSEA"
+        },
+        {
+          "date": "2026-08-07",
+          "distance_feet": 373,
+          "inning": 3,
+          "opponent": "@SEA"
+        },
+        {
+          "date": "2026-08-24",
+          "distance_feet": 380,
+          "inning": 6,
+          "opponent": "@DET"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 24,
+      "games_in_window": 129,
+      "matches": [
+        {
+          "game_id": "401814759",
+          "date": "2026-03-31",
+          "opponent": "@MIL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 388,
+          "description": "Aranda homered to left center (388 feet).",
+          "team": "TB"
+        },
+        {
+          "game_id": "401814857",
+          "date": "2026-04-08",
+          "opponent": "vsCHC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Aranda singled to center.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815192",
+          "date": "2026-05-03",
+          "opponent": "vsSF",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Aranda reached on infield single to third, Caminero to second.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815205",
+          "date": "2026-05-04",
+          "opponent": "vsTOR",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Aranda reached on infield single to second.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815258",
+          "date": "2026-05-08",
+          "opponent": "@BOS",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Aranda reached on infield single to shortstop.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815310",
+          "date": "2026-05-12",
+          "opponent": "@TOR",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Aranda singled to center.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815489",
+          "date": "2026-05-25",
+          "opponent": "@BAL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Aranda doubled to center.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815504",
+          "date": "2026-05-26",
+          "opponent": "@BAL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Aranda singled to right, Simpson scored.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815519",
+          "date": "2026-05-27",
+          "opponent": "@BAL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Aranda singled to right.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815550",
+          "date": "2026-05-30",
+          "opponent": "vsLAA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Aranda singled to center.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815565",
+          "date": "2026-05-31",
+          "opponent": "vsLAA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 409,
+          "description": "Aranda homered to right (409 feet).",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815763",
+          "date": "2026-06-14",
+          "opponent": "@LAA",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Aranda doubled to center.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815830",
+          "date": "2026-06-20",
+          "opponent": "vsWSH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Aranda singled to right, D\u00edaz to second.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815856",
+          "date": "2026-06-22",
+          "opponent": "vsKC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Aranda singled to left, D\u00edaz to second.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815869",
+          "date": "2026-06-23",
+          "opponent": "vsKC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Aranda singled to left, D\u00edaz to second.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815884",
+          "date": "2026-06-24",
+          "opponent": "vsKC",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Aranda doubled to center.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815899",
+          "date": "2026-06-25",
+          "opponent": "vsKC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Aranda singled to left.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815989",
+          "date": "2026-07-01",
+          "opponent": "@KC",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Aranda singled to center.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816103",
+          "date": "2026-07-10",
+          "opponent": "vsSEA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Aranda doubled to center.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816312",
+          "date": "2026-07-29",
+          "opponent": "vsTEX",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Aranda doubled to center.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816383",
+          "date": "2026-08-03",
+          "opponent": "@COL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Aranda singled to center.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816411",
+          "date": "2026-08-05",
+          "opponent": "@COL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Aranda singled to left, Mesa Jr. scored.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816468",
+          "date": "2026-08-09",
+          "opponent": "@SEA",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Aranda singled to center, D\u00edaz to second.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816533",
+          "date": "2026-08-15",
+          "opponent": "vsBAL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Aranda singled to right.",
+          "team": "TB"
+        }
+      ]
+    }
+  }
+}

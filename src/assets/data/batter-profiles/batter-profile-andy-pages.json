@@ -1,0 +1,866 @@
+{
+  "player": "AndyPages",
+  "player_id": "andy-pages",
+  "team": "LAD",
+  "position": "CF",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 493,
+      "R": 72,
+      "H": 134,
+      "2B": 25,
+      "3B": 2,
+      "HR": 21,
+      "RBI": 80,
+      "BB": 45,
+      "SO": 107,
+      "SB": 12,
+      "TB": 226,
+      "avg": 0.272,
+      "obp": 0.338,
+      "slg": 0.458,
+      "ops": 0.797
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 31,
+        "games": [
+          {
+            "date": "2026-03-26",
+            "value": 2
+          },
+          {
+            "date": "2026-03-30",
+            "value": 2
+          },
+          {
+            "date": "2026-03-31",
+            "value": 2
+          },
+          {
+            "date": "2026-04-01",
+            "value": 3
+          },
+          {
+            "date": "2026-04-03",
+            "value": 3
+          },
+          {
+            "date": "2026-04-04",
+            "value": 3
+          },
+          {
+            "date": "2026-04-06",
+            "value": 2
+          },
+          {
+            "date": "2026-04-10",
+            "value": 3
+          },
+          {
+            "date": "2026-04-15",
+            "value": 2
+          },
+          {
+            "date": "2026-04-25",
+            "value": 2
+          },
+          {
+            "date": "2026-05-05",
+            "value": 3
+          },
+          {
+            "date": "2026-05-06",
+            "value": 3
+          },
+          {
+            "date": "2026-05-09",
+            "value": 2
+          },
+          {
+            "date": "2026-05-25",
+            "value": 2
+          },
+          {
+            "date": "2026-05-26",
+            "value": 4
+          },
+          {
+            "date": "2026-05-27",
+            "value": 2
+          },
+          {
+            "date": "2026-06-11",
+            "value": 2
+          },
+          {
+            "date": "2026-06-17",
+            "value": 2
+          },
+          {
+            "date": "2026-06-23",
+            "value": 3
+          },
+          {
+            "date": "2026-06-27",
+            "value": 2
+          },
+          {
+            "date": "2026-06-29",
+            "value": 2
+          },
+          {
+            "date": "2026-06-30",
+            "value": 2
+          },
+          {
+            "date": "2026-07-10",
+            "value": 3
+          },
+          {
+            "date": "2026-07-11",
+            "value": 2
+          },
+          {
+            "date": "2026-07-29",
+            "value": 3
+          },
+          {
+            "date": "2026-07-30",
+            "value": 2
+          },
+          {
+            "date": "2026-08-02",
+            "value": 2
+          },
+          {
+            "date": "2026-08-08",
+            "value": 2
+          },
+          {
+            "date": "2026-08-09",
+            "value": 2
+          },
+          {
+            "date": "2026-08-14",
+            "value": 3
+          },
+          {
+            "date": "2026-08-17",
+            "value": 3
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 19,
+        "games": [
+          {
+            "date": "2026-03-26",
+            "value": 1
+          },
+          {
+            "date": "2026-04-03",
+            "value": 1
+          },
+          {
+            "date": "2026-04-04",
+            "value": 1
+          },
+          {
+            "date": "2026-04-10",
+            "value": 1
+          },
+          {
+            "date": "2026-04-13",
+            "value": 1
+          },
+          {
+            "date": "2026-05-06",
+            "value": 3
+          },
+          {
+            "date": "2026-05-09",
+            "value": 1
+          },
+          {
+            "date": "2026-05-15",
+            "value": 1
+          },
+          {
+            "date": "2026-05-24",
+            "value": 1
+          },
+          {
+            "date": "2026-05-26",
+            "value": 1
+          },
+          {
+            "date": "2026-05-27",
+            "value": 1
+          },
+          {
+            "date": "2026-06-06",
+            "value": 1
+          },
+          {
+            "date": "2026-06-09",
+            "value": 1
+          },
+          {
+            "date": "2026-06-29",
+            "value": 1
+          },
+          {
+            "date": "2026-07-10",
+            "value": 1
+          },
+          {
+            "date": "2026-07-29",
+            "value": 1
+          },
+          {
+            "date": "2026-08-07",
+            "value": 1
+          },
+          {
+            "date": "2026-08-14",
+            "value": 1
+          },
+          {
+            "date": "2026-08-16",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 10,
+        "games": [
+          {
+            "date": "2026-03-26",
+            "value": 3
+          },
+          {
+            "date": "2026-04-04",
+            "value": 3
+          },
+          {
+            "date": "2026-04-10",
+            "value": 4
+          },
+          {
+            "date": "2026-04-13",
+            "value": 3
+          },
+          {
+            "date": "2026-04-25",
+            "value": 3
+          },
+          {
+            "date": "2026-05-06",
+            "value": 6
+          },
+          {
+            "date": "2026-05-15",
+            "value": 3
+          },
+          {
+            "date": "2026-05-26",
+            "value": 3
+          },
+          {
+            "date": "2026-06-09",
+            "value": 3
+          },
+          {
+            "date": "2026-08-02",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "vsPIT",
+        "AB": 1,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "@COL",
+        "AB": 5,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "@COL",
+        "AB": 5,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "@COL",
+        "AB": 4,
+        "R": 2,
+        "H": 3,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 2,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "vsMIL",
+        "AB": 3,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 1,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-15",
+        "date_iso": "2026-08-15",
+        "opponent": "vsMIL",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-14",
+        "date_iso": "2026-08-14",
+        "opponent": "vsMIL",
+        "AB": 4,
+        "R": 2,
+        "H": 3,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 0,
+        "SB": 1,
+        "TB": 6
+      },
+      {
+        "date": "2026-08-13",
+        "date_iso": "2026-08-13",
+        "opponent": "vsMIL",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-12",
+        "date_iso": "2026-08-12",
+        "opponent": "vsKC",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-11",
+        "date_iso": "2026-08-11",
+        "opponent": "vsKC",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 3,
+      "splits": [
+        {
+          "season": 2024,
+          "total": 104.0
+        },
+        {
+          "season": 2025,
+          "total": 162.0
+        },
+        {
+          "season": 2026,
+          "total": 134.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 8195,
+      "hr_count": 21,
+      "games": 128,
+      "events": [
+        {
+          "date": "2026-03-26",
+          "distance_feet": 400,
+          "inning": 5,
+          "opponent": "vsARI"
+        },
+        {
+          "date": "2026-04-03",
+          "distance_feet": 412,
+          "inning": 4,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-04-04",
+          "distance_feet": 387,
+          "inning": 5,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-04-10",
+          "distance_feet": 396,
+          "inning": 8,
+          "opponent": "vsTEX"
+        },
+        {
+          "date": "2026-04-13",
+          "distance_feet": 364,
+          "inning": 3,
+          "opponent": "vsNYM"
+        },
+        {
+          "date": "2026-05-06",
+          "distance_feet": 393,
+          "inning": 3,
+          "opponent": "@HOU"
+        },
+        {
+          "date": "2026-05-06",
+          "distance_feet": 370,
+          "inning": 5,
+          "opponent": "@HOU"
+        },
+        {
+          "date": "2026-05-06",
+          "distance_feet": 363,
+          "inning": 9,
+          "opponent": "@HOU"
+        },
+        {
+          "date": "2026-05-09",
+          "distance_feet": 397,
+          "inning": 9,
+          "opponent": "vsATL"
+        },
+        {
+          "date": "2026-05-15",
+          "distance_feet": 407,
+          "inning": 4,
+          "opponent": "@LAA"
+        },
+        {
+          "date": "2026-05-24",
+          "distance_feet": 380,
+          "inning": 5,
+          "opponent": "@MIL"
+        },
+        {
+          "date": "2026-05-26",
+          "distance_feet": 418,
+          "inning": 3,
+          "opponent": "vsCOL"
+        },
+        {
+          "date": "2026-05-27",
+          "distance_feet": 352,
+          "inning": 8,
+          "opponent": "vsCOL"
+        },
+        {
+          "date": "2026-06-06",
+          "distance_feet": 394,
+          "inning": 1,
+          "opponent": "vsLAA"
+        },
+        {
+          "date": "2026-06-09",
+          "distance_feet": 410,
+          "inning": 7,
+          "opponent": "@PIT"
+        },
+        {
+          "date": "2026-06-29",
+          "distance_feet": 387,
+          "inning": 4,
+          "opponent": "@ATH"
+        },
+        {
+          "date": "2026-07-10",
+          "distance_feet": 419,
+          "inning": 1,
+          "opponent": "vsARI"
+        },
+        {
+          "date": "2026-07-29",
+          "distance_feet": 372,
+          "inning": 1,
+          "opponent": "vsSEA"
+        },
+        {
+          "date": "2026-08-07",
+          "distance_feet": 425,
+          "inning": 8,
+          "opponent": "@ARI"
+        },
+        {
+          "date": "2026-08-14",
+          "distance_feet": 367,
+          "inning": 5,
+          "opponent": "vsMIL"
+        },
+        {
+          "date": "2026-08-16",
+          "distance_feet": 382,
+          "inning": 9,
+          "opponent": "vsMIL"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 22,
+      "games_in_window": 128,
+      "matches": [
+        {
+          "game_id": "401814746",
+          "date": "2026-03-30",
+          "opponent": "vsCLE",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Pages singled to right.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401814775",
+          "date": "2026-04-01",
+          "opponent": "vsCLE",
+          "inning": 3,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Pages singled to left.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401814890",
+          "date": "2026-04-10",
+          "opponent": "vsTEX",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Pages singled to right.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815147",
+          "date": "2026-04-29",
+          "opponent": "vsMIA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Pages reached on infield single to second.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815165",
+          "date": "2026-05-01",
+          "opponent": "@STL",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Pages singled to right.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815195",
+          "date": "2026-05-03",
+          "opponent": "@STL",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Pages doubled to left, Tucker scored, Muncy to third.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815222",
+          "date": "2026-05-05",
+          "opponent": "@HOU",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Pages reached on infield single to third.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815294",
+          "date": "2026-05-10",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Pages singled to right.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815357",
+          "date": "2026-05-15",
+          "opponent": "@LAA",
+          "inning": 4,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 407,
+          "description": "Pages homered to center (407 feet), Smith scored and Tucker scored.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815655",
+          "date": "2026-06-06",
+          "opponent": "vsLAA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 394,
+          "description": "Pages homered to left (394 feet), Ohtani scored.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815788",
+          "date": "2026-06-16",
+          "opponent": "vsTB",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Pages singled to left.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815962",
+          "date": "2026-06-29",
+          "opponent": "@ATH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Pages singled to left.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815977",
+          "date": "2026-06-30",
+          "opponent": "@ATH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Pages singled to center.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401815991",
+          "date": "2026-07-01",
+          "opponent": "@ATH",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "GRD",
+          "distance_feet": null,
+          "description": "Pages hit a ground rule double.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816066",
+          "date": "2026-07-07",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Pages reached on infield single to pitcher, Pages safe at second on throwing error by pitcher Lorenzen.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816108",
+          "date": "2026-07-10",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 419,
+          "description": "Pages homered to left center (419 feet).",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816321",
+          "date": "2026-07-29",
+          "opponent": "vsSEA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 372,
+          "description": "Pages homered to left (372 feet).",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816330",
+          "date": "2026-07-30",
+          "opponent": "vsSEA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Pages singled to right, Edman to third.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816379",
+          "date": "2026-08-03",
+          "opponent": "@CHC",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Pages singled to right, Ohtani to second.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816490",
+          "date": "2026-08-11",
+          "opponent": "vsKC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Pages singled to left.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816530",
+          "date": "2026-08-14",
+          "opponent": "vsMIL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Pages singled to center.",
+          "team": "LAD"
+        },
+        {
+          "game_id": "401816585",
+          "date": "2026-08-18",
+          "opponent": "@COL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Pages singled to left, Freeman to third.",
+          "team": "LAD"
+        }
+      ]
+    }
+  }
+}

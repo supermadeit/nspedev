@@ -1,0 +1,992 @@
+{
+  "player": "BenRice",
+  "player_id": "ben-rice",
+  "team": "NYY",
+  "position": "1B",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 471,
+      "R": 83,
+      "H": 118,
+      "2B": 20,
+      "3B": 3,
+      "HR": 35,
+      "RBI": 83,
+      "BB": 68,
+      "SO": 136,
+      "SB": 3,
+      "TB": 249,
+      "avg": 0.251,
+      "obp": 0.35,
+      "slg": 0.529,
+      "ops": 0.878
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 31,
+        "games": [
+          {
+            "date": "2026-03-31",
+            "value": 2
+          },
+          {
+            "date": "2026-04-01",
+            "value": 2
+          },
+          {
+            "date": "2026-04-03",
+            "value": 2
+          },
+          {
+            "date": "2026-04-12",
+            "value": 2
+          },
+          {
+            "date": "2026-04-17",
+            "value": 2
+          },
+          {
+            "date": "2026-04-24",
+            "value": 2
+          },
+          {
+            "date": "2026-04-25",
+            "value": 3
+          },
+          {
+            "date": "2026-04-29",
+            "value": 3
+          },
+          {
+            "date": "2026-05-01",
+            "value": 2
+          },
+          {
+            "date": "2026-05-03",
+            "value": 2
+          },
+          {
+            "date": "2026-05-11",
+            "value": 2
+          },
+          {
+            "date": "2026-05-15",
+            "value": 3
+          },
+          {
+            "date": "2026-05-26",
+            "value": 3
+          },
+          {
+            "date": "2026-05-27",
+            "value": 2
+          },
+          {
+            "date": "2026-05-29",
+            "value": 4
+          },
+          {
+            "date": "2026-05-31",
+            "value": 2
+          },
+          {
+            "date": "2026-06-05",
+            "value": 2
+          },
+          {
+            "date": "2026-06-08",
+            "value": 2
+          },
+          {
+            "date": "2026-06-14",
+            "value": 2
+          },
+          {
+            "date": "2026-06-19",
+            "value": 2
+          },
+          {
+            "date": "2026-06-21",
+            "value": 2
+          },
+          {
+            "date": "2026-06-24",
+            "value": 2
+          },
+          {
+            "date": "2026-07-07",
+            "value": 3
+          },
+          {
+            "date": "2026-07-09",
+            "value": 2
+          },
+          {
+            "date": "2026-07-11",
+            "value": 2
+          },
+          {
+            "date": "2026-07-17",
+            "value": 2
+          },
+          {
+            "date": "2026-07-26",
+            "value": 2
+          },
+          {
+            "date": "2026-07-27",
+            "value": 2
+          },
+          {
+            "date": "2026-08-12",
+            "value": 2
+          },
+          {
+            "date": "2026-08-19",
+            "value": 2
+          },
+          {
+            "date": "2026-08-23",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 34,
+        "games": [
+          {
+            "date": "2026-04-01",
+            "value": 1
+          },
+          {
+            "date": "2026-04-03",
+            "value": 1
+          },
+          {
+            "date": "2026-04-05",
+            "value": 1
+          },
+          {
+            "date": "2026-04-10",
+            "value": 1
+          },
+          {
+            "date": "2026-04-16",
+            "value": 1
+          },
+          {
+            "date": "2026-04-17",
+            "value": 1
+          },
+          {
+            "date": "2026-04-18",
+            "value": 1
+          },
+          {
+            "date": "2026-04-19",
+            "value": 1
+          },
+          {
+            "date": "2026-04-24",
+            "value": 1
+          },
+          {
+            "date": "2026-04-27",
+            "value": 1
+          },
+          {
+            "date": "2026-05-01",
+            "value": 1
+          },
+          {
+            "date": "2026-05-03",
+            "value": 1
+          },
+          {
+            "date": "2026-05-11",
+            "value": 1
+          },
+          {
+            "date": "2026-05-15",
+            "value": 1
+          },
+          {
+            "date": "2026-05-17",
+            "value": 1
+          },
+          {
+            "date": "2026-05-19",
+            "value": 1
+          },
+          {
+            "date": "2026-05-29",
+            "value": 1
+          },
+          {
+            "date": "2026-06-05",
+            "value": 1
+          },
+          {
+            "date": "2026-06-14",
+            "value": 1
+          },
+          {
+            "date": "2026-06-16",
+            "value": 1
+          },
+          {
+            "date": "2026-06-19",
+            "value": 1
+          },
+          {
+            "date": "2026-06-21",
+            "value": 1
+          },
+          {
+            "date": "2026-06-30",
+            "value": 1
+          },
+          {
+            "date": "2026-07-03",
+            "value": 1
+          },
+          {
+            "date": "2026-07-06",
+            "value": 1
+          },
+          {
+            "date": "2026-07-07",
+            "value": 1
+          },
+          {
+            "date": "2026-07-09",
+            "value": 2
+          },
+          {
+            "date": "2026-07-10",
+            "value": 1
+          },
+          {
+            "date": "2026-07-22",
+            "value": 1
+          },
+          {
+            "date": "2026-07-26",
+            "value": 1
+          },
+          {
+            "date": "2026-08-08",
+            "value": 1
+          },
+          {
+            "date": "2026-08-16",
+            "value": 1
+          },
+          {
+            "date": "2026-08-19",
+            "value": 1
+          },
+          {
+            "date": "2026-08-26",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 9,
+        "games": [
+          {
+            "date": "2026-04-03",
+            "value": 3
+          },
+          {
+            "date": "2026-04-05",
+            "value": 3
+          },
+          {
+            "date": "2026-05-01",
+            "value": 3
+          },
+          {
+            "date": "2026-05-27",
+            "value": 3
+          },
+          {
+            "date": "2026-05-31",
+            "value": 4
+          },
+          {
+            "date": "2026-06-19",
+            "value": 3
+          },
+          {
+            "date": "2026-07-07",
+            "value": 3
+          },
+          {
+            "date": "2026-07-09",
+            "value": 5
+          },
+          {
+            "date": "2026-07-22",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-26",
+        "date_iso": "2026-08-26",
+        "opponent": "vsHOU",
+        "AB": 2,
+        "R": 3,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 1,
+        "BB": 3,
+        "SO": 0,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "vsHOU",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "vsTOR",
+        "AB": 5,
+        "R": 0,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 2,
+        "BB": 0,
+        "SO": 3,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "vsTOR",
+        "AB": 3,
+        "R": 1,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "vsTOR",
+        "AB": 2,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 2,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-20",
+        "date_iso": "2026-08-20",
+        "opponent": "@BAL",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "@BAL",
+        "AB": 5,
+        "R": 1,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 5
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "@BAL",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "@TOR",
+        "AB": 5,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 2,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-15",
+        "date_iso": "2026-08-15",
+        "opponent": "@TOR",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 1,
+      "splits": [
+        {
+          "season": 2026,
+          "total": 118.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 13412,
+      "hr_count": 34,
+      "games": 128,
+      "events": [
+        {
+          "date": "2026-04-01",
+          "distance_feet": 427,
+          "inning": 9,
+          "opponent": "@SEA"
+        },
+        {
+          "date": "2026-04-03",
+          "distance_feet": 353,
+          "inning": 7,
+          "opponent": "vsMIA"
+        },
+        {
+          "date": "2026-04-05",
+          "distance_feet": 410,
+          "inning": 1,
+          "opponent": "vsMIA"
+        },
+        {
+          "date": "2026-04-10",
+          "distance_feet": 411,
+          "inning": 8,
+          "opponent": "@TB"
+        },
+        {
+          "date": "2026-04-16",
+          "distance_feet": 405,
+          "inning": 6,
+          "opponent": "vsLAA"
+        },
+        {
+          "date": "2026-04-17",
+          "distance_feet": 364,
+          "inning": 4,
+          "opponent": "vsKC"
+        },
+        {
+          "date": "2026-04-18",
+          "distance_feet": 398,
+          "inning": 3,
+          "opponent": "vsKC"
+        },
+        {
+          "date": "2026-04-19",
+          "distance_feet": 350,
+          "inning": 2,
+          "opponent": "vsKC"
+        },
+        {
+          "date": "2026-04-24",
+          "distance_feet": 402,
+          "inning": 7,
+          "opponent": "@HOU"
+        },
+        {
+          "date": "2026-04-27",
+          "distance_feet": 404,
+          "inning": 3,
+          "opponent": "@TEX"
+        },
+        {
+          "date": "2026-05-01",
+          "distance_feet": 380,
+          "inning": 2,
+          "opponent": "vsBAL"
+        },
+        {
+          "date": "2026-05-03",
+          "distance_feet": 379,
+          "inning": 1,
+          "opponent": "vsBAL"
+        },
+        {
+          "date": "2026-05-11",
+          "distance_feet": 374,
+          "inning": 3,
+          "opponent": "@BAL"
+        },
+        {
+          "date": "2026-05-15",
+          "distance_feet": 395,
+          "inning": 9,
+          "opponent": "@NYM"
+        },
+        {
+          "date": "2026-05-17",
+          "distance_feet": 409,
+          "inning": 3,
+          "opponent": "@NYM"
+        },
+        {
+          "date": "2026-05-19",
+          "distance_feet": 366,
+          "inning": 5,
+          "opponent": "vsTOR"
+        },
+        {
+          "date": "2026-05-29",
+          "distance_feet": 411,
+          "inning": 7,
+          "opponent": "@ATH"
+        },
+        {
+          "date": "2026-06-05",
+          "distance_feet": 377,
+          "inning": 1,
+          "opponent": "vsBOS"
+        },
+        {
+          "date": "2026-06-14",
+          "distance_feet": 381,
+          "inning": 9,
+          "opponent": "@TOR"
+        },
+        {
+          "date": "2026-06-16",
+          "distance_feet": 371,
+          "inning": 4,
+          "opponent": "vsCHW"
+        },
+        {
+          "date": "2026-06-19",
+          "distance_feet": 433,
+          "inning": 2,
+          "opponent": "vsCIN"
+        },
+        {
+          "date": "2026-06-21",
+          "distance_feet": 375,
+          "inning": 3,
+          "opponent": "vsCIN"
+        },
+        {
+          "date": "2026-06-30",
+          "distance_feet": 395,
+          "inning": 1,
+          "opponent": "vsDET"
+        },
+        {
+          "date": "2026-07-03",
+          "distance_feet": 357,
+          "inning": 3,
+          "opponent": "vsMIN"
+        },
+        {
+          "date": "2026-07-06",
+          "distance_feet": 400,
+          "inning": 9,
+          "opponent": "@TB"
+        },
+        {
+          "date": "2026-07-07",
+          "distance_feet": 382,
+          "inning": 3,
+          "opponent": "@TB"
+        },
+        {
+          "date": "2026-07-09",
+          "distance_feet": 367,
+          "inning": 3,
+          "opponent": "@TB"
+        },
+        {
+          "date": "2026-07-09",
+          "distance_feet": 422,
+          "inning": 6,
+          "opponent": "@TB"
+        },
+        {
+          "date": "2026-07-10",
+          "distance_feet": 387,
+          "inning": 1,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-07-22",
+          "distance_feet": 394,
+          "inning": 7,
+          "opponent": "vsPIT"
+        },
+        {
+          "date": "2026-07-26",
+          "distance_feet": 417,
+          "inning": 7,
+          "opponent": "@PHI"
+        },
+        {
+          "date": "2026-08-08",
+          "distance_feet": 431,
+          "inning": 8,
+          "opponent": "vsATL"
+        },
+        {
+          "date": "2026-08-16",
+          "distance_feet": 438,
+          "inning": 10,
+          "opponent": "@TOR"
+        },
+        {
+          "date": "2026-08-19",
+          "distance_feet": 447,
+          "inning": 3,
+          "opponent": "@BAL"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 22,
+      "games_in_window": 128,
+      "matches": [
+        {
+          "game_id": "401814762",
+          "date": "2026-03-31",
+          "opponent": "@SEA",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Rice doubled to right, Bellinger scored.",
+          "team": "NYY"
+        },
+        {
+          "game_id": "401814777",
+          "date": "2026-04-01",
+          "opponent": "@SEA",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Rice doubled to right, Bellinger scored.",
+          "team": "NYY"
+        },
+        {
+          "game_id": "401814815",
+          "date": "2026-04-05",
+          "opponent": "vsMIA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 410,
+          "description": "Rice homered to right (410 feet), Grisham scored and Judge scored.",
+          "team": "NYY"
+        },
+        {
+          "game_id": "401815088",
+          "date": "2026-04-25",
+          "opponent": "@HOU",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rice singled to right.",
+          "team": "NYY"
+        },
+        {
+          "game_id": "401815143",
+          "date": "2026-04-29",
+          "opponent": "@TEX",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rice singled to right.",
+          "team": "NYY"
+        },
+        {
+          "game_id": "401815187",
+          "date": "2026-05-03",
+          "opponent": "vsBAL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 379,
+          "description": "Rice homered to right (379 feet).",
+          "team": "NYY"
+        },
+        {
+          "game_id": "401815299",
+          "date": "2026-05-11",
+          "opponent": "@BAL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rice singled to center.",
+          "team": "NYY"
+        },
+        {
+          "game_id": "401815308",
+          "date": "2026-05-12",
+          "opponent": "@BAL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rice singled to right.",
+          "team": "NYY"
+        },
+        {
+          "game_id": "401815395",
+          "date": "2026-05-18",
+          "opponent": "vsTOR",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Rice doubled to left.",
+          "team": "NYY"
+        },
+        {
+          "game_id": "401815508",
+          "date": "2026-05-26",
+          "opponent": "@KC",
+          "inning": 3,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rice singled to left.",
+          "team": "NYY"
+        },
+        {
+          "game_id": "401815563",
+          "date": "2026-05-30",
+          "opponent": "@ATH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rice singled to left.",
+          "team": "NYY"
+        },
+        {
+          "game_id": "401815629",
+          "date": "2026-06-05",
+          "opponent": "vsBOS",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 377,
+          "description": "Rice homered to right (377 feet).",
+          "team": "NYY"
+        },
+        {
+          "game_id": "401815753",
+          "date": "2026-06-14",
+          "opponent": "@TOR",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rice singled to left, Goldschmidt to second.",
+          "team": "NYY"
+        },
+        {
+          "game_id": "401815965",
+          "date": "2026-06-30",
+          "opponent": "vsDET",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 395,
+          "description": "Rice homered to right center (395 feet).",
+          "team": "NYY"
+        },
+        {
+          "game_id": "401815980",
+          "date": "2026-07-01",
+          "opponent": "vsDET",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rice singled to right.",
+          "team": "NYY"
+        },
+        {
+          "game_id": "401816058",
+          "date": "2026-07-07",
+          "opponent": "@TB",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rice singled to right.",
+          "team": "NYY"
+        },
+        {
+          "game_id": "401816101",
+          "date": "2026-07-10",
+          "opponent": "@WSH",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 387,
+          "description": "Rice homered to left center (387 feet).",
+          "team": "NYY"
+        },
+        {
+          "game_id": "401816116",
+          "date": "2026-07-11",
+          "opponent": "@WSH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rice singled to center, Rosario to second.",
+          "team": "NYY"
+        },
+        {
+          "game_id": "401817370",
+          "date": "2026-07-14",
+          "opponent": "vsNL*",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rice singled to center, Witt Jr. scored, Bellinger to second.",
+          "team": "NYY"
+        },
+        {
+          "game_id": "401816316",
+          "date": "2026-07-29",
+          "opponent": "@CHW",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Rice doubled to right.",
+          "team": "NYY"
+        },
+        {
+          "game_id": "401816589",
+          "date": "2026-08-19",
+          "opponent": "@BAL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rice singled to right, Grisham to second.",
+          "team": "NYY"
+        },
+        {
+          "game_id": "401816643",
+          "date": "2026-08-23",
+          "opponent": "vsTOR",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rice singled to right.",
+          "team": "NYY"
+        }
+      ]
+    }
+  }
+}

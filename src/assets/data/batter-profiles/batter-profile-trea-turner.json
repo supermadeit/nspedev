@@ -1,0 +1,906 @@
+{
+  "player": "TreaTurner",
+  "player_id": "trea-turner",
+  "team": "PHI",
+  "position": "SS",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 531,
+      "R": 86,
+      "H": 127,
+      "2B": 22,
+      "3B": 1,
+      "HR": 17,
+      "RBI": 49,
+      "BB": 36,
+      "SO": 126,
+      "SB": 17,
+      "TB": 202,
+      "avg": 0.239,
+      "obp": 0.291,
+      "slg": 0.38,
+      "ops": 0.671
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 33,
+        "games": [
+          {
+            "date": "2026-03-26",
+            "value": 2
+          },
+          {
+            "date": "2026-04-03",
+            "value": 3
+          },
+          {
+            "date": "2026-04-04",
+            "value": 2
+          },
+          {
+            "date": "2026-04-12",
+            "value": 2
+          },
+          {
+            "date": "2026-04-28",
+            "value": 4
+          },
+          {
+            "date": "2026-04-30",
+            "value": 2
+          },
+          {
+            "date": "2026-05-05",
+            "value": 2
+          },
+          {
+            "date": "2026-05-09",
+            "value": 4
+          },
+          {
+            "date": "2026-05-16",
+            "value": 2
+          },
+          {
+            "date": "2026-05-26",
+            "value": 2
+          },
+          {
+            "date": "2026-06-02",
+            "value": 2
+          },
+          {
+            "date": "2026-06-07",
+            "value": 2
+          },
+          {
+            "date": "2026-06-17",
+            "value": 3
+          },
+          {
+            "date": "2026-06-20",
+            "value": 2
+          },
+          {
+            "date": "2026-06-23",
+            "value": 2
+          },
+          {
+            "date": "2026-06-24",
+            "value": 2
+          },
+          {
+            "date": "2026-06-25",
+            "value": 2
+          },
+          {
+            "date": "2026-06-26",
+            "value": 2
+          },
+          {
+            "date": "2026-06-29",
+            "value": 2
+          },
+          {
+            "date": "2026-06-30",
+            "value": 2
+          },
+          {
+            "date": "2026-07-01",
+            "value": 2
+          },
+          {
+            "date": "2026-07-06",
+            "value": 3
+          },
+          {
+            "date": "2026-07-18",
+            "value": 3
+          },
+          {
+            "date": "2026-07-20",
+            "value": 3
+          },
+          {
+            "date": "2026-07-26",
+            "value": 2
+          },
+          {
+            "date": "2026-07-29",
+            "value": 2
+          },
+          {
+            "date": "2026-07-31",
+            "value": 3
+          },
+          {
+            "date": "2026-08-01",
+            "value": 2
+          },
+          {
+            "date": "2026-08-04",
+            "value": 3
+          },
+          {
+            "date": "2026-08-06",
+            "value": 2
+          },
+          {
+            "date": "2026-08-08",
+            "value": 2
+          },
+          {
+            "date": "2026-08-19",
+            "value": 2
+          },
+          {
+            "date": "2026-08-22",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 16,
+        "games": [
+          {
+            "date": "2026-04-12",
+            "value": 1
+          },
+          {
+            "date": "2026-04-15",
+            "value": 1
+          },
+          {
+            "date": "2026-04-24",
+            "value": 1
+          },
+          {
+            "date": "2026-04-30",
+            "value": 1
+          },
+          {
+            "date": "2026-05-19",
+            "value": 1
+          },
+          {
+            "date": "2026-05-26",
+            "value": 1
+          },
+          {
+            "date": "2026-05-27",
+            "value": 1
+          },
+          {
+            "date": "2026-06-29",
+            "value": 1
+          },
+          {
+            "date": "2026-06-30",
+            "value": 1
+          },
+          {
+            "date": "2026-07-01",
+            "value": 1
+          },
+          {
+            "date": "2026-07-16",
+            "value": 1
+          },
+          {
+            "date": "2026-07-18",
+            "value": 1
+          },
+          {
+            "date": "2026-07-20",
+            "value": 2
+          },
+          {
+            "date": "2026-07-29",
+            "value": 1
+          },
+          {
+            "date": "2026-07-31",
+            "value": 1
+          },
+          {
+            "date": "2026-08-08",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 3,
+        "games": [
+          {
+            "date": "2026-06-30",
+            "value": 3
+          },
+          {
+            "date": "2026-07-01",
+            "value": 3
+          },
+          {
+            "date": "2026-07-20",
+            "value": 5
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-26",
+        "date_iso": "2026-08-26",
+        "opponent": "@SEA",
+        "AB": 5,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "@SEA",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-24",
+        "date_iso": "2026-08-24",
+        "opponent": "@SEA",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "vsSTL",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "vsSTL",
+        "AB": 5,
+        "R": 2,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "vsSTL",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "vsMIA",
+        "AB": 4,
+        "R": 0,
+        "H": 2,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 3
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "vsMIA",
+        "AB": 4,
+        "R": 1,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "vsMIA",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-15",
+        "date_iso": "2026-08-15",
+        "opponent": "@MIN",
+        "AB": 3,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 2,
+        "SB": 0,
+        "TB": 1
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 12,
+      "splits": [
+        {
+          "season": 2015,
+          "total": 9.0
+        },
+        {
+          "season": 2016,
+          "total": 111.0
+        },
+        {
+          "season": 2017,
+          "total": 120.0
+        },
+        {
+          "season": 2018,
+          "total": 180.0
+        },
+        {
+          "season": 2019,
+          "total": 172.0
+        },
+        {
+          "season": 2020,
+          "total": 78.0
+        },
+        {
+          "season": 2021,
+          "total": 206.0
+        },
+        {
+          "season": 2022,
+          "total": 200.0
+        },
+        {
+          "season": 2023,
+          "total": 187.0
+        },
+        {
+          "season": 2024,
+          "total": 152.0
+        },
+        {
+          "season": 2025,
+          "total": 183.0
+        },
+        {
+          "season": 2026,
+          "total": 127.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 6671,
+      "hr_count": 17,
+      "games": 129,
+      "events": [
+        {
+          "date": "2026-04-12",
+          "distance_feet": 359,
+          "inning": 6,
+          "opponent": "vsARI"
+        },
+        {
+          "date": "2026-04-15",
+          "distance_feet": 423,
+          "inning": 1,
+          "opponent": "vsCHC"
+        },
+        {
+          "date": "2026-04-24",
+          "distance_feet": 375,
+          "inning": 3,
+          "opponent": "@ATL"
+        },
+        {
+          "date": "2026-04-30",
+          "distance_feet": 373,
+          "inning": 1,
+          "opponent": "vsSF"
+        },
+        {
+          "date": "2026-05-19",
+          "distance_feet": 409,
+          "inning": 3,
+          "opponent": "vsCIN"
+        },
+        {
+          "date": "2026-05-26",
+          "distance_feet": 434,
+          "inning": 3,
+          "opponent": "@SD"
+        },
+        {
+          "date": "2026-05-27",
+          "distance_feet": 382,
+          "inning": 9,
+          "opponent": "@SD"
+        },
+        {
+          "date": "2026-06-29",
+          "distance_feet": 424,
+          "inning": 1,
+          "opponent": "vsPIT"
+        },
+        {
+          "date": "2026-06-30",
+          "distance_feet": 376,
+          "inning": 8,
+          "opponent": "vsPIT"
+        },
+        {
+          "date": "2026-07-01",
+          "distance_feet": 372,
+          "inning": 2,
+          "opponent": "vsPIT"
+        },
+        {
+          "date": "2026-07-16",
+          "distance_feet": 383,
+          "inning": 8,
+          "opponent": "vsNYM"
+        },
+        {
+          "date": "2026-07-18",
+          "distance_feet": 414,
+          "inning": 5,
+          "opponent": "vsNYM"
+        },
+        {
+          "date": "2026-07-20",
+          "distance_feet": 404,
+          "inning": 2,
+          "opponent": "vsLAD"
+        },
+        {
+          "date": "2026-07-20",
+          "distance_feet": 346,
+          "inning": 6,
+          "opponent": "vsLAD"
+        },
+        {
+          "date": "2026-07-29",
+          "distance_feet": 413,
+          "inning": 5,
+          "opponent": "@MIA"
+        },
+        {
+          "date": "2026-07-31",
+          "distance_feet": 393,
+          "inning": 3,
+          "opponent": "@BAL"
+        },
+        {
+          "date": "2026-08-08",
+          "distance_feet": 391,
+          "inning": 6,
+          "opponent": "vsTOR"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 27,
+      "games_in_window": 129,
+      "matches": [
+        {
+          "game_id": "401814694",
+          "date": "2026-03-26",
+          "opponent": "vsTEX",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turner reached on infield single to second.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401814792",
+          "date": "2026-04-03",
+          "opponent": "@COL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Turner doubled to left.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401814877",
+          "date": "2026-04-10",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turner singled to left.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401814948",
+          "date": "2026-04-15",
+          "opponent": "vsCHC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 423,
+          "description": "Turner homered to center (423 feet).",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401814986",
+          "date": "2026-04-18",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turner singled to center.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815001",
+          "date": "2026-04-19",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turner singled to right.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815122",
+          "date": "2026-04-28",
+          "opponent": "vsSF",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turner singled to right.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401871107",
+          "date": "2026-04-30",
+          "opponent": "vsSF",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 373,
+          "description": "Turner homered to right center (373 feet).",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815191",
+          "date": "2026-05-03",
+          "opponent": "@MIA",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "GRD",
+          "distance_feet": null,
+          "description": "Turner hit a ground rule double.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815270",
+          "date": "2026-05-09",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turner singled to center.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815365",
+          "date": "2026-05-16",
+          "opponent": "@PIT",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turner singled to right.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815392",
+          "date": "2026-05-18",
+          "opponent": "vsCIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Turner doubled to left.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815645",
+          "date": "2026-06-06",
+          "opponent": "vsCHW",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turner singled to left.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815660",
+          "date": "2026-06-07",
+          "opponent": "vsCHW",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Turner doubled to left.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815686",
+          "date": "2026-06-09",
+          "opponent": "@TOR",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Turner doubled to right.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815791",
+          "date": "2026-06-17",
+          "opponent": "vsMIA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turner singled to right.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815910",
+          "date": "2026-06-26",
+          "opponent": "@NYM",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Turner doubled to left.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815954",
+          "date": "2026-06-29",
+          "opponent": "vsPIT",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 424,
+          "description": "Turner homered to left (424 feet).",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401816049",
+          "date": "2026-07-06",
+          "opponent": "@KC",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Turner doubled to center.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401816158",
+          "date": "2026-07-18",
+          "opponent": "vsNYM",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turner reached on infield single to shortstop.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401816187",
+          "date": "2026-07-20",
+          "opponent": "vsLAD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Turner doubled to center.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401816271",
+          "date": "2026-07-26",
+          "opponent": "vsNYY",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "3B",
+          "distance_feet": null,
+          "description": "Turner tripled to center.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401816311",
+          "date": "2026-07-29",
+          "opponent": "@MIA",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turner singled to center.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401816335",
+          "date": "2026-07-31",
+          "opponent": "@BAL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turner reached on infield single to third.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401816390",
+          "date": "2026-08-04",
+          "opponent": "vsWSH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turner singled to center.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401816419",
+          "date": "2026-08-06",
+          "opponent": "vsWSH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turner reached on infield single to shortstop.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401816444",
+          "date": "2026-08-08",
+          "opponent": "vsTOR",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turner singled to center.",
+          "team": "PHI"
+        }
+      ]
+    }
+  }
+}

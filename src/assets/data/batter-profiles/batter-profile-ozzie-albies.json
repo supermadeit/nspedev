@@ -1,0 +1,968 @@
+{
+  "player": "OzzieAlbies",
+  "player_id": "ozzie-albies",
+  "team": "ATL",
+  "position": "2B",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 509,
+      "R": 74,
+      "H": 130,
+      "2B": 23,
+      "3B": 0,
+      "HR": 20,
+      "RBI": 67,
+      "BB": 40,
+      "SO": 80,
+      "SB": 3,
+      "TB": 213,
+      "avg": 0.255,
+      "obp": 0.31,
+      "slg": 0.418,
+      "ops": 0.728
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 33,
+        "games": [
+          {
+            "date": "2026-03-27",
+            "value": 2
+          },
+          {
+            "date": "2026-03-29",
+            "value": 2
+          },
+          {
+            "date": "2026-03-30",
+            "value": 2
+          },
+          {
+            "date": "2026-04-02",
+            "value": 2
+          },
+          {
+            "date": "2026-04-03",
+            "value": 3
+          },
+          {
+            "date": "2026-04-12",
+            "value": 3
+          },
+          {
+            "date": "2026-04-18",
+            "value": 2
+          },
+          {
+            "date": "2026-04-23",
+            "value": 3
+          },
+          {
+            "date": "2026-04-24",
+            "value": 2
+          },
+          {
+            "date": "2026-04-25",
+            "value": 3
+          },
+          {
+            "date": "2026-04-30",
+            "value": 2
+          },
+          {
+            "date": "2026-05-02",
+            "value": 2
+          },
+          {
+            "date": "2026-05-03",
+            "value": 2
+          },
+          {
+            "date": "2026-05-09",
+            "value": 2
+          },
+          {
+            "date": "2026-05-20",
+            "value": 2
+          },
+          {
+            "date": "2026-05-24",
+            "value": 3
+          },
+          {
+            "date": "2026-05-28",
+            "value": 3
+          },
+          {
+            "date": "2026-06-02",
+            "value": 2
+          },
+          {
+            "date": "2026-06-03",
+            "value": 2
+          },
+          {
+            "date": "2026-06-09",
+            "value": 3
+          },
+          {
+            "date": "2026-06-12",
+            "value": 2
+          },
+          {
+            "date": "2026-06-17",
+            "value": 2
+          },
+          {
+            "date": "2026-06-20",
+            "value": 3
+          },
+          {
+            "date": "2026-07-01",
+            "value": 2
+          },
+          {
+            "date": "2026-07-06",
+            "value": 2
+          },
+          {
+            "date": "2026-07-17",
+            "value": 2
+          },
+          {
+            "date": "2026-07-20",
+            "value": 2
+          },
+          {
+            "date": "2026-07-23",
+            "value": 2
+          },
+          {
+            "date": "2026-07-27",
+            "value": 2
+          },
+          {
+            "date": "2026-07-31",
+            "value": 2
+          },
+          {
+            "date": "2026-08-22",
+            "value": 2
+          },
+          {
+            "date": "2026-08-23",
+            "value": 2
+          },
+          {
+            "date": "2026-08-25",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 19,
+        "games": [
+          {
+            "date": "2026-03-27",
+            "value": 1
+          },
+          {
+            "date": "2026-04-03",
+            "value": 1
+          },
+          {
+            "date": "2026-04-07",
+            "value": 1
+          },
+          {
+            "date": "2026-04-15",
+            "value": 1
+          },
+          {
+            "date": "2026-04-23",
+            "value": 1
+          },
+          {
+            "date": "2026-04-28",
+            "value": 1
+          },
+          {
+            "date": "2026-04-29",
+            "value": 1
+          },
+          {
+            "date": "2026-05-04",
+            "value": 1
+          },
+          {
+            "date": "2026-05-28",
+            "value": 1
+          },
+          {
+            "date": "2026-06-03",
+            "value": 1
+          },
+          {
+            "date": "2026-06-20",
+            "value": 2
+          },
+          {
+            "date": "2026-07-01",
+            "value": 1
+          },
+          {
+            "date": "2026-07-03",
+            "value": 1
+          },
+          {
+            "date": "2026-07-20",
+            "value": 1
+          },
+          {
+            "date": "2026-07-23",
+            "value": 1
+          },
+          {
+            "date": "2026-07-25",
+            "value": 1
+          },
+          {
+            "date": "2026-07-27",
+            "value": 1
+          },
+          {
+            "date": "2026-08-04",
+            "value": 1
+          },
+          {
+            "date": "2026-08-11",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 4,
+        "games": [
+          {
+            "date": "2026-04-23",
+            "value": 4
+          },
+          {
+            "date": "2026-06-03",
+            "value": 3
+          },
+          {
+            "date": "2026-06-20",
+            "value": 3
+          },
+          {
+            "date": "2026-07-27",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-26",
+        "date_iso": "2026-08-26",
+        "opponent": "vsLAD",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 1,
+        "SB": 1,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "vsLAD",
+        "AB": 3,
+        "R": 0,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 2,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "vsMIL",
+        "AB": 5,
+        "R": 1,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "@MIL",
+        "AB": 4,
+        "R": 0,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "@MIL",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-20",
+        "date_iso": "2026-08-20",
+        "opponent": "@CHW",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "@MIN",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "@MIN",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "@MIN",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "vsARI",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 10,
+      "splits": [
+        {
+          "season": 2017,
+          "total": 62.0
+        },
+        {
+          "season": 2018,
+          "total": 170.0
+        },
+        {
+          "season": 2019,
+          "total": 194.0
+        },
+        {
+          "season": 2020,
+          "total": 45.0
+        },
+        {
+          "season": 2021,
+          "total": 179.0
+        },
+        {
+          "season": 2022,
+          "total": 61.0
+        },
+        {
+          "season": 2023,
+          "total": 171.0
+        },
+        {
+          "season": 2024,
+          "total": 101.0
+        },
+        {
+          "season": 2025,
+          "total": 145.0
+        },
+        {
+          "season": 2026,
+          "total": 130.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 7728,
+      "hr_count": 20,
+      "games": 134,
+      "events": [
+        {
+          "date": "2026-03-27",
+          "distance_feet": 367,
+          "inning": 1,
+          "opponent": "vsKC"
+        },
+        {
+          "date": "2026-04-03",
+          "distance_feet": 382,
+          "inning": 9,
+          "opponent": "@ARI"
+        },
+        {
+          "date": "2026-04-07",
+          "distance_feet": 379,
+          "inning": 8,
+          "opponent": "@LAA"
+        },
+        {
+          "date": "2026-04-15",
+          "distance_feet": 370,
+          "inning": 2,
+          "opponent": "vsMIA"
+        },
+        {
+          "date": "2026-04-23",
+          "distance_feet": 396,
+          "inning": 9,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-04-28",
+          "distance_feet": 378,
+          "inning": 8,
+          "opponent": "vsDET"
+        },
+        {
+          "date": "2026-04-29",
+          "distance_feet": 400,
+          "inning": 1,
+          "opponent": "vsDET"
+        },
+        {
+          "date": "2026-05-04",
+          "distance_feet": 414,
+          "inning": 6,
+          "opponent": "@SEA"
+        },
+        {
+          "date": "2026-05-28",
+          "distance_feet": 416,
+          "inning": 9,
+          "opponent": "@BOS"
+        },
+        {
+          "date": "2026-06-03",
+          "distance_feet": 393,
+          "inning": 7,
+          "opponent": "vsTOR"
+        },
+        {
+          "date": "2026-06-20",
+          "distance_feet": 367,
+          "inning": 5,
+          "opponent": "vsMIL"
+        },
+        {
+          "date": "2026-06-20",
+          "distance_feet": 339,
+          "inning": 9,
+          "opponent": "vsMIL"
+        },
+        {
+          "date": "2026-07-01",
+          "distance_feet": 380,
+          "inning": 3,
+          "opponent": "vsSTL"
+        },
+        {
+          "date": "2026-07-03",
+          "distance_feet": 386,
+          "inning": 3,
+          "opponent": "vsNYM"
+        },
+        {
+          "date": "2026-07-20",
+          "distance_feet": 393,
+          "inning": 6,
+          "opponent": "vsSD"
+        },
+        {
+          "date": "2026-07-23",
+          "distance_feet": 398,
+          "inning": 4,
+          "opponent": "vsSD"
+        },
+        {
+          "date": "2026-07-25",
+          "distance_feet": 380,
+          "inning": 8,
+          "opponent": "@BAL"
+        },
+        {
+          "date": "2026-07-27",
+          "distance_feet": 407,
+          "inning": 4,
+          "opponent": "@NYM"
+        },
+        {
+          "date": "2026-08-04",
+          "distance_feet": 397,
+          "inning": 2,
+          "opponent": "vsMIA"
+        },
+        {
+          "date": "2026-08-11",
+          "distance_feet": 386,
+          "inning": 5,
+          "opponent": "vsNYM"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 30,
+      "games_in_window": 134,
+      "matches": [
+        {
+          "game_id": "401814691",
+          "date": "2026-03-27",
+          "opponent": "vsKC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 367,
+          "description": "Albies homered to left (367 feet).",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401814725",
+          "date": "2026-03-29",
+          "opponent": "vsKC",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Albies singled to right.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401814793",
+          "date": "2026-04-03",
+          "opponent": "@ARI",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Albies singled to center, Baldwin to second.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401814909",
+          "date": "2026-04-12",
+          "opponent": "vsCLE",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Albies singled to right, Yastrzemski to second.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401814935",
+          "date": "2026-04-14",
+          "opponent": "vsMIA",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Albies doubled to center.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401814950",
+          "date": "2026-04-15",
+          "opponent": "vsMIA",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 370,
+          "description": "Albies homered to right center (370 feet).",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401814986",
+          "date": "2026-04-18",
+          "opponent": "@PHI",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Albies doubled to right.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401815070",
+          "date": "2026-04-24",
+          "opponent": "vsPHI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Albies singled to right, Olson to second.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401815135",
+          "date": "2026-04-29",
+          "opponent": "vsDET",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 400,
+          "description": "Albies homered to left (400 feet), Baldwin scored.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401815149",
+          "date": "2026-04-30",
+          "opponent": "vsDET",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Albies singled to center, Baldwin to second.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401815182",
+          "date": "2026-05-02",
+          "opponent": "@COL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Albies doubled to center.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401815279",
+          "date": "2026-05-09",
+          "opponent": "@LAD",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Albies reached on infield single to catcher, Baldwin to second, Dub\u00f3n to third.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401815376",
+          "date": "2026-05-17",
+          "opponent": "vsBOS",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Albies singled to right.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401815419",
+          "date": "2026-05-20",
+          "opponent": "@MIA",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Albies singled to right.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401815434",
+          "date": "2026-05-21",
+          "opponent": "@MIA",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Albies singled to left.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401815478",
+          "date": "2026-05-24",
+          "opponent": "vsWSH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Albies singled to left, Acu\u00f1a Jr. to second.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401815551",
+          "date": "2026-05-30",
+          "opponent": "@CIN",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "GRD",
+          "distance_feet": null,
+          "description": "Albies hit a ground rule double.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401815661",
+          "date": "2026-06-07",
+          "opponent": "vsPIT",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Albies doubled to left, Dub\u00f3n to third.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401815689",
+          "date": "2026-06-09",
+          "opponent": "@CHW",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Albies singled to right.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401815793",
+          "date": "2026-06-17",
+          "opponent": "vsSF",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Albies singled to center, Dub\u00f3n to second.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401815983",
+          "date": "2026-07-01",
+          "opponent": "vsSTL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Albies doubled to right, Baldwin scored, Albies thrown out at third.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401816018",
+          "date": "2026-07-04",
+          "opponent": "vsNYM",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Albies doubled to left.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401816033",
+          "date": "2026-07-05",
+          "opponent": "vsNYM",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Albies doubled to right, Baldwin to third.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401816281",
+          "date": "2026-07-27",
+          "opponent": "@NYM",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Albies reached on infield single to shortstop, Acu\u00f1a Jr. scored.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401816338",
+          "date": "2026-07-31",
+          "opponent": "vsWSH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Albies singled to center.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401816353",
+          "date": "2026-08-01",
+          "opponent": "vsWSH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Albies singled to right.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401816368",
+          "date": "2026-08-02",
+          "opponent": "vsWSH",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Albies singled to left.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401816387",
+          "date": "2026-08-04",
+          "opponent": "vsMIA",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 397,
+          "description": "Albies homered to right (397 feet).",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401816441",
+          "date": "2026-08-08",
+          "opponent": "@NYY",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "GRD",
+          "distance_feet": null,
+          "description": "Albies hit a ground rule double.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401816581",
+          "date": "2026-08-17",
+          "opponent": "@MIN",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Albies singled to left.",
+          "team": "ATL"
+        }
+      ]
+    }
+  }
+}

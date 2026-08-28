@@ -1,0 +1,802 @@
+{
+  "player": "JuanSoto",
+  "player_id": "juan-soto",
+  "team": "NYM",
+  "position": "LF",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 293,
+      "R": 46,
+      "H": 83,
+      "2B": 8,
+      "3B": 2,
+      "HR": 21,
+      "RBI": 52,
+      "BB": 63,
+      "SO": 48,
+      "SB": 7,
+      "TB": 158,
+      "avg": 0.283,
+      "obp": 0.408,
+      "slg": 0.539,
+      "ops": 0.947
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 24,
+        "games": [
+          {
+            "date": "2026-03-26",
+            "value": 2
+          },
+          {
+            "date": "2026-03-29",
+            "value": 2
+          },
+          {
+            "date": "2026-03-31",
+            "value": 2
+          },
+          {
+            "date": "2026-04-29",
+            "value": 3
+          },
+          {
+            "date": "2026-04-30",
+            "value": 2
+          },
+          {
+            "date": "2026-05-12",
+            "value": 2
+          },
+          {
+            "date": "2026-05-14",
+            "value": 2
+          },
+          {
+            "date": "2026-05-16",
+            "value": 2
+          },
+          {
+            "date": "2026-05-18",
+            "value": 2
+          },
+          {
+            "date": "2026-05-19",
+            "value": 2
+          },
+          {
+            "date": "2026-05-20",
+            "value": 2
+          },
+          {
+            "date": "2026-05-22",
+            "value": 2
+          },
+          {
+            "date": "2026-05-27",
+            "value": 2
+          },
+          {
+            "date": "2026-05-31",
+            "value": 2
+          },
+          {
+            "date": "2026-06-11",
+            "value": 2
+          },
+          {
+            "date": "2026-06-12",
+            "value": 2
+          },
+          {
+            "date": "2026-06-13",
+            "value": 2
+          },
+          {
+            "date": "2026-06-14",
+            "value": 2
+          },
+          {
+            "date": "2026-06-17",
+            "value": 3
+          },
+          {
+            "date": "2026-06-18",
+            "value": 2
+          },
+          {
+            "date": "2026-06-27",
+            "value": 2
+          },
+          {
+            "date": "2026-07-03",
+            "value": 2
+          },
+          {
+            "date": "2026-07-05",
+            "value": 2
+          },
+          {
+            "date": "2026-07-19",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 19,
+        "games": [
+          {
+            "date": "2026-04-01",
+            "value": 1
+          },
+          {
+            "date": "2026-04-28",
+            "value": 1
+          },
+          {
+            "date": "2026-04-29",
+            "value": 1
+          },
+          {
+            "date": "2026-05-06",
+            "value": 1
+          },
+          {
+            "date": "2026-05-14",
+            "value": 1
+          },
+          {
+            "date": "2026-05-15",
+            "value": 1
+          },
+          {
+            "date": "2026-05-19",
+            "value": 1
+          },
+          {
+            "date": "2026-05-20",
+            "value": 2
+          },
+          {
+            "date": "2026-05-22",
+            "value": 1
+          },
+          {
+            "date": "2026-05-26",
+            "value": 1
+          },
+          {
+            "date": "2026-05-27",
+            "value": 1
+          },
+          {
+            "date": "2026-05-31",
+            "value": 1
+          },
+          {
+            "date": "2026-06-11",
+            "value": 1
+          },
+          {
+            "date": "2026-06-12",
+            "value": 1
+          },
+          {
+            "date": "2026-06-18",
+            "value": 2
+          },
+          {
+            "date": "2026-07-03",
+            "value": 1
+          },
+          {
+            "date": "2026-07-06",
+            "value": 1
+          },
+          {
+            "date": "2026-07-07",
+            "value": 1
+          },
+          {
+            "date": "2026-07-09",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 4,
+        "games": [
+          {
+            "date": "2026-05-20",
+            "value": 3
+          },
+          {
+            "date": "2026-05-31",
+            "value": 4
+          },
+          {
+            "date": "2026-07-06",
+            "value": 3
+          },
+          {
+            "date": "2026-07-07",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-07-24",
+        "date_iso": "2026-07-24",
+        "opponent": "vsLAD",
+        "AB": 0,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 2,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-07-21",
+        "date_iso": "2026-07-21",
+        "opponent": "@MIL",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-07-20",
+        "date_iso": "2026-07-20",
+        "opponent": "@MIL",
+        "AB": 3,
+        "R": 1,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-07-19",
+        "date_iso": "2026-07-19",
+        "opponent": "@PHI",
+        "AB": 5,
+        "R": 1,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-07-18",
+        "date_iso": "2026-07-18",
+        "opponent": "@PHI",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-07-16",
+        "date_iso": "2026-07-16",
+        "opponent": "@PHI",
+        "AB": 1,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 3,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-07-12",
+        "date_iso": "2026-07-12",
+        "opponent": "vsBOS",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-07-11",
+        "date_iso": "2026-07-11",
+        "opponent": "vsBOS",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-07-10",
+        "date_iso": "2026-07-10",
+        "opponent": "vsBOS",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-07-09",
+        "date_iso": "2026-07-09",
+        "opponent": "vsKC",
+        "AB": 2,
+        "R": 2,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 1,
+        "BB": 2,
+        "SO": 1,
+        "SB": 0,
+        "TB": 4
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 9,
+      "splits": [
+        {
+          "season": 2018,
+          "total": 121.0
+        },
+        {
+          "season": 2019,
+          "total": 171.0
+        },
+        {
+          "season": 2020,
+          "total": 54.0
+        },
+        {
+          "season": 2021,
+          "total": 157.0
+        },
+        {
+          "season": 2022,
+          "total": 138.0
+        },
+        {
+          "season": 2023,
+          "total": 156.0
+        },
+        {
+          "season": 2024,
+          "total": 182.0
+        },
+        {
+          "season": 2025,
+          "total": 152.0
+        },
+        {
+          "season": 2026,
+          "total": 83.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 8424,
+      "hr_count": 21,
+      "games": 85,
+      "events": [
+        {
+          "date": "2026-04-01",
+          "distance_feet": 344,
+          "inning": 6,
+          "opponent": "@STL"
+        },
+        {
+          "date": "2026-04-28",
+          "distance_feet": 381,
+          "inning": 4,
+          "opponent": "vsWSH"
+        },
+        {
+          "date": "2026-04-29",
+          "distance_feet": 375,
+          "inning": 3,
+          "opponent": "vsWSH"
+        },
+        {
+          "date": "2026-05-06",
+          "distance_feet": 435,
+          "inning": 1,
+          "opponent": "@COL"
+        },
+        {
+          "date": "2026-05-14",
+          "distance_feet": 412,
+          "inning": 7,
+          "opponent": "vsDET"
+        },
+        {
+          "date": "2026-05-15",
+          "distance_feet": 393,
+          "inning": 7,
+          "opponent": "vsNYY"
+        },
+        {
+          "date": "2026-05-19",
+          "distance_feet": 434,
+          "inning": 7,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-05-20",
+          "distance_feet": 416,
+          "inning": 3,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-05-20",
+          "distance_feet": 408,
+          "inning": 8,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-05-22",
+          "distance_feet": 449,
+          "inning": 1,
+          "opponent": "@MIA"
+        },
+        {
+          "date": "2026-05-26",
+          "distance_feet": 384,
+          "inning": 6,
+          "opponent": "vsCIN"
+        },
+        {
+          "date": "2026-05-27",
+          "distance_feet": 366,
+          "inning": 1,
+          "opponent": "vsCIN"
+        },
+        {
+          "date": "2026-05-31",
+          "distance_feet": 433,
+          "inning": 6,
+          "opponent": "vsMIA"
+        },
+        {
+          "date": "2026-06-11",
+          "distance_feet": 398,
+          "inning": 7,
+          "opponent": "vsSTL"
+        },
+        {
+          "date": "2026-06-12",
+          "distance_feet": 382,
+          "inning": 1,
+          "opponent": "vsATL"
+        },
+        {
+          "date": "2026-06-18",
+          "distance_feet": 386,
+          "inning": 1,
+          "opponent": "@PHI"
+        },
+        {
+          "date": "2026-06-18",
+          "distance_feet": 389,
+          "inning": 3,
+          "opponent": "@PHI"
+        },
+        {
+          "date": "2026-07-03",
+          "distance_feet": 359,
+          "inning": 3,
+          "opponent": "@ATL"
+        },
+        {
+          "date": "2026-07-06",
+          "distance_feet": 430,
+          "inning": 9,
+          "opponent": "@ATL"
+        },
+        {
+          "date": "2026-07-07",
+          "distance_feet": 415,
+          "inning": 4,
+          "opponent": "vsKC"
+        },
+        {
+          "date": "2026-07-09",
+          "distance_feet": 435,
+          "inning": 7,
+          "opponent": "vsKC"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 19,
+      "games_in_window": 85,
+      "matches": [
+        {
+          "game_id": "401814693",
+          "date": "2026-03-26",
+          "opponent": "vsPIT",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Soto singled to center, Lindor to third.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401814758",
+          "date": "2026-03-31",
+          "opponent": "@STL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Soto singled to center.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401814795",
+          "date": "2026-04-03",
+          "opponent": "@SF",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Soto singled to right, Lindor to second.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401870380",
+          "date": "2026-04-26",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Soto singled to center.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815140",
+          "date": "2026-04-29",
+          "opponent": "vsWSH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Soto doubled to left.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815239",
+          "date": "2026-05-06",
+          "opponent": "@COL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 435,
+          "description": "Soto homered to left center (435 feet).",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815364",
+          "date": "2026-05-16",
+          "opponent": "vsNYY",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Soto singled to right.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815379",
+          "date": "2026-05-17",
+          "opponent": "vsNYY",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Soto singled to right.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815394",
+          "date": "2026-05-18",
+          "opponent": "@WSH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Soto reached on bunt single to third, Benge to second.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815408",
+          "date": "2026-05-19",
+          "opponent": "@WSH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Soto singled to center.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815444",
+          "date": "2026-05-22",
+          "opponent": "@MIA",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 449,
+          "description": "Soto homered to right center (449 feet).",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815517",
+          "date": "2026-05-27",
+          "opponent": "vsCIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 366,
+          "description": "Soto homered to right (366 feet).",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815618",
+          "date": "2026-06-03",
+          "opponent": "@SEA",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Soto singled to left, Bichette to second.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815720",
+          "date": "2026-06-12",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 382,
+          "description": "Soto homered to right (382 feet).",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815804",
+          "date": "2026-06-18",
+          "opponent": "@PHI",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 386,
+          "description": "Soto homered to right (386 feet).",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401815953",
+          "date": "2026-06-29",
+          "opponent": "@TOR",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Soto doubled to right.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401816018",
+          "date": "2026-07-04",
+          "opponent": "@ATL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Soto singled to left.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401816033",
+          "date": "2026-07-05",
+          "opponent": "@ATL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Soto singled to right, Soto out stretching at second, Lindor to third.",
+          "team": "NYM"
+        },
+        {
+          "game_id": "401816143",
+          "date": "2026-07-16",
+          "opponent": "@PHI",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Soto singled to center.",
+          "team": "NYM"
+        }
+      ]
+    }
+  }
+}

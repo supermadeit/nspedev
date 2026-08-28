@@ -1,0 +1,882 @@
+{
+  "player": "FernandoTatisJr",
+  "player_id": "fernando-tatis-jr",
+  "team": "SD",
+  "position": "RF",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 516,
+      "R": 75,
+      "H": 147,
+      "2B": 28,
+      "3B": 2,
+      "HR": 17,
+      "RBI": 67,
+      "BB": 54,
+      "SO": 108,
+      "SB": 30,
+      "TB": 230,
+      "avg": 0.285,
+      "obp": 0.355,
+      "slg": 0.446,
+      "ops": 0.8
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 38,
+        "games": [
+          {
+            "date": "2026-04-11",
+            "value": 3
+          },
+          {
+            "date": "2026-04-12",
+            "value": 2
+          },
+          {
+            "date": "2026-04-18",
+            "value": 2
+          },
+          {
+            "date": "2026-04-21",
+            "value": 2
+          },
+          {
+            "date": "2026-04-27",
+            "value": 2
+          },
+          {
+            "date": "2026-05-01",
+            "value": 3
+          },
+          {
+            "date": "2026-05-07",
+            "value": 2
+          },
+          {
+            "date": "2026-05-13",
+            "value": 2
+          },
+          {
+            "date": "2026-05-19",
+            "value": 2
+          },
+          {
+            "date": "2026-05-24",
+            "value": 3
+          },
+          {
+            "date": "2026-05-25",
+            "value": 2
+          },
+          {
+            "date": "2026-05-27",
+            "value": 2
+          },
+          {
+            "date": "2026-05-29",
+            "value": 3
+          },
+          {
+            "date": "2026-05-30",
+            "value": 2
+          },
+          {
+            "date": "2026-06-02",
+            "value": 3
+          },
+          {
+            "date": "2026-06-06",
+            "value": 2
+          },
+          {
+            "date": "2026-06-09",
+            "value": 4
+          },
+          {
+            "date": "2026-06-10",
+            "value": 2
+          },
+          {
+            "date": "2026-06-14",
+            "value": 2
+          },
+          {
+            "date": "2026-06-17",
+            "value": 3
+          },
+          {
+            "date": "2026-06-20",
+            "value": 2
+          },
+          {
+            "date": "2026-06-23",
+            "value": 2
+          },
+          {
+            "date": "2026-06-26",
+            "value": 2
+          },
+          {
+            "date": "2026-06-30",
+            "value": 2
+          },
+          {
+            "date": "2026-07-04",
+            "value": 2
+          },
+          {
+            "date": "2026-07-05",
+            "value": 3
+          },
+          {
+            "date": "2026-07-08",
+            "value": 2
+          },
+          {
+            "date": "2026-07-17",
+            "value": 3
+          },
+          {
+            "date": "2026-07-19",
+            "value": 2
+          },
+          {
+            "date": "2026-07-21",
+            "value": 3
+          },
+          {
+            "date": "2026-07-28",
+            "value": 5
+          },
+          {
+            "date": "2026-08-07",
+            "value": 2
+          },
+          {
+            "date": "2026-08-09",
+            "value": 2
+          },
+          {
+            "date": "2026-08-16",
+            "value": 2
+          },
+          {
+            "date": "2026-08-18",
+            "value": 2
+          },
+          {
+            "date": "2026-08-21",
+            "value": 3
+          },
+          {
+            "date": "2026-08-22",
+            "value": 2
+          },
+          {
+            "date": "2026-08-23",
+            "value": 4
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 14,
+        "games": [
+          {
+            "date": "2026-05-30",
+            "value": 1
+          },
+          {
+            "date": "2026-06-10",
+            "value": 1
+          },
+          {
+            "date": "2026-06-23",
+            "value": 1
+          },
+          {
+            "date": "2026-06-30",
+            "value": 2
+          },
+          {
+            "date": "2026-07-18",
+            "value": 1
+          },
+          {
+            "date": "2026-07-19",
+            "value": 1
+          },
+          {
+            "date": "2026-07-21",
+            "value": 1
+          },
+          {
+            "date": "2026-08-05",
+            "value": 1
+          },
+          {
+            "date": "2026-08-07",
+            "value": 1
+          },
+          {
+            "date": "2026-08-09",
+            "value": 1
+          },
+          {
+            "date": "2026-08-11",
+            "value": 1
+          },
+          {
+            "date": "2026-08-14",
+            "value": 1
+          },
+          {
+            "date": "2026-08-18",
+            "value": 2
+          },
+          {
+            "date": "2026-08-23",
+            "value": 2
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 5,
+        "games": [
+          {
+            "date": "2026-07-19",
+            "value": 4
+          },
+          {
+            "date": "2026-07-21",
+            "value": 3
+          },
+          {
+            "date": "2026-08-09",
+            "value": 3
+          },
+          {
+            "date": "2026-08-18",
+            "value": 3
+          },
+          {
+            "date": "2026-08-23",
+            "value": 4
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-26",
+        "date_iso": "2026-08-26",
+        "opponent": "vsPIT",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "vsPIT",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-24",
+        "date_iso": "2026-08-24",
+        "opponent": "vsPIT",
+        "AB": 5,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 1,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "vsMIN",
+        "AB": 5,
+        "R": 2,
+        "H": 4,
+        "2B": 0,
+        "3B": 0,
+        "HR": 2,
+        "RBI": 4,
+        "BB": 0,
+        "SO": 0,
+        "SB": 1,
+        "TB": 10
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "vsMIN",
+        "AB": 5,
+        "R": 1,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "vsMIN",
+        "AB": 4,
+        "R": 1,
+        "H": 3,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "@NYM",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "@NYM",
+        "AB": 5,
+        "R": 2,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 2,
+        "RBI": 3,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 8
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "@NYM",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "@CLE",
+        "AB": 5,
+        "R": 0,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 7,
+      "splits": [
+        {
+          "season": 2019,
+          "total": 106.0
+        },
+        {
+          "season": 2020,
+          "total": 69.0
+        },
+        {
+          "season": 2021,
+          "total": 135.0
+        },
+        {
+          "season": 2023,
+          "total": 148.0
+        },
+        {
+          "season": 2024,
+          "total": 121.0
+        },
+        {
+          "season": 2025,
+          "total": 160.0
+        },
+        {
+          "season": 2026,
+          "total": 147.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 6991,
+      "hr_count": 17,
+      "games": 132,
+      "events": [
+        {
+          "date": "2026-05-30",
+          "distance_feet": 451,
+          "inning": 5,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-06-10",
+          "distance_feet": 360,
+          "inning": 9,
+          "opponent": "vsCIN"
+        },
+        {
+          "date": "2026-06-23",
+          "distance_feet": 410,
+          "inning": 7,
+          "opponent": "vsATL"
+        },
+        {
+          "date": "2026-06-30",
+          "distance_feet": 425,
+          "inning": 1,
+          "opponent": "@CHC"
+        },
+        {
+          "date": "2026-06-30",
+          "distance_feet": 370,
+          "inning": 8,
+          "opponent": "@CHC"
+        },
+        {
+          "date": "2026-07-18",
+          "distance_feet": 411,
+          "inning": 3,
+          "opponent": "@KC"
+        },
+        {
+          "date": "2026-07-19",
+          "distance_feet": 401,
+          "inning": 6,
+          "opponent": "@KC"
+        },
+        {
+          "date": "2026-07-21",
+          "distance_feet": 474,
+          "inning": 8,
+          "opponent": "@ATL"
+        },
+        {
+          "date": "2026-08-05",
+          "distance_feet": 465,
+          "inning": 9,
+          "opponent": "@ARI"
+        },
+        {
+          "date": "2026-08-07",
+          "distance_feet": 400,
+          "inning": 5,
+          "opponent": "vsHOU"
+        },
+        {
+          "date": "2026-08-09",
+          "distance_feet": 421,
+          "inning": 4,
+          "opponent": "vsHOU"
+        },
+        {
+          "date": "2026-08-11",
+          "distance_feet": 382,
+          "inning": 4,
+          "opponent": "vsMIL"
+        },
+        {
+          "date": "2026-08-14",
+          "distance_feet": 404,
+          "inning": 5,
+          "opponent": "@CLE"
+        },
+        {
+          "date": "2026-08-18",
+          "distance_feet": 452,
+          "inning": 1,
+          "opponent": "@NYM"
+        },
+        {
+          "date": "2026-08-18",
+          "distance_feet": 379,
+          "inning": 5,
+          "opponent": "@NYM"
+        },
+        {
+          "date": "2026-08-23",
+          "distance_feet": 396,
+          "inning": 3,
+          "opponent": "vsMIN"
+        },
+        {
+          "date": "2026-08-23",
+          "distance_feet": 390,
+          "inning": 8,
+          "opponent": "vsMIN"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 25,
+      "games_in_window": 132,
+      "matches": [
+        {
+          "game_id": "401814763",
+          "date": "2026-03-31",
+          "opponent": "vsSF",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Tatis Jr. doubled to right.",
+          "team": "SD"
+        },
+        {
+          "game_id": "401814918",
+          "date": "2026-04-12",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Tatis Jr. singled to left, Laureano to second.",
+          "team": "SD"
+        },
+        {
+          "game_id": "401815252",
+          "date": "2026-05-07",
+          "opponent": "vsSTL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Tatis Jr. singled to left, Machado to second.",
+          "team": "SD"
+        },
+        {
+          "game_id": "401815330",
+          "date": "2026-05-13",
+          "opponent": "@MIL",
+          "inning": 3,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Tatis Jr. reached on infield single to second.",
+          "team": "SD"
+        },
+        {
+          "game_id": "401815482",
+          "date": "2026-05-24",
+          "opponent": "vsATH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Tatis Jr. singled to right.",
+          "team": "SD"
+        },
+        {
+          "game_id": "401815497",
+          "date": "2026-05-25",
+          "opponent": "vsPHI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Tatis Jr. reached on infield single to shortstop.",
+          "team": "SD"
+        },
+        {
+          "game_id": "401815527",
+          "date": "2026-05-27",
+          "opponent": "vsPHI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Tatis Jr. reached on infield single to third.",
+          "team": "SD"
+        },
+        {
+          "game_id": "401815540",
+          "date": "2026-05-29",
+          "opponent": "@WSH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Tatis Jr. singled to center.",
+          "team": "SD"
+        },
+        {
+          "game_id": "401815555",
+          "date": "2026-05-30",
+          "opponent": "@WSH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Tatis Jr. singled to right.",
+          "team": "SD"
+        },
+        {
+          "game_id": "401815594",
+          "date": "2026-06-02",
+          "opponent": "@PHI",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Tatis Jr. doubled to left.",
+          "team": "SD"
+        },
+        {
+          "game_id": "401815641",
+          "date": "2026-06-05",
+          "opponent": "vsNYM",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Tatis Jr. singled to center.",
+          "team": "SD"
+        },
+        {
+          "game_id": "401815865",
+          "date": "2026-06-22",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Tatis Jr. singled to left.",
+          "team": "SD"
+        },
+        {
+          "game_id": "401815973",
+          "date": "2026-06-30",
+          "opponent": "@CHC",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 425,
+          "description": "Tatis Jr. homered to left (425 feet).",
+          "team": "SD"
+        },
+        {
+          "game_id": "401816001",
+          "date": "2026-07-02",
+          "opponent": "@LAD",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Tatis Jr. doubled to left.",
+          "team": "SD"
+        },
+        {
+          "game_id": "401816028",
+          "date": "2026-07-04",
+          "opponent": "@LAD",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Tatis Jr. singled to left.",
+          "team": "SD"
+        },
+        {
+          "game_id": "401816065",
+          "date": "2026-07-07",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Tatis Jr. doubled to right.",
+          "team": "SD"
+        },
+        {
+          "game_id": "401816205",
+          "date": "2026-07-21",
+          "opponent": "@ATL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Tatis Jr. reached on infield single to third.",
+          "team": "SD"
+        },
+        {
+          "game_id": "401816303",
+          "date": "2026-07-28",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Tatis Jr. singled to center.",
+          "team": "SD"
+        },
+        {
+          "game_id": "401816318",
+          "date": "2026-07-29",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Tatis Jr. doubled to left.",
+          "team": "SD"
+        },
+        {
+          "game_id": "401816331",
+          "date": "2026-07-30",
+          "opponent": "vsSF",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Tatis Jr. singled to center.",
+          "team": "SD"
+        },
+        {
+          "game_id": "401816346",
+          "date": "2026-07-31",
+          "opponent": "vsSF",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Tatis Jr. doubled to center.",
+          "team": "SD"
+        },
+        {
+          "game_id": "401816398",
+          "date": "2026-08-04",
+          "opponent": "@ARI",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Tatis Jr. doubled to left.",
+          "team": "SD"
+        },
+        {
+          "game_id": "401816423",
+          "date": "2026-08-06",
+          "opponent": "@ARI",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Tatis Jr. doubled to center.",
+          "team": "SD"
+        },
+        {
+          "game_id": "401816575",
+          "date": "2026-08-18",
+          "opponent": "@NYM",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 452,
+          "description": "Tatis Jr. homered to left center (452 feet).",
+          "team": "SD"
+        },
+        {
+          "game_id": "401816679",
+          "date": "2026-08-25",
+          "opponent": "vsPIT",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Tatis Jr. doubled to left.",
+          "team": "SD"
+        }
+      ]
+    }
+  }
+}

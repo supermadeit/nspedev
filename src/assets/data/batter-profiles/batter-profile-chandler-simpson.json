@@ -1,0 +1,837 @@
+{
+  "player": "ChandlerSimpson",
+  "player_id": "chandler-simpson",
+  "team": "TB",
+  "position": "LF",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 465,
+      "R": 50,
+      "H": 143,
+      "2B": 13,
+      "3B": 6,
+      "HR": 0,
+      "RBI": 29,
+      "BB": 23,
+      "SO": 42,
+      "SB": 35,
+      "TB": 168,
+      "avg": 0.308,
+      "obp": 0.336,
+      "slg": 0.361,
+      "ops": 0.697
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 45,
+        "games": [
+          {
+            "date": "2026-03-28",
+            "value": 2
+          },
+          {
+            "date": "2026-03-29",
+            "value": 2
+          },
+          {
+            "date": "2026-03-31",
+            "value": 2
+          },
+          {
+            "date": "2026-04-01",
+            "value": 2
+          },
+          {
+            "date": "2026-04-04",
+            "value": 2
+          },
+          {
+            "date": "2026-04-06",
+            "value": 2
+          },
+          {
+            "date": "2026-04-07",
+            "value": 2
+          },
+          {
+            "date": "2026-04-12",
+            "value": 3
+          },
+          {
+            "date": "2026-04-18",
+            "value": 2
+          },
+          {
+            "date": "2026-04-20",
+            "value": 2
+          },
+          {
+            "date": "2026-04-26",
+            "value": 3
+          },
+          {
+            "date": "2026-04-29",
+            "value": 2
+          },
+          {
+            "date": "2026-05-05",
+            "value": 2
+          },
+          {
+            "date": "2026-05-07",
+            "value": 2
+          },
+          {
+            "date": "2026-05-11",
+            "value": 3
+          },
+          {
+            "date": "2026-05-15",
+            "value": 2
+          },
+          {
+            "date": "2026-05-22",
+            "value": 2
+          },
+          {
+            "date": "2026-05-25",
+            "value": 3
+          },
+          {
+            "date": "2026-05-26",
+            "value": 2
+          },
+          {
+            "date": "2026-05-29",
+            "value": 2
+          },
+          {
+            "date": "2026-06-20",
+            "value": 2
+          },
+          {
+            "date": "2026-06-21",
+            "value": 2
+          },
+          {
+            "date": "2026-06-22",
+            "value": 2
+          },
+          {
+            "date": "2026-07-01",
+            "value": 2
+          },
+          {
+            "date": "2026-07-02",
+            "value": 3
+          },
+          {
+            "date": "2026-07-09",
+            "value": 2
+          },
+          {
+            "date": "2026-07-10",
+            "value": 3
+          },
+          {
+            "date": "2026-07-18",
+            "value": 2
+          },
+          {
+            "date": "2026-07-19",
+            "value": 2
+          },
+          {
+            "date": "2026-07-21",
+            "value": 4
+          },
+          {
+            "date": "2026-07-24",
+            "value": 2
+          },
+          {
+            "date": "2026-07-25",
+            "value": 2
+          },
+          {
+            "date": "2026-07-26",
+            "value": 2
+          },
+          {
+            "date": "2026-08-02",
+            "value": 3
+          },
+          {
+            "date": "2026-08-03",
+            "value": 2
+          },
+          {
+            "date": "2026-08-04",
+            "value": 2
+          },
+          {
+            "date": "2026-08-08",
+            "value": 2
+          },
+          {
+            "date": "2026-08-09",
+            "value": 4
+          },
+          {
+            "date": "2026-08-10",
+            "value": 2
+          },
+          {
+            "date": "2026-08-11",
+            "value": 2
+          },
+          {
+            "date": "2026-08-15",
+            "value": 2
+          },
+          {
+            "date": "2026-08-16",
+            "value": 2
+          },
+          {
+            "date": "2026-08-18",
+            "value": 2
+          },
+          {
+            "date": "2026-08-23",
+            "value": 2
+          },
+          {
+            "date": "2026-08-24",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 0,
+        "games": []
+      },
+      "rbi_3plus_games": {
+        "count": 1,
+        "games": [
+          {
+            "date": "2026-05-07",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "@DET",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-24",
+        "date_iso": "2026-08-24",
+        "opponent": "@DET",
+        "AB": 4,
+        "R": 0,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "@BAL",
+        "AB": 3,
+        "R": 0,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "@BAL",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "@BAL",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-20",
+        "date_iso": "2026-08-20",
+        "opponent": "vsTOR",
+        "AB": 4,
+        "R": 1,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "vsTOR",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "vsTOR",
+        "AB": 5,
+        "R": 0,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "vsBAL",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "vsBAL",
+        "AB": 4,
+        "R": 0,
+        "H": 2,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 3
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 1,
+      "splits": [
+        {
+          "season": 2026,
+          "total": 143.0
+        }
+      ]
+    },
+    "hr_distance": {},
+    "first_pa": {
+      "count": 36,
+      "games_in_window": 122,
+      "matches": [
+        {
+          "game_id": "401814731",
+          "date": "2026-03-29",
+          "opponent": "@STL",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson singled to left.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401814745",
+          "date": "2026-03-30",
+          "opponent": "@MIL",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson reached on bunt single to second.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401814759",
+          "date": "2026-03-31",
+          "opponent": "@MIL",
+          "inning": 3,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson singled to left.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401814805",
+          "date": "2026-04-04",
+          "opponent": "@MIN",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson reached on infield single to third, Simpson safe at second on throwing error by third baseman Lewis.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401814820",
+          "date": "2026-04-05",
+          "opponent": "@MIN",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson singled to left.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401814827",
+          "date": "2026-04-06",
+          "opponent": "vsCHC",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson singled to center.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401814912",
+          "date": "2026-04-12",
+          "opponent": "vsNYY",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson singled to center.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815007",
+          "date": "2026-04-19",
+          "opponent": "@PIT",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson singled to left.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815017",
+          "date": "2026-04-20",
+          "opponent": "vsCIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson reached on infield single to shortstop.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815099",
+          "date": "2026-04-26",
+          "opponent": "vsMIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson singled to center.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815124",
+          "date": "2026-04-28",
+          "opponent": "@CLE",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Simpson doubled to left.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815162",
+          "date": "2026-05-01",
+          "opponent": "vsSF",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson reached on bunt single to second.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815205",
+          "date": "2026-05-04",
+          "opponent": "vsTOR",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson singled to center.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815300",
+          "date": "2026-05-11",
+          "opponent": "@TOR",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson reached on infield single to pitcher.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815391",
+          "date": "2026-05-18",
+          "opponent": "vsBAL",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Simpson doubled to left.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815447",
+          "date": "2026-05-22",
+          "opponent": "@NYY",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson singled to center.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815504",
+          "date": "2026-05-26",
+          "opponent": "@BAL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Simpson doubled to right.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815519",
+          "date": "2026-05-27",
+          "opponent": "@BAL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson reached on infield single to shortstop.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815856",
+          "date": "2026-06-22",
+          "opponent": "vsKC",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Simpson doubled to right.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815989",
+          "date": "2026-07-01",
+          "opponent": "@KC",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Simpson doubled to right.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401815998",
+          "date": "2026-07-02",
+          "opponent": "@KC",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson reached on infield single to third.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816038",
+          "date": "2026-07-05",
+          "opponent": "@HOU",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson singled to center.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816073",
+          "date": "2026-07-08",
+          "opponent": "vsNYY",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson singled to right.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816103",
+          "date": "2026-07-10",
+          "opponent": "vsSEA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson reached on infield single to shortstop, Caminero to second, Aranda to third.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816118",
+          "date": "2026-07-11",
+          "opponent": "vsSEA",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson singled to center.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816160",
+          "date": "2026-07-18",
+          "opponent": "@BOS",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson reached on infield single to second, Vilade scored on throwing error by second baseman Seigler, Simpson to second.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816206",
+          "date": "2026-07-21",
+          "opponent": "@TOR",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson singled to right, DeLuca scored.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816253",
+          "date": "2026-07-25",
+          "opponent": "vsCLE",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson singled to center.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816383",
+          "date": "2026-08-03",
+          "opponent": "@COL",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson singled to right.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816411",
+          "date": "2026-08-05",
+          "opponent": "@COL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson singled to left, Aranda scored, Caminero to second.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816468",
+          "date": "2026-08-09",
+          "opponent": "@SEA",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson reached on infield single to shortstop, Aranda to second, D\u00edaz to third.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816492",
+          "date": "2026-08-11",
+          "opponent": "@ATH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson singled to left.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816518",
+          "date": "2026-08-14",
+          "opponent": "vsBAL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson singled to center.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816533",
+          "date": "2026-08-15",
+          "opponent": "vsBAL",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson reached on infield single to second.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816612",
+          "date": "2026-08-21",
+          "opponent": "@BAL",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson singled to right, Caminero scored.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816642",
+          "date": "2026-08-23",
+          "opponent": "@BAL",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson singled to center.",
+          "team": "TB"
+        }
+      ]
+    }
+  }
+}

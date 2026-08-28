@@ -1,0 +1,1038 @@
+{
+  "player": "AlecBurleson",
+  "player_id": "alec-burleson",
+  "team": "STL",
+  "position": "1B",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 506,
+      "R": 76,
+      "H": 147,
+      "2B": 33,
+      "3B": 1,
+      "HR": 21,
+      "RBI": 98,
+      "BB": 46,
+      "SO": 94,
+      "SB": 3,
+      "TB": 245,
+      "avg": 0.291,
+      "obp": 0.355,
+      "slg": 0.484,
+      "ops": 0.839
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 41,
+        "games": [
+          {
+            "date": "2026-03-26",
+            "value": 3
+          },
+          {
+            "date": "2026-03-30",
+            "value": 2
+          },
+          {
+            "date": "2026-04-08",
+            "value": 3
+          },
+          {
+            "date": "2026-04-12",
+            "value": 2
+          },
+          {
+            "date": "2026-04-13",
+            "value": 2
+          },
+          {
+            "date": "2026-04-15",
+            "value": 2
+          },
+          {
+            "date": "2026-04-17",
+            "value": 2
+          },
+          {
+            "date": "2026-04-18",
+            "value": 2
+          },
+          {
+            "date": "2026-04-21",
+            "value": 2
+          },
+          {
+            "date": "2026-04-27",
+            "value": 2
+          },
+          {
+            "date": "2026-04-28",
+            "value": 2
+          },
+          {
+            "date": "2026-04-30",
+            "value": 3
+          },
+          {
+            "date": "2026-05-08",
+            "value": 2
+          },
+          {
+            "date": "2026-05-13",
+            "value": 3
+          },
+          {
+            "date": "2026-05-15",
+            "value": 2
+          },
+          {
+            "date": "2026-05-19",
+            "value": 2
+          },
+          {
+            "date": "2026-05-21",
+            "value": 2
+          },
+          {
+            "date": "2026-05-23",
+            "value": 2
+          },
+          {
+            "date": "2026-05-30",
+            "value": 2
+          },
+          {
+            "date": "2026-06-02",
+            "value": 2
+          },
+          {
+            "date": "2026-06-03",
+            "value": 2
+          },
+          {
+            "date": "2026-06-05",
+            "value": 2
+          },
+          {
+            "date": "2026-06-09",
+            "value": 2
+          },
+          {
+            "date": "2026-06-21",
+            "value": 3
+          },
+          {
+            "date": "2026-07-03",
+            "value": 2
+          },
+          {
+            "date": "2026-07-04",
+            "value": 2
+          },
+          {
+            "date": "2026-07-05",
+            "value": 2
+          },
+          {
+            "date": "2026-07-08",
+            "value": 2
+          },
+          {
+            "date": "2026-07-18",
+            "value": 2
+          },
+          {
+            "date": "2026-07-19",
+            "value": 3
+          },
+          {
+            "date": "2026-07-21",
+            "value": 3
+          },
+          {
+            "date": "2026-07-23",
+            "value": 3
+          },
+          {
+            "date": "2026-07-25",
+            "value": 3
+          },
+          {
+            "date": "2026-07-26",
+            "value": 2
+          },
+          {
+            "date": "2026-08-01",
+            "value": 2
+          },
+          {
+            "date": "2026-08-03",
+            "value": 3
+          },
+          {
+            "date": "2026-08-10",
+            "value": 2
+          },
+          {
+            "date": "2026-08-12",
+            "value": 2
+          },
+          {
+            "date": "2026-08-16",
+            "value": 3
+          },
+          {
+            "date": "2026-08-17",
+            "value": 2
+          },
+          {
+            "date": "2026-08-23",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 19,
+        "games": [
+          {
+            "date": "2026-03-26",
+            "value": 1
+          },
+          {
+            "date": "2026-04-12",
+            "value": 1
+          },
+          {
+            "date": "2026-04-18",
+            "value": 1
+          },
+          {
+            "date": "2026-04-29",
+            "value": 1
+          },
+          {
+            "date": "2026-05-01",
+            "value": 1
+          },
+          {
+            "date": "2026-05-07",
+            "value": 1
+          },
+          {
+            "date": "2026-05-19",
+            "value": 1
+          },
+          {
+            "date": "2026-06-05",
+            "value": 1
+          },
+          {
+            "date": "2026-06-09",
+            "value": 1
+          },
+          {
+            "date": "2026-06-10",
+            "value": 1
+          },
+          {
+            "date": "2026-06-11",
+            "value": 1
+          },
+          {
+            "date": "2026-06-12",
+            "value": 1
+          },
+          {
+            "date": "2026-06-14",
+            "value": 1
+          },
+          {
+            "date": "2026-07-02",
+            "value": 1
+          },
+          {
+            "date": "2026-07-08",
+            "value": 1
+          },
+          {
+            "date": "2026-08-03",
+            "value": 3
+          },
+          {
+            "date": "2026-08-09",
+            "value": 1
+          },
+          {
+            "date": "2026-08-15",
+            "value": 1
+          },
+          {
+            "date": "2026-08-16",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 11,
+        "games": [
+          {
+            "date": "2026-04-08",
+            "value": 3
+          },
+          {
+            "date": "2026-04-28",
+            "value": 3
+          },
+          {
+            "date": "2026-04-30",
+            "value": 3
+          },
+          {
+            "date": "2026-06-03",
+            "value": 3
+          },
+          {
+            "date": "2026-06-09",
+            "value": 3
+          },
+          {
+            "date": "2026-07-03",
+            "value": 4
+          },
+          {
+            "date": "2026-07-08",
+            "value": 3
+          },
+          {
+            "date": "2026-08-03",
+            "value": 6
+          },
+          {
+            "date": "2026-08-10",
+            "value": 3
+          },
+          {
+            "date": "2026-08-12",
+            "value": 3
+          },
+          {
+            "date": "2026-08-16",
+            "value": 4
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-26",
+        "date_iso": "2026-08-26",
+        "opponent": "vsBAL",
+        "AB": 5,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 2,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "vsBAL",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "@PHI",
+        "AB": 4,
+        "R": 0,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 2,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "@PHI",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "@PHI",
+        "AB": 2,
+        "R": 2,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-20",
+        "date_iso": "2026-08-20",
+        "opponent": "@CIN",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "@CIN",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "@CIN",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "@CIN",
+        "AB": 5,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "@CIN",
+        "AB": 4,
+        "R": 0,
+        "H": 2,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 2,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 3
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 5,
+      "splits": [
+        {
+          "season": 2022,
+          "total": 9.0
+        },
+        {
+          "season": 2023,
+          "total": 77.0
+        },
+        {
+          "season": 2024,
+          "total": 147.0
+        },
+        {
+          "season": 2025,
+          "total": 144.0
+        },
+        {
+          "season": 2026,
+          "total": 147.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 8502,
+      "hr_count": 21,
+      "games": 133,
+      "events": [
+        {
+          "date": "2026-03-26",
+          "distance_feet": 432,
+          "inning": 6,
+          "opponent": "vsTB"
+        },
+        {
+          "date": "2026-04-12",
+          "distance_feet": 430,
+          "inning": 8,
+          "opponent": "vsBOS"
+        },
+        {
+          "date": "2026-04-18",
+          "distance_feet": 408,
+          "inning": 7,
+          "opponent": "@HOU"
+        },
+        {
+          "date": "2026-04-29",
+          "distance_feet": 411,
+          "inning": 5,
+          "opponent": "@PIT"
+        },
+        {
+          "date": "2026-05-01",
+          "distance_feet": 390,
+          "inning": 3,
+          "opponent": "vsLAD"
+        },
+        {
+          "date": "2026-05-07",
+          "distance_feet": 378,
+          "inning": 4,
+          "opponent": "@SD"
+        },
+        {
+          "date": "2026-05-19",
+          "distance_feet": 404,
+          "inning": 8,
+          "opponent": "vsPIT"
+        },
+        {
+          "date": "2026-06-05",
+          "distance_feet": 387,
+          "inning": 3,
+          "opponent": "vsCIN"
+        },
+        {
+          "date": "2026-06-09",
+          "distance_feet": 378,
+          "inning": 5,
+          "opponent": "@NYM"
+        },
+        {
+          "date": "2026-06-10",
+          "distance_feet": 408,
+          "inning": 9,
+          "opponent": "@NYM"
+        },
+        {
+          "date": "2026-06-11",
+          "distance_feet": 424,
+          "inning": 1,
+          "opponent": "@NYM"
+        },
+        {
+          "date": "2026-06-12",
+          "distance_feet": 419,
+          "inning": 1,
+          "opponent": "@MIN"
+        },
+        {
+          "date": "2026-06-14",
+          "distance_feet": 397,
+          "inning": 4,
+          "opponent": "@MIN"
+        },
+        {
+          "date": "2026-07-02",
+          "distance_feet": 395,
+          "inning": 9,
+          "opponent": "@ATL"
+        },
+        {
+          "date": "2026-07-08",
+          "distance_feet": 443,
+          "inning": 6,
+          "opponent": "vsMIL"
+        },
+        {
+          "date": "2026-08-03",
+          "distance_feet": 350,
+          "inning": 1,
+          "opponent": "@NYY"
+        },
+        {
+          "date": "2026-08-03",
+          "distance_feet": 365,
+          "inning": 4,
+          "opponent": "@NYY"
+        },
+        {
+          "date": "2026-08-03",
+          "distance_feet": 418,
+          "inning": 8,
+          "opponent": "@NYY"
+        },
+        {
+          "date": "2026-08-09",
+          "distance_feet": 441,
+          "inning": 5,
+          "opponent": "vsCOL"
+        },
+        {
+          "date": "2026-08-15",
+          "distance_feet": 403,
+          "inning": 8,
+          "opponent": "@CHC"
+        },
+        {
+          "date": "2026-08-16",
+          "distance_feet": 421,
+          "inning": 1,
+          "opponent": "@CHC"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 32,
+      "games_in_window": 133,
+      "matches": [
+        {
+          "game_id": "401814697",
+          "date": "2026-03-26",
+          "opponent": "vsTB",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Burleson singled to center, Herrera to third.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401814716",
+          "date": "2026-03-28",
+          "opponent": "vsTB",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Burleson singled to center, Wetherholt scored.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401814744",
+          "date": "2026-03-30",
+          "opponent": "vsNYM",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Burleson singled to right, Wetherholt scored.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401814848",
+          "date": "2026-04-07",
+          "opponent": "@WSH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Burleson singled to right, Wetherholt to third.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401814863",
+          "date": "2026-04-08",
+          "opponent": "@WSH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Burleson reached on bunt single to third, Herrera to second.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401814927",
+          "date": "2026-04-13",
+          "opponent": "vsCLE",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Burleson singled to right, Wetherholt scored, Herrera to second.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401814954",
+          "date": "2026-04-15",
+          "opponent": "vsCLE",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Burleson singled to center, Herrera to third.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401814980",
+          "date": "2026-04-17",
+          "opponent": "@HOU",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Burleson singled to center, Wetherholt to third.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815032",
+          "date": "2026-04-21",
+          "opponent": "@MIA",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Burleson singled to center, Wetherholt scored, Burleson to second.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815333",
+          "date": "2026-05-13",
+          "opponent": "@ATH",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Burleson doubled to center.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815383",
+          "date": "2026-05-17",
+          "opponent": "vsKC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Burleson singled to right.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815585",
+          "date": "2026-06-01",
+          "opponent": "vsTEX",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Burleson reached on infield single to pitcher, Herrera to second.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815600",
+          "date": "2026-06-02",
+          "opponent": "vsTEX",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Burleson singled to center.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815615",
+          "date": "2026-06-03",
+          "opponent": "vsTEX",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Burleson singled to right, Walker scored, Vel\u00e1zquez to third.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815635",
+          "date": "2026-06-05",
+          "opponent": "vsCIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Burleson singled to right, Herrera to third.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815650",
+          "date": "2026-06-06",
+          "opponent": "vsCIN",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Burleson singled to right.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815715",
+          "date": "2026-06-11",
+          "opponent": "@NYM",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 424,
+          "description": "Burleson homered to right (424 feet).",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815730",
+          "date": "2026-06-12",
+          "opponent": "@MIN",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 419,
+          "description": "Burleson homered to right center (419 feet).",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815819",
+          "date": "2026-06-19",
+          "opponent": "@KC",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Burleson doubled to right, Herrera to third.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401816079",
+          "date": "2026-07-08",
+          "opponent": "vsMIL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Burleson doubled to right, Walker scored.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401816136",
+          "date": "2026-07-12",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Burleson doubled to left, Walker scored.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401816154",
+          "date": "2026-07-17",
+          "opponent": "@ARI",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Burleson singled to right, Herrera to second.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401816184",
+          "date": "2026-07-19",
+          "opponent": "@ARI",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Burleson singled to center.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401816215",
+          "date": "2026-07-21",
+          "opponent": "@LAA",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Burleson reached on infield single to second, Herrera to second.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401881162",
+          "date": "2026-07-23",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Burleson reached on infield single to shortstop, Walker to third.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401816260",
+          "date": "2026-07-25",
+          "opponent": "vsCIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Burleson singled to left, Wetherholt scored, Walker to second.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401816275",
+          "date": "2026-07-26",
+          "opponent": "vsCIN",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Burleson doubled to right.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401816352",
+          "date": "2026-08-01",
+          "opponent": "@TOR",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Burleson singled to left.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401816377",
+          "date": "2026-08-03",
+          "opponent": "@NYY",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 350,
+          "description": "Burleson homered to right (350 feet), Wetherholt scored.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401816557",
+          "date": "2026-08-16",
+          "opponent": "@CHC",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 421,
+          "description": "Burleson homered to right center (421 feet), Wetherholt scored.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401873710",
+          "date": "2026-08-17",
+          "opponent": "@CIN",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Burleson doubled to right, Herrera scored and B\u00e1ez scored.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401816641",
+          "date": "2026-08-23",
+          "opponent": "@PHI",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Burleson singled to center, Wetherholt scored.",
+          "team": "STL"
+        }
+      ]
+    }
+  }
+}

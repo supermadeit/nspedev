@@ -1,0 +1,506 @@
+{
+  "player": "LuisGarciaJr",
+  "player_id": "luis-garcia-jr",
+  "team": "WSH",
+  "position": "1B",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 429,
+      "R": 59,
+      "H": 123,
+      "2B": 24,
+      "3B": 5,
+      "HR": 28,
+      "RBI": 87,
+      "BB": 22,
+      "SO": 74,
+      "SB": 4,
+      "TB": 241,
+      "avg": 0.287,
+      "obp": 0.32,
+      "slg": 0.562,
+      "ops": 0.882
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 33,
+        "games": [
+          {
+            "date": "2026-03-30",
+            "value": 2
+          },
+          {
+            "date": "2026-04-03",
+            "value": 2
+          },
+          {
+            "date": "2026-04-04",
+            "value": 3
+          },
+          {
+            "date": "2026-04-21",
+            "value": 4
+          },
+          {
+            "date": "2026-04-24",
+            "value": 2
+          },
+          {
+            "date": "2026-04-30",
+            "value": 2
+          },
+          {
+            "date": "2026-05-09",
+            "value": 3
+          },
+          {
+            "date": "2026-05-10",
+            "value": 2
+          },
+          {
+            "date": "2026-05-12",
+            "value": 3
+          },
+          {
+            "date": "2026-05-17",
+            "value": 2
+          },
+          {
+            "date": "2026-05-25",
+            "value": 3
+          },
+          {
+            "date": "2026-05-30",
+            "value": 2
+          },
+          {
+            "date": "2026-06-05",
+            "value": 2
+          },
+          {
+            "date": "2026-06-08",
+            "value": 2
+          },
+          {
+            "date": "2026-06-16",
+            "value": 2
+          },
+          {
+            "date": "2026-06-19",
+            "value": 2
+          },
+          {
+            "date": "2026-06-27",
+            "value": 4
+          },
+          {
+            "date": "2026-06-28",
+            "value": 3
+          },
+          {
+            "date": "2026-07-03",
+            "value": 2
+          },
+          {
+            "date": "2026-07-05",
+            "value": 2
+          },
+          {
+            "date": "2026-07-07",
+            "value": 2
+          },
+          {
+            "date": "2026-07-08",
+            "value": 3
+          },
+          {
+            "date": "2026-07-21",
+            "value": 2
+          },
+          {
+            "date": "2026-07-26",
+            "value": 2
+          },
+          {
+            "date": "2026-07-27",
+            "value": 2
+          },
+          {
+            "date": "2026-07-28",
+            "value": 2
+          },
+          {
+            "date": "2026-07-30",
+            "value": 3
+          },
+          {
+            "date": "2026-08-03",
+            "value": 2
+          },
+          {
+            "date": "2026-08-11",
+            "value": 2
+          },
+          {
+            "date": "2026-08-13",
+            "value": 2
+          },
+          {
+            "date": "2026-08-20",
+            "value": 3
+          },
+          {
+            "date": "2026-08-25",
+            "value": 4
+          },
+          {
+            "date": "2026-08-26",
+            "value": 3
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 24,
+        "games": [
+          {
+            "date": "2026-04-05",
+            "value": 1
+          },
+          {
+            "date": "2026-05-12",
+            "value": 2
+          },
+          {
+            "date": "2026-05-25",
+            "value": 1
+          },
+          {
+            "date": "2026-05-31",
+            "value": 1
+          },
+          {
+            "date": "2026-06-05",
+            "value": 2
+          },
+          {
+            "date": "2026-06-09",
+            "value": 1
+          },
+          {
+            "date": "2026-06-13",
+            "value": 1
+          },
+          {
+            "date": "2026-06-19",
+            "value": 1
+          },
+          {
+            "date": "2026-06-22",
+            "value": 1
+          },
+          {
+            "date": "2026-06-23",
+            "value": 1
+          },
+          {
+            "date": "2026-06-24",
+            "value": 1
+          },
+          {
+            "date": "2026-06-27",
+            "value": 1
+          },
+          {
+            "date": "2026-06-28",
+            "value": 2
+          },
+          {
+            "date": "2026-07-03",
+            "value": 2
+          },
+          {
+            "date": "2026-07-05",
+            "value": 1
+          },
+          {
+            "date": "2026-07-08",
+            "value": 1
+          },
+          {
+            "date": "2026-07-22",
+            "value": 1
+          },
+          {
+            "date": "2026-07-28",
+            "value": 1
+          },
+          {
+            "date": "2026-07-30",
+            "value": 1
+          },
+          {
+            "date": "2026-08-03",
+            "value": 1
+          },
+          {
+            "date": "2026-08-20",
+            "value": 1
+          },
+          {
+            "date": "2026-08-22",
+            "value": 1
+          },
+          {
+            "date": "2026-08-25",
+            "value": 1
+          },
+          {
+            "date": "2026-08-26",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 8,
+        "games": [
+          {
+            "date": "2026-03-30",
+            "value": 3
+          },
+          {
+            "date": "2026-04-21",
+            "value": 3
+          },
+          {
+            "date": "2026-05-25",
+            "value": 4
+          },
+          {
+            "date": "2026-06-05",
+            "value": 6
+          },
+          {
+            "date": "2026-06-28",
+            "value": 5
+          },
+          {
+            "date": "2026-07-03",
+            "value": 3
+          },
+          {
+            "date": "2026-07-08",
+            "value": 3
+          },
+          {
+            "date": "2026-08-25",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-26",
+        "date_iso": "2026-08-26",
+        "opponent": "vsHOU",
+        "AB": 5,
+        "R": 3,
+        "H": 3,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 2,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 6
+      },
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "vsHOU",
+        "AB": 5,
+        "R": 2,
+        "H": 4,
+        "2B": 1,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 3,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 8
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "vsTOR",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 2,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "vsTOR",
+        "AB": 3,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 2,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "vsTOR",
+        "AB": 1,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-20",
+        "date_iso": "2026-08-20",
+        "opponent": "@BAL",
+        "AB": 4,
+        "R": 2,
+        "H": 3,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 6
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "@BAL",
+        "AB": 5,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "@BAL",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "@TOR",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-15",
+        "date_iso": "2026-08-15",
+        "opponent": "@TOR",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 1
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 1,
+      "splits": [
+        {
+          "season": 2026,
+          "total": 123.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 409,
+      "hr_count": 1,
+      "games": 123,
+      "events": [
+        {
+          "date": "2026-06-05",
+          "distance_feet": 409,
+          "inning": 3,
+          "opponent": "@ARI"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 1,
+      "games_in_window": 123,
+      "matches": [
+        {
+          "game_id": "401815642",
+          "date": "2026-06-05",
+          "opponent": "@ARI",
+          "inning": 3,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 409,
+          "description": "A. Garcia homered to left center (409 feet).",
+          "team": "WSH"
+        }
+      ]
+    }
+  }
+}

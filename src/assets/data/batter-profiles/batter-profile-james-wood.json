@@ -1,0 +1,1020 @@
+{
+  "player": "JamesWood",
+  "player_id": "james-wood",
+  "team": "WSH",
+  "position": "RF",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 437,
+      "R": 100,
+      "H": 116,
+      "2B": 26,
+      "3B": 1,
+      "HR": 30,
+      "RBI": 73,
+      "BB": 90,
+      "SO": 153,
+      "SB": 17,
+      "TB": 234,
+      "avg": 0.265,
+      "obp": 0.393,
+      "slg": 0.535,
+      "ops": 0.928
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 29,
+        "games": [
+          {
+            "date": "2026-04-06",
+            "value": 2
+          },
+          {
+            "date": "2026-04-07",
+            "value": 2
+          },
+          {
+            "date": "2026-04-08",
+            "value": 2
+          },
+          {
+            "date": "2026-04-10",
+            "value": 4
+          },
+          {
+            "date": "2026-04-16",
+            "value": 2
+          },
+          {
+            "date": "2026-04-22",
+            "value": 2
+          },
+          {
+            "date": "2026-04-29",
+            "value": 2
+          },
+          {
+            "date": "2026-05-02",
+            "value": 2
+          },
+          {
+            "date": "2026-05-06",
+            "value": 2
+          },
+          {
+            "date": "2026-05-09",
+            "value": 2
+          },
+          {
+            "date": "2026-05-17",
+            "value": 2
+          },
+          {
+            "date": "2026-05-18",
+            "value": 3
+          },
+          {
+            "date": "2026-05-19",
+            "value": 3
+          },
+          {
+            "date": "2026-05-25",
+            "value": 4
+          },
+          {
+            "date": "2026-05-26",
+            "value": 3
+          },
+          {
+            "date": "2026-06-05",
+            "value": 2
+          },
+          {
+            "date": "2026-06-09",
+            "value": 3
+          },
+          {
+            "date": "2026-06-12",
+            "value": 2
+          },
+          {
+            "date": "2026-06-14",
+            "value": 3
+          },
+          {
+            "date": "2026-06-22",
+            "value": 2
+          },
+          {
+            "date": "2026-06-30",
+            "value": 3
+          },
+          {
+            "date": "2026-07-01",
+            "value": 2
+          },
+          {
+            "date": "2026-07-03",
+            "value": 2
+          },
+          {
+            "date": "2026-07-07",
+            "value": 2
+          },
+          {
+            "date": "2026-07-10",
+            "value": 3
+          },
+          {
+            "date": "2026-07-11",
+            "value": 3
+          },
+          {
+            "date": "2026-07-21",
+            "value": 2
+          },
+          {
+            "date": "2026-07-26",
+            "value": 2
+          },
+          {
+            "date": "2026-07-29",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 29,
+        "games": [
+          {
+            "date": "2026-03-28",
+            "value": 1
+          },
+          {
+            "date": "2026-04-05",
+            "value": 1
+          },
+          {
+            "date": "2026-04-06",
+            "value": 1
+          },
+          {
+            "date": "2026-04-07",
+            "value": 1
+          },
+          {
+            "date": "2026-04-12",
+            "value": 1
+          },
+          {
+            "date": "2026-04-17",
+            "value": 1
+          },
+          {
+            "date": "2026-04-18",
+            "value": 1
+          },
+          {
+            "date": "2026-04-21",
+            "value": 1
+          },
+          {
+            "date": "2026-04-22",
+            "value": 1
+          },
+          {
+            "date": "2026-04-23",
+            "value": 1
+          },
+          {
+            "date": "2026-05-09",
+            "value": 1
+          },
+          {
+            "date": "2026-05-12",
+            "value": 1
+          },
+          {
+            "date": "2026-05-19",
+            "value": 1
+          },
+          {
+            "date": "2026-05-25",
+            "value": 1
+          },
+          {
+            "date": "2026-05-26",
+            "value": 1
+          },
+          {
+            "date": "2026-05-31",
+            "value": 1
+          },
+          {
+            "date": "2026-06-05",
+            "value": 1
+          },
+          {
+            "date": "2026-06-10",
+            "value": 1
+          },
+          {
+            "date": "2026-06-12",
+            "value": 1
+          },
+          {
+            "date": "2026-06-14",
+            "value": 1
+          },
+          {
+            "date": "2026-06-29",
+            "value": 1
+          },
+          {
+            "date": "2026-07-01",
+            "value": 1
+          },
+          {
+            "date": "2026-07-04",
+            "value": 1
+          },
+          {
+            "date": "2026-07-06",
+            "value": 1
+          },
+          {
+            "date": "2026-07-07",
+            "value": 1
+          },
+          {
+            "date": "2026-07-10",
+            "value": 1
+          },
+          {
+            "date": "2026-07-11",
+            "value": 1
+          },
+          {
+            "date": "2026-07-12",
+            "value": 1
+          },
+          {
+            "date": "2026-07-26",
+            "value": 2
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 7,
+        "games": [
+          {
+            "date": "2026-04-05",
+            "value": 3
+          },
+          {
+            "date": "2026-04-06",
+            "value": 3
+          },
+          {
+            "date": "2026-04-29",
+            "value": 3
+          },
+          {
+            "date": "2026-05-19",
+            "value": 4
+          },
+          {
+            "date": "2026-07-01",
+            "value": 3
+          },
+          {
+            "date": "2026-07-06",
+            "value": 4
+          },
+          {
+            "date": "2026-07-26",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-03",
+        "date_iso": "2026-08-03",
+        "opponent": "@PHI",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-02",
+        "date_iso": "2026-08-02",
+        "opponent": "@ATL",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-01",
+        "date_iso": "2026-08-01",
+        "opponent": "@ATL",
+        "AB": 3,
+        "R": 1,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-07-31",
+        "date_iso": "2026-07-31",
+        "opponent": "@ATL",
+        "AB": 5,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-07-30",
+        "date_iso": "2026-07-30",
+        "opponent": "@ATL",
+        "AB": 2,
+        "R": 1,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 3,
+        "SO": 0,
+        "SB": 1,
+        "TB": 0
+      },
+      {
+        "date": "2026-07-29",
+        "date_iso": "2026-07-29",
+        "opponent": "vsTOR",
+        "AB": 4,
+        "R": 1,
+        "H": 2,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 3
+      },
+      {
+        "date": "2026-07-28",
+        "date_iso": "2026-07-28",
+        "opponent": "vsTOR",
+        "AB": 4,
+        "R": 1,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-07-27",
+        "date_iso": "2026-07-27",
+        "opponent": "vsTOR",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 2,
+        "SO": 1,
+        "SB": 1,
+        "TB": 1
+      },
+      {
+        "date": "2026-07-26",
+        "date_iso": "2026-07-26",
+        "opponent": "vsARI",
+        "AB": 4,
+        "R": 2,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 2,
+        "RBI": 3,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 8
+      },
+      {
+        "date": "2026-07-25",
+        "date_iso": "2026-07-25",
+        "opponent": "vsARI",
+        "AB": 5,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 1
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 2,
+      "splits": [
+        {
+          "season": 2024,
+          "total": 78.0
+        },
+        {
+          "season": 2026,
+          "total": 116.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 12351,
+      "hr_count": 30,
+      "games": 115,
+      "events": [
+        {
+          "date": "2026-03-28",
+          "distance_feet": 364,
+          "inning": 4,
+          "opponent": "@CHC"
+        },
+        {
+          "date": "2026-04-05",
+          "distance_feet": 416,
+          "inning": 4,
+          "opponent": "vsLAD"
+        },
+        {
+          "date": "2026-04-06",
+          "distance_feet": 409,
+          "inning": 8,
+          "opponent": "vsSTL"
+        },
+        {
+          "date": "2026-04-07",
+          "distance_feet": 394,
+          "inning": 3,
+          "opponent": "vsSTL"
+        },
+        {
+          "date": "2026-04-12",
+          "distance_feet": 393,
+          "inning": 4,
+          "opponent": "@MIL"
+        },
+        {
+          "date": "2026-04-17",
+          "distance_feet": 441,
+          "inning": 7,
+          "opponent": "vsSF"
+        },
+        {
+          "date": "2026-04-18",
+          "distance_feet": 406,
+          "inning": 1,
+          "opponent": "vsSF"
+        },
+        {
+          "date": "2026-04-21",
+          "distance_feet": 412,
+          "inning": 2,
+          "opponent": "vsATL"
+        },
+        {
+          "date": "2026-04-22",
+          "distance_feet": 413,
+          "inning": 6,
+          "opponent": "vsATL"
+        },
+        {
+          "date": "2026-04-23",
+          "distance_feet": 387,
+          "inning": 1,
+          "opponent": "vsATL"
+        },
+        {
+          "date": "2026-05-09",
+          "distance_feet": 442,
+          "inning": 1,
+          "opponent": "@MIA"
+        },
+        {
+          "date": "2026-05-12",
+          "distance_feet": 396,
+          "inning": 3,
+          "opponent": "@CIN"
+        },
+        {
+          "date": "2026-05-19",
+          "distance_feet": 379,
+          "inning": 2,
+          "opponent": "vsNYM"
+        },
+        {
+          "date": "2026-05-25",
+          "distance_feet": 412,
+          "inning": 1,
+          "opponent": "@CLE"
+        },
+        {
+          "date": "2026-05-26",
+          "distance_feet": 401,
+          "inning": 2,
+          "opponent": "@CLE"
+        },
+        {
+          "date": "2026-05-31",
+          "distance_feet": 417,
+          "inning": 5,
+          "opponent": "vsSD"
+        },
+        {
+          "date": "2026-06-05",
+          "distance_feet": 419,
+          "inning": 3,
+          "opponent": "@ARI"
+        },
+        {
+          "date": "2026-06-10",
+          "distance_feet": 405,
+          "inning": 3,
+          "opponent": "@SF"
+        },
+        {
+          "date": "2026-06-12",
+          "distance_feet": 416,
+          "inning": 4,
+          "opponent": "vsSEA"
+        },
+        {
+          "date": "2026-06-14",
+          "distance_feet": 413,
+          "inning": 1,
+          "opponent": "vsSEA"
+        },
+        {
+          "date": "2026-06-29",
+          "distance_feet": 441,
+          "inning": 1,
+          "opponent": "@BOS"
+        },
+        {
+          "date": "2026-07-01",
+          "distance_feet": 393,
+          "inning": 7,
+          "opponent": "@BOS"
+        },
+        {
+          "date": "2026-07-04",
+          "distance_feet": 428,
+          "inning": 1,
+          "opponent": "vsPIT"
+        },
+        {
+          "date": "2026-07-06",
+          "distance_feet": 446,
+          "inning": 5,
+          "opponent": "vsHOU"
+        },
+        {
+          "date": "2026-07-07",
+          "distance_feet": 419,
+          "inning": 1,
+          "opponent": "vsHOU"
+        },
+        {
+          "date": "2026-07-10",
+          "distance_feet": 419,
+          "inning": 7,
+          "opponent": "vsNYY"
+        },
+        {
+          "date": "2026-07-11",
+          "distance_feet": 388,
+          "inning": 1,
+          "opponent": "vsNYY"
+        },
+        {
+          "date": "2026-07-12",
+          "distance_feet": 434,
+          "inning": 1,
+          "opponent": "vsNYY"
+        },
+        {
+          "date": "2026-07-26",
+          "distance_feet": 430,
+          "inning": 5,
+          "opponent": "vsARI"
+        },
+        {
+          "date": "2026-07-26",
+          "distance_feet": 418,
+          "inning": 8,
+          "opponent": "vsARI"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 29,
+      "games_in_window": 115,
+      "matches": [
+        {
+          "game_id": "401814785",
+          "date": "2026-04-03",
+          "opponent": "vsLAD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Wood doubled to center.",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401814833",
+          "date": "2026-04-06",
+          "opponent": "vsSTL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Wood reached on infield single to shortstop.",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401814848",
+          "date": "2026-04-07",
+          "opponent": "vsSTL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Wood singled to center.",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401814863",
+          "date": "2026-04-08",
+          "opponent": "vsSTL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Wood singled to center.",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401814887",
+          "date": "2026-04-10",
+          "opponent": "@MIL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Wood doubled to center.",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401814991",
+          "date": "2026-04-18",
+          "opponent": "vsSF",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 406,
+          "description": "Wood homered to left center (406 feet).",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401815041",
+          "date": "2026-04-22",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Wood reached on infield single to third.",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401815056",
+          "date": "2026-04-23",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 387,
+          "description": "Wood homered to right (387 feet).",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401815140",
+          "date": "2026-04-29",
+          "opponent": "@NYM",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Wood singled to right.",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401815175",
+          "date": "2026-05-02",
+          "opponent": "vsMIL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Wood reached on infield single to catcher.",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401815274",
+          "date": "2026-05-09",
+          "opponent": "@MIA",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 442,
+          "description": "Wood homered to right center (442 feet).",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401815289",
+          "date": "2026-05-10",
+          "opponent": "@MIA",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Wood doubled to left.",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401815408",
+          "date": "2026-05-19",
+          "opponent": "vsNYM",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Wood singled to left.",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401815490",
+          "date": "2026-05-25",
+          "opponent": "@CLE",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 412,
+          "description": "Wood homered to right center (412 feet).",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401815555",
+          "date": "2026-05-30",
+          "opponent": "vsSD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Wood singled to center.",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401815657",
+          "date": "2026-06-06",
+          "opponent": "@ARI",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Wood singled to left.",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401815695",
+          "date": "2026-06-09",
+          "opponent": "@SF",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Wood singled to left.",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401815725",
+          "date": "2026-06-12",
+          "opponent": "vsSEA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Wood singled to right.",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401815755",
+          "date": "2026-06-14",
+          "opponent": "vsSEA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 413,
+          "description": "Wood homered to right center (413 feet).",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401815859",
+          "date": "2026-06-22",
+          "opponent": "vsPHI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Wood doubled to right.",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401815956",
+          "date": "2026-06-29",
+          "opponent": "@BOS",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 441,
+          "description": "Wood homered to right (441 feet).",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401816019",
+          "date": "2026-07-04",
+          "opponent": "vsPIT",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 428,
+          "description": "Wood homered to right (428 feet).",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401816056",
+          "date": "2026-07-07",
+          "opponent": "vsHOU",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 419,
+          "description": "Wood homered to right center (419 feet).",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401816101",
+          "date": "2026-07-10",
+          "opponent": "vsNYY",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Wood singled to center.",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401816116",
+          "date": "2026-07-11",
+          "opponent": "vsNYY",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 388,
+          "description": "Wood homered to right center (388 feet).",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401816131",
+          "date": "2026-07-12",
+          "opponent": "vsNYY",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 434,
+          "description": "Wood homered to center (434 feet).",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401816235",
+          "date": "2026-07-24",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Wood singled to right.",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401816285",
+          "date": "2026-07-27",
+          "opponent": "vsTOR",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Wood singled to left.",
+          "team": "WSH"
+        },
+        {
+          "game_id": "401816313",
+          "date": "2026-07-29",
+          "opponent": "vsTOR",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Wood singled to center.",
+          "team": "WSH"
+        }
+      ]
+    }
+  }
+}

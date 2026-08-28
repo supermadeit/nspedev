@@ -1,0 +1,1002 @@
+{
+  "player": "BrandonLowe",
+  "player_id": "brandon-lowe",
+  "team": "PIT",
+  "position": "2B",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 492,
+      "R": 78,
+      "H": 123,
+      "2B": 26,
+      "3B": 1,
+      "HR": 27,
+      "RBI": 80,
+      "BB": 48,
+      "SO": 163,
+      "SB": 2,
+      "TB": 232,
+      "avg": 0.25,
+      "obp": 0.315,
+      "slg": 0.472,
+      "ops": 0.787
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 32,
+        "games": [
+          {
+            "date": "2026-03-26",
+            "value": 2
+          },
+          {
+            "date": "2026-03-29",
+            "value": 2
+          },
+          {
+            "date": "2026-04-12",
+            "value": 2
+          },
+          {
+            "date": "2026-04-13",
+            "value": 3
+          },
+          {
+            "date": "2026-04-16",
+            "value": 2
+          },
+          {
+            "date": "2026-04-17",
+            "value": 3
+          },
+          {
+            "date": "2026-04-30",
+            "value": 2
+          },
+          {
+            "date": "2026-05-06",
+            "value": 2
+          },
+          {
+            "date": "2026-05-07",
+            "value": 3
+          },
+          {
+            "date": "2026-05-09",
+            "value": 2
+          },
+          {
+            "date": "2026-05-15",
+            "value": 2
+          },
+          {
+            "date": "2026-05-19",
+            "value": 2
+          },
+          {
+            "date": "2026-05-21",
+            "value": 2
+          },
+          {
+            "date": "2026-05-22",
+            "value": 2
+          },
+          {
+            "date": "2026-05-25",
+            "value": 2
+          },
+          {
+            "date": "2026-05-26",
+            "value": 2
+          },
+          {
+            "date": "2026-06-04",
+            "value": 2
+          },
+          {
+            "date": "2026-06-20",
+            "value": 2
+          },
+          {
+            "date": "2026-06-23",
+            "value": 2
+          },
+          {
+            "date": "2026-06-25",
+            "value": 2
+          },
+          {
+            "date": "2026-07-02",
+            "value": 2
+          },
+          {
+            "date": "2026-07-07",
+            "value": 3
+          },
+          {
+            "date": "2026-07-11",
+            "value": 2
+          },
+          {
+            "date": "2026-07-18",
+            "value": 2
+          },
+          {
+            "date": "2026-07-26",
+            "value": 3
+          },
+          {
+            "date": "2026-07-27",
+            "value": 3
+          },
+          {
+            "date": "2026-07-28",
+            "value": 2
+          },
+          {
+            "date": "2026-07-31",
+            "value": 3
+          },
+          {
+            "date": "2026-08-04",
+            "value": 2
+          },
+          {
+            "date": "2026-08-16",
+            "value": 2
+          },
+          {
+            "date": "2026-08-17",
+            "value": 2
+          },
+          {
+            "date": "2026-08-21",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 24,
+        "games": [
+          {
+            "date": "2026-03-26",
+            "value": 2
+          },
+          {
+            "date": "2026-03-29",
+            "value": 1
+          },
+          {
+            "date": "2026-04-12",
+            "value": 2
+          },
+          {
+            "date": "2026-04-13",
+            "value": 1
+          },
+          {
+            "date": "2026-04-14",
+            "value": 1
+          },
+          {
+            "date": "2026-04-30",
+            "value": 1
+          },
+          {
+            "date": "2026-05-06",
+            "value": 1
+          },
+          {
+            "date": "2026-05-07",
+            "value": 1
+          },
+          {
+            "date": "2026-05-15",
+            "value": 2
+          },
+          {
+            "date": "2026-05-21",
+            "value": 1
+          },
+          {
+            "date": "2026-05-27",
+            "value": 1
+          },
+          {
+            "date": "2026-06-02",
+            "value": 1
+          },
+          {
+            "date": "2026-06-11",
+            "value": 1
+          },
+          {
+            "date": "2026-06-12",
+            "value": 1
+          },
+          {
+            "date": "2026-06-16",
+            "value": 1
+          },
+          {
+            "date": "2026-06-25",
+            "value": 1
+          },
+          {
+            "date": "2026-06-27",
+            "value": 1
+          },
+          {
+            "date": "2026-07-05",
+            "value": 1
+          },
+          {
+            "date": "2026-07-28",
+            "value": 1
+          },
+          {
+            "date": "2026-07-30",
+            "value": 1
+          },
+          {
+            "date": "2026-08-06",
+            "value": 1
+          },
+          {
+            "date": "2026-08-08",
+            "value": 1
+          },
+          {
+            "date": "2026-08-14",
+            "value": 1
+          },
+          {
+            "date": "2026-08-19",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 10,
+        "games": [
+          {
+            "date": "2026-03-26",
+            "value": 3
+          },
+          {
+            "date": "2026-04-12",
+            "value": 5
+          },
+          {
+            "date": "2026-04-13",
+            "value": 5
+          },
+          {
+            "date": "2026-05-09",
+            "value": 4
+          },
+          {
+            "date": "2026-05-15",
+            "value": 3
+          },
+          {
+            "date": "2026-05-27",
+            "value": 3
+          },
+          {
+            "date": "2026-06-02",
+            "value": 3
+          },
+          {
+            "date": "2026-06-27",
+            "value": 4
+          },
+          {
+            "date": "2026-07-05",
+            "value": 3
+          },
+          {
+            "date": "2026-08-14",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "@SD",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 3,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-24",
+        "date_iso": "2026-08-24",
+        "opponent": "@SD",
+        "AB": 5,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 4,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "@LAD",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "@LAD",
+        "AB": 5,
+        "R": 2,
+        "H": 2,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 3,
+        "SB": 0,
+        "TB": 3
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "vsDET",
+        "AB": 3,
+        "R": 2,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 1,
+        "BB": 2,
+        "SO": 1,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "vsDET",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "vsDET",
+        "AB": 4,
+        "R": 0,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "vsBOS",
+        "AB": 4,
+        "R": 1,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 2,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-15",
+        "date_iso": "2026-08-15",
+        "opponent": "vsBOS",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-14",
+        "date_iso": "2026-08-14",
+        "opponent": "vsBOS",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 3,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 4
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 1,
+      "splits": [
+        {
+          "season": 2026,
+          "total": 123.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 10545,
+      "hr_count": 27,
+      "games": 124,
+      "events": [
+        {
+          "date": "2026-03-26",
+          "distance_feet": 337,
+          "inning": 1,
+          "opponent": "@NYM"
+        },
+        {
+          "date": "2026-03-26",
+          "distance_feet": 401,
+          "inning": 3,
+          "opponent": "@NYM"
+        },
+        {
+          "date": "2026-03-29",
+          "distance_feet": 390,
+          "inning": 3,
+          "opponent": "@NYM"
+        },
+        {
+          "date": "2026-04-12",
+          "distance_feet": 372,
+          "inning": 2,
+          "opponent": "@CHC"
+        },
+        {
+          "date": "2026-04-12",
+          "distance_feet": 444,
+          "inning": 5,
+          "opponent": "@CHC"
+        },
+        {
+          "date": "2026-04-13",
+          "distance_feet": 410,
+          "inning": 6,
+          "opponent": "vsWSH"
+        },
+        {
+          "date": "2026-04-14",
+          "distance_feet": 376,
+          "inning": 1,
+          "opponent": "vsWSH"
+        },
+        {
+          "date": "2026-04-30",
+          "distance_feet": 416,
+          "inning": 7,
+          "opponent": "vsSTL"
+        },
+        {
+          "date": "2026-05-06",
+          "distance_feet": 435,
+          "inning": 1,
+          "opponent": "@ARI"
+        },
+        {
+          "date": "2026-05-07",
+          "distance_feet": 436,
+          "inning": 1,
+          "opponent": "@ARI"
+        },
+        {
+          "date": "2026-05-15",
+          "distance_feet": 378,
+          "inning": 3,
+          "opponent": "vsPHI"
+        },
+        {
+          "date": "2026-05-15",
+          "distance_feet": 422,
+          "inning": 5,
+          "opponent": "vsPHI"
+        },
+        {
+          "date": "2026-05-21",
+          "distance_feet": 342,
+          "inning": 1,
+          "opponent": "@STL"
+        },
+        {
+          "date": "2026-05-27",
+          "distance_feet": 387,
+          "inning": 3,
+          "opponent": "vsCHC"
+        },
+        {
+          "date": "2026-06-02",
+          "distance_feet": 356,
+          "inning": 8,
+          "opponent": "@HOU"
+        },
+        {
+          "date": "2026-06-11",
+          "distance_feet": 383,
+          "inning": 5,
+          "opponent": "vsLAD"
+        },
+        {
+          "date": "2026-06-12",
+          "distance_feet": 391,
+          "inning": 8,
+          "opponent": "vsMIA"
+        },
+        {
+          "date": "2026-06-16",
+          "distance_feet": 371,
+          "inning": 9,
+          "opponent": "@ATH"
+        },
+        {
+          "date": "2026-06-25",
+          "distance_feet": 391,
+          "inning": 1,
+          "opponent": "vsSEA"
+        },
+        {
+          "date": "2026-06-27",
+          "distance_feet": 396,
+          "inning": 3,
+          "opponent": "vsCIN"
+        },
+        {
+          "date": "2026-07-05",
+          "distance_feet": 396,
+          "inning": 8,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-07-28",
+          "distance_feet": 415,
+          "inning": 9,
+          "opponent": "vsARI"
+        },
+        {
+          "date": "2026-07-30",
+          "distance_feet": 402,
+          "inning": 6,
+          "opponent": "@CIN"
+        },
+        {
+          "date": "2026-08-06",
+          "distance_feet": 384,
+          "inning": 4,
+          "opponent": "@MIL"
+        },
+        {
+          "date": "2026-08-08",
+          "distance_feet": 380,
+          "inning": 7,
+          "opponent": "vsNYM"
+        },
+        {
+          "date": "2026-08-14",
+          "distance_feet": 375,
+          "inning": 5,
+          "opponent": "vsBOS"
+        },
+        {
+          "date": "2026-08-19",
+          "distance_feet": 359,
+          "inning": 9,
+          "opponent": "vsDET"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 29,
+      "games_in_window": 124,
+      "matches": [
+        {
+          "game_id": "401814693",
+          "date": "2026-03-26",
+          "opponent": "@NYM",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 337,
+          "description": "Lowe homered to right (337 feet), Cruz scored.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401814783",
+          "date": "2026-04-03",
+          "opponent": "vsBAL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Lowe doubled to right.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401814937",
+          "date": "2026-04-14",
+          "opponent": "vsWSH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 376,
+          "description": "Lowe homered to right center (376 feet).",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401814977",
+          "date": "2026-04-17",
+          "opponent": "vsTB",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "GRD",
+          "distance_feet": null,
+          "description": "Lowe hit a ground rule double.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815123",
+          "date": "2026-04-28",
+          "opponent": "vsSTL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Lowe doubled to center.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815138",
+          "date": "2026-04-29",
+          "opponent": "vsSTL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Lowe doubled to right.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815173",
+          "date": "2026-05-02",
+          "opponent": "vsCIN",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "GRD",
+          "distance_feet": null,
+          "description": "Lowe hit a ground rule double, Bleday and De La Cruz scored.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815242",
+          "date": "2026-05-06",
+          "opponent": "@ARI",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 435,
+          "description": "Lowe homered to center (435 feet).",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815251",
+          "date": "2026-05-07",
+          "opponent": "@ARI",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 436,
+          "description": "Lowe homered to right (436 feet).",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815413",
+          "date": "2026-05-19",
+          "opponent": "@STL",
+          "inning": 3,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lowe singled to right.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815438",
+          "date": "2026-05-21",
+          "opponent": "@STL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 342,
+          "description": "Lowe homered to left (342 feet).",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815445",
+          "date": "2026-05-22",
+          "opponent": "@TOR",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lowe singled to center.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815486",
+          "date": "2026-05-25",
+          "opponent": "vsCHC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lowe singled to right.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815501",
+          "date": "2026-05-26",
+          "opponent": "vsCHC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lowe singled to center, Lowe to second, Griffin to third.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815625",
+          "date": "2026-06-04",
+          "opponent": "@HOU",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Lowe doubled to right.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815821",
+          "date": "2026-06-19",
+          "opponent": "@COL",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Lowe doubled to right.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815834",
+          "date": "2026-06-20",
+          "opponent": "@COL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lowe singled to right.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815902",
+          "date": "2026-06-25",
+          "opponent": "vsSEA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 391,
+          "description": "Lowe homered to right center (391 feet).",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401816054",
+          "date": "2026-07-07",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lowe singled to right, Mangum to second.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401816069",
+          "date": "2026-07-08",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lowe singled to right.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401896568",
+          "date": "2026-07-18",
+          "opponent": "@CLE",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lowe singled to right.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401816267",
+          "date": "2026-07-26",
+          "opponent": "vsCHC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lowe singled to right.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401816292",
+          "date": "2026-07-28",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Lowe doubled to right.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401816336",
+          "date": "2026-07-31",
+          "opponent": "@CIN",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lowe singled to right.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401816534",
+          "date": "2026-08-15",
+          "opponent": "vsBOS",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lowe singled to right.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401816549",
+          "date": "2026-08-16",
+          "opponent": "vsBOS",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lowe singled to left, Reynolds scored.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401816564",
+          "date": "2026-08-17",
+          "opponent": "vsDET",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lowe singled to center, Gonzales to second.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401816624",
+          "date": "2026-08-21",
+          "opponent": "@LAD",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lowe singled to right.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401816654",
+          "date": "2026-08-23",
+          "opponent": "@LAD",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lowe reached on infield single to second, Gonzales to third.",
+          "team": "PIT"
+        }
+      ]
+    }
+  }
+}

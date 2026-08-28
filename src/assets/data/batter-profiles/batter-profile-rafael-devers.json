@@ -1,0 +1,1032 @@
+{
+  "player": "RafaelDevers",
+  "player_id": "rafael-devers",
+  "team": "SF",
+  "position": "1B",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 500,
+      "R": 74,
+      "H": 123,
+      "2B": 31,
+      "3B": 1,
+      "HR": 29,
+      "RBI": 76,
+      "BB": 59,
+      "SO": 145,
+      "SB": 0,
+      "TB": 243,
+      "avg": 0.246,
+      "obp": 0.324,
+      "slg": 0.486,
+      "ops": 0.81
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 34,
+        "games": [
+          {
+            "date": "2026-03-28",
+            "value": 2
+          },
+          {
+            "date": "2026-03-31",
+            "value": 2
+          },
+          {
+            "date": "2026-04-02",
+            "value": 2
+          },
+          {
+            "date": "2026-04-08",
+            "value": 2
+          },
+          {
+            "date": "2026-04-15",
+            "value": 2
+          },
+          {
+            "date": "2026-04-19",
+            "value": 2
+          },
+          {
+            "date": "2026-04-22",
+            "value": 2
+          },
+          {
+            "date": "2026-05-08",
+            "value": 2
+          },
+          {
+            "date": "2026-05-10",
+            "value": 2
+          },
+          {
+            "date": "2026-05-11",
+            "value": 2
+          },
+          {
+            "date": "2026-05-13",
+            "value": 2
+          },
+          {
+            "date": "2026-05-16",
+            "value": 2
+          },
+          {
+            "date": "2026-05-19",
+            "value": 2
+          },
+          {
+            "date": "2026-05-24",
+            "value": 2
+          },
+          {
+            "date": "2026-05-29",
+            "value": 2
+          },
+          {
+            "date": "2026-05-31",
+            "value": 4
+          },
+          {
+            "date": "2026-06-05",
+            "value": 2
+          },
+          {
+            "date": "2026-06-13",
+            "value": 2
+          },
+          {
+            "date": "2026-06-17",
+            "value": 2
+          },
+          {
+            "date": "2026-06-19",
+            "value": 2
+          },
+          {
+            "date": "2026-06-27",
+            "value": 2
+          },
+          {
+            "date": "2026-07-03",
+            "value": 2
+          },
+          {
+            "date": "2026-07-05",
+            "value": 2
+          },
+          {
+            "date": "2026-07-09",
+            "value": 2
+          },
+          {
+            "date": "2026-07-10",
+            "value": 3
+          },
+          {
+            "date": "2026-07-24",
+            "value": 2
+          },
+          {
+            "date": "2026-07-25",
+            "value": 3
+          },
+          {
+            "date": "2026-07-30",
+            "value": 3
+          },
+          {
+            "date": "2026-08-01",
+            "value": 2
+          },
+          {
+            "date": "2026-08-05",
+            "value": 2
+          },
+          {
+            "date": "2026-08-09",
+            "value": 2
+          },
+          {
+            "date": "2026-08-16",
+            "value": 2
+          },
+          {
+            "date": "2026-08-24",
+            "value": 2
+          },
+          {
+            "date": "2026-08-26",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 27,
+        "games": [
+          {
+            "date": "2026-04-02",
+            "value": 1
+          },
+          {
+            "date": "2026-04-08",
+            "value": 1
+          },
+          {
+            "date": "2026-05-06",
+            "value": 1
+          },
+          {
+            "date": "2026-05-08",
+            "value": 1
+          },
+          {
+            "date": "2026-05-11",
+            "value": 1
+          },
+          {
+            "date": "2026-05-19",
+            "value": 1
+          },
+          {
+            "date": "2026-05-24",
+            "value": 1
+          },
+          {
+            "date": "2026-06-06",
+            "value": 1
+          },
+          {
+            "date": "2026-06-10",
+            "value": 1
+          },
+          {
+            "date": "2026-06-16",
+            "value": 1
+          },
+          {
+            "date": "2026-06-19",
+            "value": 1
+          },
+          {
+            "date": "2026-06-24",
+            "value": 1
+          },
+          {
+            "date": "2026-06-27",
+            "value": 2
+          },
+          {
+            "date": "2026-06-30",
+            "value": 1
+          },
+          {
+            "date": "2026-07-03",
+            "value": 1
+          },
+          {
+            "date": "2026-07-05",
+            "value": 2
+          },
+          {
+            "date": "2026-07-10",
+            "value": 1
+          },
+          {
+            "date": "2026-07-18",
+            "value": 1
+          },
+          {
+            "date": "2026-07-24",
+            "value": 1
+          },
+          {
+            "date": "2026-07-25",
+            "value": 1
+          },
+          {
+            "date": "2026-08-02",
+            "value": 1
+          },
+          {
+            "date": "2026-08-07",
+            "value": 1
+          },
+          {
+            "date": "2026-08-16",
+            "value": 1
+          },
+          {
+            "date": "2026-08-21",
+            "value": 1
+          },
+          {
+            "date": "2026-08-24",
+            "value": 1
+          },
+          {
+            "date": "2026-08-25",
+            "value": 1
+          },
+          {
+            "date": "2026-08-26",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 8,
+        "games": [
+          {
+            "date": "2026-04-08",
+            "value": 4
+          },
+          {
+            "date": "2026-05-24",
+            "value": 5
+          },
+          {
+            "date": "2026-06-27",
+            "value": 4
+          },
+          {
+            "date": "2026-07-10",
+            "value": 3
+          },
+          {
+            "date": "2026-07-24",
+            "value": 3
+          },
+          {
+            "date": "2026-07-25",
+            "value": 4
+          },
+          {
+            "date": "2026-08-16",
+            "value": 3
+          },
+          {
+            "date": "2026-08-24",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-26",
+        "date_iso": "2026-08-26",
+        "opponent": "vsCIN",
+        "AB": 4,
+        "R": 1,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 2,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 5
+      },
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "vsCIN",
+        "AB": 3,
+        "R": 2,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 1,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-24",
+        "date_iso": "2026-08-24",
+        "opponent": "vsCIN",
+        "AB": 4,
+        "R": 2,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 3,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 5
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "@BOS",
+        "AB": 3,
+        "R": 1,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "@BOS",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "@BOS",
+        "AB": 3,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 1,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-20",
+        "date_iso": "2026-08-20",
+        "opponent": "@CLE",
+        "AB": 3,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 2,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "@CLE",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "@CLE",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 3,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "vsCOL",
+        "AB": 5,
+        "R": 2,
+        "H": 2,
+        "2B": 1,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 3,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 6
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 10,
+      "splits": [
+        {
+          "season": 2017,
+          "total": 67.0
+        },
+        {
+          "season": 2018,
+          "total": 116.0
+        },
+        {
+          "season": 2019,
+          "total": 201.0
+        },
+        {
+          "season": 2020,
+          "total": 61.0
+        },
+        {
+          "season": 2021,
+          "total": 178.0
+        },
+        {
+          "season": 2022,
+          "total": 164.0
+        },
+        {
+          "season": 2023,
+          "total": 157.0
+        },
+        {
+          "season": 2024,
+          "total": 143.0
+        },
+        {
+          "season": 2025,
+          "total": 153.0
+        },
+        {
+          "season": 2026,
+          "total": 123.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 11166,
+      "hr_count": 28,
+      "games": 133,
+      "events": [
+        {
+          "date": "2026-04-02",
+          "distance_feet": 404,
+          "inning": 6,
+          "opponent": "vsNYM"
+        },
+        {
+          "date": "2026-04-08",
+          "distance_feet": 411,
+          "inning": 6,
+          "opponent": "vsPHI"
+        },
+        {
+          "date": "2026-05-06",
+          "distance_feet": 365,
+          "inning": 5,
+          "opponent": "vsSD"
+        },
+        {
+          "date": "2026-05-08",
+          "distance_feet": 399,
+          "inning": 2,
+          "opponent": "vsPIT"
+        },
+        {
+          "date": "2026-05-11",
+          "distance_feet": 401,
+          "inning": 2,
+          "opponent": "@LAD"
+        },
+        {
+          "date": "2026-05-19",
+          "distance_feet": 441,
+          "inning": 2,
+          "opponent": "@ARI"
+        },
+        {
+          "date": "2026-05-24",
+          "distance_feet": 391,
+          "inning": 5,
+          "opponent": "vsCHW"
+        },
+        {
+          "date": "2026-06-06",
+          "distance_feet": 387,
+          "inning": 6,
+          "opponent": "@CHC"
+        },
+        {
+          "date": "2026-06-10",
+          "distance_feet": 408,
+          "inning": 8,
+          "opponent": "vsWSH"
+        },
+        {
+          "date": "2026-06-16",
+          "distance_feet": 400,
+          "inning": 5,
+          "opponent": "@ATL"
+        },
+        {
+          "date": "2026-06-19",
+          "distance_feet": 413,
+          "inning": 6,
+          "opponent": "@MIA"
+        },
+        {
+          "date": "2026-06-24",
+          "distance_feet": 416,
+          "inning": 9,
+          "opponent": "vsATH"
+        },
+        {
+          "date": "2026-06-27",
+          "distance_feet": 404,
+          "inning": 2,
+          "opponent": "vsATL"
+        },
+        {
+          "date": "2026-06-27",
+          "distance_feet": 359,
+          "inning": 3,
+          "opponent": "vsATL"
+        },
+        {
+          "date": "2026-06-30",
+          "distance_feet": 424,
+          "inning": 7,
+          "opponent": "@ARI"
+        },
+        {
+          "date": "2026-07-03",
+          "distance_feet": 432,
+          "inning": 6,
+          "opponent": "@COL"
+        },
+        {
+          "date": "2026-07-05",
+          "distance_feet": 420,
+          "inning": 4,
+          "opponent": "@COL"
+        },
+        {
+          "date": "2026-07-05",
+          "distance_feet": 463,
+          "inning": 5,
+          "opponent": "@COL"
+        },
+        {
+          "date": "2026-07-10",
+          "distance_feet": 347,
+          "inning": 2,
+          "opponent": "vsCOL"
+        },
+        {
+          "date": "2026-07-18",
+          "distance_feet": 339,
+          "inning": 6,
+          "opponent": "@SEA"
+        },
+        {
+          "date": "2026-07-24",
+          "distance_feet": 362,
+          "inning": 1,
+          "opponent": "vsLAA"
+        },
+        {
+          "date": "2026-07-25",
+          "distance_feet": 401,
+          "inning": 4,
+          "opponent": "vsLAA"
+        },
+        {
+          "date": "2026-08-02",
+          "distance_feet": 359,
+          "inning": 8,
+          "opponent": "@SD"
+        },
+        {
+          "date": "2026-08-07",
+          "distance_feet": 401,
+          "inning": 1,
+          "opponent": "vsDET"
+        },
+        {
+          "date": "2026-08-16",
+          "distance_feet": 380,
+          "inning": 2,
+          "opponent": "vsCOL"
+        },
+        {
+          "date": "2026-08-21",
+          "distance_feet": 412,
+          "inning": 4,
+          "opponent": "@BOS"
+        },
+        {
+          "date": "2026-08-24",
+          "distance_feet": 427,
+          "inning": 2,
+          "opponent": "vsCIN"
+        },
+        {
+          "date": "2026-08-25",
+          "distance_feet": 400,
+          "inning": 5,
+          "opponent": "vsCIN"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 27,
+      "games_in_window": 133,
+      "matches": [
+        {
+          "game_id": "401814702",
+          "date": "2026-03-25",
+          "opponent": "vsNYY",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Devers singled to center, Chapman to third.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401814734",
+          "date": "2026-03-28",
+          "opponent": "vsNYY",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Devers singled to left, Arraez to second.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401814782",
+          "date": "2026-04-02",
+          "opponent": "vsNYM",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Devers singled to right.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401814898",
+          "date": "2026-04-11",
+          "opponent": "@BAL",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Devers singled to center.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815006",
+          "date": "2026-04-19",
+          "opponent": "@WSH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Devers singled to right, Chapman to second.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815039",
+          "date": "2026-04-21",
+          "opponent": "vsLAD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Devers singled to right, Adames scored, Chapman to second, Arraez to third.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815054",
+          "date": "2026-04-22",
+          "opponent": "vsLAD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Devers singled to center, Arraez to second.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815192",
+          "date": "2026-05-03",
+          "opponent": "@TB",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Devers doubled to left.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815213",
+          "date": "2026-05-04",
+          "opponent": "vsSD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Devers singled to center, Arraez scored, Ramos to third.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815266",
+          "date": "2026-05-08",
+          "opponent": "vsPIT",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 399,
+          "description": "Devers homered to center (399 feet).",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815303",
+          "date": "2026-05-11",
+          "opponent": "@LAD",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 401,
+          "description": "Devers homered to right center (401 feet).",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815332",
+          "date": "2026-05-13",
+          "opponent": "@LAD",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Devers singled to center, Ramos to third.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815418",
+          "date": "2026-05-19",
+          "opponent": "@ARI",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 441,
+          "description": "Devers homered to center (441 feet).",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815483",
+          "date": "2026-05-24",
+          "opponent": "vsCHW",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Devers doubled to center, Schmitt scored.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815746",
+          "date": "2026-06-13",
+          "opponent": "vsCHC",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "GRD",
+          "distance_feet": null,
+          "description": "Devers hit a ground rule double.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815793",
+          "date": "2026-06-17",
+          "opponent": "@ATL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Devers doubled to left, Arraez scored.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815919",
+          "date": "2026-06-26",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Devers doubled to right, Schmitt scored.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815934",
+          "date": "2026-06-27",
+          "opponent": "vsATL",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 404,
+          "description": "Devers homered to center (404 feet).",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816067",
+          "date": "2026-07-07",
+          "opponent": "vsTOR",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Devers singled to right.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816109",
+          "date": "2026-07-10",
+          "opponent": "vsCOL",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 347,
+          "description": "Devers homered to right (347 feet).",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816226",
+          "date": "2026-07-22",
+          "opponent": "@KC",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Devers doubled to center.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816249",
+          "date": "2026-07-24",
+          "opponent": "vsLAA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 362,
+          "description": "Devers homered to left (362 feet), Eldridge scored.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816305",
+          "date": "2026-07-28",
+          "opponent": "vsMIL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Devers singled to right, Ramos to second.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816409",
+          "date": "2026-08-05",
+          "opponent": "@TEX",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Devers singled to center, Adames to third.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816435",
+          "date": "2026-08-07",
+          "opponent": "vsDET",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 401,
+          "description": "Devers homered to center (401 feet), Lee scored.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816558",
+          "date": "2026-08-16",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Devers doubled to left.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816660",
+          "date": "2026-08-24",
+          "opponent": "vsCIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Devers singled to right, Gilbert to third.",
+          "team": "SF"
+        }
+      ]
+    }
+  }
+}

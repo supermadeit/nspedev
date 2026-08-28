@@ -1,0 +1,908 @@
+{
+  "player": "BobbyWittJr",
+  "player_id": "bobby-witt-jr",
+  "team": "KC",
+  "position": "SS",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 448,
+      "R": 72,
+      "H": 129,
+      "2B": 26,
+      "3B": 1,
+      "HR": 16,
+      "RBI": 48,
+      "BB": 55,
+      "SO": 90,
+      "SB": 35,
+      "TB": 205,
+      "avg": 0.288,
+      "obp": 0.366,
+      "slg": 0.458,
+      "ops": 0.824
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 34,
+        "games": [
+          {
+            "date": "2026-03-27",
+            "value": 2
+          },
+          {
+            "date": "2026-04-06",
+            "value": 2
+          },
+          {
+            "date": "2026-04-08",
+            "value": 2
+          },
+          {
+            "date": "2026-04-09",
+            "value": 2
+          },
+          {
+            "date": "2026-04-16",
+            "value": 3
+          },
+          {
+            "date": "2026-04-19",
+            "value": 2
+          },
+          {
+            "date": "2026-04-20",
+            "value": 2
+          },
+          {
+            "date": "2026-04-25",
+            "value": 2
+          },
+          {
+            "date": "2026-04-26",
+            "value": 2
+          },
+          {
+            "date": "2026-04-29",
+            "value": 2
+          },
+          {
+            "date": "2026-05-05",
+            "value": 2
+          },
+          {
+            "date": "2026-05-07",
+            "value": 4
+          },
+          {
+            "date": "2026-05-10",
+            "value": 2
+          },
+          {
+            "date": "2026-05-12",
+            "value": 2
+          },
+          {
+            "date": "2026-05-15",
+            "value": 2
+          },
+          {
+            "date": "2026-05-23",
+            "value": 2
+          },
+          {
+            "date": "2026-05-31",
+            "value": 2
+          },
+          {
+            "date": "2026-06-06",
+            "value": 2
+          },
+          {
+            "date": "2026-06-10",
+            "value": 2
+          },
+          {
+            "date": "2026-06-13",
+            "value": 3
+          },
+          {
+            "date": "2026-06-14",
+            "value": 2
+          },
+          {
+            "date": "2026-06-16",
+            "value": 3
+          },
+          {
+            "date": "2026-06-18",
+            "value": 2
+          },
+          {
+            "date": "2026-06-30",
+            "value": 3
+          },
+          {
+            "date": "2026-07-05",
+            "value": 2
+          },
+          {
+            "date": "2026-07-06",
+            "value": 2
+          },
+          {
+            "date": "2026-07-12",
+            "value": 2
+          },
+          {
+            "date": "2026-08-04",
+            "value": 3
+          },
+          {
+            "date": "2026-08-06",
+            "value": 3
+          },
+          {
+            "date": "2026-08-11",
+            "value": 2
+          },
+          {
+            "date": "2026-08-12",
+            "value": 2
+          },
+          {
+            "date": "2026-08-17",
+            "value": 3
+          },
+          {
+            "date": "2026-08-20",
+            "value": 3
+          },
+          {
+            "date": "2026-08-21",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 15,
+        "games": [
+          {
+            "date": "2026-04-26",
+            "value": 1
+          },
+          {
+            "date": "2026-04-28",
+            "value": 1
+          },
+          {
+            "date": "2026-05-04",
+            "value": 1
+          },
+          {
+            "date": "2026-05-07",
+            "value": 1
+          },
+          {
+            "date": "2026-05-09",
+            "value": 1
+          },
+          {
+            "date": "2026-05-12",
+            "value": 1
+          },
+          {
+            "date": "2026-05-13",
+            "value": 1
+          },
+          {
+            "date": "2026-05-25",
+            "value": 1
+          },
+          {
+            "date": "2026-05-26",
+            "value": 1
+          },
+          {
+            "date": "2026-06-18",
+            "value": 1
+          },
+          {
+            "date": "2026-06-30",
+            "value": 2
+          },
+          {
+            "date": "2026-07-09",
+            "value": 1
+          },
+          {
+            "date": "2026-08-16",
+            "value": 1
+          },
+          {
+            "date": "2026-08-17",
+            "value": 1
+          },
+          {
+            "date": "2026-08-20",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 3,
+        "games": [
+          {
+            "date": "2026-04-28",
+            "value": 3
+          },
+          {
+            "date": "2026-06-30",
+            "value": 3
+          },
+          {
+            "date": "2026-08-17",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-26",
+        "date_iso": "2026-08-26",
+        "opponent": "@TOR",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "@TOR",
+        "AB": 3,
+        "R": 1,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 2,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "vsDET",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 2,
+        "SB": 1,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "vsDET",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 1,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "vsDET",
+        "AB": 4,
+        "R": 0,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-20",
+        "date_iso": "2026-08-20",
+        "opponent": "vsATH",
+        "AB": 4,
+        "R": 3,
+        "H": 3,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 1,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 6
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "vsATH",
+        "AB": 4,
+        "R": 1,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "vsATH",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "vsATH",
+        "AB": 4,
+        "R": 4,
+        "H": 3,
+        "2B": 1,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 3,
+        "BB": 1,
+        "SO": 0,
+        "SB": 1,
+        "TB": 7
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "@LAA",
+        "AB": 5,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 4
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 5,
+      "splits": [
+        {
+          "season": 2022,
+          "total": 150.0
+        },
+        {
+          "season": 2023,
+          "total": 177.0
+        },
+        {
+          "season": 2024,
+          "total": 216.0
+        },
+        {
+          "season": 2025,
+          "total": 184.0
+        },
+        {
+          "season": 2026,
+          "total": 129.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 6068,
+      "hr_count": 16,
+      "games": 116,
+      "events": [
+        {
+          "date": "2026-04-26",
+          "distance_feet": 427,
+          "inning": 6,
+          "opponent": "vsLAA"
+        },
+        {
+          "date": "2026-04-28",
+          "distance_feet": 389,
+          "inning": 10,
+          "opponent": "@ATH"
+        },
+        {
+          "date": "2026-05-04",
+          "distance_feet": 422,
+          "inning": 4,
+          "opponent": "vsCLE"
+        },
+        {
+          "date": "2026-05-07",
+          "distance_feet": 407,
+          "inning": 7,
+          "opponent": "vsCLE"
+        },
+        {
+          "date": "2026-05-09",
+          "distance_feet": 17,
+          "inning": 1,
+          "opponent": "vsDET"
+        },
+        {
+          "date": "2026-05-12",
+          "distance_feet": 373,
+          "inning": 1,
+          "opponent": "@CHW"
+        },
+        {
+          "date": "2026-05-13",
+          "distance_feet": 405,
+          "inning": 9,
+          "opponent": "@CHW"
+        },
+        {
+          "date": "2026-05-25",
+          "distance_feet": 432,
+          "inning": 8,
+          "opponent": "vsNYY"
+        },
+        {
+          "date": "2026-05-26",
+          "distance_feet": 386,
+          "inning": 3,
+          "opponent": "vsNYY"
+        },
+        {
+          "date": "2026-06-18",
+          "distance_feet": 419,
+          "inning": 1,
+          "opponent": "vsSTL"
+        },
+        {
+          "date": "2026-06-30",
+          "distance_feet": 416,
+          "inning": 3,
+          "opponent": "vsTB"
+        },
+        {
+          "date": "2026-06-30",
+          "distance_feet": 432,
+          "inning": 8,
+          "opponent": "vsTB"
+        },
+        {
+          "date": "2026-07-09",
+          "distance_feet": 386,
+          "inning": 4,
+          "opponent": "@NYM"
+        },
+        {
+          "date": "2026-08-16",
+          "distance_feet": 365,
+          "inning": 5,
+          "opponent": "@LAA"
+        },
+        {
+          "date": "2026-08-17",
+          "distance_feet": 390,
+          "inning": 2,
+          "opponent": "vsATH"
+        },
+        {
+          "date": "2026-08-20",
+          "distance_feet": 402,
+          "inning": 1,
+          "opponent": "vsATH"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 30,
+      "games_in_window": 116,
+      "matches": [
+        {
+          "game_id": "401814772",
+          "date": "2026-04-01",
+          "opponent": "vsMIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Witt Jr. singled to center.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401814829",
+          "date": "2026-04-06",
+          "opponent": "@CLE",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Witt Jr. singled to left.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815004",
+          "date": "2026-04-19",
+          "opponent": "@NYY",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Witt Jr. singled to right.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815086",
+          "date": "2026-04-25",
+          "opponent": "vsLAA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Witt Jr. reached on infield single to second.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815146",
+          "date": "2026-04-29",
+          "opponent": "@ATH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Witt Jr. reached on infield single to shortstop.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815170",
+          "date": "2026-05-01",
+          "opponent": "@SEA",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Witt Jr. reached on infield single to shortstop, Garcia to second.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815221",
+          "date": "2026-05-05",
+          "opponent": "vsCLE",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Witt Jr. doubled to right, Garcia to third.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815276",
+          "date": "2026-05-09",
+          "opponent": "vsDET",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 17,
+          "description": "Witt Jr. homered inside-the-park to right (17 feet), Garcia scored.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815291",
+          "date": "2026-05-10",
+          "opponent": "vsDET",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Witt Jr. singled to right, Garcia to second.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815313",
+          "date": "2026-05-12",
+          "opponent": "@CHW",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 373,
+          "description": "Witt Jr. homered to right (373 feet).",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815339",
+          "date": "2026-05-14",
+          "opponent": "@CHW",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Witt Jr. singled to center, Garcia to third.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815410",
+          "date": "2026-05-19",
+          "opponent": "vsBOS",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Witt Jr. singled to right.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815466",
+          "date": "2026-05-23",
+          "opponent": "vsSEA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Witt Jr. reached on infield single to third, Garcia to third.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815624",
+          "date": "2026-06-04",
+          "opponent": "@MIN",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Witt Jr. singled to center.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815705",
+          "date": "2026-06-10",
+          "opponent": "vsTEX",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Witt Jr. singled to center.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815757",
+          "date": "2026-06-14",
+          "opponent": "vsHOU",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Witt Jr. singled to left.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815775",
+          "date": "2026-06-16",
+          "opponent": "@WSH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Witt Jr. singled to center.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815809",
+          "date": "2026-06-18",
+          "opponent": "vsSTL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 419,
+          "description": "Witt Jr. homered to left center (419 feet).",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815974",
+          "date": "2026-06-30",
+          "opponent": "vsTB",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Witt Jr. singled to left.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815989",
+          "date": "2026-07-01",
+          "opponent": "vsTB",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Witt Jr. singled to right.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401816036",
+          "date": "2026-07-05",
+          "opponent": "vsPHI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Witt Jr. singled to center.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401816057",
+          "date": "2026-07-07",
+          "opponent": "@NYM",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Witt Jr. singled to right.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401816072",
+          "date": "2026-07-08",
+          "opponent": "@NYM",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Witt Jr. reached on infield single to third.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401816099",
+          "date": "2026-07-10",
+          "opponent": "@BAL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Witt Jr. doubled to right.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401816392",
+          "date": "2026-08-04",
+          "opponent": "vsMIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Witt Jr. singled to center.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401816420",
+          "date": "2026-08-06",
+          "opponent": "vsMIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Witt Jr. singled to left.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401816505",
+          "date": "2026-08-12",
+          "opponent": "@LAD",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "GRD",
+          "distance_feet": null,
+          "description": "Witt Jr. hit a ground rule double.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401816606",
+          "date": "2026-08-20",
+          "opponent": "vsATH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 402,
+          "description": "Witt Jr. homered to left center (402 feet).",
+          "team": "KC"
+        },
+        {
+          "game_id": "401816618",
+          "date": "2026-08-21",
+          "opponent": "vsDET",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Witt Jr. singled to center.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401816633",
+          "date": "2026-08-22",
+          "opponent": "vsDET",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Witt Jr. singled to center.",
+          "team": "KC"
+        }
+      ]
+    }
+  }
+}

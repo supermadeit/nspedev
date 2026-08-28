@@ -85,6 +85,50 @@ export interface H2hTotals {
   OPS?: number
 }
 
+export interface H2hStaffPitcherLine {
+  pitcher: string
+  team?: string
+  AB?: number
+  H?: number
+  '2B'?: number
+  '3B'?: number
+  HR?: number
+  RBI?: number
+  BB?: number
+  K?: number
+  AVG?: number
+  OBP?: number
+  SLG?: number
+  OPS?: number
+}
+
+// `-staff` adds this one extra field to an otherwise-normal h2h payload —
+// the batter's per-pitcher breakdown against the opposing team's staff.
+// Everything else about the payload (query/totals/games) is unchanged, so
+// isH2hPayload below deliberately doesn't need to know about this field to
+// keep recognizing the payload as h2h-shaped.
+export interface H2hStaffBreakdown {
+  player: string
+  team: string
+  pitcher_count: number
+  pitchers: H2hStaffPitcherLine[]
+  totals: {
+    AB?: number
+    H?: number
+    '2B'?: number
+    '3B'?: number
+    HR?: number
+    RBI?: number
+    BB?: number
+    K?: number
+    TB?: number
+    AVG?: number
+    OBP?: number
+    SLG?: number
+    OPS?: number
+  }
+}
+
 export interface H2hPayload {
   engine: string
   query: {
@@ -101,6 +145,7 @@ export interface H2hPayload {
   }
   totals: H2hTotals
   games: H2hGame[]
+  staff_breakdown?: H2hStaffBreakdown
 }
 
 export function isH2hPayload(payload: unknown): payload is H2hPayload {
@@ -848,6 +893,13 @@ export function parseGamesFromNotes(notes: unknown): number | null {
 
   const parsed = Number(match[1])
   return Number.isFinite(parsed) ? parsed : null
+}
+
+// ".276" style — drop the leading zero on a batting-average-shaped decimal.
+// Shared by h2h, {h2h -staff}, and batter profiles so all three format AVG/
+// OBP/SLG/OPS identically.
+export function formatBattingAvg(n?: number): string {
+  return typeof n === 'number' ? n.toFixed(3).replace(/^0+/, '') : '—'
 }
 
 export function extractDateToken(value: unknown): string | null {

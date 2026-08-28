@@ -1,0 +1,1050 @@
+{
+  "player": "JordanWalker",
+  "player_id": "jordan-walker",
+  "team": "STL",
+  "position": "RF",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 506,
+      "R": 83,
+      "H": 144,
+      "2B": 29,
+      "3B": 0,
+      "HR": 27,
+      "RBI": 97,
+      "BB": 43,
+      "SO": 134,
+      "SB": 18,
+      "TB": 254,
+      "avg": 0.285,
+      "obp": 0.344,
+      "slg": 0.502,
+      "ops": 0.846
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 38,
+        "games": [
+          {
+            "date": "2026-03-29",
+            "value": 3
+          },
+          {
+            "date": "2026-04-04",
+            "value": 3
+          },
+          {
+            "date": "2026-04-06",
+            "value": 2
+          },
+          {
+            "date": "2026-04-10",
+            "value": 2
+          },
+          {
+            "date": "2026-04-12",
+            "value": 2
+          },
+          {
+            "date": "2026-04-13",
+            "value": 2
+          },
+          {
+            "date": "2026-04-28",
+            "value": 2
+          },
+          {
+            "date": "2026-04-30",
+            "value": 2
+          },
+          {
+            "date": "2026-05-01",
+            "value": 4
+          },
+          {
+            "date": "2026-05-02",
+            "value": 2
+          },
+          {
+            "date": "2026-05-07",
+            "value": 2
+          },
+          {
+            "date": "2026-05-12",
+            "value": 2
+          },
+          {
+            "date": "2026-05-14",
+            "value": 2
+          },
+          {
+            "date": "2026-05-15",
+            "value": 3
+          },
+          {
+            "date": "2026-05-23",
+            "value": 3
+          },
+          {
+            "date": "2026-05-27",
+            "value": 2
+          },
+          {
+            "date": "2026-06-03",
+            "value": 3
+          },
+          {
+            "date": "2026-06-05",
+            "value": 3
+          },
+          {
+            "date": "2026-06-06",
+            "value": 2
+          },
+          {
+            "date": "2026-06-07",
+            "value": 2
+          },
+          {
+            "date": "2026-06-10",
+            "value": 2
+          },
+          {
+            "date": "2026-06-15",
+            "value": 2
+          },
+          {
+            "date": "2026-06-18",
+            "value": 2
+          },
+          {
+            "date": "2026-06-19",
+            "value": 2
+          },
+          {
+            "date": "2026-06-23",
+            "value": 2
+          },
+          {
+            "date": "2026-07-02",
+            "value": 2
+          },
+          {
+            "date": "2026-07-07",
+            "value": 2
+          },
+          {
+            "date": "2026-07-08",
+            "value": 2
+          },
+          {
+            "date": "2026-07-23",
+            "value": 2
+          },
+          {
+            "date": "2026-07-25",
+            "value": 2
+          },
+          {
+            "date": "2026-08-01",
+            "value": 2
+          },
+          {
+            "date": "2026-08-02",
+            "value": 2
+          },
+          {
+            "date": "2026-08-03",
+            "value": 2
+          },
+          {
+            "date": "2026-08-09",
+            "value": 2
+          },
+          {
+            "date": "2026-08-16",
+            "value": 3
+          },
+          {
+            "date": "2026-08-17",
+            "value": 3
+          },
+          {
+            "date": "2026-08-17",
+            "value": 2
+          },
+          {
+            "date": "2026-08-21",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 27,
+        "games": [
+          {
+            "date": "2026-03-29",
+            "value": 1
+          },
+          {
+            "date": "2026-04-04",
+            "value": 1
+          },
+          {
+            "date": "2026-04-06",
+            "value": 1
+          },
+          {
+            "date": "2026-04-07",
+            "value": 1
+          },
+          {
+            "date": "2026-04-08",
+            "value": 1
+          },
+          {
+            "date": "2026-04-11",
+            "value": 1
+          },
+          {
+            "date": "2026-04-12",
+            "value": 1
+          },
+          {
+            "date": "2026-04-13",
+            "value": 1
+          },
+          {
+            "date": "2026-04-30",
+            "value": 1
+          },
+          {
+            "date": "2026-05-02",
+            "value": 1
+          },
+          {
+            "date": "2026-05-10",
+            "value": 1
+          },
+          {
+            "date": "2026-05-14",
+            "value": 1
+          },
+          {
+            "date": "2026-05-15",
+            "value": 1
+          },
+          {
+            "date": "2026-05-23",
+            "value": 1
+          },
+          {
+            "date": "2026-05-23",
+            "value": 1
+          },
+          {
+            "date": "2026-06-06",
+            "value": 1
+          },
+          {
+            "date": "2026-06-10",
+            "value": 1
+          },
+          {
+            "date": "2026-06-13",
+            "value": 1
+          },
+          {
+            "date": "2026-07-02",
+            "value": 1
+          },
+          {
+            "date": "2026-07-05",
+            "value": 1
+          },
+          {
+            "date": "2026-07-07",
+            "value": 1
+          },
+          {
+            "date": "2026-07-09",
+            "value": 1
+          },
+          {
+            "date": "2026-08-08",
+            "value": 1
+          },
+          {
+            "date": "2026-08-16",
+            "value": 1
+          },
+          {
+            "date": "2026-08-19",
+            "value": 1
+          },
+          {
+            "date": "2026-08-20",
+            "value": 1
+          },
+          {
+            "date": "2026-08-21",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 13,
+        "games": [
+          {
+            "date": "2026-03-29",
+            "value": 3
+          },
+          {
+            "date": "2026-04-04",
+            "value": 5
+          },
+          {
+            "date": "2026-04-28",
+            "value": 3
+          },
+          {
+            "date": "2026-04-30",
+            "value": 3
+          },
+          {
+            "date": "2026-05-23",
+            "value": 4
+          },
+          {
+            "date": "2026-05-23",
+            "value": 3
+          },
+          {
+            "date": "2026-06-10",
+            "value": 4
+          },
+          {
+            "date": "2026-06-12",
+            "value": 3
+          },
+          {
+            "date": "2026-07-02",
+            "value": 4
+          },
+          {
+            "date": "2026-07-05",
+            "value": 4
+          },
+          {
+            "date": "2026-07-09",
+            "value": 3
+          },
+          {
+            "date": "2026-08-16",
+            "value": 4
+          },
+          {
+            "date": "2026-08-20",
+            "value": 4
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-26",
+        "date_iso": "2026-08-26",
+        "opponent": "vsBAL",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "vsBAL",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "@PHI",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 1,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "@PHI",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "@PHI",
+        "AB": 5,
+        "R": 2,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 2,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 5
+      },
+      {
+        "date": "2026-08-20",
+        "date_iso": "2026-08-20",
+        "opponent": "@CIN",
+        "AB": 4,
+        "R": 2,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 4,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "@CIN",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 2,
+        "BB": 1,
+        "SO": 3,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "@CIN",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "@CIN",
+        "AB": 5,
+        "R": 2,
+        "H": 3,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 1,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "@CIN",
+        "AB": 4,
+        "R": 0,
+        "H": 2,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 3
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 1,
+      "splits": [
+        {
+          "season": 2026,
+          "total": 144.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 10966,
+      "hr_count": 27,
+      "games": 131,
+      "events": [
+        {
+          "date": "2026-03-29",
+          "distance_feet": 415,
+          "inning": 4,
+          "opponent": "vsTB"
+        },
+        {
+          "date": "2026-04-04",
+          "distance_feet": 459,
+          "inning": 5,
+          "opponent": "@DET"
+        },
+        {
+          "date": "2026-04-06",
+          "distance_feet": 378,
+          "inning": 8,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-04-07",
+          "distance_feet": 386,
+          "inning": 7,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-04-08",
+          "distance_feet": 405,
+          "inning": 5,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-04-11",
+          "distance_feet": 429,
+          "inning": 8,
+          "opponent": "vsBOS"
+        },
+        {
+          "date": "2026-04-12",
+          "distance_feet": 432,
+          "inning": 2,
+          "opponent": "vsBOS"
+        },
+        {
+          "date": "2026-04-13",
+          "distance_feet": 398,
+          "inning": 6,
+          "opponent": "vsCLE"
+        },
+        {
+          "date": "2026-04-30",
+          "distance_feet": 383,
+          "inning": 1,
+          "opponent": "@PIT"
+        },
+        {
+          "date": "2026-05-02",
+          "distance_feet": 372,
+          "inning": 3,
+          "opponent": "vsLAD"
+        },
+        {
+          "date": "2026-05-10",
+          "distance_feet": 425,
+          "inning": 4,
+          "opponent": "@SD"
+        },
+        {
+          "date": "2026-05-14",
+          "distance_feet": 381,
+          "inning": 6,
+          "opponent": "@ATH"
+        },
+        {
+          "date": "2026-05-15",
+          "distance_feet": 409,
+          "inning": 4,
+          "opponent": "vsKC"
+        },
+        {
+          "date": "2026-05-23",
+          "distance_feet": 427,
+          "inning": 6,
+          "opponent": "@CIN"
+        },
+        {
+          "date": "2026-05-23",
+          "distance_feet": 389,
+          "inning": 7,
+          "opponent": "@CIN"
+        },
+        {
+          "date": "2026-06-06",
+          "distance_feet": 401,
+          "inning": 5,
+          "opponent": "vsCIN"
+        },
+        {
+          "date": "2026-06-10",
+          "distance_feet": 401,
+          "inning": 4,
+          "opponent": "@NYM"
+        },
+        {
+          "date": "2026-06-13",
+          "distance_feet": 454,
+          "inning": 7,
+          "opponent": "@MIN"
+        },
+        {
+          "date": "2026-07-02",
+          "distance_feet": 396,
+          "inning": 1,
+          "opponent": "@ATL"
+        },
+        {
+          "date": "2026-07-05",
+          "distance_feet": 409,
+          "inning": 6,
+          "opponent": "@CHC"
+        },
+        {
+          "date": "2026-07-07",
+          "distance_feet": 386,
+          "inning": 1,
+          "opponent": "vsMIL"
+        },
+        {
+          "date": "2026-07-09",
+          "distance_feet": 406,
+          "inning": 6,
+          "opponent": "vsMIL"
+        },
+        {
+          "date": "2026-08-08",
+          "distance_feet": 432,
+          "inning": 8,
+          "opponent": "vsCOL"
+        },
+        {
+          "date": "2026-08-16",
+          "distance_feet": 413,
+          "inning": 4,
+          "opponent": "@CHC"
+        },
+        {
+          "date": "2026-08-19",
+          "distance_feet": 381,
+          "inning": 9,
+          "opponent": "@CIN"
+        },
+        {
+          "date": "2026-08-20",
+          "distance_feet": 407,
+          "inning": 3,
+          "opponent": "@CIN"
+        },
+        {
+          "date": "2026-08-21",
+          "distance_feet": 392,
+          "inning": 6,
+          "opponent": "@PHI"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 29,
+      "games_in_window": 131,
+      "matches": [
+        {
+          "game_id": "401814731",
+          "date": "2026-03-29",
+          "opponent": "vsTB",
+          "inning": 3,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Walker doubled to left.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401814744",
+          "date": "2026-03-30",
+          "opponent": "vsNYM",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Walker reached on infield single to third.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401814817",
+          "date": "2026-04-05",
+          "opponent": "@DET",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Walker singled to right.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401814914",
+          "date": "2026-04-12",
+          "opponent": "vsBOS",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 432,
+          "description": "Walker homered to left center (432 feet).",
+          "team": "STL"
+        },
+        {
+          "game_id": "401814980",
+          "date": "2026-04-17",
+          "opponent": "@HOU",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Walker singled to center, Wetherholt scored, Burleson to third.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815152",
+          "date": "2026-04-30",
+          "opponent": "@PIT",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 383,
+          "description": "Walker homered to left (383 feet), Herrera scored.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815165",
+          "date": "2026-05-01",
+          "opponent": "vsLAD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Walker singled to left, Herrera to second.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815180",
+          "date": "2026-05-02",
+          "opponent": "vsLAD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Walker singled to center, Burleson to second.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815209",
+          "date": "2026-05-04",
+          "opponent": "vsMIL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Walker singled to left, Herrera to second.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815318",
+          "date": "2026-05-12",
+          "opponent": "@ATH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Walker singled to left, Wetherholt scored, Herrera to second.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815353",
+          "date": "2026-05-15",
+          "opponent": "vsKC",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Walker reached on infield single to third.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815368",
+          "date": "2026-05-16",
+          "opponent": "vsKC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Walker singled to left, Herrera to third.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815524",
+          "date": "2026-05-27",
+          "opponent": "@MIL",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Walker singled to right.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815572",
+          "date": "2026-05-31",
+          "opponent": "vsCHC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Walker singled to right, Wetherholt scored, Herrera to second.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815665",
+          "date": "2026-06-07",
+          "opponent": "vsCIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Walker singled to left, Herrera to second.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815703",
+          "date": "2026-06-10",
+          "opponent": "@NYM",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Walker singled to center, Wetherholt scored, Herrera to third.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815770",
+          "date": "2026-06-15",
+          "opponent": "vsSD",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Walker singled to left.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815917",
+          "date": "2026-06-26",
+          "opponent": "vsMIA",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Walker reached on infield single to third.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815983",
+          "date": "2026-07-01",
+          "opponent": "@ATL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Walker singled to right, Herrera scored.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401815995",
+          "date": "2026-07-02",
+          "opponent": "@ATL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 396,
+          "description": "Walker homered to left center (396 feet), Wetherholt scored and Herrera scored.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401816064",
+          "date": "2026-07-07",
+          "opponent": "vsMIL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Walker singled to left.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401871790",
+          "date": "2026-07-07",
+          "opponent": "vsMIL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 386,
+          "description": "Walker homered to left (386 feet), Wetherholt scored.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401816079",
+          "date": "2026-07-08",
+          "opponent": "vsMIL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Walker doubled to right, Winn scored.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401816121",
+          "date": "2026-07-11",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Walker singled to right, Herrera to second.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401816200",
+          "date": "2026-07-20",
+          "opponent": "@LAA",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Walker doubled to left.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401881162",
+          "date": "2026-07-23",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Walker doubled to center, Wetherholt scored.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401816260",
+          "date": "2026-07-25",
+          "opponent": "vsCIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Walker reached on infield single to shortstop, Wetherholt to second.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401816463",
+          "date": "2026-08-09",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Walker singled to right, Wetherholt scored, Burleson to second.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401816611",
+          "date": "2026-08-21",
+          "opponent": "@PHI",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Walker reached on infield single to third, Walker safe at second on throwing error by third baseman Stott.",
+          "team": "STL"
+        }
+      ]
+    }
+  }
+}

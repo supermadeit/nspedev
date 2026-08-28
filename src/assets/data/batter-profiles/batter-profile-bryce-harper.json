@@ -1,0 +1,964 @@
+{
+  "player": "BryceHarper",
+  "player_id": "bryce-harper",
+  "team": "PHI",
+  "position": "1B",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 469,
+      "R": 84,
+      "H": 125,
+      "2B": 26,
+      "3B": 3,
+      "HR": 27,
+      "RBI": 77,
+      "BB": 94,
+      "SO": 118,
+      "SB": 7,
+      "TB": 238,
+      "avg": 0.267,
+      "obp": 0.385,
+      "slg": 0.507,
+      "ops": 0.893
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 31,
+        "games": [
+          {
+            "date": "2026-04-03",
+            "value": 2
+          },
+          {
+            "date": "2026-04-06",
+            "value": 3
+          },
+          {
+            "date": "2026-04-10",
+            "value": 2
+          },
+          {
+            "date": "2026-04-12",
+            "value": 2
+          },
+          {
+            "date": "2026-04-17",
+            "value": 3
+          },
+          {
+            "date": "2026-04-25",
+            "value": 2
+          },
+          {
+            "date": "2026-04-28",
+            "value": 2
+          },
+          {
+            "date": "2026-05-04",
+            "value": 3
+          },
+          {
+            "date": "2026-05-05",
+            "value": 3
+          },
+          {
+            "date": "2026-05-08",
+            "value": 2
+          },
+          {
+            "date": "2026-05-15",
+            "value": 4
+          },
+          {
+            "date": "2026-05-23",
+            "value": 3
+          },
+          {
+            "date": "2026-06-05",
+            "value": 2
+          },
+          {
+            "date": "2026-06-07",
+            "value": 2
+          },
+          {
+            "date": "2026-06-10",
+            "value": 2
+          },
+          {
+            "date": "2026-06-20",
+            "value": 4
+          },
+          {
+            "date": "2026-06-21",
+            "value": 3
+          },
+          {
+            "date": "2026-06-22",
+            "value": 2
+          },
+          {
+            "date": "2026-06-25",
+            "value": 2
+          },
+          {
+            "date": "2026-06-26",
+            "value": 3
+          },
+          {
+            "date": "2026-06-27",
+            "value": 2
+          },
+          {
+            "date": "2026-07-11",
+            "value": 2
+          },
+          {
+            "date": "2026-08-01",
+            "value": 2
+          },
+          {
+            "date": "2026-08-06",
+            "value": 2
+          },
+          {
+            "date": "2026-08-07",
+            "value": 2
+          },
+          {
+            "date": "2026-08-15",
+            "value": 2
+          },
+          {
+            "date": "2026-08-17",
+            "value": 3
+          },
+          {
+            "date": "2026-08-23",
+            "value": 2
+          },
+          {
+            "date": "2026-08-24",
+            "value": 2
+          },
+          {
+            "date": "2026-08-25",
+            "value": 2
+          },
+          {
+            "date": "2026-08-26",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 26,
+        "games": [
+          {
+            "date": "2026-04-01",
+            "value": 1
+          },
+          {
+            "date": "2026-04-03",
+            "value": 1
+          },
+          {
+            "date": "2026-04-11",
+            "value": 1
+          },
+          {
+            "date": "2026-04-15",
+            "value": 1
+          },
+          {
+            "date": "2026-04-21",
+            "value": 1
+          },
+          {
+            "date": "2026-04-24",
+            "value": 1
+          },
+          {
+            "date": "2026-05-04",
+            "value": 1
+          },
+          {
+            "date": "2026-05-05",
+            "value": 2
+          },
+          {
+            "date": "2026-05-10",
+            "value": 1
+          },
+          {
+            "date": "2026-05-16",
+            "value": 1
+          },
+          {
+            "date": "2026-05-17",
+            "value": 1
+          },
+          {
+            "date": "2026-05-26",
+            "value": 1
+          },
+          {
+            "date": "2026-06-02",
+            "value": 1
+          },
+          {
+            "date": "2026-06-10",
+            "value": 1
+          },
+          {
+            "date": "2026-06-20",
+            "value": 1
+          },
+          {
+            "date": "2026-06-21",
+            "value": 1
+          },
+          {
+            "date": "2026-06-25",
+            "value": 1
+          },
+          {
+            "date": "2026-06-27",
+            "value": 1
+          },
+          {
+            "date": "2026-06-29",
+            "value": 1
+          },
+          {
+            "date": "2026-07-20",
+            "value": 1
+          },
+          {
+            "date": "2026-07-27",
+            "value": 1
+          },
+          {
+            "date": "2026-08-02",
+            "value": 1
+          },
+          {
+            "date": "2026-08-03",
+            "value": 1
+          },
+          {
+            "date": "2026-08-08",
+            "value": 1
+          },
+          {
+            "date": "2026-08-22",
+            "value": 1
+          },
+          {
+            "date": "2026-08-26",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 7,
+        "games": [
+          {
+            "date": "2026-04-06",
+            "value": 3
+          },
+          {
+            "date": "2026-04-25",
+            "value": 4
+          },
+          {
+            "date": "2026-05-05",
+            "value": 3
+          },
+          {
+            "date": "2026-05-16",
+            "value": 3
+          },
+          {
+            "date": "2026-06-20",
+            "value": 3
+          },
+          {
+            "date": "2026-06-25",
+            "value": 3
+          },
+          {
+            "date": "2026-08-22",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-26",
+        "date_iso": "2026-08-26",
+        "opponent": "@SEA",
+        "AB": 4,
+        "R": 1,
+        "H": 2,
+        "2B": 1,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 2,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 6
+      },
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "@SEA",
+        "AB": 4,
+        "R": 0,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-24",
+        "date_iso": "2026-08-24",
+        "opponent": "@SEA",
+        "AB": 3,
+        "R": 0,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "vsSTL",
+        "AB": 3,
+        "R": 1,
+        "H": 2,
+        "2B": 2,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "vsSTL",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 3,
+        "BB": 0,
+        "SO": 3,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "vsSTL",
+        "AB": 4,
+        "R": 1,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "vsMIA",
+        "AB": 3,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "vsMIA",
+        "AB": 2,
+        "R": 1,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 2,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "vsMIA",
+        "AB": 4,
+        "R": 1,
+        "H": 3,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 3
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "@MIN",
+        "AB": 4,
+        "R": 2,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 1,
+      "splits": [
+        {
+          "season": 2026,
+          "total": 125.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 10463,
+      "hr_count": 26,
+      "games": 135,
+      "events": [
+        {
+          "date": "2026-04-01",
+          "distance_feet": 425,
+          "inning": 8,
+          "opponent": "vsWSH"
+        },
+        {
+          "date": "2026-04-03",
+          "distance_feet": 421,
+          "inning": 2,
+          "opponent": "@COL"
+        },
+        {
+          "date": "2026-04-11",
+          "distance_feet": 419,
+          "inning": 3,
+          "opponent": "vsARI"
+        },
+        {
+          "date": "2026-04-15",
+          "distance_feet": 406,
+          "inning": 9,
+          "opponent": "vsCHC"
+        },
+        {
+          "date": "2026-04-21",
+          "distance_feet": 406,
+          "inning": 8,
+          "opponent": "@CHC"
+        },
+        {
+          "date": "2026-04-24",
+          "distance_feet": 389,
+          "inning": 5,
+          "opponent": "@ATL"
+        },
+        {
+          "date": "2026-05-04",
+          "distance_feet": 393,
+          "inning": 3,
+          "opponent": "@MIA"
+        },
+        {
+          "date": "2026-05-05",
+          "distance_feet": 393,
+          "inning": 3,
+          "opponent": "vsATH"
+        },
+        {
+          "date": "2026-05-05",
+          "distance_feet": 408,
+          "inning": 8,
+          "opponent": "vsATH"
+        },
+        {
+          "date": "2026-05-10",
+          "distance_feet": 411,
+          "inning": 1,
+          "opponent": "vsCOL"
+        },
+        {
+          "date": "2026-05-16",
+          "distance_feet": 457,
+          "inning": 1,
+          "opponent": "@PIT"
+        },
+        {
+          "date": "2026-05-17",
+          "distance_feet": 401,
+          "inning": 6,
+          "opponent": "@PIT"
+        },
+        {
+          "date": "2026-05-26",
+          "distance_feet": 361,
+          "inning": 1,
+          "opponent": "@SD"
+        },
+        {
+          "date": "2026-06-02",
+          "distance_feet": 419,
+          "inning": 4,
+          "opponent": "vsSD"
+        },
+        {
+          "date": "2026-06-10",
+          "distance_feet": 339,
+          "inning": 1,
+          "opponent": "@TOR"
+        },
+        {
+          "date": "2026-06-20",
+          "distance_feet": 385,
+          "inning": 1,
+          "opponent": "vsNYM"
+        },
+        {
+          "date": "2026-06-21",
+          "distance_feet": 390,
+          "inning": 5,
+          "opponent": "vsNYM"
+        },
+        {
+          "date": "2026-06-25",
+          "distance_feet": 390,
+          "inning": 9,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-06-27",
+          "distance_feet": 378,
+          "inning": 3,
+          "opponent": "@NYM"
+        },
+        {
+          "date": "2026-06-29",
+          "distance_feet": 405,
+          "inning": 3,
+          "opponent": "vsPIT"
+        },
+        {
+          "date": "2026-07-20",
+          "distance_feet": 407,
+          "inning": 7,
+          "opponent": "vsLAD"
+        },
+        {
+          "date": "2026-07-27",
+          "distance_feet": 419,
+          "inning": 1,
+          "opponent": "@MIA"
+        },
+        {
+          "date": "2026-08-02",
+          "distance_feet": 419,
+          "inning": 5,
+          "opponent": "@BAL"
+        },
+        {
+          "date": "2026-08-03",
+          "distance_feet": 433,
+          "inning": 8,
+          "opponent": "vsWSH"
+        },
+        {
+          "date": "2026-08-08",
+          "distance_feet": 399,
+          "inning": 6,
+          "opponent": "vsTOR"
+        },
+        {
+          "date": "2026-08-22",
+          "distance_feet": 390,
+          "inning": 6,
+          "opponent": "vsSTL"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 27,
+      "games_in_window": 135,
+      "matches": [
+        {
+          "game_id": "401814839",
+          "date": "2026-04-06",
+          "opponent": "@SF",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Harper doubled to left.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401814869",
+          "date": "2026-04-08",
+          "opponent": "@SF",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Harper reached on infield single to shortstop, Schwarber to second.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401814877",
+          "date": "2026-04-10",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Harper doubled to right, Turner scored, Schwarber to third.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401814971",
+          "date": "2026-04-17",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Harper singled to left, Schwarber to second.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815151",
+          "date": "2026-04-30",
+          "opponent": "vsSF",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Harper singled to right.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815204",
+          "date": "2026-05-04",
+          "opponent": "@MIA",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Harper doubled to right.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815214",
+          "date": "2026-05-05",
+          "opponent": "vsATH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Harper reached on infield single to second.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815285",
+          "date": "2026-05-10",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 411,
+          "description": "Harper homered to center (411 feet).",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815350",
+          "date": "2026-05-15",
+          "opponent": "@PIT",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Harper singled to center, Schwarber to third.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815365",
+          "date": "2026-05-16",
+          "opponent": "@PIT",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 457,
+          "description": "Harper homered to center (457 feet), Turner scored and Schwarber scored.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815441",
+          "date": "2026-05-22",
+          "opponent": "vsCLE",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Harper doubled to right.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815512",
+          "date": "2026-05-26",
+          "opponent": "@SD",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 361,
+          "description": "Harper homered to right (361 feet).",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815630",
+          "date": "2026-06-05",
+          "opponent": "vsCHW",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Harper singled to center, Turner to second.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815660",
+          "date": "2026-06-07",
+          "opponent": "vsCHW",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Harper doubled to right, Turner scored.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815701",
+          "date": "2026-06-10",
+          "opponent": "@TOR",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 339,
+          "description": "Harper homered to left (339 feet).",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815791",
+          "date": "2026-06-17",
+          "opponent": "vsMIA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Harper singled to right, Turner to third.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815828",
+          "date": "2026-06-20",
+          "opponent": "vsNYM",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 385,
+          "description": "Harper homered to right center (385 feet).",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815859",
+          "date": "2026-06-22",
+          "opponent": "@WSH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Harper reached on infield single to third.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401815910",
+          "date": "2026-06-26",
+          "opponent": "@NYM",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Harper singled to center, Turner scored, Schwarber to second.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401816021",
+          "date": "2026-07-04",
+          "opponent": "@KC",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Harper reached on infield single to pitcher, Schwarber to second. Harper to second, Schwarber to third on throwing error by pitcher Wacha.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401816117",
+          "date": "2026-07-11",
+          "opponent": "@DET",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Harper doubled to right, Turner to third.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401816202",
+          "date": "2026-07-21",
+          "opponent": "vsLAD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Harper doubled to center.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401816284",
+          "date": "2026-07-27",
+          "opponent": "@MIA",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 419,
+          "description": "Harper homered to center (419 feet), Schwarber scored.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401816335",
+          "date": "2026-07-31",
+          "opponent": "@BAL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Harper singled to left, Turner scored, Schwarber to second.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401816565",
+          "date": "2026-08-17",
+          "opponent": "vsMIA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Harper reached on infield single to second.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401816663",
+          "date": "2026-08-24",
+          "opponent": "@SEA",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Harper singled to left, Schwarber to second.",
+          "team": "PHI"
+        },
+        {
+          "game_id": "401816678",
+          "date": "2026-08-25",
+          "opponent": "@SEA",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Harper singled to right.",
+          "team": "PHI"
+        }
+      ]
+    }
+  }
+}

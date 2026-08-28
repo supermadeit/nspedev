@@ -1,0 +1,858 @@
+{
+  "player": "ByronBuxton",
+  "player_id": "byron-buxton",
+  "team": "MIN",
+  "position": "CF",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 370,
+      "R": 65,
+      "H": 94,
+      "2B": 18,
+      "3B": 1,
+      "HR": 25,
+      "RBI": 46,
+      "BB": 30,
+      "SO": 100,
+      "SB": 7,
+      "TB": 189,
+      "avg": 0.254,
+      "obp": 0.319,
+      "slg": 0.511,
+      "ops": 0.829
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 24,
+        "games": [
+          {
+            "date": "2026-03-28",
+            "value": 2
+          },
+          {
+            "date": "2026-04-08",
+            "value": 3
+          },
+          {
+            "date": "2026-04-13",
+            "value": 2
+          },
+          {
+            "date": "2026-04-14",
+            "value": 4
+          },
+          {
+            "date": "2026-04-25",
+            "value": 2
+          },
+          {
+            "date": "2026-04-28",
+            "value": 2
+          },
+          {
+            "date": "2026-04-30",
+            "value": 3
+          },
+          {
+            "date": "2026-05-01",
+            "value": 2
+          },
+          {
+            "date": "2026-05-08",
+            "value": 3
+          },
+          {
+            "date": "2026-05-09",
+            "value": 2
+          },
+          {
+            "date": "2026-05-13",
+            "value": 2
+          },
+          {
+            "date": "2026-05-19",
+            "value": 2
+          },
+          {
+            "date": "2026-05-22",
+            "value": 2
+          },
+          {
+            "date": "2026-05-30",
+            "value": 2
+          },
+          {
+            "date": "2026-06-04",
+            "value": 2
+          },
+          {
+            "date": "2026-06-10",
+            "value": 2
+          },
+          {
+            "date": "2026-06-12",
+            "value": 3
+          },
+          {
+            "date": "2026-06-13",
+            "value": 2
+          },
+          {
+            "date": "2026-06-14",
+            "value": 3
+          },
+          {
+            "date": "2026-06-19",
+            "value": 2
+          },
+          {
+            "date": "2026-06-21",
+            "value": 2
+          },
+          {
+            "date": "2026-06-26",
+            "value": 3
+          },
+          {
+            "date": "2026-07-20",
+            "value": 2
+          },
+          {
+            "date": "2026-08-24",
+            "value": 3
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 23,
+        "games": [
+          {
+            "date": "2026-04-13",
+            "value": 1
+          },
+          {
+            "date": "2026-04-14",
+            "value": 2
+          },
+          {
+            "date": "2026-04-21",
+            "value": 1
+          },
+          {
+            "date": "2026-04-22",
+            "value": 1
+          },
+          {
+            "date": "2026-04-27",
+            "value": 1
+          },
+          {
+            "date": "2026-04-28",
+            "value": 1
+          },
+          {
+            "date": "2026-04-30",
+            "value": 1
+          },
+          {
+            "date": "2026-05-01",
+            "value": 1
+          },
+          {
+            "date": "2026-05-02",
+            "value": 1
+          },
+          {
+            "date": "2026-05-05",
+            "value": 1
+          },
+          {
+            "date": "2026-05-08",
+            "value": 1
+          },
+          {
+            "date": "2026-05-09",
+            "value": 1
+          },
+          {
+            "date": "2026-05-13",
+            "value": 2
+          },
+          {
+            "date": "2026-05-22",
+            "value": 1
+          },
+          {
+            "date": "2026-05-27",
+            "value": 1
+          },
+          {
+            "date": "2026-06-04",
+            "value": 1
+          },
+          {
+            "date": "2026-06-09",
+            "value": 1
+          },
+          {
+            "date": "2026-06-10",
+            "value": 1
+          },
+          {
+            "date": "2026-06-12",
+            "value": 1
+          },
+          {
+            "date": "2026-06-13",
+            "value": 1
+          },
+          {
+            "date": "2026-06-15",
+            "value": 1
+          },
+          {
+            "date": "2026-06-20",
+            "value": 1
+          },
+          {
+            "date": "2026-06-22",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 4,
+        "games": [
+          {
+            "date": "2026-05-05",
+            "value": 3
+          },
+          {
+            "date": "2026-05-22",
+            "value": 3
+          },
+          {
+            "date": "2026-06-10",
+            "value": 3
+          },
+          {
+            "date": "2026-06-20",
+            "value": 4
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "@ATH",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 3,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-24",
+        "date_iso": "2026-08-24",
+        "opponent": "@ATH",
+        "AB": 5,
+        "R": 4,
+        "H": 3,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "@SD",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "@SD",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "@SD",
+        "AB": 4,
+        "R": 1,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "vsATL",
+        "AB": 4,
+        "R": 1,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "vsATL",
+        "AB": 1,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "vsATL",
+        "AB": 3,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "vsPHI",
+        "AB": 5,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 3,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-15",
+        "date_iso": "2026-08-15",
+        "opponent": "vsPHI",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 2,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 1,
+      "splits": [
+        {
+          "season": 2026,
+          "total": 94.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 10040,
+      "hr_count": 25,
+      "games": 93,
+      "events": [
+        {
+          "date": "2026-04-13",
+          "distance_feet": 420,
+          "inning": 5,
+          "opponent": "vsBOS"
+        },
+        {
+          "date": "2026-04-14",
+          "distance_feet": 401,
+          "inning": 3,
+          "opponent": "vsBOS"
+        },
+        {
+          "date": "2026-04-14",
+          "distance_feet": 438,
+          "inning": 6,
+          "opponent": "vsBOS"
+        },
+        {
+          "date": "2026-04-21",
+          "distance_feet": 374,
+          "inning": 6,
+          "opponent": "@NYM"
+        },
+        {
+          "date": "2026-04-22",
+          "distance_feet": 409,
+          "inning": 6,
+          "opponent": "@NYM"
+        },
+        {
+          "date": "2026-04-27",
+          "distance_feet": 396,
+          "inning": 4,
+          "opponent": "vsSEA"
+        },
+        {
+          "date": "2026-04-28",
+          "distance_feet": 389,
+          "inning": 5,
+          "opponent": "vsSEA"
+        },
+        {
+          "date": "2026-04-30",
+          "distance_feet": 375,
+          "inning": 6,
+          "opponent": "vsTOR"
+        },
+        {
+          "date": "2026-05-01",
+          "distance_feet": 364,
+          "inning": 3,
+          "opponent": "vsTOR"
+        },
+        {
+          "date": "2026-05-02",
+          "distance_feet": 363,
+          "inning": 1,
+          "opponent": "vsTOR"
+        },
+        {
+          "date": "2026-05-05",
+          "distance_feet": 387,
+          "inning": 8,
+          "opponent": "@WSH"
+        },
+        {
+          "date": "2026-05-08",
+          "distance_feet": 400,
+          "inning": 7,
+          "opponent": "@CLE"
+        },
+        {
+          "date": "2026-05-09",
+          "distance_feet": 378,
+          "inning": 1,
+          "opponent": "@CLE"
+        },
+        {
+          "date": "2026-05-13",
+          "distance_feet": 382,
+          "inning": 1,
+          "opponent": "vsMIA"
+        },
+        {
+          "date": "2026-05-13",
+          "distance_feet": 418,
+          "inning": 3,
+          "opponent": "vsMIA"
+        },
+        {
+          "date": "2026-05-22",
+          "distance_feet": 419,
+          "inning": 7,
+          "opponent": "@BOS"
+        },
+        {
+          "date": "2026-05-27",
+          "distance_feet": 417,
+          "inning": 1,
+          "opponent": "@CHW"
+        },
+        {
+          "date": "2026-06-04",
+          "distance_feet": 430,
+          "inning": 1,
+          "opponent": "vsKC"
+        },
+        {
+          "date": "2026-06-09",
+          "distance_feet": 428,
+          "inning": 1,
+          "opponent": "@DET"
+        },
+        {
+          "date": "2026-06-10",
+          "distance_feet": 413,
+          "inning": 5,
+          "opponent": "@DET"
+        },
+        {
+          "date": "2026-06-12",
+          "distance_feet": 425,
+          "inning": 1,
+          "opponent": "vsSTL"
+        },
+        {
+          "date": "2026-06-13",
+          "distance_feet": 420,
+          "inning": 4,
+          "opponent": "vsSTL"
+        },
+        {
+          "date": "2026-06-15",
+          "distance_feet": 398,
+          "inning": 6,
+          "opponent": "@TEX"
+        },
+        {
+          "date": "2026-06-20",
+          "distance_feet": 402,
+          "inning": 5,
+          "opponent": "@ARI"
+        },
+        {
+          "date": "2026-06-22",
+          "distance_feet": 394,
+          "inning": 1,
+          "opponent": "vsLAD"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 23,
+      "games_in_window": 93,
+      "matches": [
+        {
+          "game_id": "401814865",
+          "date": "2026-04-08",
+          "opponent": "vsDET",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Buxton singled to left.",
+          "team": "MIN"
+        },
+        {
+          "game_id": "401814938",
+          "date": "2026-04-14",
+          "opponent": "vsBOS",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Buxton singled to center.",
+          "team": "MIN"
+        },
+        {
+          "game_id": "401815008",
+          "date": "2026-04-19",
+          "opponent": "vsCIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Buxton reached on infield single to third, Buxton safe at second on throwing error by third baseman Hayes.",
+          "team": "MIN"
+        },
+        {
+          "game_id": "401815084",
+          "date": "2026-04-25",
+          "opponent": "@TB",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Buxton reached on infield single to second, Buxton safe at second on throwing error by second baseman Palacios.",
+          "team": "MIN"
+        },
+        {
+          "game_id": "401815155",
+          "date": "2026-04-30",
+          "opponent": "vsTOR",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Buxton doubled to center.",
+          "team": "MIN"
+        },
+        {
+          "game_id": "401815181",
+          "date": "2026-05-02",
+          "opponent": "vsTOR",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 363,
+          "description": "Buxton homered to right (363 feet).",
+          "team": "MIN"
+        },
+        {
+          "game_id": "401815257",
+          "date": "2026-05-08",
+          "opponent": "@CLE",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Buxton doubled to left.",
+          "team": "MIN"
+        },
+        {
+          "game_id": "401815272",
+          "date": "2026-05-09",
+          "opponent": "@CLE",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 378,
+          "description": "Buxton homered to left (378 feet).",
+          "team": "MIN"
+        },
+        {
+          "game_id": "401815329",
+          "date": "2026-05-13",
+          "opponent": "vsMIA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 382,
+          "description": "Buxton homered to left (382 feet).",
+          "team": "MIN"
+        },
+        {
+          "game_id": "401815458",
+          "date": "2026-05-23",
+          "opponent": "@BOS",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Buxton singled to center.",
+          "team": "MIN"
+        },
+        {
+          "game_id": "401815522",
+          "date": "2026-05-27",
+          "opponent": "@CHW",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 417,
+          "description": "Buxton homered to center (417 feet).",
+          "team": "MIN"
+        },
+        {
+          "game_id": "401815624",
+          "date": "2026-06-04",
+          "opponent": "vsKC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 430,
+          "description": "Buxton homered to center (430 feet).",
+          "team": "MIN"
+        },
+        {
+          "game_id": "401815684",
+          "date": "2026-06-09",
+          "opponent": "@DET",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 428,
+          "description": "Buxton homered to left center (428 feet).",
+          "team": "MIN"
+        },
+        {
+          "game_id": "401815730",
+          "date": "2026-06-12",
+          "opponent": "vsSTL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 425,
+          "description": "Buxton homered to center (425 feet).",
+          "team": "MIN"
+        },
+        {
+          "game_id": "401815760",
+          "date": "2026-06-14",
+          "opponent": "vsSTL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Buxton doubled to left.",
+          "team": "MIN"
+        },
+        {
+          "game_id": "401815783",
+          "date": "2026-06-16",
+          "opponent": "@TEX",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Buxton reached on infield single to second.",
+          "team": "MIN"
+        },
+        {
+          "game_id": "401815824",
+          "date": "2026-06-19",
+          "opponent": "@ARI",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Buxton singled to left, Buxton out stretching at second.",
+          "team": "MIN"
+        },
+        {
+          "game_id": "401815863",
+          "date": "2026-06-22",
+          "opponent": "vsLAD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 394,
+          "description": "Buxton homered to left center (394 feet).",
+          "team": "MIN"
+        },
+        {
+          "game_id": "401815915",
+          "date": "2026-06-26",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Buxton singled to left.",
+          "team": "MIN"
+        },
+        {
+          "game_id": "401816017",
+          "date": "2026-07-04",
+          "opponent": "@NYY",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Buxton doubled to center, Larnach scored.",
+          "team": "MIN"
+        },
+        {
+          "game_id": "401816032",
+          "date": "2026-07-05",
+          "opponent": "@NYY",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Buxton reached on infield single to pitcher, Martin to third.",
+          "team": "MIN"
+        },
+        {
+          "game_id": "401816188",
+          "date": "2026-07-20",
+          "opponent": "@CLE",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Buxton reached on infield single to third.",
+          "team": "MIN"
+        },
+        {
+          "game_id": "401816232",
+          "date": "2026-07-23",
+          "opponent": "@CLE",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Buxton reached on infield single to third.",
+          "team": "MIN"
+        }
+      ]
+    }
+  }
+}

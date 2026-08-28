@@ -1,0 +1,884 @@
+{
+  "player": "NickGonzales",
+  "player_id": "nick-gonzales",
+  "team": "PIT",
+  "position": "3B",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 475,
+      "R": 66,
+      "H": 145,
+      "2B": 22,
+      "3B": 1,
+      "HR": 6,
+      "RBI": 56,
+      "BB": 35,
+      "SO": 88,
+      "SB": 7,
+      "TB": 187,
+      "avg": 0.305,
+      "obp": 0.365,
+      "slg": 0.394,
+      "ops": 0.758
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 51,
+        "games": [
+          {
+            "date": "2026-03-26",
+            "value": 2
+          },
+          {
+            "date": "2026-03-28",
+            "value": 2
+          },
+          {
+            "date": "2026-03-31",
+            "value": 2
+          },
+          {
+            "date": "2026-04-01",
+            "value": 2
+          },
+          {
+            "date": "2026-04-16",
+            "value": 2
+          },
+          {
+            "date": "2026-04-19",
+            "value": 2
+          },
+          {
+            "date": "2026-04-21",
+            "value": 2
+          },
+          {
+            "date": "2026-04-23",
+            "value": 2
+          },
+          {
+            "date": "2026-04-25",
+            "value": 3
+          },
+          {
+            "date": "2026-04-27",
+            "value": 3
+          },
+          {
+            "date": "2026-04-28",
+            "value": 2
+          },
+          {
+            "date": "2026-05-01",
+            "value": 3
+          },
+          {
+            "date": "2026-05-02",
+            "value": 2
+          },
+          {
+            "date": "2026-05-09",
+            "value": 4
+          },
+          {
+            "date": "2026-05-12",
+            "value": 2
+          },
+          {
+            "date": "2026-05-16",
+            "value": 2
+          },
+          {
+            "date": "2026-05-20",
+            "value": 2
+          },
+          {
+            "date": "2026-05-22",
+            "value": 2
+          },
+          {
+            "date": "2026-05-26",
+            "value": 2
+          },
+          {
+            "date": "2026-05-30",
+            "value": 3
+          },
+          {
+            "date": "2026-06-02",
+            "value": 3
+          },
+          {
+            "date": "2026-06-03",
+            "value": 2
+          },
+          {
+            "date": "2026-06-06",
+            "value": 2
+          },
+          {
+            "date": "2026-06-11",
+            "value": 2
+          },
+          {
+            "date": "2026-06-14",
+            "value": 2
+          },
+          {
+            "date": "2026-06-17",
+            "value": 2
+          },
+          {
+            "date": "2026-06-21",
+            "value": 2
+          },
+          {
+            "date": "2026-06-23",
+            "value": 2
+          },
+          {
+            "date": "2026-06-24",
+            "value": 2
+          },
+          {
+            "date": "2026-07-01",
+            "value": 3
+          },
+          {
+            "date": "2026-07-02",
+            "value": 3
+          },
+          {
+            "date": "2026-07-04",
+            "value": 2
+          },
+          {
+            "date": "2026-07-05",
+            "value": 3
+          },
+          {
+            "date": "2026-07-07",
+            "value": 2
+          },
+          {
+            "date": "2026-07-12",
+            "value": 2
+          },
+          {
+            "date": "2026-07-18",
+            "value": 2
+          },
+          {
+            "date": "2026-07-19",
+            "value": 2
+          },
+          {
+            "date": "2026-07-22",
+            "value": 2
+          },
+          {
+            "date": "2026-07-22",
+            "value": 2
+          },
+          {
+            "date": "2026-07-26",
+            "value": 2
+          },
+          {
+            "date": "2026-07-27",
+            "value": 2
+          },
+          {
+            "date": "2026-07-28",
+            "value": 2
+          },
+          {
+            "date": "2026-07-30",
+            "value": 2
+          },
+          {
+            "date": "2026-07-31",
+            "value": 2
+          },
+          {
+            "date": "2026-08-06",
+            "value": 2
+          },
+          {
+            "date": "2026-08-07",
+            "value": 2
+          },
+          {
+            "date": "2026-08-12",
+            "value": 2
+          },
+          {
+            "date": "2026-08-13",
+            "value": 2
+          },
+          {
+            "date": "2026-08-19",
+            "value": 2
+          },
+          {
+            "date": "2026-08-21",
+            "value": 2
+          },
+          {
+            "date": "2026-08-24",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 6,
+        "games": [
+          {
+            "date": "2026-05-31",
+            "value": 1
+          },
+          {
+            "date": "2026-06-03",
+            "value": 1
+          },
+          {
+            "date": "2026-06-21",
+            "value": 1
+          },
+          {
+            "date": "2026-07-02",
+            "value": 1
+          },
+          {
+            "date": "2026-07-18",
+            "value": 1
+          },
+          {
+            "date": "2026-07-22",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 2,
+        "games": [
+          {
+            "date": "2026-06-03",
+            "value": 3
+          },
+          {
+            "date": "2026-08-08",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-26",
+        "date_iso": "2026-08-26",
+        "opponent": "@SD",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "@SD",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-24",
+        "date_iso": "2026-08-24",
+        "opponent": "@SD",
+        "AB": 5,
+        "R": 0,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 1,
+        "SO": 0,
+        "SB": 1,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "@LAD",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 1,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "@LAD",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "@LAD",
+        "AB": 5,
+        "R": 0,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 2,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "vsDET",
+        "AB": 3,
+        "R": 0,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "vsDET",
+        "AB": 2,
+        "R": 1,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 2,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-14",
+        "date_iso": "2026-08-14",
+        "opponent": "vsBOS",
+        "AB": 2,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-13",
+        "date_iso": "2026-08-13",
+        "opponent": "@MIA",
+        "AB": 4,
+        "R": 1,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 1,
+      "splits": [
+        {
+          "season": 2026,
+          "total": 145.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 2379,
+      "hr_count": 6,
+      "games": 126,
+      "events": [
+        {
+          "date": "2026-05-31",
+          "distance_feet": 407,
+          "inning": 3,
+          "opponent": "vsMIN"
+        },
+        {
+          "date": "2026-06-03",
+          "distance_feet": 370,
+          "inning": 7,
+          "opponent": "@HOU"
+        },
+        {
+          "date": "2026-06-21",
+          "distance_feet": 431,
+          "inning": 4,
+          "opponent": "@COL"
+        },
+        {
+          "date": "2026-07-02",
+          "distance_feet": 387,
+          "inning": 9,
+          "opponent": "@PHI"
+        },
+        {
+          "date": "2026-07-18",
+          "distance_feet": 387,
+          "inning": 6,
+          "opponent": "@CLE"
+        },
+        {
+          "date": "2026-07-22",
+          "distance_feet": 397,
+          "inning": 7,
+          "opponent": "@NYY"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 32,
+      "games_in_window": 126,
+      "matches": [
+        {
+          "game_id": "401814753",
+          "date": "2026-03-31",
+          "opponent": "@CIN",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales singled to left.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401814832",
+          "date": "2026-04-06",
+          "opponent": "vsSD",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales singled to center, O'Hearn to second.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401814952",
+          "date": "2026-04-15",
+          "opponent": "vsWSH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales reached on infield single to shortstop, O'Hearn scored, Ozuna to second.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401814965",
+          "date": "2026-04-16",
+          "opponent": "vsWSH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales singled to left, Mangum to second.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815007",
+          "date": "2026-04-19",
+          "opponent": "vsTB",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales singled to right, Mangum to third.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815035",
+          "date": "2026-04-21",
+          "opponent": "@TEX",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales singled to center.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815061",
+          "date": "2026-04-23",
+          "opponent": "@TEX",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales singled to left, O'Hearn to second.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815089",
+          "date": "2026-04-25",
+          "opponent": "@MIL",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales singled to center.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815111",
+          "date": "2026-04-27",
+          "opponent": "vsSTL",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Gonzales doubled to right.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815158",
+          "date": "2026-05-01",
+          "opponent": "vsCIN",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales reached on infield single to third.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815296",
+          "date": "2026-05-10",
+          "opponent": "@SF",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales singled to center, Cruz scored.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815306",
+          "date": "2026-05-12",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales singled to right, Cruz scored, O'Hearn to second.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815445",
+          "date": "2026-05-22",
+          "opponent": "@TOR",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Gonzales doubled to center, Lowe to third.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815539",
+          "date": "2026-05-29",
+          "opponent": "vsMIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales reached on infield single to third, Lowe scored on throwing error by third baseman Lee, Gonzales to second, Reynolds safe at third on error.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815554",
+          "date": "2026-05-30",
+          "opponent": "vsMIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales singled to center, Reynolds to third.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815598",
+          "date": "2026-06-02",
+          "opponent": "@HOU",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales reached on infield single to third.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815873",
+          "date": "2026-06-23",
+          "opponent": "vsSEA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales reached on infield single to shortstop, Gonzales out stretching at second, Horwitz to third.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815937",
+          "date": "2026-06-28",
+          "opponent": "vsCIN",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales singled to left.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401815982",
+          "date": "2026-07-01",
+          "opponent": "@PHI",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales singled to right.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401816019",
+          "date": "2026-07-04",
+          "opponent": "@WSH",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales singled to left.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401816034",
+          "date": "2026-07-05",
+          "opponent": "@WSH",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales singled to left, O'Hearn to second.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401816054",
+          "date": "2026-07-07",
+          "opponent": "vsATL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales singled to center.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401816174",
+          "date": "2026-07-19",
+          "opponent": "@CLE",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Gonzales doubled to center.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401898714",
+          "date": "2026-07-22",
+          "opponent": "@NYY",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales singled to left, Gonzales out stretching at second.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401816280",
+          "date": "2026-07-27",
+          "opponent": "vsARI",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales singled to center.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401816307",
+          "date": "2026-07-29",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales singled to center.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401816323",
+          "date": "2026-07-30",
+          "opponent": "@CIN",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales singled to left.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401816336",
+          "date": "2026-07-31",
+          "opponent": "@CIN",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales singled to center, Reynolds and Valdez scored, O'Hearn to second.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401816408",
+          "date": "2026-08-05",
+          "opponent": "@MIL",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales singled to center.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401816498",
+          "date": "2026-08-12",
+          "opponent": "@MIA",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales singled to center.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401816512",
+          "date": "2026-08-13",
+          "opponent": "@MIA",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales reached on infield single to third.",
+          "team": "PIT"
+        },
+        {
+          "game_id": "401816624",
+          "date": "2026-08-21",
+          "opponent": "@LAD",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Gonzales singled to center, Lowe scored, Reynolds to second.",
+          "team": "PIT"
+        }
+      ]
+    }
+  }
+}

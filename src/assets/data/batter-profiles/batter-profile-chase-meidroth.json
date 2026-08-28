@@ -1,0 +1,860 @@
+{
+  "player": "ChaseMeidroth",
+  "player_id": "chase-meidroth",
+  "team": "CHW",
+  "position": "2B",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 472,
+      "R": 73,
+      "H": 128,
+      "2B": 24,
+      "3B": 0,
+      "HR": 12,
+      "RBI": 50,
+      "BB": 50,
+      "SO": 121,
+      "SB": 2,
+      "TB": 188,
+      "avg": 0.271,
+      "obp": 0.344,
+      "slg": 0.398,
+      "ops": 0.742
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 33,
+        "games": [
+          {
+            "date": "2026-03-28",
+            "value": 2
+          },
+          {
+            "date": "2026-04-06",
+            "value": 2
+          },
+          {
+            "date": "2026-04-07",
+            "value": 2
+          },
+          {
+            "date": "2026-04-16",
+            "value": 2
+          },
+          {
+            "date": "2026-04-17",
+            "value": 2
+          },
+          {
+            "date": "2026-04-19",
+            "value": 2
+          },
+          {
+            "date": "2026-04-23",
+            "value": 2
+          },
+          {
+            "date": "2026-04-25",
+            "value": 2
+          },
+          {
+            "date": "2026-05-03",
+            "value": 2
+          },
+          {
+            "date": "2026-05-05",
+            "value": 2
+          },
+          {
+            "date": "2026-05-06",
+            "value": 2
+          },
+          {
+            "date": "2026-05-14",
+            "value": 2
+          },
+          {
+            "date": "2026-05-20",
+            "value": 2
+          },
+          {
+            "date": "2026-05-25",
+            "value": 2
+          },
+          {
+            "date": "2026-05-26",
+            "value": 2
+          },
+          {
+            "date": "2026-05-27",
+            "value": 2
+          },
+          {
+            "date": "2026-06-02",
+            "value": 2
+          },
+          {
+            "date": "2026-06-06",
+            "value": 2
+          },
+          {
+            "date": "2026-06-12",
+            "value": 3
+          },
+          {
+            "date": "2026-06-17",
+            "value": 2
+          },
+          {
+            "date": "2026-06-26",
+            "value": 4
+          },
+          {
+            "date": "2026-06-27",
+            "value": 2
+          },
+          {
+            "date": "2026-07-10",
+            "value": 2
+          },
+          {
+            "date": "2026-07-11",
+            "value": 2
+          },
+          {
+            "date": "2026-07-17",
+            "value": 2
+          },
+          {
+            "date": "2026-07-22",
+            "value": 4
+          },
+          {
+            "date": "2026-08-02",
+            "value": 2
+          },
+          {
+            "date": "2026-08-06",
+            "value": 3
+          },
+          {
+            "date": "2026-08-12",
+            "value": 2
+          },
+          {
+            "date": "2026-08-13",
+            "value": 2
+          },
+          {
+            "date": "2026-08-14",
+            "value": 2
+          },
+          {
+            "date": "2026-08-22",
+            "value": 2
+          },
+          {
+            "date": "2026-08-25",
+            "value": 3
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 11,
+        "games": [
+          {
+            "date": "2026-03-26",
+            "value": 1
+          },
+          {
+            "date": "2026-05-05",
+            "value": 1
+          },
+          {
+            "date": "2026-05-12",
+            "value": 1
+          },
+          {
+            "date": "2026-05-24",
+            "value": 1
+          },
+          {
+            "date": "2026-05-27",
+            "value": 1
+          },
+          {
+            "date": "2026-06-14",
+            "value": 1
+          },
+          {
+            "date": "2026-07-02",
+            "value": 1
+          },
+          {
+            "date": "2026-07-26",
+            "value": 1
+          },
+          {
+            "date": "2026-07-28",
+            "value": 1
+          },
+          {
+            "date": "2026-08-06",
+            "value": 2
+          },
+          {
+            "date": "2026-08-12",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 3,
+        "games": [
+          {
+            "date": "2026-05-12",
+            "value": 3
+          },
+          {
+            "date": "2026-05-27",
+            "value": 4
+          },
+          {
+            "date": "2026-08-06",
+            "value": 4
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "vsTEX",
+        "AB": 5,
+        "R": 0,
+        "H": 3,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 3
+      },
+      {
+        "date": "2026-08-24",
+        "date_iso": "2026-08-24",
+        "opponent": "vsTEX",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "vsNYM",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "vsNYM",
+        "AB": 5,
+        "R": 1,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "vsNYM",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-20",
+        "date_iso": "2026-08-20",
+        "opponent": "vsATL",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "@CHC",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "@CHC",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "@CHC",
+        "AB": 5,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 4,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "@DET",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 1,
+      "splits": [
+        {
+          "season": 2026,
+          "total": 128.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 4553,
+      "hr_count": 12,
+      "games": 127,
+      "events": [
+        {
+          "date": "2026-03-26",
+          "distance_feet": 417,
+          "inning": 1,
+          "opponent": "@MIL"
+        },
+        {
+          "date": "2026-05-05",
+          "distance_feet": 372,
+          "inning": 7,
+          "opponent": "@LAA"
+        },
+        {
+          "date": "2026-05-12",
+          "distance_feet": 359,
+          "inning": 5,
+          "opponent": "vsKC"
+        },
+        {
+          "date": "2026-05-24",
+          "distance_feet": 371,
+          "inning": 1,
+          "opponent": "@SF"
+        },
+        {
+          "date": "2026-05-27",
+          "distance_feet": 400,
+          "inning": 7,
+          "opponent": "vsMIN"
+        },
+        {
+          "date": "2026-06-14",
+          "distance_feet": 366,
+          "inning": 6,
+          "opponent": "vsLAD"
+        },
+        {
+          "date": "2026-07-02",
+          "distance_feet": 349,
+          "inning": 6,
+          "opponent": "@CLE"
+        },
+        {
+          "date": "2026-07-26",
+          "distance_feet": 382,
+          "inning": 7,
+          "opponent": "vsHOU"
+        },
+        {
+          "date": "2026-07-28",
+          "distance_feet": 406,
+          "inning": 9,
+          "opponent": "vsNYY"
+        },
+        {
+          "date": "2026-08-06",
+          "distance_feet": 409,
+          "inning": 3,
+          "opponent": "@BOS"
+        },
+        {
+          "date": "2026-08-06",
+          "distance_feet": 362,
+          "inning": 10,
+          "opponent": "@BOS"
+        },
+        {
+          "date": "2026-08-12",
+          "distance_feet": 360,
+          "inning": 6,
+          "opponent": "vsCIN"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 31,
+      "games_in_window": 127,
+      "matches": [
+        {
+          "game_id": "401814696",
+          "date": "2026-03-26",
+          "opponent": "@MIL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 417,
+          "description": "Meidroth homered to left center (417 feet).",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401814821",
+          "date": "2026-04-05",
+          "opponent": "vsTOR",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Meidroth doubled to left.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401814967",
+          "date": "2026-04-16",
+          "opponent": "vsTB",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Meidroth singled to left.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401814982",
+          "date": "2026-04-17",
+          "opponent": "@ATH",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Meidroth singled to right, Quero to second.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401815012",
+          "date": "2026-04-19",
+          "opponent": "@ATH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Meidroth singled to left.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401815053",
+          "date": "2026-04-22",
+          "opponent": "@ARI",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Meidroth singled to right.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401815063",
+          "date": "2026-04-23",
+          "opponent": "@ARI",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Meidroth reached on infield single to shortstop, Montgomery to third.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401815091",
+          "date": "2026-04-25",
+          "opponent": "vsWSH",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Meidroth singled to left.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401815106",
+          "date": "2026-04-26",
+          "opponent": "vsWSH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Meidroth singled to left.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401815168",
+          "date": "2026-05-01",
+          "opponent": "@SD",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Meidroth doubled to right, Montgomery to third.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401815198",
+          "date": "2026-05-03",
+          "opponent": "@SD",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Meidroth reached on infield single to shortstop, Montgomery to second, Antonacci out at home on runner's fielder's choice.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401815212",
+          "date": "2026-05-04",
+          "opponent": "@LAA",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Meidroth singled to center, Antonacci scored, Murakami to second.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401815226",
+          "date": "2026-05-05",
+          "opponent": "@LAA",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Meidroth singled to left.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401815241",
+          "date": "2026-05-06",
+          "opponent": "@LAA",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Meidroth singled to right, Montgomery to third.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401815483",
+          "date": "2026-05-24",
+          "opponent": "@SF",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 371,
+          "description": "Meidroth homered to left center (371 feet).",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401815492",
+          "date": "2026-05-25",
+          "opponent": "vsMIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Meidroth singled to center, Montgomery to second.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401815558",
+          "date": "2026-05-30",
+          "opponent": "vsDET",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Meidroth doubled to left.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401815689",
+          "date": "2026-06-09",
+          "opponent": "vsATL",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Meidroth singled to center.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401815728",
+          "date": "2026-06-12",
+          "opponent": "vsLAD",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Meidroth singled to center.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401815862",
+          "date": "2026-06-22",
+          "opponent": "vsCLE",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Meidroth singled to right.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401815891",
+          "date": "2026-06-24",
+          "opponent": "vsCLE",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Meidroth singled to right, Teel to third.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401816077",
+          "date": "2026-07-08",
+          "opponent": "vsBOS",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Meidroth singled to left.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401816120",
+          "date": "2026-07-11",
+          "opponent": "vsATH",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Meidroth singled to right.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401816141",
+          "date": "2026-07-17",
+          "opponent": "@TOR",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Meidroth singled to center, B. Montgomery scored.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401816222",
+          "date": "2026-07-22",
+          "opponent": "@TEX",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Meidroth singled to left, B. Montgomery scored.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401816363",
+          "date": "2026-08-02",
+          "opponent": "@TB",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Meidroth reached on infield single to first.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401816432",
+          "date": "2026-08-07",
+          "opponent": "vsCLE",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Meidroth doubled to right.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401816501",
+          "date": "2026-08-12",
+          "opponent": "vsCIN",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Meidroth reached on infield single to third.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401816514",
+          "date": "2026-08-13",
+          "opponent": "vsCIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Meidroth doubled to left.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401816535",
+          "date": "2026-08-15",
+          "opponent": "@DET",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Meidroth singled to center.",
+          "team": "CHW"
+        },
+        {
+          "game_id": "401816582",
+          "date": "2026-08-18",
+          "opponent": "@CHC",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Meidroth singled to left.",
+          "team": "CHW"
+        }
+      ]
+    }
+  }
+}

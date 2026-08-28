@@ -1,0 +1,860 @@
+{
+  "player": "JacCaglianone",
+  "player_id": "jac-caglianone",
+  "team": "KC",
+  "position": "RF",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 438,
+      "R": 59,
+      "H": 120,
+      "2B": 23,
+      "3B": 2,
+      "HR": 22,
+      "RBI": 60,
+      "BB": 29,
+      "SO": 124,
+      "SB": 6,
+      "TB": 213,
+      "avg": 0.274,
+      "obp": 0.326,
+      "slg": 0.486,
+      "ops": 0.812
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 32,
+        "games": [
+          {
+            "date": "2026-03-28",
+            "value": 2
+          },
+          {
+            "date": "2026-04-01",
+            "value": 3
+          },
+          {
+            "date": "2026-04-04",
+            "value": 2
+          },
+          {
+            "date": "2026-04-15",
+            "value": 3
+          },
+          {
+            "date": "2026-05-02",
+            "value": 2
+          },
+          {
+            "date": "2026-05-16",
+            "value": 2
+          },
+          {
+            "date": "2026-05-18",
+            "value": 2
+          },
+          {
+            "date": "2026-05-20",
+            "value": 2
+          },
+          {
+            "date": "2026-06-01",
+            "value": 2
+          },
+          {
+            "date": "2026-06-03",
+            "value": 2
+          },
+          {
+            "date": "2026-06-05",
+            "value": 2
+          },
+          {
+            "date": "2026-06-09",
+            "value": 3
+          },
+          {
+            "date": "2026-06-10",
+            "value": 4
+          },
+          {
+            "date": "2026-06-11",
+            "value": 2
+          },
+          {
+            "date": "2026-06-15",
+            "value": 2
+          },
+          {
+            "date": "2026-06-19",
+            "value": 2
+          },
+          {
+            "date": "2026-06-21",
+            "value": 2
+          },
+          {
+            "date": "2026-06-23",
+            "value": 3
+          },
+          {
+            "date": "2026-07-01",
+            "value": 2
+          },
+          {
+            "date": "2026-07-06",
+            "value": 2
+          },
+          {
+            "date": "2026-07-10",
+            "value": 2
+          },
+          {
+            "date": "2026-07-19",
+            "value": 2
+          },
+          {
+            "date": "2026-07-29",
+            "value": 2
+          },
+          {
+            "date": "2026-07-30",
+            "value": 2
+          },
+          {
+            "date": "2026-08-04",
+            "value": 2
+          },
+          {
+            "date": "2026-08-07",
+            "value": 2
+          },
+          {
+            "date": "2026-08-08",
+            "value": 4
+          },
+          {
+            "date": "2026-08-10",
+            "value": 2
+          },
+          {
+            "date": "2026-08-11",
+            "value": 2
+          },
+          {
+            "date": "2026-08-14",
+            "value": 3
+          },
+          {
+            "date": "2026-08-17",
+            "value": 3
+          },
+          {
+            "date": "2026-08-18",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 18,
+        "games": [
+          {
+            "date": "2026-04-20",
+            "value": 1
+          },
+          {
+            "date": "2026-04-26",
+            "value": 1
+          },
+          {
+            "date": "2026-05-01",
+            "value": 1
+          },
+          {
+            "date": "2026-05-04",
+            "value": 1
+          },
+          {
+            "date": "2026-05-16",
+            "value": 1
+          },
+          {
+            "date": "2026-06-01",
+            "value": 1
+          },
+          {
+            "date": "2026-06-09",
+            "value": 2
+          },
+          {
+            "date": "2026-06-18",
+            "value": 1
+          },
+          {
+            "date": "2026-06-19",
+            "value": 1
+          },
+          {
+            "date": "2026-06-21",
+            "value": 2
+          },
+          {
+            "date": "2026-06-23",
+            "value": 2
+          },
+          {
+            "date": "2026-07-10",
+            "value": 1
+          },
+          {
+            "date": "2026-07-19",
+            "value": 1
+          },
+          {
+            "date": "2026-07-30",
+            "value": 1
+          },
+          {
+            "date": "2026-08-01",
+            "value": 1
+          },
+          {
+            "date": "2026-08-08",
+            "value": 2
+          },
+          {
+            "date": "2026-08-10",
+            "value": 1
+          },
+          {
+            "date": "2026-08-14",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 6,
+        "games": [
+          {
+            "date": "2026-06-09",
+            "value": 3
+          },
+          {
+            "date": "2026-06-21",
+            "value": 3
+          },
+          {
+            "date": "2026-06-23",
+            "value": 3
+          },
+          {
+            "date": "2026-08-08",
+            "value": 4
+          },
+          {
+            "date": "2026-08-10",
+            "value": 3
+          },
+          {
+            "date": "2026-08-14",
+            "value": 5
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-26",
+        "date_iso": "2026-08-26",
+        "opponent": "@TOR",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "vsDET",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "vsDET",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "vsATH",
+        "AB": 1,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-18",
+        "date_iso": "2026-08-18",
+        "opponent": "vsATH",
+        "AB": 4,
+        "R": 1,
+        "H": 2,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 3
+      },
+      {
+        "date": "2026-08-17",
+        "date_iso": "2026-08-17",
+        "opponent": "vsATH",
+        "AB": 5,
+        "R": 1,
+        "H": 3,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 2,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 3
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "@LAA",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-15",
+        "date_iso": "2026-08-15",
+        "opponent": "@LAA",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 1,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-14",
+        "date_iso": "2026-08-14",
+        "opponent": "@LAA",
+        "AB": 4,
+        "R": 2,
+        "H": 3,
+        "2B": 0,
+        "3B": 0,
+        "HR": 1,
+        "RBI": 5,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 6
+      },
+      {
+        "date": "2026-08-12",
+        "date_iso": "2026-08-12",
+        "opponent": "@LAD",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 1,
+      "splits": [
+        {
+          "season": 2026,
+          "total": 120.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 9167,
+      "hr_count": 22,
+      "games": 122,
+      "events": [
+        {
+          "date": "2026-04-20",
+          "distance_feet": 437,
+          "inning": 2,
+          "opponent": "vsBAL"
+        },
+        {
+          "date": "2026-04-26",
+          "distance_feet": 409,
+          "inning": 9,
+          "opponent": "vsLAA"
+        },
+        {
+          "date": "2026-05-01",
+          "distance_feet": 347,
+          "inning": 6,
+          "opponent": "@SEA"
+        },
+        {
+          "date": "2026-05-04",
+          "distance_feet": 421,
+          "inning": 6,
+          "opponent": "vsCLE"
+        },
+        {
+          "date": "2026-05-16",
+          "distance_feet": 428,
+          "inning": 9,
+          "opponent": "@STL"
+        },
+        {
+          "date": "2026-06-01",
+          "distance_feet": 419,
+          "inning": 5,
+          "opponent": "@CIN"
+        },
+        {
+          "date": "2026-06-09",
+          "distance_feet": 421,
+          "inning": 5,
+          "opponent": "vsTEX"
+        },
+        {
+          "date": "2026-06-09",
+          "distance_feet": 431,
+          "inning": 6,
+          "opponent": "vsTEX"
+        },
+        {
+          "date": "2026-06-18",
+          "distance_feet": 402,
+          "inning": 4,
+          "opponent": "vsSTL"
+        },
+        {
+          "date": "2026-06-19",
+          "distance_feet": 404,
+          "inning": 5,
+          "opponent": "vsSTL"
+        },
+        {
+          "date": "2026-06-21",
+          "distance_feet": 444,
+          "inning": 2,
+          "opponent": "vsSTL"
+        },
+        {
+          "date": "2026-06-21",
+          "distance_feet": 426,
+          "inning": 9,
+          "opponent": "vsSTL"
+        },
+        {
+          "date": "2026-06-23",
+          "distance_feet": 443,
+          "inning": 1,
+          "opponent": "@TB"
+        },
+        {
+          "date": "2026-06-23",
+          "distance_feet": 416,
+          "inning": 5,
+          "opponent": "@TB"
+        },
+        {
+          "date": "2026-07-10",
+          "distance_feet": 368,
+          "inning": 4,
+          "opponent": "@BAL"
+        },
+        {
+          "date": "2026-07-19",
+          "distance_feet": 432,
+          "inning": 1,
+          "opponent": "vsSD"
+        },
+        {
+          "date": "2026-07-30",
+          "distance_feet": 438,
+          "inning": 3,
+          "opponent": "@MIN"
+        },
+        {
+          "date": "2026-08-01",
+          "distance_feet": 410,
+          "inning": 3,
+          "opponent": "@COL"
+        },
+        {
+          "date": "2026-08-08",
+          "distance_feet": 448,
+          "inning": 1,
+          "opponent": "vsCHC"
+        },
+        {
+          "date": "2026-08-08",
+          "distance_feet": 420,
+          "inning": 7,
+          "opponent": "vsCHC"
+        },
+        {
+          "date": "2026-08-10",
+          "distance_feet": 410,
+          "inning": 3,
+          "opponent": "@LAD"
+        },
+        {
+          "date": "2026-08-14",
+          "distance_feet": 393,
+          "inning": 5,
+          "opponent": "@LAA"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 23,
+      "games_in_window": 122,
+      "matches": [
+        {
+          "game_id": "401814772",
+          "date": "2026-04-01",
+          "opponent": "vsMIN",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Caglianone doubled to center.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401814804",
+          "date": "2026-04-04",
+          "opponent": "vsMIL",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caglianone singled to right.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401814949",
+          "date": "2026-04-15",
+          "opponent": "@DET",
+          "inning": 3,
+          "half": "Top",
+          "category": "XBH",
+          "result": "3B",
+          "distance_feet": null,
+          "description": "Caglianone tripled to center.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815021",
+          "date": "2026-04-20",
+          "opponent": "vsBAL",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 437,
+          "description": "Caglianone homered to center (437 feet).",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815185",
+          "date": "2026-05-02",
+          "opponent": "@SEA",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caglianone singled to right.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815261",
+          "date": "2026-05-08",
+          "opponent": "vsDET",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Caglianone doubled to right.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815368",
+          "date": "2026-05-16",
+          "opponent": "@STL",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caglianone singled to right.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815396",
+          "date": "2026-05-18",
+          "opponent": "vsBOS",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Caglianone doubled to right, Perez to third.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815425",
+          "date": "2026-05-20",
+          "opponent": "vsBOS",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caglianone singled to left.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815466",
+          "date": "2026-05-23",
+          "opponent": "vsSEA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caglianone singled to right, Pasquantino scored.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815624",
+          "date": "2026-06-04",
+          "opponent": "@MIN",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caglianone singled to right, Pasquantino to third.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815637",
+          "date": "2026-06-05",
+          "opponent": "@MIN",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Caglianone doubled to center, Pasquantino scored.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815705",
+          "date": "2026-06-10",
+          "opponent": "vsTEX",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Caglianone doubled to left.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815764",
+          "date": "2026-06-15",
+          "opponent": "@WSH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caglianone singled to left.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815790",
+          "date": "2026-06-17",
+          "opponent": "@WSH",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caglianone singled to right.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401815869",
+          "date": "2026-06-23",
+          "opponent": "@TB",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 443,
+          "description": "Caglianone homered to right (443 feet).",
+          "team": "KC"
+        },
+        {
+          "game_id": "401816129",
+          "date": "2026-07-12",
+          "opponent": "@BAL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caglianone singled to center.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401816180",
+          "date": "2026-07-19",
+          "opponent": "vsSD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 432,
+          "description": "Caglianone homered to right (432 feet).",
+          "team": "KC"
+        },
+        {
+          "game_id": "401816392",
+          "date": "2026-08-04",
+          "opponent": "vsMIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caglianone singled to right, Witt Jr. to third.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401816446",
+          "date": "2026-08-08",
+          "opponent": "vsCHC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 448,
+          "description": "Caglianone homered to center (448 feet).",
+          "team": "KC"
+        },
+        {
+          "game_id": "401816475",
+          "date": "2026-08-10",
+          "opponent": "@LAD",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caglianone singled to center, Witt Jr. scored.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401816568",
+          "date": "2026-08-17",
+          "opponent": "vsATH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caglianone singled to left, Witt Jr. to second.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401816595",
+          "date": "2026-08-19",
+          "opponent": "vsATH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caglianone reached on infield single to shortstop.",
+          "team": "KC"
+        }
+      ]
+    }
+  }
+}

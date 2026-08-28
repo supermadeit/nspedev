@@ -1,0 +1,781 @@
+{
+  "player": "JoshJung",
+  "player_id": "josh-jung",
+  "team": "TEX",
+  "position": "3B",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 354,
+      "R": 46,
+      "H": 104,
+      "2B": 23,
+      "3B": 1,
+      "HR": 9,
+      "RBI": 35,
+      "BB": 33,
+      "SO": 71,
+      "SB": 1,
+      "TB": 156,
+      "avg": 0.294,
+      "obp": 0.361,
+      "slg": 0.441,
+      "ops": 0.802
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 32,
+        "games": [
+          {
+            "date": "2026-04-01",
+            "value": 2
+          },
+          {
+            "date": "2026-04-06",
+            "value": 2
+          },
+          {
+            "date": "2026-04-12",
+            "value": 2
+          },
+          {
+            "date": "2026-04-16",
+            "value": 3
+          },
+          {
+            "date": "2026-04-17",
+            "value": 3
+          },
+          {
+            "date": "2026-04-18",
+            "value": 2
+          },
+          {
+            "date": "2026-04-22",
+            "value": 2
+          },
+          {
+            "date": "2026-04-26",
+            "value": 2
+          },
+          {
+            "date": "2026-04-28",
+            "value": 2
+          },
+          {
+            "date": "2026-05-01",
+            "value": 2
+          },
+          {
+            "date": "2026-05-02",
+            "value": 2
+          },
+          {
+            "date": "2026-05-05",
+            "value": 3
+          },
+          {
+            "date": "2026-05-09",
+            "value": 3
+          },
+          {
+            "date": "2026-05-10",
+            "value": 3
+          },
+          {
+            "date": "2026-05-13",
+            "value": 2
+          },
+          {
+            "date": "2026-05-20",
+            "value": 3
+          },
+          {
+            "date": "2026-05-28",
+            "value": 2
+          },
+          {
+            "date": "2026-05-30",
+            "value": 3
+          },
+          {
+            "date": "2026-05-31",
+            "value": 2
+          },
+          {
+            "date": "2026-06-05",
+            "value": 2
+          },
+          {
+            "date": "2026-06-07",
+            "value": 2
+          },
+          {
+            "date": "2026-06-09",
+            "value": 2
+          },
+          {
+            "date": "2026-06-18",
+            "value": 2
+          },
+          {
+            "date": "2026-06-19",
+            "value": 2
+          },
+          {
+            "date": "2026-06-20",
+            "value": 2
+          },
+          {
+            "date": "2026-06-21",
+            "value": 2
+          },
+          {
+            "date": "2026-06-28",
+            "value": 2
+          },
+          {
+            "date": "2026-06-29",
+            "value": 2
+          },
+          {
+            "date": "2026-06-30",
+            "value": 2
+          },
+          {
+            "date": "2026-07-02",
+            "value": 2
+          },
+          {
+            "date": "2026-07-12",
+            "value": 2
+          },
+          {
+            "date": "2026-07-18",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 9,
+        "games": [
+          {
+            "date": "2026-04-16",
+            "value": 1
+          },
+          {
+            "date": "2026-04-18",
+            "value": 1
+          },
+          {
+            "date": "2026-04-22",
+            "value": 1
+          },
+          {
+            "date": "2026-04-25",
+            "value": 1
+          },
+          {
+            "date": "2026-05-09",
+            "value": 1
+          },
+          {
+            "date": "2026-05-28",
+            "value": 1
+          },
+          {
+            "date": "2026-05-30",
+            "value": 1
+          },
+          {
+            "date": "2026-06-07",
+            "value": 1
+          },
+          {
+            "date": "2026-06-30",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 0,
+        "games": []
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-07-21",
+        "date_iso": "2026-07-21",
+        "opponent": "vsCHW",
+        "AB": 2,
+        "R": 1,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-07-20",
+        "date_iso": "2026-07-20",
+        "opponent": "vsCHW",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-07-19",
+        "date_iso": "2026-07-19",
+        "opponent": "@ATL",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-07-18",
+        "date_iso": "2026-07-18",
+        "opponent": "@ATL",
+        "AB": 5,
+        "R": 0,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-07-17",
+        "date_iso": "2026-07-17",
+        "opponent": "@ATL",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-07-12",
+        "date_iso": "2026-07-12",
+        "opponent": "vsHOU",
+        "AB": 3,
+        "R": 1,
+        "H": 2,
+        "2B": 0,
+        "3B": 1,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 2,
+        "SO": 1,
+        "SB": 0,
+        "TB": 4
+      },
+      {
+        "date": "2026-07-11",
+        "date_iso": "2026-07-11",
+        "opponent": "vsHOU",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 2,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-07-10",
+        "date_iso": "2026-07-10",
+        "opponent": "vsHOU",
+        "AB": 3,
+        "R": 2,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-07-09",
+        "date_iso": "2026-07-09",
+        "opponent": "vsLAA",
+        "AB": 4,
+        "R": 1,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-07-04",
+        "date_iso": "2026-07-04",
+        "opponent": "vsDET",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 2
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 1,
+      "splits": [
+        {
+          "season": 2026,
+          "total": 104.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 3471,
+      "hr_count": 9,
+      "games": 92,
+      "events": [
+        {
+          "date": "2026-04-16",
+          "distance_feet": 364,
+          "inning": 7,
+          "opponent": "@ATH"
+        },
+        {
+          "date": "2026-04-18",
+          "distance_feet": 412,
+          "inning": 6,
+          "opponent": "@SEA"
+        },
+        {
+          "date": "2026-04-22",
+          "distance_feet": 344,
+          "inning": 2,
+          "opponent": "vsPIT"
+        },
+        {
+          "date": "2026-04-25",
+          "distance_feet": 381,
+          "inning": 6,
+          "opponent": "vsATH"
+        },
+        {
+          "date": "2026-05-09",
+          "distance_feet": 389,
+          "inning": 2,
+          "opponent": "vsCHC"
+        },
+        {
+          "date": "2026-05-28",
+          "distance_feet": 424,
+          "inning": 2,
+          "opponent": "vsHOU"
+        },
+        {
+          "date": "2026-05-30",
+          "distance_feet": 399,
+          "inning": 1,
+          "opponent": "vsKC"
+        },
+        {
+          "date": "2026-06-07",
+          "distance_feet": 382,
+          "inning": 3,
+          "opponent": "vsCLE"
+        },
+        {
+          "date": "2026-06-30",
+          "distance_feet": 376,
+          "inning": 8,
+          "opponent": "@CLE"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 28,
+      "games_in_window": 92,
+      "matches": [
+        {
+          "game_id": "401814789",
+          "date": "2026-04-03",
+          "opponent": "vsCIN",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Jung singled to left.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401814836",
+          "date": "2026-04-06",
+          "opponent": "vsSEA",
+          "inning": 3,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Jung reached on infield single to third.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401814920",
+          "date": "2026-04-12",
+          "opponent": "@LAD",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Jung doubled to center, Jansen to third.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401814984",
+          "date": "2026-04-17",
+          "opponent": "@SEA",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Jung doubled to center.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815035",
+          "date": "2026-04-21",
+          "opponent": "vsPIT",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Jung doubled to center, Pederson to third.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815050",
+          "date": "2026-04-22",
+          "opponent": "vsPIT",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 344,
+          "description": "Jung homered to right (344 feet), Pederson scored.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815102",
+          "date": "2026-04-26",
+          "opponent": "vsATH",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Jung doubled to left.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815163",
+          "date": "2026-05-01",
+          "opponent": "@DET",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Jung singled to left, Nimmo scored.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815193",
+          "date": "2026-05-03",
+          "opponent": "@DET",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Jung singled to right, Nimmo to second.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815218",
+          "date": "2026-05-05",
+          "opponent": "@NYY",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Jung singled to right, Seager to second, Carter to third.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815275",
+          "date": "2026-05-09",
+          "opponent": "vsCHC",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 389,
+          "description": "Jung homered to right center (389 feet).",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815414",
+          "date": "2026-05-19",
+          "opponent": "@COL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Jung singled to right, Nimmo to second, McCutchen to third.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815429",
+          "date": "2026-05-20",
+          "opponent": "@COL",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Jung singled to right.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815521",
+          "date": "2026-05-27",
+          "opponent": "vsHOU",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Jung singled to center, Nimmo to second.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815533",
+          "date": "2026-05-28",
+          "opponent": "vsHOU",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 424,
+          "description": "Jung homered to left center (424 feet).",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815559",
+          "date": "2026-05-30",
+          "opponent": "vsKC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 399,
+          "description": "Jung homered to left (399 feet).",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815574",
+          "date": "2026-05-31",
+          "opponent": "vsKC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Jung doubled to left.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815666",
+          "date": "2026-06-07",
+          "opponent": "vsCLE",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Jung singled to center.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815726",
+          "date": "2026-06-12",
+          "opponent": "@BOS",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Jung singled to left, Pederson to third.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815756",
+          "date": "2026-06-14",
+          "opponent": "@BOS",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Jung singled to left.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815832",
+          "date": "2026-06-20",
+          "opponent": "vsSD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Jung singled to center.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815846",
+          "date": "2026-06-21",
+          "opponent": "vsSD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Jung singled to center.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815942",
+          "date": "2026-06-28",
+          "opponent": "@TOR",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Jung singled to left.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815969",
+          "date": "2026-06-30",
+          "opponent": "@CLE",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Jung singled to left.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401815997",
+          "date": "2026-07-02",
+          "opponent": "vsDET",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Jung singled to center.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401816090",
+          "date": "2026-07-09",
+          "opponent": "vsLAA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Jung doubled to left.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401816107",
+          "date": "2026-07-10",
+          "opponent": "vsHOU",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Jung singled to center, Langford to second.",
+          "team": "TEX"
+        },
+        {
+          "game_id": "401816137",
+          "date": "2026-07-12",
+          "opponent": "vsHOU",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "3B",
+          "distance_feet": null,
+          "description": "Jung tripled to center.",
+          "team": "TEX"
+        }
+      ]
+    }
+  }
+}

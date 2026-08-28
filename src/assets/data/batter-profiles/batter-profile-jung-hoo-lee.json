@@ -1,0 +1,758 @@
+{
+  "player": "JungHooLee",
+  "player_id": "jung-hoo-lee",
+  "team": "SF",
+  "position": "UNK",
+  "season": 2026,
+  "sections": {
+    "season_totals": {
+      "AB": 461,
+      "R": 58,
+      "H": 133,
+      "2B": 27,
+      "3B": 4,
+      "HR": 9,
+      "RBI": 47,
+      "BB": 20,
+      "SO": 49,
+      "SB": 10,
+      "TB": 195,
+      "avg": 0.289,
+      "obp": 0.325,
+      "slg": 0.423,
+      "ops": 0.748
+    },
+    "season_splits": {
+      "multi_hit_games": {
+        "count": 37,
+        "games": [
+          {
+            "date": "2026-03-31",
+            "value": 3
+          },
+          {
+            "date": "2026-04-10",
+            "value": 2
+          },
+          {
+            "date": "2026-04-11",
+            "value": 2
+          },
+          {
+            "date": "2026-04-14",
+            "value": 2
+          },
+          {
+            "date": "2026-04-16",
+            "value": 3
+          },
+          {
+            "date": "2026-04-18",
+            "value": 2
+          },
+          {
+            "date": "2026-04-21",
+            "value": 2
+          },
+          {
+            "date": "2026-04-24",
+            "value": 3
+          },
+          {
+            "date": "2026-04-25",
+            "value": 2
+          },
+          {
+            "date": "2026-04-26",
+            "value": 4
+          },
+          {
+            "date": "2026-04-30",
+            "value": 2
+          },
+          {
+            "date": "2026-05-08",
+            "value": 2
+          },
+          {
+            "date": "2026-05-10",
+            "value": 2
+          },
+          {
+            "date": "2026-05-12",
+            "value": 2
+          },
+          {
+            "date": "2026-05-29",
+            "value": 4
+          },
+          {
+            "date": "2026-05-30",
+            "value": 2
+          },
+          {
+            "date": "2026-05-31",
+            "value": 5
+          },
+          {
+            "date": "2026-06-03",
+            "value": 2
+          },
+          {
+            "date": "2026-06-04",
+            "value": 4
+          },
+          {
+            "date": "2026-06-06",
+            "value": 2
+          },
+          {
+            "date": "2026-06-08",
+            "value": 4
+          },
+          {
+            "date": "2026-06-09",
+            "value": 2
+          },
+          {
+            "date": "2026-06-10",
+            "value": 2
+          },
+          {
+            "date": "2026-06-14",
+            "value": 2
+          },
+          {
+            "date": "2026-06-19",
+            "value": 2
+          },
+          {
+            "date": "2026-06-20",
+            "value": 2
+          },
+          {
+            "date": "2026-06-23",
+            "value": 2
+          },
+          {
+            "date": "2026-06-24",
+            "value": 2
+          },
+          {
+            "date": "2026-07-01",
+            "value": 2
+          },
+          {
+            "date": "2026-07-17",
+            "value": 3
+          },
+          {
+            "date": "2026-07-25",
+            "value": 2
+          },
+          {
+            "date": "2026-07-29",
+            "value": 2
+          },
+          {
+            "date": "2026-08-02",
+            "value": 2
+          },
+          {
+            "date": "2026-08-03",
+            "value": 3
+          },
+          {
+            "date": "2026-08-10",
+            "value": 2
+          },
+          {
+            "date": "2026-08-15",
+            "value": 2
+          },
+          {
+            "date": "2026-08-19",
+            "value": 2
+          }
+        ]
+      },
+      "hr_games": {
+        "count": 8,
+        "games": [
+          {
+            "date": "2026-04-10",
+            "value": 1
+          },
+          {
+            "date": "2026-04-24",
+            "value": 1
+          },
+          {
+            "date": "2026-05-14",
+            "value": 1
+          },
+          {
+            "date": "2026-06-16",
+            "value": 1
+          },
+          {
+            "date": "2026-06-23",
+            "value": 1
+          },
+          {
+            "date": "2026-07-25",
+            "value": 1
+          },
+          {
+            "date": "2026-08-03",
+            "value": 2
+          },
+          {
+            "date": "2026-08-10",
+            "value": 1
+          }
+        ]
+      },
+      "rbi_3plus_games": {
+        "count": 5,
+        "games": [
+          {
+            "date": "2026-03-31",
+            "value": 3
+          },
+          {
+            "date": "2026-06-25",
+            "value": 3
+          },
+          {
+            "date": "2026-07-25",
+            "value": 3
+          },
+          {
+            "date": "2026-07-29",
+            "value": 3
+          },
+          {
+            "date": "2026-08-03",
+            "value": 3
+          }
+        ]
+      }
+    },
+    "recent_games": [
+      {
+        "date": "2026-08-25",
+        "date_iso": "2026-08-25",
+        "opponent": "vsCIN",
+        "AB": 3,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 1,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-24",
+        "date_iso": "2026-08-24",
+        "opponent": "vsCIN",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 1,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-23",
+        "date_iso": "2026-08-23",
+        "opponent": "@BOS",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-22",
+        "date_iso": "2026-08-22",
+        "opponent": "@BOS",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 1,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-21",
+        "date_iso": "2026-08-21",
+        "opponent": "@BOS",
+        "AB": 3,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      },
+      {
+        "date": "2026-08-20",
+        "date_iso": "2026-08-20",
+        "opponent": "@CLE",
+        "AB": 4,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-19",
+        "date_iso": "2026-08-19",
+        "opponent": "@CLE",
+        "AB": 4,
+        "R": 0,
+        "H": 2,
+        "2B": 1,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 1,
+        "SB": 0,
+        "TB": 3
+      },
+      {
+        "date": "2026-08-16",
+        "date_iso": "2026-08-16",
+        "opponent": "vsCOL",
+        "AB": 5,
+        "R": 0,
+        "H": 1,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 1
+      },
+      {
+        "date": "2026-08-15",
+        "date_iso": "2026-08-15",
+        "opponent": "vsCOL",
+        "AB": 3,
+        "R": 1,
+        "H": 2,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 1,
+        "SO": 0,
+        "SB": 0,
+        "TB": 2
+      },
+      {
+        "date": "2026-08-14",
+        "date_iso": "2026-08-14",
+        "opponent": "vsCOL",
+        "AB": 4,
+        "R": 0,
+        "H": 0,
+        "2B": 0,
+        "3B": 0,
+        "HR": 0,
+        "RBI": 0,
+        "BB": 0,
+        "SO": 0,
+        "SB": 0,
+        "TB": 0
+      }
+    ],
+    "career_splits": {
+      "splits_single_season": false,
+      "splits_count": 1,
+      "splits": [
+        {
+          "season": 2026,
+          "total": 133.0
+        }
+      ]
+    },
+    "hr_distance": {
+      "total_ft": 3279,
+      "hr_count": 9,
+      "games": 121,
+      "events": [
+        {
+          "date": "2026-04-10",
+          "distance_feet": 361,
+          "inning": 7,
+          "opponent": "@BAL"
+        },
+        {
+          "date": "2026-04-24",
+          "distance_feet": 364,
+          "inning": 8,
+          "opponent": "vsMIA"
+        },
+        {
+          "date": "2026-05-14",
+          "distance_feet": 225,
+          "inning": 5,
+          "opponent": "@LAD"
+        },
+        {
+          "date": "2026-06-16",
+          "distance_feet": 373,
+          "inning": 5,
+          "opponent": "@ATL"
+        },
+        {
+          "date": "2026-06-23",
+          "distance_feet": 414,
+          "inning": 2,
+          "opponent": "vsATH"
+        },
+        {
+          "date": "2026-07-25",
+          "distance_feet": 365,
+          "inning": 3,
+          "opponent": "vsLAA"
+        },
+        {
+          "date": "2026-08-03",
+          "distance_feet": 410,
+          "inning": 3,
+          "opponent": "@TEX"
+        },
+        {
+          "date": "2026-08-03",
+          "distance_feet": 385,
+          "inning": 8,
+          "opponent": "@TEX"
+        },
+        {
+          "date": "2026-08-10",
+          "distance_feet": 382,
+          "inning": 5,
+          "opponent": "vsHOU"
+        }
+      ]
+    },
+    "first_pa": {
+      "count": 23,
+      "games_in_window": 121,
+      "matches": [
+        {
+          "game_id": "401814763",
+          "date": "2026-03-31",
+          "opponent": "@SD",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Lee doubled to right, Chapman scored and Ramos scored.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401814883",
+          "date": "2026-04-10",
+          "opponent": "@BAL",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Lee doubled to left.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401814936",
+          "date": "2026-04-14",
+          "opponent": "@CIN",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lee singled to left.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401814976",
+          "date": "2026-04-17",
+          "opponent": "@WSH",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lee singled to right, Schmitt to third.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401814991",
+          "date": "2026-04-18",
+          "opponent": "@WSH",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lee singled to right.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815039",
+          "date": "2026-04-21",
+          "opponent": "vsLAD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lee singled to right, Chapman scored, Devers to second.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815078",
+          "date": "2026-04-24",
+          "opponent": "vsMIA",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lee singled to center.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815093",
+          "date": "2026-04-25",
+          "opponent": "vsMIA",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Lee doubled to right.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815108",
+          "date": "2026-04-26",
+          "opponent": "vsMIA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "3B",
+          "distance_feet": null,
+          "description": "Lee tripled to right.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401871107",
+          "date": "2026-04-30",
+          "opponent": "@PHI",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lee singled to right, Adames to third.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815228",
+          "date": "2026-05-05",
+          "opponent": "vsSD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lee singled to left.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815576",
+          "date": "2026-05-31",
+          "opponent": "@COL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lee singled to center, Devers scored, Adames to second.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815584",
+          "date": "2026-06-01",
+          "opponent": "@MIL",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lee singled to right.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815626",
+          "date": "2026-06-04",
+          "opponent": "@MIL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lee singled to left, Arraez to second.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815668",
+          "date": "2026-06-07",
+          "opponent": "@CHC",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lee singled to center, Devers scored, Arraez to third.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815761",
+          "date": "2026-06-14",
+          "opponent": "vsCHC",
+          "inning": 3,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lee singled to left.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815829",
+          "date": "2026-06-20",
+          "opponent": "@MIA",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Lee doubled to right.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815879",
+          "date": "2026-06-23",
+          "opponent": "vsATH",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 414,
+          "description": "Lee homered to right center (414 feet).",
+          "team": "SF"
+        },
+        {
+          "game_id": "401815894",
+          "date": "2026-06-24",
+          "opponent": "vsATH",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Lee doubled to right.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816109",
+          "date": "2026-07-10",
+          "opponent": "vsCOL",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lee singled to right. Colorado Rockies challenged: call on the field was upheld.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816153",
+          "date": "2026-07-17",
+          "opponent": "@SEA",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lee singled to right.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816376",
+          "date": "2026-08-02",
+          "opponent": "@SD",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lee reached on infield single to second.",
+          "team": "SF"
+        },
+        {
+          "game_id": "401816660",
+          "date": "2026-08-24",
+          "opponent": "vsCIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lee singled to center, Gilbert scored, Devers to third.",
+          "team": "SF"
+        }
+      ]
+    }
+  }
+}
