@@ -21,7 +21,6 @@ import {
   type BandBreakdownSection,
   type FlatTotalsSection,
   type KeyedEntriesSection,
-  type MatchListSection,
   type ProfileSection,
   type StatChipsSection,
 } from '@/components/ProfileSections'
@@ -275,8 +274,23 @@ interface RawBatterProfile {
 // for threshold splits. Kept separate from formatSplitLabel (QB's ordering
 // puts the threshold first, e.g. "3+ pass rush TD") since there's no
 // existing convention to match here and no reason to force one.
+//
+// "multi_hit_games" is a special case: the backend key doesn't encode the
+// threshold it actually represents (games with 2+ hits), so it needs an
+// explicit override rather than the generic _Nplus parser — same treatment
+// once the backend starts sending differently-named 2+/3+ splits (see
+// SEASON_SPLITS_EXCLUDE below), so this stays a small lookup table rather
+// than a one-off special case wired into the parser itself.
+const BATTER_SPLIT_LABEL_OVERRIDES: Record<string, string> = {
+  multi_hit_games: '2+ Hits',
+}
+// Splits the backend still includes in every file but that shouldn't be
+// shown — currently just HR games (per request). Filtered by raw key so
+// this stays correct however the backend eventually renames things.
+const SEASON_SPLITS_EXCLUDE = new Set(['hr_games'])
 const BATTER_SPLIT_ABBR = new Set(['hr', 'rbi', 'bb', 'so', 'sb', 'ab', 'xbh', 'tb'])
 function formatBatterSplitLabel(key: string): string {
+  if (BATTER_SPLIT_LABEL_OVERRIDES[key]) return BATTER_SPLIT_LABEL_OVERRIDES[key]
   const stripped = key.replace(/_games$/, '')
   const m = stripped.match(/^(.+)_(\d+)plus$/)
   if (m) {
@@ -289,7 +303,7 @@ function formatBatterSplitLabel(key: string): string {
 }
 
 function adaptBatterProfile(raw: RawBatterProfile): ProfilePayload {
-  const { season_totals: t, season_splits, recent_games, career_splits, hr_distance: hr, first_pa } = raw.sections
+  const { season_totals: t, season_splits, career_splits, hr_distance: hr, first_pa } = raw.sections
 
   const seasonTotals: FlatTotalsSection = {
     type: 'flat_totals',
@@ -310,105 +324,47 @@ function adaptBatterProfile(raw: RawBatterProfile): ProfilePayload {
       { key: 'so', label: 'SO', value: t.SO },
       { key: 'sb', label: 'SB', value: t.SB },
       { key: 'tb', label: 'TB', value: t.TB },
+      // HR distance summary moved up to sit right after TB in this same
+      // row, rather than its own section further down the page — dropped
+      // entirely (not just hidden) when a player has no HR distance data
+      // at all (see hr_distance's Partial type note above).
+      ...(typeof hr?.total_ft === 'number'
+        ? [
+            { key: 'hr_total_ft', label: 'Total Ft', value: hr.total_ft.toLocaleString() },
+            { key: 'hr_dist_count', label: 'HR Count', value: hr.hr_count ?? 0, accent: (hr.hr_count ?? 0) > 0 },
+            { key: 'hr_dist_games', label: 'Games', value: hr.games ?? 0 },
+          ]
+        : []),
+      // Season splits (2+ Hits, RBI 3+, and whatever thresholds the backend
+      // adds next) are just a single count each now, no per-game log — they
+      // read as more season totals, so they render as the same StatCard
+      // size in this same row rather than their own bigger keyed-entries
+      // section. Generic over whatever keys exist (minus SEASON_SPLITS_
+      // EXCLUDE), so new splits (2+ RBI, 3+ Hits, 3+ Runs) show up here
+      // automatically the moment the backend ships them — no code change.
+      ...Object.entries(season_splits)
+        .filter(([key]) => !SEASON_SPLITS_EXCLUDE.has(key))
+        .map(([key, split]) => ({ key, label: formatBatterSplitLabel(key), value: split.count })),
+      // First PA hits is functionally a season total (one number, no
+      // per-appearance log needed), so it sits in this same row too.
+      ...(typeof first_pa?.count === 'number'
+        ? [{ key: 'first_pa_hits', label: 'First PA Hits', value: first_pa.count }]
+        : []),
     ],
   }
 
-  const seasonSplits: KeyedEntriesSection = {
-    type: 'keyed_entries',
-    label: 'Season splits',
-    entries: Object.entries(season_splits).map(([key, split]) => ({
-      key,
-      label: formatBatterSplitLabel(key),
-      count: split.count,
-      games: split.games,
-    })),
-  }
-
-  // No per-season backend concept the QB shape has an equivalent for — a
-  // straight season-by-season series reuses flat_totals directly (label =
-  // year, value = that season's total for whatever stat this split tracks).
-  const careerBySeason: FlatTotalsSection = {
+  // Confirmed by cross-checking 20 players' current-season split value
+  // against season_totals.H — exact match every time, so this is a career
+  // hits-by-season trend, not a combined hits/runs/rbi figure despite the
+  // generic "total" field name. Labeled accordingly rather than left as the
+  // ambiguous "Career totals by season".
+  const careerHitsBySeason: FlatTotalsSection = {
     type: 'flat_totals',
-    label: 'Career totals by season',
+    label: 'Career hits by season',
     entries: career_splits.splits.map((s) => ({
       key: String(s.season),
       label: String(s.season),
       value: s.total,
-    })),
-  }
-
-  // First-PA outcomes pair side-by-side with the HR-distance summary below,
-  // mirroring the QB layout's "Pass yds/quarter | Explosive pass plays"
-  // half-width row — first_pa is this sport's equivalent "per-something
-  // breakdown" slot. Both sections are genuinely absent for some real
-  // players (a handful of batter files ship `first_pa: {}` / `hr_distance:
-  // {}` — no matches recorded rather than a zeroed shape), so both are
-  // built conditionally and dropped from the section list entirely rather
-  // than rendering an empty/undefined section. groupSections already
-  // handles an unpaired lone 'half' by rendering it full-width, so leaving
-  // one out when the other is missing needs no extra layout logic.
-  const firstPaOutcomes: MatchListSection | null = Array.isArray(first_pa?.matches)
-    ? {
-        type: 'match_list',
-        label: 'First PA outcomes',
-        width: 'half',
-        rows: first_pa.matches.map((m) => ({
-          date: m.date,
-          opponent: m.opponent,
-          fields: [
-            { label: '', value: m.result ?? m.category ?? '—' },
-            ...(m.distance_feet ? [{ label: ' ft', value: m.distance_feet }] : []),
-          ],
-        })),
-      }
-    : null
-
-  const hrDistanceSummary: FlatTotalsSection | null =
-    typeof hr?.total_ft === 'number'
-      ? {
-          type: 'flat_totals',
-          label: 'HR distance',
-          width: 'half',
-          entries: [
-            { key: 'total_ft', label: 'Total Ft', value: hr.total_ft.toLocaleString() },
-            { key: 'hr_count', label: 'HR Count', value: hr.hr_count ?? 0, accent: (hr.hr_count ?? 0) > 0 },
-            { key: 'games', label: 'Games', value: hr.games ?? 0 },
-          ],
-        }
-      : null
-
-  const hrLog: MatchListSection | null = Array.isArray(hr?.events)
-    ? {
-        type: 'match_list',
-        label: 'HR log',
-        rows: hr.events.map((e) => ({
-          date: e.date,
-          opponent: e.opponent,
-          fields: [
-            { label: ' ft', value: e.distance_feet },
-            ...(e.inning ? [{ label: ' inn', value: e.inning }] : []),
-          ],
-        })),
-      }
-    : null
-
-  const recentGamesLog: MatchListSection = {
-    type: 'match_list',
-    label: 'Recent games',
-    rows: recent_games.map((g) => ({
-      date: g.date_iso ?? g.date,
-      opponent: g.opponent,
-      fields: [
-        { label: ' AB', value: g.AB ?? 0 },
-        { label: ' H', value: g.H ?? 0 },
-        ...(g.HR ? [{ label: ' HR', value: g.HR }] : []),
-        ...(g.RBI ? [{ label: ' RBI', value: g.RBI }] : []),
-        ...(g['2B'] ? [{ label: ' 2B', value: g['2B'] }] : []),
-        ...(g['3B'] ? [{ label: ' 3B', value: g['3B'] }] : []),
-        ...(g.BB ? [{ label: ' BB', value: g.BB }] : []),
-        ...(g.SO ? [{ label: ' SO', value: g.SO }] : []),
-        ...(g.SB ? [{ label: ' SB', value: g.SB }] : []),
-      ],
     })),
   }
 
@@ -418,17 +374,7 @@ function adaptBatterProfile(raw: RawBatterProfile): ProfilePayload {
     team: raw.team,
     position: raw.position,
     season: raw.season,
-    sections: (
-      [
-        seasonTotals,
-        seasonSplits,
-        careerBySeason,
-        firstPaOutcomes,
-        hrDistanceSummary,
-        hrLog,
-        recentGamesLog,
-      ] as Array<ProfileSection | null>
-    ).filter((s): s is ProfileSection => s !== null),
+    sections: [seasonTotals, careerHitsBySeason],
   }
 }
 
