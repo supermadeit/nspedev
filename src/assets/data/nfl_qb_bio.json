@@ -1,0 +1,894 @@
+{
+  "generated": "2026-09-09T17:03:20.138Z",
+  "count": 37,
+  "players": [
+    {
+      "player_id": "8439",
+      "full_name": "Aaron Rodgers",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 2\"",
+      "weight": "223 lbs",
+      "birth_date": "12/2/1983",
+      "birth_place": "Chico, CA",
+      "college": "California",
+      "draft": "2005: Rd 1, Pk 24 (GB)",
+      "current_team": "Pittsburgh Steelers",
+      "jersey_number": "8",
+      "team_history": [
+        {
+          "team": "Pittsburgh Steelers",
+          "years": "2025-CURRENT"
+        },
+        {
+          "team": "New York Jets",
+          "years": "2023-2025"
+        },
+        {
+          "team": "Green Bay Packers",
+          "years": "2005-2023"
+        }
+      ]
+    },
+    {
+      "player_id": "3052587",
+      "full_name": "Baker Mayfield",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 1\"",
+      "weight": "215 lbs",
+      "birth_date": "4/14/1995",
+      "birth_place": "Austin, TX",
+      "college": "Oklahoma",
+      "draft": "2018: Rd 1, Pk 1 (CLE)",
+      "current_team": "Tampa Bay Buccaneers",
+      "jersey_number": "6",
+      "team_history": [
+        {
+          "team": "Tampa Bay Buccaneers",
+          "years": "2023-CURRENT"
+        },
+        {
+          "team": "Carolina Panthers",
+          "years": "2022*-2023"
+        },
+        {
+          "team": "Los Angeles Rams",
+          "years": "2022*-2023"
+        },
+        {
+          "team": "Cleveland Browns",
+          "years": "2018-2022"
+        }
+      ]
+    },
+    {
+      "player_id": "4426338",
+      "full_name": "Bo Nix",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 2\"",
+      "weight": "217 lbs",
+      "birth_date": "2/25/2000",
+      "birth_place": "Pinson, AL",
+      "college": "Oregon",
+      "draft": "2024: Rd 1, Pk 12 (DEN)",
+      "current_team": "Denver Broncos",
+      "jersey_number": "10",
+      "team_history": [
+        {
+          "team": "Denver Broncos",
+          "years": "2024-CURRENT"
+        }
+      ]
+    },
+    {
+      "player_id": "4361741",
+      "full_name": "Brock Purdy",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 1\"",
+      "weight": "220 lbs",
+      "birth_date": "12/27/1999",
+      "birth_place": "Gilbert, AZ",
+      "college": "Iowa State",
+      "draft": "2022: Rd 7, Pk 262 (SF)",
+      "current_team": "San Francisco 49ers",
+      "jersey_number": "13",
+      "team_history": [
+        {
+          "team": "San Francisco 49ers",
+          "years": "2022-CURRENT"
+        }
+      ]
+    },
+    {
+      "player_id": "4685720",
+      "full_name": "Bryce Young",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "5' 10\"",
+      "weight": "204 lbs",
+      "birth_date": "7/25/2001",
+      "birth_place": "Pasadena, CA",
+      "college": "Alabama",
+      "draft": "2023: Rd 1, Pk 1 (CAR)",
+      "current_team": "Carolina Panthers",
+      "jersey_number": "9",
+      "team_history": [
+        {
+          "team": "Carolina Panthers",
+          "years": "2023-CURRENT"
+        }
+      ]
+    },
+    {
+      "player_id": "4431611",
+      "full_name": "Caleb Williams",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 1\"",
+      "weight": "226 lbs",
+      "birth_date": "11/18/2001",
+      "birth_place": "Washington, DC",
+      "college": "USC",
+      "draft": "2024: Rd 1, Pk 1 (CHI)",
+      "current_team": "Chicago Bears",
+      "jersey_number": "18",
+      "team_history": [
+        {
+          "team": "Chicago Bears",
+          "years": "2024-CURRENT"
+        }
+      ]
+    },
+    {
+      "player_id": "4688380",
+      "full_name": "Cam Ward",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 2\"",
+      "weight": "219 lbs",
+      "birth_date": "5/25/2002",
+      "birth_place": "West Columbia, TX",
+      "college": "Miami",
+      "draft": "2025: Rd 1, Pk 1 (TEN)",
+      "current_team": "Tennessee Titans",
+      "jersey_number": "1",
+      "team_history": [
+        {
+          "team": "Tennessee Titans",
+          "years": "2025-CURRENT"
+        }
+      ]
+    },
+    {
+      "player_id": "4432577",
+      "full_name": "C.J. Stroud",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 3\"",
+      "weight": "218 lbs",
+      "birth_date": "10/3/2001",
+      "birth_place": "Inland Empire, CA",
+      "college": "Ohio State",
+      "draft": "2023: Rd 1, Pk 2 (HOU)",
+      "current_team": "Houston Texans",
+      "jersey_number": "7",
+      "team_history": [
+        {
+          "team": "Houston Texans",
+          "years": "2023-CURRENT"
+        }
+      ]
+    },
+    {
+      "player_id": "2577417",
+      "full_name": "Dak Prescott",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 2\"",
+      "weight": "230 lbs",
+      "birth_date": "7/29/1993",
+      "birth_place": "Haughton, LA",
+      "college": "Miss St",
+      "draft": "2016: Rd 4, Pk 135 (DAL)",
+      "current_team": "Dallas Cowboys",
+      "jersey_number": "4",
+      "team_history": [
+        {
+          "team": "Dallas Cowboys",
+          "years": "2016-CURRENT"
+        }
+      ]
+    },
+    {
+      "player_id": "3917792",
+      "full_name": "Daniel Jones",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 5\"",
+      "weight": "230 lbs",
+      "birth_date": "5/27/1997",
+      "birth_place": "Charlotte, NC",
+      "college": "Duke",
+      "draft": "2019: Rd 1, Pk 6 (NYG)",
+      "current_team": "Indianapolis Colts",
+      "jersey_number": "17",
+      "team_history": [
+        {
+          "team": "Indianapolis Colts",
+          "years": "2025-CURRENT"
+        },
+        {
+          "team": "New York Giants",
+          "years": "2019-2025"
+        }
+      ]
+    },
+    {
+      "player_id": "4242546",
+      "full_name": "Davis Mills",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 4\"",
+      "weight": "225 lbs",
+      "birth_date": "10/21/1998",
+      "birth_place": "Duluth, GA",
+      "college": "Stanford",
+      "draft": "2021: Rd 3, Pk 67 (HOU)",
+      "current_team": "Houston Texans",
+      "jersey_number": "10",
+      "team_history": [
+        {
+          "team": "Houston Texans",
+          "years": "2021-CURRENT"
+        }
+      ]
+    },
+    {
+      "player_id": "3122840",
+      "full_name": "Deshaun Watson",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 3\"",
+      "weight": "223 lbs",
+      "birth_date": "9/14/1995",
+      "birth_place": "Gainesville, GA",
+      "college": "Clemson",
+      "draft": "2017: Rd 1, Pk 12 (HOU)",
+      "current_team": "Cleveland Browns",
+      "jersey_number": "4",
+      "team_history": [
+        {
+          "team": "Cleveland Browns",
+          "years": "2022-2025, 2026-CURRENT"
+        },
+        {
+          "team": "Houston Texans",
+          "years": "2017-2021"
+        }
+      ]
+    },
+    {
+      "player_id": "4431452",
+      "full_name": "Drake Maye",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 4\"",
+      "weight": "225 lbs",
+      "birth_date": "8/30/2002",
+      "birth_place": "Huntersville, NC",
+      "college": "North Carolina",
+      "draft": "2024: Rd 1, Pk 3 (NE)",
+      "current_team": "New England Patriots",
+      "jersey_number": "10",
+      "team_history": [
+        {
+          "team": "New England Patriots",
+          "years": "2024-CURRENT"
+        }
+      ]
+    },
+    {
+      "player_id": "15864",
+      "full_name": "Geno Smith",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 2\"",
+      "weight": "221 lbs",
+      "birth_date": "10/10/1990",
+      "birth_place": "Miami, FL",
+      "college": "West Virginia",
+      "draft": "2013: Rd 2, Pk 39 (NYJ)",
+      "current_team": "New York Jets",
+      "jersey_number": "7",
+      "team_history": [
+        {
+          "team": "New York Jets",
+          "years": "2013-2017, 2026-CURRENT"
+        },
+        {
+          "team": "Las Vegas Raiders",
+          "years": "2025-2026"
+        },
+        {
+          "team": "Seattle Seahawks",
+          "years": "2020-2025"
+        },
+        {
+          "team": "Los Angeles Chargers",
+          "years": "2018-2019"
+        },
+        {
+          "team": "New York Giants",
+          "years": "2017-2018"
+        }
+      ]
+    },
+    {
+      "player_id": "2578570",
+      "full_name": "Jacoby Brissett",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 4\"",
+      "weight": "235 lbs",
+      "birth_date": "12/11/1992",
+      "birth_place": "West Palm Beach, FL",
+      "college": "NC State",
+      "draft": "2016: Rd 3, Pk 91 (NE)",
+      "current_team": "Arizona Cardinals",
+      "jersey_number": "7",
+      "team_history": [
+        {
+          "team": "Arizona Cardinals",
+          "years": "2025-CURRENT"
+        },
+        {
+          "team": "New England Patriots",
+          "years": "2016-2017, 2024-2025"
+        },
+        {
+          "team": "Washington Commanders",
+          "years": "2023-2024"
+        },
+        {
+          "team": "Cleveland Browns",
+          "years": "2022-2023"
+        },
+        {
+          "team": "Miami Dolphins",
+          "years": "2021-2022"
+        },
+        {
+          "team": "Indianapolis Colts",
+          "years": "2017-2021"
+        }
+      ]
+    },
+    {
+      "player_id": "4040715",
+      "full_name": "Jalen Hurts",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 1\"",
+      "weight": "223 lbs",
+      "birth_date": "8/7/1998",
+      "birth_place": "Houston, TX",
+      "college": "Oklahoma",
+      "draft": "2020: Rd 2, Pk 53 (PHI)",
+      "current_team": "Philadelphia Eagles",
+      "jersey_number": "1",
+      "team_history": [
+        {
+          "team": "Philadelphia Eagles",
+          "years": "2020-CURRENT"
+        }
+      ]
+    },
+    {
+      "player_id": "3046779",
+      "full_name": "Jared Goff",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 4\"",
+      "weight": "217 lbs",
+      "birth_date": "10/14/1994",
+      "birth_place": "Novato, CA",
+      "college": "California",
+      "draft": "2016: Rd 1, Pk 1 (LAR)",
+      "current_team": "Detroit Lions",
+      "jersey_number": "16",
+      "team_history": [
+        {
+          "team": "Detroit Lions",
+          "years": "2021-CURRENT"
+        },
+        {
+          "team": "Los Angeles Rams",
+          "years": "2016-2021"
+        }
+      ]
+    },
+    {
+      "player_id": "4689114",
+      "full_name": "Jaxson Dart",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 2\"",
+      "weight": "223 lbs",
+      "birth_date": "5/13/2003",
+      "birth_place": "Kaysville, UT",
+      "college": "Ole Miss",
+      "draft": "2025: Rd 1, Pk 25 (NYG)",
+      "current_team": "New York Giants",
+      "jersey_number": "6",
+      "team_history": [
+        {
+          "team": "New York Giants",
+          "years": "2025-CURRENT"
+        }
+      ]
+    },
+    {
+      "player_id": "4426348",
+      "full_name": "Jayden Daniels",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 4\"",
+      "weight": "210 lbs",
+      "birth_date": "12/18/2000",
+      "birth_place": "San Bernardino, CA",
+      "college": "LSU",
+      "draft": "2024: Rd 1, Pk 2 (WSH)",
+      "current_team": "Washington Commanders",
+      "jersey_number": "5",
+      "team_history": [
+        {
+          "team": "Washington Commanders",
+          "years": "2024-CURRENT"
+        }
+      ]
+    },
+    {
+      "player_id": "3915511",
+      "full_name": "Joe Burrow",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 4\"",
+      "weight": "215 lbs",
+      "birth_date": "12/10/1996",
+      "birth_place": "Athens, OH",
+      "college": "LSU",
+      "draft": "2020: Rd 1, Pk 1 (CIN)",
+      "current_team": "Cincinnati Bengals",
+      "jersey_number": "9",
+      "team_history": [
+        {
+          "team": "Cincinnati Bengals",
+          "years": "2020-CURRENT"
+        }
+      ]
+    },
+    {
+      "player_id": "11252",
+      "full_name": "Joe Flacco",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 6\"",
+      "weight": "245 lbs",
+      "birth_date": "1/16/1985",
+      "birth_place": "Audubon, NJ",
+      "college": "Delaware",
+      "draft": "2008: Rd 1, Pk 18 (BAL)",
+      "current_team": "Cincinnati Bengals",
+      "jersey_number": "16",
+      "team_history": [
+        {
+          "team": "Cincinnati Bengals",
+          "years": "2025*-CURRENT"
+        },
+        {
+          "team": "Cleveland Browns",
+          "years": "2023-2024, 2025-2025*"
+        },
+        {
+          "team": "Indianapolis Colts",
+          "years": "2024-2025"
+        },
+        {
+          "team": "New York Jets",
+          "years": "2020, 2021*-2023"
+        },
+        {
+          "team": "Philadelphia Eagles",
+          "years": "2021-2022"
+        },
+        {
+          "team": "Denver Broncos",
+          "years": "2019-2020"
+        },
+        {
+          "team": "Baltimore Ravens",
+          "years": "2008-2019"
+        }
+      ]
+    },
+    {
+      "player_id": "4036378",
+      "full_name": "Jordan Love",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 4\"",
+      "weight": "219 lbs",
+      "birth_date": "11/2/1998",
+      "birth_place": "Bakersfield, CA",
+      "college": "Utah State",
+      "draft": "2020: Rd 1, Pk 26 (GB)",
+      "current_team": "Green Bay Packers",
+      "jersey_number": "10",
+      "team_history": [
+        {
+          "team": "Green Bay Packers",
+          "years": "2021-CURRENT"
+        }
+      ]
+    },
+    {
+      "player_id": "3918298",
+      "full_name": "Josh Allen",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 5\"",
+      "weight": "237 lbs",
+      "birth_date": "5/21/1996",
+      "birth_place": "Firebaugh, CA",
+      "college": "Wyoming",
+      "draft": "2018: Rd 1, Pk 7 (BUF)",
+      "current_team": "Buffalo Bills",
+      "jersey_number": "17",
+      "team_history": [
+        {
+          "team": "Buffalo Bills",
+          "years": "2018-CURRENT"
+        }
+      ]
+    },
+    {
+      "player_id": "4038941",
+      "full_name": "Justin Herbert",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 6\"",
+      "weight": "236 lbs",
+      "birth_date": "3/10/1998",
+      "birth_place": "Eugene, OR",
+      "college": "Oregon",
+      "draft": "2020: Rd 1, Pk 6 (LAC)",
+      "current_team": "Los Angeles Chargers",
+      "jersey_number": "10",
+      "team_history": [
+        {
+          "team": "Los Angeles Chargers",
+          "years": "2020-CURRENT"
+        }
+      ]
+    },
+    {
+      "player_id": "14880",
+      "full_name": "Kirk Cousins",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 3\"",
+      "weight": "209 lbs",
+      "birth_date": "8/19/1988",
+      "birth_place": "Holland, MI",
+      "college": "Michigan State",
+      "draft": "2012: Rd 4, Pk 102 (WSH)",
+      "current_team": "Las Vegas Raiders",
+      "jersey_number": "8",
+      "team_history": [
+        {
+          "team": "Las Vegas Raiders",
+          "years": "2026-CURRENT"
+        },
+        {
+          "team": "Atlanta Falcons",
+          "years": "2024-2026"
+        },
+        {
+          "team": "Minnesota Vikings",
+          "years": "2018-2024"
+        },
+        {
+          "team": "Washington Redskins",
+          "years": "2012-2018"
+        }
+      ]
+    },
+    {
+      "player_id": "3917315",
+      "full_name": "Kyler Murray",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "5' 10\"",
+      "weight": "207 lbs",
+      "birth_date": "8/7/1997",
+      "birth_place": "Allen, TX",
+      "college": "Oklahoma",
+      "draft": "2019: Rd 1, Pk 1 (ARI)",
+      "current_team": "Minnesota Vikings",
+      "jersey_number": "1",
+      "team_history": [
+        {
+          "team": "Minnesota Vikings",
+          "years": "2026-CURRENT"
+        },
+        {
+          "team": "Arizona Cardinals",
+          "years": "2019-2026"
+        }
+      ]
+    },
+    {
+      "player_id": "3916387",
+      "full_name": "Lamar Jackson",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 2\"",
+      "weight": "205 lbs",
+      "birth_date": "1/7/1997",
+      "birth_place": "Pompano Beach, FL",
+      "college": "Louisville",
+      "draft": "2018: Rd 1, Pk 32 (BAL)",
+      "current_team": "Baltimore Ravens",
+      "jersey_number": "8",
+      "team_history": [
+        {
+          "team": "Baltimore Ravens",
+          "years": "2018-CURRENT"
+        }
+      ]
+    },
+    {
+      "player_id": "4241464",
+      "full_name": "Mac Jones",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 3\"",
+      "weight": "220 lbs",
+      "birth_date": "9/5/1998",
+      "birth_place": "Jacksonville, FL",
+      "college": "Alabama",
+      "draft": "2021: Rd 1, Pk 15 (NE)",
+      "current_team": "San Francisco 49ers",
+      "jersey_number": "10",
+      "team_history": [
+        {
+          "team": "San Francisco 49ers",
+          "years": "2025-CURRENT"
+        },
+        {
+          "team": "Jacksonville Jaguars",
+          "years": "2024-2025"
+        },
+        {
+          "team": "New England Patriots",
+          "years": "2021-2024"
+        }
+      ]
+    },
+    {
+      "player_id": "4242512",
+      "full_name": "Malik Willis",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 1\"",
+      "weight": "225 lbs",
+      "birth_date": "5/25/1999",
+      "birth_place": "Atlanta, GA",
+      "college": "Liberty",
+      "draft": "2022: Rd 3, Pk 86 (TEN)",
+      "current_team": "Miami Dolphins",
+      "jersey_number": "2",
+      "team_history": [
+        {
+          "team": "Miami Dolphins",
+          "years": "2026-CURRENT"
+        },
+        {
+          "team": "Green Bay Packers",
+          "years": "2024-2026"
+        },
+        {
+          "team": "Tennessee Titans",
+          "years": "2022-2025"
+        }
+      ]
+    },
+    {
+      "player_id": "12483",
+      "full_name": "Matthew Stafford",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 3\"",
+      "weight": "214 lbs",
+      "birth_date": "2/7/1988",
+      "birth_place": "Dallas, TX",
+      "college": "Georgia",
+      "draft": "2009: Rd 1, Pk 1 (DET)",
+      "current_team": "Los Angeles Rams",
+      "jersey_number": "9",
+      "team_history": [
+        {
+          "team": "Los Angeles Rams",
+          "years": "2021-CURRENT"
+        },
+        {
+          "team": "Detroit Lions",
+          "years": "2009-2021"
+        }
+      ]
+    },
+    {
+      "player_id": "4360423",
+      "full_name": "Michael Penix Jr.",
+      "position": "Quarterback",
+      "status": "OUT",
+      "height": "6' 3\"",
+      "weight": "220 lbs",
+      "birth_date": "5/8/2000",
+      "birth_place": "Tampa, FL",
+      "college": "Washington",
+      "draft": "2024: Rd 1, Pk 8 (ATL)",
+      "current_team": "Atlanta Falcons",
+      "jersey_number": "9",
+      "team_history": [
+        {
+          "team": "Atlanta Falcons",
+          "years": "2024-CURRENT"
+        }
+      ]
+    },
+    {
+      "player_id": "3139477",
+      "full_name": "Patrick Mahomes",
+      "position": "Quarterback",
+      "status": "QUESTIONABLE",
+      "height": "6' 2\"",
+      "weight": "225 lbs",
+      "birth_date": "9/17/1995",
+      "birth_place": "Whitehouse, TX",
+      "college": "Texas Tech",
+      "draft": "2017: Rd 1, Pk 10 (KC)",
+      "current_team": "Kansas City Chiefs",
+      "jersey_number": "15",
+      "team_history": [
+        {
+          "team": "Kansas City Chiefs",
+          "years": "2017-CURRENT"
+        }
+      ]
+    },
+    {
+      "player_id": "3912547",
+      "full_name": "Sam Darnold",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 3\"",
+      "weight": "225 lbs",
+      "birth_date": "6/5/1997",
+      "birth_place": "Capistrano Beach, CA",
+      "college": "USC",
+      "draft": "2018: Rd 1, Pk 3 (NYJ)",
+      "current_team": "Seattle Seahawks",
+      "jersey_number": "14",
+      "team_history": [
+        {
+          "team": "Seattle Seahawks",
+          "years": "2025-CURRENT"
+        },
+        {
+          "team": "Minnesota Vikings",
+          "years": "2024-2025"
+        },
+        {
+          "team": "San Francisco 49ers",
+          "years": "2023-2024"
+        },
+        {
+          "team": "Carolina Panthers",
+          "years": "2021-2023"
+        },
+        {
+          "team": "New York Jets",
+          "years": "2018-2021"
+        }
+      ]
+    },
+    {
+      "player_id": "4432762",
+      "full_name": "Shedeur Sanders",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 2\"",
+      "weight": "212 lbs",
+      "birth_date": "2/7/2002",
+      "birth_place": "Dallas, TX",
+      "college": "Colorado",
+      "draft": "2025: Rd 5, Pk 144 (CLE)",
+      "current_team": "Cleveland Browns",
+      "jersey_number": "2",
+      "team_history": [
+        {
+          "team": "Cleveland Browns",
+          "years": "2025-CURRENT"
+        }
+      ]
+    },
+    {
+      "player_id": "4360310",
+      "full_name": "Trevor Lawrence",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 6\"",
+      "weight": "220 lbs",
+      "birth_date": "10/6/1999",
+      "birth_place": "Cartersville, GA",
+      "college": "Clemson",
+      "draft": "2021: Rd 1, Pk 1 (JAX)",
+      "current_team": "Jacksonville Jaguars",
+      "jersey_number": "16",
+      "team_history": [
+        {
+          "team": "Jacksonville Jaguars",
+          "years": "2021-CURRENT"
+        }
+      ]
+    },
+    {
+      "player_id": "4241479",
+      "full_name": "Tua Tagovailoa",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 1\"",
+      "weight": "225 lbs",
+      "birth_date": "3/2/1998",
+      "birth_place": "Ewa Beach, HI",
+      "college": "Alabama",
+      "draft": "2020: Rd 1, Pk 5 (MIA)",
+      "current_team": "Atlanta Falcons",
+      "jersey_number": "1",
+      "team_history": [
+        {
+          "team": "Atlanta Falcons",
+          "years": "2026-CURRENT"
+        },
+        {
+          "team": "Miami Dolphins",
+          "years": "2020-2026"
+        }
+      ]
+    },
+    {
+      "player_id": "4360689",
+      "full_name": "Tyler Shough",
+      "position": "Quarterback",
+      "status": "Active",
+      "height": "6' 5\"",
+      "weight": "219 lbs",
+      "birth_date": "9/28/1999",
+      "birth_place": "Chandler, AZ",
+      "college": "Louisville",
+      "draft": "2025: Rd 2, Pk 40 (NO)",
+      "current_team": "New Orleans Saints",
+      "jersey_number": "6",
+      "team_history": [
+        {
+          "team": "New Orleans Saints",
+          "years": "2025-CURRENT"
+        }
+      ]
+    }
+  ]
+}

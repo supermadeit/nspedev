@@ -5,7 +5,12 @@
 // later design pass). Desktop's equivalent is SampleQueriesModal.tsx, sharing
 // the same buildSampleQueries() data — content is uniform, only the chrome
 // (full-screen takeover vs. centered modal) differs per platform.
-import { buildSampleQueries } from '@/lib/sampleQueries'
+//
+// Every row is a one-tap copy-to-clipboard target (the whole row, not a
+// small icon) — the screen stays open afterward so multiple commands can be
+// copied in one visit rather than bouncing back after the first tap.
+import { buildSampleQueries, type SampleQuery } from '@/lib/sampleQueries'
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 import { C } from './components/theme'
 
 export interface SampleQueriesScreenProps {
@@ -21,6 +26,32 @@ function CalcLogo() {
     >
       ▸_
     </div>
+  )
+}
+
+function SampleQueryRow({ query }: { query: SampleQuery }) {
+  const { copied, copy } = useCopyToClipboard()
+  const green = 'oklch(0.85 0.15 145)'
+
+  return (
+    <button
+      type="button"
+      onClick={() => copy(query.command)}
+      className="w-full text-left rounded-lg border px-3 py-2.5 flex items-center justify-between gap-3"
+      style={{ backgroundColor: C.surface2, borderColor: copied ? green : C.border }}
+    >
+      <div className="min-w-0">
+        <div className="font-mono text-[9px] uppercase tracking-widest mb-1" style={{ color: C.textDim }}>
+          {query.label}
+        </div>
+        <div className="font-mono text-[13px] truncate" style={{ color: C.accent }}>
+          {query.command}
+        </div>
+      </div>
+      <span className="font-mono text-[11px] flex-none" style={{ color: copied ? green : C.textDim }}>
+        {copied ? '{copied}' : '{copy}'}
+      </span>
+    </button>
   )
 }
 
@@ -54,18 +85,7 @@ export function SampleQueriesScreen({ onBack }: SampleQueriesScreenProps) {
 
       <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-2">
         {queries.map((q) => (
-          <div
-            key={q.command}
-            className="rounded-lg border px-3 py-2.5"
-            style={{ backgroundColor: C.surface2, borderColor: C.border }}
-          >
-            <div className="font-mono text-[9px] uppercase tracking-widest mb-1" style={{ color: C.textDim }}>
-              {q.label}
-            </div>
-            <div className="font-mono text-[13px]" style={{ color: C.accent }}>
-              {q.command}
-            </div>
-          </div>
+          <SampleQueryRow key={q.command} query={q} />
         ))}
       </div>
     </div>

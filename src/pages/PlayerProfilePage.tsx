@@ -7,10 +7,12 @@
 // (build_qb_profile_payload / build_batter_profile_payload) already return
 // JSON matching ProfilePayload, so this file no longer needs the
 // adaptQbProfile/adaptBatterProfile bundled-JSON adapters it used to carry.
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { normalizeDisplayPlayer } from '@/lib/nspe-payloads'
 import { fetchPlayerProfile } from '@/lib/databaseApi'
+import { loadPlayerIndex, searchPlayers } from '@/lib/playerSearch'
+import { PlayerSearchDropdown } from '@/components/PlayerSearchDropdown'
 import { C, MiniStat, SectionStack, type ProfileSection, type StatChipsSection } from '@/components/ProfileSections'
 
 export interface ProfilePayload {
@@ -40,7 +42,66 @@ type LoadState = { status: 'loading' } | { status: 'ready'; data: ProfilePayload
 
 export default function PlayerProfilePage() {
   const { slug } = useParams<{ slug: string }>()
+  const navigate = useNavigate()
   const [state, setState] = useState<LoadState>({ status: 'loading' })
+
+  // {database} in the header doubles as a search toggle — clicking it pops
+  // open the same player-search dropdown the homepage uses, so switching to
+  // another player doesn't require backing out to the homepage first. No
+  // CLI-doubling heuristic needed here (unlike the homepage input) since
+  // this is a dedicated search-only field — every keystroke searches.
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [searchValue, setSearchValue] = useState('')
+  const [searchActiveIndex, setSearchActiveIndex] = useState(0)
+  const [isPlayerIndexReady, setIsPlayerIndexReady] = useState(false)
+  const searchContainerRef = useRef<HTMLDivElement>(null)
+  const searchInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    loadPlayerIndex().then(() => setIsPlayerIndexReady(true))
+  }, [])
+
+  useEffect(() => {
+    if (!isSearchOpen) return
+    searchInputRef.current?.focus()
+    const handleClickOutside = (e: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
+        setIsSearchOpen(false)
+      }
+    }
+    window.addEventListener('mousedown', handleClickOutside)
+    return () => window.removeEventListener('mousedown', handleClickOutside)
+  }, [isSearchOpen])
+
+  const playerMatches = useMemo(
+    () => (isSearchOpen ? searchPlayers(searchValue, 8) : []),
+    [searchValue, isSearchOpen, isPlayerIndexReady],
+  )
+
+  const goToPlayerProfile = (targetSlug: string) => {
+    setIsSearchOpen(false)
+    setSearchValue('')
+    navigate(`/database/${targetSlug}`)
+  }
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Escape') {
+      setIsSearchOpen(false)
+      return
+    }
+    if (playerMatches.length === 0) return
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setSearchActiveIndex((i) => (i + 1) % playerMatches.length)
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setSearchActiveIndex((i) => (i - 1 + playerMatches.length) % playerMatches.length)
+    } else if (e.key === 'Enter') {
+      e.preventDefault()
+      const match = playerMatches[searchActiveIndex] ?? playerMatches[0]
+      goToPlayerProfile(match.entry.slug)
+    }
+  }
 
   useEffect(() => {
     if (!slug) {
@@ -106,13 +167,46 @@ export default function PlayerProfilePage() {
     <div className="h-dvh w-full overflow-y-auto" style={{ backgroundColor: C.surface, color: C.textBright, fontFamily: 'monospace' }}>
       <div>
         <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: `1px solid ${C.border}` }}>
-          <div>
-            <span className="font-mono font-bold text-[15px]" style={{ color: C.accent }}>
+          <div className="relative" ref={searchContainerRef}>
+            <button
+              type="button"
+              onClick={() => setIsSearchOpen((v) => !v)}
+              className="font-mono font-bold text-[15px] hover:opacity-80 transition-opacity"
+              style={{ color: C.accent }}
+              aria-label="Search another player"
+            >
               {'{database}'}
-            </span>
+            </button>
             <span className="ml-2 font-mono text-[12px]" style={{ color: C.textDim }}>
               {DATA.season} season profile
             </span>
+            {isSearchOpen && (
+              <div className="absolute top-full left-0 mt-2 w-[320px] z-30">
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={searchValue}
+                  onChange={(e) => {
+                    setSearchValue(e.target.value)
+                    setSearchActiveIndex(0)
+                  }}
+                  onKeyDown={handleSearchKeyDown}
+                  placeholder="search a player"
+                  className="w-full h-[38px] px-3 font-mono text-[13px] rounded-lg border outline-none"
+                  style={{ backgroundColor: C.surface2, borderColor: C.border, color: C.textBright }}
+                />
+                {playerMatches.length > 0 && (
+                  <div className="mt-1.5">
+                    <PlayerSearchDropdown
+                      matches={playerMatches}
+                      activeIndex={searchActiveIndex}
+                      onHoverIndex={setSearchActiveIndex}
+                      onSelect={(entry) => goToPlayerProfile(entry.slug)}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
           </div>
           <div className="flex items-center gap-4">
             <a href="/charts" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>

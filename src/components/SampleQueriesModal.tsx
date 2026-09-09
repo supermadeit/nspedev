@@ -5,10 +5,16 @@
 // AutoDemo.tsx). Replaces the old {sample-commands} scripted-typing demo as
 // the primary entry point — that feature is shelved, not deleted, for a
 // possible later redesign.
-import { buildSampleQueries } from '@/lib/sampleQueries'
+//
+// Every row is a one-tap copy-to-clipboard target (the whole row, not a
+// small icon) — the modal stays open afterward so multiple commands can be
+// copied in one visit rather than closing after the first tap.
+import { buildSampleQueries, type SampleQuery } from '@/lib/sampleQueries'
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 
 const C = {
   accent: 'oklch(0.85 0.15 195)',
+  green: 'oklch(0.85 0.15 145)',
   surface: 'oklch(0.12 0 0)',
   surface2: 'oklch(0.17 0 0)',
   border: 'oklch(0.25 0 0)',
@@ -19,6 +25,31 @@ const C = {
 export interface SampleQueriesModalProps {
   open: boolean
   onClose: () => void
+}
+
+function SampleQueryRow({ query }: { query: SampleQuery }) {
+  const { copied, copy } = useCopyToClipboard()
+
+  return (
+    <button
+      type="button"
+      onClick={() => copy(query.command)}
+      className="w-full text-left rounded px-3 py-2 flex items-center justify-between gap-3 hover:opacity-90 transition-opacity"
+      style={{ backgroundColor: C.surface2, border: `1px solid ${copied ? C.green : C.border}` }}
+    >
+      <div className="min-w-0">
+        <div className="font-mono text-[9px] uppercase tracking-widest mb-1" style={{ color: C.textDim }}>
+          {query.label}
+        </div>
+        <div className="font-mono text-[13px] truncate" style={{ color: C.accent }}>
+          {query.command}
+        </div>
+      </div>
+      <span className="font-mono text-[11px] flex-none" style={{ color: copied ? C.green : C.textDim }}>
+        {copied ? '{copied}' : '{copy}'}
+      </span>
+    </button>
+  )
 }
 
 export function SampleQueriesModal({ open, onClose }: SampleQueriesModalProps) {
@@ -61,18 +92,7 @@ export function SampleQueriesModal({ open, onClose }: SampleQueriesModalProps) {
 
         <div className="overflow-y-auto px-5 py-4 space-y-2">
           {queries.map((q) => (
-            <div
-              key={q.command}
-              className="rounded px-3 py-2"
-              style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}` }}
-            >
-              <div className="font-mono text-[9px] uppercase tracking-widest mb-1" style={{ color: C.textDim }}>
-                {q.label}
-              </div>
-              <div className="font-mono text-[13px]" style={{ color: C.accent }}>
-                {q.command}
-              </div>
-            </div>
+            <SampleQueryRow key={q.command} query={q} />
           ))}
         </div>
       </div>

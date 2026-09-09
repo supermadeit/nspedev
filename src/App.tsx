@@ -67,11 +67,7 @@ const TERMINAL_COLORS = [
   'oklch(0.65 0.15 250)',
 ]
 
-const PLACEHOLDER_TEXTS = [
-  'What do you need to know?',
-  'Search stats like the pros',
-  '{SPORTS}{WORLD} IS YOURS',
-]
+const PLACEHOLDER_TEXTS = ['{SPORTS}{WORLD} IS YOURS']
 
 const COMMAND_EXAMPLES = [
   {
@@ -1846,8 +1842,6 @@ function looksLikePlayerSearch(value: string): boolean {
 
 function App() {
   const [stars, setStars] = useState<Star[]>([])
-  const [placeholderIndex, setPlaceholderIndex] = useState(0)
-  const [placeholderOpacity, setPlaceholderOpacity] = useState(1)
   const [searchValue, setSearchValue] = useState('')
   const [isMiniOpen, setIsMiniOpen] = useState(false)
   const [isSampleMenuOpen, setIsSampleMenuOpen] = useState(false)
@@ -2149,19 +2143,6 @@ function App() {
     }
 
     generateStars()
-  }, [])
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setPlaceholderOpacity(0)
-      
-      setTimeout(() => {
-        setPlaceholderIndex((prev) => (prev + 1) % PLACEHOLDER_TEXTS.length)
-        setPlaceholderOpacity(1)
-      }, 300)
-    }, 3000)
-
-    return () => clearInterval(interval)
   }, [])
 
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -2837,12 +2818,10 @@ function App() {
                 />
                 {!searchValue && (
                   <div
-                    className="absolute inset-0 flex items-center px-5 pointer-events-none font-mono text-[16px] text-muted-foreground transition-opacity duration-300"
-                    style={{
-                      opacity: placeholderOpacity * 0.5,
-                    }}
+                    className="absolute inset-0 flex items-center px-5 pointer-events-none font-mono text-[16px] text-muted-foreground"
+                    style={{ opacity: 0.5 }}
                   >
-                    {PLACEHOLDER_TEXTS[placeholderIndex]}
+                    {PLACEHOLDER_TEXTS[0]}
                   </div>
                 )}
                 {playerMatches.length > 0 && (
@@ -2905,12 +2884,10 @@ function App() {
                 />
                 {!searchValue && (
                   <div
-                    className="absolute inset-0 flex items-center px-5 pointer-events-none font-mono text-[16px] text-muted-foreground transition-opacity duration-300"
-                    style={{
-                      opacity: placeholderOpacity * 0.5,
-                    }}
+                    className="absolute inset-0 flex items-center px-5 pointer-events-none font-mono text-[16px] text-muted-foreground"
+                    style={{ opacity: 0.5 }}
                   >
-                    {PLACEHOLDER_TEXTS[placeholderIndex]}
+                    {PLACEHOLDER_TEXTS[0]}
                   </div>
                 )}
                 {playerMatches.length > 0 && (

@@ -1,180 +1,145 @@
 [
   {
-    "raw": "NFL 300pass_yds+ {season}"
+    "raw": "MLB 2hits+ {top20} {season}"
   },
   {
-    "team": "DET",
-    "player": "JaredGoff",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 6
-  },
-  {
-    "team": "DAL",
-    "player": "DakPrescott",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 6
-  },
-  {
-    "team": "LAC",
-    "player": "JustinHerbert",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 4
-  },
-  {
-    "team": "DEN",
-    "player": "BoNix",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 4
-  },
-  {
-    "team": "LAR",
-    "player": "MatthewStafford",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 4
-  },
-  {
-    "team": "ARI",
-    "player": "JacobyBrissett",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 4
-  },
-  {
-    "team": "BUF",
-    "player": "JoshAllen",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 3
+    "team": "PIT",
+    "player": "Nick Gonzales",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 53
   },
   {
     "team": "SF",
-    "player": "MacJones",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 3
-  },
-  {
-    "team": "SF",
-    "player": "BrockPurdy",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 2
-  },
-  {
-    "team": "CIN",
-    "player": "JoeBurrow",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 2
+    "player": "Luis Arraez",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 52
   },
   {
     "team": "TB",
-    "player": "BakerMayfield",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 2
+    "player": "Chandler Simpson",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 51
   },
   {
-    "team": "NO",
-    "player": "TylerShough",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 2
+    "team": "TB",
+    "player": "Yandy Diaz",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 50
   },
   {
-    "team": "KC",
-    "player": "PatrickMahomes",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 2
+    "team": "MIA",
+    "player": "Otto Lopez",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 50
   },
   {
-    "team": "CAR",
-    "player": "BryceYoung",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 2
+    "team": "HOU",
+    "player": "Yordan Alvarez",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 47
   },
   {
-    "team": "IND",
-    "player": "DanielJones",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 2
+    "team": "LAD",
+    "player": "Freddie Freeman",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 47
   },
   {
-    "team": "SEA",
-    "player": "SamDarnold",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 2
+    "team": "LAD",
+    "player": "Shohei Ohtani",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 44
   },
   {
-    "team": "CIN",
-    "player": "JoeFlacco",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 2
+    "team": "STL",
+    "player": "Alec Burleson",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 43
   },
   {
-    "team": "GB",
-    "player": "JordanLove",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 2
+    "team": "TB",
+    "player": "Junior Caminero",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 43
   },
   {
-    "team": "MIN",
-    "player": "CarsonWentz",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 2
+    "team": "TEX",
+    "player": "Brandon Nimmo",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 43
   },
   {
-    "team": "CHI",
-    "player": "CalebWilliams",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 1
+    "team": "STL",
+    "player": "Jordan Walker",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 42
   },
   {
-    "team": "NE",
-    "player": "DrakeMaye",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 1
+    "team": "BOS",
+    "player": "Ceddanne Rafaela",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 41
   },
   {
-    "team": "JAX",
-    "player": "TrevorLawrence",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 1
+    "team": "SD",
+    "player": "Fernando Tatis Jr",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 41
   },
   {
-    "team": "LV",
-    "player": "KirkCousins",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 1
+    "team": "MIL",
+    "player": "William Contreras",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 41
   },
   {
-    "team": "CLE",
-    "player": "ShedeurSanders",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 1
+    "team": "PIT",
+    "player": "Bryan Reynolds",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 41
   },
   {
-    "team": "NYG",
-    "player": "JameisWinston",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "games_meeting": 1
+    "team": "NYM",
+    "player": "BO Bichette",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 41
+  },
+  {
+    "team": "SF",
+    "player": "Rafael Devers",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 41
+  },
+  {
+    "team": "ATL",
+    "player": "Michael Harris II",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 40
+  },
+  {
+    "team": "TB",
+    "player": "Jonathan Aranda",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 40
   }
 ]

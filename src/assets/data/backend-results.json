@@ -1,494 +1,218 @@
 {
-  "engine": "nfl-leaderboard",
-  "kind": "nfl_leaderboard",
+  "kind": "mlb_stat_leaderboard",
+  "generated_at": "2026-09-09T18:14:27.187176Z",
   "query": {
-    "league": "nfl",
-    "scope": "pass",
-    "stat": "pass_yds",
-    "threshold": 300,
-    "last": null,
-    "top": 25,
-    "post": false,
-    "season_window": "2025",
-    "year_window": [
-      2025,
-      2025
-    ],
-    "date_range": null
+    "stat": "hits",
+    "field": "H",
+    "short": "H",
+    "threshold": 2,
+    "year": 2026,
+    "last_n": null
+  },
+  "thresholds": {
+    "min_ab_season": 20,
+    "top_n": 20
   },
   "rows": [
     {
-      "player": "JaredGoff",
-      "team": "DET",
-      "count": 6,
-      "games_in_window": 17,
-      "latest": "2026-01-04",
-      "matches": [
-        {
-          "val": 331,
-          "date": "2026-01-04"
-        },
-        {
-          "val": 364,
-          "date": "2025-12-21"
-        },
-        {
-          "val": 338,
-          "date": "2025-12-14"
-        },
-        {
-          "val": 309,
-          "date": "2025-12-04"
-        },
-        {
-          "val": 320,
-          "date": "2025-11-09"
-        },
-        {
-          "val": 334,
-          "date": "2025-09-14"
-        }
-      ]
+      "player": "Nick Gonzales",
+      "team": "PIT",
+      "games_meeting": 53,
+      "window_games": null,
+      "season_ab": 504,
+      "season_hits": 154,
+      "season_avg": 0.3056,
+      "last_match": "2026-09-01"
     },
     {
-      "player": "DakPrescott",
-      "team": "DAL",
-      "count": 6,
-      "games_in_window": 17,
-      "latest": "2025-12-25",
-      "matches": [
-        {
-          "val": 307,
-          "date": "2025-12-25"
-        },
-        {
-          "val": 376,
-          "date": "2025-12-04"
-        },
-        {
-          "val": 320,
-          "date": "2025-11-27"
-        },
-        {
-          "val": 354,
-          "date": "2025-11-23"
-        },
-        {
-          "val": 319,
-          "date": "2025-09-28"
-        },
-        {
-          "val": 361,
-          "date": "2025-09-14"
-        }
-      ]
-    },
-    {
-      "player": "JustinHerbert",
-      "team": "LAC",
-      "count": 4,
-      "games_in_window": 16,
-      "latest": "2025-12-21",
-      "matches": [
-        {
-          "val": 300,
-          "date": "2025-12-21"
-        },
-        {
-          "val": 420,
-          "date": "2025-10-19"
-        },
-        {
-          "val": 300,
-          "date": "2025-09-21"
-        },
-        {
-          "val": 318,
-          "date": "2025-09-05"
-        }
-      ]
-    },
-    {
-      "player": "BoNix",
-      "team": "DEN",
-      "count": 4,
-      "games_in_window": 17,
-      "latest": "2025-12-21",
-      "matches": [
-        {
-          "val": 352,
-          "date": "2025-12-21"
-        },
-        {
-          "val": 302,
-          "date": "2025-12-14"
-        },
-        {
-          "val": 321,
-          "date": "2025-11-30"
-        },
-        {
-          "val": 326,
-          "date": "2025-09-29"
-        }
-      ]
-    },
-    {
-      "player": "MatthewStafford",
-      "team": "LAR",
-      "count": 4,
-      "games_in_window": 17,
-      "latest": "2025-12-18",
-      "matches": [
-        {
-          "val": 457,
-          "date": "2025-12-18"
-        },
-        {
-          "val": 368,
-          "date": "2025-12-14"
-        },
-        {
-          "val": 389,
-          "date": "2025-10-02"
-        },
-        {
-          "val": 375,
-          "date": "2025-09-28"
-        }
-      ]
-    },
-    {
-      "player": "JacobyBrissett",
-      "team": "ARI",
-      "count": 4,
-      "games_in_window": 14,
-      "latest": "2025-11-30",
-      "matches": [
-        {
-          "val": 301,
-          "date": "2025-11-30"
-        },
-        {
-          "val": 317,
-          "date": "2025-11-23"
-        },
-        {
-          "val": 452,
-          "date": "2025-11-16"
-        },
-        {
-          "val": 320,
-          "date": "2025-10-12"
-        }
-      ]
-    },
-    {
-      "player": "JoshAllen",
-      "team": "BUF",
-      "count": 3,
-      "games_in_window": 17,
-      "latest": "2025-11-16",
-      "matches": [
-        {
-          "val": 317,
-          "date": "2025-11-16"
-        },
-        {
-          "val": 306,
-          "date": "2025-11-09"
-        },
-        {
-          "val": 394,
-          "date": "2025-09-07"
-        }
-      ]
-    },
-    {
-      "player": "MacJones",
+      "player": "Luis Arraez",
       "team": "SF",
-      "count": 3,
-      "games_in_window": 11,
-      "latest": "2025-11-09",
-      "matches": [
-        {
-          "val": 319,
-          "date": "2025-11-09"
-        },
-        {
-          "val": 347,
-          "date": "2025-10-12"
-        },
-        {
-          "val": 342,
-          "date": "2025-10-02"
-        }
-      ]
+      "games_meeting": 52,
+      "window_games": null,
+      "season_ab": 544,
+      "season_hits": 172,
+      "season_avg": 0.3162,
+      "last_match": "2026-09-05"
     },
     {
-      "player": "BrockPurdy",
-      "team": "SF",
-      "count": 2,
-      "games_in_window": 9,
-      "latest": "2025-12-28",
-      "matches": [
-        {
-          "val": 303,
-          "date": "2025-12-28"
-        },
-        {
-          "val": 309,
-          "date": "2025-09-28"
-        }
-      ]
-    },
-    {
-      "player": "JoeBurrow",
-      "team": "CIN",
-      "count": 2,
-      "games_in_window": 8,
-      "latest": "2025-12-28",
-      "matches": [
-        {
-          "val": 305,
-          "date": "2025-12-28"
-        },
-        {
-          "val": 309,
-          "date": "2025-12-21"
-        }
-      ]
-    },
-    {
-      "player": "BakerMayfield",
+      "player": "Chandler Simpson",
       "team": "TB",
-      "count": 2,
-      "games_in_window": 17,
-      "latest": "2025-12-28",
-      "matches": [
-        {
-          "val": 346,
-          "date": "2025-12-28"
-        },
-        {
-          "val": 379,
-          "date": "2025-10-05"
-        }
-      ]
+      "games_meeting": 51,
+      "window_games": null,
+      "season_ab": 514,
+      "season_hits": 158,
+      "season_avg": 0.3074,
+      "last_match": "2026-09-06"
     },
     {
-      "player": "TylerShough",
-      "team": "NO",
-      "count": 2,
-      "games_in_window": 11,
-      "latest": "2025-12-28",
-      "matches": [
-        {
-          "val": 333,
-          "date": "2025-12-28"
-        },
-        {
-          "val": 308,
-          "date": "2025-12-21"
-        }
-      ]
+      "player": "Yandy Diaz",
+      "team": "TB",
+      "games_meeting": 50,
+      "window_games": null,
+      "season_ab": 553,
+      "season_hits": 169,
+      "season_avg": 0.3056,
+      "last_match": "2026-09-08"
     },
     {
-      "player": "PatrickMahomes",
-      "team": "KC",
-      "count": 2,
-      "games_in_window": 14,
-      "latest": "2025-11-23",
-      "matches": [
-        {
-          "val": 352,
-          "date": "2025-11-23"
-        },
-        {
-          "val": 318,
-          "date": "2025-10-06"
-        }
-      ]
+      "player": "Otto Lopez",
+      "team": "MIA",
+      "games_meeting": 50,
+      "window_games": null,
+      "season_ab": 568,
+      "season_hits": 171,
+      "season_avg": 0.3011,
+      "last_match": "2026-09-06"
     },
     {
-      "player": "BryceYoung",
-      "team": "CAR",
-      "count": 2,
-      "games_in_window": 16,
-      "latest": "2025-11-16",
-      "matches": [
-        {
-          "val": 448,
-          "date": "2025-11-16"
-        },
-        {
-          "val": 328,
-          "date": "2025-09-14"
-        }
-      ]
+      "player": "Yordan Alvarez",
+      "team": "HOU",
+      "games_meeting": 47,
+      "window_games": null,
+      "season_ab": 514,
+      "season_hits": 160,
+      "season_avg": 0.3113,
+      "last_match": "2026-09-04"
     },
     {
-      "player": "DanielJones",
-      "team": "IND",
-      "count": 2,
-      "games_in_window": 13,
-      "latest": "2025-11-02",
-      "matches": [
-        {
-          "val": 342,
-          "date": "2025-11-02"
-        },
-        {
-          "val": 316,
-          "date": "2025-09-14"
-        }
-      ]
+      "player": "Freddie Freeman",
+      "team": "LAD",
+      "games_meeting": 47,
+      "window_games": null,
+      "season_ab": 525,
+      "season_hits": 156,
+      "season_avg": 0.2971,
+      "last_match": "2026-09-02"
     },
     {
-      "player": "SamDarnold",
-      "team": "SEA",
-      "count": 2,
-      "games_in_window": 17,
-      "latest": "2025-11-02",
-      "matches": [
-        {
-          "val": 330,
-          "date": "2025-11-02"
-        },
-        {
-          "val": 341,
-          "date": "2025-10-05"
-        }
-      ]
+      "player": "Shohei Ohtani",
+      "team": "LAD",
+      "games_meeting": 44,
+      "window_games": null,
+      "season_ab": 502,
+      "season_hits": 154,
+      "season_avg": 0.3068,
+      "last_match": "2026-08-26"
     },
     {
-      "player": "JoeFlacco",
-      "team": "CIN",
-      "count": 2,
-      "games_in_window": 13,
-      "latest": "2025-11-02",
-      "matches": [
-        {
-          "val": 470,
-          "date": "2025-11-02"
-        },
-        {
-          "val": 342,
-          "date": "2025-10-16"
-        }
-      ]
+      "player": "Alec Burleson",
+      "team": "STL",
+      "games_meeting": 43,
+      "window_games": null,
+      "season_ab": 553,
+      "season_hits": 157,
+      "season_avg": 0.2839,
+      "last_match": "2026-09-06"
     },
     {
-      "player": "JordanLove",
-      "team": "GB",
-      "count": 2,
-      "games_in_window": 15,
-      "latest": "2025-10-26",
-      "matches": [
-        {
-          "val": 360,
-          "date": "2025-10-26"
-        },
-        {
-          "val": 337,
-          "date": "2025-09-28"
-        }
-      ]
+      "player": "Junior Caminero",
+      "team": "TB",
+      "games_meeting": 43,
+      "window_games": null,
+      "season_ab": 550,
+      "season_hits": 155,
+      "season_avg": 0.2818,
+      "last_match": "2026-09-08"
     },
     {
-      "player": "CarsonWentz",
-      "team": "MIN",
-      "count": 2,
-      "games_in_window": 5,
-      "latest": "2025-10-19",
-      "matches": [
-        {
-          "val": 313,
-          "date": "2025-10-19"
-        },
-        {
-          "val": 350,
-          "date": "2025-09-28"
-        }
-      ]
+      "player": "Brandon Nimmo",
+      "team": "TEX",
+      "games_meeting": 43,
+      "window_games": null,
+      "season_ab": 532,
+      "season_hits": 139,
+      "season_avg": 0.2613,
+      "last_match": "2026-09-01"
     },
     {
-      "player": "CalebWilliams",
-      "team": "CHI",
-      "count": 1,
-      "games_in_window": 17,
-      "latest": "2025-12-28",
-      "matches": [
-        {
-          "val": 330,
-          "date": "2025-12-28"
-        }
-      ]
+      "player": "Jordan Walker",
+      "team": "STL",
+      "games_meeting": 42,
+      "window_games": null,
+      "season_ab": 557,
+      "season_hits": 157,
+      "season_avg": 0.2819,
+      "last_match": "2026-09-03"
     },
     {
-      "player": "DrakeMaye",
-      "team": "NE",
-      "count": 1,
-      "games_in_window": 17,
-      "latest": "2025-12-21",
-      "matches": [
-        {
-          "val": 380,
-          "date": "2025-12-21"
-        }
-      ]
+      "player": "Ceddanne Rafaela",
+      "team": "BOS",
+      "games_meeting": 41,
+      "window_games": null,
+      "season_ab": 535,
+      "season_hits": 151,
+      "season_avg": 0.2822,
+      "last_match": "2026-08-31"
     },
     {
-      "player": "TrevorLawrence",
-      "team": "JAX",
-      "count": 1,
-      "games_in_window": 17,
-      "latest": "2025-12-14",
-      "matches": [
-        {
-          "val": 330,
-          "date": "2025-12-14"
-        }
-      ]
+      "player": "Fernando Tatis Jr",
+      "team": "SD",
+      "games_meeting": 41,
+      "window_games": null,
+      "season_ab": 561,
+      "season_hits": 158,
+      "season_avg": 0.2816,
+      "last_match": "2026-09-07"
     },
     {
-      "player": "KirkCousins",
-      "team": "LV",
-      "count": 1,
-      "games_in_window": 10,
-      "latest": "2025-12-11",
-      "matches": [
-        {
-          "val": 373,
-          "date": "2025-12-11"
-        }
-      ]
+      "player": "William Contreras",
+      "team": "MIL",
+      "games_meeting": 41,
+      "window_games": null,
+      "season_ab": 517,
+      "season_hits": 139,
+      "season_avg": 0.2689,
+      "last_match": "2026-09-02"
     },
     {
-      "player": "ShedeurSanders",
-      "team": "CLE",
-      "count": 1,
-      "games_in_window": 8,
-      "latest": "2025-12-07",
-      "matches": [
-        {
-          "val": 364,
-          "date": "2025-12-07"
-        }
-      ]
+      "player": "Bryan Reynolds",
+      "team": "PIT",
+      "games_meeting": 41,
+      "window_games": null,
+      "season_ab": 537,
+      "season_hits": 144,
+      "season_avg": 0.2682,
+      "last_match": "2026-09-08"
     },
     {
-      "player": "JameisWinston",
-      "team": "NYG",
-      "count": 1,
-      "games_in_window": 3,
-      "latest": "2025-11-23",
-      "matches": [
-        {
-          "val": 366,
-          "date": "2025-11-23"
-        }
-      ]
+      "player": "BO Bichette",
+      "team": "NYM",
+      "games_meeting": 41,
+      "window_games": null,
+      "season_ab": 565,
+      "season_hits": 150,
+      "season_avg": 0.2655,
+      "last_match": "2026-09-07"
+    },
+    {
+      "player": "Rafael Devers",
+      "team": "SF",
+      "games_meeting": 41,
+      "window_games": null,
+      "season_ab": 550,
+      "season_hits": 142,
+      "season_avg": 0.2582,
+      "last_match": "2026-09-07"
+    },
+    {
+      "player": "Michael Harris II",
+      "team": "ATL",
+      "games_meeting": 40,
+      "window_games": null,
+      "season_ab": 526,
+      "season_hits": 152,
+      "season_avg": 0.289,
+      "last_match": "2026-08-31"
+    },
+    {
+      "player": "Jonathan Aranda",
+      "team": "TB",
+      "games_meeting": 40,
+      "window_games": null,
+      "season_ab": 530,
+      "season_hits": 148,
+      "season_avg": 0.2792,
+      "last_match": "2026-09-06"
     }
   ]
 }
