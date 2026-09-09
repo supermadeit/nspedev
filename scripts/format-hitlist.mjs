@@ -52,12 +52,21 @@ function buildRawHeader({ sport, query, topN, windowLabel }) {
 }
 
 function buildEntry(row, { stat, threshold, windowGames }) {
+  // Different leaderboard engines name the "games meeting the threshold"
+  // field differently — the MLB stat-leaderboard payload calls it
+  // `games_meeting`, the NFL leaderboard payload calls it `count`. Same
+  // meaning either way (Jared Goff's `count: 6` lines up with exactly 6
+  // entries in his `matches` array), so prefer games_meeting when present
+  // and fall back to count rather than requiring every engine to agree on
+  // a field name.
+  const gamesMeeting = typeof row.games_meeting === 'number' ? row.games_meeting : row.count
+
   const out = {
     team: row.team ?? '',
     player: row.player ?? '',
     stat,
     threshold,
-    games_meeting: row.games_meeting,
+    games_meeting: gamesMeeting,
   }
   if (typeof windowGames === 'number') {
     out.window_games = windowGames

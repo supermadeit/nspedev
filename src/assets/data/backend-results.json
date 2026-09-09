@@ -1,250 +1,494 @@
 {
-  "engine": "mlb-h2h",
+  "engine": "nfl-leaderboard",
+  "kind": "nfl_leaderboard",
   "query": {
-    "player_query": "bobby",
-    "player_display": "Bobby Witt Jr",
-    "player_team": "KC",
-    "opponent_code": "TOR",
-    "home_away": "both",
-    "source": "regular",
-    "year": 2026,
-    "last_n": null,
-    "season": false,
-    "career": false,
-    "window_label": "(2026)"
+    "league": "nfl",
+    "scope": "pass",
+    "stat": "pass_yds",
+    "threshold": 300,
+    "last": null,
+    "top": 25,
+    "post": false,
+    "season_window": "2025",
+    "year_window": [
+      2025,
+      2025
+    ],
+    "date_range": null
   },
-  "totals": {
-    "games": 2,
-    "AB": 6,
-    "R": 1,
-    "H": 1,
-    "2B": 0,
-    "3B": 0,
-    "HR": 0,
-    "RBI": 0,
-    "BB": 3,
-    "SO": 2,
-    "SB": 0,
-    "TB": 1,
-    "AVG": 0.167,
-    "OBP": 0.444,
-    "SLG": 0.167,
-    "OPS": 0.611
-  },
-  "games": [
+  "rows": [
     {
-      "date": "Tue 8/25",
-      "date_iso": "2026-08-25",
-      "venue": "away",
-      "opponent": "TOR",
-      "AB": 3,
-      "R": 1,
-      "H": 0,
-      "2B": 0,
-      "3B": 0,
-      "HR": 0,
-      "RBI": 0,
-      "BB": 2,
-      "SO": 1,
-      "SB": 0
+      "player": "JaredGoff",
+      "team": "DET",
+      "count": 6,
+      "games_in_window": 17,
+      "latest": "2026-01-04",
+      "matches": [
+        {
+          "val": 331,
+          "date": "2026-01-04"
+        },
+        {
+          "val": 364,
+          "date": "2025-12-21"
+        },
+        {
+          "val": 338,
+          "date": "2025-12-14"
+        },
+        {
+          "val": 309,
+          "date": "2025-12-04"
+        },
+        {
+          "val": 320,
+          "date": "2025-11-09"
+        },
+        {
+          "val": 334,
+          "date": "2025-09-14"
+        }
+      ]
     },
     {
-      "date": "Wed 8/26",
-      "date_iso": "2026-08-26",
-      "venue": "away",
-      "opponent": "TOR",
-      "AB": 3,
-      "R": 0,
-      "H": 1,
-      "2B": 0,
-      "3B": 0,
-      "HR": 0,
-      "RBI": 0,
-      "BB": 1,
-      "SO": 1,
-      "SB": 0
+      "player": "DakPrescott",
+      "team": "DAL",
+      "count": 6,
+      "games_in_window": 17,
+      "latest": "2025-12-25",
+      "matches": [
+        {
+          "val": 307,
+          "date": "2025-12-25"
+        },
+        {
+          "val": 376,
+          "date": "2025-12-04"
+        },
+        {
+          "val": 320,
+          "date": "2025-11-27"
+        },
+        {
+          "val": 354,
+          "date": "2025-11-23"
+        },
+        {
+          "val": 319,
+          "date": "2025-09-28"
+        },
+        {
+          "val": 361,
+          "date": "2025-09-14"
+        }
+      ]
+    },
+    {
+      "player": "JustinHerbert",
+      "team": "LAC",
+      "count": 4,
+      "games_in_window": 16,
+      "latest": "2025-12-21",
+      "matches": [
+        {
+          "val": 300,
+          "date": "2025-12-21"
+        },
+        {
+          "val": 420,
+          "date": "2025-10-19"
+        },
+        {
+          "val": 300,
+          "date": "2025-09-21"
+        },
+        {
+          "val": 318,
+          "date": "2025-09-05"
+        }
+      ]
+    },
+    {
+      "player": "BoNix",
+      "team": "DEN",
+      "count": 4,
+      "games_in_window": 17,
+      "latest": "2025-12-21",
+      "matches": [
+        {
+          "val": 352,
+          "date": "2025-12-21"
+        },
+        {
+          "val": 302,
+          "date": "2025-12-14"
+        },
+        {
+          "val": 321,
+          "date": "2025-11-30"
+        },
+        {
+          "val": 326,
+          "date": "2025-09-29"
+        }
+      ]
+    },
+    {
+      "player": "MatthewStafford",
+      "team": "LAR",
+      "count": 4,
+      "games_in_window": 17,
+      "latest": "2025-12-18",
+      "matches": [
+        {
+          "val": 457,
+          "date": "2025-12-18"
+        },
+        {
+          "val": 368,
+          "date": "2025-12-14"
+        },
+        {
+          "val": 389,
+          "date": "2025-10-02"
+        },
+        {
+          "val": 375,
+          "date": "2025-09-28"
+        }
+      ]
+    },
+    {
+      "player": "JacobyBrissett",
+      "team": "ARI",
+      "count": 4,
+      "games_in_window": 14,
+      "latest": "2025-11-30",
+      "matches": [
+        {
+          "val": 301,
+          "date": "2025-11-30"
+        },
+        {
+          "val": 317,
+          "date": "2025-11-23"
+        },
+        {
+          "val": 452,
+          "date": "2025-11-16"
+        },
+        {
+          "val": 320,
+          "date": "2025-10-12"
+        }
+      ]
+    },
+    {
+      "player": "JoshAllen",
+      "team": "BUF",
+      "count": 3,
+      "games_in_window": 17,
+      "latest": "2025-11-16",
+      "matches": [
+        {
+          "val": 317,
+          "date": "2025-11-16"
+        },
+        {
+          "val": 306,
+          "date": "2025-11-09"
+        },
+        {
+          "val": 394,
+          "date": "2025-09-07"
+        }
+      ]
+    },
+    {
+      "player": "MacJones",
+      "team": "SF",
+      "count": 3,
+      "games_in_window": 11,
+      "latest": "2025-11-09",
+      "matches": [
+        {
+          "val": 319,
+          "date": "2025-11-09"
+        },
+        {
+          "val": 347,
+          "date": "2025-10-12"
+        },
+        {
+          "val": 342,
+          "date": "2025-10-02"
+        }
+      ]
+    },
+    {
+      "player": "BrockPurdy",
+      "team": "SF",
+      "count": 2,
+      "games_in_window": 9,
+      "latest": "2025-12-28",
+      "matches": [
+        {
+          "val": 303,
+          "date": "2025-12-28"
+        },
+        {
+          "val": 309,
+          "date": "2025-09-28"
+        }
+      ]
+    },
+    {
+      "player": "JoeBurrow",
+      "team": "CIN",
+      "count": 2,
+      "games_in_window": 8,
+      "latest": "2025-12-28",
+      "matches": [
+        {
+          "val": 305,
+          "date": "2025-12-28"
+        },
+        {
+          "val": 309,
+          "date": "2025-12-21"
+        }
+      ]
+    },
+    {
+      "player": "BakerMayfield",
+      "team": "TB",
+      "count": 2,
+      "games_in_window": 17,
+      "latest": "2025-12-28",
+      "matches": [
+        {
+          "val": 346,
+          "date": "2025-12-28"
+        },
+        {
+          "val": 379,
+          "date": "2025-10-05"
+        }
+      ]
+    },
+    {
+      "player": "TylerShough",
+      "team": "NO",
+      "count": 2,
+      "games_in_window": 11,
+      "latest": "2025-12-28",
+      "matches": [
+        {
+          "val": 333,
+          "date": "2025-12-28"
+        },
+        {
+          "val": 308,
+          "date": "2025-12-21"
+        }
+      ]
+    },
+    {
+      "player": "PatrickMahomes",
+      "team": "KC",
+      "count": 2,
+      "games_in_window": 14,
+      "latest": "2025-11-23",
+      "matches": [
+        {
+          "val": 352,
+          "date": "2025-11-23"
+        },
+        {
+          "val": 318,
+          "date": "2025-10-06"
+        }
+      ]
+    },
+    {
+      "player": "BryceYoung",
+      "team": "CAR",
+      "count": 2,
+      "games_in_window": 16,
+      "latest": "2025-11-16",
+      "matches": [
+        {
+          "val": 448,
+          "date": "2025-11-16"
+        },
+        {
+          "val": 328,
+          "date": "2025-09-14"
+        }
+      ]
+    },
+    {
+      "player": "DanielJones",
+      "team": "IND",
+      "count": 2,
+      "games_in_window": 13,
+      "latest": "2025-11-02",
+      "matches": [
+        {
+          "val": 342,
+          "date": "2025-11-02"
+        },
+        {
+          "val": 316,
+          "date": "2025-09-14"
+        }
+      ]
+    },
+    {
+      "player": "SamDarnold",
+      "team": "SEA",
+      "count": 2,
+      "games_in_window": 17,
+      "latest": "2025-11-02",
+      "matches": [
+        {
+          "val": 330,
+          "date": "2025-11-02"
+        },
+        {
+          "val": 341,
+          "date": "2025-10-05"
+        }
+      ]
+    },
+    {
+      "player": "JoeFlacco",
+      "team": "CIN",
+      "count": 2,
+      "games_in_window": 13,
+      "latest": "2025-11-02",
+      "matches": [
+        {
+          "val": 470,
+          "date": "2025-11-02"
+        },
+        {
+          "val": 342,
+          "date": "2025-10-16"
+        }
+      ]
+    },
+    {
+      "player": "JordanLove",
+      "team": "GB",
+      "count": 2,
+      "games_in_window": 15,
+      "latest": "2025-10-26",
+      "matches": [
+        {
+          "val": 360,
+          "date": "2025-10-26"
+        },
+        {
+          "val": 337,
+          "date": "2025-09-28"
+        }
+      ]
+    },
+    {
+      "player": "CarsonWentz",
+      "team": "MIN",
+      "count": 2,
+      "games_in_window": 5,
+      "latest": "2025-10-19",
+      "matches": [
+        {
+          "val": 313,
+          "date": "2025-10-19"
+        },
+        {
+          "val": 350,
+          "date": "2025-09-28"
+        }
+      ]
+    },
+    {
+      "player": "CalebWilliams",
+      "team": "CHI",
+      "count": 1,
+      "games_in_window": 17,
+      "latest": "2025-12-28",
+      "matches": [
+        {
+          "val": 330,
+          "date": "2025-12-28"
+        }
+      ]
+    },
+    {
+      "player": "DrakeMaye",
+      "team": "NE",
+      "count": 1,
+      "games_in_window": 17,
+      "latest": "2025-12-21",
+      "matches": [
+        {
+          "val": 380,
+          "date": "2025-12-21"
+        }
+      ]
+    },
+    {
+      "player": "TrevorLawrence",
+      "team": "JAX",
+      "count": 1,
+      "games_in_window": 17,
+      "latest": "2025-12-14",
+      "matches": [
+        {
+          "val": 330,
+          "date": "2025-12-14"
+        }
+      ]
+    },
+    {
+      "player": "KirkCousins",
+      "team": "LV",
+      "count": 1,
+      "games_in_window": 10,
+      "latest": "2025-12-11",
+      "matches": [
+        {
+          "val": 373,
+          "date": "2025-12-11"
+        }
+      ]
+    },
+    {
+      "player": "ShedeurSanders",
+      "team": "CLE",
+      "count": 1,
+      "games_in_window": 8,
+      "latest": "2025-12-07",
+      "matches": [
+        {
+          "val": 364,
+          "date": "2025-12-07"
+        }
+      ]
+    },
+    {
+      "player": "JameisWinston",
+      "team": "NYG",
+      "count": 1,
+      "games_in_window": 3,
+      "latest": "2025-11-23",
+      "matches": [
+        {
+          "val": 366,
+          "date": "2025-11-23"
+        }
+      ]
     }
-  ],
-  "staff_breakdown": {
-    "player": "Bobby Witt Jr",
-    "team": "TOR",
-    "pitcher_count": 10,
-    "pitchers": [
-      {
-        "pitcher": "Dylan Cease",
-        "team": "TOR",
-        "AB": 19,
-        "H": 5,
-        "2B": 1,
-        "3B": 0,
-        "HR": 0,
-        "RBI": 1,
-        "BB": 1,
-        "K": 3,
-        "AVG": 0.263,
-        "OBP": 0.3,
-        "SLG": 0.316,
-        "OPS": 0.616
-      },
-      {
-        "pitcher": "Simeon Woods Richardson",
-        "team": "TOR",
-        "AB": 11,
-        "H": 0,
-        "2B": 0,
-        "3B": 0,
-        "HR": 0,
-        "RBI": 1,
-        "BB": 0,
-        "K": 1,
-        "AVG": 0.0,
-        "OBP": 0.0,
-        "SLG": 0.0,
-        "OPS": 0.0
-      },
-      {
-        "pitcher": "Max Scherzer",
-        "team": "TOR",
-        "AB": 8,
-        "H": 1,
-        "2B": 0,
-        "3B": 0,
-        "HR": 0,
-        "RBI": 1,
-        "BB": 1,
-        "K": 2,
-        "AVG": 0.125,
-        "OBP": 0.222,
-        "SLG": 0.125,
-        "OPS": 0.347
-      },
-      {
-        "pitcher": "Louis Varland",
-        "team": "TOR",
-        "AB": 6,
-        "H": 3,
-        "2B": 1,
-        "3B": 0,
-        "HR": 1,
-        "RBI": 1,
-        "BB": 0,
-        "K": 1,
-        "AVG": 0.5,
-        "OBP": 0.5,
-        "SLG": 1.167,
-        "OPS": 1.667
-      },
-      {
-        "pitcher": "Spencer Arrighetti",
-        "team": "TOR",
-        "AB": 4,
-        "H": 2,
-        "2B": 0,
-        "3B": 0,
-        "HR": 0,
-        "RBI": 0,
-        "BB": 1,
-        "K": 1,
-        "AVG": 0.5,
-        "OBP": 0.6,
-        "SLG": 0.5,
-        "OPS": 1.1
-      },
-      {
-        "pitcher": "Paul Sewald",
-        "team": "TOR",
-        "AB": 3,
-        "H": 1,
-        "2B": 0,
-        "3B": 0,
-        "HR": 0,
-        "RBI": 0,
-        "BB": 0,
-        "K": 0,
-        "AVG": 0.333,
-        "OBP": 0.333,
-        "SLG": 0.333,
-        "OPS": 0.667
-      },
-      {
-        "pitcher": "Tyler Rogers",
-        "team": "TOR",
-        "AB": 2,
-        "H": 1,
-        "2B": 0,
-        "3B": 0,
-        "HR": 0,
-        "RBI": 1,
-        "BB": 1,
-        "K": 0,
-        "AVG": 0.5,
-        "OBP": 0.5,
-        "SLG": 0.5,
-        "OPS": 1.0
-      },
-      {
-        "pitcher": "Braydon Fisher",
-        "team": "TOR",
-        "AB": 1,
-        "H": 0,
-        "2B": 0,
-        "3B": 0,
-        "HR": 0,
-        "RBI": 0,
-        "BB": 0,
-        "K": 0,
-        "AVG": 0.0,
-        "OBP": 0.0,
-        "SLG": 0.0,
-        "OPS": 0.0
-      },
-      {
-        "pitcher": "Brendon Little",
-        "team": "TOR",
-        "AB": 1,
-        "H": 0,
-        "2B": 0,
-        "3B": 0,
-        "HR": 0,
-        "RBI": 0,
-        "BB": 0,
-        "K": 1,
-        "AVG": 0.0,
-        "OBP": 0.0,
-        "SLG": 0.0,
-        "OPS": 0.0
-      },
-      {
-        "pitcher": "Mason Fluharty",
-        "team": "TOR",
-        "AB": 0,
-        "H": 0,
-        "2B": 0,
-        "3B": 0,
-        "HR": 0,
-        "RBI": 0,
-        "BB": 2,
-        "K": 0,
-        "AVG": 0.0,
-        "OBP": 1.0,
-        "SLG": 0.0,
-        "OPS": 1.0
-      }
-    ],
-    "totals": {
-      "AB": 55,
-      "H": 13,
-      "2B": 2,
-      "3B": 0,
-      "HR": 1,
-      "RBI": 5,
-      "BB": 6,
-      "K": 9,
-      "TB": 18,
-      "AVG": 0.236,
-      "OBP": 0.311,
-      "SLG": 0.327,
-      "OPS": 0.639
-    }
-  }
+  ]
 }

@@ -1,10 +1,13 @@
 // Flat player index + name-search matching, shared by desktop's CLI input
 // and mobile's dedicated search input (both wire this same module — see
-// the plan discussion this was built from). Sourced the same way
-// QbChartsPage filters its roster: glob every profile file at build time so
-// the index — and therefore what's searchable — grows automatically as more
-// profiles land (any sport/position), no hardcoded roster to keep in sync.
+// the plan discussion this was built from). Sourced from the live
+// GET /database/index endpoint (fetched once, cached — not a bundled glob
+// anymore) so the index — and therefore what's searchable — grows as the
+// backend's roster grows, with no rebuild/redeploy needed on this side. See
+// nspedev-live-architecture-pivot in memory for the migration this replaced
+// (qb-profiles/*.json + batter-profiles/*.json globs).
 import { normalizeDisplayPlayer } from './nspe-payloads'
+import { fetchPlayerIndex } from './databaseApi'
 
 export interface PlayerIndexEntry {
   name: string
@@ -22,18 +25,6 @@ export interface PlayerIndexEntry {
   nameTokens: string[]
 }
 
-type RawProfileModule = { default: { player: string; player_id: string; team: string; position: string } }
-
-const qbProfileModules = import.meta.glob('../assets/data/qb-profiles/*.json', { eager: true }) as Record<
-  string,
-  RawProfileModule
->
-const batterProfileModules = import.meta.glob('../assets/data/batter-profiles/*.json', { eager: true }) as Record<
-  string,
-  RawProfileModule
->
-const profileModules = { ...qbProfileModules, ...batterProfileModules }
-
 // Suffixes are real words in the display name but aren't what anyone types
 // to search for a player — dropping them means the word before the suffix
 // (the actual surname) is treated as the last searchable token instead.
@@ -47,19 +38,46 @@ function buildNameTokens(display: string): string[] {
     .filter((w) => w && !NAME_SUFFIXES.has(w))
 }
 
-export const PLAYER_INDEX: PlayerIndexEntry[] = Object.values(profileModules).map((m) => {
-  const display = normalizeDisplayPlayer(m.default.player)
-  const nameTokens = buildNameTokens(display)
-  return {
-    name: display,
-    slug: m.default.player_id,
-    team: m.default.team,
-    position: m.default.position,
-    firstName: nameTokens[0] ?? '',
-    lastName: nameTokens[nameTokens.length - 1] ?? '',
-    nameTokens,
+// Mutable — starts empty, populated once loadPlayerIndex()'s fetch resolves.
+// searchPlayers() stays synchronous and just reads whatever's here at call
+// time (empty results before the first load completes, same as any other
+// "no matches yet" case — App.tsx re-triggers its search useMemo once
+// loadPlayerIndex() resolves so results appear without the user retyping).
+export let PLAYER_INDEX: PlayerIndexEntry[] = []
+
+let loadPromise: Promise<void> | null = null
+
+// Idempotent — safe to call from multiple components/renders, only ever
+// fetches once. Callers that need to react to the index becoming available
+// (e.g. to recompute search results) should await this or key off its
+// resolution, not assume PLAYER_INDEX is already populated on first render.
+export function loadPlayerIndex(): Promise<void> {
+  if (!loadPromise) {
+    loadPromise = fetchPlayerIndex()
+      .then((entries) => {
+        PLAYER_INDEX = entries.map((e) => {
+          const display = normalizeDisplayPlayer(e.name)
+          const nameTokens = buildNameTokens(display)
+          return {
+            name: display,
+            slug: e.slug,
+            team: e.team,
+            position: e.position,
+            firstName: nameTokens[0] ?? '',
+            lastName: nameTokens[nameTokens.length - 1] ?? '',
+            nameTokens,
+          }
+        })
+      })
+      .catch((err) => {
+        console.error('Failed to load player search index:', err)
+        // Leave loadPromise resolved (not reset to null) — a hard failure
+        // shouldn't retry on every keystroke; PLAYER_INDEX just stays empty
+        // until a full page reload.
+      })
   }
-})
+  return loadPromise
+}
 
 export interface PlayerMatch {
   entry: PlayerIndexEntry

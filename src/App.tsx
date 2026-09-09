@@ -10,7 +10,7 @@ import { AutoDemo } from '@/components/AutoDemo'
 import { SampleQueriesModal } from '@/components/SampleQueriesModal'
 import { H2hStaffOverlay } from '@/components/H2hStaffOverlay'
 import { PlayerSearchDropdown } from '@/components/PlayerSearchDropdown'
-import { searchPlayers } from '@/lib/playerSearch'
+import { loadPlayerIndex, searchPlayers } from '@/lib/playerSearch'
 import { authHeader } from '@/lib/auth-token'
 import {
   asNumber,
@@ -159,6 +159,16 @@ const STAT_LABELS: Record<string, string> = {
   reb: 'reb',
   stl: 'stl',
   ast: 'ast',
+  // NFL leaderboard entries carry the raw stat key (e.g. "pass_yds") — map
+  // to the short display unit so the ticker reads "300yds" not
+  // "300pass_yds". Covers the yds/td categories across all three play
+  // types since the backend's NFL formatting isn't limited to passing.
+  pass_yds: 'yds',
+  rush_yds: 'yds',
+  rec_yds: 'yds',
+  pass_td: 'td',
+  rush_td: 'td',
+  rec_td: 'td',
 }
 
 interface GlossaryEntry {
@@ -246,18 +256,29 @@ function formatTickerEntry(entry: HitlistEntry): string {
   }
 
   const statLabel = entry.stat ? (STAT_LABELS[entry.stat] || entry.stat) : ''
+  const playerLabel = entry.player ? normalizeDisplayPlayer(entry.player) : ''
 
-  // MLB-leaderboard style: team + player + {Nstat MG <window>}
+  // Leaderboard style (MLB and now NFL both use this): team + player +
+  // {Nstat MG <window>} — e.g. "DAL Dak Prescott {300yds 6G season}". This
+  // branch is sport-agnostic; it only fires once an entry actually carries
+  // games_meeting. NFL leaderboard entries added so far (team/player/stat/
+  // threshold only, no games_meeting) fall through to the legacy branch
+  // below and render without a games count until the backend adds that
+  // field — this function doesn't need to change again once it does.
   if (entry.team && typeof entry.games_meeting === 'number') {
     const windowSuffix =
       typeof entry.window_games === 'number' ? `L${entry.window_games}` : 'season'
     const tag = `{${entry.threshold ?? ''}${statLabel} ${entry.games_meeting}G ${windowSuffix}}`
-    return `${entry.team} ${entry.player ?? ''} ${tag}`.trim()
+    return `${entry.team} ${playerLabel} ${tag}`.trim()
   }
 
-  // Legacy per-player rolling entries
+  // Legacy per-player rolling entries. Also the current fallback path for
+  // NFL leaderboard entries (see above) — includes team when present so
+  // those don't lose it entirely just because games_meeting isn't there yet.
   const windowPart = entry.window ? ` last${entry.window}` : ''
-  const header = `{${statLabel}${entry.threshold ?? ''}${windowPart}}`
+  // Value-then-unit ("300yds", not "yds300") to match the leaderboard-style
+  // branch above and every other stat display in this app.
+  const header = `{${entry.threshold ?? ''}${statLabel}${windowPart}}`
   const dates = entry.hit_dates ?? []
   const values = entry.values ?? []
   const pairs = dates.map((date, i) => {
@@ -265,7 +286,8 @@ function formatTickerEntry(entry: HitlistEntry): string {
     return `"${date}" {${value ?? ''}}`
   })
 
-  return `${entry.player ?? ''} ${header} ${pairs.join(', ')}`.trim()
+  const teamPrefix = entry.team ? `${entry.team} ` : ''
+  return `${teamPrefix}${playerLabel} ${header} ${pairs.join(', ')}`.trim()
 }
 
 interface LeaderboardRow {
@@ -1882,9 +1904,17 @@ function App() {
   // looksLikePlayerSearch above) — {database} has no static nav entry point,
   // this is the only way to reach a player's page short of a direct URL.
   const [playerSearchActiveIndex, setPlayerSearchActiveIndex] = useState(0)
+  // PLAYER_INDEX now loads from a live fetch (GET /database/index) instead
+  // of a build-time glob, so it's empty on first render — bump this once
+  // loadPlayerIndex() resolves so playerMatches recomputes even if the user
+  // already finished typing before the fetch came back.
+  const [isPlayerIndexReady, setIsPlayerIndexReady] = useState(false)
+  useEffect(() => {
+    loadPlayerIndex().then(() => setIsPlayerIndexReady(true))
+  }, [])
   const playerMatches = useMemo(
     () => (looksLikePlayerSearch(searchValue) ? searchPlayers(searchValue, 8) : []),
-    [searchValue],
+    [searchValue, isPlayerIndexReady],
   )
   const searchInputRef = useRef<HTMLInputElement>(null)
   const sampleMenuRef = useRef<HTMLDivElement>(null)
