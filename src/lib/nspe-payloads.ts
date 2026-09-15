@@ -947,6 +947,17 @@ export const STAT_FIELDS: Record<string, Record<string, string | string[]>> = {
     // array-sum is a fallback that in practice is never exercised.
     'pass+rush': ['pass_yds', 'rush_yds'],
     'rush+rec': ['rush_yds', 'rec_yds'],
+    // "any" = anytime-TD (rush_td + rec_td combined). Unlike the yds combo
+    // stats above, the backend doesn't echo a matching query.short/query.stat
+    // string for this one (confirmed: `any -td2` came back as a plain query
+    // string, not the object form with a `short` field) — detectStatContext
+    // only finds it via the token-scan fallback matching the literal "any"
+    // token, so this alias has to exist for that scan to have anything to
+    // match. Backend precomputes the combined count directly on each match
+    // as `_combo_td` — computeMatchValue's match.val fast path doesn't apply
+    // here (no `val` field on these match objects), so this field name is
+    // actually load-bearing, not a fallback that's never exercised.
+    any: '_combo_td',
   },
   cfb: {
     pass: 'pass_yds',

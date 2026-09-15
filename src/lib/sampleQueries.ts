@@ -104,5 +104,26 @@ export function buildSampleQueries(): SampleQuery[] {
     })
   }
 
-  return out
+  // -ov (single-player explosive-play overview, the new bar-chart engine) —
+  // confirmed working command shape from the conversation that shipped it.
+  // Not derived from curatedDefaults.ts like everything else above since -ov
+  // takes a player name, not a stat/threshold — nothing to curate per sport,
+  // just the one example.
+  out.push({ label: 'nfl explosive · overview (-ov)', command: 'nspe nfl long lamar jackson -ov' })
+
+  return promoteMoatCommands(out)
+}
+
+// -ov, -long, q1/1h scope, etc. are the differentiated commands meant to be
+// the product's moat — surfaced first so they show up inside the predictive
+// dropdown's capped result count even on a broad/early query like the bare
+// "nspe" prefix, rather than being crowded out by however many plain trend
+// entries happen to exist. Reorders, doesn't filter — nothing is hidden, a
+// specific enough query (e.g. "mlb -hits") still finds the traditional
+// commands via prefix match regardless of this ordering.
+function promoteMoatCommands(queries: SampleQuery[]): SampleQuery[] {
+  const isMoat = (q: SampleQuery) => /-ov\b|\blong\b|\b1h\b|\bq1\b/i.test(q.command)
+  const moat = queries.filter(isMoat)
+  const rest = queries.filter((q) => !isMoat(q))
+  return [...moat, ...rest]
 }

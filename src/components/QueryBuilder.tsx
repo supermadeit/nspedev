@@ -21,7 +21,6 @@ export type ThresholdMode = 'min' | 'range' | 'exact'
 interface PersistedBuilderState {
   mode: QueryMode
   sport: string
-  seasonType: SeasonType
   period: PeriodType
   yearFilter: string
   stat: string
@@ -212,12 +211,19 @@ export function computeThresholdPresetsFor(sport: string, stat: string): number[
   return thresholdPresetsFor(sport, stat).map((n) => n * COMPUTE_SCALE)
 }
 
-// YYYY filter: NFL/NBA only for now, fixed 2005–2025 until the new seasons
-// actually kick off/tip off — bump the end year by hand at that point rather
-// than deriving it from the current date, since season-start timing doesn't
-// map cleanly to a calendar cutoff.
-export const YEAR_OPTIONS: number[] = []
-for (let y = 2025; y >= 2005; y -= 1) YEAR_OPTIONS.push(y)
+// Season year selector — replaces the old postseason toggle entirely.
+// Visible as individual {YY} pills for the most recent 7 years (styled like
+// H2H's opponent-team buttons — see MLB_TEAMS above), plus an {older}
+// dropdown for 2010–2019. Bump both ranges by hand as seasons roll over
+// rather than deriving from the current date, same reasoning YEAR_OPTIONS
+// used to have — season-start timing doesn't map cleanly to a calendar
+// cutoff. Pre-2010 seasons (career-spanning players like LeBron/Rodgers go
+// back to 2005) aren't reachable from this picker yet — a manual YYYY input
+// is the planned follow-up for that, not built here.
+export const SEASON_YEARS_VISIBLE: number[] = []
+for (let y = 2026; y >= 2020; y -= 1) SEASON_YEARS_VISIBLE.push(y)
+export const SEASON_YEARS_OLDER: number[] = []
+for (let y = 2019; y >= 2010; y -= 1) SEASON_YEARS_OLDER.push(y)
 
 export const C = {
   accent: 'oklch(0.85 0.15 195)',
@@ -384,9 +390,12 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
 
   const [mode, setMode] = useState<QueryMode>(initial.mode ?? 'trend')
   const [sport, setSport] = useState(initial.sport ?? '')
-  const [seasonType, setSeasonType] = useState<SeasonType>(initial.seasonType ?? '')
   const [period, setPeriod] = useState<PeriodType>(initial.period ?? '')
-  // Explicit season year (NFL/NBA only for now) — blank means current season.
+  // Explicit season year, any sport — blank means current season. Replaces
+  // the old postseason toggle entirely (see SEASON_YEARS_VISIBLE/_OLDER):
+  // picking a specific past year already covers what "post" used to mean
+  // for most queries, and a manual YYYY input for pre-2010 seasons (Lebron/
+  // Rodgers-era players) is a known follow-up, not built yet.
   const [yearFilter, setYearFilter] = useState(initial.yearFilter ?? '')
   const [stat, setStat] = useState(initial.stat ?? '')
   // trend
@@ -424,7 +433,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
   useEffect(() => {
     if (typeof window === 'undefined') return
     const payload: PersistedBuilderState = {
-      mode, sport, seasonType, period, yearFilter, stat,
+      mode, sport, period, yearFilter, stat,
       thresholdN, lastA, lastB,
       minN, maxN, thresholdMode, computeWindow, windowN,
       streakN,
@@ -439,7 +448,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     } catch {
       // ignore quota / unavailable storage
     }
-  }, [storageKey, mode, sport, seasonType, period, yearFilter, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, nflStatType, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds])
+  }, [storageKey, mode, sport, period, yearFilter, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, nflStatType, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds])
 
   const isNbaHalfPeriod = sport === 'nba' && period === '1h'
   const allStats = SPORT_STATS[sport] ?? []
@@ -551,7 +560,6 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     const parts: string[] = ['nspe', sport]
 
     if (sport === 'mlb' && batPosition) parts.push(batPosition)
-    if (seasonType) parts.push(seasonType)
     if (period === 'q1') {
       if (sport === 'nhl') parts.push('p1')
       else if (sport !== 'mlb') parts.push('q1')
@@ -603,13 +611,14 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       if (streakN) parts.push(`-streak${streakN}`)
     }
 
-    // Explicit season year — NFL/NBA only for now, appended as a trailing
-    // bare token (matches the backend's `... -first3/5 2020` form). Blank
-    // means "current season," the backend's own default.
-    if (yearFilter && (sport === 'nfl' || sport === 'nba')) parts.push(yearFilter)
+    // Explicit season year — replaces the old postseason toggle, any sport,
+    // appended as a trailing bare token (matches the backend's
+    // `... -first3/5 2020` form / the documented -YYYY shared token, dash
+    // optional). Blank means "current season," the backend's own default.
+    if (yearFilter) parts.push(yearFilter)
 
     return parts.join(' ')
-  }, [mode, sport, seasonType, period, yearFilter, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds, nflStatType])
+  }, [mode, sport, period, yearFilter, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds, nflStatType])
 
   const canRun = Boolean(builtCommand) && !isLoading
 
@@ -1074,29 +1083,58 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
 
       {/* Season / Period */}
       {isBuilderQuery && !firstPaActive && (
-      <div className="flex gap-6 mb-3">
+      <div className="flex gap-6 mb-3 flex-wrap">
         <div>
-          <SLabel>season</SLabel>
-          <div className="flex gap-1.5">
-            <Pill
-              selected={seasonType === 'post'}
-              onClick={() => setSeasonType((p) => (p === 'post' ? '' : 'post'))}
+          <SLabel>season {'{optional}'}</SLabel>
+          {/* Replaces the old postseason toggle — pick a specific year
+              instead. Styled like H2H's opponent-team pills (MLB_TEAMS
+              above): small buttons in a wrapping row. {YY} not {YYYY} to
+              keep the row compact; the {older} dropdown covers 2010-2019.
+              Pre-2010 (career-spanning players) isn't reachable here yet —
+              planned manual-YYYY-input follow-up, not built. */}
+          <div className="flex gap-1.5 flex-wrap items-center">
+            {SEASON_YEARS_VISIBLE.map((y) => (
+              <Pill
+                key={y}
+                selected={yearFilter === String(y)}
+                onClick={() => setYearFilter((p) => (p === String(y) ? '' : String(y)))}
+              >
+                {String(y).slice(2)}
+              </Pill>
+            ))}
+            <select
+              value={SEASON_YEARS_OLDER.includes(Number(yearFilter)) ? yearFilter : ''}
+              onChange={(e) => setYearFilter(e.target.value)}
+              className={selectClass}
+              style={{ ...selectStyle, width: '84px' }}
             >
-              post
-            </Pill>
+              <option value="">{'{older}'}</option>
+              {SEASON_YEARS_OLDER.map((y) => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
+        {/* MLB/NFL dropped entirely — both only ever had a single always-
+            selected "reg"/"full" pill with nothing else to toggle to, which
+            read as a dead control now that "post" (its one real alternative)
+            is gone. Only render this column for sports with a genuine
+            second option (NHL's p1, NBA's q1/1h). Postseason returns later
+            as its own thing once MLB's October postseason starts — for now
+            every command defaults to regular season same as before, just
+            without a pointless button implying there's a choice to make. */}
+        {(sport === 'nba' || sport === 'nhl') && (
         <div>
-          <SLabel>{sport === 'mlb' ? 'season' : 'period'}</SLabel>
+          <SLabel>period</SLabel>
           <div className="flex gap-1.5 flex-wrap">
             <Pill selected={period === ''} onClick={() => handlePeriodSelect('')}>
-              {sport === 'mlb' ? 'reg' : 'full'}
+              full
             </Pill>
-            {sport !== 'mlb' && sport !== 'nfl' && (
-              <Pill selected={period === 'q1'} onClick={() => handlePeriodSelect('q1')}>
-                {sport === 'nhl' ? 'p1' : 'q1'}
-              </Pill>
-            )}
+            <Pill selected={period === 'q1'} onClick={() => handlePeriodSelect('q1')}>
+              {sport === 'nhl' ? 'p1' : 'q1'}
+            </Pill>
             {sport === 'nba' && (
               <Pill selected={period === '1h'} onClick={() => handlePeriodSelect('1h')}>
                 1h
@@ -1104,23 +1142,6 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
             )}
           </div>
         </div>
-        {(sport === 'nfl' || sport === 'nba') && (
-          <div>
-            <SLabel>year {'{optional}'}</SLabel>
-            <select
-              value={yearFilter}
-              onChange={(e) => setYearFilter(e.target.value)}
-              className={selectClass}
-              style={{ ...selectStyle, width: '84px' }}
-            >
-              <option value="">current</option>
-              {YEAR_OPTIONS.map((y) => (
-                <option key={y} value={y}>
-                  {y}
-                </option>
-              ))}
-            </select>
-          </div>
         )}
       </div>
       )}

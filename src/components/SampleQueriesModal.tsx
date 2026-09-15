@@ -34,20 +34,24 @@ function SampleQueryRow({ query }: { query: SampleQuery }) {
     <button
       type="button"
       onClick={() => copy(query.command)}
-      className="w-full text-left rounded px-3 py-2 flex items-center justify-between gap-3 hover:opacity-90 transition-opacity"
+      className="w-full text-left rounded px-3 py-2 hover:opacity-90 transition-opacity"
       style={{ backgroundColor: C.surface2, border: `1px solid ${copied ? C.green : C.border}` }}
     >
-      <div className="min-w-0">
-        <div className="font-mono text-[9px] uppercase tracking-widest mb-1" style={{ color: C.textDim }}>
+      {/* {copy}/{copied} lives on the label row, not next to the command
+          itself — freeing the full row width for the command text, which is
+          what was truncating on narrower viewports. Still far-right, just a
+          line up. */}
+      <div className="flex items-center justify-between gap-3 mb-1">
+        <span className="font-mono text-[9px] uppercase tracking-widest" style={{ color: C.textDim }}>
           {query.label}
-        </div>
-        <div className="font-mono text-[13px] truncate" style={{ color: C.accent }}>
-          {query.command}
-        </div>
+        </span>
+        <span className="font-mono text-[11px] flex-none" style={{ color: copied ? C.green : C.textDim }}>
+          {copied ? '{copied}' : '{copy}'}
+        </span>
       </div>
-      <span className="font-mono text-[11px] flex-none" style={{ color: copied ? C.green : C.textDim }}>
-        {copied ? '{copied}' : '{copy}'}
-      </span>
+      <div className="font-mono text-[13px] whitespace-nowrap" style={{ color: C.accent }}>
+        {query.command}
+      </div>
     </button>
   )
 }
@@ -65,7 +69,7 @@ export function SampleQueriesModal({ open, onClose }: SampleQueriesModalProps) {
       aria-modal="true"
     >
       <div
-        className="w-full max-w-[600px] max-h-[80vh] rounded-lg overflow-hidden shadow-2xl flex flex-col"
+        className="w-full max-w-[720px] max-h-[80vh] rounded-lg overflow-hidden shadow-2xl flex flex-col"
         style={{ backgroundColor: C.surface, border: `1px solid ${C.border}`, fontFamily: 'monospace' }}
         onClick={(e) => e.stopPropagation()}
       >

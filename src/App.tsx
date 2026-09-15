@@ -1952,10 +1952,13 @@ const SEARCH_GLOW = '0 0 8px 1px oklch(0.90 0.18 195 / 0.55), 0 0 20px 4px oklch
 
 // Every command family in nspecommand_map.json (the CLI's own dispatch
 // catalog) opens with one of these tokens — a league name, 'ncaaf' (a pure
-// input alias for 'cfb'), the 'plus' batch-runner meta-command, or 'help'.
-// Anything else with no hyphen and no leading token from this list is
-// treated as a player-name search instead of a malformed command.
-const NSPE_COMMAND_TOKENS = ['mlb', 'nfl', 'nba', 'nhl', 'cfb', 'ncaaf', 'plus', 'help']
+// input alias for 'cfb'), the 'plus' batch-runner meta-command, 'help', or
+// the literal CLI program name 'nspe' itself (so predictive syntax starts
+// the moment someone types "nspe", before they've even picked a sport, per
+// the explicit request not to wait for "nspe <sport>"). Anything else with
+// no hyphen and no leading token from this list is treated as a player-name
+// search instead of a malformed command.
+const NSPE_COMMAND_TOKENS = ['nspe', 'mlb', 'nfl', 'nba', 'nhl', 'cfb', 'ncaaf', 'plus', 'help']
 function looksLikePlayerSearch(value: string): boolean {
   const trimmed = value.trim().toLowerCase()
   if (!trimmed || trimmed.includes('-')) return false
@@ -1999,7 +2002,7 @@ function App() {
   const [lastQuery, setLastQuery] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [queryError, setQueryError] = useState<string | null>(null)
-  const [collapsedPlayers, setCollapsedPlayers] = useState<Record<string, boolean>>({})
+  const [expandedPlayers, setExpandedPlayers] = useState<Record<string, boolean>>({})
   const [hitlistEntries, setHitlistEntries] = useState<HitlistEntry[]>(hitlistData as HitlistEntry[])
   const [isBuilderOpen, setIsBuilderOpen] = useState(false)
   const [builderPosition, setBuilderPosition] = useState({
@@ -2041,9 +2044,18 @@ function App() {
   // or the other, never both. Selecting one fills the input for editing, it
   // never runs/navigates on its own.
   const [syntaxActiveIndex, setSyntaxActiveIndex] = useState(0)
+  // Selecting a suggestion fills the input with that exact command, which
+  // would otherwise still self-match on the very next render (the dropdown
+  // never actually closes, blocking the search button underneath it on
+  // mobile). This suppresses matching right after a selection; any real
+  // keystroke afterward (the input's onChange) clears it again.
+  const [suppressSyntaxDropdown, setSuppressSyntaxDropdown] = useState(false)
   const syntaxMatches = useMemo(
-    () => (searchValue.trim() && !looksLikePlayerSearch(searchValue) ? searchSyntax(searchValue, 8) : []),
-    [searchValue],
+    () =>
+      searchValue.trim() && !looksLikePlayerSearch(searchValue) && !suppressSyntaxDropdown
+        ? searchSyntax(searchValue, 8)
+        : [],
+    [searchValue, suppressSyntaxDropdown],
   )
   const searchInputRef = useRef<HTMLInputElement>(null)
   const sampleMenuRef = useRef<HTMLDivElement>(null)
@@ -2088,7 +2100,7 @@ function App() {
     setIsLoading(true)
     setLastQuery(sanitizedQuery || query.trim())
     setQueryError(null)
-    setCollapsedPlayers({})
+    setExpandedPlayers({})
     setIsH2hStaffOpen(false)
     setH2hResult(null)
     setPitchResult(null)
@@ -2412,6 +2424,7 @@ function App() {
   const selectSyntaxSuggestion = (command: string) => {
     setSearchValue(command)
     setSyntaxActiveIndex(0)
+    setSuppressSyntaxDropdown(true)
     searchInputRef.current?.focus()
   }
 
@@ -2493,8 +2506,8 @@ function App() {
     })
   }
 
-  const togglePlayerCollapsed = (player: string) => {
-    setCollapsedPlayers((prev) => ({
+  const togglePlayerExpanded = (player: string) => {
+    setExpandedPlayers((prev) => ({
       ...prev,
       [player]: !prev[player],
     }))
@@ -2892,11 +2905,24 @@ function App() {
                 // to drill into beyond what the badge already shows.
                 const isSingleDayWindow = isTrendRow && result.windowSize === 1 && result.matchDetails?.length === 1
                 const canExpand = !isSingleDayWindow && (hasStreakDetails || hasMatchDetails)
-                const isExpanded = canExpand ? !collapsedPlayers[result.player] : false
+                // Collapsed by default — only expands once a user explicitly
+                // asks for the full per-game breakdown, rather than jumbling
+                // every qualifying game into the row up front. Backend match
+                // arrays are chronological ascending in every shape seen so
+                // far (h2h, HR trend, first-PA), so the last element is the
+                // most recent game.
+                const isExpanded = canExpand ? Boolean(expandedPlayers[result.player]) : false
+                const latestMatch = hasMatchDetails ? result.matchDetails![result.matchDetails!.length - 1] : null
                 const resultBadge = isSingleDayWindow
                   ? `${result.matchDetails![0].value}${result.matchDetails![0].statLabel} ${result.matchDetails![0].date}`
+                  : isTrendRow && latestMatch
+                  ? `${latestMatch.value}${latestMatch.statLabel} ${latestMatch.date}`
                   : isTrendRow
-                  ? `met=${result.total}`
+                  ? // Per-match values didn't parse (e.g. -rr/-pr/-any combo
+                    // stats — see the conversation this was flagged in), so
+                    // there's no latest-match value/date to show. met=N stays
+                    // the safe fallback rather than fabricating a unit.
+                    `met=${result.total}`
                   : queryResultsStatLabel
                   ? `${result.total}${queryResultsStatLabel}`
                   : result.total
@@ -2920,7 +2946,7 @@ function App() {
                       {canExpand ? (
                         <button
                           type="button"
-                          onClick={() => togglePlayerCollapsed(result.player)}
+                          onClick={() => togglePlayerExpanded(result.player)}
                           className="font-mono font-bold text-[13px] ml-4 shrink-0 px-2 py-0.5 rounded border"
                           style={{
                             backgroundColor: isExpanded ? 'oklch(0.27 0.03 145)' : 'oklch(0.22 0 0)',
@@ -2959,7 +2985,9 @@ function App() {
 
                     {isExpanded && hasMatchDetails && result.matchDetails && (
                       <div className="mt-2 pl-2 font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
-                        <span style={{ color: 'oklch(0.55 0 0)' }}>match: </span>
+                        {isTrendRow && (
+                          <span style={{ color: 'oklch(0.55 0 0)' }}>met={result.total} — </span>
+                        )}
                         {result.matchDetails
                           .map((m) => `${m.value}${m.statLabel} ${m.date}`)
                           .join(', ')}
@@ -2992,6 +3020,7 @@ function App() {
                     setSearchValue(e.target.value)
                     setPlayerSearchActiveIndex(0)
                     setSyntaxActiveIndex(0)
+                    setSuppressSyntaxDropdown(false)
                   }}
                   onKeyDown={handleSearchSubmit}
                   className="w-full h-[52px] px-5 py-3 bg-card text-foreground font-mono text-[16px] rounded-lg border border-border outline-none focus:border-primary transition-colors duration-200"
@@ -3071,6 +3100,7 @@ function App() {
                     setSearchValue(e.target.value)
                     setPlayerSearchActiveIndex(0)
                     setSyntaxActiveIndex(0)
+                    setSuppressSyntaxDropdown(false)
                   }}
                   onKeyDown={handleSearchSubmit}
                   className="w-full h-[52px] px-5 py-3 bg-card text-foreground font-mono text-[16px] rounded-lg border border-border outline-none focus:border-primary transition-colors duration-200"
@@ -3129,13 +3159,15 @@ function App() {
             </div>
           )}
 
-          {isMobile && (
-            <div className="mt-6 text-center">
-              <p className="font-mono text-[14px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
-                build your own query
-              </p>
-            </div>
-          )}
+          {/* Shown on both platforms now — was mobile-only "build your own
+              query" before; replaced with a direct nudge toward the CLI
+              itself now that it doubles as player search + predictive
+              syntax on both platforms. */}
+          <div className="mt-6 text-center">
+            <p className="font-mono text-[14px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+              type: nspe
+            </p>
+          </div>
         </div>
       </div>
 
