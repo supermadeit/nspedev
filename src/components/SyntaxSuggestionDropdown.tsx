@@ -39,7 +39,7 @@ export function SyntaxSuggestionDropdown({ matches, activeIndex = -1, onSelect, 
 
   return (
     <div
-      className="flex flex-col rounded-lg border overflow-hidden"
+      className="flex flex-col rounded-lg border overflow-y-auto max-h-[45vh]"
       style={{ backgroundColor: C.surface2, borderColor: C.border }}
       role="listbox"
     >
@@ -50,7 +50,7 @@ export function SyntaxSuggestionDropdown({ matches, activeIndex = -1, onSelect, 
           role="option"
           aria-selected={i === activeIndex}
           onMouseEnter={() => onHoverIndex?.(i)}
-          onClick={() => onSelect(m.query.command)}
+          onClick={() => onSelect(m.displayCommand)}
           className="flex flex-col gap-0.5 px-3 py-2 text-left font-mono transition-colors"
           style={{
             backgroundColor: i === activeIndex ? GREEN_DARK : 'transparent',
@@ -61,7 +61,7 @@ export function SyntaxSuggestionDropdown({ matches, activeIndex = -1, onSelect, 
             {m.query.label}
           </span>
           <span className="text-[13px] truncate" style={{ color: C.textBright }}>
-            <HighlightedCommand command={m.query.command} prefix={m.matchedPrefix} />
+            <HighlightedCommand command={m.displayCommand} prefix={m.matchedPrefix} />
           </span>
         </button>
       ))}

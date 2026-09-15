@@ -73,18 +73,17 @@ export function buildSampleQueries(): SampleQuery[] {
     }
   }
 
-  // NFL compute, pinned to -first1 (season just started — anchors to the
-  // one game actually played so far instead of a -lastN/-season window that
-  // doesn't have enough games behind it yet). Kept separate from
-  // CURATED_COMPUTE_DEFAULTS/windowSuffix() above rather than adding '-first'
-  // as a third window kind there: that table's `window` value flows straight
-  // into the mobile calculator's setComputeWindow(), whose ComputeWindow
-  // type (QueryBuilder.tsx) has no '-first' option and no UI button for it —
-  // this stays scoped to sample/predictive-syntax text only, not a builder
-  // capability. Revisit once NFL has enough games for a real window again.
+  // NFL compute, pinned to -last1 (season just started — a wider -lastN or
+  // -season window doesn't have enough games behind it yet, and -last1
+  // keeps auto-tracking the most recent game as the season progresses,
+  // unlike a -first1 pin which would stay stuck on week 1 forever). Kept as
+  // manual entries rather than folded into CURATED_COMPUTE_DEFAULTS/
+  // windowSuffix() above since NFL's compute shape (bare category word +
+  // "-yds" flag) differs from that loop's "-stat" flag shape. Revisit the
+  // window size once NFL has enough games for a wider one to make sense.
   out.push(
-    { label: 'nfl compute · pass_yds', command: 'nspe nfl pass -yds min300 -first1' },
-    { label: 'nfl compute · rush_yds', command: 'nspe nfl rush -yds min100 -first1' },
+    { label: 'nfl compute · pass_yds', command: 'nspe nfl pass -yds min300 -last1' },
+    { label: 'nfl compute · rush_yds', command: 'nspe nfl rush -yds min100 -last1' },
   )
 
   for (const [league, plays] of Object.entries(CURATED_EXPLOSIVE_TREND_DEFAULTS)) {

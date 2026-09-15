@@ -361,6 +361,70 @@ function parseExplosiveThreshold(query: string | string[]): number | null {
   return m ? parseInt(m[1], 10) : null
 }
 
+// Shared collapsed-row badge for every trend-shaped view (generic results
+// panel, NFL explosive, MLB HR/first-PA/team-runs) — a small lowercase
+// "met=N · latest" header (same monospace/cyan family as the TEAM acronym
+// beside it, but dim and tiny so it doesn't compete with the value line)
+// stacked over the actual {value/stat/date} for the most recent qualifying
+// game. Uniform across sports/engines per the explicit ask that trend rows
+// read the same way everywhere. `ml-auto` (not `justify-between` on the row)
+// is what lets this badge drop to its own line on narrow/mobile widths while
+// staying right-aligned — flex auto-margins resolve per wrapped line, so it
+// works whether it shares a line with the name or not.
+function TrendBadge({
+  header,
+  value,
+  expanded,
+  onToggle,
+  accent = 'oklch(0.85 0.15 145)',
+  ariaLabel,
+}: {
+  header?: string | null
+  value: string
+  expanded?: boolean
+  onToggle?: () => void
+  accent?: string
+  ariaLabel?: string
+}) {
+  const inner = (
+    <span className="flex flex-col items-end gap-0.5 leading-none">
+      {header && (
+        <span className="text-[9px] lowercase tracking-wide" style={{ color: 'oklch(0.55 0.07 195)' }}>
+          {header}
+        </span>
+      )}
+      <span className="font-bold text-[13px]" style={{ color: accent }}>
+        {value}
+      </span>
+    </span>
+  )
+  const className = `font-mono ml-auto shrink-0 px-2 py-1 rounded${onToggle ? ' border' : ''}`
+  const style = {
+    backgroundColor: expanded ? 'oklch(0.27 0.03 145)' : 'oklch(0.22 0 0)',
+    borderColor: onToggle ? 'oklch(0.35 0 0)' : undefined,
+    cursor: onToggle ? 'pointer' : undefined,
+  }
+  if (!onToggle) {
+    return (
+      <span className={className} style={style}>
+        {inner}
+      </span>
+    )
+  }
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      className={className}
+      style={style}
+      aria-expanded={expanded}
+      aria-label={ariaLabel}
+    >
+      {inner}
+    </button>
+  )
+}
+
 function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
   const [expanded, setExpanded] = useState<Set<number>>(new Set())
   const results = payload.results
@@ -431,10 +495,16 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
       {results.map((r, i) => {
         const isOpen = expanded.has(i)
         const matchList = r.matches ?? []
+        const metCount = r.met_count ?? r.met ?? matchList.length
+        const latest = matchList.length > 0 ? matchList[matchList.length - 1] : null
+        const latestYds = latest ? (Array.isArray(latest.yards_list) ? latest.yards_list.join(', ') : latest.yards) : null
+        const latestValue = latest
+          ? `${latestYds}yds ${extractDateToken(latest.date_iso ?? latest.date) ?? (latest.date_iso ?? latest.date)}`
+          : null
         return (
           <div key={i} className="py-2 border-b" style={{ borderColor: 'oklch(0.22 0 0)' }}>
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+            <div className="flex flex-wrap items-start gap-x-3 gap-y-1">
+              <span className="font-mono text-[13px] min-w-0" style={{ color: 'oklch(0.90 0.18 195)' }}>
                 {r.team && r.team !== 'UNK' && (
                   <>
                     <span style={{ color: 'oklch(0.70 0.10 195)' }}>{r.team}</span>
@@ -443,19 +513,12 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
                 )}
                 {normalizeDisplayPlayer(r.player)}
               </span>
-              <button
-                type="button"
-                onClick={() => toggle(i)}
-                className="font-mono font-bold text-[13px] ml-4 shrink-0 px-2 py-0.5 rounded border"
-                style={{
-                  backgroundColor: isOpen ? 'oklch(0.27 0.03 145)' : 'oklch(0.22 0 0)',
-                  color: 'oklch(0.85 0.15 145)',
-                  borderColor: 'oklch(0.35 0 0)',
-                  cursor: 'pointer',
-                }}
-              >
-                met={r.met_count ?? r.met ?? matchList.length}
-              </button>
+              <TrendBadge
+                header={latestValue ? `met=${metCount} · latest` : null}
+                value={latestValue ?? `met=${metCount}`}
+                expanded={isOpen}
+                onToggle={() => toggle(i)}
+              />
             </div>
             {isOpen && (
               <div className="mt-2 space-y-1 pl-2">
@@ -691,10 +754,13 @@ function MlbHrView({ payload }: { payload: MlbHrPayload }) {
       {results.map((r, i) => {
         const isOpen = expanded.has(i)
         const matchList = r.matches ?? []
+        const metCount = r.met_count ?? matchList.length
+        const latest = matchList.length > 0 ? matchList[matchList.length - 1] : null
+        const latestValue = latest ? `${latest.distance_feet}ft ${extractDateToken(latest.date) ?? latest.date}` : null
         return (
           <div key={i} className="py-2 border-b" style={{ borderColor: PITCH_BORDER }}>
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-[13px]" style={{ color: PITCH_ACCENT }}>
+            <div className="flex flex-wrap items-start gap-x-3 gap-y-1">
+              <span className="font-mono text-[13px] min-w-0" style={{ color: PITCH_ACCENT }}>
                 {r.team && (
                   <>
                     <span style={{ color: 'oklch(0.70 0.10 195)' }}>{r.team}</span>
@@ -703,19 +769,13 @@ function MlbHrView({ payload }: { payload: MlbHrPayload }) {
                 )}
                 {normalizeDisplayPlayer(r.player)}
               </span>
-              <button
-                type="button"
-                onClick={() => toggle(i)}
-                className="font-mono font-bold text-[13px] ml-4 shrink-0 px-2 py-0.5 rounded border"
-                style={{
-                  backgroundColor: isOpen ? 'oklch(0.27 0.03 145)' : 'oklch(0.22 0 0)',
-                  color: PITCH_GREEN,
-                  borderColor: 'oklch(0.35 0 0)',
-                  cursor: 'pointer',
-                }}
-              >
-                met={r.met_count ?? matchList.length}
-              </button>
+              <TrendBadge
+                header={latestValue ? `met=${metCount} · latest` : null}
+                value={latestValue ?? `met=${metCount}`}
+                expanded={isOpen}
+                onToggle={() => toggle(i)}
+                accent={PITCH_GREEN}
+              />
             </div>
             {isOpen && (
               <div className="mt-2 space-y-1.5 pl-2">
@@ -764,10 +824,15 @@ function MlbFirstPaTrendView({ payload }: { payload: MlbFirstPaTrendPayload }) {
       {results.map((r, i) => {
         const isOpen = expanded.has(i)
         const matchList = r.matches ?? []
+        const metCount = r.met_count ?? matchList.length
+        const latest = matchList.length > 0 ? matchList[matchList.length - 1] : null
+        const latestValue = latest
+          ? `${latest.result}${latest.distance_feet != null ? ` (${latest.distance_feet}ft)` : ''} ${extractDateToken(latest.date) ?? latest.date}`
+          : null
         return (
           <div key={i} className="py-2 border-b" style={{ borderColor: PITCH_BORDER }}>
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-[13px]" style={{ color: PITCH_ACCENT }}>
+            <div className="flex flex-wrap items-start gap-x-3 gap-y-1">
+              <span className="font-mono text-[13px] min-w-0" style={{ color: PITCH_ACCENT }}>
                 {r.team && (
                   <>
                     <span style={{ color: 'oklch(0.70 0.10 195)' }}>{r.team}</span>
@@ -776,19 +841,13 @@ function MlbFirstPaTrendView({ payload }: { payload: MlbFirstPaTrendPayload }) {
                 )}
                 {normalizeDisplayPlayer(r.player)}
               </span>
-              <button
-                type="button"
-                onClick={() => toggle(i)}
-                className="font-mono font-bold text-[13px] ml-4 shrink-0 px-2 py-0.5 rounded border"
-                style={{
-                  backgroundColor: isOpen ? 'oklch(0.27 0.03 145)' : 'oklch(0.22 0 0)',
-                  color: PITCH_GREEN,
-                  borderColor: 'oklch(0.35 0 0)',
-                  cursor: 'pointer',
-                }}
-              >
-                met={r.met_count ?? matchList.length}
-              </button>
+              <TrendBadge
+                header={latestValue ? `met=${metCount} · latest` : null}
+                value={latestValue ?? `met=${metCount}`}
+                expanded={isOpen}
+                onToggle={() => toggle(i)}
+                accent={PITCH_GREEN}
+              />
             </div>
             {isOpen && (
               <div className="mt-2 space-y-1.5 pl-2">
@@ -876,23 +935,22 @@ function MlbTeamRunsView({ payload }: { payload: MlbTeamRunsPayload }) {
       {results.map((r, i) => {
         const isOpen = expanded.has(i)
         const matchList = r.matches ?? []
+        const metCount = r.met_count ?? matchList.length
+        const latest = matchList.length > 0 ? matchList[matchList.length - 1] : null
+        const latestValue = latest
+          ? `${latest.runs_for}-${latest.runs_allowed} ${extractDateToken(latest.date_iso) ?? latest.date_iso}`
+          : null
         return (
           <div key={i} className="py-2 border-b" style={{ borderColor: PITCH_BORDER }}>
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-[13px]" style={{ color: 'oklch(0.70 0.10 195)' }}>{r.team}</span>
-              <button
-                type="button"
-                onClick={() => toggle(i)}
-                className="font-mono font-bold text-[13px] ml-4 shrink-0 px-2 py-0.5 rounded border"
-                style={{
-                  backgroundColor: isOpen ? 'oklch(0.27 0.03 145)' : 'oklch(0.22 0 0)',
-                  color: PITCH_GREEN,
-                  borderColor: 'oklch(0.35 0 0)',
-                  cursor: 'pointer',
-                }}
-              >
-                met={r.met_count ?? matchList.length}
-              </button>
+            <div className="flex flex-wrap items-start gap-x-3 gap-y-1">
+              <span className="font-mono text-[13px] min-w-0" style={{ color: 'oklch(0.70 0.10 195)' }}>{r.team}</span>
+              <TrendBadge
+                header={latestValue ? `met=${metCount} · latest` : null}
+                value={latestValue ?? `met=${metCount}`}
+                expanded={isOpen}
+                onToggle={() => toggle(i)}
+                accent={PITCH_GREEN}
+              />
             </div>
             {isOpen && (
               <div className="mt-2 space-y-1 pl-2">
@@ -2465,7 +2523,7 @@ function App() {
       if (e.key === 'Enter') {
         e.preventDefault()
         const match = syntaxMatches[syntaxActiveIndex] ?? syntaxMatches[0]
-        selectSyntaxSuggestion(match.query.command)
+        selectSyntaxSuggestion(match.displayCommand)
         return
       }
       if (e.key === 'Escape') {
@@ -2926,6 +2984,16 @@ function App() {
                   : queryResultsStatLabel
                   ? `${result.total}${queryResultsStatLabel}`
                   : result.total
+                // A tiny lowercase header sits above the badge so "the number
+                // on the right" is never ambiguous between a met-count and an
+                // actual stat value — only shown when the badge itself is a
+                // value/date (met=N alone, or a bare compute total, already
+                // reads fine standalone).
+                const resultBadgeHeader = isSingleDayWindow
+                  ? 'latest'
+                  : isTrendRow && latestMatch
+                  ? `met=${result.total} · latest`
+                  : null
 
                 return (
                   <div
@@ -2933,8 +3001,8 @@ function App() {
                     className="py-2 border-b"
                     style={{ borderColor: 'oklch(0.22 0 0)' }}
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+                    <div className="flex flex-wrap items-start gap-x-3 gap-y-1">
+                      <span className="font-mono text-[13px] min-w-0" style={{ color: 'oklch(0.90 0.18 195)' }}>
                         {result.team ? (
                           <>
                             <span style={{ color: 'oklch(0.70 0.10 195)' }}>{result.team}</span>
@@ -2943,30 +3011,13 @@ function App() {
                         ) : null}
                         {result.player}
                       </span>
-                      {canExpand ? (
-                        <button
-                          type="button"
-                          onClick={() => togglePlayerExpanded(result.player)}
-                          className="font-mono font-bold text-[13px] ml-4 shrink-0 px-2 py-0.5 rounded border"
-                          style={{
-                            backgroundColor: isExpanded ? 'oklch(0.27 0.03 145)' : 'oklch(0.22 0 0)',
-                            color: 'oklch(0.85 0.15 145)',
-                            borderColor: 'oklch(0.35 0 0)',
-                            cursor: 'pointer',
-                          }}
-                          aria-expanded={isExpanded}
-                          aria-label={`Toggle details for ${result.player}`}
-                        >
-                          {resultBadge}
-                        </button>
-                      ) : (
-                        <span
-                          className="font-mono font-bold text-[13px] ml-4 shrink-0 px-2 py-0.5 rounded"
-                          style={{ backgroundColor: 'oklch(0.22 0 0)', color: 'oklch(0.85 0.15 145)' }}
-                        >
-                          {resultBadge}
-                        </span>
-                      )}
+                      <TrendBadge
+                        header={resultBadgeHeader}
+                        value={String(resultBadge)}
+                        expanded={isExpanded}
+                        onToggle={canExpand ? () => togglePlayerExpanded(result.player) : undefined}
+                        ariaLabel={canExpand ? `Toggle details for ${result.player}` : undefined}
+                      />
                     </div>
 
                     {isExpanded && hasStreakDetails && result.streakDetails && (

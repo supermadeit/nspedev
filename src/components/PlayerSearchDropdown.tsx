@@ -52,7 +52,7 @@ export function PlayerSearchDropdown({
 
   return (
     <div
-      className="flex flex-col rounded-lg border overflow-hidden"
+      className="flex flex-col rounded-lg border overflow-y-auto max-h-[45vh]"
       style={{ backgroundColor: C.surface2, borderColor: C.border }}
       role="listbox"
     >

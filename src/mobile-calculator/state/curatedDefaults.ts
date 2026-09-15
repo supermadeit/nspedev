@@ -60,10 +60,12 @@ export const CURATED_COMPUTE_DEFAULTS: Record<
 }
 
 // Explosive mode trend defaults, keyed by league then play type (NFL only
-// for now — MLB explosive has no play-type dimension).
+// for now — MLB explosive has no play-type dimension). met/last pinned to
+// 1/1 for NFL, same season-start reasoning as CURATED_TREND_DEFAULTS.nfl
+// above — revisit once there's enough season depth for a wider window.
 export const CURATED_EXPLOSIVE_TREND_DEFAULTS: Record<string, Record<string, [threshold: number, met: number, last: number]>> = {
   nfl: {
-    pass: [30, 3, 5],
+    pass: [30, 1, 1],
   },
 }
 

@@ -175,7 +175,10 @@ export const NFL_TD_PRESETS = [1, 2, 3, 4, 5]
 export const STREAK_N_PRESETS = [2, 3, 4, 5, 6, 8, 10]
 export const WINDOW_MET_PRESETS = [1, 2, 3, 4, 5, 6, 8, 10]
 export const WINDOW_LAST_PRESETS = [1, 3, 5, 10, 15, 20, 25, 30]
-export const COMPUTE_WINDOW_N_PRESETS = [3, 5, 10, 15, 20, 25, 30]
+// Leading 1 added for NFL's season-start default (see the compute default-
+// fill effect below) — a full "-last1" window until there's enough season
+// depth for the wider presets to make sense again.
+export const COMPUTE_WINDOW_N_PRESETS = [1, 3, 5, 10, 15, 20, 25, 30]
 // Compute asks for a TOTAL over the window (e.g. every stat over the last 10
 // games), not a per-game amount — reusing the trend per-game presets here
 // made queries like "min2 -last10" trivially match almost the whole roster,
@@ -632,29 +635,44 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
   useEffect(() => {
     if (mode === 'trend' || mode === 'streak') {
       if (!stat || firstPaActive) return
+      // NFL's season just started — a 3/5-style multi-game trend window asks
+      // for more games than any player has played yet. Pin to the tightest
+      // possible window (met 1 of the last 1 game) instead, revisited once
+      // there's enough season depth for a wider window to make sense again.
       if (mode === 'trend' && sport === 'nfl' && nflStatType === 'total') {
         setThresholdN(String(NFL_TOTAL_TREND_DEFAULT[stat] ?? NFL_YDS_PRESETS[0]))
-        setLastA('3')
-        setLastB('5')
+        setLastA('1')
+        setLastB('1')
         return
       }
       const presets =
         sport === 'nfl' ? (nflStatType === 'td' ? NFL_TD_PRESETS : NFL_YDS_PRESETS) : thresholdPresetsFor(sport, stat)
       setThresholdN(String(presets[0]))
       if (mode === 'trend') {
-        setLastA('3')
-        setLastB('5')
+        setLastA(sport === 'nfl' ? '1' : '3')
+        setLastB(sport === 'nfl' ? '1' : '5')
       } else {
         setStreakN('3')
       }
     } else if (mode === 'compute') {
       if (!stat) return
-      const presets =
-        sport === 'nfl' ? (nflStatType === 'td' ? NFL_TD_COMPUTE_PRESETS : NFL_YDS_COMPUTE_PRESETS) : computeThresholdPresetsFor(sport, stat)
       setThresholdMode('min')
-      setMinN(String(presets[0]))
-      setComputeWindow('-last')
-      setWindowN('10')
+      if (sport === 'nfl') {
+        // Same season-start reasoning as trend, and the ×COMPUTE_SCALE
+        // presets below assume a wide multi-game window — with the window
+        // pinned to a single game, reuse the unscaled per-game presets
+        // instead so the default min value is still one a single game can
+        // realistically clear.
+        const presets = nflStatType === 'td' ? NFL_TD_PRESETS : NFL_YDS_PRESETS
+        setMinN(String(presets[0]))
+        setComputeWindow('-last')
+        setWindowN('1')
+      } else {
+        const presets = computeThresholdPresetsFor(sport, stat)
+        setMinN(String(presets[0]))
+        setComputeWindow('-last')
+        setWindowN('10')
+      }
     } else if (mode === 'team') {
       if (!teamStat) return
       if (teamSubMode === 'trend') {
@@ -672,8 +690,10 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       const computePresets = explosiveLeague === 'mlb' ? EXPLOSIVE_MLB_COMPUTE_PRESETS : EXPLOSIVE_NFL_COMPUTE_PRESETS
       if (nflExplosiveSubMode === 'trend') {
         setNflYds(String(trendPresets[0]))
-        setLastA('3')
-        setLastB('5')
+        // NFL only — season just started, same 1/1 pin as regular trend.
+        // MLB's season is well underway, so its 3/5 default stays as is.
+        setLastA(explosiveLeague === 'nfl' ? '1' : '3')
+        setLastB(explosiveLeague === 'nfl' ? '1' : '5')
       } else {
         setNflMinYds(String(computePresets[0]))
         if (explosiveLeague === 'mlb') setWindowN('10')
