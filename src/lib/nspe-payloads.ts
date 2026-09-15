@@ -572,6 +572,129 @@ export function isNflExplosivePayload(payload: unknown): payload is NflExplosive
   return p.sport === 'nfl' && queryHasLong && Array.isArray(p.results)
 }
 
+// ---------- Explosive-play overview (single player, distance-bucketed) ----------
+// Sport-agnostic on purpose: NFL shipped first (`nfl_overview_long`), MLB/NBA/
+// NHL equivalents are expected to follow using the same `-ov` idea. Matched
+// by engine SUFFIX (`_overview_long`) rather than an exact per-sport string,
+// and every numeric field is read through a short list of plausible names
+// rather than one fixed key — same lesson learned from `games_meeting` vs
+// `count` (format-hitlist.mjs) and `total_ft` vs `total_yards` (batter HR
+// distance vs this engine) showing up as real naming drift across engines
+// for the identical underlying concept within this same session. This is
+// the one thing that has to stay true for "add a sport, get it for free on
+// the frontend" to actually hold: an explicit, matchable tag (the engine
+// suffix) plus tolerance for reasonable field-name variation, NOT an exact
+// one-shape assumption that breaks the moment a second sport spells a field
+// differently. A first-class `unit` field (defaulting to a category-based
+// guess when absent) is what lets one view print "64yds" for NFL and
+// "450ft" for a future MLB variant without knowing the sport at all.
+export interface ExplosiveOverviewBucket {
+  range: string
+  count: number
+  value: number
+  avg: number
+}
+
+export interface ExplosiveOverviewLongest {
+  value: number
+  date_iso?: string
+  opponent?: string
+  quarter?: number
+}
+
+export interface ExplosiveOverviewPayload {
+  engine: string
+  query: {
+    player: string
+    category: string
+    scope?: string | null
+    year_window?: [number, number]
+  }
+  totalPlays: number
+  totalValue: number
+  avgValue: number
+  unit: string
+  longest?: ExplosiveOverviewLongest
+  buckets: ExplosiveOverviewBucket[]
+}
+
+function inferOverviewUnit(engine: string, category: string): string {
+  if (engine.toLowerCase().startsWith('mlb')) return 'ft'
+  if (category) return 'yds'
+  return 'yds'
+}
+
+function normalizeExplosiveOverview(raw: Record<string, unknown>): ExplosiveOverviewPayload | null {
+  const engine = raw.engine
+  if (typeof engine !== 'string' || !/_overview_long$/i.test(engine)) return null
+  if (!Array.isArray(raw.buckets)) return null
+
+  const queryRaw = raw.query && typeof raw.query === 'object' && !Array.isArray(raw.query) ? (raw.query as Record<string, unknown>) : {}
+  const player = typeof queryRaw.player === 'string' ? queryRaw.player : ''
+  const category = typeof queryRaw.category === 'string' ? queryRaw.category : ''
+  const unit = typeof raw.unit === 'string' && raw.unit ? raw.unit : inferOverviewUnit(engine, category)
+
+  const longestRaw = raw.longest && typeof raw.longest === 'object' && !Array.isArray(raw.longest) ? (raw.longest as Record<string, unknown>) : null
+  const longest: ExplosiveOverviewLongest | undefined = longestRaw
+    ? {
+        value: asNumber(longestRaw.value ?? longestRaw.yards ?? longestRaw.ft ?? longestRaw.feet ?? longestRaw.distance_feet),
+        date_iso: typeof longestRaw.date_iso === 'string' ? longestRaw.date_iso : undefined,
+        opponent: typeof longestRaw.opponent === 'string' ? longestRaw.opponent : undefined,
+        quarter: typeof longestRaw.quarter === 'number' ? longestRaw.quarter : undefined,
+      }
+    : undefined
+
+  const buckets: ExplosiveOverviewBucket[] = (raw.buckets as unknown[])
+    .filter((b): b is Record<string, unknown> => !!b && typeof b === 'object' && !Array.isArray(b))
+    .map((b) => ({
+      range: typeof b.range === 'string' ? b.range : '',
+      count: asNumber(b.count),
+      value: asNumber(b.value ?? b.yards ?? b.ft ?? b.feet),
+      avg: asNumber(b.avg),
+    }))
+
+  return {
+    engine,
+    query: {
+      player,
+      category,
+      scope: (queryRaw.scope as string | null | undefined) ?? null,
+      year_window: Array.isArray(queryRaw.year_window) ? (queryRaw.year_window as [number, number]) : undefined,
+    },
+    totalPlays: asNumber(raw.total_plays ?? raw.total_events ?? raw.total_count),
+    totalValue: asNumber(raw.total_value ?? raw.total_yards ?? raw.total_ft ?? raw.total_feet),
+    avgValue: asNumber(raw.avg_value ?? raw.avg_yards ?? raw.avg_ft ?? raw.avg_feet),
+    unit,
+    longest,
+    buckets,
+  }
+}
+
+export function extractExplosiveOverviewPayload(payload: unknown): ExplosiveOverviewPayload | null {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return null
+  const rec = payload as Record<string, unknown>
+
+  const direct = normalizeExplosiveOverview(rec)
+  if (direct) return direct
+
+  if (typeof rec.output === 'string') {
+    const inner = extractEnvelopeFromText(rec.output)
+    if (inner && typeof inner === 'object' && !Array.isArray(inner)) {
+      const fromInner = normalizeExplosiveOverview(inner as Record<string, unknown>)
+      if (fromInner) return fromInner
+    }
+  }
+  for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+    const v = rec[key]
+    if (v && typeof v === 'object' && !Array.isArray(v)) {
+      const fromNested = normalizeExplosiveOverview(v as Record<string, unknown>)
+      if (fromNested) return fromNested
+    }
+  }
+
+  return null
+}
+
 // ---------- MLB Home Run Distance (mlb long) ----------
 
 export interface MlbHrTrendMatch {

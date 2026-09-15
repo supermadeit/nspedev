@@ -1,0 +1,528 @@
+{
+  "generated_at": "2026-09-11",
+  "notes": "Catalog of every command pattern the `nspe` CLI (utils/nspe_cli.py) dispatches to, built from two sources: (1) the working examples in testnspe.sh/nfl.sh/testpost.sh, each already paired with a plain-English description, and (2) a direct read of nspe_cli.py's dispatch branches, its embedded '_..._FORMAT_CATALOG' usage strings, and the 'Command syntax:' docstrings in the engines/ modules they call. To keep this current: when adding a new dispatch branch to nspe_cli.py, add a matching family here (and update its FORMAT_CATALOG string too, if one exists) rather than letting the two drift apart. Bracket notation `{...}` marks optional tokens; `<...>` marks a required placeholder; `|` separates alternatives. Every 'examples' entry was read from a verified-working source or spot-checked live via `python3 utils/nspe_cli.py ...` during construction of this file (noted where a check surfaced a gotcha).",
+  "leagues": {
+    "mlb": {
+      "families": [
+        {
+          "name": "compute",
+          "pattern": "nspe mlb [<player selector>] -<stat> {min|max}N {-lastN|-season|-career|-YYYY|-YYYY-YYYY}",
+          "description": "Sums a stat across a window of games (or filters to a min/max total) for one or more hitters; omit the player to scan the whole league.",
+          "examples": ["nspe mlb -hits min15 -last20", "nspe mlb -hr min10 -season", "nspe mlb -runs min3 max3 -last10"],
+          "notes": "Also supports position-code prefixes (e.g. `nspe mlb c -hr min5 -season` filters to catchers) via engines/mlb/loader.py's POSITION_MAP -- undocumented in the shell scripts, found only by reading the loader."
+        },
+        {
+          "name": "trend",
+          "pattern": "nspe mlb -<stat>N -lastA/B",
+          "description": "Players who hit a per-game threshold in at least A of their last B games.",
+          "examples": ["nspe mlb -hits2 -last5/10", "nspe mlb -tb2 -last3/5", "nspe mlb -hr1 -last3/10"]
+        },
+        {
+          "name": "yesterday trend",
+          "pattern": "nspe mlb -<stat>N -yst",
+          "description": "Players who hit the threshold in their exact calendar-yesterday game (not just 'most recent game', which could be from days ago if they didn't play yesterday).",
+          "examples": ["nspe mlb -hits2 -yst"]
+        },
+        {
+          "name": "stat-token + date window",
+          "pattern": "nspe mlb -<stat>N {MM/DD/YY | Ndays}",
+          "description": "Bare stat-token followed by a specific date or an N-day window runs a one-off stat scan; no -leaderboard needed.",
+          "examples": ["nspe mlb -tb4 30days", "nspe mlb -hr1 7days"]
+        },
+        {
+          "name": "streak",
+          "pattern": "nspe mlb -<stat>N -streakN {YYYY|YYYY-YYYY}",
+          "description": "Every maximal run of N+ consecutive qualifying games, current season by default (or a given year/year-range).",
+          "examples": ["nspe mlb -hits2 -streak5", "nspe mlb -hr1 -streak3", "nspe mlb -tb2 -streak4"],
+          "notes": "-streakN cannot be combined with -leaderboard or -lastA/B -- it is a separate engine (verified: `nspe mlb -leaderboard -streak3` errors)."
+        },
+        {
+          "name": "splits (season/game breakdown)",
+          "pattern": "nspe mlb <stat> minN -splits {-YYYY-YYYY|-career}",
+          "description": "Breaks a total down instead of collapsing it to one number: a single resolved season splits by game (each qualifying game listed with its date), a multi-season scope (explicit year range, -career, or no window at all) splits by season (each qualifying season listed with its total).",
+          "examples": ["nspe mlb -hr min10 -season -splits", "nspe mlb -hr min10 -splits -career"],
+          "notes": "Shared generic compute-engine feature also available for NBA/NHL (not CFB, and not NFL's own -splits -- see NFL family)."
+        },
+        {
+          "name": "weighted heat-score leaderboard",
+          "pattern": "nspe mlb -leaderboard",
+          "description": "Top-20 hitters by a weighted heat-score composite across all tracked stats (current season). Writes data/output/mlb_leaderboard.json.",
+          "examples": ["nspe mlb -leaderboard"]
+        },
+        {
+          "name": "per-stat count leaderboard",
+          "pattern": "nspe mlb -leaderboard -<stat>N {-lastN}",
+          "description": "Ranks players by how many qualifying games they've had for one stat threshold; token order is interchangeable (-<stat>N -leaderboard also works).",
+          "examples": ["nspe mlb -leaderboard -hr2", "nspe mlb -leaderboard -rbi3 -last10", "nspe mlb -tb2 -leaderboard -last10"]
+        },
+        {
+          "name": "postseason",
+          "pattern": "nspe mlb post -<stat>N|-stat {min|max}N {-lastA/B|-lastN|-career} {YYYY|YYYY-YYYY}",
+          "description": "Same compute/trend/streak grammar as the regular-season family, scoped to postseason gamelogs (mlbpost_run). Defaults to the current/most-recent postseason year unless a YYYY or YYYY-YYYY is supplied.",
+          "examples": ["nspe mlb post -hits2 -last3/10", "nspe mlb post -hr min3 -last20", "nspe mlb post -rbi min10 -career", "nspe mlb post -hits2 -streak3 2020-2024"]
+        },
+        {
+          "name": "pitcher h2h / VFP",
+          "pattern": "nspe mlb pitch <name> vs <team> {-YYYY} {-vfp}",
+          "description": "A starting pitcher's per-start summary vs one team; -vfp adds average first-pitch velocity.",
+          "examples": ["nspe mlb pitch Paul Skenes vs LAD -2026", "nspe mlb pitch Paul Skenes vs LAD -2026 -vfp", "nspe mlb pitch paul skenes -2026"]
+        },
+        {
+          "name": "pitcher leaderboard",
+          "pattern": "nspe mlb pitch -<stat>N -leaderboard {-topN}",
+          "description": "Pitchers ranked by count of starts meeting a stat threshold (K, BB, HR allowed, etc).",
+          "examples": ["nspe mlb pitch -K8 -leaderboard -top5", "nspe mlb pitch -bb1 -leaderboard -top5", "nspe mlb pitch -hr1 -leaderboard -top5"]
+        },
+        {
+          "name": "team overview (-ov)",
+          "pattern": "nspe mlb <TEAM> -ov -season {YYYY}",
+          "description": "Aggregates a team's pitcher play-by-play by game: 3/6/9-down rates, K/BB totals, schedule completeness. Requires both -ov and -season.",
+          "examples": ["nspe mlb braves -ov -season", "nspe mlb yankees -ov -season 2026"]
+        },
+        {
+          "name": "team batting (bat)",
+          "pattern": "nspe mlb bat <TEAM> {-outs|-hits|-allowed|-tb|-tbN} {-lastN|-season|-career|-YYYY}",
+          "description": "Inverts the pitcher PBP corpus into a team-batting view: K/BB/HR/H rates, out-type breakdown, or per-game hits/total-bases.",
+          "examples": ["nspe mlb bat braves", "nspe mlb bat braves -outs", "nspe mlb bat braves -tb", "nspe mlb bat braves -tb3", "nspe mlb bat yankees -outs -2026"]
+        },
+        {
+          "name": "team batting vs pitcher",
+          "pattern": "nspe mlb bat <TEAM> vs <pitcher>",
+          "description": "A team's collective batting line against one specific opposing pitcher.",
+          "examples": ["nspe mlb bat braves vs wheeler"],
+          "notes": "Spot-checked live; works and returns K/BB/HR/H/HBP breakdown."
+        },
+        {
+          "name": "team report (-teamreport)",
+          "pattern": "nspe mlb <TEAM> -teamreport {-lastN|-season}",
+          "description": "Single-team hits/runs for-and-allowed plus average margin of victory/loss, sourced from the daily scoreboard scrape. Distinct from -ov (pitching-mechanics focus, different data source).",
+          "examples": ["nspe mlb braves -teamreport -last10"],
+          "notes": "Not present in any of the three shell scripts -- found only via engine docstring, spot-checked live."
+        },
+        {
+          "name": "team runs/hits (league-wide)",
+          "pattern": "nspe mlb team -runs|-allowed {min|max}N|-<stat>N -lastA/B|-leaderboard|{min|max}N {-lastN|-season}",
+          "description": "Scans/ranks all 30 teams by runs scored or allowed (2026-season-only data source); every result also carries the companion hits total for the same window.",
+          "examples": ["nspe mlb team -runs -leaderboard -last10", "nspe mlb team -runs min500 -season", "nspe mlb team -runs5 -last2/5", "nspe mlb team -runs5 -first2/5"],
+          "notes": "`nspe mlb team -runs` alone (no min/max/-leaderboard/-lastA-B) errors with a format catalog, by design."
+        },
+        {
+          "name": "team margin/spread scan",
+          "pattern": "nspe mlb team -spread|-margin {min|max}N|-exactN {-lastN|-season}",
+          "description": "Scans teams by per-game score margin (win or loss size); -exactN and min/max are mutually exclusive; no -leaderboard or -lastA/B support for this sub-family.",
+          "examples": ["nspe mlb team -spread min3 -last10"],
+          "notes": "Not in any shell script -- found only via the _MLB_TEAM_FORMAT_CATALOG usage string; spot-checked live."
+        },
+        {
+          "name": "player report card",
+          "pattern": "nspe mlb <player> -report {-lastN|-season}",
+          "description": "Weighted A++ through E letter grade for one hitter's recent form (total bases, hit%, RBI%, runs%, HR%, SB%, strikeout penalty). Default window is last 10 games.",
+          "examples": ["nspe mlb judge -report", "nspe mlb judge -report -last20"]
+        },
+        {
+          "name": "report leaderboard",
+          "pattern": "nspe mlb -report {-lastN|-season} {<team filter>}",
+          "description": "League-wide hitter report-card ranking when no player is given.",
+          "examples": ["nspe mlb -report"]
+        },
+        {
+          "name": "leaderboard audit",
+          "pattern": "nspe mlb -audit",
+          "description": "Replays the leaderboard's historical accuracy audit (predicted vs actual). No player needed.",
+          "examples": ["nspe mlb -audit"]
+        },
+        {
+          "name": "combo bases",
+          "pattern": "nspe mlb <player1>/<player2> -combo {-season|vs <team>|-leaderboard|-detailed}",
+          "description": "Combined total-bases analysis for a pair of players (teammates by default, or vs a common opponent), matched by shared game_id.",
+          "examples": ["nspe mlb shohei/freddie -combo -season", "nspe mlb shohei/freddie -combo vs sd", "nspe mlb judge/soto -combo"]
+        },
+        {
+          "name": "head-to-head (player vs/@ team)",
+          "pattern": "nspe mlb <player> vs|@ <team> {-lastN|-season|-career} {-staff}",
+          "description": "A hitter's game log against one opponent team (regular-season source); @ scopes to away games only. -staff adds a per-pitcher career breakdown against that team's staff.",
+          "examples": ["nspe mlb judge vs boston -last10", "nspe mlb judge @ sf -last5", "nspe mlb judge vs boston -staff"],
+          "notes": "-staff is only pre-computed for ~40 covered batters (data/output/mlb_bvp/*.json, see engines/mlb/bvp.py); other players simply get no staff section, no error. Spot-checked live -- works, prints a per-pitcher AB/H/HR/BB/K/AVG/OPS table."
+        },
+        {
+          "name": "postseason head-to-head",
+          "pattern": "nspe mlb post <player> vs <team>",
+          "description": "Same h2h shape as above, sourced from mlbpost_run instead of the regular-season scrape.",
+          "examples": ["nspe mlb post mookie betts vs PHI"]
+        },
+        {
+          "name": "home-run distance (long)",
+          "pattern": "nspe mlb long -hrN -lastA/B | nspe mlb long -hr {min|max}N {-lastN|-season|-career|-YYYY|-YYYY-YYYY} | nspe mlb long -hrN -leaderboard {-lastN|-season|-career}",
+          "description": "Home-run-distance-in-feet query family (from mlb_hr_tracker.json), mirroring NFL's 'long' explosive-play grammar: digit-attached -hrN is a per-event trend/leaderboard threshold, bare -hr + min/max is a compute total-distance threshold.",
+          "examples": ["nspe mlb long -hr350 -leaderboard", "nspe mlb long -hr min800 -last5", "nspe mlb long -hr450 -last1/3", "nspe mlb long -hr350 -first1/3"]
+        },
+        {
+          "name": "first plate-appearance outcome (first)",
+          "pattern": "nspe mlb first -xbh|-single|-walk|-hit|-k|-oth {-leaderboard {-lastN|-season|-career} | -lastA/B}",
+          "description": "Categorical first-PA-of-the-game outcome tracker (from mlb_firstpa.json). No compute mode and no digit threshold -- an outcome either happened in a game or it didn't, so leaderboard (count) and trend (met A of B) are the only two shapes.",
+          "examples": ["nspe mlb first -xbh -leaderboard -last10", "nspe mlb first -walk -last1/5", "nspe mlb first -hit -last3/5"],
+          "notes": "`-hit` is a union of XBH-or-single (a walk doesn't count). Bare `nspe mlb first -xbh` with neither -leaderboard nor -lastA/B errors -- required, no default."
+        },
+        {
+          "name": "first-inning trend/leaderboard (inn1, legacy alt)",
+          "pattern": "nspe mlb inn1 -single|-extra|-walk|-hit|-so {-leaderboard {-season|-lastN} | -lastA/B}",
+          "description": "An earlier/parallel implementation of the same first-plate-appearance-outcome idea as 'mlb first' above, kept for backward compatibility. `inn1` is used (not `p1`) because `p1` is reserved for NHL period-1 scope.",
+          "examples": ["nspe mlb inn1 -single -last2/3", "nspe mlb inn1 -hit -leaderboard -season"],
+          "notes": "Functionally overlaps 'mlb first' -xbh/-walk/-hit but with slightly different outcome vocabulary (-extra instead of -xbh, plus -so for strikeout) -- both exist in the code side by side."
+        },
+        {
+          "name": "DraftKings hitter leaderboard",
+          "pattern": "nspe mlb dk -leaderboard {-lastN|-yst} {-topN}",
+          "description": "Hitters ranked by average real DraftKings fantasy points over a recent window (or an exact single-day slate via -yst). -leaderboard is required.",
+          "examples": ["nspe mlb dk -leaderboard", "nspe mlb dk -leaderboard -last7 -top5"]
+        },
+        {
+          "name": "insight engine",
+          "pattern": "nspe mlb -insight {YYYY-MM-DD} {-lastN} {<prop stat filter>}",
+          "description": "Blends report-card form with team-allowed vulnerability to surface top prop suggestions for a given (or today's) slate.",
+          "examples": ["nspe mlb -insight -last5"],
+          "notes": "Not in any shell script; spot-checked live."
+        },
+        {
+          "name": "matchup crusher",
+          "pattern": "nspe mlb -matchup {YYYY-MM-DD} {-season}",
+          "description": "Identifies batters who historically dominate today's opposing team; -season restricts the historical window to this season only (default career).",
+          "examples": ["nspe mlb -matchup -season"],
+          "notes": "Not in any shell script; spot-checked live."
+        },
+        {
+          "name": "parlay generator",
+          "pattern": "nspe mlb -parlay 2/2|1|3/2/1|cut {YYYY-MM-DD}",
+          "description": "Draws a randomized (score-weighted) parlay from a blended pool of hot-streak, matchup, batter-vs-pitcher, and first-PA signals; 'cut' instead prints the top ~15 shortlist itself for manual review, no parlay drawn.",
+          "examples": ["nspe mlb -parlay cut", "nspe mlb -parlay 2/2"],
+          "notes": "Repeated runs of the same non-'cut' format vary (weighted-random draw), by design -- not a fixed top-N."
+        },
+        {
+          "name": "goatcase (streak detector)",
+          "pattern": "nspe mlb -<stat> -goatcase{M} YYYY {player}",
+          "description": "Detects and ranks players by consecutive-game streaks meeting a stat threshold in a given year; -goatcase alone means 3+ games, -goatcaseM sets a custom minimum streak length.",
+          "examples": ["nspe mlb -hr -goatcase 2024", "nspe mlb -hr -goatcase5 2010 pujols"],
+          "notes": "Shared dispatch entry point also serves NBA and NFL (separate engines) -- see each league's own goatcase family. MLB stat vocabulary: hr, rbi, h, r, so, sb, 2b, 3b, tb."
+        }
+      ]
+    },
+    "nfl": {
+      "families": [
+        {
+          "name": "compute",
+          "pattern": "nspe nfl [long] [post] [qb|rb|wr|te] <pass|rush|rec> {-yds|-td} {min|max}N {-lastN|-season|-career|-YYYY|-YYYY-YYYY} {-splits}",
+          "description": "Sums passing/rushing/receiving yards or TDs across a window; with no window given, defaults to the current season (not career-wide). 'long' switches to explosive-play (PBP) counting instead of aggregated totals.",
+          "examples": ["nspe nfl pass -yds min1000", "nspe nfl pass -yds min4000 -2020", "nspe nfl pass -yds min1000 -career", "nspe nfl rush -yds min800 -season"],
+          "notes": "-career and an explicit year filter are mutually exclusive (errors if both given)."
+        },
+        {
+          "name": "compute modifiers: -td / -int / -tgts",
+          "pattern": "nspe nfl <pass|rush|rec> -td {min|max}N ... | nspe nfl pass -int {min|max}N ... | nspe nfl rec -tgts {min|max}N ...",
+          "description": "-td works for all three categories (switches summed field to touchdowns). -int is passing-only (interceptions) and errors on rush/rec. -tgts is receiving-only (targets) and errors on pass/rush.",
+          "examples": ["nspe nfl pass -td min20 -season", "nspe nfl pass -int min10 -season", "nspe nfl rec -tgts min50 -season"],
+          "notes": "Verified live: `-int` on rush/rec and `-tgts` on pass/rush both produce a clear rejection error rather than a nonsensical field lookup. Bare `-tdN` (digit-attached) outside a trend query (-lastA/B) also errors, directing you to `-td minN` instead."
+        },
+        {
+          "name": "compute modifier: -splits",
+          "pattern": "nspe nfl <pass|rush|rec> -yds minN -splits {-career|-YYYY-YYYY}",
+          "description": "NFL's own -splits (separate implementation from the generic MLB/NBA/NHL one): breaks a career/multi-year total down by season, or a single-season total down by game.",
+          "examples": ["nspe nfl pass -yds min1000 -splits -career"],
+          "notes": "Not compatible with -long: `nspe nfl long pass -yds min50 -splits` errors explicitly ('-splits isn't supported with -long yet')."
+        },
+        {
+          "name": "trend",
+          "pattern": "nspe nfl [long] [post] <pass|rush|rec> -ydsN|-tdN -lastA/B",
+          "description": "QBs/RBs/WRs/TEs who hit a per-game yard or TD threshold in at least A of their last B games.",
+          "examples": ["nspe nfl pass -yds250 -last3/5", "nspe nfl rush_td -yds2 -last3/5", "nspe nfl long pass -yds30 -last2/5"],
+          "notes": "nfl.sh uses an alternate '_td' suffix spelling for the TD trend variant (`pass_td -yds3 -last2/5`, `rush_td`, `rec_td`) -- functionally the same family as `<stat> -td<N>` seen elsewhere; both forms appear in the codebase's own test scripts."
+        },
+        {
+          "name": "leaderboard",
+          "pattern": "nspe nfl [long] <pass|rush|rec> -ydsN|-tdN -leaderboard {-lastN} {-topN}",
+          "description": "Ranks players by total count of games (or explosive plays, for 'long') meeting a threshold.",
+          "examples": ["nspe nfl long pass -yds30 -leaderboard", "nspe nfl long pass -yds50 -leaderboard -last5"]
+        },
+        {
+          "name": "streak",
+          "pattern": "nspe nfl <pass|rush|rec> -ydsN|-tdN -streakN",
+          "description": "Consecutive-game streaks of a per-game threshold, regular season only (no postseason streak support for NFL).",
+          "examples": ["nspe nfl pass -yds250 -streak2 (see CFB equivalent; NFL streak follows the same shape per the format catalog)"],
+          "notes": "`-streakN` is not yet supported for NFL/CFB postseason data -- attempting it prints a clear error pointing to trend/compute/leaderboard alternatives instead."
+        },
+        {
+          "name": "combo",
+          "pattern": "nspe nfl -rrN|-prN|-<stat>/-<stat>N|<pass|rush|rec> -totalN {-lastA/B | minN -lastN|-season | -streakN | -leaderboard {-lastN} {-topN}}",
+          "description": "Combined-stat queries: -rr is rush+rec yards, -pr is pass+rush yards; verbose form -rush/-rec also works. -totalN is a context-dependent alias resolved by the nearest preceding pass/rush/rec keyword (pass always means pass+rush; rush/rec mean rush+rec).",
+          "examples": ["nspe cfb -rr100 -last3/5 (CFB shown; NFL shares the identical combo grammar per _NFL_FORMAT_CATALOG)"]
+        },
+        {
+          "name": "goatcase (streak detector)",
+          "pattern": "nspe nfl -<stat>N -goatcase{M} YYYY {player}",
+          "description": "Consecutive-game streak detector for pass/rush/rec yardage in a given year.",
+          "examples": ["nspe nfl -yds300 -goatcase 2025 (CFB equivalent; NFL's own goatcase.py mirrors it)"],
+          "notes": "NFL stat vocabulary for goatcase: yds, pass, rush, rec."
+        },
+        {
+          "name": "head-to-head (player vs/@ team)",
+          "pattern": "nspe nfl [pass|rush|rec] <player> vs|@ <team> {-lastN|-season|-career|-YYYY|-YYYY-YYYY} {post}",
+          "description": "A player's stat line against one specific opponent, with loose nickname/city/abbreviation team resolution.",
+          "examples": ["nspe nfl dak vs PHI -career", "nspe nfl derek vs CIN -2024", "nspe nfl dak vs eagles -last5", "nspe nfl post dak vs PHI"],
+          "notes": "There is NO NFL equivalent of MLB's `-staff` flag (verified: no 'staff' reference anywhere in engines/nfl/h2h.py)."
+        },
+        {
+          "name": "reference (win/loss record)",
+          "pattern": "nspe nfl ref <player> -wins|-loss {minN} {-lastN|-season|-career|-YYYY|-YYYY-YYYY} {post}",
+          "description": "A player's team win/loss record (optionally filtered to wins/losses by at least N points margin), parsed from each game's result string.",
+          "examples": ["nspe nfl ref dak -wins -career", "nspe nfl ref hurts -loss -career", "nspe nfl ref mahomes -wins min20 2020"]
+        },
+        {
+          "name": "week-N performance",
+          "pattern": "nspe nfl <qb> -weekN{-M} {-career|-YYYY|-YYYY-YYYY} | nspe nfl <team> -weekN{-M} {-career|-YYYY|-YYYY-YYYY}",
+          "description": "A player's (QB-only) or team's average/aggregate performance in one specific regular-season week number, or a week range (-weekN-M). No window given defaults to the current season.",
+          "examples": ["nspe nfl mahomes -week1 -career"],
+          "notes": "QB mode is scoped to engines.nfl.qb_profile.STARTER_ROSTER only -- any other player gets a clear 'not supported yet' error, not a silently wrong answer. Team mode reuses the QB-pool game index, so its coverage for older seasons is bounded by how far back the team's CURRENT tracked QB's career reaches. Washington/Commanders has a known week-data gap for 2019-2021. Not present in any of the three shell scripts -- found via engine docstring, spot-checked live."
+        },
+        {
+          "name": "power rankings",
+          "pattern": "nspe nfl power {-YYYY|-YYYY-YYYY}",
+          "description": "Weighted composite team power ranking (efficiency + W/L + point margin, z-scored across all 32 teams), regular season only. Defaults to the 2025 season if no year given.",
+          "examples": ["nspe nfl power -2024"],
+          "notes": "Spot-checked live. Not present in the shell scripts -- built after they were written."
+        },
+        {
+          "name": "power rankings (team entry point)",
+          "pattern": "nspe nfl team -rankings {-YYYY|-YYYY-YYYY}",
+          "description": "Identical engine and output to 'nfl power' above, exposed as a second entry point under the 'team' namespace.",
+          "examples": ["nspe nfl team -rankings -2024"],
+          "notes": "Spot-checked live; output is byte-for-byte the same as `nspe nfl power` for the same year."
+        },
+        {
+          "name": "team head-to-head",
+          "pattern": "nspe nfl team <A> vs <B> {-lastN|-season|-YYYY|-YYYY-YYYY|-career}",
+          "description": "Team-vs-team matchup history: box-score detail (yards/play, turnovers, time of possession) plus win/loss/score for every meeting in the window.",
+          "examples": ["nspe nfl team dal vs phi -career"],
+          "notes": "Spot-checked live. Unlike power rankings, this is NOT regular-season-only -- playoff meetings between the same two teams are included."
+        },
+        {
+          "name": "team points scored/allowed",
+          "pattern": "nspe nfl team -ptsN|-allowedN -lastA/B | nspe nfl team -pts|-allowed {min|max}N {-lastN|-season|-YYYY|-YYYY-YYYY|-career} | nspe nfl team -pts|-allowed -leaderboard {-lastN|-season|-YYYY|-YYYY-YYYY|-career}",
+          "description": "Trend/compute/leaderboard family for team-level points scored or allowed, derived from box scores already present in each player's row.",
+          "examples": ["nspe nfl team -pts -leaderboard", "nspe nfl team -pts min450 -season", "nspe nfl team -pts24 -last2/5", "nspe nfl team -allowed max430 -2024"],
+          "notes": "`nspe nfl team -pts` with no min/max/-leaderboard/-lastA-B errors with a format catalog."
+        },
+        {
+          "name": "per-quarter passing/rushing/receiving",
+          "pattern": "nspe nfl q1|q2|q3|q4|1h|h1 <pass|rush|rec> -ydsN -lastA/B | nspe nfl q1|q2|q3|q4|1h|h1 <pass|rush|rec> {min|max}N {-lastN|-season|-YYYY|-YYYY-YYYY|-career}",
+          "description": "Trend/compute over yardage earned in one specific quarter or the first half only, from a dedicated PBP-derived data source (does not interact with 'long' or the regular gamelog).",
+          "examples": ["nspe nfl q1 pass -yds50 -last2/5", "nspe nfl 1h rush -yds50 -last1/3", "nspe nfl q2 rush min50 -season", "nspe nfl h1 pass min50 -career"],
+          "notes": "The pass|rush|rec category token is REQUIRED -- `nspe nfl q1 -yds50 -last1/3` (no category) errors explicitly with a format catalog. `h1` is an accepted alias for `1h`. Known data-quality caveat in the source: ~14% of rows don't sum-match the real box-score total (off by small amounts); ~0.5% of rows have a self-referential opponent bug and are dropped outright."
+        }
+      ]
+    },
+    "nba": {
+      "families": [
+        {
+          "name": "compute",
+          "pattern": "nspe nba [q1|q2|q3|q4|1h] [post] [<player selector>] -<stat> {min|max}N {-lastN|-season}",
+          "description": "Sums a stat across a window (or filters min/max total); supports a shorthand where digits attach directly to the stat token for a per-game (not total) filter context inside compute is unusual -- see 'trend' below for that shape.",
+          "examples": ["nspe nba -pts min300 -last10", "nspe nba -pts min1750 -season", "nspe nba -pts min500 max700 -last10", "nspe nba -dub min10 -season", "nspe nba -tripdub min1 -season"],
+          "notes": "-total is an alias for -pts. -dub/-tripdub count double-doubles/triple-doubles rather than a raw stat total."
+        },
+        {
+          "name": "compute (multi-player selector)",
+          "pattern": "nspe nba -<stat> <player1>/<player2> -lastN",
+          "description": "Slash-separated player names run the same compute query for each named player instead of scanning the whole league.",
+          "examples": ["nspe nba -pts doncic/durant -last5"]
+        },
+        {
+          "name": "trend",
+          "pattern": "nspe nba [q1|1h] [post] -<stat>N -lastA/B",
+          "description": "Players who hit a per-game threshold in at least A of their last B games.",
+          "examples": ["nspe nba -pts30 -last3/5", "nspe nba -reb10 -last4/10", "nspe nba q1 -pts10 -last3/5"]
+        },
+        {
+          "name": "leaderboard",
+          "pattern": "nspe nba [post] [q1|q2|q3|q4|1h] -<stat>N -leaderboard {-topN} {-lastN}",
+          "description": "Ranks players by count of qualifying games for a per-game threshold.",
+          "examples": ["nspe nba -pts30 -leaderboard", "nspe nba -reb15 -leaderboard -top10", "nspe nba post -pts30 -leaderboard", "nspe nba q1 -pts15 -leaderboard"],
+          "notes": "-streakN cannot be combined with -leaderboard (separate engines; verified this errors)."
+        },
+        {
+          "name": "streak",
+          "pattern": "nspe nba -<stat>N -streakN",
+          "description": "Every maximal run of N+ consecutive qualifying games, current season by default.",
+          "examples": ["nspe nba -pts40 -streak3", "nspe nba -reb15 -streak3"]
+        },
+        {
+          "name": "combo-stat",
+          "pattern": "nspe nba -<stat1>/-<stat2>N -lastA/B | minN -lastN|-season | -streakN",
+          "description": "Per-game value = sum of two listed stats (pts/reb/ast/stl/blk/tpm). Routes to trend when -lastA/B is present, otherwise compute/streak. Shorthand `-stksN` = steals+blocks.",
+          "examples": ["nspe nba -pts/-ast40 -last5", "nspe nba -reb/-ast18 -last3/5", "nspe nba -stl/-blk3 -last3/5", "nspe nba -stks3 -last3/5", "nspe nba -pts/-reb35 -streak3"],
+          "notes": "Not supported under q1/1h quarter scope (no per-half ast/reb data yet)."
+        },
+        {
+          "name": "q1 / 1h quarter-and-half scope",
+          "pattern": "nspe nba q1|1h -pts|-tpm {N | min/maxN} {-lastN|-season|-lastA/B|-streakN|-leaderboard}",
+          "description": "First-quarter or first-half-only points/three-pointers-made, sourced from a dedicated single-source-of-truth PBP dataset (playnba/<year>/1h/).",
+          "examples": ["nspe nba q1 -pts min200 -season", "nspe nba 1h -tpm min100 -season", "nspe nba q1 -tpm2 -last3/5", "nspe nba q1 -pts15 -streak3"]
+        },
+        {
+          "name": "postseason",
+          "pattern": "nspe nba post [q1] -<stat>N|-stat {min|max}N {-lastA/B|-lastN|-career} {YYYY|YYYY-YYYY}",
+          "description": "Same compute/trend/streak grammar as regular season, scoped to playoff gamelogs. Defaults to the current/most-recent postseason year unless a YYYY or YYYY-YYYY is given.",
+          "examples": ["nspe nba post -pts30 -last3/5", "nspe nba post -dub min20 -career", "nspe nba post -pts min50 -last2 2024-2025", "nspe nba post -pts30 -streak3 2020-2025"]
+        },
+        {
+          "name": "splits",
+          "pattern": "nspe nba <stat> minN -splits {-YYYY-YYYY|-career}",
+          "description": "Season-by-season or game-by-game breakdown instead of one collapsed total (shared generic compute-engine feature with MLB/NHL).",
+          "examples": ["nspe nba -reb min50 -splits -career"],
+          "notes": "Spot-checked live; not present in the shell scripts."
+        },
+        {
+          "name": "goatcase (streak detector)",
+          "pattern": "nspe nba -<stat>N -goatcase{M} YYYY {player}",
+          "description": "Consecutive-game streak detector for an NBA stat in a given year.",
+          "examples": ["nspe nba -pts -goatcase 2024 (mirrors MLB/NFL goatcase shape; engines/nba/goatcase.py)"],
+          "notes": "Stat vocabulary: pts, reb, ast, stl, blk, fg, 3pt."
+        }
+      ]
+    },
+    "nhl": {
+      "families": [
+        {
+          "name": "compute",
+          "pattern": "nspe nhl [post] -<stat> {min|max}N {-lastN|-season}",
+          "description": "Sums a stat (sog/g/ast/pts) across a window or filters by min/max total.",
+          "examples": ["nspe nhl -sog min30 -last10", "nspe nhl -g min10 -season", "nspe nhl -g max5 -season", "nspe nhl -pts min80 -season"]
+        },
+        {
+          "name": "trend",
+          "pattern": "nspe nhl [post] -<stat>N -lastA/B",
+          "description": "Players who hit a per-game threshold in at least A of their last B games.",
+          "examples": ["nspe nhl -sog5 -last4/10", "nspe nhl -g1 -last3/5", "nspe nhl -pts2 -last3/5"]
+        },
+        {
+          "name": "streak",
+          "pattern": "nspe nhl -<stat>N -streakN {YYYY|YYYY-YYYY}",
+          "description": "Every maximal run of N+ consecutive qualifying games.",
+          "examples": ["nspe nhl -pts2 -streak4", "nspe nhl -g1 -streak3", "nspe nhl -g1 -streak3 2024-2025"]
+        },
+        {
+          "name": "period scope (p1/p2/p3/ot)",
+          "pattern": "nspe nhl p1|p2|p3|ot -<stat> {min|max}N | nspe nhl p1|p2|p3|ot <player>",
+          "description": "Season-aggregate scoring-play points within one specific period (or OT). Every scorer AND assister on a scoring play earns 1 point in that play's period.",
+          "examples": ["nspe nhl p1 -pts min20", "nspe nhl ot -pts min5", "nspe nhl p1 mcdavid"],
+          "notes": "Compute-only -- explicitly rejects -lastN/-season/-firstN windows with a clear error ('period data is season-aggregate only, try -pts minN'). No trend, streak, or leaderboard support for period scope."
+        },
+        {
+          "name": "postseason",
+          "pattern": "nspe nhl post -<stat>N|-stat {min|max}N {-lastA/B|-lastN|-career} {YYYY|YYYY-YYYY}",
+          "description": "Same compute/trend/streak grammar as regular season, scoped to playoff gamelogs.",
+          "examples": ["nspe nhl post -g1 -last3/10", "nspe nhl post -sog min30 -last10", "nspe nhl post -g min10 -career"]
+        },
+        {
+          "name": "splits",
+          "pattern": "nspe nhl <stat> minN -splits {-YYYY-YYYY|-career}",
+          "description": "Season-by-season or game-by-game breakdown instead of one collapsed total (shared generic compute-engine feature with MLB/NBA).",
+          "examples": ["nspe nhl -g min10 -splits -career"],
+          "notes": "Not present in shell scripts; inferred/expected from the shared generic-compute -splits implementation (not individually spot-checked for NHL specifically, but the code path is identical to NBA/MLB)."
+        }
+      ],
+      "limitations": [
+        "NHL does NOT support a stat-token -leaderboard the way NBA does -- verified live: `nspe nhl -sog5 -leaderboard` errors with 'Unrecognized stat/option -leaderboard'. If you need an NHL leaderboard-style view, use -streakN or a compute min/max scan instead.",
+        "The NHL season had not yet started as of this catalog's generation date -- some current-season regular-season queries (e.g. -streak) may legitimately return empty results rather than indicating a bug."
+      ]
+    },
+    "cfb": {
+      "families": [
+        {
+          "name": "compute",
+          "pattern": "nspe cfb [post] [qb|rb|wr|te] <pass|rush|rec> {-yds|-td} minN {-lastN|-season|-career|-YYYY|-YYYY-YYYY}",
+          "description": "Sums passing/rushing/receiving yards or TDs across a window; mirrors NFL's compute grammar exactly, minus the explosive-play ('long') and -int/-tgts/-splits modifiers, which don't exist for CFB.",
+          "examples": ["nspe cfb pass -yds min2000 -season", "nspe cfb pass -yds min1 -career", "nspe cfb qb pass -yds min2000 -season", "nspe cfb post pass -yds min100 -career"],
+          "notes": "-splits is silently accepted but has no effect for CFB (engines/cfb/stats.py's run_cfb_stats_query has no splits parameter at all) -- spot-checked live: `nspe cfb pass -yds min500 -splits -career` runs a normal career leaderboard, no error, no actual split-out breakdown. Worth fixing or documenting more loudly upstream."
+        },
+        {
+          "name": "trend",
+          "pattern": "nspe cfb [post] <pass|rush|rec> -ydsN|-tdN -lastA/B",
+          "description": "QBs/RBs/receivers who hit a per-game yard/TD threshold in at least A of their last B games.",
+          "examples": ["nspe cfb pass -yds300 -last3/5", "nspe cfb rush -yds100 -last2/5", "nspe cfb post pass -yds200 -last1/3"]
+        },
+        {
+          "name": "leaderboard",
+          "pattern": "nspe cfb [post] <pass|rush|rec> -ydsN|-tdN -leaderboard {-lastN} {-topN}",
+          "description": "Ranks players by count of games meeting a threshold.",
+          "examples": ["nspe cfb pass -yds300 -leaderboard", "nspe cfb rec -yds100 -leaderboard -career"]
+        },
+        {
+          "name": "streak",
+          "pattern": "nspe cfb <pass|rush|rec> -ydsN|-tdN -streakN",
+          "description": "Consecutive-game streaks of a per-game threshold, regular season only (no postseason streak support).",
+          "examples": ["nspe cfb pass -yds250 -streak2"]
+        },
+        {
+          "name": "combo (rush+rec)",
+          "pattern": "nspe cfb -rrN|-<stat>/-<stat>N -lastA/B | minN -season | -streakN | -leaderboard",
+          "description": "Combined rush+receiving yards per game.",
+          "examples": ["nspe cfb -rr100 -last3/5", "nspe cfb -rr min800 -season"]
+        },
+        {
+          "name": "goatcase (streak detector) -- BROKEN",
+          "pattern": "nspe cfb -yds300 -goatcase 2025",
+          "description": "Documented in testnspe.sh as a working example (players with 3+ consecutive 300+ pass-yd game streaks), but the shared -goatcase dispatch in nspe_cli.py only has explicit routing branches for mlb/nba/nfl -- there is no engines/cfb/goatcase.py and no cfb branch in the dispatcher's if/elif chain.",
+          "examples": ["nspe cfb -yds300 -goatcase 2025"],
+          "notes": "CONFIRMED BROKEN by direct execution: this exact command from testnspe.sh returns 'Error: Unknown league/stat combination for goatcase: cfb / YDS' instead of results. This is a real regression/gap worth flagging to the CLI owner -- the test script's own comment claims it should work."
+        },
+        {
+          "name": "head-to-head (player vs/@ team)",
+          "pattern": "nspe cfb [pass|rush|rec] <player> vs|@ <team> {-lastN|-season|-career|-YYYY} {post}",
+          "description": "A player's stat line against one specific ranked opponent (only AP top-25/tracked teams have data); supports nickname resolution.",
+          "examples": ["nspe cfb manning vs georgia -career", "nspe cfb manning vs UGA -2025", "nspe ncaaf manning vs UGA -career"],
+          "notes": "'ncaaf' is a pure input alias for 'cfb' -- works identically everywhere. The tracked team roster is NOT a fixed 25/32 -- it grows dynamically from whatever team files exist in data/output/cfbscrape_results/ at runtime (starts at AP top-25, hard-capped at 32). Do not hardcode a team-count assumption when reasoning about CFB coverage."
+        },
+        {
+          "name": "reference (win/loss record)",
+          "pattern": "nspe cfb ref <player> -wins|-loss {minN} {-lastN|-season|-career|-YYYY|-YYYY-YYYY} {post}",
+          "description": "A player's team win/loss record, optionally filtered by margin.",
+          "examples": ["nspe cfb ref manning -wins -career", "nspe cfb ref manning -loss -career"],
+          "notes": "Omitting 'ref' (e.g. `nspe cfb manning -wins -career`) is explicitly detected and errors with a hint to add 'ref', rather than silently misrouting."
+        }
+      ]
+    }
+  },
+  "meta_commands": [
+    {
+      "name": "plus (batch runner)",
+      "pattern": "nspe plus {--config path} {--output path}",
+      "description": "Runs up to 5 saved queries from data/plus_commands.json in one pass (each a pre-tokenized argv array, not a shell string) and writes a consolidated envelope to data/output/plus_results.json. Not a sport -- dispatched before any league parsing.",
+      "examples": ["nspe plus"]
+    }
+  ],
+  "shared_tokens": [
+    {"token": "-lastN", "meaning": "Restrict to the player's most recent N games (compute: sum/filter over those N games; used as the window size for -lastA/B trend too)."},
+    {"token": "-lastA/B", "meaning": "Trend query: the stat threshold must be met in at least A of the player's last B games."},
+    {"token": "-firstN / -firstA/B", "meaning": "Same as -lastN/-lastA/B but anchored to the OLDEST N games in scope (season or year-window) instead of the most recent."},
+    {"token": "-season", "meaning": "Scope to the current season only (all games), as opposed to a fixed -lastN window."},
+    {"token": "-career", "meaning": "Sum/scan every available game with no season or window filter. Mutually exclusive with an explicit year filter for NFL compute."},
+    {"token": "-YYYY / -YYYY-YYYY", "meaning": "Scope to one specific season year, or an inclusive range of years. The leading dash is optional in most parsers (both '-2024' and '2024' are accepted)."},
+    {"token": "-yst", "meaning": "Exact-yesterday window: the player's real calendar-yesterday game specifically (not just their most-recent game, which could be older if they didn't play yesterday). Works for MLB compute/trend and MLB DK leaderboard."},
+    {"token": "-streakN", "meaning": "Separate 'streak' engine (N>=2): reports every maximal run of N+ consecutive qualifying games. Cannot be combined with -leaderboard or -lastA/B trend tokens -- always used alone alongside the stat threshold."},
+    {"token": "-leaderboard", "meaning": "Ranks players/teams by count of qualifying games (or, for MLB's bare `-leaderboard`, a weighted heat-score composite) instead of listing individual matches."},
+    {"token": "-topN", "meaning": "Limits a leaderboard's output to the top N rows."},
+    {"token": "min N / max N", "meaning": "Compute-mode threshold on a SUMMED total across the window (as opposed to a digit-attached stat token like -pts30, which is a PER-GAME threshold used by trend/leaderboard/streak)."},
+    {"token": "-splits", "meaning": "Breaks a collapsed total down into its components: by season for a multi-season/career scope, by individual game for a single-season scope. Generic implementation shared by MLB/NBA/NHL; NFL has its own separate -splits implementation with the same idea."},
+    {"token": "post", "meaning": "Scopes to postseason data instead of the regular season. Accepted with or without a leading dash in most dispatch branches (both 'post' and '-post' work)."},
+    {"token": "vs / @", "meaning": "Head-to-head opponent selector. 'vs' means any game against that team; '@' restricts to away games only (MLB). Supports nickname/city/abbreviation resolution for the team name."},
+    {"token": "q1 / q2 / q3 / q4 / 1h / h1", "meaning": "Quarter-or-half scope. NBA: first-quarter/first-half PBP for pts/tpm. NFL: per-quarter pass/rush/rec yardage (category token REQUIRED alongside the scope). 'h1' is accepted as an alias for '1h'."},
+    {"token": "p1 / p2 / p3 / ot", "meaning": "NHL period scope (season-aggregate scoring-play points only; no -lastN/-season window support here -- compute-mode only)."},
+    {"token": "inn1", "meaning": "MLB first-plate-appearance/first-inning scope (deliberately distinct from NHL's 'p1' to avoid a naming collision)."},
+    {"token": "-goatcase{M}", "meaning": "Consecutive-game streak detector across MLB/NBA/NFL (not CFB -- currently broken there, see cfb.goatcase family), given a year; M sets the minimum streak length (default 3)."},
+    {"token": "-combo", "meaning": "MLB-specific: combined total-bases analysis for a pair of players (`<p1>/<p2> -combo`). Distinct from the NBA/NFL/CFB '-stat1/-stat2N' combo-stat token grammar, which sums two DIFFERENT stats for one player rather than combining two players."},
+    {"token": "-staff", "meaning": "MLB-only h2h modifier: adds a per-pitcher career breakdown against the opposing team's pitching staff (pre-computed for ~40 covered batters). No NFL equivalent exists."},
+    {"token": "-td / -int / -tgts / -long", "meaning": "NFL stat-family modifiers. -td: touchdowns instead of yards (pass/rush/rec all valid). -int: interceptions (passing only, errors elsewhere). -tgts: targets (receiving only, errors elsewhere). -long: switches source to play-by-play explosive-play data and prefixes the stat as 'long_<stat>'."},
+    {"token": "-rr / -pr", "meaning": "Combo-stat shorthand for NFL/CFB: -rr = rush+rec yards, -pr = pass+rush yards. Verbose equivalent: '-rush/-rec' / '-pass/-rush'."},
+    {"token": "qb / rb / wr / te", "meaning": "Position filter, accepted as the token right after the league name for NFL and CFB (e.g. `nspe nfl qb pass ...`), or spelled out (quarterback/runningback/widereceiver/tightend)."},
+    {"token": "--json", "meaning": "Global flag (or NSPE_JSON=1 env var): suppresses/augments the human-readable table output with a single compact JSON envelope line on stdout, for programmatic consumers."}
+  ]
+}

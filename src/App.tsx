@@ -34,6 +34,7 @@ import {
   extractMlbReportLeaderboardPayload,
   extractMlbTeamOverviewPayload,
   extractMlbTeamRunsPayload,
+  extractExplosiveOverviewPayload,
   isNflExplosivePayload,
   normalizeDisplayPlayer,
   normalizeQueryResults,
@@ -54,6 +55,7 @@ import {
   type MlbTeamRunsComputeResult,
   type MlbTeamRunsPayload,
   type MlbTeamRunsTrendResult,
+  type ExplosiveOverviewPayload,
   type NflExplosivePayload,
   type QueryResult,
 } from '@/lib/nspe-payloads'
@@ -499,6 +501,121 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
           </div>
         )
       })}
+    </div>
+  )
+}
+
+// ---------- Explosive-play overview (single player, bar chart) ----------
+// Sport-agnostic — see ExplosiveOverviewPayload's comment in nspe-payloads.ts
+// for why (matched by engine suffix, tolerant field-name resolution, an
+// explicit/inferred `unit` so this same view can print "64yds" for NFL or
+// "450ft" for a future MLB variant without knowing the sport). The app's
+// first result rendered as an actual chart rather than stat cards or a
+// table — horizontal bars (not vertical) since they read cleanly at the
+// mini panel's fixed ~620px width without needing extra height. Terminal
+// palette per request: cyan/white text, green bars.
+
+function ExplosiveOverviewView({ payload }: { payload: ExplosiveOverviewPayload }) {
+  const CYAN = 'oklch(0.85 0.15 195)'
+  const CYAN_BRIGHT = 'oklch(0.90 0.18 195)'
+  const GREEN = 'oklch(0.75 0.16 145)'
+  const DIM = 'oklch(0.55 0 0)'
+  const BORDER = 'oklch(0.22 0 0)'
+
+  const player = normalizeDisplayPlayer(payload.query.player)
+  const category = payload.query.category
+  const unit = payload.unit
+  const [yearStart, yearEnd] = payload.query.year_window ?? []
+  const yearLabel = yearStart != null ? (yearStart === yearEnd ? `${yearStart}` : `${yearStart}-${yearEnd}`) : ''
+
+  const buckets = payload.buckets
+  const maxCount = Math.max(1, ...buckets.map((b) => b.count))
+
+  return (
+    <div className="space-y-4 font-mono">
+      <div className="flex items-baseline gap-2 pb-2" style={{ borderBottom: `1px solid ${BORDER}` }}>
+        <span className="text-[14px] font-bold" style={{ color: CYAN_BRIGHT }}>
+          {player}
+        </span>
+        <span className="text-[12px]" style={{ color: DIM }}>
+          explosive {category} plays{yearLabel ? ` · ${yearLabel}` : ''}
+        </span>
+      </div>
+
+      <div className="flex flex-wrap gap-5 text-[12px]">
+        <div>
+          <div className="text-[9px] uppercase tracking-wider" style={{ color: DIM }}>
+            Plays
+          </div>
+          <div className="text-[16px] font-bold" style={{ color: CYAN }}>
+            {payload.totalPlays}
+          </div>
+        </div>
+        <div>
+          <div className="text-[9px] uppercase tracking-wider" style={{ color: DIM }}>
+            Total {unit}
+          </div>
+          <div className="text-[16px] font-bold" style={{ color: CYAN }}>
+            {payload.totalValue.toLocaleString()}
+          </div>
+        </div>
+        <div>
+          <div className="text-[9px] uppercase tracking-wider" style={{ color: DIM }}>
+            Avg {unit}
+          </div>
+          <div className="text-[16px] font-bold" style={{ color: CYAN }}>
+            {payload.avgValue.toFixed(1)}
+          </div>
+        </div>
+        {payload.longest && (
+          <div>
+            <div className="text-[9px] uppercase tracking-wider" style={{ color: DIM }}>
+              Longest
+            </div>
+            <div className="text-[16px] font-bold" style={{ color: GREEN }}>
+              {payload.longest.value}
+              {unit}
+              <span className="text-[11px] font-normal ml-1.5" style={{ color: DIM }}>
+                {[
+                  payload.longest.opponent,
+                  payload.longest.quarter ? `Q${payload.longest.quarter}` : null,
+                  extractDateToken(payload.longest.date_iso),
+                ]
+                  .filter(Boolean)
+                  .join(' · ')}
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div>
+        <div className="text-[9px] uppercase tracking-wider mb-2" style={{ color: DIM }}>
+          by distance
+        </div>
+        <div className="space-y-1.5">
+          {buckets.map((b) => {
+            const widthPct = Math.max(4, (b.count / maxCount) * 100)
+            return (
+              <div key={b.range} className="flex items-center gap-2">
+                <span className="text-[11px] w-[46px] flex-none text-right" style={{ color: DIM }}>
+                  {b.range}
+                </span>
+                <div className="flex-1 h-[16px] rounded relative overflow-hidden" style={{ backgroundColor: 'oklch(0.20 0 0)' }}>
+                  <div className="h-full rounded" style={{ width: `${widthPct}%`, backgroundColor: GREEN }} />
+                </div>
+                <span className="text-[11px] w-[22px] flex-none font-bold text-right" style={{ color: CYAN_BRIGHT }}>
+                  {b.count}
+                </span>
+                <span className="text-[10px] w-[100px] flex-none" style={{ color: DIM }}>
+                  {b.value}
+                  {unit} · {b.avg.toFixed(1)}avg
+                </span>
+              </div>
+            )
+          })}
+        </div>
+      </div>
     </div>
   )
 }
@@ -1831,12 +1948,17 @@ function MlbPlayerReportView({ payload }: { payload: MlbPlayerReportPayload }) {
 // reads as "the button that matters" without being distracting.
 const SEARCH_GLOW = '0 0 8px 1px oklch(0.90 0.18 195 / 0.55), 0 0 20px 4px oklch(0.90 0.18 195 / 0.25)'
 
-const NSPE_SPORT_TOKENS = ['mlb', 'nfl', 'nba', 'nhl', 'cfb', 'help']
+// Every command family in nspecommand_map.json (the CLI's own dispatch
+// catalog) opens with one of these tokens — a league name, 'ncaaf' (a pure
+// input alias for 'cfb'), the 'plus' batch-runner meta-command, or 'help'.
+// Anything else with no hyphen and no leading token from this list is
+// treated as a player-name search instead of a malformed command.
+const NSPE_COMMAND_TOKENS = ['mlb', 'nfl', 'nba', 'nhl', 'cfb', 'ncaaf', 'plus', 'help']
 function looksLikePlayerSearch(value: string): boolean {
   const trimmed = value.trim().toLowerCase()
   if (!trimmed || trimmed.includes('-')) return false
   const firstToken = trimmed.split(/\s+/)[0]
-  if (NSPE_SPORT_TOKENS.includes(firstToken)) return false
+  if (NSPE_COMMAND_TOKENS.includes(firstToken)) return false
   return true
 }
 
@@ -1868,6 +1990,7 @@ function App() {
   const [reportLeaderboardResult, setReportLeaderboardResult] = useState<MlbReportLeaderboardPayload | null>(null)
   const [playerReportResult, setPlayerReportResult] = useState<MlbPlayerReportPayload | null>(null)
   const [nflExplosiveResult, setNflExplosiveResult] = useState<NflExplosivePayload | null>(null)
+  const [explosiveOverviewResult, setExplosiveOverviewResult] = useState<ExplosiveOverviewPayload | null>(null)
   const [hrResult, setHrResult] = useState<MlbHrPayload | null>(null)
   const [firstPaResult, setFirstPaResult] = useState<MlbFirstPaTrendPayload | null>(null)
   const [teamRunsResult, setTeamRunsResult] = useState<MlbTeamRunsPayload | null>(null)
@@ -1963,6 +2086,7 @@ function App() {
     setReportLeaderboardResult(null)
     setPlayerReportResult(null)
     setNflExplosiveResult(null)
+    setExplosiveOverviewResult(null)
     setHrResult(null)
     setFirstPaResult(null)
     setTeamRunsResult(null)
@@ -2077,6 +2201,14 @@ function App() {
       // NFL explosive (play-by-play long plays)
       if (isNflExplosivePayload(payload)) {
         setNflExplosiveResult(payload)
+        setQueryResults([])
+        return
+      }
+
+      // NFL explosive-play overview (single player, distance-bucketed bar chart)
+      const explosiveOverviewPayload = extractExplosiveOverviewPayload(payload)
+      if (explosiveOverviewPayload) {
+        setExplosiveOverviewResult(explosiveOverviewPayload)
         setQueryResults([])
         return
       }
@@ -2638,6 +2770,8 @@ function App() {
                 ? `${lastQuery} — player report`
                 : nflExplosiveResult
                 ? `${lastQuery} — explosive`
+                : explosiveOverviewResult
+                ? `${lastQuery} — explosive overview`
                 : hrResult
                 ? `${lastQuery} — hr`
                 : firstPaResult
@@ -2678,6 +2812,8 @@ function App() {
               <MlbPlayerReportView payload={playerReportResult} />
             ) : nflExplosiveResult ? (
               <NflExplosiveView payload={nflExplosiveResult} />
+            ) : explosiveOverviewResult ? (
+              <ExplosiveOverviewView payload={explosiveOverviewResult} />
             ) : hrResult ? (
               <MlbHrView payload={hrResult} />
             ) : firstPaResult ? (
@@ -2845,17 +2981,21 @@ function App() {
                 >
                   search
                 </button>
-                {/* Entry point into the mobile calculator UI (/calculator) —
-                    a real navigation, not a local bottom-sheet toggle, so the
-                    calculator lives at its own URL instead of being shown
-                    automatically to every mobile visitor. */}
-                <a
-                  href="/calculator"
-                  className="h-[52px] flex items-center rounded-lg border px-6 font-mono text-[14px] hover:opacity-80 transition-opacity"
+                {/* {calculator} removed from mobile nav — paused indefinitely
+                    pending a design rework (see the conversation this was
+                    decided in). Route stays live at /calculator, just
+                    unlinked, same shelve-don't-delete pattern as {database}/
+                    {sample-commands}. QueryBuilder (already built, desktop-
+                    proven) fills the gap for now via the same mobile
+                    full-screen bottom-sheet-turned-takeover below. */}
+                <button
+                  type="button"
+                  onClick={() => setIsBuilderOpen(true)}
+                  className="h-[52px] shrink-0 rounded-lg border px-6 font-mono text-[14px] hover:opacity-80 transition-opacity"
                   style={{ color: 'oklch(0.85 0.15 195)', borderColor: 'oklch(0.85 0.15 195)' }}
                 >
-                  {'{calculator}'}
-                </a>
+                  build
+                </button>
               </div>
             </div>
           ) : (
@@ -2932,50 +3072,35 @@ function App() {
         </div>
       </div>
 
-      {/* Query builder — bottom sheet on mobile, draggable floating panel on desktop */}
+      {/* Query builder — full-screen takeover on mobile (matching /calculator's
+          own full-viewport page feel, per request, rather than a partial
+          bottom sheet), draggable floating panel on desktop. */}
       {isBuilderOpen && isMobile && (
-        <>
+        <div className="fixed inset-0 z-50 flex flex-col" style={{ backgroundColor: 'oklch(0.08 0 0)' }}>
           <div
-            className="fixed inset-0 z-40"
-            style={{ backgroundColor: 'rgba(0,0,0,0.55)' }}
-            onClick={() => setIsBuilderOpen(false)}
-          />
-          <div
-            className="fixed z-50 rounded-t-2xl overflow-y-auto"
-            style={{
-              bottom: 0,
-              left: 0,
-              right: 0,
-              maxHeight: '96dvh',
-              backgroundColor: 'oklch(0.13 0 0)',
-              border: '1px solid oklch(0.28 0 0)',
-              borderBottom: 'none',
-            }}
+            className="flex items-center gap-3 px-4 pt-4 pb-3 flex-none"
+            style={{ borderBottom: '1px solid oklch(0.28 0 0)' }}
           >
-            <div className="flex justify-center pt-3 pb-1">
-              <div className="w-10 h-1 rounded-full" style={{ backgroundColor: 'oklch(0.32 0 0)' }} />
-            </div>
-            <div className="px-5 pb-3 flex items-center justify-between">
-              <span className="font-mono font-bold text-[13px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
-                Query Builder
-              </span>
-              <button
-                onClick={() => setIsBuilderOpen(false)}
-                className="font-mono text-[14px] hover:opacity-70 transition-opacity"
-                style={{ color: 'oklch(0.85 0.15 195)' }}
-              >
-                ✕
-              </button>
-            </div>
-            <div className="px-5 pb-10">
-              <QueryBuilder
-                onRunQuery={handleRunFromBuilder}
-                isLoading={isLoading}
-                popularPlayers={(leaderboard?.rows ?? []).slice(0, 20).map((r) => ({ player: r.player, team: r.team }))}
-              />
-            </div>
+            <button
+              type="button"
+              onClick={() => setIsBuilderOpen(false)}
+              className="font-mono text-[13px] px-3 py-2 rounded-lg border flex-none"
+              style={{ backgroundColor: 'oklch(0.15 0 0)', borderColor: 'oklch(0.28 0 0)', color: 'oklch(0.88 0 0)' }}
+            >
+              ‹ back
+            </button>
+            <span className="font-mono font-bold text-[13px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
+              {'{build}'}
+            </span>
           </div>
-        </>
+          <div className="flex-1 overflow-y-auto px-4 py-4">
+            <QueryBuilder
+              onRunQuery={handleRunFromBuilder}
+              isLoading={isLoading}
+              popularPlayers={(leaderboard?.rows ?? []).slice(0, 20).map((r) => ({ player: r.player, team: r.team }))}
+            />
+          </div>
+        </div>
       )}
 
       {isBuilderOpen && !isMobile && (
