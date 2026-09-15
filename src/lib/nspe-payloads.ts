@@ -1373,9 +1373,19 @@ export function detectStatContext(payload: ApiPayload, fallbackQuery: string): S
 }
 
 export function computeMatchValue(match: Record<string, unknown>, ctx: StatContext): number | null {
-  // New backend shape uses a sport-agnostic `val` field; prefer it when present.
+  // Several backend engines use a sport-agnostic field for "the stat value
+  // for this match" — but not all of them spell it the same way. `val` was
+  // the first one seen; `nfl_quarter_trend` (the 1h/q1-scoped trend engine)
+  // spells the identical concept `value` instead (confirmed against a real
+  // response — every match had `value: 163`-style entries with no `val`,
+  // `pass_yds`, or period-prefixed field at all, so extraction silently
+  // failed for 100% of rows until this was added). Prefer both over the
+  // STAT_FIELDS-based lookup below.
   if (match.val !== undefined) {
     return asNumber(match.val)
+  }
+  if (match.value !== undefined) {
+    return asNumber(match.value)
   }
   const field = STAT_FIELDS[ctx.sport]?.[ctx.stat]
   if (Array.isArray(field)) {
