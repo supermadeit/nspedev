@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { useIsMobile } from '@/hooks/use-mobile'
 
 export type QueryMode = 'trend' | 'compute' | 'streak' | 'h2h' | 'team' | 'explosive'
@@ -10,12 +10,25 @@ export type ExplosiveLeague = 'mlb' | 'nfl'
 export type MlbFirstPaFlag = 'xbh' | 'walk' | 'single' | 'hit' | ''
 export type NflStatType = 'yds' | 'td' | 'total'
 
-// "total" combines the selected category with its partner (pass+rush when
-// the category is pass; rush+rec when it's rush or rec) — a combined-yardage
-// stat that only pairs with -yds-style thresholds, never -td. Trend default
-// thresholds, curated per category (rush and rec share the same underlying
-// rush+rec combo, hence the same default).
-export const NFL_TOTAL_TREND_DEFAULT: Record<string, number> = { pass: 250, rush: 100, rec: 100 }
+// pass -> pass+rush combo ("-pr"), rush/rec -> rush+rec combo ("-rr") — the
+// two short flags the backend recognizes directly after "nspe nfl", with no
+// category word in front (unlike -yds/-td, which need "pass"/"rush"/"rec"
+// first).
+function nflComboCode(stat: string): 'pr' | 'rr' {
+  return stat === 'pass' ? 'pr' : 'rr'
+}
+
+// Default combo-yardage threshold, keyed by combo code (see nflComboCode
+// above) — a comfortably-clearable single-game value for each. Used both as
+// the trend "-pr{N}/-rr{N}" default and the compute "min{N}" default, since
+// both share the same season-start single-game window pin as the rest of
+// NFL right now.
+export const NFL_COMBO_DEFAULT: Record<'pr' | 'rr', number> = { pr: 250, rr: 80 }
+// 'exact' has no reachable UI on desktop anymore (the {exact} button was
+// removed — see the compute-mode threshold Pills below), but stays in the
+// type purely so the paused mobile calculator (BuilderScreen.tsx /
+// useCalculatorQuery.ts, which still has a live {exact} button) keeps
+// compiling — same reasoning as SeasonType above.
 export type ThresholdMode = 'min' | 'range' | 'exact'
 
 interface PersistedBuilderState {
@@ -40,6 +53,7 @@ interface PersistedBuilderState {
   batPosition: string
   mlbFirstFlag: MlbFirstPaFlag
   nflStatType: NflStatType
+  nflCombo: boolean
   explosiveLeague: ExplosiveLeague
   nflPlayType: string
   nflYds: string
@@ -201,6 +215,10 @@ export const EXPLOSIVE_MLB_COMPUTE_PRESETS = [600, 800, 1000, 1200, 1500, 2000]
 export const COMPUTE_PRESET_OVERRIDES: Record<string, Record<string, number[]>> = {
   nba: {
     total: [80, 100, 120, 140, 160],
+    // pts' own ×5 scaling (trend preset 10 → 50) starts too high for a
+    // compute-mode "total over the window" ask — 30, stepping by 10 to 100,
+    // matches the requested range directly.
+    pts: [30, 40, 50, 60, 70, 80, 90, 100],
   },
 }
 
@@ -284,11 +302,13 @@ function NumInput({
   onChange,
   placeholder,
   w = 60,
+  autoFocus,
 }: {
   value: string
   onChange: (v: string) => void
   placeholder?: string
   w?: number
+  autoFocus?: boolean
 }) {
   return (
     <input
@@ -297,6 +317,7 @@ function NumInput({
       value={value}
       onChange={(e) => onChange(e.target.value.replace(/[^0-9]/g, ''))}
       placeholder={placeholder ?? 'N'}
+      autoFocus={autoFocus}
       className="font-mono text-[13px] rounded border px-2 py-1.5 outline-none"
       style={{
         width: `${w}px`,
@@ -334,11 +355,27 @@ function NumSelect({
 }) {
   const isCustom = value !== '' && !options.includes(Number(value))
   const [showCustom, setShowCustom] = useState(isCustom)
+  // Only auto-focus the custom input when the user actively switches into it
+  // via "Other…" mid-session (so the numpad pops immediately, no extra tap
+  // needed) — never on a fresh mount where showCustom already starts true
+  // because a previously-persisted custom value was restored, which would
+  // otherwise steal focus (and pop the mobile keyboard) the instant the
+  // builder opens with no user action at all.
+  const hasMountedRef = useRef(false)
+  useEffect(() => {
+    hasMountedRef.current = true
+  }, [])
 
   if (showCustom) {
     return (
       <div className="flex items-center gap-1">
-        <NumInput value={value} onChange={onChange} placeholder={placeholder} w={w - 24} />
+        <NumInput
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          w={w - 24}
+          autoFocus={hasMountedRef.current}
+        />
         <button
           type="button"
           onClick={() => {
@@ -425,6 +462,10 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
   const [mlbFirstFlag, setMlbFirstFlag] = useState<MlbFirstPaFlag>(initial.mlbFirstFlag ?? '')
   // NFL stat type: yards or touchdowns, applies to rush/pass/rec
   const [nflStatType, setNflStatType] = useState<NflStatType>(initial.nflStatType ?? 'yds')
+  // Combo toggle (pass+rush / rush+rec), independent of nflStatType so -td
+  // stays selectable alongside it instead of being mutually exclusive — see
+  // the {rush+rec} button's comment below for the full command mapping.
+  const [nflCombo, setNflCombo] = useState(initial.nflCombo ?? false)
   // explosive (NFL long plays / MLB long HR)
   const [explosiveLeague, setExplosiveLeague] = useState<ExplosiveLeague>(initial.explosiveLeague ?? 'nfl')
   const [nflPlayType, setNflPlayType] = useState(initial.nflPlayType ?? '')
@@ -442,7 +483,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       streakN,
       h2hPlayer, h2hOpponent,
       teamStat, teamSubMode,
-      batPosition, mlbFirstFlag, nflStatType,
+      batPosition, mlbFirstFlag, nflStatType, nflCombo,
       explosiveLeague, nflPlayType, nflYds,
       nflExplosiveSubMode, nflMinYds,
     }
@@ -451,7 +492,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     } catch {
       // ignore quota / unavailable storage
     }
-  }, [storageKey, mode, sport, period, yearFilter, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, nflStatType, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds])
+  }, [storageKey, mode, sport, period, yearFilter, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, nflStatType, nflCombo, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds])
 
   const isNbaHalfPeriod = sport === 'nba' && period === '1h'
   const allStats = SPORT_STATS[sport] ?? []
@@ -541,11 +582,6 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
         } else if (thresholdMode === 'range') {
           if (minN) parts.push(`min${minN}`)
           if (maxN) parts.push(`max${maxN}`)
-        } else if (thresholdMode === 'exact') {
-          if (minN) {
-            parts.push(`min${minN}`)
-            parts.push(`max${minN}`)
-          }
         }
         if (computeWindow === '-season') parts.push('-season')
         else if (computeWindow === '-last' && windowN) parts.push(`-last${windowN}`)
@@ -572,8 +608,19 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     if (mode === 'trend') {
       if (stat) {
         if (sport === 'nfl') {
-          parts.push(stat)
-          parts.push(`-${nflStatType}${thresholdN}`)
+          if (nflCombo && nflStatType === 'td') {
+            // Combo + td is the "anytime TD" concept — the backend's own
+            // engine for this is a distinct "any" category (rush_td +
+            // rec_td summed), not a per-category -td flag, regardless of
+            // which of the three categories happens to be selected.
+            parts.push('any')
+            parts.push(`-td${thresholdN}`)
+          } else if (nflCombo) {
+            parts.push(`-${nflComboCode(stat)}${thresholdN}`)
+          } else {
+            parts.push(stat)
+            parts.push(`-${nflStatType}${thresholdN}`)
+          }
         } else {
           parts.push(`-${stat}${thresholdN}`)
         }
@@ -582,8 +629,15 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     } else if (mode === 'compute') {
       if (stat) {
         if (sport === 'nfl') {
-          parts.push(stat)
-          parts.push(`-${nflStatType}`)
+          if (nflCombo && nflStatType === 'td') {
+            parts.push('any')
+            parts.push('-td')
+          } else if (nflCombo) {
+            parts.push(`-${nflComboCode(stat)}`)
+          } else {
+            parts.push(stat)
+            parts.push(`-${nflStatType}`)
+          }
         } else {
           parts.push(`-${stat}`)
         }
@@ -593,11 +647,6 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       } else if (thresholdMode === 'range') {
         if (minN) parts.push(`min${minN}`)
         if (maxN) parts.push(`max${maxN}`)
-      } else if (thresholdMode === 'exact') {
-        if (minN) {
-          parts.push(`min${minN}`)
-          parts.push(`max${minN}`)
-        }
       }
       if (computeWindow === '-season') parts.push('-season')
       else if (computeWindow === '-career') parts.push('-career')
@@ -621,7 +670,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     if (yearFilter) parts.push(yearFilter)
 
     return parts.join(' ')
-  }, [mode, sport, period, yearFilter, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds, nflStatType])
+  }, [mode, sport, period, yearFilter, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds, nflStatType, nflCombo])
 
   const canRun = Boolean(builtCommand) && !isLoading
 
@@ -639,8 +688,8 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       // for more games than any player has played yet. Pin to the tightest
       // possible window (met 1 of the last 1 game) instead, revisited once
       // there's enough season depth for a wider window to make sense again.
-      if (mode === 'trend' && sport === 'nfl' && nflStatType === 'total') {
-        setThresholdN(String(NFL_TOTAL_TREND_DEFAULT[stat] ?? NFL_YDS_PRESETS[0]))
+      if (mode === 'trend' && sport === 'nfl' && nflCombo && nflStatType !== 'td') {
+        setThresholdN(String(NFL_COMBO_DEFAULT[nflComboCode(stat)]))
         setLastA('1')
         setLastB('1')
         return
@@ -663,8 +712,11 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
         // pinned to a single game, reuse the unscaled per-game presets
         // instead so the default min value is still one a single game can
         // realistically clear.
-        const presets = nflStatType === 'td' ? NFL_TD_PRESETS : NFL_YDS_PRESETS
-        setMinN(String(presets[0]))
+        const minDefault =
+          nflCombo && nflStatType !== 'td'
+            ? NFL_COMBO_DEFAULT[nflComboCode(stat)]
+            : (nflStatType === 'td' ? NFL_TD_PRESETS : NFL_YDS_PRESETS)[0]
+        setMinN(String(minDefault))
         setComputeWindow('-last')
         setWindowN('1')
       } else {
@@ -700,7 +752,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode, sport, stat, nflStatType, firstPaActive, teamStat, teamSubMode, explosiveLeague, nflExplosiveSubMode])
+  }, [mode, sport, stat, nflStatType, nflCombo, firstPaActive, teamStat, teamSubMode, explosiveLeague, nflExplosiveSubMode])
 
   // Same idea for MLB first plate appearance — picking a category fills in
   // the met/last window right away.
@@ -998,21 +1050,9 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
                   </Pill>
                   <Pill
                     selected={thresholdMode === 'range'}
-                    onClick={() => {
-                      if (thresholdMode === 'exact' && minN) setMaxN(minN)
-                      setThresholdMode('range')
-                    }}
+                    onClick={() => setThresholdMode('range')}
                   >
                     min - max
-                  </Pill>
-                  <Pill
-                    selected={thresholdMode === 'exact'}
-                    onClick={() => {
-                      setThresholdMode('exact')
-                      setMaxN('')
-                    }}
-                  >
-                    exact
                   </Pill>
                 </div>
               </div>
@@ -1035,12 +1075,6 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
                       <NumSelect value={maxN} onChange={setMaxN} options={TEAM_RUNS_COMPUTE_PRESETS} w={80} />
                     </div>
                   </>
-                )}
-                {thresholdMode === 'exact' && (
-                  <div>
-                    <SLabel>exact threshold</SLabel>
-                    <NumSelect value={minN} onChange={setMinN} options={TEAM_RUNS_COMPUTE_PRESETS} w={80} />
-                  </div>
                 )}
               </div>
               <SLabel>window</SLabel>
@@ -1101,52 +1135,20 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
         </div>
       )}
 
-      {/* Season / Period */}
-      {isBuilderQuery && !firstPaActive && (
-      <div className="flex gap-6 mb-3 flex-wrap">
-        <div>
-          <SLabel>season {'{optional}'}</SLabel>
-          {/* Replaces the old postseason toggle — pick a specific year
-              instead. Styled like H2H's opponent-team pills (MLB_TEAMS
-              above): small buttons in a wrapping row. {YY} not {YYYY} to
-              keep the row compact; the {older} dropdown covers 2010-2019.
-              Pre-2010 (career-spanning players) isn't reachable here yet —
-              planned manual-YYYY-input follow-up, not built. */}
-          <div className="flex gap-1.5 flex-wrap items-center">
-            {SEASON_YEARS_VISIBLE.map((y) => (
-              <Pill
-                key={y}
-                selected={yearFilter === String(y)}
-                onClick={() => setYearFilter((p) => (p === String(y) ? '' : String(y)))}
-              >
-                {String(y).slice(2)}
-              </Pill>
-            ))}
-            <select
-              value={SEASON_YEARS_OLDER.includes(Number(yearFilter)) ? yearFilter : ''}
-              onChange={(e) => setYearFilter(e.target.value)}
-              className={selectClass}
-              style={{ ...selectStyle, width: '84px' }}
-            >
-              <option value="">{'{older}'}</option>
-              {SEASON_YEARS_OLDER.map((y) => (
-                <option key={y} value={y}>
-                  {y}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-        {/* MLB/NFL dropped entirely — both only ever had a single always-
-            selected "reg"/"full" pill with nothing else to toggle to, which
-            read as a dead control now that "post" (its one real alternative)
-            is gone. Only render this column for sports with a genuine
-            second option (NHL's p1, NBA's q1/1h). Postseason returns later
-            as its own thing once MLB's October postseason starts — for now
-            every command defaults to regular season same as before, just
-            without a pointless button implying there's a choice to make. */}
-        {(sport === 'nba' || sport === 'nhl') && (
-        <div>
+      {/* Period — kept here (right after sport, before stat) since it's
+          pushed onto the built command early (right after sport, before the
+          stat/threshold tokens) — its position in the UI mirrors its actual
+          position in the command, same reasoning as moving {season} to the
+          bottom below. MLB/NFL dropped entirely — both only ever had a
+          single always-selected "reg"/"full" pill with nothing else to
+          toggle to, which read as a dead control now that "post" (its one
+          real alternative) is gone. Only render this column for sports with
+          a genuine second option (NHL's p1, NBA's q1/1h). Postseason returns
+          later as its own thing once MLB's October postseason starts — for
+          now every command defaults to regular season same as before, just
+          without a pointless button implying there's a choice to make. */}
+      {isBuilderQuery && !firstPaActive && (sport === 'nba' || sport === 'nhl') && (
+        <div className="mb-3">
           <SLabel>period</SLabel>
           <div className="flex gap-1.5 flex-wrap">
             <Pill selected={period === ''} onClick={() => handlePeriodSelect('')}>
@@ -1162,8 +1164,6 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
             )}
           </div>
         </div>
-        )}
-      </div>
       )}
 
       {/* First plate appearance (MLB trend only — one PA per game, no threshold N) */}
@@ -1234,25 +1234,28 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
         </div>
       )}
 
-      {/* NFL stat type: yards, touchdowns, or the combined total (pass+rush /
-          rush+rec) — total never pairs with -td, so that Pill is disabled
-          while total is selected rather than allowing an invalid combo. */}
+      {/* NFL stat type: -yds/-td stay a normal mutually-exclusive pair,
+          always both clickable. The combo (pass+rush / rush+rec) is a
+          separate toggle, not a third radio option — that's what lets it
+          combine with -td instead of disabling it. Combo alone -> bare
+          "-pr"/"-rr" (no category word, e.g. "nspe nfl -rr80 -last1/1").
+          Combo + -td -> the backend's actual "anytime TD" concept, which is
+          its own "any" category rather than a per-category -td flag (e.g.
+          "nspe nfl any -td2 -last1/1", equivalently thought of as
+          "-rr -td2"). */}
       {isBuilderQuery && sport === 'nfl' && stat && (
         <div className="mb-3">
           <SLabel>type</SLabel>
-          <div className="flex gap-1.5">
+          <div className="flex gap-1.5 flex-wrap items-center">
             <Pill selected={nflStatType === 'yds'} onClick={() => setNflStatType('yds')}>
               -yds
             </Pill>
-            <Pill
-              selected={nflStatType === 'td'}
-              onClick={() => setNflStatType('td')}
-              disabled={nflStatType === 'total'}
-            >
+            <Pill selected={nflStatType === 'td'} onClick={() => setNflStatType('td')}>
               -td
             </Pill>
-            <Pill selected={nflStatType === 'total'} onClick={() => setNflStatType('total')}>
-              -total
+            <span style={{ color: C.textDim }}>+</span>
+            <Pill selected={nflCombo} onClick={() => setNflCombo((p) => !p)}>
+              {stat === 'pass' ? 'pass+rush' : 'rush+rec'}
             </Pill>
           </div>
         </div>
@@ -1307,21 +1310,9 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
               </Pill>
               <Pill
                 selected={thresholdMode === 'range'}
-                onClick={() => {
-                  if (thresholdMode === 'exact' && minN) setMaxN(minN)
-                  setThresholdMode('range')
-                }}
+                onClick={() => setThresholdMode('range')}
               >
                 min - max
-              </Pill>
-              <Pill
-                selected={thresholdMode === 'exact'}
-                onClick={() => {
-                  setThresholdMode('exact')
-                  setMaxN('')
-                }}
-              >
-                exact
               </Pill>
             </div>
           </div>
@@ -1360,17 +1351,6 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
                 </div>
               </>
             )}
-            {thresholdMode === 'exact' && (
-              <div>
-                <SLabel>exact threshold</SLabel>
-                <NumSelect
-                  value={minN}
-                  onChange={setMinN}
-                  options={sport === 'nfl' ? (nflStatType === 'td' ? NFL_TD_COMPUTE_PRESETS : NFL_YDS_COMPUTE_PRESETS) : computeThresholdPresetsFor(sport, stat)}
-                  w={80}
-                />
-              </div>
-            )}
           </div>
           <SLabel>window</SLabel>
           <div className="flex gap-2 flex-wrap items-center">
@@ -1394,6 +1374,46 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
                 <NumSelect value={windowN} onChange={setWindowN} options={COMPUTE_WINDOW_N_PRESETS} w={64} />
               )}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Season — lives at the bottom, under window, since it's optional and
+          is literally the last token in the built command (appended after
+          everything else in builtCommand's yearFilter push, regardless of
+          mode) — e.g. "nspe mlb -hits min100 -season 2025". Replaces the old
+          postseason toggle — pick a specific year instead. Styled like H2H's
+          opponent-team pills (MLB_TEAMS above): small buttons in a wrapping
+          row. {YY} not {YYYY} to keep the row compact; the {older} dropdown
+          covers 2010-2019. Pre-2010 (career-spanning players) isn't
+          reachable here yet — planned manual-YYYY-input follow-up, not
+          built. */}
+      {isBuilderQuery && !firstPaActive && (
+        <div className="mb-3">
+          <SLabel>season {'{optional}'}</SLabel>
+          <div className="flex gap-1.5 flex-wrap items-center">
+            {SEASON_YEARS_VISIBLE.map((y) => (
+              <Pill
+                key={y}
+                selected={yearFilter === String(y)}
+                onClick={() => setYearFilter((p) => (p === String(y) ? '' : String(y)))}
+              >
+                {String(y).slice(2)}
+              </Pill>
+            ))}
+            <select
+              value={SEASON_YEARS_OLDER.includes(Number(yearFilter)) ? yearFilter : ''}
+              onChange={(e) => setYearFilter(e.target.value)}
+              className={selectClass}
+              style={{ ...selectStyle, width: '84px' }}
+            >
+              <option value="">{'{older}'}</option>
+              {SEASON_YEARS_OLDER.map((y) => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       )}

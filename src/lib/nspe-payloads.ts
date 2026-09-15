@@ -947,6 +947,16 @@ export const STAT_FIELDS: Record<string, Record<string, string | string[]>> = {
     // array-sum is a fallback that in practice is never exercised.
     'pass+rush': ['pass_yds', 'rush_yds'],
     'rush+rec': ['rush_yds', 'rec_yds'],
+    // Short-flag aliases for the same two combos — "-pr"/"-rr" queries (e.g.
+    // "nspe nfl -pr250 -last1/1") come through as a bare token with no
+    // preceding category word, unlike -yds/-td which need "pass"/"rush"/
+    // "rec" first. The object-form query.short path already resolves via
+    // the long-form keys above; these are what the plain token-array/
+    // fallback-string path (detectStatContext's bottom scan) needs to match
+    // against instead, since "pr"/"rr" aren't substrings of "pass+rush"/
+    // "rush+rec".
+    pr: ['pass_yds', 'rush_yds'],
+    rr: ['rush_yds', 'rec_yds'],
     // "any" = anytime-TD (rush_td + rec_td combined). Unlike the yds combo
     // stats above, the backend doesn't echo a matching query.short/query.stat
     // string for this one (confirmed: `any -td2` came back as a plain query
@@ -972,6 +982,8 @@ export const STAT_DISPLAY_LABELS: Record<string, string> = {
   tb: 'tb',
   'pass+rush': 'yds',
   'rush+rec': 'yds',
+  pr: 'yds',
+  rr: 'yds',
 }
 
 // Insert a space before any internal capital (e.g. "AaronJudge" -> "Aaron Judge").
@@ -1335,11 +1347,25 @@ export function detectStatContext(payload: ApiPayload, fallbackQuery: string): S
       }
     }
   }
+  // A period token ("1h", "q1", etc.) sitting alongside the stat token in the
+  // plain token-array/fallback-string form of the query (as opposed to the
+  // underscore-joined "1h_pts" form the object-form branch above already
+  // handles) — carry it into periodField too, so a period-scoped query that
+  // comes through this path isn't silently missing the one piece of context
+  // computeMatchValue needs to find the per-match field if it isn't named
+  // plainly. Without this, period-scoped queries reaching this fallback path
+  // depended entirely on computeMatchValue's own brute-force prefix scan.
+  const periodToken = tokens.find((t) => ['q1', '1h', 'p1', 'h1', 'h2', 'q2', 'q3', 'q4'].includes(t.toLowerCase()))
   for (const tok of tokens) {
     const lower = tok.toLowerCase()
     for (const s of knownStats) {
       if (lower.startsWith(s) && /^[a-z]+/i.test(lower)) {
-        return { sport, stat: s, unitLabel }
+        return {
+          sport,
+          stat: s,
+          unitLabel,
+          periodField: periodToken ? `${periodToken.toLowerCase()}_${s}` : undefined,
+        }
       }
     }
   }

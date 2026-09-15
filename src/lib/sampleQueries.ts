@@ -42,6 +42,19 @@ function windowSuffix(window: '-last' | '-season', windowN?: number): string {
 export function buildSampleQueries(): SampleQuery[] {
   const out: SampleQuery[] = []
 
+  // NFL 1st-half passing — unshifted to the very front so it wins the
+  // "first suggestion for a bare nspe" slot once promoteMoatCommands sorts
+  // nfl/mlb ahead of everything else (see below): it's both season-relevant
+  // (nfl) and moat-tagged (1h), same as nba's pts_1h below, but nfl/mlb are
+  // what's actually in season right now. Not derived from
+  // CURATED_TREND_DEFAULTS.nfl like the full-game nfl entries below — that
+  // table's per-key parsing (parseNflTrendKey) has no period dimension, and
+  // adding one there for a single entry isn't worth the generalization.
+  // Threshold is roughly half a full game's 240yd pass default, window
+  // pinned to -last1/1 for the same season-start reason as everything else
+  // NFL right now.
+  out.push({ label: 'nfl trend · pass (1h)', command: 'nspe nfl 1h pass -yds120 -last1/1' })
+
   for (const [sport, stats] of Object.entries(CURATED_TREND_DEFAULTS)) {
     for (const [key, [threshold, met, last]] of Object.entries(stats)) {
       if (sport === 'nfl') {
@@ -103,6 +116,23 @@ export function buildSampleQueries(): SampleQuery[] {
     })
   }
 
+  // MLB first plate appearance — no threshold N behind the category flag
+  // (batters only get one first PA per game, so there's nothing to
+  // threshold), unlike every other trend command here.
+  out.push({ label: 'mlb first pa · hit', command: 'nspe mlb first -hit -last1/1' })
+
+  // NFL combo flags (-pr = pass+rush, -rr = rush+rec) — bare flags with no
+  // category word in front, unlike -yds/-td which need "pass"/"rush"/"rec"
+  // first (see nflComboCode in QueryBuilder.tsx). Thresholds match
+  // NFL_COMBO_DEFAULT there so the sample and the builder's own default
+  // never drift apart.
+  out.push(
+    { label: 'nfl trend · pass+rush (-pr)', command: 'nspe nfl -pr250 -last1/1' },
+    { label: 'nfl trend · rush+rec (-rr)', command: 'nspe nfl -rr80 -last1/1' },
+    { label: 'nfl compute · pass+rush (-pr)', command: 'nspe nfl -pr min250 -last1' },
+    { label: 'nfl compute · rush+rec (-rr)', command: 'nspe nfl -rr min80 -last1' },
+  )
+
   // -ov (single-player explosive-play overview, the new bar-chart engine) —
   // confirmed working command shape from the conversation that shipped it.
   // Not derived from curatedDefaults.ts like everything else above since -ov
@@ -120,9 +150,34 @@ export function buildSampleQueries(): SampleQuery[] {
 // entries happen to exist. Reorders, doesn't filter — nothing is hidden, a
 // specific enough query (e.g. "mlb -hits") still finds the traditional
 // commands via prefix match regardless of this ordering.
+//
+// Within each of those two buckets, NFL/MLB additionally rank ahead of every
+// other sport — it's currently NFL/MLB season, NBA/NHL aren't, and without
+// this a bare "nspe" query surfaced an NBA-heavy top-8 almost by accident
+// (CURATED_TREND_DEFAULTS just happens to define nba's table first). This
+// is a soft, temporary priority, not a hard exclusion: NBA/NHL entries still
+// appear, just lower in the list — a specific enough query still finds them
+// via prefix match regardless of this ordering, same as the moat/rest split
+// above. Revisit once more than one sport is actually in season.
+function seasonPriority(command: string): number {
+  return /^nspe (nfl|mlb)\b/i.test(command) ? 0 : 1
+}
+
+// Stable sort by seasonPriority alone — Array.prototype.sort is spec-stable
+// in modern JS, but spelling out the index tiebreaker keeps that guarantee
+// explicit rather than implicit, since preserving each bucket's original
+// relative order (not just "nfl/mlb somewhere near the top") is the whole
+// point here.
+function bySeasonPriority(queries: SampleQuery[]): SampleQuery[] {
+  return queries
+    .map((q, i) => ({ q, i }))
+    .sort((a, b) => seasonPriority(a.q.command) - seasonPriority(b.q.command) || a.i - b.i)
+    .map(({ q }) => q)
+}
+
 function promoteMoatCommands(queries: SampleQuery[]): SampleQuery[] {
   const isMoat = (q: SampleQuery) => /-ov\b|\blong\b|\b1h\b|\bq1\b/i.test(q.command)
-  const moat = queries.filter(isMoat)
-  const rest = queries.filter((q) => !isMoat(q))
+  const moat = bySeasonPriority(queries.filter(isMoat))
+  const rest = bySeasonPriority(queries.filter((q) => !isMoat(q)))
   return [...moat, ...rest]
 }

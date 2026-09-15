@@ -6,7 +6,7 @@
 // backend's roster grows, with no rebuild/redeploy needed on this side. See
 // nspedev-live-architecture-pivot in memory for the migration this replaced
 // (qb-profiles/*.json + batter-profiles/*.json globs).
-import { normalizeDisplayPlayer } from './nspe-payloads'
+import { normalizeDisplayPlayer, PLAYER_TEAM_MAP } from './nspe-payloads'
 import { fetchPlayerIndex } from './databaseApi'
 
 export interface PlayerIndexEntry {
@@ -77,6 +77,21 @@ export function loadPlayerIndex(): Promise<void> {
       })
   }
   return loadPromise
+}
+
+// Frontend player -> team fallback for query results whose backend engine
+// doesn't echo a team field on the row itself — checked before falling back
+// to the raw result rendering with no team at all. PLAYER_INDEX (this same
+// module's live /database/index fetch) is tried first since it's the
+// broader, actively-growing source; PLAYER_TEAM_MAP (nspe-payloads.ts,
+// built from the bundled leaderboard/hitlist data) only fills in players
+// PLAYER_INDEX doesn't have yet — most trend/compute engines return far more
+// players than have a dedicated database profile.
+export function resolvePlayerTeam(player: string): string | undefined {
+  const normalized = normalizeDisplayPlayer(player).toLowerCase()
+  const indexed = PLAYER_INDEX.find((e) => e.name.toLowerCase() === normalized)
+  if (indexed?.team) return indexed.team
+  return PLAYER_TEAM_MAP.get(normalized)
 }
 
 export interface PlayerMatch {

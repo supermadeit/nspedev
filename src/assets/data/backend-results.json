@@ -1,873 +1,56 @@
 {
-  "engine": "combo-trend",
+  "engine": "mlb_first_pa_trend",
   "query": {
-    "stats": [
-      "rush_yds",
-      "rec_yds"
-    ],
-    "short": "rush+rec",
-    "threshold": 100,
-    "last": 1,
-    "required": 1,
-    "streak": null,
-    "year_window": [
-      2026,
-      2026
-    ],
-    "career": false,
-    "date_range": null
-  },
-  "results": [
-    {
-      "player": "KennethWalkerIii",
-      "met": 1,
-      "match": [
-        {
-          "val": 191,
-          "date": "9/14/26"
-        }
-      ],
-      "last": 1,
-      "threshold": 100,
-      "_latest": "2026-09-14"
-    },
-    {
-      "player": "JonathanTaylor",
-      "met": 1,
-      "match": [
-        {
-          "val": 121,
-          "date": "9/13/26"
-        }
-      ],
-      "last": 1,
-      "threshold": 100,
-      "_latest": "2026-09-13"
-    },
-    {
-      "player": "DaltonKincaid",
-      "met": 1,
-      "match": [
-        {
-          "val": 130,
-          "date": "9/13/26"
-        }
-      ],
-      "last": 1,
-      "threshold": 100,
-      "_latest": "2026-09-13"
-    },
-    {
-      "player": "DjMoore",
-      "met": 1,
-      "match": [
-        {
-          "val": 100,
-          "date": "9/13/26"
-        }
-      ],
-      "last": 1,
-      "threshold": 100,
-      "_latest": "2026-09-13"
-    },
-    {
-      "player": "JalenCoker",
-      "met": 1,
-      "match": [
-        {
-          "val": 138,
-          "date": "9/13/26"
-        }
-      ],
-      "last": 1,
-      "threshold": 100,
-      "_latest": "2026-09-13"
-    },
-    {
-      "player": "KyleMonangai",
-      "met": 1,
-      "match": [
-        {
-          "val": 124,
-          "date": "9/13/26"
-        }
-      ],
-      "last": 1,
-      "threshold": 100,
-      "_latest": "2026-09-13"
-    },
-    {
-      "player": "DAndreSwift",
-      "met": 1,
-      "match": [
-        {
-          "val": 134,
-          "date": "9/13/26"
-        }
-      ],
-      "last": 1,
-      "threshold": 100,
-      "_latest": "2026-09-13"
-    },
-    {
-      "player": "ChristianWatson",
-      "met": 1,
-      "match": [
-        {
-          "val": 147,
-          "date": "9/13/26"
-        }
-      ],
-      "last": 1,
-      "threshold": 100,
-      "_latest": "2026-09-13"
-    },
-    {
-      "player": "BijanRobinson",
-      "met": 1,
-      "match": [
-        {
-          "val": 173,
-          "date": "9/13/26"
-        }
-      ],
-      "last": 1,
-      "threshold": 100,
-      "_latest": "2026-09-13"
-    },
-    {
-      "player": "JahmyrGibbs",
-      "met": 1,
-      "match": [
-        {
-          "val": 186,
-          "date": "9/13/26"
-        }
-      ],
-      "last": 1,
-      "threshold": 100,
-      "_latest": "2026-09-13"
-    },
-    {
-      "player": "AshtonJeanty",
-      "met": 1,
-      "match": [
-        {
-          "val": 147,
-          "date": "9/13/26"
-        }
-      ],
-      "last": 1,
-      "threshold": 100,
-      "_latest": "2026-09-13"
-    },
-    {
-      "player": "ChrisOlave",
-      "met": 1,
-      "match": [
-        {
-          "val": 182,
-          "date": "9/13/26"
-        }
-      ],
-      "last": 1,
-      "threshold": 100,
-      "_latest": "2026-09-13"
-    },
-    {
-      "player": "BreeceHall",
-      "met": 1,
-      "match": [
-        {
-          "val": 118,
-          "date": "9/13/26"
-        }
-      ],
-      "last": 1,
-      "threshold": 100,
-      "_latest": "2026-09-13"
-    },
-    {
-      "player": "ZayFlowers",
-      "met": 1,
-      "match": [
-        {
-          "val": 150,
-          "date": "9/13/26"
-        }
-      ],
-      "last": 1,
-      "threshold": 100,
-      "_latest": "2026-09-13"
-    },
-    {
-      "player": "DerrickHenry",
-      "met": 1,
-      "match": [
-        {
-          "val": 163,
-          "date": "9/13/26"
-        }
-      ],
-      "last": 1,
-      "threshold": 100,
-      "_latest": "2026-09-13"
-    },
-    {
-      "player": "JaxonSmithNjigba",
-      "met": 1,
-      "match": [
-        {
-          "val": 122,
-          "date": "9/9/26"
-        }
-      ],
-      "last": 1,
-      "threshold": 100,
-      "_latest": "2026-09-09"
-    }
-  ]
-}
-
-
-{
-  "sport": "nfl",
-  "query": "nfl any tdmin2 first1/1",
-  "results": [
-    {
-      "player": "kennethwalker iii",
-      "matches": [
-        {
-          "player_id": "4567048",
-          "player_name": "KennethWalker III",
-          "date": "Mon 9/14",
-          "opponent": "vsDEN",
-          "result": "W31-10",
-          "rush_car": 23,
-          "rush_yds": 173,
-          "rush_avg": 7.5,
-          "rush_td": 1,
-          "rush_lng": 60,
-          "rec_rec": 3,
-          "rec_tgts": 6,
-          "rec_yds": 18,
-          "rec_avg": 6,
-          "rec_td": 1,
-          "rec_lng": 11,
-          "fum": 0,
-          "fum_lost": 0,
-          "fum_forced": 0,
-          "fum_kb": 0,
-          "game_id": "401872931",
-          "season_type": "regular",
-          "seasonYear": "2026",
-          "date_iso": "2026-09-14",
-          "team": "KC",
-          "pass_yds": 0,
-          "_combo_td": 2
-        }
-      ],
-      "met_count": 1,
-      "window": 1
-    },
-    {
-      "player": "Jonathan Taylor",
-      "matches": [
-        {
-          "player_id": "4242335",
-          "player_name": "JonathanTaylor",
-          "date": "Sun 9/13",
-          "opponent": "vsBAL",
-          "result": "L41-23",
-          "rush_car": 19,
-          "rush_yds": 98,
-          "rush_avg": 5.2,
-          "rush_td": 2,
-          "rush_lng": 21,
-          "rec_rec": 3,
-          "rec_tgts": 4,
-          "rec_yds": 23,
-          "rec_avg": 7.7,
-          "rec_td": 0,
-          "rec_lng": 13,
-          "fum": 1,
-          "fum_lost": 1,
-          "fum_forced": 0,
-          "fum_kb": 0,
-          "game_id": "401872659",
-          "season_type": "regular",
-          "seasonYear": "2026",
-          "date_iso": "2026-09-13",
-          "team": "IND",
-          "pass_yds": 0,
-          "_combo_td": 2
-        }
-      ],
-      "met_count": 1,
-      "window": 1
-    },
-    {
-      "player": "Josh Allen",
-      "matches": [
-        {
-          "player_id": "3918298",
-          "player_name": "JoshAllen",
-          "date": "Sun 9/13",
-          "opponent": "@HOU",
-          "result": "W36-31",
-          "pass_cmp": 20,
-          "pass_att": 29,
-          "pass_yds": 334,
-          "pass_pct": 69,
-          "pass_avg": 11.5,
-          "pass_td": 2,
-          "pass_int": 0,
-          "pass_lng": 43,
-          "pass_sack": 2,
-          "pass_rtg": 130.5,
-          "qbr": 84.5,
-          "rush_car": 6,
-          "rush_yds": 23,
-          "rush_avg": 3.8,
-          "rush_td": 2,
-          "rush_lng": 21,
-          "game_id": "401872660",
-          "season_type": "regular",
-          "seasonYear": "2026",
-          "date_iso": "2026-09-13",
-          "team": "BUF",
-          "rec_yds": 0,
-          "_combo_td": 2
-        }
-      ],
-      "met_count": 1,
-      "window": 1
-    },
-    {
-      "player": "Jalen Coker",
-      "matches": [
-        {
-          "player_id": "4695883",
-          "player_name": "JalenCoker",
-          "date": "Sun 9/13",
-          "opponent": "vsCHI",
-          "result": "L59-37",
-          "rec_rec": 8,
-          "rec_tgts": 9,
-          "rec_yds": 138,
-          "rec_avg": 17.3,
-          "rec_td": 2,
-          "rec_lng": 51,
-          "rush_car": 0,
-          "rush_yds": 0,
-          "rush_avg": 0,
-          "rush_lng": 0,
-          "rush_td": 0,
-          "fum": 0,
-          "fum_lost": 0,
-          "fum_forced": 0,
-          "fum_kb": 0,
-          "game_id": "401872661",
-          "season_type": "regular",
-          "seasonYear": "2026",
-          "date_iso": "2026-09-13",
-          "team": "CAR",
-          "pass_yds": 0,
-          "_combo_td": 2
-        }
-      ],
-      "met_count": 1,
-      "window": 1
-    },
-    {
-      "player": "Chuba Hubbard",
-      "matches": [
-        {
-          "player_id": "4241416",
-          "player_name": "ChubaHubbard",
-          "date": "Sun 9/13",
-          "opponent": "vsCHI",
-          "result": "L59-37",
-          "rush_car": 10,
-          "rush_yds": 49,
-          "rush_avg": 4.9,
-          "rush_td": 1,
-          "rush_lng": 11,
-          "rec_rec": 3,
-          "rec_tgts": 3,
-          "rec_yds": 38,
-          "rec_avg": 12.7,
-          "rec_td": 1,
-          "rec_lng": 29,
-          "fum": 0,
-          "fum_lost": 0,
-          "fum_forced": 0,
-          "fum_kb": 0,
-          "game_id": "401872661",
-          "season_type": "regular",
-          "seasonYear": "2026",
-          "date_iso": "2026-09-13",
-          "team": "CAR",
-          "pass_yds": 0,
-          "_combo_td": 2
-        }
-      ],
-      "met_count": 1,
-      "window": 1
-    },
-    {
-      "player": "D' Andre Swift",
-      "matches": [
-        {
-          "player_id": "4259545",
-          "player_name": "D'AndreSwift",
-          "date": "Sun 9/13",
-          "opponent": "@CAR",
-          "result": "W59-37",
-          "rush_car": 18,
-          "rush_yds": 124,
-          "rush_avg": 6.9,
-          "rush_td": 3,
-          "rush_lng": 32,
-          "rec_rec": 1,
-          "rec_tgts": 1,
-          "rec_yds": 10,
-          "rec_avg": 10,
-          "rec_td": 0,
-          "rec_lng": 10,
-          "fum": 0,
-          "fum_lost": 0,
-          "fum_forced": 0,
-          "fum_kb": 0,
-          "game_id": "401872661",
-          "season_type": "regular",
-          "seasonYear": "2026",
-          "date_iso": "2026-09-13",
-          "team": "CHI",
-          "pass_yds": 0,
-          "_combo_td": 3
-        }
-      ],
-      "met_count": 1,
-      "window": 1
-    },
-    {
-      "player": "Caleb Williams",
-      "matches": [
-        {
-          "player_id": "4431611",
-          "player_name": "CalebWilliams",
-          "date": "Sun 9/13",
-          "opponent": "@CAR",
-          "result": "W59-37",
-          "pass_cmp": 21,
-          "pass_att": 29,
-          "pass_yds": 269,
-          "pass_pct": 72.4,
-          "pass_avg": 9.3,
-          "pass_td": 2,
-          "pass_int": 0,
-          "pass_lng": 47,
-          "pass_sack": 2,
-          "pass_rtg": 124.1,
-          "qbr": 94.9,
-          "rush_car": 10,
-          "rush_yds": 65,
-          "rush_avg": 6.5,
-          "rush_td": 2,
-          "rush_lng": 29,
-          "game_id": "401872661",
-          "season_type": "regular",
-          "seasonYear": "2026",
-          "date_iso": "2026-09-13",
-          "team": "CHI",
-          "rec_yds": 0,
-          "_combo_td": 2
-        }
-      ],
-      "met_count": 1,
-      "window": 1
-    },
-    {
-      "player": "Justin Jefferson",
-      "matches": [
-        {
-          "player_id": "4262921",
-          "player_name": "JustinJefferson",
-          "date": "Sun 9/13",
-          "opponent": "vsGB",
-          "result": "W39-22",
-          "rec_rec": 8,
-          "rec_tgts": 9,
-          "rec_yds": 92,
-          "rec_avg": 11.5,
-          "rec_td": 2,
-          "rec_lng": 39,
-          "rush_car": 0,
-          "rush_yds": 0,
-          "rush_avg": 0,
-          "rush_lng": 0,
-          "rush_td": 0,
-          "fum": 0,
-          "fum_lost": 0,
-          "fum_forced": 0,
-          "fum_kb": 0,
-          "game_id": "401872927",
-          "season_type": "regular",
-          "seasonYear": "2026",
-          "date_iso": "2026-09-13",
-          "team": "MIN",
-          "pass_yds": 0,
-          "_combo_td": 2
-        }
-      ],
-      "met_count": 1,
-      "window": 1
-    },
-    {
-      "player": "David Montgomery",
-      "matches": [
-        {
-          "player_id": "4035538",
-          "player_name": "DavidMontgomery",
-          "date": "Sun 9/13",
-          "opponent": "vsBUF",
-          "result": "L36-31",
-          "rush_car": 20,
-          "rush_yds": 60,
-          "rush_avg": 3,
-          "rush_td": 2,
-          "rush_lng": 18,
-          "rec_rec": 3,
-          "rec_tgts": 3,
-          "rec_yds": 19,
-          "rec_avg": 6.3,
-          "rec_td": 1,
-          "rec_lng": 9,
-          "fum": 0,
-          "fum_lost": 0,
-          "fum_forced": 0,
-          "fum_kb": 0,
-          "game_id": "401872660",
-          "season_type": "regular",
-          "seasonYear": "2026",
-          "date_iso": "2026-09-13",
-          "team": "HOU",
-          "pass_yds": 0,
-          "_combo_td": 3
-        }
-      ],
-      "met_count": 1,
-      "window": 1
-    },
-    {
-      "player": "Christian Watson",
-      "matches": [
-        {
-          "player_id": "4248528",
-          "player_name": "ChristianWatson",
-          "date": "Sun 9/13",
-          "opponent": "@MIN",
-          "result": "L39-22",
-          "rec_rec": 6,
-          "rec_tgts": 8,
-          "rec_yds": 147,
-          "rec_avg": 24.5,
-          "rec_td": 2,
-          "rec_lng": 81,
-          "rush_car": 0,
-          "rush_yds": 0,
-          "rush_avg": 0,
-          "rush_lng": 0,
-          "rush_td": 0,
-          "fum": 0,
-          "fum_lost": 0,
-          "fum_forced": 0,
-          "fum_kb": 0,
-          "game_id": "401872927",
-          "season_type": "regular",
-          "seasonYear": "2026",
-          "date_iso": "2026-09-13",
-          "team": "GB",
-          "pass_yds": 0,
-          "_combo_td": 2
-        }
-      ],
-      "met_count": 1,
-      "window": 1
-    },
-    {
-      "player": "Dallas Goedert",
-      "matches": [
-        {
-          "player_id": "3121023",
-          "player_name": "DallasGoedert",
-          "date": "Sun 9/13",
-          "opponent": "vsWSH",
-          "result": "W24-22",
-          "rec_rec": 4,
-          "rec_tgts": 5,
-          "rec_yds": 77,
-          "rec_avg": 19.3,
-          "rec_td": 2,
-          "rec_lng": 43,
-          "rush_car": 0,
-          "rush_yds": 0,
-          "rush_avg": 0,
-          "rush_lng": 0,
-          "rush_td": 0,
-          "fum": 0,
-          "fum_lost": 0,
-          "fum_forced": 0,
-          "fum_kb": 0,
-          "game_id": "401872929",
-          "season_type": "regular",
-          "seasonYear": "2026",
-          "date_iso": "2026-09-13",
-          "team": "PHI",
-          "pass_yds": 0,
-          "_combo_td": 2
-        }
-      ],
-      "met_count": 1,
-      "window": 1
-    },
-    {
-      "player": "Javonte Williams",
-      "matches": [
-        {
-          "player_id": "4361579",
-          "player_name": "JavonteWilliams",
-          "date": "Sun 9/13",
-          "opponent": "@NYG",
-          "result": "L28-20",
-          "rush_car": 12,
-          "rush_yds": 41,
-          "rush_avg": 3.4,
-          "rush_td": 1,
-          "rush_lng": 8,
-          "rec_rec": 5,
-          "rec_tgts": 5,
-          "rec_yds": 31,
-          "rec_avg": 6.2,
-          "rec_td": 1,
-          "rec_lng": 17,
-          "fum": 0,
-          "fum_lost": 0,
-          "fum_forced": 0,
-          "fum_kb": 0,
-          "game_id": "401872930",
-          "season_type": "regular",
-          "seasonYear": "2026",
-          "date_iso": "2026-09-13",
-          "team": "DAL",
-          "pass_yds": 0,
-          "_combo_td": 2
-        }
-      ],
-      "met_count": 1,
-      "window": 1
-    },
-    {
-      "player": "Jahmyr Gibbs",
-      "matches": [
-        {
-          "player_id": "4429795",
-          "player_name": "JahmyrGibbs",
-          "date": "Sun 9/13",
-          "opponent": "vsNO",
-          "result": "W31-30 OT",
-          "rush_car": 29,
-          "rush_yds": 156,
-          "rush_avg": 5.4,
-          "rush_td": 2,
-          "rush_lng": 21,
-          "rec_rec": 5,
-          "rec_tgts": 5,
-          "rec_yds": 30,
-          "rec_avg": 6,
-          "rec_td": 0,
-          "rec_lng": 11,
-          "fum": 1,
-          "fum_lost": 1,
-          "fum_forced": 0,
-          "fum_kb": 0,
-          "game_id": "401872923",
-          "season_type": "regular",
-          "seasonYear": "2026",
-          "date_iso": "2026-09-13",
-          "team": "DET",
-          "pass_yds": 0,
-          "_combo_td": 2
-        }
-      ],
-      "met_count": 1,
-      "window": 1
-    },
-    {
-      "player": "amon-rast. brown",
-      "matches": [
-        {
-          "player_id": "4374302",
-          "player_name": "Amon-RaSt. Brown",
-          "date": "Sun 9/13",
-          "opponent": "vsNO",
-          "result": "W31-30 OT",
-          "rec_rec": 10,
-          "rec_tgts": 14,
-          "rec_yds": 67,
-          "rec_avg": 6.7,
-          "rec_td": 2,
-          "rec_lng": 19,
-          "rush_car": 0,
-          "rush_yds": 0,
-          "rush_avg": 0,
-          "rush_lng": 0,
-          "rush_td": 0,
-          "fum": 0,
-          "fum_lost": 0,
-          "fum_forced": 0,
-          "fum_kb": 0,
-          "game_id": "401872923",
-          "season_type": "regular",
-          "seasonYear": "2026",
-          "date_iso": "2026-09-13",
-          "team": "DET",
-          "pass_yds": 0,
-          "_combo_td": 2
-        }
-      ],
-      "met_count": 1,
-      "window": 1
-    },
-    {
-      "player": "Isaiah Likely",
-      "matches": [
-        {
-          "player_id": "4361050",
-          "player_name": "IsaiahLikely",
-          "date": "Sun 9/13",
-          "opponent": "vsDAL",
-          "result": "W28-20",
-          "rec_rec": 8,
-          "rec_tgts": 8,
-          "rec_yds": 78,
-          "rec_avg": 9.8,
-          "rec_td": 2,
-          "rec_lng": 19,
-          "rush_car": 0,
-          "rush_yds": 0,
-          "rush_avg": 0,
-          "rush_lng": 0,
-          "rush_td": 0,
-          "fum": 1,
-          "fum_lost": 0,
-          "fum_forced": 0,
-          "fum_kb": 0,
-          "game_id": "401872930",
-          "season_type": "regular",
-          "seasonYear": "2026",
-          "date_iso": "2026-09-13",
-          "team": "NYG",
-          "pass_yds": 0,
-          "_combo_td": 2
-        }
-      ],
-      "met_count": 1,
-      "window": 1
-    },
-    {
-      "player": "Ashton Jeanty",
-      "matches": [
-        {
-          "player_id": "4890973",
-          "player_name": "AshtonJeanty",
-          "date": "Sun 9/13",
-          "opponent": "vsMIA",
-          "result": "W27-13",
-          "rush_car": 23,
-          "rush_yds": 102,
-          "rush_avg": 4.4,
-          "rush_td": 0,
-          "rush_lng": 15,
-          "rec_rec": 6,
-          "rec_tgts": 6,
-          "rec_yds": 45,
-          "rec_avg": 7.5,
-          "rec_td": 2,
-          "rec_lng": 13,
-          "fum": 0,
-          "fum_lost": 0,
-          "fum_forced": 0,
-          "fum_kb": 0,
-          "game_id": "401872928",
-          "season_type": "regular",
-          "seasonYear": "2026",
-          "date_iso": "2026-09-13",
-          "team": "LV",
-          "pass_yds": 0,
-          "_combo_td": 2
-        }
-      ],
-      "met_count": 1,
-      "window": 1
-    },
-    {
-      "player": "Derrick Henry",
-      "matches": [
-        {
-          "player_id": "3043078",
-          "player_name": "DerrickHenry",
-          "date": "Sun 9/13",
-          "opponent": "@IND",
-          "result": "W41-23",
-          "rush_car": 24,
-          "rush_yds": 144,
-          "rush_avg": 6,
-          "rush_td": 3,
-          "rush_lng": 32,
-          "rec_rec": 1,
-          "rec_tgts": 1,
-          "rec_yds": 19,
-          "rec_avg": 19,
-          "rec_td": 0,
-          "rec_lng": 19,
-          "fum": 0,
-          "fum_lost": 0,
-          "fum_forced": 0,
-          "fum_kb": 0,
-          "game_id": "401872659",
-          "season_type": "regular",
-          "seasonYear": "2026",
-          "date_iso": "2026-09-13",
-          "team": "BAL",
-          "pass_yds": 0,
-          "_combo_td": 3
-        }
-      ],
-      "met_count": 1,
-      "window": 1
-    }
-  ],
-  "year_window": [
-    2026,
-    2026
-  ],
-  "career": false,
-  "window_label": "2026"
-}
-
-
-
-{
-  "engine": "mlb_hr_trend",
-  "query": {
-    "threshold": 350,
+    "category": "hit",
     "last": 5,
     "met": 1,
     "first": false
   },
   "results": [
+    {
+      "player": "Brice Turang",
+      "team": "MIL",
+      "met_count": 3,
+      "window": 5,
+      "matches": [
+        {
+          "game_id": "401816861",
+          "date": "2026-09-08",
+          "opponent": "vsCHC",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turang singled to center, Chourio scored.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401816897",
+          "date": "2026-09-11",
+          "opponent": "vsCIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Turang reached on bunt single to second, Chourio to third.",
+          "team": "MIL"
+        },
+        {
+          "game_id": "401816912",
+          "date": "2026-09-12",
+          "opponent": "vsCIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 400,
+          "description": "Turang homered to center (400 feet), Chourio scored.",
+          "team": "MIL"
+        }
+      ]
+    },
     {
       "player": "Kevin Mcgonigle",
       "team": "DET",
@@ -880,6 +63,8 @@
           "opponent": "vsMIN",
           "inning": 1,
           "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
           "distance_feet": 375,
           "description": "McGonigle homered to right (375 feet).",
           "team": "DET"
@@ -888,280 +73,98 @@
           "game_id": "401816857",
           "date": "2026-09-08",
           "opponent": "vsMIN",
-          "inning": 5,
+          "inning": 1,
           "half": "Bottom",
-          "distance_feet": 362,
-          "description": "McGonigle homered to left (362 feet), McKinstry scored.",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "McGonigle singled to center.",
           "team": "DET"
         },
         {
           "game_id": "401816905",
           "date": "2026-09-12",
           "opponent": "vsCOL",
-          "inning": 3,
+          "inning": 1,
           "half": "Bottom",
-          "distance_feet": 389,
-          "description": "McGonigle homered to right center (389 feet).",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "McGonigle singled to center.",
           "team": "DET"
         }
       ]
     },
     {
-      "player": "William Contreras",
-      "team": "MIL",
+      "player": "Matt Olson",
+      "team": "ATL",
       "met_count": 3,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816876",
-          "date": "2026-09-09",
-          "opponent": "vsCHC",
-          "inning": 2,
-          "half": "Bottom",
-          "distance_feet": 374,
-          "description": "Contreras homered to left (374 feet), Turang scored.",
-          "team": "MIL"
-        },
-        {
-          "game_id": "401816897",
-          "date": "2026-09-11",
-          "opponent": "vsCIN",
-          "inning": 8,
-          "half": "Bottom",
-          "distance_feet": 388,
-          "description": "Contreras homered to left (388 feet), Ortiz scored and Hamilton scored.",
-          "team": "MIL"
-        },
-        {
-          "game_id": "401816912",
-          "date": "2026-09-12",
-          "opponent": "vsCIN",
-          "inning": 4,
-          "half": "Bottom",
-          "distance_feet": 381,
-          "description": "Contreras homered to left center (381 feet), Bauers scored and Yelich scored.",
-          "team": "MIL"
-        }
-      ]
-    },
-    {
-      "player": "Kazuma Okamoto",
-      "team": "TOR",
-      "met_count": 3,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816851",
-          "date": "2026-09-07",
-          "opponent": "@ATH",
-          "inning": 7,
-          "half": "Top",
-          "distance_feet": 423,
-          "description": "Okamoto homered to left (423 feet).",
-          "team": "TOR"
-        },
-        {
-          "game_id": "401816866",
-          "date": "2026-09-08",
-          "opponent": "@ATH",
-          "inning": 2,
-          "half": "Top",
-          "distance_feet": 387,
-          "description": "Okamoto homered to left (387 feet).",
-          "team": "TOR"
-        },
-        {
-          "game_id": "401816889",
-          "date": "2026-09-11",
-          "opponent": "vsBAL",
-          "inning": 4,
-          "half": "Bottom",
-          "distance_feet": 399,
-          "description": "Okamoto homered to right center (399 feet).",
-          "team": "TOR"
-        }
-      ]
-    },
-    {
-      "player": "Brice Turang",
-      "team": "MIL",
-      "met_count": 2,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816897",
-          "date": "2026-09-11",
-          "opponent": "vsCIN",
-          "inning": 2,
-          "half": "Bottom",
-          "distance_feet": 382,
-          "description": "Turang homered to right center (382 feet), Mitchell scored and Chourio scored.",
-          "team": "MIL"
-        },
-        {
-          "game_id": "401816912",
-          "date": "2026-09-12",
-          "opponent": "vsCIN",
-          "inning": 1,
-          "half": "Bottom",
-          "distance_feet": 400,
-          "description": "Turang homered to center (400 feet), Chourio scored.",
-          "team": "MIL"
-        }
-      ]
-    },
-    {
-      "player": "Juan Soto",
-      "team": "NYM",
-      "met_count": 2,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816858",
-          "date": "2026-09-08",
-          "opponent": "@MIA",
-          "inning": 2,
-          "half": "Top",
-          "distance_feet": 417,
-          "description": "Soto homered to center (417 feet), Alvarez scored and Lindor scored.",
-          "team": "NYM"
-        },
-        {
-          "game_id": "401816909",
-          "date": "2026-09-12",
-          "opponent": "@NYY",
-          "inning": 7,
-          "half": "Top",
-          "distance_feet": 400,
-          "description": "Soto homered to right center (400 feet).",
-          "team": "NYM"
-        }
-      ]
-    },
-    {
-      "player": "Max Muncy",
-      "team": "LAD",
-      "met_count": 2,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816878",
-          "date": "2026-09-09",
-          "opponent": "vsCIN",
-          "inning": 6,
-          "half": "Bottom",
-          "distance_feet": 380,
-          "description": "Muncy homered to right (380 feet), Betts scored.",
-          "team": "LAD"
-        },
-        {
-          "game_id": "401816908",
-          "date": "2026-09-12",
-          "opponent": "@MIA",
-          "inning": 1,
-          "half": "Top",
-          "distance_feet": 393,
-          "description": "Muncy homered to center (393 feet).",
-          "team": "LAD"
-        }
-      ]
-    },
-    {
-      "player": "Pete Alonso",
-      "team": "BAL",
-      "met_count": 2,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816854",
-          "date": "2026-09-08",
-          "opponent": "vsCLE",
-          "inning": 5,
-          "half": "Bottom",
-          "distance_feet": 420,
-          "description": "Alonso homered to left (420 feet), Holliday scored.",
-          "team": "BAL"
-        },
-        {
-          "game_id": "401816904",
-          "date": "2026-09-12",
-          "opponent": "@TOR",
-          "inning": 7,
-          "half": "Top",
-          "distance_feet": 387,
-          "description": "Alonso homered to left (387 feet), Pozo scored.",
-          "team": "BAL"
-        }
-      ]
-    },
-    {
-      "player": "Rafael Devers",
-      "team": "SF",
-      "met_count": 2,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816900",
-          "date": "2026-09-11",
-          "opponent": "vsSD",
-          "inning": 5,
-          "half": "Bottom",
-          "distance_feet": 388,
-          "description": "Devers homered to right (388 feet), Knizner scored, Koss scored and Cox scored.",
-          "team": "SF"
-        },
-        {
-          "game_id": "401816915",
-          "date": "2026-09-12",
-          "opponent": "vsSD",
-          "inning": 1,
-          "half": "Bottom",
-          "distance_feet": 389,
-          "description": "Devers homered to right center (389 feet), Gilbert scored.",
-          "team": "SF"
-        }
-      ]
-    },
-    {
-      "player": "Junior Caminero",
-      "team": "TB",
-      "met_count": 2,
       "window": 5,
       "matches": [
         {
           "game_id": "401816859",
           "date": "2026-09-08",
-          "opponent": "@ATL",
+          "opponent": "vsTB",
           "inning": 1,
-          "half": "Top",
-          "distance_feet": 455,
-          "description": "Caminero homered to left center (455 feet).",
-          "team": "TB"
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Olson singled to right, Acu\u00f1a Jr. to second.",
+          "team": "ATL"
         },
         {
-          "game_id": "401816891",
-          "date": "2026-09-11",
-          "opponent": "vsHOU",
-          "inning": 9,
+          "game_id": "401816885",
+          "date": "2026-09-10",
+          "opponent": "vsTB",
+          "inning": 1,
           "half": "Bottom",
-          "distance_feet": 417,
-          "description": "Caminero homered to left center (417 feet), DeLuca scored.",
-          "team": "TB"
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Olson singled to center.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401816895",
+          "date": "2026-09-11",
+          "opponent": "vsPHI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 352,
+          "description": "Olson homered to left (352 feet).",
+          "team": "ATL"
         }
       ]
     },
     {
       "player": "Luis Garcia Jr",
       "team": "WSH",
-      "met_count": 2,
+      "met_count": 3,
       "window": 5,
       "matches": [
+        {
+          "game_id": "401816855",
+          "date": "2026-09-08",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Garc\u00eda Jr. singled to left, Bellinger scored on throwing error by left fielder McCarthy, Garc\u00eda Jr. to third.",
+          "team": "WSH"
+        },
         {
           "game_id": "401816870",
           "date": "2026-09-09",
           "opponent": "vsCOL",
           "inning": 2,
           "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
           "distance_feet": 413,
           "description": "Garc\u00eda Jr. homered to right center (413 feet).",
           "team": "WSH"
@@ -1172,6 +175,8 @@
           "opponent": "vsCOL",
           "inning": 1,
           "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
           "distance_feet": 413,
           "description": "Garc\u00eda Jr. homered to center (413 feet), Rice scored.",
           "team": "WSH"
@@ -1179,104 +184,470 @@
       ]
     },
     {
-      "player": "Trea Turner",
-      "team": "PHI",
+      "player": "Tj Rumfield",
+      "team": "COL",
       "met_count": 2,
       "window": 5,
       "matches": [
         {
-          "game_id": "401816856",
-          "date": "2026-09-08",
-          "opponent": "vsHOU",
-          "inning": 6,
+          "game_id": "401816838",
+          "date": "2026-09-06",
+          "opponent": "vsSTL",
+          "inning": 1,
           "half": "Bottom",
-          "distance_feet": 362,
-          "description": "Turner homered to left (362 feet), Schwarber scored.",
-          "team": "PHI"
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Rumfield doubled to left, McCarthy scored.",
+          "team": "COL"
         },
         {
-          "game_id": "401816871",
-          "date": "2026-09-09",
-          "opponent": "vsHOU",
-          "inning": 5,
-          "half": "Bottom",
-          "distance_feet": 374,
-          "description": "Turner homered to right center (374 feet).",
-          "team": "PHI"
+          "game_id": "401816905",
+          "date": "2026-09-12",
+          "opponent": "@DET",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Rumfield doubled to left, Goodman to third.",
+          "team": "COL"
         }
       ]
     },
     {
-      "player": "Mookie Betts",
+      "player": "Max Muncy",
       "team": "LAD",
       "met_count": 2,
       "window": 5,
       "matches": [
         {
-          "game_id": "401816841",
-          "date": "2026-09-06",
-          "opponent": "vsWSH",
-          "inning": 8,
+          "game_id": "401816863",
+          "date": "2026-09-08",
+          "opponent": "vsCIN",
+          "inning": 2,
           "half": "Bottom",
-          "distance_feet": 384,
-          "description": "Betts homered to left center (384 feet), Call scored and Edman scored.",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Muncy singled to center, T. Hern\u00e1ndez to second.",
           "team": "LAD"
         },
         {
-          "game_id": "401816878",
-          "date": "2026-09-09",
-          "opponent": "vsCIN",
-          "inning": 3,
-          "half": "Bottom",
-          "distance_feet": 382,
-          "description": "Betts homered to left center (382 feet), Smith scored.",
+          "game_id": "401816908",
+          "date": "2026-09-12",
+          "opponent": "@MIA",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 393,
+          "description": "Muncy homered to center (393 feet).",
           "team": "LAD"
         }
       ]
     },
     {
-      "player": "Casey Schmitt",
+      "player": "Rafael Devers",
       "team": "SF",
       "met_count": 2,
       "window": 5,
       "matches": [
         {
-          "game_id": "401816226",
-          "date": "2026-07-22",
-          "opponent": "@KC",
-          "inning": 9,
-          "half": "Top",
-          "distance_feet": 376,
-          "description": "Schmitt homered to left (376 feet).",
+          "game_id": "401816850",
+          "date": "2026-09-07",
+          "opponent": "vsSTL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Devers doubled to right, Hill scored.",
           "team": "SF"
         },
         {
-          "game_id": "401816249",
-          "date": "2026-07-24",
-          "opponent": "vsLAA",
-          "inning": 3,
+          "game_id": "401816915",
+          "date": "2026-09-12",
+          "opponent": "vsSD",
+          "inning": 1,
           "half": "Bottom",
-          "distance_feet": 412,
-          "description": "Schmitt homered to left (412 feet), Eldridge scored and Devers scored.",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 389,
+          "description": "Devers homered to right center (389 feet), Gilbert scored.",
           "team": "SF"
+        }
+      ]
+    },
+    {
+      "player": "Ronald Acuna Jr",
+      "team": "ATL",
+      "met_count": 2,
+      "window": 5,
+      "matches": [
+        {
+          "game_id": "401816859",
+          "date": "2026-09-08",
+          "opponent": "vsTB",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Acu\u00f1a Jr. singled to right.",
+          "team": "ATL"
+        },
+        {
+          "game_id": "401816910",
+          "date": "2026-09-12",
+          "opponent": "vsPHI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Acu\u00f1a Jr. reached on infield single to shortstop.",
+          "team": "ATL"
+        }
+      ]
+    },
+    {
+      "player": "Alec Burleson",
+      "team": "STL",
+      "met_count": 2,
+      "window": 5,
+      "matches": [
+        {
+          "game_id": "401816864",
+          "date": "2026-09-08",
+          "opponent": "@SF",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Burleson singled to right.",
+          "team": "STL"
+        },
+        {
+          "game_id": "401816896",
+          "date": "2026-09-11",
+          "opponent": "vsCHW",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Burleson doubled to right, Herrera scored.",
+          "team": "STL"
+        }
+      ]
+    },
+    {
+      "player": "Ben Rice",
+      "team": "NYY",
+      "met_count": 2,
+      "window": 5,
+      "matches": [
+        {
+          "game_id": "401816883",
+          "date": "2026-09-10",
+          "opponent": "vsCOL",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rice singled to right.",
+          "team": "NYY"
+        },
+        {
+          "game_id": "401816894",
+          "date": "2026-09-11",
+          "opponent": "vsNYM",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rice singled to left.",
+          "team": "NYY"
+        }
+      ]
+    },
+    {
+      "player": "Otto Lopez",
+      "team": "MIA",
+      "met_count": 2,
+      "window": 5,
+      "matches": [
+        {
+          "game_id": "401816873",
+          "date": "2026-09-09",
+          "opponent": "vsNYM",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lopez reached on infield single to third, Conine to second.",
+          "team": "MIA"
+        },
+        {
+          "game_id": "401816893",
+          "date": "2026-09-11",
+          "opponent": "vsLAD",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lopez singled to right.",
+          "team": "MIA"
+        }
+      ]
+    },
+    {
+      "player": "Riley Greene",
+      "team": "DET",
+      "met_count": 2,
+      "window": 5,
+      "matches": [
+        {
+          "game_id": "401816845",
+          "date": "2026-09-07",
+          "opponent": "vsMIN",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Greene singled to right.",
+          "team": "DET"
+        },
+        {
+          "game_id": "401816890",
+          "date": "2026-09-11",
+          "opponent": "vsCOL",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Greene singled to right.",
+          "team": "DET"
+        }
+      ]
+    },
+    {
+      "player": "Sal Stewart",
+      "team": "CIN",
+      "met_count": 2,
+      "window": 5,
+      "matches": [
+        {
+          "game_id": "401816878",
+          "date": "2026-09-09",
+          "opponent": "@LAD",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Stewart singled to center.",
+          "team": "CIN"
+        },
+        {
+          "game_id": "401816897",
+          "date": "2026-09-11",
+          "opponent": "@MIL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Stewart singled to right.",
+          "team": "CIN"
+        }
+      ]
+    },
+    {
+      "player": "Yandy Diaz",
+      "team": "TB",
+      "met_count": 2,
+      "window": 5,
+      "matches": [
+        {
+          "game_id": "401816874",
+          "date": "2026-09-09",
+          "opponent": "@ATL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "D\u00edaz singled to center.",
+          "team": "TB"
+        },
+        {
+          "game_id": "401816885",
+          "date": "2026-09-10",
+          "opponent": "@ATL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "D\u00edaz singled to left.",
+          "team": "TB"
         }
       ]
     },
     {
       "player": "Fernando Tatis Jr",
       "team": "SD",
+      "met_count": 2,
+      "window": 5,
+      "matches": [
+        {
+          "game_id": "401816852",
+          "date": "2026-09-07",
+          "opponent": "vsWSH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Tatis Jr. singled to right.",
+          "team": "SD"
+        },
+        {
+          "game_id": "401816882",
+          "date": "2026-09-09",
+          "opponent": "vsWSH",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Tatis Jr. reached on infield single to shortstop.",
+          "team": "SD"
+        }
+      ]
+    },
+    {
+      "player": "Yordan Alvarez",
+      "team": "HOU",
+      "met_count": 2,
+      "window": 5,
+      "matches": [
+        {
+          "game_id": "401816834",
+          "date": "2026-09-06",
+          "opponent": "vsARI",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 337,
+          "description": "Alvarez homered to right (337 feet).",
+          "team": "HOU"
+        },
+        {
+          "game_id": "401816871",
+          "date": "2026-09-09",
+          "opponent": "@PHI",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Alvarez singled to right.",
+          "team": "HOU"
+        }
+      ]
+    },
+    {
+      "player": "Jac Caglianone",
+      "team": "KC",
+      "met_count": 2,
+      "window": 5,
+      "matches": [
+        {
+          "game_id": "401816782",
+          "date": "2026-09-02",
+          "opponent": "vsMIA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Caglianone doubled to right, Witt Jr. scored.",
+          "team": "KC"
+        },
+        {
+          "game_id": "401816822",
+          "date": "2026-09-05",
+          "opponent": "vsTOR",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Caglianone reached on infield single to second, Jensen scored, Witt Jr. to third.",
+          "team": "KC"
+        }
+      ]
+    },
+    {
+      "player": "Ceddanne Rafaela",
+      "team": "BOS",
+      "met_count": 2,
+      "window": 5,
+      "matches": [
+        {
+          "game_id": "401816750",
+          "date": "2026-08-31",
+          "opponent": "vsSEA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rafaela singled to center.",
+          "team": "BOS"
+        },
+        {
+          "game_id": "401816776",
+          "date": "2026-09-02",
+          "opponent": "vsSEA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Rafaela singled to center, Gasper to second.",
+          "team": "BOS"
+        }
+      ]
+    },
+    {
+      "player": "Cj Abrams",
+      "team": "WSH",
       "met_count": 1,
       "window": 5,
       "matches": [
         {
-          "game_id": "401816915",
+          "game_id": "401816903",
           "date": "2026-09-12",
-          "opponent": "@SF",
-          "inning": 6,
-          "half": "Top",
-          "distance_feet": 421,
-          "description": "Tatis Jr. homered to left (421 feet).",
-          "team": "SD"
+          "opponent": "vsLAA",
+          "inning": 1,
+          "half": "Bottom",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Abrams doubled to center, Ortiz scored.",
+          "team": "WSH"
         }
       ]
     },
@@ -1290,10 +661,12 @@
           "game_id": "401816910",
           "date": "2026-09-12",
           "opponent": "vsPHI",
-          "inning": 8,
+          "inning": 2,
           "half": "Bottom",
-          "distance_feet": 367,
-          "description": "Harris II homered to right (367 feet), Keirsey Jr. scored and Albies scored.",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Harris II singled to center.",
           "team": "ATL"
         }
       ]
@@ -1310,99 +683,11 @@
           "opponent": "@ATL",
           "inning": 1,
           "half": "Top",
+          "category": "XBH",
+          "result": "HR",
           "distance_feet": 426,
           "description": "Harper homered to center (426 feet).",
           "team": "PHI"
-        }
-      ]
-    },
-    {
-      "player": "Hunter Goodman",
-      "team": "COL",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816905",
-          "date": "2026-09-12",
-          "opponent": "@DET",
-          "inning": 3,
-          "half": "Top",
-          "distance_feet": 362,
-          "description": "Goodman homered to left (362 feet), McCarthy scored and Norby scored.",
-          "team": "COL"
-        }
-      ]
-    },
-    {
-      "player": "Ronald Acuna Jr",
-      "team": "ATL",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816910",
-          "date": "2026-09-12",
-          "opponent": "vsPHI",
-          "inning": 4,
-          "half": "Bottom",
-          "distance_feet": 353,
-          "description": "Acu\u00f1a Jr. homered to left (353 feet).",
-          "team": "ATL"
-        }
-      ]
-    },
-    {
-      "player": "Bryan Reynolds",
-      "team": "PIT",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816899",
-          "date": "2026-09-11",
-          "opponent": "@CHC",
-          "inning": 6,
-          "half": "Top",
-          "distance_feet": 364,
-          "description": "Reynolds homered to left (364 feet).",
-          "team": "PIT"
-        }
-      ]
-    },
-    {
-      "player": "Matt Olson",
-      "team": "ATL",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816895",
-          "date": "2026-09-11",
-          "opponent": "vsPHI",
-          "inning": 1,
-          "half": "Bottom",
-          "distance_feet": 352,
-          "description": "Olson homered to left (352 feet).",
-          "team": "ATL"
-        }
-      ]
-    },
-    {
-      "player": "Ben Rice",
-      "team": "NYY",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816894",
-          "date": "2026-09-11",
-          "opponent": "vsNYM",
-          "inning": 5,
-          "half": "Bottom",
-          "distance_feet": 371,
-          "description": "Rice homered to left center (371 feet).",
-          "team": "NYY"
         }
       ]
     },
@@ -1418,19 +703,191 @@
           "opponent": "@STL",
           "inning": 1,
           "half": "Top",
+          "category": "XBH",
+          "result": "HR",
           "distance_feet": 398,
           "description": "Meidroth homered to center (398 feet).",
           "team": "CHW"
-        },
+        }
+      ]
+    },
+    {
+      "player": "Brandon Marsh",
+      "team": "PHI",
+      "met_count": 1,
+      "window": 5,
+      "matches": [
         {
-          "game_id": "401816896",
-          "date": "2026-09-11",
-          "opponent": "@STL",
-          "inning": 3,
+          "game_id": "401816871",
+          "date": "2026-09-09",
+          "opponent": "vsHOU",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Marsh singled to right.",
+          "team": "PHI"
+        }
+      ]
+    },
+    {
+      "player": "Brandon Nimmo",
+      "team": "TEX",
+      "met_count": 1,
+      "window": 5,
+      "matches": [
+        {
+          "game_id": "401816880",
+          "date": "2026-09-09",
+          "opponent": "@SEA",
+          "inning": 1,
           "half": "Top",
-          "distance_feet": 391,
-          "description": "Meidroth homered to left center (391 feet).",
-          "team": "CHW"
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Nimmo singled to right, Foscue to second.",
+          "team": "TEX"
+        }
+      ]
+    },
+    {
+      "player": "Chandler Simpson",
+      "team": "TB",
+      "met_count": 1,
+      "window": 5,
+      "matches": [
+        {
+          "game_id": "401816874",
+          "date": "2026-09-09",
+          "opponent": "@ATL",
+          "inning": 2,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Simpson singled to center.",
+          "team": "TB"
+        }
+      ]
+    },
+    {
+      "player": "Jung Hoo Lee",
+      "team": "SF",
+      "met_count": 1,
+      "window": 5,
+      "matches": [
+        {
+          "game_id": "401816879",
+          "date": "2026-09-09",
+          "opponent": "vsSTL",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Lee singled to left.",
+          "team": "SF"
+        }
+      ]
+    },
+    {
+      "player": "Bryan Reynolds",
+      "team": "PIT",
+      "met_count": 1,
+      "window": 5,
+      "matches": [
+        {
+          "game_id": "401816862",
+          "date": "2026-09-08",
+          "opponent": "@CHW",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "2B",
+          "distance_feet": null,
+          "description": "Reynolds doubled to right, Griffin scored, Lowe to third.",
+          "team": "PIT"
+        }
+      ]
+    },
+    {
+      "player": "Junior Caminero",
+      "team": "TB",
+      "met_count": 1,
+      "window": 5,
+      "matches": [
+        {
+          "game_id": "401816859",
+          "date": "2026-09-08",
+          "opponent": "@ATL",
+          "inning": 1,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 455,
+          "description": "Caminero homered to left center (455 feet).",
+          "team": "TB"
+        }
+      ]
+    },
+    {
+      "player": "Luis Arraez",
+      "team": "SF",
+      "met_count": 1,
+      "window": 5,
+      "matches": [
+        {
+          "game_id": "401816856",
+          "date": "2026-09-08",
+          "opponent": "vsHOU",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Arraez singled to right.",
+          "team": "SF"
+        }
+      ]
+    },
+    {
+      "player": "Kazuma Okamoto",
+      "team": "TOR",
+      "met_count": 1,
+      "window": 5,
+      "matches": [
+        {
+          "game_id": "401816866",
+          "date": "2026-09-08",
+          "opponent": "@ATH",
+          "inning": 2,
+          "half": "Top",
+          "category": "XBH",
+          "result": "HR",
+          "distance_feet": 387,
+          "description": "Okamoto homered to left (387 feet).",
+          "team": "TOR"
+        }
+      ]
+    },
+    {
+      "player": "Juan Soto",
+      "team": "NYM",
+      "met_count": 1,
+      "window": 5,
+      "matches": [
+        {
+          "game_id": "401816846",
+          "date": "2026-09-07",
+          "opponent": "@MIA",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Soto singled to center.",
+          "team": "NYM"
         }
       ]
     },
@@ -1441,140 +898,36 @@
       "window": 5,
       "matches": [
         {
-          "game_id": "401816890",
-          "date": "2026-09-11",
-          "opponent": "vsCOL",
-          "inning": 6,
-          "half": "Bottom",
-          "distance_feet": 408,
-          "description": "Dingler homered to left (408 feet), Greene scored.",
+          "game_id": "401816831",
+          "date": "2026-09-06",
+          "opponent": "@CLE",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Dingler singled to right, Greene to third.",
           "team": "DET"
         }
       ]
     },
     {
-      "player": "Bobby Witt Jr",
-      "team": "KC",
+      "player": "Xavier Edwards",
+      "team": "MIA",
       "met_count": 1,
       "window": 5,
       "matches": [
         {
-          "game_id": "401816875",
-          "date": "2026-09-09",
-          "opponent": "vsARI",
-          "inning": 5,
-          "half": "Bottom",
-          "distance_feet": 394,
-          "description": "Witt Jr. homered to left center (394 feet), Collins scored and Jensen scored.",
-          "team": "KC"
-        }
-      ]
-    },
-    {
-      "player": "Kyle Schwarber",
-      "team": "PHI",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816871",
-          "date": "2026-09-09",
-          "opponent": "vsHOU",
-          "inning": 6,
-          "half": "Bottom",
-          "distance_feet": 408,
-          "description": "Schwarber homered to right (408 feet), Sosa scored, Crawford scored and De La Cruz scored.",
-          "team": "PHI"
-        }
-      ]
-    },
-    {
-      "player": "Munetaka Murakami",
-      "team": "CHW",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816877",
-          "date": "2026-09-09",
-          "opponent": "vsPIT",
-          "inning": 8,
-          "half": "Bottom",
-          "distance_feet": 381,
-          "description": "Murakami homered to right center (381 feet).",
-          "team": "CHW"
-        }
-      ]
-    },
-    {
-      "player": "Yandy Diaz",
-      "team": "TB",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816859",
-          "date": "2026-09-08",
-          "opponent": "@ATL",
-          "inning": 8,
+          "game_id": "401816707",
+          "date": "2026-08-28",
+          "opponent": "@WSH",
+          "inning": 2,
           "half": "Top",
-          "distance_feet": 393,
-          "description": "D\u00edaz homered to left (393 feet).",
-          "team": "TB"
-        }
-      ]
-    },
-    {
-      "player": "Alec Burleson",
-      "team": "STL",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816850",
-          "date": "2026-09-07",
-          "opponent": "@SF",
-          "inning": 6,
-          "half": "Top",
-          "distance_feet": 431,
-          "description": "Burleson homered to right (431 feet).",
-          "team": "STL"
-        }
-      ]
-    },
-    {
-      "player": "Pete Crow Armstrong",
-      "team": "CHC",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816848",
-          "date": "2026-09-07",
-          "opponent": "@MIL",
-          "inning": 9,
-          "half": "Top",
-          "distance_feet": 400,
-          "description": "Crow-Armstrong homered to right center (400 feet).",
-          "team": "CHC"
-        }
-      ]
-    },
-    {
-      "player": "Riley Greene",
-      "team": "DET",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816845",
-          "date": "2026-09-07",
-          "opponent": "vsMIN",
-          "inning": 5,
-          "half": "Bottom",
-          "distance_feet": 417,
-          "description": "Greene homered to right (417 feet), Torres scored.",
-          "team": "DET"
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Edwards singled to right, Sanoja scored.",
+          "team": "MIA"
         }
       ]
     },
@@ -1585,14 +938,56 @@
       "window": 5,
       "matches": [
         {
-          "game_id": "401816560",
-          "date": "2026-08-16",
-          "opponent": "vsMIL",
-          "inning": 9,
-          "half": "Bottom",
-          "distance_feet": 382,
-          "description": "Pages homered to left (382 feet).",
+          "game_id": "401816585",
+          "date": "2026-08-18",
+          "opponent": "@COL",
+          "inning": 1,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Pages singled to left, Freeman to third.",
           "team": "LAD"
+        }
+      ]
+    },
+    {
+      "player": "Casey Schmitt",
+      "team": "SF",
+      "met_count": 1,
+      "window": 5,
+      "matches": [
+        {
+          "game_id": "401816291",
+          "date": "2026-07-27",
+          "opponent": "vsMIL",
+          "inning": 2,
+          "half": "Bottom",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Schmitt singled to right.",
+          "team": "SF"
+        }
+      ]
+    },
+    {
+      "player": "Aaron Judge",
+      "team": "NYY",
+      "met_count": 1,
+      "window": 5,
+      "matches": [
+        {
+          "game_id": "401815578",
+          "date": "2026-05-31",
+          "opponent": "@ATH",
+          "inning": 3,
+          "half": "Top",
+          "category": "1B",
+          "result": "1B",
+          "distance_feet": null,
+          "description": "Judge singled to center, Goldschmidt scored.",
+          "team": "NYY"
         }
       ]
     }

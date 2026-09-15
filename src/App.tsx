@@ -11,7 +11,7 @@ import { SampleQueriesModal } from '@/components/SampleQueriesModal'
 import { H2hStaffOverlay } from '@/components/H2hStaffOverlay'
 import { PlayerSearchDropdown } from '@/components/PlayerSearchDropdown'
 import { SyntaxSuggestionDropdown } from '@/components/SyntaxSuggestionDropdown'
-import { loadPlayerIndex, searchPlayers } from '@/lib/playerSearch'
+import { loadPlayerIndex, resolvePlayerTeam, searchPlayers } from '@/lib/playerSearch'
 import { searchSyntax } from '@/lib/syntaxSuggestions'
 import { authHeader } from '@/lib/auth-token'
 import {
@@ -40,7 +40,6 @@ import {
   isNflExplosivePayload,
   normalizeDisplayPlayer,
   normalizeQueryResults,
-  PLAYER_TEAM_MAP,
   STAT_DISPLAY_LABELS,
   type H2hPayload,
   type MlbBatTeamPayload,
@@ -361,6 +360,16 @@ function parseExplosiveThreshold(query: string | string[]): number | null {
   return m ? parseInt(m[1], 10) : null
 }
 
+// "met=N" alone drops the window it was measured against — "met=2" reads
+// very differently depending on whether the window was -last2/3 or
+// -last2/10. Appending "/window" whenever the window size is known keeps
+// that scope visible even when there's no per-match value/date to show
+// instead (the fallback path below, for engines whose per-match values
+// don't parse yet).
+function formatMet(met: number, window?: number | null): string {
+  return window != null ? `met=${met}/${window}` : `met=${met}`
+}
+
 // Shared collapsed-row badge for every trend-shaped view (generic results
 // panel, NFL explosive, MLB HR/first-PA/team-runs) — a small lowercase
 // "met=N · latest" header (same monospace/cyan family as the TEAM acronym
@@ -496,6 +505,7 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
         const isOpen = expanded.has(i)
         const matchList = r.matches ?? []
         const metCount = r.met_count ?? r.met ?? matchList.length
+        const metLabel = formatMet(metCount, r.window)
         const latest = matchList.length > 0 ? matchList[matchList.length - 1] : null
         const latestYds = latest ? (Array.isArray(latest.yards_list) ? latest.yards_list.join(', ') : latest.yards) : null
         const latestValue = latest
@@ -514,8 +524,8 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
                 {normalizeDisplayPlayer(r.player)}
               </span>
               <TrendBadge
-                header={latestValue ? `met=${metCount} · latest` : null}
-                value={latestValue ?? `met=${metCount}`}
+                header={latestValue ? `${metLabel} · latest` : null}
+                value={latestValue ?? metLabel}
                 expanded={isOpen}
                 onToggle={() => toggle(i)}
               />
@@ -755,6 +765,7 @@ function MlbHrView({ payload }: { payload: MlbHrPayload }) {
         const isOpen = expanded.has(i)
         const matchList = r.matches ?? []
         const metCount = r.met_count ?? matchList.length
+        const metLabel = formatMet(metCount, r.window)
         const latest = matchList.length > 0 ? matchList[matchList.length - 1] : null
         const latestValue = latest ? `${latest.distance_feet}ft ${extractDateToken(latest.date) ?? latest.date}` : null
         return (
@@ -770,8 +781,8 @@ function MlbHrView({ payload }: { payload: MlbHrPayload }) {
                 {normalizeDisplayPlayer(r.player)}
               </span>
               <TrendBadge
-                header={latestValue ? `met=${metCount} · latest` : null}
-                value={latestValue ?? `met=${metCount}`}
+                header={latestValue ? `${metLabel} · latest` : null}
+                value={latestValue ?? metLabel}
                 expanded={isOpen}
                 onToggle={() => toggle(i)}
                 accent={PITCH_GREEN}
@@ -825,6 +836,7 @@ function MlbFirstPaTrendView({ payload }: { payload: MlbFirstPaTrendPayload }) {
         const isOpen = expanded.has(i)
         const matchList = r.matches ?? []
         const metCount = r.met_count ?? matchList.length
+        const metLabel = formatMet(metCount, r.window)
         const latest = matchList.length > 0 ? matchList[matchList.length - 1] : null
         const latestValue = latest
           ? `${latest.result}${latest.distance_feet != null ? ` (${latest.distance_feet}ft)` : ''} ${extractDateToken(latest.date) ?? latest.date}`
@@ -842,8 +854,8 @@ function MlbFirstPaTrendView({ payload }: { payload: MlbFirstPaTrendPayload }) {
                 {normalizeDisplayPlayer(r.player)}
               </span>
               <TrendBadge
-                header={latestValue ? `met=${metCount} · latest` : null}
-                value={latestValue ?? `met=${metCount}`}
+                header={latestValue ? `${metLabel} · latest` : null}
+                value={latestValue ?? metLabel}
                 expanded={isOpen}
                 onToggle={() => toggle(i)}
                 accent={PITCH_GREEN}
@@ -936,6 +948,7 @@ function MlbTeamRunsView({ payload }: { payload: MlbTeamRunsPayload }) {
         const isOpen = expanded.has(i)
         const matchList = r.matches ?? []
         const metCount = r.met_count ?? matchList.length
+        const metLabel = formatMet(metCount, r.window)
         const latest = matchList.length > 0 ? matchList[matchList.length - 1] : null
         const latestValue = latest
           ? `${latest.runs_for}-${latest.runs_allowed} ${extractDateToken(latest.date_iso) ?? latest.date_iso}`
@@ -945,8 +958,8 @@ function MlbTeamRunsView({ payload }: { payload: MlbTeamRunsPayload }) {
             <div className="flex flex-wrap items-start gap-x-3 gap-y-1">
               <span className="font-mono text-[13px] min-w-0" style={{ color: 'oklch(0.70 0.10 195)' }}>{r.team}</span>
               <TrendBadge
-                header={latestValue ? `met=${metCount} · latest` : null}
-                value={latestValue ?? `met=${metCount}`}
+                header={latestValue ? `${metLabel} · latest` : null}
+                value={latestValue ?? metLabel}
                 expanded={isOpen}
                 onToggle={() => toggle(i)}
                 accent={PITCH_GREEN}
@@ -2312,7 +2325,7 @@ function App() {
 
       const normalized = normalizeQueryResults(payload, sanitizedQuery)
       const enriched = normalized.map((r) =>
-        r.team ? r : { ...r, team: PLAYER_TEAM_MAP.get(r.player.toLowerCase()) || undefined }
+        r.team ? r : { ...r, team: resolvePlayerTeam(r.player) }
       )
       const payloadError = getPayloadError(payload)
       const statCtx = detectStatContext(payload, sanitizedQuery)
@@ -2978,9 +2991,11 @@ function App() {
                   : isTrendRow
                   ? // Per-match values didn't parse (e.g. -rr/-pr/-any combo
                     // stats — see the conversation this was flagged in), so
-                    // there's no latest-match value/date to show. met=N stays
-                    // the safe fallback rather than fabricating a unit.
-                    `met=${result.total}`
+                    // there's no latest-match value/date to show. met=N/window
+                    // stays the safe fallback rather than fabricating a unit —
+                    // the window is included so the scope isn't lost just
+                    // because the per-match breakdown didn't parse.
+                    formatMet(result.total, result.windowSize)
                   : queryResultsStatLabel
                   ? `${result.total}${queryResultsStatLabel}`
                   : result.total
@@ -2992,7 +3007,7 @@ function App() {
                 const resultBadgeHeader = isSingleDayWindow
                   ? 'latest'
                   : isTrendRow && latestMatch
-                  ? `met=${result.total} · latest`
+                  ? `${formatMet(result.total, result.windowSize)} · latest`
                   : null
 
                 return (
@@ -3037,7 +3052,7 @@ function App() {
                     {isExpanded && hasMatchDetails && result.matchDetails && (
                       <div className="mt-2 pl-2 font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
                         {isTrendRow && (
-                          <span style={{ color: 'oklch(0.55 0 0)' }}>met={result.total} — </span>
+                          <span style={{ color: 'oklch(0.55 0 0)' }}>{formatMet(result.total, result.windowSize)} — </span>
                         )}
                         {result.matchDetails
                           .map((m) => `${m.value}${m.statLabel} ${m.date}`)
@@ -3216,7 +3231,7 @@ function App() {
               syntax on both platforms. */}
           <div className="mt-6 text-center">
             <p className="font-mono text-[14px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
-              type: nspe
+              search a player or type: nspe
             </p>
           </div>
         </div>
