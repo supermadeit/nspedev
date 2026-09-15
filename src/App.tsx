@@ -10,7 +10,9 @@ import { AutoDemo } from '@/components/AutoDemo'
 import { SampleQueriesModal } from '@/components/SampleQueriesModal'
 import { H2hStaffOverlay } from '@/components/H2hStaffOverlay'
 import { PlayerSearchDropdown } from '@/components/PlayerSearchDropdown'
+import { SyntaxSuggestionDropdown } from '@/components/SyntaxSuggestionDropdown'
 import { loadPlayerIndex, searchPlayers } from '@/lib/playerSearch'
+import { searchSyntax } from '@/lib/syntaxSuggestions'
 import { authHeader } from '@/lib/auth-token'
 import {
   asNumber,
@@ -2033,6 +2035,16 @@ function App() {
     () => (looksLikePlayerSearch(searchValue) ? searchPlayers(searchValue, 8) : []),
     [searchValue, isPlayerIndexReady],
   )
+  // Predictive command-syntax suggestions (Option B: curated templates,
+  // filtered by prefix/substring — see syntaxSuggestions.ts) — the exact
+  // inverse trigger of playerMatches, since a query only ever looks like one
+  // or the other, never both. Selecting one fills the input for editing, it
+  // never runs/navigates on its own.
+  const [syntaxActiveIndex, setSyntaxActiveIndex] = useState(0)
+  const syntaxMatches = useMemo(
+    () => (searchValue.trim() && !looksLikePlayerSearch(searchValue) ? searchSyntax(searchValue, 8) : []),
+    [searchValue],
+  )
   const searchInputRef = useRef<HTMLInputElement>(null)
   const sampleMenuRef = useRef<HTMLDivElement>(null)
   const miniRef = useRef<HTMLDivElement>(null)
@@ -2394,6 +2406,15 @@ function App() {
     navigate(`/database/${slug}`)
   }
 
+  // Fills the input for editing (statN/lastN/N/minN values, etc.) — never
+  // runs or navigates on its own, per the explicit design call: users must
+  // still hit search themselves after customizing the template's values.
+  const selectSyntaxSuggestion = (command: string) => {
+    setSearchValue(command)
+    setSyntaxActiveIndex(0)
+    searchInputRef.current?.focus()
+  }
+
   const handleSearchSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (playerMatches.length > 0) {
       if (e.key === 'ArrowDown') {
@@ -2410,6 +2431,28 @@ function App() {
         e.preventDefault()
         const match = playerMatches[playerSearchActiveIndex] ?? playerMatches[0]
         goToPlayerProfile(match.entry.slug)
+        return
+      }
+      if (e.key === 'Escape') {
+        setSearchValue('')
+        return
+      }
+    }
+    if (syntaxMatches.length > 0) {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault()
+        setSyntaxActiveIndex((i) => (i + 1) % syntaxMatches.length)
+        return
+      }
+      if (e.key === 'ArrowUp') {
+        e.preventDefault()
+        setSyntaxActiveIndex((i) => (i - 1 + syntaxMatches.length) % syntaxMatches.length)
+        return
+      }
+      if (e.key === 'Enter') {
+        e.preventDefault()
+        const match = syntaxMatches[syntaxActiveIndex] ?? syntaxMatches[0]
+        selectSyntaxSuggestion(match.query.command)
         return
       }
       if (e.key === 'Escape') {
@@ -2948,6 +2991,7 @@ function App() {
                   onChange={(e) => {
                     setSearchValue(e.target.value)
                     setPlayerSearchActiveIndex(0)
+                    setSyntaxActiveIndex(0)
                   }}
                   onKeyDown={handleSearchSubmit}
                   className="w-full h-[52px] px-5 py-3 bg-card text-foreground font-mono text-[16px] rounded-lg border border-border outline-none focus:border-primary transition-colors duration-200"
@@ -2960,7 +3004,7 @@ function App() {
                     {PLACEHOLDER_TEXTS[0]}
                   </div>
                 )}
-                {playerMatches.length > 0 && (
+                {playerMatches.length > 0 ? (
                   <div className="absolute top-[60px] left-0 right-0 z-20">
                     <PlayerSearchDropdown
                       matches={playerMatches}
@@ -2969,6 +3013,17 @@ function App() {
                       onSelect={(entry) => goToPlayerProfile(entry.slug)}
                     />
                   </div>
+                ) : (
+                  syntaxMatches.length > 0 && (
+                    <div className="absolute top-[60px] left-0 right-0 z-20">
+                      <SyntaxSuggestionDropdown
+                        matches={syntaxMatches}
+                        activeIndex={syntaxActiveIndex}
+                        onHoverIndex={setSyntaxActiveIndex}
+                        onSelect={selectSyntaxSuggestion}
+                      />
+                    </div>
+                  )
                 )}
               </div>
 
@@ -3015,6 +3070,7 @@ function App() {
                   onChange={(e) => {
                     setSearchValue(e.target.value)
                     setPlayerSearchActiveIndex(0)
+                    setSyntaxActiveIndex(0)
                   }}
                   onKeyDown={handleSearchSubmit}
                   className="w-full h-[52px] px-5 py-3 bg-card text-foreground font-mono text-[16px] rounded-lg border border-border outline-none focus:border-primary transition-colors duration-200"
@@ -3030,7 +3086,7 @@ function App() {
                     {PLACEHOLDER_TEXTS[0]}
                   </div>
                 )}
-                {playerMatches.length > 0 && (
+                {playerMatches.length > 0 ? (
                   <div className="absolute top-[60px] left-0 right-0 z-20">
                     <PlayerSearchDropdown
                       matches={playerMatches}
@@ -3039,6 +3095,17 @@ function App() {
                       onSelect={(entry) => goToPlayerProfile(entry.slug)}
                     />
                   </div>
+                ) : (
+                  syntaxMatches.length > 0 && (
+                    <div className="absolute top-[60px] left-0 right-0 z-20">
+                      <SyntaxSuggestionDropdown
+                        matches={syntaxMatches}
+                        activeIndex={syntaxActiveIndex}
+                        onHoverIndex={setSyntaxActiveIndex}
+                        onSelect={selectSyntaxSuggestion}
+                      />
+                    </div>
+                  )
                 )}
               </div>
 

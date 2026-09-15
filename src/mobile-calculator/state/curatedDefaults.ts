@@ -28,15 +28,20 @@ export const CURATED_TREND_DEFAULTS: Record<string, Record<string, [threshold: n
     hr: [1, 1, 1],
     tb: [2, 4, 5],
   },
+  // met/last pinned to 1/1 for every NFL entry — the season just started, so
+  // a 3/5 or similar multi-game window would be asking for more games than
+  // any player has actually played yet. Revisit once there's enough season
+  // depth for a wider window to make sense again.
   nfl: {
-    pass_yds: [300, 3, 5],
-    rush_yds: [100, 2, 5],
-    // "-total" (pass+rush / rush+rec combo) — met/last use the generic 3/5
-    // default, only the threshold is curated. rush and rec share the same
-    // threshold since they both resolve to the same rush+rec combo stat.
-    pass_total: [250, 3, 5],
-    rush_total: [100, 3, 5],
-    rec_total: [100, 3, 5],
+    pass_yds: [300, 1, 1],
+    rush_yds: [100, 1, 1],
+    // "-total" (pass+rush / rush+rec combo) — only the threshold is curated,
+    // met/last follow the same season-start 1/1 pin as the rest of NFL.
+    // rush and rec share the same threshold since they both resolve to the
+    // same rush+rec combo stat.
+    pass_total: [250, 1, 1],
+    rush_total: [100, 1, 1],
+    rec_total: [100, 1, 1],
   },
 }
 

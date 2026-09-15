@@ -73,6 +73,20 @@ export function buildSampleQueries(): SampleQuery[] {
     }
   }
 
+  // NFL compute, pinned to -first1 (season just started — anchors to the
+  // one game actually played so far instead of a -lastN/-season window that
+  // doesn't have enough games behind it yet). Kept separate from
+  // CURATED_COMPUTE_DEFAULTS/windowSuffix() above rather than adding '-first'
+  // as a third window kind there: that table's `window` value flows straight
+  // into the mobile calculator's setComputeWindow(), whose ComputeWindow
+  // type (QueryBuilder.tsx) has no '-first' option and no UI button for it —
+  // this stays scoped to sample/predictive-syntax text only, not a builder
+  // capability. Revisit once NFL has enough games for a real window again.
+  out.push(
+    { label: 'nfl compute · pass_yds', command: 'nspe nfl pass -yds min300 -first1' },
+    { label: 'nfl compute · rush_yds', command: 'nspe nfl rush -yds min100 -first1' },
+  )
+
   for (const [league, plays] of Object.entries(CURATED_EXPLOSIVE_TREND_DEFAULTS)) {
     for (const [playType, [threshold, met, last]] of Object.entries(plays)) {
       const command =
