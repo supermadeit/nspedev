@@ -10,6 +10,23 @@ export type ExplosiveLeague = 'mlb' | 'nfl'
 export type MlbFirstPaFlag = 'xbh' | 'walk' | 'single' | 'hit' | ''
 export type NflStatType = 'yds' | 'td' | 'total'
 
+// NBA's 3 combo stats ("pts+ast"/"pts+reb"/"reb+ast" in STAT_FIELDS) are
+// typed with each half separately dash-flagged and slash-joined —
+// "-pts/-ast35", not "-pts+ast35" — confirmed against a real combo-trend
+// backend response: the response's own query.short still comes back
+// "pts+ast" internally (which is why STAT_FIELDS/detectStatContext keep
+// using "+" as the internal key), but that's not the syntax the backend
+// accepts as *input* — sending "-pts+ast35" returns no results. Only stat
+// keys containing "+" need reformatting here; everything else passes
+// through unchanged.
+function formatStatFlag(stat: string, suffix: string): string {
+  if (stat.includes('+')) {
+    const [first, second] = stat.split('+')
+    return `-${first}/-${second}${suffix}`
+  }
+  return `-${stat}${suffix}`
+}
+
 // pass -> pass+rush combo ("-pr"), rush/rec -> rush+rec combo ("-rr") — the
 // two short flags the backend recognizes directly after "nspe nfl", with no
 // category word in front (unlike -yds/-td, which need "pass"/"rush"/"rec"
@@ -622,7 +639,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
             parts.push(`-${nflStatType}${thresholdN}`)
           }
         } else {
-          parts.push(`-${stat}${thresholdN}`)
+          parts.push(formatStatFlag(stat, thresholdN))
         }
       }
       if (lastA && lastB) parts.push(`-last${lastA}/${lastB}`)
@@ -639,7 +656,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
             parts.push(`-${nflStatType}`)
           }
         } else {
-          parts.push(`-${stat}`)
+          parts.push(formatStatFlag(stat, ''))
         }
       }
       if (thresholdMode === 'min') {
@@ -657,7 +674,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
           parts.push(stat)
           parts.push(`-${nflStatType}${thresholdN}`)
         } else {
-          parts.push(`-${stat}${thresholdN}`)
+          parts.push(formatStatFlag(stat, thresholdN))
         }
       }
       if (streakN) parts.push(`-streak${streakN}`)

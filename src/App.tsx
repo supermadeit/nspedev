@@ -2124,11 +2124,29 @@ function App() {
   const syntaxMatches = useMemo(
     () =>
       searchValue.trim() && !looksLikePlayerSearch(searchValue) && !suppressSyntaxDropdown
-        ? searchSyntax(searchValue, 8)
+        ? searchSyntax(searchValue)
         : [],
     [searchValue, suppressSyntaxDropdown],
   )
   const searchInputRef = useRef<HTMLInputElement>(null)
+  // Mobile only — tapping outside the search input/dropdown dismisses
+  // whichever dropdown is open. Separate from suppressSyntaxDropdown above
+  // (which only ever targets the syntax dropdown, right after a selection):
+  // this also covers the player-search dropdown, and resets on refocus (not
+  // just on typing), so tapping back into the input with the same text
+  // still-typed repopulates the dropdown normally rather than requiring the
+  // user to retype something to bring it back.
+  const [isMobileDropdownDismissed, setIsMobileDropdownDismissed] = useState(false)
+  const mobileSearchContainerRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const handlePointerDown = (e: PointerEvent) => {
+      if (mobileSearchContainerRef.current && !mobileSearchContainerRef.current.contains(e.target as Node)) {
+        setIsMobileDropdownDismissed(true)
+      }
+    }
+    document.addEventListener('pointerdown', handlePointerDown)
+    return () => document.removeEventListener('pointerdown', handlePointerDown)
+  }, [])
   const sampleMenuRef = useRef<HTMLDivElement>(null)
   const miniRef = useRef<HTMLDivElement>(null)
   const builderRef = useRef<HTMLDivElement>(null)
@@ -3077,7 +3095,7 @@ function App() {
                   too, same as desktop. Stacked layout instead of desktop's
                   single row: input+run on one line, {calculator}/{charts}
                   below. */}
-              <div className="relative w-full">
+              <div className="relative w-full" ref={mobileSearchContainerRef}>
                 <input
                   ref={searchInputRef}
                   type="text"
@@ -3087,7 +3105,9 @@ function App() {
                     setPlayerSearchActiveIndex(0)
                     setSyntaxActiveIndex(0)
                     setSuppressSyntaxDropdown(false)
+                    setIsMobileDropdownDismissed(false)
                   }}
+                  onFocus={() => setIsMobileDropdownDismissed(false)}
                   onKeyDown={handleSearchSubmit}
                   className="w-full h-[52px] px-5 py-3 bg-card text-foreground font-mono text-[16px] rounded-lg border border-border outline-none focus:border-primary transition-colors duration-200"
                 />
@@ -3099,7 +3119,7 @@ function App() {
                     {PLACEHOLDER_TEXTS[0]}
                   </div>
                 )}
-                {playerMatches.length > 0 ? (
+                {playerMatches.length > 0 && !isMobileDropdownDismissed ? (
                   <div className="absolute top-[60px] left-0 right-0 z-20">
                     <PlayerSearchDropdown
                       matches={playerMatches}
@@ -3109,7 +3129,7 @@ function App() {
                     />
                   </div>
                 ) : (
-                  syntaxMatches.length > 0 && (
+                  syntaxMatches.length > 0 && !isMobileDropdownDismissed && (
                     <div className="absolute top-[60px] left-0 right-0 z-20">
                       <SyntaxSuggestionDropdown
                         matches={syntaxMatches}
@@ -3228,8 +3248,12 @@ function App() {
           {/* Shown on both platforms now — was mobile-only "build your own
               query" before; replaced with a direct nudge toward the CLI
               itself now that it doubles as player search + predictive
-              syntax on both platforms. */}
-          <div className="mt-6 text-center">
+              syntax on both platforms. Desktop-only: nudged left so the "s"
+              in "search" lines up under the "W" in "{WORLD}" from the
+              placeholder above — measured offset (~97px), not eyeballed.
+              Mobile stays centered, narrower width makes an offset like
+              this look arbitrary rather than deliberate. */}
+          <div className={`mt-6 ${isMobile ? 'text-center' : 'text-left'}`} style={isMobile ? undefined : { paddingLeft: '97px' }}>
             <p className="font-mono text-[14px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
               search a player or type: nspe
             </p>

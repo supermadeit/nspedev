@@ -39,6 +39,13 @@ function normalizeToken(token: string): string {
     .replace(/^(-last)\d+$/, '$1#')
     .replace(/^(min)\d+$/, '$1#')
     .replace(/^(max)\d+$/, '$1#')
+    // Combo stats ("-pts/-ast35") — same digit-collapse as the plain
+    // "-stat#" case just below, but for the slash-joined two-flag shape
+    // QueryBuilder now emits for NBA's combo stats. Without this, editing
+    // the threshold on one of these (e.g. "-pts/-ast35" -> "-pts/-ast40")
+    // would un-match the "-last#/#" that follows it, the exact bug the
+    // plain-stat case already avoids.
+    .replace(/^(-[a-z]+\/-[a-z]+)\d+$/, '$1#')
     .replace(/^(-[a-z]+)\d+$/, '$1#')
 }
 
@@ -65,7 +72,10 @@ function matchTokenShape(typedTokens: string[], catalogTokens: string[]): string
 // somewhere in the middle) — typing "nba -pts" should surface pts-trend
 // commands before some unrelated command that merely happens to contain
 // "pts" deeper in its string.
-export function searchSyntax(query: string, limit = 8): SyntaxMatch[] {
+// 25 is a comfortable ceiling — a bare "nspe" is the only realistic case
+// that hits it (prefix matching naturally narrows well below 25 the moment
+// a sport or stat is typed), and the dropdown scrolls if it's ever exceeded.
+export function searchSyntax(query: string, limit = 25): SyntaxMatch[] {
   const trimmed = query.trim().toLowerCase()
   if (!trimmed) return []
 

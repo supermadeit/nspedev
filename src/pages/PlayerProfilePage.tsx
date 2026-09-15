@@ -45,48 +45,35 @@ export default function PlayerProfilePage() {
   const navigate = useNavigate()
   const [state, setState] = useState<LoadState>({ status: 'loading' })
 
-  // {database} in the header doubles as a search toggle — clicking it pops
-  // open the same player-search dropdown the homepage uses, so switching to
-  // another player doesn't require backing out to the homepage first. No
-  // CLI-doubling heuristic needed here (unlike the homepage input) since
-  // this is a dedicated search-only field — every keystroke searches.
-  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  // Player search lives directly in the header now — {database} used to be
+  // a click-to-open toggle for this same dropdown, but that doubled up with
+  // this always-visible field once it moved out here, so the button was
+  // removed in favor of just this. No CLI-doubling heuristic needed here
+  // (unlike the homepage input) since this is a dedicated search-only field
+  // — every keystroke searches.
   const [searchValue, setSearchValue] = useState('')
   const [searchActiveIndex, setSearchActiveIndex] = useState(0)
   const [isPlayerIndexReady, setIsPlayerIndexReady] = useState(false)
-  const searchContainerRef = useRef<HTMLDivElement>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     loadPlayerIndex().then(() => setIsPlayerIndexReady(true))
   }, [])
 
-  useEffect(() => {
-    if (!isSearchOpen) return
-    searchInputRef.current?.focus()
-    const handleClickOutside = (e: MouseEvent) => {
-      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
-        setIsSearchOpen(false)
-      }
-    }
-    window.addEventListener('mousedown', handleClickOutside)
-    return () => window.removeEventListener('mousedown', handleClickOutside)
-  }, [isSearchOpen])
-
   const playerMatches = useMemo(
-    () => (isSearchOpen ? searchPlayers(searchValue, 8) : []),
-    [searchValue, isSearchOpen, isPlayerIndexReady],
+    () => searchPlayers(searchValue, 8),
+    [searchValue, isPlayerIndexReady],
   )
 
   const goToPlayerProfile = (targetSlug: string) => {
-    setIsSearchOpen(false)
     setSearchValue('')
     navigate(`/database/${targetSlug}`)
   }
 
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Escape') {
-      setIsSearchOpen(false)
+      setSearchValue('')
+      searchInputRef.current?.blur()
       return
     }
     if (playerMatches.length === 0) return
@@ -166,49 +153,36 @@ export default function PlayerProfilePage() {
   return (
     <div className="h-dvh w-full overflow-y-auto" style={{ backgroundColor: C.surface, color: C.textBright, fontFamily: 'monospace' }}>
       <div>
-        <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: `1px solid ${C.border}` }}>
-          <div className="relative" ref={searchContainerRef}>
-            <button
-              type="button"
-              onClick={() => setIsSearchOpen((v) => !v)}
-              className="font-mono font-bold text-[15px] hover:opacity-80 transition-opacity"
-              style={{ color: C.accent }}
-              aria-label="Search another player"
-            >
-              {'{database}'}
-            </button>
-            <span className="ml-2 font-mono text-[12px]" style={{ color: C.textDim }}>
-              {DATA.season} season profile
-            </span>
-            {isSearchOpen && (
-              <div className="absolute top-full left-0 mt-2 w-[320px] z-30">
-                <input
-                  ref={searchInputRef}
-                  type="text"
-                  value={searchValue}
-                  onChange={(e) => {
-                    setSearchValue(e.target.value)
-                    setSearchActiveIndex(0)
-                  }}
-                  onKeyDown={handleSearchKeyDown}
-                  placeholder="search a player"
-                  className="w-full h-[38px] px-3 font-mono text-[13px] rounded-lg border outline-none"
-                  style={{ backgroundColor: C.surface2, borderColor: C.border, color: C.textBright }}
-                />
-                {playerMatches.length > 0 && (
-                  <div className="mt-1.5">
-                    <PlayerSearchDropdown
-                      matches={playerMatches}
-                      activeIndex={searchActiveIndex}
-                      onHoverIndex={setSearchActiveIndex}
-                      onSelect={(entry) => goToPlayerProfile(entry.slug)}
-                    />
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
+        <div className="flex flex-wrap items-center justify-between gap-y-3 px-6 py-4" style={{ borderBottom: `1px solid ${C.border}` }}>
+          <span className="font-mono font-bold text-[19px]" style={{ color: C.textBright }}>
+            {DATA.season} SEASON PROFILE
+          </span>
           <div className="flex items-center gap-4">
+            <div className="relative w-[200px] sm:w-[240px]">
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchValue}
+                onChange={(e) => {
+                  setSearchValue(e.target.value)
+                  setSearchActiveIndex(0)
+                }}
+                onKeyDown={handleSearchKeyDown}
+                placeholder="search a player"
+                className="w-full h-[38px] px-3 font-mono text-[13px] rounded-lg border outline-none"
+                style={{ backgroundColor: C.surface2, borderColor: C.border, color: C.textBright }}
+              />
+              {playerMatches.length > 0 && (
+                <div className="absolute top-full left-0 right-0 mt-1.5 z-30">
+                  <PlayerSearchDropdown
+                    matches={playerMatches}
+                    activeIndex={searchActiveIndex}
+                    onHoverIndex={setSearchActiveIndex}
+                    onSelect={(entry) => goToPlayerProfile(entry.slug)}
+                  />
+                </div>
+              )}
+            </div>
             <a href="/charts" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
               {'{chart}'}
             </a>

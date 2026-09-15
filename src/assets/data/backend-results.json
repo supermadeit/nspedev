@@ -1,357 +1,107 @@
 {
-  "engine": "nfl_quarter_trend",
+  "engine": "combo-trend",
   "query": {
-    "scope": "1h",
-    "category": "pass",
-    "threshold": 120,
-    "last": 1,
-    "met": 1,
-    "first": false
+    "stats": [
+      "points",
+      "assists"
+    ],
+    "short": "pts+ast",
+    "threshold": 35,
+    "last": 3,
+    "required": 2,
+    "streak": null,
+    "mode": "last",
+    "date_range": null
   },
   "results": [
     {
-      "player": "JoshAllen",
-      "team": "BUF",
-      "met_count": 1,
-      "window": 1,
-      "matches": [
+      "player": "JalenBrunson",
+      "met": 3,
+      "match": [
         {
-          "game_id": "401872660",
-          "date_iso": "2026-09-13",
-          "seasonYear": "2026",
-          "opponent": "HOU",
-          "team": "BUF",
-          "value": 163
+          "val": 48,
+          "date": "6/13/26"
+        },
+        {
+          "val": 43,
+          "date": "6/10/26"
+        },
+        {
+          "val": 37,
+          "date": "6/8/26"
         }
-      ]
+      ],
+      "last": 3,
+      "threshold": 35,
+      "_latest": "2026-06-13"
     },
     {
-      "player": "BryceYoung",
-      "team": "CAR",
-      "met_count": 1,
-      "window": 1,
-      "matches": [
+      "player": "ShaiGilgeous-Alexander",
+      "met": 2,
+      "match": [
         {
-          "game_id": "401872661",
-          "date_iso": "2026-09-13",
-          "seasonYear": "2026",
-          "opponent": "CHI",
-          "team": "CAR",
-          "value": 193
+          "val": 44,
+          "date": "5/30/26"
+        },
+        {
+          "val": 38,
+          "date": "5/22/26"
         }
-      ]
+      ],
+      "last": 3,
+      "threshold": 35,
+      "_latest": "2026-05-30"
     },
     {
-      "player": "JacobyBrissett",
-      "team": "ARI",
-      "met_count": 1,
-      "window": 1,
-      "matches": [
+      "player": "PaoloBanchero",
+      "met": 2,
+      "match": [
         {
-          "game_id": "401872926",
-          "date_iso": "2026-09-13",
-          "seasonYear": "2026",
-          "opponent": "LAC",
-          "team": "ARI",
-          "value": 164
+          "val": 44,
+          "date": "5/3/26"
+        },
+        {
+          "val": 52,
+          "date": "4/29/26"
         }
-      ]
+      ],
+      "last": 3,
+      "threshold": 35,
+      "_latest": "2026-05-03"
     },
     {
-      "player": "AaronRodgers",
-      "team": "PIT",
-      "met_count": 1,
-      "window": 1,
-      "matches": [
+      "player": "NikolaJokic",
+      "met": 2,
+      "match": [
         {
-          "game_id": "401872658",
-          "date_iso": "2026-09-13",
-          "seasonYear": "2026",
-          "opponent": "ATL",
-          "team": "PIT",
-          "value": 133
+          "val": 38,
+          "date": "4/30/26"
+        },
+        {
+          "val": 43,
+          "date": "4/27/26"
         }
-      ]
+      ],
+      "last": 3,
+      "threshold": 35,
+      "_latest": "2026-04-30"
     },
     {
-      "player": "CalebWilliams",
-      "team": "CHI",
-      "met_count": 1,
-      "window": 1,
-      "matches": [
+      "player": "LukaDoncic",
+      "met": 2,
+      "match": [
         {
-          "game_id": "401872661",
-          "date_iso": "2026-09-13",
-          "seasonYear": "2026",
-          "opponent": "CAR",
-          "team": "CHI",
-          "value": 189
-        }
-      ]
-    },
-    {
-      "player": "C.J.Stroud",
-      "team": "HOU",
-      "met_count": 1,
-      "window": 1,
-      "matches": [
+          "val": 54,
+          "date": "3/31/26"
+        },
         {
-          "game_id": "401872660",
-          "date_iso": "2026-09-13",
-          "seasonYear": "2026",
-          "opponent": "BUF",
-          "team": "HOU",
-          "value": 123
+          "val": 44,
+          "date": "3/27/26"
         }
-      ]
-    },
-    {
-      "player": "JordanLove",
-      "team": "GB",
-      "met_count": 1,
-      "window": 1,
-      "matches": [
-        {
-          "game_id": "401872927",
-          "date_iso": "2026-09-13",
-          "seasonYear": "2026",
-          "opponent": "MIN",
-          "team": "GB",
-          "value": 199
-        }
-      ]
-    },
-    {
-      "player": "JoeBurrow",
-      "team": "CIN",
-      "met_count": 1,
-      "window": 1,
-      "matches": [
-        {
-          "game_id": "401872925",
-          "date_iso": "2026-09-13",
-          "seasonYear": "2026",
-          "opponent": "TB",
-          "team": "CIN",
-          "value": 133
-        }
-      ]
-    },
-    {
-      "player": "BakerMayfield",
-      "team": "TB",
-      "met_count": 1,
-      "window": 1,
-      "matches": [
-        {
-          "game_id": "401872925",
-          "date_iso": "2026-09-13",
-          "seasonYear": "2026",
-          "opponent": "CIN",
-          "team": "TB",
-          "value": 125
-        }
-      ]
-    },
-    {
-      "player": "TrevorLawrence",
-      "team": "JAX",
-      "met_count": 1,
-      "window": 1,
-      "matches": [
-        {
-          "game_id": "401872922",
-          "date_iso": "2026-09-13",
-          "seasonYear": "2026",
-          "opponent": "CLE",
-          "team": "JAX",
-          "value": 154
-        }
-      ]
-    },
-    {
-      "player": "JaxsonDart",
-      "team": "NYG",
-      "met_count": 1,
-      "window": 1,
-      "matches": [
-        {
-          "game_id": "401872930",
-          "date_iso": "2026-09-13",
-          "seasonYear": "2026",
-          "opponent": "DAL",
-          "team": "NYG",
-          "value": 127
-        }
-      ]
-    },
-    {
-      "player": "LamarJackson",
-      "team": "BAL",
-      "met_count": 1,
-      "window": 1,
-      "matches": [
-        {
-          "game_id": "401872659",
-          "date_iso": "2026-09-13",
-          "seasonYear": "2026",
-          "opponent": "IND",
-          "team": "BAL",
-          "value": 229
-        }
-      ]
-    },
-    {
-      "player": "BrockPurdy",
-      "team": "SF",
-      "met_count": 1,
-      "window": 1,
-      "matches": [
-        {
-          "game_id": "401872657",
-          "date_iso": "2026-09-10",
-          "seasonYear": "2026",
-          "opponent": "LAR",
-          "team": "SF",
-          "value": 141
-        }
-      ]
+      ],
+      "last": 3,
+      "threshold": 35,
+      "_latest": "2026-03-31"
     }
   ]
-}
-
-
-
-
-{
-  "sport": "nfl",
-  "query": "nfl long rush ydsmin30 last1 reqmet1",
-  "results": [
-    {
-      "player": "Kenneth Walker I I I",
-      "matches": [
-        {
-          "player_name": "KennethWalkerIII",
-          "player_id": "4567048",
-          "position": "RB",
-          "team": "KC",
-          "date_iso": "2026-09-15",
-          "date": "2026-09-15",
-          "seasonYear": 2026,
-          "opponent": "DEN",
-          "game_id": "401872931",
-          "play_type": "rush",
-          "yards": 60,
-          "touchdown": true,
-          "quarter": 3,
-          "receiver": "",
-          "passer": ""
-        }
-      ],
-      "met_count": 1,
-      "window": 1
-    },
-    {
-      "player": "D' Andre Swift",
-      "matches": [
-        {
-          "player_name": "D'AndreSwift",
-          "player_id": "4259545",
-          "position": "RB",
-          "team": "CHI",
-          "date_iso": "2026-09-13",
-          "date": "2026-09-13",
-          "seasonYear": 2026,
-          "opponent": "CAR",
-          "game_id": "401872661",
-          "play_type": "rush",
-          "yards": 32,
-          "touchdown": false,
-          "quarter": 1,
-          "receiver": "",
-          "passer": ""
-        }
-      ],
-      "met_count": 1,
-      "window": 1
-    },
-    {
-      "player": "Kyle Monangai",
-      "matches": [
-        {
-          "player_name": "KyleMonangai",
-          "player_id": "4608686",
-          "position": "RB",
-          "team": "CHI",
-          "date_iso": "2026-09-13",
-          "date": "2026-09-13",
-          "seasonYear": 2026,
-          "opponent": "CAR",
-          "game_id": "401872661",
-          "play_type": "rush",
-          "yards": 61,
-          "touchdown": true,
-          "quarter": 3,
-          "receiver": "",
-          "passer": ""
-        }
-      ],
-      "met_count": 1,
-      "window": 1
-    },
-    {
-      "player": "Saquon Barkley",
-      "matches": [
-        {
-          "player_name": "SaquonBarkley",
-          "player_id": "3929630",
-          "position": "RB",
-          "team": "PHI",
-          "date_iso": "2026-09-13",
-          "date": "2026-09-13",
-          "seasonYear": 2026,
-          "opponent": "WSH",
-          "game_id": "401872929",
-          "play_type": "rush",
-          "yards": 42,
-          "touchdown": false,
-          "quarter": 2,
-          "receiver": "",
-          "passer": ""
-        }
-      ],
-      "met_count": 1,
-      "window": 1
-    },
-    {
-      "player": "Derrick Henry",
-      "matches": [
-        {
-          "player_name": "DerrickHenry",
-          "player_id": "3043078",
-          "position": "RB",
-          "team": "BAL",
-          "date_iso": "2026-09-13",
-          "date": "2026-09-13",
-          "seasonYear": 2026,
-          "opponent": "IND",
-          "game_id": "401872659",
-          "play_type": "rush",
-          "yards": 32,
-          "touchdown": true,
-          "quarter": 2,
-          "receiver": "",
-          "passer": ""
-        }
-      ],
-      "met_count": 1,
-      "window": 1
-    }
-  ],
-  "year_window": [
-    2026,
-    2026
-  ],
-  "career": false,
-  "window_label": "2026"
 }
