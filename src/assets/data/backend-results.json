@@ -1,699 +1,774 @@
 {
-  "engine": "mlb_hr_trend",
+  "engine": "nfl_matchup_insight",
   "query": {
-    "threshold": 350,
-    "last": 5,
-    "met": 1,
-    "first": false
+    "team_a": "DAL",
+    "team_b": "WSH",
+    "window_label": "career"
   },
-  "results": [
+  "team_record": {
+    "wins": 17,
+    "losses": 6,
+    "ties": 0
+  },
+  "meetings": [
     {
-      "player": "Kazuma Okamoto",
-      "team": "TOR",
-      "met_count": 3,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816889",
-          "date": "2026-09-11",
-          "opponent": "vsBAL",
-          "inning": 4,
-          "half": "Bottom",
-          "distance_feet": 399,
-          "description": "Okamoto homered to right center (399 feet).",
-          "team": "TOR"
-        },
-        {
-          "game_id": "401816919",
-          "date": "2026-09-13",
-          "opponent": "vsBAL",
-          "inning": 5,
-          "half": "Bottom",
-          "distance_feet": 410,
-          "description": "Okamoto homered to left (410 feet).",
-          "team": "TOR"
-        },
-        {
-          "game_id": "401816935",
-          "date": "2026-09-14",
-          "opponent": "vsDET",
-          "inning": 7,
-          "half": "Bottom",
-          "distance_feet": 390,
-          "description": "Okamoto homered to left (390 feet), Springer scored and Kirk scored.",
-          "team": "TOR"
-        }
-      ]
+      "date_iso": "2013-12-22",
+      "season": "2013",
+      "outcome": "W",
+      "pts_for": 24,
+      "pts_allowed": 23,
+      "a_stats": {
+        "total_yards": 309,
+        "yards_per_play": 5.9,
+        "turnovers": 2,
+        "possession_seconds": 1573
+      },
+      "b_stats": {
+        "total_yards": 297,
+        "yards_per_play": 4.6,
+        "turnovers": 1,
+        "possession_seconds": 2027
+      }
     },
     {
-      "player": "William Contreras",
-      "team": "MIL",
-      "met_count": 3,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816876",
-          "date": "2026-09-09",
-          "opponent": "vsCHC",
-          "inning": 2,
-          "half": "Bottom",
-          "distance_feet": 374,
-          "description": "Contreras homered to left (374 feet), Turang scored.",
-          "team": "MIL"
-        },
-        {
-          "game_id": "401816897",
-          "date": "2026-09-11",
-          "opponent": "vsCIN",
-          "inning": 8,
-          "half": "Bottom",
-          "distance_feet": 388,
-          "description": "Contreras homered to left (388 feet), Ortiz scored and Hamilton scored.",
-          "team": "MIL"
-        },
-        {
-          "game_id": "401816912",
-          "date": "2026-09-12",
-          "opponent": "vsCIN",
-          "inning": 4,
-          "half": "Bottom",
-          "distance_feet": 381,
-          "description": "Contreras homered to left center (381 feet), Bauers scored and Yelich scored.",
-          "team": "MIL"
-        }
-      ]
+      "date_iso": "2015-12-07",
+      "season": "2015",
+      "outcome": "W",
+      "pts_for": 19,
+      "pts_allowed": 16,
+      "a_stats": {
+        "total_yards": 318,
+        "yards_per_play": 5.9,
+        "turnovers": 3,
+        "possession_seconds": 1633
+      },
+      "b_stats": {
+        "total_yards": 266,
+        "yards_per_play": 4.4,
+        "turnovers": 1,
+        "possession_seconds": 1967
+      }
     },
     {
-      "player": "Fernando Tatis Jr",
-      "team": "SD",
-      "met_count": 2,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816915",
-          "date": "2026-09-12",
-          "opponent": "@SF",
-          "inning": 6,
-          "half": "Top",
-          "distance_feet": 421,
-          "description": "Tatis Jr. homered to left (421 feet).",
-          "team": "SD"
-        },
-        {
-          "game_id": "401816940",
-          "date": "2026-09-14",
-          "opponent": "@COL",
-          "inning": 2,
-          "half": "Top",
-          "distance_feet": 449,
-          "description": "Tatis Jr. homered to center (449 feet), Cronenworth scored.",
-          "team": "SD"
-        }
-      ]
+      "date_iso": "2016-01-03",
+      "season": "2015",
+      "outcome": "L",
+      "pts_for": 23,
+      "pts_allowed": 34,
+      "a_stats": {
+        "total_yards": 512,
+        "yards_per_play": 7.5,
+        "turnovers": 4,
+        "possession_seconds": 1563
+      },
+      "b_stats": {
+        "total_yards": 437,
+        "yards_per_play": 6.9,
+        "turnovers": 0,
+        "possession_seconds": 2037
+      }
     },
     {
-      "player": "Matt Olson",
-      "team": "ATL",
-      "met_count": 2,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816895",
-          "date": "2026-09-11",
-          "opponent": "vsPHI",
-          "inning": 1,
-          "half": "Bottom",
-          "distance_feet": 352,
-          "description": "Olson homered to left (352 feet).",
-          "team": "ATL"
-        },
-        {
-          "game_id": "401816925",
-          "date": "2026-09-13",
-          "opponent": "vsPHI",
-          "inning": 9,
-          "half": "Bottom",
-          "distance_feet": 400,
-          "description": "Olson homered to left center (400 feet), Acu\u00f1a Jr. scored.",
-          "team": "ATL"
-        }
-      ]
+      "date_iso": "2016-09-18",
+      "season": "2016",
+      "outcome": "W",
+      "pts_for": 27,
+      "pts_allowed": 23,
+      "a_stats": {
+        "total_yards": 380,
+        "yards_per_play": 5.9,
+        "turnovers": 1,
+        "possession_seconds": 1971
+      },
+      "b_stats": {
+        "total_yards": 432,
+        "yards_per_play": 6.6,
+        "turnovers": 1,
+        "possession_seconds": 1629
+      }
     },
     {
-      "player": "Brice Turang",
-      "team": "MIL",
-      "met_count": 2,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816897",
-          "date": "2026-09-11",
-          "opponent": "vsCIN",
-          "inning": 2,
-          "half": "Bottom",
-          "distance_feet": 382,
-          "description": "Turang homered to right center (382 feet), Mitchell scored and Chourio scored.",
-          "team": "MIL"
-        },
-        {
-          "game_id": "401816912",
-          "date": "2026-09-12",
-          "opponent": "vsCIN",
-          "inning": 1,
-          "half": "Bottom",
-          "distance_feet": 400,
-          "description": "Turang homered to center (400 feet), Chourio scored.",
-          "team": "MIL"
-        }
-      ]
+      "date_iso": "2016-11-24",
+      "season": "2016",
+      "outcome": "W",
+      "pts_for": 31,
+      "pts_allowed": 26,
+      "a_stats": {
+        "total_yards": 353,
+        "yards_per_play": 6.4,
+        "turnovers": 0,
+        "possession_seconds": 1596
+      },
+      "b_stats": {
+        "total_yards": 505,
+        "yards_per_play": 7.0,
+        "turnovers": 0,
+        "possession_seconds": 2004
+      }
     },
     {
-      "player": "Max Muncy",
-      "team": "LAD",
-      "met_count": 2,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816878",
-          "date": "2026-09-09",
-          "opponent": "vsCIN",
-          "inning": 6,
-          "half": "Bottom",
-          "distance_feet": 380,
-          "description": "Muncy homered to right (380 feet), Betts scored.",
-          "team": "LAD"
-        },
-        {
-          "game_id": "401816908",
-          "date": "2026-09-12",
-          "opponent": "@MIA",
-          "inning": 1,
-          "half": "Top",
-          "distance_feet": 393,
-          "description": "Muncy homered to center (393 feet).",
-          "team": "LAD"
-        }
-      ]
+      "date_iso": "2017-10-29",
+      "season": "2017",
+      "outcome": "W",
+      "pts_for": 33,
+      "pts_allowed": 19,
+      "a_stats": {
+        "total_yards": 307,
+        "yards_per_play": 4.9,
+        "turnovers": 1,
+        "possession_seconds": 1999
+      },
+      "b_stats": {
+        "total_yards": 285,
+        "yards_per_play": 4.9,
+        "turnovers": 3,
+        "possession_seconds": 1601
+      }
     },
     {
-      "player": "Mookie Betts",
-      "team": "LAD",
-      "met_count": 2,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816878",
-          "date": "2026-09-09",
-          "opponent": "vsCIN",
-          "inning": 3,
-          "half": "Bottom",
-          "distance_feet": 382,
-          "description": "Betts homered to left center (382 feet), Smith scored.",
-          "team": "LAD"
-        },
-        {
-          "game_id": "401816908",
-          "date": "2026-09-12",
-          "opponent": "@MIA",
-          "inning": 1,
-          "half": "Top",
-          "distance_feet": 399,
-          "description": "Betts homered to left center (399 feet).",
-          "team": "LAD"
-        }
-      ]
+      "date_iso": "2017-11-30",
+      "season": "2017",
+      "outcome": "W",
+      "pts_for": 38,
+      "pts_allowed": 14,
+      "a_stats": {
+        "total_yards": 275,
+        "yards_per_play": 4.2,
+        "turnovers": 0,
+        "possession_seconds": 1948
+      },
+      "b_stats": {
+        "total_yards": 280,
+        "yards_per_play": 4.7,
+        "turnovers": 4,
+        "possession_seconds": 1652
+      }
     },
     {
-      "player": "Rafael Devers",
-      "team": "SF",
-      "met_count": 2,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816900",
-          "date": "2026-09-11",
-          "opponent": "vsSD",
-          "inning": 5,
-          "half": "Bottom",
-          "distance_feet": 388,
-          "description": "Devers homered to right (388 feet), Knizner scored, Koss scored and Cox scored.",
-          "team": "SF"
-        },
-        {
-          "game_id": "401816915",
-          "date": "2026-09-12",
-          "opponent": "vsSD",
-          "inning": 1,
-          "half": "Bottom",
-          "distance_feet": 389,
-          "description": "Devers homered to right center (389 feet), Gilbert scored.",
-          "team": "SF"
-        }
-      ]
+      "date_iso": "2018-10-21",
+      "season": "2018",
+      "outcome": "L",
+      "pts_for": 17,
+      "pts_allowed": 20,
+      "a_stats": {
+        "total_yards": 323,
+        "yards_per_play": 5.3,
+        "turnovers": 2,
+        "possession_seconds": 1745
+      },
+      "b_stats": {
+        "total_yards": 305,
+        "yards_per_play": 5.3,
+        "turnovers": 0,
+        "possession_seconds": 1855
+      }
     },
     {
-      "player": "Luis Garcia Jr",
-      "team": "WSH",
-      "met_count": 2,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816870",
-          "date": "2026-09-09",
-          "opponent": "vsCOL",
-          "inning": 2,
-          "half": "Bottom",
-          "distance_feet": 413,
-          "description": "Garc\u00eda Jr. homered to right center (413 feet).",
-          "team": "WSH"
-        },
-        {
-          "game_id": "401816883",
-          "date": "2026-09-10",
-          "opponent": "vsCOL",
-          "inning": 1,
-          "half": "Bottom",
-          "distance_feet": 413,
-          "description": "Garc\u00eda Jr. homered to center (413 feet), Rice scored.",
-          "team": "WSH"
-        }
-      ]
+      "date_iso": "2018-11-22",
+      "season": "2018",
+      "outcome": "W",
+      "pts_for": 31,
+      "pts_allowed": 23,
+      "a_stats": {
+        "total_yards": 404,
+        "yards_per_play": 5.9,
+        "turnovers": 0,
+        "possession_seconds": 2003
+      },
+      "b_stats": {
+        "total_yards": 331,
+        "yards_per_play": 5.4,
+        "turnovers": 3,
+        "possession_seconds": 1597
+      }
     },
     {
-      "player": "Casey Schmitt",
-      "team": "SF",
-      "met_count": 2,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816226",
-          "date": "2026-07-22",
-          "opponent": "@KC",
-          "inning": 9,
-          "half": "Top",
-          "distance_feet": 376,
-          "description": "Schmitt homered to left (376 feet).",
-          "team": "SF"
-        },
-        {
-          "game_id": "401816249",
-          "date": "2026-07-24",
-          "opponent": "vsLAA",
-          "inning": 3,
-          "half": "Bottom",
-          "distance_feet": 412,
-          "description": "Schmitt homered to left (412 feet), Eldridge scored and Devers scored.",
-          "team": "SF"
-        }
-      ]
+      "date_iso": "2019-09-15",
+      "season": "2019",
+      "outcome": "W",
+      "pts_for": 31,
+      "pts_allowed": 21,
+      "a_stats": {
+        "total_yards": 474,
+        "yards_per_play": 7.3,
+        "turnovers": 1,
+        "possession_seconds": 2002
+      },
+      "b_stats": {
+        "total_yards": 255,
+        "yards_per_play": 4.6,
+        "turnovers": 0,
+        "possession_seconds": 1598
+      }
     },
     {
-      "player": "Pete Crow Armstrong",
-      "team": "CHC",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816937",
-          "date": "2026-09-14",
-          "opponent": "vsATL",
-          "inning": 6,
-          "half": "Bottom",
-          "distance_feet": 373,
-          "description": "Crow-Armstrong homered to right center (373 feet), Kelly scored.",
-          "team": "CHC"
-        }
-      ]
+      "date_iso": "2019-12-29",
+      "season": "2019",
+      "outcome": "W",
+      "pts_for": 47,
+      "pts_allowed": 16,
+      "a_stats": {
+        "total_yards": 517,
+        "yards_per_play": 7.2,
+        "turnovers": 1,
+        "possession_seconds": 2055
+      },
+      "b_stats": {
+        "total_yards": 271,
+        "yards_per_play": 4.6,
+        "turnovers": 2,
+        "possession_seconds": 1545
+      }
     },
     {
-      "player": "Aaron Judge",
-      "team": "NYY",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816938",
-          "date": "2026-09-14",
-          "opponent": "@MIN",
-          "inning": 8,
-          "half": "Top",
-          "distance_feet": 415,
-          "description": "Judge homered to left (415 feet), Rice scored and Bellinger scored.",
-          "team": "NYY"
-        }
-      ]
+      "date_iso": "2020-10-25",
+      "season": "2020",
+      "outcome": "L",
+      "pts_for": 3,
+      "pts_allowed": 25,
+      "a_stats": {
+        "total_yards": 142,
+        "yards_per_play": 2.6,
+        "turnovers": 1,
+        "possession_seconds": 1416
+      },
+      "b_stats": {
+        "total_yards": 397,
+        "yards_per_play": 6.0,
+        "turnovers": 0,
+        "possession_seconds": 2184
+      }
     },
     {
-      "player": "Miguel Vargas",
-      "team": "CHW",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816934",
-          "date": "2026-09-14",
-          "opponent": "@CLE",
-          "inning": 6,
-          "half": "Top",
-          "distance_feet": 392,
-          "description": "Vargas homered to left (392 feet), Teel scored.",
-          "team": "CHW"
-        }
-      ]
+      "date_iso": "2020-11-26",
+      "season": "2020",
+      "outcome": "L",
+      "pts_for": 16,
+      "pts_allowed": 41,
+      "a_stats": {
+        "total_yards": 247,
+        "yards_per_play": 4.3,
+        "turnovers": 2,
+        "possession_seconds": 1444
+      },
+      "b_stats": {
+        "total_yards": 338,
+        "yards_per_play": 5.1,
+        "turnovers": 1,
+        "possession_seconds": 2156
+      }
     },
     {
-      "player": "Jonathan Aranda",
-      "team": "TB",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816921",
-          "date": "2026-09-13",
-          "opponent": "vsHOU",
-          "inning": 7,
-          "half": "Bottom",
-          "distance_feet": 415,
-          "description": "Aranda homered to right center (415 feet), D\u00edaz scored.",
-          "team": "TB"
-        }
-      ]
+      "date_iso": "2021-12-12",
+      "season": "2021",
+      "outcome": "W",
+      "pts_for": 27,
+      "pts_allowed": 20,
+      "a_stats": {
+        "total_yards": 323,
+        "yards_per_play": 4.1,
+        "turnovers": 2,
+        "possession_seconds": 2069
+      },
+      "b_stats": {
+        "total_yards": 224,
+        "yards_per_play": 3.6,
+        "turnovers": 4,
+        "possession_seconds": 1531
+      }
     },
     {
-      "player": "Riley Greene",
-      "team": "DET",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816920",
-          "date": "2026-09-13",
-          "opponent": "vsCOL",
-          "inning": 1,
-          "half": "Bottom",
-          "distance_feet": 365,
-          "description": "Greene homered to left (365 feet), Keith scored.",
-          "team": "DET"
-        }
-      ]
+      "date_iso": "2021-12-26",
+      "season": "2021",
+      "outcome": "W",
+      "pts_for": 56,
+      "pts_allowed": 14,
+      "a_stats": {
+        "total_yards": 497,
+        "yards_per_play": 6.8,
+        "turnovers": 0,
+        "possession_seconds": 1891
+      },
+      "b_stats": {
+        "total_yards": 257,
+        "yards_per_play": 4.5,
+        "turnovers": 2,
+        "possession_seconds": 1709
+      }
     },
     {
-      "player": "Kevin Mcgonigle",
-      "team": "DET",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816905",
-          "date": "2026-09-12",
-          "opponent": "vsCOL",
-          "inning": 3,
-          "half": "Bottom",
-          "distance_feet": 389,
-          "description": "McGonigle homered to right center (389 feet).",
-          "team": "DET"
-        }
-      ]
+      "date_iso": "2022-10-02",
+      "season": "2022",
+      "outcome": "W",
+      "pts_for": 25,
+      "pts_allowed": 10,
+      "a_stats": {
+        "total_yards": 279,
+        "yards_per_play": 4.9,
+        "turnovers": 0,
+        "possession_seconds": 1614
+      },
+      "b_stats": {
+        "total_yards": 297,
+        "yards_per_play": 4.2,
+        "turnovers": 2,
+        "possession_seconds": 1986
+      }
     },
     {
-      "player": "Michael Harris Ii",
-      "team": "ATL",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816910",
-          "date": "2026-09-12",
-          "opponent": "vsPHI",
-          "inning": 8,
-          "half": "Bottom",
-          "distance_feet": 367,
-          "description": "Harris II homered to right (367 feet), Keirsey Jr. scored and Albies scored.",
-          "team": "ATL"
-        }
-      ]
+      "date_iso": "2023-01-08",
+      "season": "2022",
+      "outcome": "L",
+      "pts_for": 6,
+      "pts_allowed": 26,
+      "a_stats": {
+        "total_yards": 182,
+        "yards_per_play": 2.8,
+        "turnovers": 2,
+        "possession_seconds": 1428
+      },
+      "b_stats": {
+        "total_yards": 309,
+        "yards_per_play": 4.9,
+        "turnovers": 1,
+        "possession_seconds": 2172
+      }
     },
     {
-      "player": "Bryce Harper",
-      "team": "PHI",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816910",
-          "date": "2026-09-12",
-          "opponent": "@ATL",
-          "inning": 1,
-          "half": "Top",
-          "distance_feet": 426,
-          "description": "Harper homered to center (426 feet).",
-          "team": "PHI"
-        }
-      ]
+      "date_iso": "2023-11-23",
+      "season": "2023",
+      "outcome": "W",
+      "pts_for": 45,
+      "pts_allowed": 10,
+      "a_stats": {
+        "total_yards": 431,
+        "yards_per_play": 8.6,
+        "turnovers": 0,
+        "possession_seconds": 1386
+      },
+      "b_stats": {
+        "total_yards": 376,
+        "yards_per_play": 5.0,
+        "turnovers": 1,
+        "possession_seconds": 2214
+      }
     },
     {
-      "player": "Hunter Goodman",
-      "team": "COL",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816905",
-          "date": "2026-09-12",
-          "opponent": "@DET",
-          "inning": 3,
-          "half": "Top",
-          "distance_feet": 362,
-          "description": "Goodman homered to left (362 feet), McCarthy scored and Norby scored.",
-          "team": "COL"
-        }
-      ]
+      "date_iso": "2024-01-07",
+      "season": "2023",
+      "outcome": "W",
+      "pts_for": 38,
+      "pts_allowed": 10,
+      "a_stats": {
+        "total_yards": 440,
+        "yards_per_play": 6.4,
+        "turnovers": 1,
+        "possession_seconds": 2035
+      },
+      "b_stats": {
+        "total_yards": 180,
+        "yards_per_play": 3.7,
+        "turnovers": 3,
+        "possession_seconds": 1565
+      }
     },
     {
-      "player": "Juan Soto",
-      "team": "NYM",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816909",
-          "date": "2026-09-12",
-          "opponent": "@NYY",
-          "inning": 7,
-          "half": "Top",
-          "distance_feet": 400,
-          "description": "Soto homered to right center (400 feet).",
-          "team": "NYM"
-        }
-      ]
+      "date_iso": "2024-11-24",
+      "season": "2024",
+      "outcome": "W",
+      "pts_for": 34,
+      "pts_allowed": 26,
+      "a_stats": {
+        "total_yards": 332,
+        "yards_per_play": 5.4,
+        "turnovers": 1,
+        "possession_seconds": 2112
+      },
+      "b_stats": {
+        "total_yards": 412,
+        "yards_per_play": 6.1,
+        "turnovers": 3,
+        "possession_seconds": 1488
+      }
     },
     {
-      "player": "Pete Alonso",
-      "team": "BAL",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816904",
-          "date": "2026-09-12",
-          "opponent": "@TOR",
-          "inning": 7,
-          "half": "Top",
-          "distance_feet": 387,
-          "description": "Alonso homered to left (387 feet), Pozo scored.",
-          "team": "BAL"
-        }
-      ]
+      "date_iso": "2025-01-05",
+      "season": "2024",
+      "outcome": "L",
+      "pts_for": 19,
+      "pts_allowed": 23,
+      "a_stats": {
+        "total_yards": 378,
+        "yards_per_play": 5.0,
+        "turnovers": 0,
+        "possession_seconds": 2223
+      },
+      "b_stats": {
+        "total_yards": 269,
+        "yards_per_play": 4.9,
+        "turnovers": 1,
+        "possession_seconds": 1377
+      }
     },
     {
-      "player": "Ronald Acuna Jr",
-      "team": "ATL",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816910",
-          "date": "2026-09-12",
-          "opponent": "vsPHI",
-          "inning": 4,
-          "half": "Bottom",
-          "distance_feet": 353,
-          "description": "Acu\u00f1a Jr. homered to left (353 feet).",
-          "team": "ATL"
-        }
-      ]
+      "date_iso": "2025-10-19",
+      "season": "2025",
+      "outcome": "W",
+      "pts_for": 44,
+      "pts_allowed": 22,
+      "a_stats": {
+        "total_yards": 409,
+        "yards_per_play": 6.6,
+        "turnovers": 0,
+        "possession_seconds": 1881
+      },
+      "b_stats": {
+        "total_yards": 341,
+        "yards_per_play": 5.3,
+        "turnovers": 2,
+        "possession_seconds": 1719
+      }
     },
     {
-      "player": "Bryan Reynolds",
-      "team": "PIT",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816899",
-          "date": "2026-09-11",
-          "opponent": "@CHC",
-          "inning": 6,
-          "half": "Top",
-          "distance_feet": 364,
-          "description": "Reynolds homered to left (364 feet).",
-          "team": "PIT"
-        }
-      ]
-    },
-    {
-      "player": "Junior Caminero",
-      "team": "TB",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816891",
-          "date": "2026-09-11",
-          "opponent": "vsHOU",
-          "inning": 9,
-          "half": "Bottom",
-          "distance_feet": 417,
-          "description": "Caminero homered to left center (417 feet), DeLuca scored.",
-          "team": "TB"
-        }
-      ]
-    },
-    {
-      "player": "Ben Rice",
-      "team": "NYY",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816894",
-          "date": "2026-09-11",
-          "opponent": "vsNYM",
-          "inning": 5,
-          "half": "Bottom",
-          "distance_feet": 371,
-          "description": "Rice homered to left center (371 feet).",
-          "team": "NYY"
-        }
-      ]
-    },
-    {
-      "player": "Chase Meidroth",
-      "team": "CHW",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816896",
-          "date": "2026-09-11",
-          "opponent": "@STL",
-          "inning": 1,
-          "half": "Top",
-          "distance_feet": 398,
-          "description": "Meidroth homered to center (398 feet).",
-          "team": "CHW"
-        },
-        {
-          "game_id": "401816896",
-          "date": "2026-09-11",
-          "opponent": "@STL",
-          "inning": 3,
-          "half": "Top",
-          "distance_feet": 391,
-          "description": "Meidroth homered to left center (391 feet).",
-          "team": "CHW"
-        }
-      ]
-    },
-    {
-      "player": "Dillon Dingler",
-      "team": "DET",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816890",
-          "date": "2026-09-11",
-          "opponent": "vsCOL",
-          "inning": 6,
-          "half": "Bottom",
-          "distance_feet": 408,
-          "description": "Dingler homered to left (408 feet), Greene scored.",
-          "team": "DET"
-        }
-      ]
-    },
-    {
-      "player": "Bobby Witt Jr",
-      "team": "KC",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816875",
-          "date": "2026-09-09",
-          "opponent": "vsARI",
-          "inning": 5,
-          "half": "Bottom",
-          "distance_feet": 394,
-          "description": "Witt Jr. homered to left center (394 feet), Collins scored and Jensen scored.",
-          "team": "KC"
-        }
-      ]
-    },
-    {
-      "player": "Trea Turner",
-      "team": "PHI",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816871",
-          "date": "2026-09-09",
-          "opponent": "vsHOU",
-          "inning": 5,
-          "half": "Bottom",
-          "distance_feet": 374,
-          "description": "Turner homered to right center (374 feet).",
-          "team": "PHI"
-        }
-      ]
-    },
-    {
-      "player": "Kyle Schwarber",
-      "team": "PHI",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816871",
-          "date": "2026-09-09",
-          "opponent": "vsHOU",
-          "inning": 6,
-          "half": "Bottom",
-          "distance_feet": 408,
-          "description": "Schwarber homered to right (408 feet), Sosa scored, Crawford scored and De La Cruz scored.",
-          "team": "PHI"
-        }
-      ]
-    },
-    {
-      "player": "Andy Pages",
-      "team": "LAD",
-      "met_count": 1,
-      "window": 5,
-      "matches": [
-        {
-          "game_id": "401816560",
-          "date": "2026-08-16",
-          "opponent": "vsMIL",
-          "inning": 9,
-          "half": "Bottom",
-          "distance_feet": 382,
-          "description": "Pages homered to left (382 feet).",
-          "team": "LAD"
-        }
-      ]
+      "date_iso": "2025-12-25",
+      "season": "2025",
+      "outcome": "W",
+      "pts_for": 30,
+      "pts_allowed": 23,
+      "a_stats": {
+        "total_yards": 480,
+        "yards_per_play": 5.5,
+        "turnovers": 0,
+        "possession_seconds": 2324
+      },
+      "b_stats": {
+        "total_yards": 328,
+        "yards_per_play": 8.0,
+        "turnovers": 0,
+        "possession_seconds": 1276
+      }
     }
-  ]
+  ],
+  "team_a": {
+    "team": "DAL",
+    "players": [
+      {
+        "player_name": "DakPrescott",
+        "team": "DAL",
+        "category": "pass",
+        "vs_opponent": {
+          "games": 15,
+          "attempts": 477,
+          "completions": 314,
+          "yards": 3716,
+          "td": 32,
+          "int": 5,
+          "long": 43.2,
+          "pct": 65.8,
+          "quarters": {
+            "q1": 921,
+            "q2": 215,
+            "q3": 89,
+            "q4": 101,
+            "1h": 2252,
+            "2h": 190
+          }
+        },
+        "recent_form": {
+          "games": 8,
+          "attempts": 272,
+          "completions": 173,
+          "yards": 2140,
+          "td": 11,
+          "int": 5,
+          "long": 41.9,
+          "pct": 63.6,
+          "quarters": {
+            "q1": 394,
+            "q2": 668,
+            "q3": 425,
+            "q4": 640,
+            "1h": 1062,
+            "2h": 1065
+          }
+        }
+      },
+      {
+        "player_name": "CeedeeLamb",
+        "team": "DAL",
+        "category": "rec",
+        "vs_opponent": {
+          "games": 11,
+          "attempts": 94,
+          "completions": 64,
+          "yards": 671,
+          "td": 6,
+          "long": 21.7,
+          "pct": 68.1,
+          "quarters": {
+            "q1": 92,
+            "q2": 33,
+            "q3": 31,
+            "q4": 0,
+            "1h": 125,
+            "2h": 31
+          }
+        },
+        "recent_form": {
+          "games": 8,
+          "attempts": 64,
+          "completions": 40,
+          "yards": 564,
+          "td": 2,
+          "long": 28.4,
+          "pct": 62.5,
+          "quarters": {
+            "q1": 113,
+            "q2": 162,
+            "q3": 195,
+            "q4": 94,
+            "1h": 275,
+            "2h": 289
+          }
+        }
+      },
+      {
+        "player_name": "JavonteWilliams",
+        "team": "DAL",
+        "category": "rush",
+        "vs_opponent": {
+          "games": 4,
+          "attempts": 53,
+          "yards": 249,
+          "td": 2,
+          "long": 17.8,
+          "quarters": {
+            "q1": 62,
+            "q2": 35,
+            "q3": 43,
+            "q4": 11,
+            "1h": 97,
+            "2h": 54
+          }
+        },
+        "recent_form": {
+          "games": 8,
+          "attempts": 125,
+          "yards": 526,
+          "td": 4,
+          "long": 13.0,
+          "quarters": {
+            "q1": 172,
+            "q2": 97,
+            "q3": 148,
+            "q4": 109,
+            "1h": 269,
+            "2h": 257
+          }
+        }
+      },
+      {
+        "player_name": "GeorgePickens",
+        "team": "DAL",
+        "category": "rec",
+        "vs_opponent": {
+          "games": 3,
+          "attempts": 18,
+          "completions": 13,
+          "yards": 251,
+          "td": 1,
+          "long": 33.0,
+          "pct": 72.2,
+          "quarters": {
+            "q1": 62,
+            "q2": 48,
+            "q3": 29,
+            "q4": 21,
+            "1h": 110,
+            "2h": 50
+          }
+        },
+        "recent_form": {
+          "games": 8,
+          "attempts": 60,
+          "completions": 38,
+          "yards": 549,
+          "td": 2,
+          "long": 23.6,
+          "pct": 63.3,
+          "quarters": {
+            "q1": 144,
+            "q2": 100,
+            "q3": 93,
+            "q4": 202,
+            "1h": 244,
+            "2h": 295
+          }
+        }
+      }
+    ]
+  },
+  "team_b": {
+    "team": "WSH",
+    "players": [
+      {
+        "player_name": "TerryMclaurin",
+        "team": "WSH",
+        "category": "rec",
+        "vs_opponent": {
+          "games": 12,
+          "attempts": 94,
+          "completions": 55,
+          "yards": 706,
+          "td": 5,
+          "long": 28.8,
+          "pct": 58.5,
+          "quarters": {
+            "q1": 16,
+            "q2": 7,
+            "q3": 28,
+            "q4": 12,
+            "1h": 23,
+            "2h": 40
+          }
+        },
+        "recent_form": {
+          "games": 8,
+          "attempts": 47,
+          "completions": 30,
+          "yards": 447,
+          "td": 3,
+          "long": 26.6,
+          "pct": 63.8,
+          "quarters": {
+            "q1": 78,
+            "q2": 121,
+            "q3": 113,
+            "q4": 112,
+            "1h": 199,
+            "2h": 225
+          }
+        }
+      },
+      {
+        "player_name": "JaydenDaniels",
+        "team": "WSH",
+        "category": "pass",
+        "vs_opponent": {
+          "games": 3,
+          "attempts": 72,
+          "completions": 43,
+          "yards": 469,
+          "td": 3,
+          "int": 2,
+          "long": 47.0,
+          "pct": 59.7,
+          "quarters": {
+            "q1": 96,
+            "q2": 65,
+            "q3": 20,
+            "q4": 0,
+            "1h": 231,
+            "2h": 20
+          }
+        },
+        "recent_form": {
+          "games": 8,
+          "attempts": 222,
+          "completions": 132,
+          "yards": 1426,
+          "td": 10,
+          "int": 3,
+          "long": 33.9,
+          "pct": 59.5,
+          "quarters": {
+            "q1": 275,
+            "q2": 439,
+            "q3": 330,
+            "q4": 404,
+            "1h": 714,
+            "2h": 734
+          }
+        }
+      },
+      {
+        "player_name": "StefonDiggs",
+        "team": "WSH",
+        "category": "rec",
+        "vs_opponent": {
+          "games": 0,
+          "attempts": 0,
+          "completions": 0,
+          "yards": 0,
+          "td": 0,
+          "long": 0.0,
+          "pct": 0.0,
+          "quarters": {
+            "q1": 0,
+            "q2": 0,
+            "q3": 0,
+            "q4": 0,
+            "1h": 0,
+            "2h": 0
+          }
+        },
+        "recent_form": {
+          "games": 1,
+          "attempts": 9,
+          "completions": 4,
+          "yards": 55,
+          "td": 1,
+          "long": 17.0,
+          "pct": 44.4,
+          "quarters": {
+            "q1": 13,
+            "q2": 15,
+            "q3": 0,
+            "q4": 27,
+            "1h": 28,
+            "2h": 27
+          }
+        }
+      },
+      {
+        "player_name": "AntonioWilliams",
+        "team": "WSH",
+        "category": "rec",
+        "vs_opponent": {
+          "games": 0,
+          "attempts": 0,
+          "completions": 0,
+          "yards": 0,
+          "td": 0,
+          "long": 0.0,
+          "pct": 0.0,
+          "quarters": {
+            "q1": 0,
+            "q2": 0,
+            "q3": 0,
+            "q4": 0,
+            "1h": 0,
+            "2h": 0
+          }
+        },
+        "recent_form": {
+          "games": 1,
+          "attempts": 4,
+          "completions": 4,
+          "yards": 64,
+          "td": 1,
+          "long": 33.0,
+          "pct": 100.0,
+          "quarters": {
+            "q1": 0,
+            "q2": 16,
+            "q3": 0,
+            "q4": 48,
+            "1h": 16,
+            "2h": 48
+          }
+        }
+      }
+    ]
+  }
 }

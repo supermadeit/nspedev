@@ -9,10 +9,11 @@ import { QueryBuilderTutorial } from '@/components/QueryBuilderTutorial'
 import { AutoDemo } from '@/components/AutoDemo'
 import { SampleQueriesModal } from '@/components/SampleQueriesModal'
 import { H2hStaffOverlay } from '@/components/H2hStaffOverlay'
+import { MatchupInsightOverlay } from '@/components/MatchupInsightOverlay'
 import { PlayerSearchDropdown } from '@/components/PlayerSearchDropdown'
 import { SyntaxSuggestionDropdown } from '@/components/SyntaxSuggestionDropdown'
 import { loadPlayerIndex, resolvePlayerTeam, searchPlayers } from '@/lib/playerSearch'
-import { searchSyntax } from '@/lib/syntaxSuggestions'
+import { findPlayerSpotlightCommands, getMatchupSuggestions, searchSyntax } from '@/lib/syntaxSuggestions'
 import { authHeader } from '@/lib/auth-token'
 import {
   asNumber,
@@ -27,6 +28,7 @@ import {
   detectStatContext,
   extractDateToken,
   extractH2hPayload,
+  extractMatchupInsightPayload,
   extractMlbBatTeamPayload,
   extractMlbFirstPaTrendPayload,
   extractMlbHrPayload,
@@ -42,6 +44,7 @@ import {
   normalizeQueryResults,
   STAT_DISPLAY_LABELS,
   type H2hPayload,
+  type MatchupInsightPayload,
   type MlbBatTeamPayload,
   type MlbFirstPaTrendPayload,
   type MlbHrComputeResult,
@@ -994,17 +997,60 @@ function MlbTeamRunsView({ payload }: { payload: MlbTeamRunsPayload }) {
 }
 
 
+// Non-MLB h2h engines (e.g. "nfl-h2h") reuse the same totals/games envelope
+// but with an entirely different stat set, named explicitly by
+// query.display_fields rather than MLB's fixed batting line — this is the
+// label map for whichever of those fields show up. Anything not listed
+// falls back to the raw field name (still readable, just not prettified).
+const H2H_FIELD_LABELS: Record<string, string> = {
+  pass_cmp: 'cmp',
+  pass_att: 'att',
+  pass_yds: 'pass yds',
+  pass_td: 'pass td',
+  pass_int: 'int',
+  pass_lng: 'long',
+  pass_rtg: 'rtg',
+  rush_yds: 'rush yds',
+  rush_td: 'rush td',
+  rec_yds: 'rec yds',
+  rec_td: 'rec td',
+  rec: 'rec',
+  g: 'g',
+  a: 'a',
+  pts: 'pts',
+  sog: 'sog',
+}
+
+function formatH2hFieldValue(field: string, value: number): string {
+  return /rtg|avg|pct/i.test(field) ? value.toFixed(1) : String(value)
+}
+
 function H2hView({ payload }: { payload: H2hPayload }) {
   const q = payload.query ?? {}
   const t = payload.totals ?? {}
   const games = payload.games ?? []
 
-  const playerLabel = q.player_display || q.player_query || 'player'
+  const playerLabel = normalizeDisplayPlayer(q.player_display || q.player_query || 'player')
   const playerTeam = q.player_team || ''
   const opponent = q.opponent_code || ''
   const venueLabel =
     q.home_away === 'home' ? '@ home' : q.home_away === 'away' ? 'on the road' : 'home & away'
   const windowLabel = q.window_label || (q.year ? `(${q.year})` : '')
+  // "-week" queries ("career week N", e.g. engine "nfl-week") have no
+  // opponent/home-away concept at all — they're keyed by week number
+  // instead, so the header reads "week N" rather than "vs OPP · home & away".
+  const isWeekQuery = q.week != null
+  const weekLabel = isWeekQuery
+    ? q.week_end != null && q.week_end !== q.week
+      ? `week ${q.week}-${q.week_end}`
+      : `week ${q.week}`
+    : ''
+
+  // display_fields present -> a non-MLB sport's stat line (see
+  // H2H_FIELD_LABELS above); absent -> assume classic MLB batting fields,
+  // exactly as this view always has — zero behavior change for every h2h
+  // response that predates display_fields.
+  const displayFields = q.display_fields && q.display_fields.length > 0 ? q.display_fields : null
 
   const formatAvg = (n?: number) => (typeof n === 'number' ? n.toFixed(3).replace(/^0+/, '') : '—')
 
@@ -1030,6 +1076,16 @@ function H2hView({ payload }: { payload: H2hPayload }) {
     { label: 'SB', value: t.SB ?? 0 },
   ]
 
+  const genericCounting: { label: string; value: string }[] | null = displayFields
+    ? [
+        { label: 'g', value: String(t.games ?? games.length) },
+        ...displayFields.map((f) => ({
+          label: H2H_FIELD_LABELS[f] ?? f.replace(/_/g, ' '),
+          value: formatH2hFieldValue(f, typeof t[f] === 'number' ? (t[f] as number) : 0),
+        })),
+      ]
+    : null
+
   return (
     <div className="space-y-4">
       {/* Header */}
@@ -1041,9 +1097,16 @@ function H2hView({ payload }: { payload: H2hPayload }) {
           </>
         ) : null}
         <span>{playerLabel}</span>
-        <span style={{ color: 'oklch(0.55 0 0)' }}> vs </span>
-        <span style={{ color: 'oklch(0.70 0.10 195)' }}>{opponent || '—'}</span>
-        <span style={{ color: 'oklch(0.55 0 0)' }}>{` · ${venueLabel}${windowLabel ? ` · ${windowLabel}` : ''}`}</span>
+        {isWeekQuery ? (
+          <span style={{ color: 'oklch(0.70 0.10 195)' }}>{` · ${weekLabel}`}</span>
+        ) : (
+          <>
+            <span style={{ color: 'oklch(0.55 0 0)' }}> vs </span>
+            <span style={{ color: 'oklch(0.70 0.10 195)' }}>{opponent || '—'}</span>
+            <span style={{ color: 'oklch(0.55 0 0)' }}>{` · ${venueLabel}`}</span>
+          </>
+        )}
+        <span style={{ color: 'oklch(0.55 0 0)' }}>{windowLabel ? ` · ${windowLabel}` : ''}</span>
       </div>
 
       {/* Totals card */}
@@ -1051,30 +1114,47 @@ function H2hView({ payload }: { payload: H2hPayload }) {
         className="rounded p-3"
         style={{ backgroundColor: 'oklch(0.18 0 0)', border: '1px solid oklch(0.28 0 0)' }}
       >
-        <div className="grid grid-cols-4 gap-2 mb-3">
-          {slashLine.map((s) => (
-            <div key={s.label} className="flex flex-col items-center">
-              <span className="font-mono text-[10px] uppercase tracking-wider" style={{ color: 'oklch(0.55 0 0)' }}>
-                {s.label}
-              </span>
-              <span className="font-mono font-bold text-[15px]" style={{ color: 'oklch(0.85 0.15 145)' }}>
-                {s.value}
-              </span>
+        {genericCounting ? (
+          <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${Math.min(genericCounting.length, 6)}, minmax(0, 1fr))` }}>
+            {genericCounting.map((s) => (
+              <div key={s.label} className="flex flex-col items-center">
+                <span className="font-mono text-[10px] uppercase tracking-wider" style={{ color: 'oklch(0.55 0 0)' }}>
+                  {s.label}
+                </span>
+                <span className="font-mono font-bold text-[15px]" style={{ color: 'oklch(0.85 0.15 145)' }}>
+                  {s.value}
+                </span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-4 gap-2 mb-3">
+              {slashLine.map((s) => (
+                <div key={s.label} className="flex flex-col items-center">
+                  <span className="font-mono text-[10px] uppercase tracking-wider" style={{ color: 'oklch(0.55 0 0)' }}>
+                    {s.label}
+                  </span>
+                  <span className="font-mono font-bold text-[15px]" style={{ color: 'oklch(0.85 0.15 145)' }}>
+                    {s.value}
+                  </span>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <div className="grid grid-cols-6 gap-2">
-          {counting.map((s) => (
-            <div key={s.label} className="flex flex-col items-center">
-              <span className="font-mono text-[10px] uppercase tracking-wider" style={{ color: 'oklch(0.48 0 0)' }}>
-                {s.label}
-              </span>
-              <span className="font-mono text-[13px]" style={{ color: 'oklch(0.88 0 0)' }}>
-                {s.value}
-              </span>
+            <div className="grid grid-cols-6 gap-2">
+              {counting.map((s) => (
+                <div key={s.label} className="flex flex-col items-center">
+                  <span className="font-mono text-[10px] uppercase tracking-wider" style={{ color: 'oklch(0.48 0 0)' }}>
+                    {s.label}
+                  </span>
+                  <span className="font-mono text-[13px]" style={{ color: 'oklch(0.88 0 0)' }}>
+                    {s.value}
+                  </span>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </>
+        )}
       </div>
 
       {/* Game log */}
@@ -1092,18 +1172,29 @@ function H2hView({ payload }: { payload: H2hPayload }) {
               const venuePrefix = g.venue === 'away' ? '@' : g.venue === 'home' ? 'vs' : ''
               const opp = g.opponent ?? ''
               const matchup = [venuePrefix, opp].filter(Boolean).join(' ')
-              const line = [
-                `${g.AB ?? 0} AB`,
-                `${g.H ?? 0} H`,
-                ...(g.HR ? [`${g.HR} HR`] : []),
-                ...(g.RBI ? [`${g.RBI} RBI`] : []),
-                ...(g.R ? [`${g.R} R`] : []),
-                ...(g['2B'] ? [`${g['2B']} 2B`] : []),
-                ...(g['3B'] ? [`${g['3B']} 3B`] : []),
-                ...(g.BB ? [`${g.BB} BB`] : []),
-                ...(g.SO ? [`${g.SO} SO`] : []),
-                ...(g.SB ? [`${g.SB} SB`] : []),
-              ].join(', ')
+              const line = displayFields
+                ? displayFields
+                    // Skip a field entirely for this row when it's absent
+                    // from the game object (not the same as a genuine 0) —
+                    // some engines only carry certain fields (e.g. cmp/att)
+                    // on the totals object, not per game. Showing "0 cmp"
+                    // there would misreport a stat that was simply never
+                    // recorded per-game as an actual zero performance.
+                    .filter((f) => typeof g[f] === 'number')
+                    .map((f) => `${formatH2hFieldValue(f, g[f] as number)} ${H2H_FIELD_LABELS[f] ?? f.replace(/_/g, ' ')}`)
+                    .join(', ')
+                : [
+                    `${g.AB ?? 0} AB`,
+                    `${g.H ?? 0} H`,
+                    ...(g.HR ? [`${g.HR} HR`] : []),
+                    ...(g.RBI ? [`${g.RBI} RBI`] : []),
+                    ...(g.R ? [`${g.R} R`] : []),
+                    ...(g['2B'] ? [`${g['2B']} 2B`] : []),
+                    ...(g['3B'] ? [`${g['3B']} 3B`] : []),
+                    ...(g.BB ? [`${g.BB} BB`] : []),
+                    ...(g.SO ? [`${g.SO} SO`] : []),
+                    ...(g.SB ? [`${g.SB} SB`] : []),
+                  ].join(', ')
               return (
                 <div
                   key={`${g.date_iso ?? g.date}-${i}`}
@@ -2029,7 +2120,17 @@ const SEARCH_GLOW = '0 0 8px 1px oklch(0.90 0.18 195 / 0.55), 0 0 20px 4px oklch
 // the explicit request not to wait for "nspe <sport>"). Anything else with
 // no hyphen and no leading token from this list is treated as a player-name
 // search instead of a malformed command.
-const NSPE_COMMAND_TOKENS = ['nspe', 'mlb', 'nfl', 'nba', 'nhl', 'cfb', 'ncaaf', 'plus', 'help']
+// Sport names plus every bare mode/category keyword that can start a real
+// command on its own (streak/team/first/long/h2h/week/1h/q1/pass/rush/rec)
+// — without these, typing e.g. "streak" alone has no "-" and isn't a sport,
+// so looksLikePlayerSearch treated it as a player-name search and syntax
+// matching never even ran, even though "-streak" commands are literally in
+// the catalog.
+const NSPE_COMMAND_TOKENS = [
+  'nspe', 'mlb', 'nfl', 'nba', 'nhl', 'cfb', 'ncaaf', 'plus', 'help',
+  'streak', 'team', 'first', 'long', 'h2h', 'week', '1h', 'q1',
+  'pass', 'rush', 'rec',
+]
 function looksLikePlayerSearch(value: string): boolean {
   const trimmed = value.trim().toLowerCase()
   if (!trimmed || trimmed.includes('-')) return false
@@ -2059,6 +2160,8 @@ function App() {
   // per query the same way extractMatchDetails resolves match statLabels.
   const [queryResultsStatLabel, setQueryResultsStatLabel] = useState('')
   const [h2hResult, setH2hResult] = useState<H2hPayload | null>(null)
+  const [matchupResult, setMatchupResult] = useState<MatchupInsightPayload | null>(null)
+  const [isMatchupOpen, setIsMatchupOpen] = useState(false)
   const [pitchResult, setPitchResult] = useState<MlbPitchH2hPayload | null>(null)
   const [fpvResult, setFpvResult] = useState<MlbPitchFpvPayload | null>(null)
   const [batTeamResult, setBatTeamResult] = useState<MlbBatTeamPayload | null>(null)
@@ -2109,6 +2212,16 @@ function App() {
     () => (looksLikePlayerSearch(searchValue) ? searchPlayers(searchValue, 8) : []),
     [searchValue, isPlayerIndexReady],
   )
+  // Any curated commands that showcase one of the currently-matched players
+  // (e.g. typing "mahomes" surfaces "nspe nfl long mahomes -ov" alongside
+  // his profile match) — shown as a second, stacked dropdown beneath the
+  // player matches rather than replacing them, since the two are answering
+  // different questions ("here's his profile" vs "here's a popular query
+  // that uses him").
+  const playerSpotlightMatches = useMemo(
+    () => (playerMatches.length > 0 ? findPlayerSpotlightCommands(playerMatches.map((m) => m.entry.name)) : []),
+    [playerMatches],
+  )
   // Predictive command-syntax suggestions (Option B: curated templates,
   // filtered by prefix/substring — see syntaxSuggestions.ts) — the exact
   // inverse trigger of playerMatches, since a query only ever looks like one
@@ -2128,6 +2241,25 @@ function App() {
         : [],
     [searchValue, suppressSyntaxDropdown],
   )
+  // This week's real matchup slate (dynamic — derived from schedule data,
+  // not a static catalog entry) — checked independently of
+  // looksLikePlayerSearch entirely, so it surfaces regardless of which mode
+  // the rest of the dropdown is in: alongside player matches for "ma" (a
+  // real prefix of both "matchup" and player names like Mahomes), or on its
+  // own for "matc"/"matchup" where no player happens to match.
+  const matchupSuggestions = useMemo(() => getMatchupSuggestions(searchValue), [searchValue])
+  // The single green-dropdown payload, covering all three cases: player
+  // matches exist (their spotlight commands + the matchup slate, stacked
+  // beneath the cyan player dropdown), real syntax matches exist (those,
+  // matchup slate not needed since a real command match already won), or
+  // neither (falls back to just the matchup slate, e.g. "matc").
+  const greenMatches = suppressSyntaxDropdown
+    ? []
+    : playerMatches.length > 0
+    ? [...playerSpotlightMatches, ...matchupSuggestions]
+    : syntaxMatches.length > 0
+    ? syntaxMatches
+    : matchupSuggestions
   const searchInputRef = useRef<HTMLInputElement>(null)
   // Mobile only — tapping outside the search input/dropdown dismisses
   // whichever dropdown is open. Separate from suppressSyntaxDropdown above
@@ -2192,6 +2324,8 @@ function App() {
     setExpandedPlayers({})
     setIsH2hStaffOpen(false)
     setH2hResult(null)
+    setIsMatchupOpen(false)
+    setMatchupResult(null)
     setPitchResult(null)
     setFpvResult(null)
     setBatTeamResult(null)
@@ -2245,6 +2379,15 @@ function App() {
           setIsMiniOpen(false)
           setIsH2hStaffOpen(true)
         }
+        return
+      }
+
+      const matchupPayload = extractMatchupInsightPayload(payload)
+      if (matchupPayload) {
+        setMatchupResult(matchupPayload)
+        setQueryResults([])
+        setIsMiniOpen(false)
+        setIsMatchupOpen(true)
         return
       }
 
@@ -2484,6 +2627,8 @@ function App() {
     if (trimmedQuery === 'help') {
       setQueryResults(null)
       setH2hResult(null)
+      setIsMatchupOpen(false)
+      setMatchupResult(null)
       setPitchResult(null)
       setBatTeamResult(null)
       setLastQuery('')
@@ -2540,20 +2685,20 @@ function App() {
         return
       }
     }
-    if (syntaxMatches.length > 0) {
+    if (playerMatches.length === 0 && greenMatches.length > 0) {
       if (e.key === 'ArrowDown') {
         e.preventDefault()
-        setSyntaxActiveIndex((i) => (i + 1) % syntaxMatches.length)
+        setSyntaxActiveIndex((i) => (i + 1) % greenMatches.length)
         return
       }
       if (e.key === 'ArrowUp') {
         e.preventDefault()
-        setSyntaxActiveIndex((i) => (i - 1 + syntaxMatches.length) % syntaxMatches.length)
+        setSyntaxActiveIndex((i) => (i - 1 + greenMatches.length) % greenMatches.length)
         return
       }
       if (e.key === 'Enter') {
         e.preventDefault()
-        const match = syntaxMatches[syntaxActiveIndex] ?? syntaxMatches[0]
+        const match = greenMatches[syntaxActiveIndex] ?? greenMatches[0]
         selectSyntaxSuggestion(match.displayCommand)
         return
       }
@@ -2695,6 +2840,7 @@ function App() {
       <QueryBuilderTutorial open={isTutorialOpen} onClose={() => setIsTutorialOpen(false)} />
       <SampleQueriesModal open={isSampleQueriesOpen} onClose={() => setIsSampleQueriesOpen(false)} />
       <H2hStaffOverlay open={isH2hStaffOpen} onClose={() => setIsH2hStaffOpen(false)} payload={h2hResult} />
+      <MatchupInsightOverlay open={isMatchupOpen} onClose={() => setIsMatchupOpen(false)} payload={matchupResult} />
       {/* {sample-commands}'s scripted-typing demo is shelved (not deleted) in
           favor of {sample-queries} above — no entry point triggers this open
           anymore, kept mounted only so it's easy to revisit later. */}
@@ -3002,6 +3148,15 @@ function App() {
                 // most recent game.
                 const isExpanded = canExpand ? Boolean(expandedPlayers[result.player]) : false
                 const latestMatch = hasMatchDetails ? result.matchDetails![result.matchDetails!.length - 1] : null
+                // Streak-only rows (mode: -streakN, e.g. "trend-streak")
+                // have no match array at all — isTrendRow is false for
+                // them, and result.total is just the backend's raw streak
+                // *count* (almost always 1), not a stat value. Showing
+                // "1tb" there is meaningless — every row reads identically
+                // regardless of how long the actual streak was. Show the
+                // most recent streak's length/dates instead, same "latest
+                // wins" convention as match-based trends.
+                const latestStreak = hasStreakDetails ? result.streakDetails![result.streakDetails!.length - 1] : null
                 const resultBadge = isSingleDayWindow
                   ? `${result.matchDetails![0].value}${result.matchDetails![0].statLabel} ${result.matchDetails![0].date}`
                   : isTrendRow && latestMatch
@@ -3014,6 +3169,8 @@ function App() {
                     // the window is included so the scope isn't lost just
                     // because the per-match breakdown didn't parse.
                     formatMet(result.total, result.windowSize)
+                  : !isTrendRow && latestStreak
+                  ? `${latestStreak.length} game streak`
                   : queryResultsStatLabel
                   ? `${result.total}${queryResultsStatLabel}`
                   : result.total
@@ -3026,6 +3183,8 @@ function App() {
                   ? 'latest'
                   : isTrendRow && latestMatch
                   ? `${formatMet(result.total, result.windowSize)} · latest`
+                  : !isTrendRow && latestStreak
+                  ? `${latestStreak.start} - ${latestStreak.end}`
                   : null
 
                 return (
@@ -3119,26 +3278,25 @@ function App() {
                     {PLACEHOLDER_TEXTS[0]}
                   </div>
                 )}
-                {playerMatches.length > 0 && !isMobileDropdownDismissed ? (
-                  <div className="absolute top-[60px] left-0 right-0 z-20">
-                    <PlayerSearchDropdown
-                      matches={playerMatches}
-                      activeIndex={playerSearchActiveIndex}
-                      onHoverIndex={setPlayerSearchActiveIndex}
-                      onSelect={(entry) => goToPlayerProfile(entry.slug)}
-                    />
-                  </div>
-                ) : (
-                  syntaxMatches.length > 0 && !isMobileDropdownDismissed && (
-                    <div className="absolute top-[60px] left-0 right-0 z-20">
+                {(playerMatches.length > 0 || greenMatches.length > 0) && !isMobileDropdownDismissed && (
+                  <div className="absolute top-[60px] left-0 right-0 z-20 flex flex-col gap-2">
+                    {playerMatches.length > 0 && (
+                      <PlayerSearchDropdown
+                        matches={playerMatches}
+                        activeIndex={playerSearchActiveIndex}
+                        onHoverIndex={setPlayerSearchActiveIndex}
+                        onSelect={(entry) => goToPlayerProfile(entry.slug)}
+                      />
+                    )}
+                    {greenMatches.length > 0 && (
                       <SyntaxSuggestionDropdown
-                        matches={syntaxMatches}
-                        activeIndex={syntaxActiveIndex}
-                        onHoverIndex={setSyntaxActiveIndex}
+                        matches={greenMatches}
+                        activeIndex={playerMatches.length === 0 ? syntaxActiveIndex : -1}
+                        onHoverIndex={playerMatches.length === 0 ? setSyntaxActiveIndex : undefined}
                         onSelect={selectSyntaxSuggestion}
                       />
-                    </div>
-                  )
+                    )}
+                  </div>
                 )}
               </div>
 
@@ -3202,26 +3360,25 @@ function App() {
                     {PLACEHOLDER_TEXTS[0]}
                   </div>
                 )}
-                {playerMatches.length > 0 ? (
-                  <div className="absolute top-[60px] left-0 right-0 z-20">
-                    <PlayerSearchDropdown
-                      matches={playerMatches}
-                      activeIndex={playerSearchActiveIndex}
-                      onHoverIndex={setPlayerSearchActiveIndex}
-                      onSelect={(entry) => goToPlayerProfile(entry.slug)}
-                    />
-                  </div>
-                ) : (
-                  syntaxMatches.length > 0 && (
-                    <div className="absolute top-[60px] left-0 right-0 z-20">
+                {(playerMatches.length > 0 || greenMatches.length > 0) && (
+                  <div className="absolute top-[60px] left-0 right-0 z-20 flex flex-col gap-2">
+                    {playerMatches.length > 0 && (
+                      <PlayerSearchDropdown
+                        matches={playerMatches}
+                        activeIndex={playerSearchActiveIndex}
+                        onHoverIndex={setPlayerSearchActiveIndex}
+                        onSelect={(entry) => goToPlayerProfile(entry.slug)}
+                      />
+                    )}
+                    {greenMatches.length > 0 && (
                       <SyntaxSuggestionDropdown
-                        matches={syntaxMatches}
-                        activeIndex={syntaxActiveIndex}
-                        onHoverIndex={setSyntaxActiveIndex}
+                        matches={greenMatches}
+                        activeIndex={playerMatches.length === 0 ? syntaxActiveIndex : -1}
+                        onHoverIndex={playerMatches.length === 0 ? setSyntaxActiveIndex : undefined}
                         onSelect={selectSyntaxSuggestion}
                       />
-                    </div>
-                  )
+                    )}
+                  </div>
                 )}
               </div>
 

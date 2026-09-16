@@ -34,6 +34,16 @@ export interface SampleQuery {
   /** Short scannable label, e.g. "nba trend · pts (1h)". */
   label: string
   command: string
+  // Lowercase substring of a real player's display name — set only on
+  // commands that showcase one specific player (mostly -ov and h2h). Used
+  // to surface this command in the predictive dropdown alongside that
+  // player's own profile match (e.g. typing "mahomes" shows both Patrick
+  // Mahomes' profile AND this command) — see App.tsx's
+  // playerSpotlightMatches. Matched via `entry.name.toLowerCase().includes
+  // (playerHint)`, not an exact slug, so it survives name-formatting
+  // differences between this catalog and the live player index without
+  // needing to know real slugs ahead of time.
+  playerHint?: string
 }
 
 const NFL_COMMANDS: SampleQuery[] = [
@@ -64,10 +74,19 @@ const NFL_COMMANDS: SampleQuery[] = [
   { label: 'nfl explosive · rec', command: 'nspe nfl long rec -yds25 -last1/1' },
   { label: 'nfl explosive compute · pass', command: 'nspe nfl long pass -yds min400 -season' },
   // -ov — windows: bare YYYY, -career, YYYY-YYYY, or omitted (current season)
-  { label: 'nfl overview · long (-ov)', command: 'nspe nfl long mahomes -ov 2025' },
-  { label: 'nfl overview · 1h (-ov, career)', command: 'nspe nfl 1h dak -ov -career' },
-  { label: 'nfl overview · q1 (-ov)', command: 'nspe nfl q1 kenneth -ov' },
-  { label: 'nfl overview · long (-ov, range)', command: 'nspe nfl long lamar jackson -ov 2023-2025' },
+  { label: 'nfl overview · long (-ov)', command: 'nspe nfl long mahomes -ov 2025', playerHint: 'mahomes' },
+  { label: 'nfl overview · 1h (-ov, career)', command: 'nspe nfl 1h dak -ov -career', playerHint: 'dak' },
+  { label: 'nfl overview · q1 (-ov)', command: 'nspe nfl q1 kenneth -ov', playerHint: 'kenneth' },
+  { label: 'nfl overview · long (-ov, range)', command: 'nspe nfl long lamar jackson -ov 2023-2025', playerHint: 'lamar jackson' },
+  { label: 'nfl overview · long (-ov)', command: 'nspe nfl long caleb -ov', playerHint: 'caleb' },
+  { label: 'nfl overview · long (-ov)', command: 'nspe nfl long dak -ov', playerHint: 'dak' },
+  { label: 'nfl overview · q1 (-ov)', command: 'nspe nfl q1 dak -ov', playerHint: 'dak' },
+  // h2h — divisional opponent (WSH is a real NFC East rival of DAL)
+  { label: 'nfl h2h (career)', command: 'nspe nfl dak vs wsh -career', playerHint: 'dak' },
+  // "-week" — career performance in one week number across every season,
+  // a different concept from h2h (opponent) despite reusing the same
+  // totals/games rendering. Confirmed live against a real backend response.
+  { label: 'nfl career · week 1', command: 'nspe nfl dak -week1 -career', playerHint: 'dak' },
 ]
 
 const MLB_COMMANDS: SampleQuery[] = [
@@ -86,7 +105,10 @@ const MLB_COMMANDS: SampleQuery[] = [
   { label: 'mlb compute · tb', command: 'nspe mlb -tb min100 -season' },
   // streak
   { label: 'mlb streak · hits', command: 'nspe mlb -hits1 -streak5' },
-  { label: 'mlb streak · hr', command: 'nspe mlb -hr1 -streak3' },
+  // -hr1 -streak3 (HR in 3 straight games) is rare enough it can genuinely
+  // return zero qualifying players on a given day — tb2 is a far more
+  // reliably-hit bar, so the sample never looks "broken" just from bad luck.
+  { label: 'mlb streak · tb', command: 'nspe mlb -tb2 -streak3' },
   // explosive (HR distance)
   { label: 'mlb explosive · hr distance', command: 'nspe mlb long -hr350 -last1/5' },
   { label: 'mlb explosive compute · hr distance', command: 'nspe mlb long -hr min800 -last10' },
@@ -101,9 +123,9 @@ const MLB_COMMANDS: SampleQuery[] = [
   { label: 'mlb team compute · runs for', command: 'nspe mlb team -runs min120 -last25' },
   { label: 'mlb team compute · runs allowed', command: 'nspe mlb team -allowed min500 -season' },
   // h2h
-  { label: 'mlb h2h', command: 'nspe mlb aaron judge vs bos' },
-  { label: 'mlb h2h', command: 'nspe mlb shohei ohtani vs sf' },
-  { label: 'mlb h2h', command: 'nspe mlb juan soto vs atl' },
+  { label: 'mlb h2h', command: 'nspe mlb aaron judge vs bos', playerHint: 'aaron judge' },
+  { label: 'mlb h2h', command: 'nspe mlb shohei ohtani vs sf', playerHint: 'shohei ohtani' },
+  { label: 'mlb h2h', command: 'nspe mlb juan soto vs atl', playerHint: 'juan soto' },
 ]
 
 const NBA_COMMANDS: SampleQuery[] = [

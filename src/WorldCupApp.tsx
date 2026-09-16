@@ -2,6 +2,11 @@ import { useMemo, useState } from 'react'
 import { StarsBackground } from '@/components/StarsBackground'
 import nflData from '@/assets/data/worldcup.json'
 import scheduleData from '@/assets/data/nfl_schedule.json'
+import { useIsMobile } from '@/hooks/use-mobile'
+import { authHeader } from '@/lib/auth-token'
+import { fetchFirstSuccessful, parseApiPayload, RUN_ENDPOINTS } from '@/lib/nspe-api'
+import { extractMatchupInsightPayload, type MatchupInsightPayload } from '@/lib/nspe-payloads'
+import { MatchupInsightOverlay } from '@/components/MatchupInsightOverlay'
 
 // ---------------- types ----------------
 
@@ -167,7 +172,18 @@ function DivisionsView({ conferences }: { conferences: NflSeasonData['conference
 
 // ---------------- game card ----------------
 
-function GameCard({ game, abbrMap }: { game: Game; abbrMap: Record<string, string> }) {
+function GameCard({
+  game,
+  abbrMap,
+  onMatchupClick,
+}: {
+  game: Game
+  abbrMap: Record<string, string>
+  // Mobile only — desktop's entry point for this lives in the homepage
+  // header instead (still being worked out), so this prop is simply absent
+  // there rather than gating render internally on useIsMobile() twice.
+  onMatchupClick?: (teamA: string, teamB: string) => void
+}) {
   const awayAbbr = abbrMap[game.awayTeam] ?? game.awayTeam.slice(0, 3).toUpperCase()
   const homeAbbr = abbrMap[game.homeTeam] ?? game.homeTeam.slice(0, 3).toUpperCase()
   const isComplete = game.score_away != null && game.score_home != null
@@ -208,10 +224,20 @@ function GameCard({ game, abbrMap }: { game: Game; abbrMap: Record<string, strin
       {renderSide(awayAbbr, game.awayTeam, game.score_away, awayWon, true)}
       {renderSide(homeAbbr, game.homeTeam, game.score_home, homeWon, false)}
       <div
-        className="font-mono text-[9px] uppercase tracking-wider px-1.5 py-[1px]"
+        className="font-mono text-[9px] uppercase tracking-wider px-1.5 py-[1px] flex items-center justify-between gap-1"
         style={{ color: C.label, borderTop: `1px solid ${C.green}`, backgroundColor: 'oklch(0.08 0 0)' }}
       >
-        {isComplete ? 'final' : (game.gameTime || game.gameDate || 'tbd')}
+        <span>{isComplete ? 'final' : (game.gameTime || game.gameDate || 'tbd')}</span>
+        {onMatchupClick && (
+          <button
+            type="button"
+            onClick={() => onMatchupClick(awayAbbr, homeAbbr)}
+            className="hover:opacity-70 transition-opacity"
+            style={{ color: C.accent }}
+          >
+            {`{${awayAbbr} vs ${homeAbbr}}`}
+          </button>
+        )}
       </div>
     </div>
   )
@@ -224,11 +250,13 @@ function ScheduleView({
   totalWeeks,
   abbrMap,
   initialWeek,
+  onMatchupClick,
 }: {
   games: Game[]
   totalWeeks: number
   abbrMap: Record<string, string>
   initialWeek: number
+  onMatchupClick?: (teamA: string, teamB: string) => void
 }) {
   const [week, setWeek] = useState(initialWeek)
   const weekGames = useMemo(() => games.filter((g) => g.week === week), [games, week])
@@ -268,7 +296,7 @@ function ScheduleView({
           <div key={date}>
             <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: C.label }}>{date}</div>
             <div className="grid gap-2" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(168px, 1fr))' }}>
-              {dGames.map((g, i) => <GameCard key={i} game={g} abbrMap={abbrMap} />)}
+              {dGames.map((g, i) => <GameCard key={i} game={g} abbrMap={abbrMap} onMatchupClick={onMatchupClick} />)}
             </div>
           </div>
         ))}
@@ -307,6 +335,42 @@ export default function WorldCupApp() {
   // current_week is ever missing/out of range before a season starts.
   const initialScheduleWeek = Math.min(Math.max(data.current_week ?? 1, 1), data.total_weeks)
 
+  const isMobile = useIsMobile()
+  const [matchupResult, setMatchupResult] = useState<MatchupInsightPayload | null>(null)
+  const [isMatchupOpen, setIsMatchupOpen] = useState(false)
+  const [isMatchupLoading, setIsMatchupLoading] = useState(false)
+  // Self-contained on purpose — this page has no shared query-running
+  // infrastructure with App.tsx (separate route, separate component tree),
+  // so it hits /run directly with the same base-URL/auth helpers rather
+  // than threading state across the two. Mobile-only entry point for now;
+  // desktop's is still being decided (see the conversation this was scoped
+  // in — a homepage-header placement tangled up with an upcoming logo
+  // redesign), so nothing here assumes it'll stay mobile-exclusive forever.
+  const requestMatchup = async (teamA: string, teamB: string) => {
+    setIsMatchupLoading(true)
+    try {
+      const { response } = await fetchFirstSuccessful(
+        RUN_ENDPOINTS,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', ...authHeader() },
+          body: JSON.stringify({ query: `nfl matchup ${teamA} vs ${teamB}` }),
+        },
+        12000,
+      )
+      const payload = await parseApiPayload(response)
+      const matchup = extractMatchupInsightPayload(payload)
+      if (matchup) {
+        setMatchupResult(matchup)
+        setIsMatchupOpen(true)
+      }
+    } catch (err) {
+      console.error('Failed to load matchup insight:', err)
+    } finally {
+      setIsMatchupLoading(false)
+    }
+  }
+
   return (
     <div className="relative w-screen h-screen bg-background overflow-hidden">
       <StarsBackground density={180} />
@@ -325,7 +389,15 @@ export default function WorldCupApp() {
         </div>
 
         <div className="flex items-center gap-5 pt-2">
-          {(['season', 'schedule'] as const).map((view) => (
+          {/* {nfl.schedule}'s tab button is hidden, not removed — the tab
+              nav entry point isn't in use for now, since this whole view is
+              slated to become "the official matchup library" (a weekly
+              slate of actionable matchup commands) rather than keeping its
+              current per-division/score-card style. ScheduleView, GameCard,
+              and the mobile matchup buttons all stay wired underneath;
+              route/state (activeView) is untouched, just unreachable via
+              this nav until that redesign happens. */}
+          {(['season'] as const).map((view) => (
             <button key={view} type="button" onClick={() => setActiveView(view)}
               className="font-mono font-bold text-[14px] underline-offset-4 hover:opacity-80 transition-opacity whitespace-nowrap"
               style={{ color: activeView === view ? C.accent : C.label, textDecoration: activeView === view ? 'underline' : 'none' }}>
@@ -353,7 +425,13 @@ export default function WorldCupApp() {
               schedule · {schedule.totalGames} games
             </div>
             <div className="flex-1 min-h-0">
-              <ScheduleView games={schedule.games} totalWeeks={data.total_weeks} abbrMap={abbrMap} initialWeek={initialScheduleWeek} />
+              <ScheduleView
+                games={schedule.games}
+                totalWeeks={data.total_weeks}
+                abbrMap={abbrMap}
+                initialWeek={initialScheduleWeek}
+                onMatchupClick={isMobile ? requestMatchup : undefined}
+              />
             </div>
           </section>
         )}
@@ -365,6 +443,16 @@ export default function WorldCupApp() {
       <div className="fixed bottom-3 left-4 z-20 font-mono text-[11px]" style={{ color: C.label }}>
         updated · {formatUpdated(data.last_updated)}
       </div>
+
+      {isMatchupLoading && (
+        <div
+          className="fixed bottom-3 right-4 z-20 font-mono text-[11px]"
+          style={{ color: C.accent }}
+        >
+          loading matchup…
+        </div>
+      )}
+      <MatchupInsightOverlay open={isMatchupOpen} onClose={() => setIsMatchupOpen(false)} payload={matchupResult} />
     </div>
   )
 }

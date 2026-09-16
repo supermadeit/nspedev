@@ -6,6 +6,7 @@
 // command text for the user to edit values in and then explicitly run —
 // it never auto-runs or navigates, unlike player search selection.
 import { buildSampleQueries, type SampleQuery } from './sampleQueries'
+import { getWeeklyMatchupCommands } from './matchupCommands'
 
 export interface SyntaxMatch {
   query: SampleQuery
@@ -72,10 +73,15 @@ function matchTokenShape(typedTokens: string[], catalogTokens: string[]): string
 // somewhere in the middle) — typing "nba -pts" should surface pts-trend
 // commands before some unrelated command that merely happens to contain
 // "pts" deeper in its string.
-// 25 is a comfortable ceiling — a bare "nspe" is the only realistic case
-// that hits it (prefix matching naturally narrows well below 25 the moment
-// a sport or stat is typed), and the dropdown scrolls if it's ever exceeded.
-export function searchSyntax(query: string, limit = 25): SyntaxMatch[] {
+// 50 is a comfortable ceiling — the dropdown scrolls, so this isn't "how
+// many are visible at once," it's "how deep can you scroll for a bare
+// nspe." A bare "nspe" is the only realistic case that hits it at all —
+// prefix matching narrows well below this the moment a sport or stat is
+// typed. The product goal here is deliberately "aggressively informative"
+// rather than minimal — {psc} is meant to spark curiosity about what's
+// possible, so erring toward showing more command *types* up front (not
+// just a token sample) is the right trade once scrolling absorbs the cost.
+export function searchSyntax(query: string, limit = 50): SyntaxMatch[] {
   const trimmed = query.trim().toLowerCase()
   if (!trimmed) return []
 
@@ -105,10 +111,54 @@ export function searchSyntax(query: string, limit = 25): SyntaxMatch[] {
       const resolvedLastToken = /\d/.test(typedLastRaw) ? typedLastRaw : catalogLastRaw
       const displayCommand = [...typedTokens.slice(0, lastIdx), resolvedLastToken, ...tail].join(' ')
       prefixMatches.push({ query: q, matchedPrefix: trimmed, displayCommand })
-    } else if (command.includes(trimmed)) {
+    } else if (command.includes(trimmed) || q.label.toLowerCase().includes(trimmed)) {
+      // Also checks the label, not just the literal command text — some
+      // modes (h2h) never appear as a literal token in the command itself
+      // ("nspe mlb judge vs bos" has no "h2h" substring anywhere), only in
+      // the label ("mlb h2h"), so command-only matching left them
+      // unreachable by their own mode name.
       containsMatches.push({ query: q, matchedPrefix: trimmed, displayCommand: q.command })
     }
   }
 
   return [...prefixMatches, ...containsMatches].slice(0, limit)
+}
+
+// Player-name lookup doesn't un-match syntax mode the way stat/window
+// prefixes do — a query only ever LOOKS like player search or syntax, but
+// once it's decided to look like player search, this surfaces any curated
+// commands that showcase one of the matched players (Patrick Mahomes ->
+// "nspe nfl long mahomes -ov") right alongside their profile match, so
+// typing a name promotes the moat commands the same way the syntax
+// dropdown already does for bare "nspe". Matched by substring against the
+// player's real display name, not an exact slug — see playerHint's comment
+// in predictiveCommands.ts for why. The explicit goal is showing ~all the
+// popular query shapes for one player (-ov in its 3 scopes, h2h, -week,
+// ...), not a token sample of them — 20 gives real headroom as each
+// player's set of tagged commands grows past the initial 5.
+export function findPlayerSpotlightCommands(playerNames: string[], limit = 20): SyntaxMatch[] {
+  const lowerNames = playerNames.map((n) => n.toLowerCase())
+  const matches: SyntaxMatch[] = []
+  for (const q of SYNTAX_CATALOG) {
+    if (!q.playerHint) continue
+    if (lowerNames.some((name) => name.includes(q.playerHint!))) {
+      matches.push({ query: q, matchedPrefix: '', displayCommand: q.command })
+    }
+  }
+  return matches.slice(0, limit)
+}
+
+// "matchup" isn't a static catalog entry (it's a dynamic weekly slate, not
+// a fixed example command) and deliberately doesn't go through
+// looksLikePlayerSearch/searchSyntax's mutual exclusivity at all — this is
+// checked independently and layered in alongside whichever of
+// playerMatches/syntaxMatches is already showing, so typing "ma" surfaces
+// this week's full slate right under Mahomes' profile match rather than
+// needing "nspe" typed first. Any prefix of the word "matchup" long enough
+// to be a deliberate signal (2+ chars, so bare "m" doesn't fire on every
+// single keystroke) triggers it.
+export function getMatchupSuggestions(query: string): SyntaxMatch[] {
+  const trimmed = query.trim().toLowerCase()
+  if (trimmed.length < 2 || !'matchup'.startsWith(trimmed)) return []
+  return getWeeklyMatchupCommands().map((q) => ({ query: q, matchedPrefix: '', displayCommand: q.command }))
 }

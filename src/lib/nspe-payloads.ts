@@ -64,6 +64,12 @@ export interface H2hGame {
   BB?: number
   SO?: number
   SB?: number
+  // NFL h2h (and any future non-MLB h2h) reuses this same envelope but with
+  // an entirely different stat set (pass_yds, rush_td, etc — see
+  // query.display_fields) — index signature lets H2hView read whichever
+  // fields display_fields names without MLB's fixed field list rejecting
+  // them at the type level.
+  [key: string]: string | number | undefined
 }
 
 export interface H2hTotals {
@@ -83,6 +89,7 @@ export interface H2hTotals {
   OBP?: number
   SLG?: number
   OPS?: number
+  [key: string]: number | undefined
 }
 
 export interface H2hStaffPitcherLine {
@@ -141,7 +148,21 @@ export interface H2hPayload {
     year?: number
     last_n?: number | null
     season?: boolean
+    career?: boolean
+    year_window?: [number, number]
     window_label?: string
+    // "-week" queries ("career performance in week N", not vs an opponent —
+    // e.g. engine "nfl-week") reuse this exact totals/games/display_fields
+    // envelope with a different matchup concept: a week number instead of
+    // an opponent. week_end differs from week only for a week range.
+    week?: number
+    week_end?: number
+    // Present on non-MLB h2h engines (e.g. "nfl-h2h") — names which of
+    // totals/each game row's fields are meaningful for this sport, since
+    // the field set isn't fixed the way MLB's batting line is. Its absence
+    // means "assume the classic MLB batting fields" (back-compat with every
+    // h2h response seen before this).
+    display_fields?: string[]
   }
   totals: H2hTotals
   games: H2hGame[]
@@ -154,7 +175,10 @@ export function isH2hPayload(payload: unknown): payload is H2hPayload {
   const engine = typeof rec.engine === 'string' ? rec.engine : ''
   // Pitcher h2h has its own dedicated view.
   if (engine === 'mlb-pitch-h2h') return false
-  return engine.endsWith('-h2h') && typeof rec.totals === 'object' && Array.isArray(rec.games)
+  // "-week" (e.g. "nfl-week") is the same totals/games/display_fields
+  // envelope as h2h, just keyed by week number instead of an opponent —
+  // H2hView branches its header on query.week vs query.opponent_code.
+  return (engine.endsWith('-h2h') || engine.endsWith('-week')) && typeof rec.totals === 'object' && Array.isArray(rec.games)
 }
 
 // h2h responses may arrive either as a top-level JSON object or wrapped inside
@@ -176,6 +200,100 @@ export function extractH2hPayload(payload: unknown): H2hPayload | null {
     }
   }
 
+  return null
+}
+
+// ---------- NFL matchup insight (`nfl matchup <A> vs <B>`) ----------
+// Purely descriptive — no trend/compute window, never suggested to users as
+// a predictive-syntax sample, entry point is a clickable {A vs B} button
+// next to a real scheduled game rather than typed. Matched by engine SUFFIX
+// (sport-agnostic, same reasoning as ExplosiveOverviewPayload) since the
+// shape itself has no sport-specific field names baked into the envelope.
+
+export interface MatchupTeamRecord {
+  wins: number
+  losses: number
+  ties: number
+}
+
+export interface MatchupTeamGameStats {
+  total_yards: number
+  yards_per_play: number
+  turnovers: number
+  possession_seconds: number
+}
+
+export interface MatchupMeeting {
+  date_iso: string
+  season: string
+  outcome: string
+  pts_for: number
+  pts_allowed: number
+  a_stats: MatchupTeamGameStats
+  b_stats: MatchupTeamGameStats
+}
+
+export interface MatchupPlayerSplit {
+  games: number
+  attempts?: number
+  completions?: number
+  yards: number
+  td: number
+  int?: number
+  long: number
+  pct?: number
+  quarters?: { q1: number; q2: number; q3: number; q4: number; '1h': number; '2h': number }
+}
+
+export interface MatchupPlayer {
+  player_name: string
+  team: string
+  category: string
+  vs_opponent: MatchupPlayerSplit
+  recent_form: MatchupPlayerSplit
+}
+
+export interface MatchupTeamPlayers {
+  team: string
+  players: MatchupPlayer[]
+}
+
+export interface MatchupInsightPayload {
+  engine: string
+  query: { team_a: string; team_b: string; window_label?: string }
+  team_record: MatchupTeamRecord
+  meetings: MatchupMeeting[]
+  team_a: MatchupTeamPlayers
+  team_b: MatchupTeamPlayers
+}
+
+export function isMatchupInsightPayload(payload: unknown): payload is MatchupInsightPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  const engine = typeof rec.engine === 'string' ? rec.engine : ''
+  return (
+    /_matchup_insight$/i.test(engine) &&
+    Array.isArray(rec.meetings) &&
+    !!rec.team_a &&
+    typeof rec.team_a === 'object' &&
+    !!rec.team_b &&
+    typeof rec.team_b === 'object'
+  )
+}
+
+export function extractMatchupInsightPayload(payload: unknown): MatchupInsightPayload | null {
+  if (isMatchupInsightPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isMatchupInsightPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isMatchupInsightPayload(v)) return v
+    }
+  }
   return null
 }
 
