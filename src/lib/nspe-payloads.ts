@@ -297,6 +297,59 @@ export function extractMatchupInsightPayload(payload: unknown): MatchupInsightPa
   return null
 }
 
+// ---------- NFL power rankings ----------
+// A backend-computed weekly ranking of all 32 teams (composite `power_score`
+// from a handful of z-scored efficiency stats) — engine `nfl-power-rankings`.
+// The `_z_*` fields on each row are the raw per-stat z-scores that feed
+// `power_score`; they're internal to the computation and never rendered, so
+// the row type only lists what the UI actually shows plus a loose index
+// signature to tolerate the rest without needing to enumerate every _z_ key.
+
+export interface PowerRankingsRow {
+  team: string
+  games: number
+  wins: number
+  losses: number
+  ties: number
+  power_score: number
+  rank: number
+  point_margin?: number
+  pts_for?: number
+  pts_allowed?: number
+  yards_per_play?: number
+  third_down_pct?: number
+  [key: string]: string | number | undefined
+}
+
+export interface PowerRankingsPayload {
+  engine: string
+  query: { season: number; year_range: [number, number] | null; window: string }
+  results: PowerRankingsRow[]
+}
+
+export function isPowerRankingsPayload(payload: unknown): payload is PowerRankingsPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  const engine = typeof rec.engine === 'string' ? rec.engine : ''
+  return /power[_-]rankings$/i.test(engine) && Array.isArray(rec.results)
+}
+
+export function extractPowerRankingsPayload(payload: unknown): PowerRankingsPayload | null {
+  if (isPowerRankingsPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isPowerRankingsPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isPowerRankingsPayload(v)) return v
+    }
+  }
+  return null
+}
+
 // ---------- MLB Pitcher H2H ----------
 
 export interface MlbPitchGame {
