@@ -219,8 +219,18 @@ function GameCard({ game, abbrMap }: { game: Game; abbrMap: Record<string, strin
 
 // ---------------- schedule view ----------------
 
-function ScheduleView({ games, totalWeeks, abbrMap }: { games: Game[]; totalWeeks: number; abbrMap: Record<string, string> }) {
-  const [week, setWeek] = useState(1)
+function ScheduleView({
+  games,
+  totalWeeks,
+  abbrMap,
+  initialWeek,
+}: {
+  games: Game[]
+  totalWeeks: number
+  abbrMap: Record<string, string>
+  initialWeek: number
+}) {
+  const [week, setWeek] = useState(initialWeek)
   const weekGames = useMemo(() => games.filter((g) => g.week === week), [games, week])
   const byDate = useMemo(() => {
     const order: string[] = []
@@ -290,6 +300,12 @@ export default function WorldCupApp() {
   const weekLabel = data.current_week != null
     ? `week ${data.current_week} · ${data.total_weeks}`
     : 'pre-season'
+  // Schedule tab opens on the active week (data.current_week), not always
+  // week 1 — current_week is expected to already reflect the Tuesday-
+  // morning rollover backend-side (games run through Monday Night Football,
+  // so the "active" week doesn't advance until Tuesday). Clamped in case
+  // current_week is ever missing/out of range before a season starts.
+  const initialScheduleWeek = Math.min(Math.max(data.current_week ?? 1, 1), data.total_weeks)
 
   return (
     <div className="relative w-screen h-screen bg-background overflow-hidden">
@@ -337,7 +353,7 @@ export default function WorldCupApp() {
               schedule · {schedule.totalGames} games
             </div>
             <div className="flex-1 min-h-0">
-              <ScheduleView games={schedule.games} totalWeeks={data.total_weeks} abbrMap={abbrMap} />
+              <ScheduleView games={schedule.games} totalWeeks={data.total_weeks} abbrMap={abbrMap} initialWeek={initialScheduleWeek} />
             </div>
           </section>
         )}

@@ -1,0 +1,55 @@
+# `nfl matchup <A> vs <B>` — career-vs-opponent player insight cards
+
+## Context
+
+A frontend "matchup" selector (click e.g. KC vs IND for a given week) needs to show, per team, each notable player's **career** stats specifically against that opponent: quarter splits (Q1/Q2/Q3/Q4/1H/2H), long play, att/cmp/cmp%, the team's W/L record in those meetings, and the player's recent form. This is largely an assembly job — the individual pieces already exist and were confirmed live in this codebase, not guessed:
+
+- `engines/nfl/h2h.py` already has vs-opponent game filtering (`_load_player_games`, `_filter_vs_opponent`, `resolve_team`), reused generically across sports.
+- `engines/nfl/quarters.py::run_quarter_h2h` / `_player_quarter_games` (quarters.py:417, added 2026-09-14) already join vs-opponent games onto per-quarter data, including the career-PBP merge for whitelisted QBs at q1/1h.
+- `engines/nfl/team_h2h.py::run_team_h2h` (team_h2h.py:77) already computes team-level W/L record + per-meeting box-score history between two teams, wired to `nfl team <A> vs <B>` in the CLI (`utils/nspe_cli.py:4389-4418`).
+- `engines/nfl/qb_career_pbp.py` (28-QB whitelist) has real career PBP data and `is_whitelisted()`/`career_plays_for()`/`career_half_games()`.
+- The skill-position whitelist (69 players, built earlier this session) has real backfilled data sitting unused at `data/output/nfl_skill_career_pbp/` — no loader module reads it yet.
+
+Decided with the user:
+- **Standalone new command**, not a new flag on `-ov` (which is architecturally single-player under `resolve_player_and_category`, a mismatch for a multi-player team-roster card) and not a flag on `nfl team <A> vs <B>` (keeps `team_h2h.py`'s existing box-score-focused output untouched).
+- **Whitelist coverage**: the user's expectation is every team already has at least one whitelisted player ("it's the NFL, they have somebody good somewhere"); if the audit below finds a genuine gap, add that team's best current-season producer to the whitelist and backfill them via the same one-time process used to build the original 69-player list — a data-completeness step done once, not a live runtime fallback inside the new engine.
+
+## Step 0 — Whitelist coverage audit (data step, before writing any engine code)
+
+Combine `qb_career_pbp.py`'s 28-player whitelist with `nfl_skill_pbp_whitelist.json`'s 69 players, map each to their team, and confirm all 32 teams have ≥1 covered player. For any team that comes up empty: identify their leading producer this season via `load_nfl_aggregated_source()` (`engines/nfl/loader.py:14`, sorted by yards+TDs), and propose adding them to the appropriate whitelist file. **Confirm findings with the user before adding anyone or running a backfill fetch** (it's a network call against ESPN and a write to a tracked input file, same category of action as the original 69-player build).
+
+## Step 1 — New skill-position career-PBP loader (`engines/nfl/skill_career_pbp.py`)
+
+Mirror `engines/nfl/qb_career_pbp.py`'s shape exactly: `load_skill_career_pbp()`, `is_whitelisted(player_name)`, `career_plays_for(player_name, pbp_plays)`, reading `data/output/nfl_skill_career_pbp/` (69 files today, real per-play rec/rush data with a `role` field). Skip building a `career_half_games()` equivalent for v1 unless testing in Step 5 surfaces the same kind of q1/1h playnfl gap for skill positions that justified it for QBs — no evidence of that gap yet for rec/rush.
+
+## Step 2 — New engine module (`engines/nfl/matchup_insight.py`)
+
+`build_matchup_payload(team_a, team_b, year_window=None, career=True) -> dict`, composed entirely from existing primitives:
+
+- **Team resolution**: `engines.nfl.h2h.resolve_team` (h2h.py:113).
+- **Team-level record + recent meetings**: call `engines.nfl.team_h2h.run_team_h2h(team_a, team_b, career=True)` directly and lift its `record`/`results` (team_h2h.py:142-147) — no reimplementation.
+- **Per-team notable players**: iterate that team's players from `load_nfl_aggregated_source()`, keep those where `qb_career_pbp.is_whitelisted(name)` or the new `skill_career_pbp.is_whitelisted(name)` is true.
+- **Per-player card, vs this opponent**:
+  - Game list: `h2h._load_player_games` + `_filter_vs_opponent` (h2h.py:337) — the exact primitives `run_quarter_h2h` already composes.
+  - Quarter splits: `quarters._player_quarter_games` (quarters.py:417) — already includes the QB career-PBP q1/1h merge; 2H derived as Q3+Q4 (same convention as `qb_explosives.py`).
+  - Att/Cmp/Cmp% and long play: read directly off the vs-opponent game rows from `h2h.py` (per-game aggregated fields, including `pass_lng`, already correct per this session's earlier `pass_lng` averaging fix).
+  - Recent form: same h2h.py game-loading primitives with no opponent filter, sliced to the last 8 games by `date_iso` (matches `parlay_builder.py`'s `_RECENT_WINDOW_GAMES=8` convention, parlay_builder.py:501), summarized with the same small totals aggregator as the vs-opponent card.
+- **New logic in this module** is limited to one small aggregator helper: given a list of per-game rows, return `{games, att, cmp, cmp_pct, pass_yds, pass_td, long}` (pass category; equivalent rush/rec fields for skill players) — straightforward sums/averages over fields that already exist, not new data sourcing.
+- No live "best player" fallback here — Step 0 is what guarantees whitelist coverage; this module trusts it.
+
+## Step 3 — CLI dispatch (`utils/nspe_cli.py`)
+
+New sibling branch next to the existing `nfl team <A> vs <B>` dispatch (nspe_cli.py:4389-4418): `nfl matchup <A> vs <B> [-season|-career|-YYYY[-YYYY]]`. Reuses `resolve_team` and the existing window-flag parsing (`_h2h_win_opts`, nspe_cli.py:4403) for consistency. Default with no window flag is **career** (all-time vs this opponent) — a deliberate divergence from `-ov`'s season-default, since this command's entire point is career-long opponent history (matches the user's own framing: "Mahomes career vs IND").
+
+## Step 4 — API endpoint (`api/matchups.py`)
+
+Mirrors `api/profiles.py`'s structure exactly (bare `APIRouter()`, `run_in_threadpool` for the heavy call, `HTTPException(404)` for unresolvable teams — api/profiles.py:1-63 as the template). `GET /matchup/{team_a}/{team_b}` → `build_matchup_payload(team_a, team_b)` (career default, matching the CLI default). Mounted in `api/main.py` the same way `profiles_router` is (api/main.py:37, 42) — this is what the frontend's matchup button actually calls.
+
+## Verification
+
+- `nfl matchup KC vs IND` (CLI) — confirm Mahomes' card shows real Q1-Q4/1H/2H, att/cmp/cmp%, long, plus KC's team-level record vs IND sourced from `team_h2h`.
+- Confirm a skill-position player from the 69-list renders correctly through the new `skill_career_pbp` loader.
+- Confirm recent-form numbers differ meaningfully from vs-opponent numbers for at least one spot-checked player (sanity check the two slices aren't accidentally identical).
+- Hit `GET /matchup/KC/IND` locally, confirm the JSON shape matches what the CLI's `--json` mode produces.
+- Regression: confirm `nfl team KC vs IND` (the existing box-score-only command) is completely unaffected.
+- Confirm the Step 0 audit's "every team has ≥1 whitelisted player" claim is actually true (or was made true) before shipping — a team with zero cards is the one failure mode this design doesn't self-correct at runtime.
