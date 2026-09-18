@@ -48,9 +48,13 @@ export interface SampleQuery {
 
 const NFL_COMMANDS: SampleQuery[] = [
   // trend
+  { label: 'nfl trend · pass -yds', command: 'nspe nfl pass -yds225 -last1/1' },
   { label: 'nfl trend · pass -yds', command: 'nspe nfl pass -yds250 -last1/1' },
+  { label: 'nfl trend · pass -yds', command: 'nspe nfl pass -yds300 -last1/1' },
   { label: 'nfl trend · pass -td', command: 'nspe nfl pass -td2 -last1/1' },
+  { label: 'nfl trend · pass -td', command: 'nspe nfl pass -td3 -last1/1' },
   { label: 'nfl trend · rush -yds', command: 'nspe nfl rush -yds80 -last1/1' },
+  { label: 'nfl trend · rush -yds', command: 'nspe nfl rush -yds100 -last1/1' },
   { label: 'nfl trend · rush -td', command: 'nspe nfl rush -td1 -last1/1' },
   { label: 'nfl trend · rec -yds', command: 'nspe nfl rec -yds70 -last1/1' },
   { label: 'nfl trend · rec -td', command: 'nspe nfl rec -td1 -last1/1' },
@@ -63,24 +67,25 @@ const NFL_COMMANDS: SampleQuery[] = [
   { label: 'nfl compute · pass+rush (-pr)', command: 'nspe nfl -pr min250 -last1' },
   { label: 'nfl compute · rush+rec (-rr)', command: 'nspe nfl -rr min80 -last1' },
   // streak
-  { label: 'nfl streak · pass -td', command: 'nspe nfl pass -td1 -streak3' },
-  { label: 'nfl streak · rush -yds', command: 'nspe nfl rush -yds50 -streak2' },
+  { label: 'nfl streak · pass -td', command: 'nspe nfl pass -td1 -streak3 2025' },
+  { label: 'nfl streak · rush -yds', command: 'nspe nfl rush -yds50 -streak2 2025' },
   // 1h
+  { label: 'nfl trend · pass (1h)', command: 'nspe nfl 1h pass -yds100 -last1/1' },
   { label: 'nfl trend · pass (1h)', command: 'nspe nfl 1h pass -yds120 -last1/1' },
-  { label: 'nfl trend · pass -td (1h)', command: 'nspe nfl 1h pass -td1 -last1/1' },
+  { label: 'nfl trend · pass (1h)', command: 'nspe nfl 1h pass -yds150 -last1/1' },
   // explosive
   { label: 'nfl explosive · pass', command: 'nspe nfl long pass -yds30 -last1/1' },
   { label: 'nfl explosive · rush', command: 'nspe nfl long rush -yds20 -last1/1' },
   { label: 'nfl explosive · rec', command: 'nspe nfl long rec -yds25 -last1/1' },
   { label: 'nfl explosive compute · pass', command: 'nspe nfl long pass -yds min400 -season' },
   // -ov — windows: bare YYYY, -career, YYYY-YYYY, or omitted (current season)
-  { label: 'nfl overview · long (-ov)', command: 'nspe nfl long mahomes -ov 2025', playerHint: 'mahomes' },
+  { label: 'nfl overview · long (-ov)', command: 'nspe nfl long mahomes -ov', playerHint: 'mahomes' },
   { label: 'nfl overview · 1h (-ov, career)', command: 'nspe nfl 1h dak -ov -career', playerHint: 'dak' },
   { label: 'nfl overview · q1 (-ov)', command: 'nspe nfl q1 kenneth -ov', playerHint: 'kenneth' },
-  { label: 'nfl overview · long (-ov, range)', command: 'nspe nfl long lamar jackson -ov 2023-2025', playerHint: 'lamar jackson' },
+  { label: 'nfl overview · long (-ov, range)', command: 'nspe nfl long lamar -ov', playerHint: 'lamar jackson' },
   { label: 'nfl overview · long (-ov)', command: 'nspe nfl long caleb -ov', playerHint: 'caleb' },
-  { label: 'nfl overview · long (-ov)', command: 'nspe nfl long dak -ov', playerHint: 'dak' },
-  { label: 'nfl overview · q1 (-ov)', command: 'nspe nfl q1 dak -ov', playerHint: 'dak' },
+  { label: 'nfl overview · long (-ov)', command: 'nspe nfl long dak -ov 2025', playerHint: 'dak' },
+  { label: 'nfl overview · q1 (-ov)', command: 'nspe nfl q1 dak -ov -career', playerHint: 'dak' },
   // h2h — divisional opponent (WSH is a real NFC East rival of DAL)
   { label: 'nfl h2h (career)', command: 'nspe nfl dak vs wsh -career', playerHint: 'dak' },
   // "-week" — career performance in one week number across every season,
@@ -91,6 +96,13 @@ const NFL_COMMANDS: SampleQuery[] = [
 
 const MLB_COMMANDS: SampleQuery[] = [
   // trend
+  { label: 'mlb trend/yst · hits', command: 'nspe mlb -hits2 -yst' },
+  { label: 'mlb trend/yst · tb', command: 'nspe mlb -tb2 -yst' },
+  { label: 'mlb trend/yst · hr', command: 'nspe mlb -hr1 -yst' },
+  { label: 'mlb trend/yst · runs', command: 'nspe mlb -runs1 -yst' },
+  { label: 'mlb trend/yst · runs', command: 'nspe mlb -runs2 -yst' },
+  { label: 'mlb trend/yst · rbi', command: 'nspe mlb -rbi2 -yst' },
+  { label: 'mlb trend/yst · rbi', command: 'nspe mlb -rbi1 -yst' },
   { label: 'mlb trend · hits', command: 'nspe mlb -hits2 -last3/5' },
   { label: 'mlb trend · hr', command: 'nspe mlb -hr1 -last1/1' },
   { label: 'mlb trend · rbi', command: 'nspe mlb -rbi2 -last3/5' },
@@ -109,6 +121,13 @@ const MLB_COMMANDS: SampleQuery[] = [
   // return zero qualifying players on a given day — tb2 is a far more
   // reliably-hit bar, so the sample never looks "broken" just from bad luck.
   { label: 'mlb streak · tb', command: 'nspe mlb -tb2 -streak3' },
+  { label: 'mlb streak · hits', command: 'nspe mlb -hits1 -streak5' },
+  { label: 'mlb streak · runs', command: 'nspe mlb -runs1 -streak5' },
+  { label: 'mlb streak · rbi', command: 'nspe mlb -rbi1 -streak5' },
+  { label: 'mlb streak · hr', command: 'nspe mlb -hr1 -streak2' },
+
+
+
   // explosive (HR distance)
   { label: 'mlb explosive · hr distance', command: 'nspe mlb long -hr350 -last1/5' },
   { label: 'mlb explosive compute · hr distance', command: 'nspe mlb long -hr min800 -last10' },

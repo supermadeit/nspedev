@@ -1,145 +1,145 @@
 [
   {
-    "raw": "MLB 3hits+ {top20} {season}"
+    "raw": "MLB 2hits+ {top20} {season}"
   },
   {
     "team": "SF",
     "player": "Luis Arraez",
     "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 16
+    "threshold": 2,
+    "games_meeting": 55
   },
   {
-    "team": "SD",
-    "player": "Fernando Tatis Jr",
+    "team": "TB",
+    "player": "Chandler Simpson",
     "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 16
-  },
-  {
-    "team": "ATL",
-    "player": "Michael Harris II",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 15
-  },
-  {
-    "team": "HOU",
-    "player": "Yordan Alvarez",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 14
+    "threshold": 2,
+    "games_meeting": 55
   },
   {
     "team": "MIA",
     "player": "Otto Lopez",
     "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 14
+    "threshold": 2,
+    "games_meeting": 54
   },
   {
-    "team": "MIL",
-    "player": "Jackson Chourio",
+    "team": "PIT",
+    "player": "Nick Gonzales",
     "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 14
-  },
-  {
-    "team": "WSH",
-    "player": "Luis Garcia Jr",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 14
-  },
-  {
-    "team": "MIL",
-    "player": "Brice Turang",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 14
-  },
-  {
-    "team": "CHC",
-    "player": "Nico Hoerner",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 14
-  },
-  {
-    "team": "SD",
-    "player": "Jackson Merrill",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 14
-  },
-  {
-    "team": "LAD",
-    "player": "Shohei Ohtani",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 13
-  },
-  {
-    "team": "COL",
-    "player": "TJ Rumfield",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 13
+    "threshold": 2,
+    "games_meeting": 54
   },
   {
     "team": "TB",
     "player": "Yandy Diaz",
     "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 13
+    "threshold": 2,
+    "games_meeting": 51
   },
   {
-    "team": "CHC",
-    "player": "Pete Crow Armstrong",
+    "team": "HOU",
+    "player": "Yordan Alvarez",
     "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 13
-  },
-  {
-    "team": "CHC",
-    "player": "Alex Bregman",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 13
-  },
-  {
-    "team": "BAL",
-    "player": "Gunnar Henderson",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 13
+    "threshold": 2,
+    "games_meeting": 49
   },
   {
     "team": "LAD",
     "player": "Freddie Freeman",
     "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 12
+    "threshold": 2,
+    "games_meeting": 49
+  },
+  {
+    "team": "TEX",
+    "player": "Brandon Nimmo",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 46
   },
   {
     "team": "STL",
     "player": "Alec Burleson",
     "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 12
-  },
-  {
-    "team": "SEA",
-    "player": "Randy Arozarena",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 12
+    "threshold": 2,
+    "games_meeting": 45
   },
   {
     "team": "LAD",
-    "player": "Andy Pages",
+    "player": "Shohei Ohtani",
     "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 12
+    "threshold": 2,
+    "games_meeting": 44
+  },
+  {
+    "team": "SD",
+    "player": "Fernando Tatis Jr",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 44
+  },
+  {
+    "team": "SEA",
+    "player": "Josh Naylor",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 44
+  },
+  {
+    "team": "ATL",
+    "player": "Michael Harris II",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 43
+  },
+  {
+    "team": "STL",
+    "player": "Jordan Walker",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 43
+  },
+  {
+    "team": "ATL",
+    "player": "Drake Baldwin",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 43
+  },
+  {
+    "team": "TB",
+    "player": "Junior Caminero",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 43
+  },
+  {
+    "team": "MIL",
+    "player": "William Contreras",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 43
+  },
+  {
+    "team": "CIN",
+    "player": "Sal Stewart",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 43
+  },
+  {
+    "team": "SD",
+    "player": "Jackson Merrill",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 43
+  },
+  {
+    "team": "ARI",
+    "player": "Gabriel Moreno",
+    "stat": "hits",
+    "threshold": 2,
+    "games_meeting": 42
   }
 ]
