@@ -866,6 +866,70 @@ export function extractExplosiveOverviewPayload(payload: unknown): ExplosiveOver
   return null
 }
 
+// ---------- NFL overview scopes (q1/1h `-ov`) ----------
+// A sibling of ExplosiveOverviewPayload above, but NOT a variant of it —
+// confirmed against the live backend (2026-09-19) that `nfl {q1|1h} {player}
+// -ov` returns a completely different engine (`nfl_overview_scopes`, flat
+// per-game totals) from `nfl long {player} -ov` (`nfl_overview_long`,
+// distance-bucketed). The original `/_overview_long$/i` suffix match assumed
+// q1/1h would share that engine family under different suffixes
+// (`_overview_q1`, `_overview_1h`) — they don't, so those two commands had no
+// extractor at all and silently fell through the whole dispatch chain. This
+// is genuinely a separate shape: no buckets/longest, just totals + a flat
+// breakdown list, because a quarter/half scope has no "explosive play"
+// distance concept to bucket.
+//
+// opponent/date on breakdown rows come back populated for some
+// player/category combos and null for others (backend-side inconsistency,
+// not something to normalize away) — rendered only when present, same
+// tolerant-optional-field pattern used throughout this file.
+
+export interface NflOverviewScopeBreakdown {
+  opponent: string | null
+  date: string | null
+  amount: number
+}
+
+export interface NflOverviewScopeRow {
+  scope: string
+  total_yards: number
+  games: number
+  avg: number
+  total_td: number | null
+  completions: number | null
+  attempts: number | null
+  completion_pct: number | null
+  breakdown: NflOverviewScopeBreakdown[]
+}
+
+export interface NflOverviewScopesPayload {
+  engine: 'nfl_overview_scopes'
+  query: { player: string; category: string; scope: string; year_window: [number, number] | null }
+  rows: NflOverviewScopeRow[]
+}
+
+export function isNflOverviewScopesPayload(payload: unknown): payload is NflOverviewScopesPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return rec.engine === 'nfl_overview_scopes' && Array.isArray(rec.rows)
+}
+
+export function extractNflOverviewScopesPayload(payload: unknown): NflOverviewScopesPayload | null {
+  if (isNflOverviewScopesPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isNflOverviewScopesPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isNflOverviewScopesPayload(v)) return v
+    }
+  }
+  return null
+}
+
 // ---------- MLB Home Run Distance (mlb long) ----------
 
 export interface MlbHrTrendMatch {

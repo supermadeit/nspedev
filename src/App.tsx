@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react'
+import { useState, useEffect, useMemo, useRef, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import hitlistData from '@/assets/data/hitlist.json'
 import leaderboardData from '@/assets/data/leaderboard.json'
@@ -39,6 +39,7 @@ import {
   extractMlbTeamOverviewPayload,
   extractMlbTeamRunsPayload,
   extractExplosiveOverviewPayload,
+  extractNflOverviewScopesPayload,
   isNflExplosivePayload,
   normalizeDisplayPlayer,
   normalizeQueryResults,
@@ -60,6 +61,7 @@ import {
   type MlbTeamRunsPayload,
   type MlbTeamRunsTrendResult,
   type ExplosiveOverviewPayload,
+  type NflOverviewScopesPayload,
   type NflExplosivePayload,
   type QueryResult,
 } from '@/lib/nspe-payloads'
@@ -437,10 +439,12 @@ function TrendBadge({
   )
 }
 
-function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
+// Per-payload collapse/expand state for a list of result rows, keyed by
+// index. Was previously copy-pasted (identical useState<Set<number>> +
+// toggle function) into every trend/compute view separately — pulled out
+// once so there's a single implementation to get right.
+function useExpandableRows() {
   const [expanded, setExpanded] = useState<Set<number>>(new Set())
-  const results = payload.results
-
   const toggle = (i: number) =>
     setExpanded((prev) => {
       const next = new Set(prev)
@@ -448,6 +452,60 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
       else next.add(i)
       return next
     })
+  return { isExpanded: (i: number) => expanded.has(i), toggle }
+}
+
+// One shared row shell for every "one entity + a headline stat badge + an
+// optional expandable per-game breakdown" result — the shape every trend
+// AND compute engine in this app actually has. Centralizing it is what makes
+// TrendBadge usage, the collapsed-by-default toggle, and the border/spacing
+// automatic for any view, instead of depending on whoever writes the next
+// one remembering to copy the pattern by hand — the exact way the compute
+// branches (mlb_hr_compute, mlb_team_runs_compute, NFL explosive's leaderboard
+// shape) drifted into their own bespoke, non-collapsible layouts instead of
+// matching their trend siblings one function down.
+function ResultRow({
+  label,
+  badgeHeader,
+  badgeValue,
+  accent,
+  expanded,
+  onToggle,
+  ariaLabel,
+  children,
+}: {
+  label: ReactNode
+  badgeHeader?: string | null
+  badgeValue: string
+  accent?: string
+  expanded?: boolean
+  onToggle?: () => void
+  ariaLabel?: string
+  children?: ReactNode
+}) {
+  return (
+    <div className="py-2 border-b" style={{ borderColor: PITCH_BORDER }}>
+      <div className="flex flex-wrap items-start gap-x-3 gap-y-1">
+        <span className="font-mono text-[13px] min-w-0" style={{ color: PITCH_ACCENT }}>
+          {label}
+        </span>
+        <TrendBadge
+          header={badgeHeader}
+          value={badgeValue}
+          expanded={expanded}
+          onToggle={onToggle}
+          accent={accent}
+          ariaLabel={ariaLabel}
+        />
+      </div>
+      {expanded && children && <div className="mt-2 space-y-1.5 pl-2">{children}</div>}
+    </div>
+  )
+}
+
+function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
+  const { isExpanded, toggle } = useExpandableRows()
+  const results = payload.results
 
   // Compute (leaderboard) shape — results have value/games/yards, no matches array
   const isCompute = results.length > 0 && results[0].value != null && !results[0].matches
@@ -455,26 +513,12 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
     return (
       <div className="space-y-0">
         {results.map((r, i) => (
-          <div
+          <ResultRow
             key={i}
-            className="py-2 border-b font-mono"
-            style={{ borderColor: 'oklch(0.22 0 0)' }}
-          >
-            <div className="text-[13px]" style={{ color: 'oklch(0.88 0.15 195)' }}>
-              {normalizeDisplayPlayer(r.player)}
-            </div>
-            <div className="flex items-center gap-3 mt-0.5 text-[12px]">
-              <span>
-                <span className="font-bold" style={{ color: 'oklch(0.85 0.15 145)' }}>{(r.yards ?? r.value)?.toLocaleString()}</span>
-                <span style={{ color: 'oklch(0.50 0 0)' }}> yds</span>
-              </span>
-              <span style={{ color: 'oklch(0.30 0 0)' }}>·</span>
-              <span>
-                <span style={{ color: 'oklch(0.65 0 0)' }}>{r.games}</span>
-                <span style={{ color: 'oklch(0.50 0 0)' }}> gp</span>
-              </span>
-            </div>
-          </div>
+            label={normalizeDisplayPlayer(r.player)}
+            badgeHeader={`${r.games}gp`}
+            badgeValue={`${(r.yards ?? r.value)?.toLocaleString()}yds`}
+          />
         ))}
       </div>
     )
@@ -491,7 +535,7 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
       {(threshold != null || globalWindow != null) && (
         <div
           className="flex items-center gap-2 pb-1.5 mb-1 font-mono text-[11px]"
-          style={{ color: 'oklch(0.50 0 0)', borderBottom: '1px solid oklch(0.22 0 0)' }}
+          style={{ color: 'oklch(0.50 0 0)', borderBottom: `1px solid ${PITCH_BORDER}` }}
         >
           {threshold != null && (
             <span>yds<span style={{ color: 'oklch(0.72 0 0)' }}>&ge;{threshold}</span></span>
@@ -505,7 +549,6 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
         </div>
       )}
       {results.map((r, i) => {
-        const isOpen = expanded.has(i)
         const matchList = r.matches ?? []
         const metCount = r.met_count ?? r.met ?? matchList.length
         const metLabel = formatMet(metCount, r.window)
@@ -515,9 +558,10 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
           ? `${latestYds}yds ${extractDateToken(latest.date_iso ?? latest.date) ?? (latest.date_iso ?? latest.date)}`
           : null
         return (
-          <div key={i} className="py-2 border-b" style={{ borderColor: 'oklch(0.22 0 0)' }}>
-            <div className="flex flex-wrap items-start gap-x-3 gap-y-1">
-              <span className="font-mono text-[13px] min-w-0" style={{ color: 'oklch(0.90 0.18 195)' }}>
+          <ResultRow
+            key={i}
+            label={
+              <>
                 {r.team && r.team !== 'UNK' && (
                   <>
                     <span style={{ color: 'oklch(0.70 0.10 195)' }}>{r.team}</span>
@@ -525,58 +569,53 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
                   </>
                 )}
                 {normalizeDisplayPlayer(r.player)}
-              </span>
-              <TrendBadge
-                header={latestValue ? `${metLabel} · latest` : null}
-                value={latestValue ?? metLabel}
-                expanded={isOpen}
-                onToggle={() => toggle(i)}
-              />
-            </div>
-            {isOpen && (
-              <div className="mt-2 space-y-1 pl-2">
-                {matchList.map((m, j) => {
-                  const ydsDisplay = Array.isArray(m.yards_list)
-                    ? m.yards_list.join(', ')
-                    : String(m.yards)
-                  return (
-                    <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
-                      <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(m.date_iso ?? m.date) ?? (m.date_iso ?? m.date)}</span>
-                      {m.opponent && (
-                        <>
-                          <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
-                          <span style={{ color: 'oklch(0.75 0.08 220)' }}>{m.opponent}</span>
-                        </>
-                      )}
-                      <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
-                      <span style={{ color: 'oklch(0.85 0.15 145)' }}>{ydsDisplay}yds</span>
-                      {m.quarter != null && (
-                        <span style={{ color: 'oklch(0.55 0 0)' }}> Q{m.quarter}</span>
-                      )}
-                      {m.touchdown && (
-                        <span style={{ color: 'oklch(0.80 0.18 60)' }}> TD</span>
-                      )}
-                      {m.receiver && (
-                        <>
-                          <span style={{ color: 'oklch(0.45 0 0)' }}>{' → '}</span>
-                          <span style={{ color: 'oklch(0.72 0 0)' }}>{normalizeDisplayPlayer(m.receiver)}</span>
-                        </>
-                      )}
-                      {m.passer && (
-                        <>
-                          <span style={{ color: 'oklch(0.45 0 0)' }}>{' from '}</span>
-                          <span style={{ color: 'oklch(0.72 0 0)' }}>{normalizeDisplayPlayer(m.passer)}</span>
-                        </>
-                      )}
-                      {m.count != null && m.count > 1 && (
-                        <span style={{ color: 'oklch(0.50 0 0)' }}> ({m.count} plays)</span>
-                      )}
-                    </div>
-                  )
-                })}
-              </div>
-            )}
-          </div>
+              </>
+            }
+            badgeHeader={latestValue ? `${metLabel} · latest` : null}
+            badgeValue={latestValue ?? metLabel}
+            expanded={isExpanded(i)}
+            onToggle={() => toggle(i)}
+          >
+            {matchList.map((m, j) => {
+              const ydsDisplay = Array.isArray(m.yards_list)
+                ? m.yards_list.join(', ')
+                : String(m.yards)
+              return (
+                <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+                  <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(m.date_iso ?? m.date) ?? (m.date_iso ?? m.date)}</span>
+                  {m.opponent && (
+                    <>
+                      <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
+                      <span style={{ color: 'oklch(0.75 0.08 220)' }}>{m.opponent}</span>
+                    </>
+                  )}
+                  <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                  <span style={{ color: 'oklch(0.85 0.15 145)' }}>{ydsDisplay}yds</span>
+                  {m.quarter != null && (
+                    <span style={{ color: 'oklch(0.55 0 0)' }}> Q{m.quarter}</span>
+                  )}
+                  {m.touchdown && (
+                    <span style={{ color: 'oklch(0.80 0.18 60)' }}> TD</span>
+                  )}
+                  {m.receiver && (
+                    <>
+                      <span style={{ color: 'oklch(0.45 0 0)' }}>{' → '}</span>
+                      <span style={{ color: 'oklch(0.72 0 0)' }}>{normalizeDisplayPlayer(m.receiver)}</span>
+                    </>
+                  )}
+                  {m.passer && (
+                    <>
+                      <span style={{ color: 'oklch(0.45 0 0)' }}>{' from '}</span>
+                      <span style={{ color: 'oklch(0.72 0 0)' }}>{normalizeDisplayPlayer(m.passer)}</span>
+                    </>
+                  )}
+                  {m.count != null && m.count > 1 && (
+                    <span style={{ color: 'oklch(0.50 0 0)' }}> ({m.count} plays)</span>
+                  )}
+                </div>
+              )
+            })}
+          </ResultRow>
         )
       })}
     </div>
@@ -698,9 +737,13 @@ function ExplosiveOverviewView({ payload }: { payload: ExplosiveOverviewPayload 
   )
 }
 
-// ---------- MLB Home Run Distance view ----------
+function scopeLabel(scope: string): string {
+  if (scope === 'q1') return 'Q1'
+  if (scope === '1h') return '1H'
+  return scope.toUpperCase()
+}
 
-function MlbHrView({ payload }: { payload: MlbHrPayload }) {
+function NflOverviewScopesView({ payload }: { payload: NflOverviewScopesPayload }) {
   const [expanded, setExpanded] = useState<Set<number>>(new Set())
   const toggle = (i: number) =>
     setExpanded((prev) => {
@@ -710,52 +753,139 @@ function MlbHrView({ payload }: { payload: MlbHrPayload }) {
       return next
     })
 
-  if (payload.engine === 'mlb_hr_compute') {
-    const results = payload.results as MlbHrComputeResult[]
-    return (
-      <div className="space-y-0">
-        {results.map((r, i) => (
-          <div key={i} className="py-2 border-b" style={{ borderColor: PITCH_BORDER }}>
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-[13px]" style={{ color: PITCH_ACCENT }}>
-                <span style={{ color: 'oklch(0.70 0.10 195)' }}>{r.team}</span>
-                <span style={{ color: 'oklch(0.55 0 0)' }}>{' — '}</span>
-                {normalizeDisplayPlayer(r.player)}
-              </span>
-              <span className="font-mono text-[12px]" style={{ color: PITCH_LABEL }}>
-                {r.games} gp
-              </span>
+  const CYAN = 'oklch(0.85 0.15 195)'
+  const CYAN_BRIGHT = 'oklch(0.90 0.18 195)'
+  const DIM = 'oklch(0.55 0 0)'
+  const BORDER = 'oklch(0.22 0 0)'
+
+  const player = normalizeDisplayPlayer(payload.query.player)
+  const category = payload.query.category
+  const yearWindow = payload.query.year_window
+  const yearLabel = yearWindow == null ? 'career' : yearWindow[0] === yearWindow[1] ? `${yearWindow[0]}` : `${yearWindow[0]}-${yearWindow[1]}`
+
+  return (
+    <div className="space-y-4 font-mono">
+      <div className="flex items-baseline gap-2 pb-2" style={{ borderBottom: `1px solid ${BORDER}` }}>
+        <span className="text-[14px] font-bold" style={{ color: CYAN_BRIGHT }}>
+          {player}
+        </span>
+        <span className="text-[12px]" style={{ color: DIM }}>
+          {category} · {scopeLabel(payload.query.scope)} · {yearLabel}
+        </span>
+      </div>
+
+      {payload.rows.map((r, i) => {
+        const isOpen = expanded.has(i)
+        const hasCompletions = r.completions != null && r.attempts != null
+        return (
+          <div key={i} className="space-y-3">
+            <div className="flex flex-wrap gap-5 text-[12px]">
+              <div>
+                <div className="text-[9px] uppercase tracking-wider" style={{ color: DIM }}>Games</div>
+                <div className="text-[16px] font-bold" style={{ color: CYAN }}>{r.games}</div>
+              </div>
+              <div>
+                <div className="text-[9px] uppercase tracking-wider" style={{ color: DIM }}>Total Yards</div>
+                <div className="text-[16px] font-bold" style={{ color: CYAN }}>{r.total_yards.toLocaleString()}</div>
+              </div>
+              <div>
+                <div className="text-[9px] uppercase tracking-wider" style={{ color: DIM }}>Avg</div>
+                <div className="text-[16px] font-bold" style={{ color: CYAN }}>{r.avg.toFixed(1)}</div>
+              </div>
+              {r.total_td != null && (
+                <div>
+                  <div className="text-[9px] uppercase tracking-wider" style={{ color: DIM }}>TD</div>
+                  <div className="text-[16px] font-bold" style={{ color: CYAN }}>{r.total_td}</div>
+                </div>
+              )}
+              {hasCompletions && (
+                <div>
+                  <div className="text-[9px] uppercase tracking-wider" style={{ color: DIM }}>Comp/Att</div>
+                  <div className="text-[16px] font-bold" style={{ color: CYAN }}>
+                    {r.completions}/{r.attempts}
+                    {r.completion_pct != null && (
+                      <span className="text-[11px] font-normal ml-1" style={{ color: DIM }}>{r.completion_pct.toFixed(1)}%</span>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
-            <div className="flex items-center gap-3 mt-1 text-[12px] font-mono">
-              <span>
-                <span className="font-bold" style={{ color: PITCH_GREEN }}>{r.hr_count}</span>
-                <span style={{ color: PITCH_LABEL }}> HR</span>
-              </span>
-              <span style={{ color: 'oklch(0.30 0 0)' }}>·</span>
-              <span>
-                <span className="font-bold" style={{ color: PITCH_GREEN }}>{r.total_ft?.toLocaleString()}</span>
-                <span style={{ color: PITCH_LABEL }}> ft total</span>
-              </span>
-            </div>
-            {r.events?.length > 0 && (
-              <div className="mt-1.5 space-y-0.5 pl-2">
-                {r.events.map((e, j) => (
-                  <div key={j} className="font-mono text-[11px]" style={{ color: 'oklch(0.72 0 0)' }}>
-                    <span style={{ color: 'oklch(0.55 0 0)' }}>{extractDateToken(e.date) ?? e.date}</span>
-                    {e.opponent && (
+
+            {r.breakdown.length > 0 && (
+              <div className="flex items-start gap-x-3">
+                <TrendBadge
+                  header={`${r.breakdown.length} games`}
+                  value={isOpen ? 'hide' : 'view'}
+                  expanded={isOpen}
+                  onToggle={() => toggle(i)}
+                  ariaLabel="Toggle game-by-game breakdown"
+                />
+              </div>
+            )}
+            {isOpen && (
+              <div className="space-y-1 pl-1">
+                {r.breakdown.map((b, j) => (
+                  <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+                    {b.date && <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(b.date) ?? b.date}</span>}
+                    {b.opponent && (
                       <>
-                        <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
-                        <span style={{ color: 'oklch(0.75 0.08 220)' }}>{e.opponent}</span>
+                        <span style={{ color: 'oklch(0.45 0 0)' }}>{b.date ? ' vs ' : 'vs '}</span>
+                        <span style={{ color: 'oklch(0.75 0.08 220)' }}>{b.opponent}</span>
                       </>
                     )}
-                    <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
-                    <span style={{ color: PITCH_GREEN }}>{e.distance_feet}ft</span>
-                    <span style={{ color: 'oklch(0.50 0 0)' }}> Inn {e.inning}</span>
+                    {(b.date || b.opponent) && <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>}
+                    <span style={{ color: CYAN }}>{b.amount} yds</span>
                   </div>
                 ))}
               </div>
             )}
           </div>
+        )
+      })}
+    </div>
+  )
+}
+
+// ---------- MLB Home Run Distance view ----------
+
+function MlbHrView({ payload }: { payload: MlbHrPayload }) {
+  const { isExpanded, toggle } = useExpandableRows()
+
+  if (payload.engine === 'mlb_hr_compute') {
+    const results = payload.results as MlbHrComputeResult[]
+    return (
+      <div className="space-y-0">
+        {results.map((r, i) => (
+          <ResultRow
+            key={i}
+            label={
+              <>
+                <span style={{ color: 'oklch(0.70 0.10 195)' }}>{r.team}</span>
+                <span style={{ color: 'oklch(0.55 0 0)' }}>{' — '}</span>
+                {normalizeDisplayPlayer(r.player)}
+              </>
+            }
+            badgeHeader={`${r.games}gp`}
+            badgeValue={`${r.hr_count}HR · ${r.total_ft?.toLocaleString()}ft`}
+            accent={PITCH_GREEN}
+            expanded={isExpanded(i)}
+            onToggle={r.events?.length > 0 ? () => toggle(i) : undefined}
+          >
+            {r.events?.map((e, j) => (
+              <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+                <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(e.date) ?? e.date}</span>
+                {e.opponent && (
+                  <>
+                    <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
+                    <span style={{ color: 'oklch(0.75 0.08 220)' }}>{e.opponent}</span>
+                  </>
+                )}
+                <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                <span style={{ color: PITCH_GREEN }}>{e.distance_feet}ft</span>
+                <span style={{ color: 'oklch(0.50 0 0)' }}> Inn {e.inning}</span>
+              </div>
+            ))}
+          </ResultRow>
         ))}
       </div>
     )
@@ -765,16 +895,16 @@ function MlbHrView({ payload }: { payload: MlbHrPayload }) {
   return (
     <div className="space-y-0">
       {results.map((r, i) => {
-        const isOpen = expanded.has(i)
         const matchList = r.matches ?? []
         const metCount = r.met_count ?? matchList.length
         const metLabel = formatMet(metCount, r.window)
         const latest = matchList.length > 0 ? matchList[matchList.length - 1] : null
         const latestValue = latest ? `${latest.distance_feet}ft ${extractDateToken(latest.date) ?? latest.date}` : null
         return (
-          <div key={i} className="py-2 border-b" style={{ borderColor: PITCH_BORDER }}>
-            <div className="flex flex-wrap items-start gap-x-3 gap-y-1">
-              <span className="font-mono text-[13px] min-w-0" style={{ color: PITCH_ACCENT }}>
+          <ResultRow
+            key={i}
+            label={
+              <>
                 {r.team && (
                   <>
                     <span style={{ color: 'oklch(0.70 0.10 195)' }}>{r.team}</span>
@@ -782,38 +912,33 @@ function MlbHrView({ payload }: { payload: MlbHrPayload }) {
                   </>
                 )}
                 {normalizeDisplayPlayer(r.player)}
-              </span>
-              <TrendBadge
-                header={latestValue ? `${metLabel} · latest` : null}
-                value={latestValue ?? metLabel}
-                expanded={isOpen}
-                onToggle={() => toggle(i)}
-                accent={PITCH_GREEN}
-              />
-            </div>
-            {isOpen && (
-              <div className="mt-2 space-y-1.5 pl-2">
-                {matchList.map((m, j) => (
-                  <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
-                    <div>
-                      <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(m.date) ?? m.date}</span>
-                      {m.opponent && (
-                        <>
-                          <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
-                          <span style={{ color: 'oklch(0.75 0.08 220)' }}>{m.opponent}</span>
-                        </>
-                      )}
-                      <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
-                      <span style={{ color: PITCH_GREEN }}>{m.distance_feet}ft</span>
-                    </div>
-                    {m.description && (
-                      <div style={{ color: 'oklch(0.60 0 0)' }}>{m.description}</div>
-                    )}
-                  </div>
-                ))}
+              </>
+            }
+            badgeHeader={latestValue ? `${metLabel} · latest` : null}
+            badgeValue={latestValue ?? metLabel}
+            accent={PITCH_GREEN}
+            expanded={isExpanded(i)}
+            onToggle={() => toggle(i)}
+          >
+            {matchList.map((m, j) => (
+              <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+                <div>
+                  <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(m.date) ?? m.date}</span>
+                  {m.opponent && (
+                    <>
+                      <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
+                      <span style={{ color: 'oklch(0.75 0.08 220)' }}>{m.opponent}</span>
+                    </>
+                  )}
+                  <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                  <span style={{ color: PITCH_GREEN }}>{m.distance_feet}ft</span>
+                </div>
+                {m.description && (
+                  <div style={{ color: 'oklch(0.60 0 0)' }}>{m.description}</div>
+                )}
               </div>
-            )}
-          </div>
+            ))}
+          </ResultRow>
         )
       })}
     </div>
@@ -823,20 +948,12 @@ function MlbHrView({ payload }: { payload: MlbHrPayload }) {
 // ---------- MLB First Plate Appearance Trend view ----------
 
 function MlbFirstPaTrendView({ payload }: { payload: MlbFirstPaTrendPayload }) {
-  const [expanded, setExpanded] = useState<Set<number>>(new Set())
-  const toggle = (i: number) =>
-    setExpanded((prev) => {
-      const next = new Set(prev)
-      if (next.has(i)) next.delete(i)
-      else next.add(i)
-      return next
-    })
+  const { isExpanded, toggle } = useExpandableRows()
 
   const results = payload.results
   return (
     <div className="space-y-0">
       {results.map((r, i) => {
-        const isOpen = expanded.has(i)
         const matchList = r.matches ?? []
         const metCount = r.met_count ?? matchList.length
         const metLabel = formatMet(metCount, r.window)
@@ -845,9 +962,10 @@ function MlbFirstPaTrendView({ payload }: { payload: MlbFirstPaTrendPayload }) {
           ? `${latest.result}${latest.distance_feet != null ? ` (${latest.distance_feet}ft)` : ''} ${extractDateToken(latest.date) ?? latest.date}`
           : null
         return (
-          <div key={i} className="py-2 border-b" style={{ borderColor: PITCH_BORDER }}>
-            <div className="flex flex-wrap items-start gap-x-3 gap-y-1">
-              <span className="font-mono text-[13px] min-w-0" style={{ color: PITCH_ACCENT }}>
+          <ResultRow
+            key={i}
+            label={
+              <>
                 {r.team && (
                   <>
                     <span style={{ color: 'oklch(0.70 0.10 195)' }}>{r.team}</span>
@@ -855,41 +973,36 @@ function MlbFirstPaTrendView({ payload }: { payload: MlbFirstPaTrendPayload }) {
                   </>
                 )}
                 {normalizeDisplayPlayer(r.player)}
-              </span>
-              <TrendBadge
-                header={latestValue ? `${metLabel} · latest` : null}
-                value={latestValue ?? metLabel}
-                expanded={isOpen}
-                onToggle={() => toggle(i)}
-                accent={PITCH_GREEN}
-              />
-            </div>
-            {isOpen && (
-              <div className="mt-2 space-y-1.5 pl-2">
-                {matchList.map((m, j) => (
-                  <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
-                    <div>
-                      <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(m.date) ?? m.date}</span>
-                      {m.opponent && (
-                        <>
-                          <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
-                          <span style={{ color: 'oklch(0.75 0.08 220)' }}>{m.opponent}</span>
-                        </>
-                      )}
-                      <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
-                      <span style={{ color: PITCH_GREEN }}>{m.result}</span>
-                      {m.distance_feet != null && (
-                        <span style={{ color: PITCH_LABEL }}> ({m.distance_feet}ft)</span>
-                      )}
-                    </div>
-                    {m.description && (
-                      <div style={{ color: 'oklch(0.60 0 0)' }}>{m.description}</div>
-                    )}
-                  </div>
-                ))}
+              </>
+            }
+            badgeHeader={latestValue ? `${metLabel} · latest` : null}
+            badgeValue={latestValue ?? metLabel}
+            accent={PITCH_GREEN}
+            expanded={isExpanded(i)}
+            onToggle={() => toggle(i)}
+          >
+            {matchList.map((m, j) => (
+              <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+                <div>
+                  <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(m.date) ?? m.date}</span>
+                  {m.opponent && (
+                    <>
+                      <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
+                      <span style={{ color: 'oklch(0.75 0.08 220)' }}>{m.opponent}</span>
+                    </>
+                  )}
+                  <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                  <span style={{ color: PITCH_GREEN }}>{m.result}</span>
+                  {m.distance_feet != null && (
+                    <span style={{ color: PITCH_LABEL }}> ({m.distance_feet}ft)</span>
+                  )}
+                </div>
+                {m.description && (
+                  <div style={{ color: 'oklch(0.60 0 0)' }}>{m.description}</div>
+                )}
               </div>
-            )}
-          </div>
+            ))}
+          </ResultRow>
         )
       })}
     </div>
@@ -899,14 +1012,7 @@ function MlbFirstPaTrendView({ payload }: { payload: MlbFirstPaTrendPayload }) {
 // ---------- MLB Team Runs For/Allowed view ----------
 
 function MlbTeamRunsView({ payload }: { payload: MlbTeamRunsPayload }) {
-  const [expanded, setExpanded] = useState<Set<number>>(new Set())
-  const toggle = (i: number) =>
-    setExpanded((prev) => {
-      const next = new Set(prev)
-      if (next.has(i)) next.delete(i)
-      else next.add(i)
-      return next
-    })
+  const { isExpanded, toggle } = useExpandableRows()
 
   if (payload.engine === 'mlb_team_runs_compute') {
     const results = payload.results as MlbTeamRunsComputeResult[]
@@ -920,25 +1026,13 @@ function MlbTeamRunsView({ payload }: { payload: MlbTeamRunsPayload }) {
     return (
       <div className="space-y-0">
         {results.map((r, i) => (
-          <div key={i} className="py-2 border-b flex items-center justify-between" style={{ borderColor: PITCH_BORDER }}>
-            <span className="font-mono text-[13px]" style={{ color: 'oklch(0.70 0.10 195)' }}>{r.team}</span>
-            <div className="flex items-center gap-3 text-[12px] font-mono">
-              <span>
-                <span className="font-bold" style={{ color: PITCH_GREEN }}>{r.total ?? '—'}</span>
-                <span style={{ color: PITCH_LABEL }}> total</span>
-              </span>
-              <span style={{ color: 'oklch(0.30 0 0)' }}>·</span>
-              <span>
-                <span style={{ color: PITCH_VALUE }}>{r.avg ?? '—'}</span>
-                <span style={{ color: PITCH_LABEL }}> avg</span>
-              </span>
-              <span style={{ color: 'oklch(0.30 0 0)' }}>·</span>
-              <span>
-                <span style={{ color: PITCH_VALUE }}>{r.games ?? '—'}</span>
-                <span style={{ color: PITCH_LABEL }}> gp</span>
-              </span>
-            </div>
-          </div>
+          <ResultRow
+            key={i}
+            label={r.team}
+            badgeHeader={`${r.games ?? '—'}gp`}
+            badgeValue={`${r.total ?? '—'} total · ${r.avg ?? '—'} avg`}
+            accent={PITCH_GREEN}
+          />
         ))}
       </div>
     )
@@ -948,7 +1042,6 @@ function MlbTeamRunsView({ payload }: { payload: MlbTeamRunsPayload }) {
   return (
     <div className="space-y-0">
       {results.map((r, i) => {
-        const isOpen = expanded.has(i)
         const matchList = r.matches ?? []
         const metCount = r.met_count ?? matchList.length
         const metLabel = formatMet(metCount, r.window)
@@ -957,39 +1050,33 @@ function MlbTeamRunsView({ payload }: { payload: MlbTeamRunsPayload }) {
           ? `${latest.runs_for}-${latest.runs_allowed} ${extractDateToken(latest.date_iso) ?? latest.date_iso}`
           : null
         return (
-          <div key={i} className="py-2 border-b" style={{ borderColor: PITCH_BORDER }}>
-            <div className="flex flex-wrap items-start gap-x-3 gap-y-1">
-              <span className="font-mono text-[13px] min-w-0" style={{ color: 'oklch(0.70 0.10 195)' }}>{r.team}</span>
-              <TrendBadge
-                header={latestValue ? `${metLabel} · latest` : null}
-                value={latestValue ?? metLabel}
-                expanded={isOpen}
-                onToggle={() => toggle(i)}
-                accent={PITCH_GREEN}
-              />
-            </div>
-            {isOpen && (
-              <div className="mt-2 space-y-1 pl-2">
-                {matchList.map((m, j) => (
-                  <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
-                    <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(m.date_iso) ?? m.date_iso}</span>
-                    {m.opponent && (
-                      <>
-                        <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
-                        <span style={{ color: 'oklch(0.75 0.08 220)' }}>{m.opponent}</span>
-                      </>
-                    )}
-                    <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
-                    <span style={{ color: PITCH_GREEN }}>{m.runs_for}</span>
-                    <span style={{ color: PITCH_LABEL }}> runs for</span>
-                    <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
-                    <span style={{ color: 'oklch(0.80 0.15 30)' }}>{m.runs_allowed}</span>
-                    <span style={{ color: PITCH_LABEL }}> allowed</span>
-                  </div>
-                ))}
+          <ResultRow
+            key={i}
+            label={r.team}
+            badgeHeader={latestValue ? `${metLabel} · latest` : null}
+            badgeValue={latestValue ?? metLabel}
+            accent={PITCH_GREEN}
+            expanded={isExpanded(i)}
+            onToggle={() => toggle(i)}
+          >
+            {matchList.map((m, j) => (
+              <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+                <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(m.date_iso) ?? m.date_iso}</span>
+                {m.opponent && (
+                  <>
+                    <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
+                    <span style={{ color: 'oklch(0.75 0.08 220)' }}>{m.opponent}</span>
+                  </>
+                )}
+                <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                <span style={{ color: PITCH_GREEN }}>{m.runs_for}</span>
+                <span style={{ color: PITCH_LABEL }}> runs for</span>
+                <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                <span style={{ color: 'oklch(0.80 0.15 30)' }}>{m.runs_allowed}</span>
+                <span style={{ color: PITCH_LABEL }}> allowed</span>
               </div>
-            )}
-          </div>
+            ))}
+          </ResultRow>
         )
       })}
     </div>
@@ -2170,6 +2257,7 @@ function App() {
   const [playerReportResult, setPlayerReportResult] = useState<MlbPlayerReportPayload | null>(null)
   const [nflExplosiveResult, setNflExplosiveResult] = useState<NflExplosivePayload | null>(null)
   const [explosiveOverviewResult, setExplosiveOverviewResult] = useState<ExplosiveOverviewPayload | null>(null)
+  const [overviewScopesResult, setOverviewScopesResult] = useState<NflOverviewScopesPayload | null>(null)
   const [hrResult, setHrResult] = useState<MlbHrPayload | null>(null)
   const [firstPaResult, setFirstPaResult] = useState<MlbFirstPaTrendPayload | null>(null)
   const [teamRunsResult, setTeamRunsResult] = useState<MlbTeamRunsPayload | null>(null)
@@ -2334,6 +2422,7 @@ function App() {
     setPlayerReportResult(null)
     setNflExplosiveResult(null)
     setExplosiveOverviewResult(null)
+    setOverviewScopesResult(null)
     setHrResult(null)
     setFirstPaResult(null)
     setTeamRunsResult(null)
@@ -2465,6 +2554,16 @@ function App() {
       const explosiveOverviewPayload = extractExplosiveOverviewPayload(payload)
       if (explosiveOverviewPayload) {
         setExplosiveOverviewResult(explosiveOverviewPayload)
+        setQueryResults([])
+        return
+      }
+
+      // NFL q1/1h overview (flat per-game totals, no distance buckets — see
+      // nspe-payloads.ts's comment on why this isn't part of the engine
+      // family above despite sharing the "-ov" command suffix)
+      const overviewScopesPayload = extractNflOverviewScopesPayload(payload)
+      if (overviewScopesPayload) {
+        setOverviewScopesResult(overviewScopesPayload)
         setQueryResults([])
         return
       }
@@ -3063,6 +3162,8 @@ function App() {
                 ? `${lastQuery} — explosive`
                 : explosiveOverviewResult
                 ? `${lastQuery} — explosive overview`
+                : overviewScopesResult
+                ? `${lastQuery} — overview`
                 : hrResult
                 ? `${lastQuery} — hr`
                 : firstPaResult
@@ -3105,6 +3206,8 @@ function App() {
               <NflExplosiveView payload={nflExplosiveResult} />
             ) : explosiveOverviewResult ? (
               <ExplosiveOverviewView payload={explosiveOverviewResult} />
+            ) : overviewScopesResult ? (
+              <NflOverviewScopesView payload={overviewScopesResult} />
             ) : hrResult ? (
               <MlbHrView payload={hrResult} />
             ) : firstPaResult ? (
@@ -3188,13 +3291,10 @@ function App() {
                   : null
 
                 return (
-                  <div
+                  <ResultRow
                     key={index}
-                    className="py-2 border-b"
-                    style={{ borderColor: 'oklch(0.22 0 0)' }}
-                  >
-                    <div className="flex flex-wrap items-start gap-x-3 gap-y-1">
-                      <span className="font-mono text-[13px] min-w-0" style={{ color: 'oklch(0.90 0.18 195)' }}>
+                    label={
+                      <>
                         {result.team ? (
                           <>
                             <span style={{ color: 'oklch(0.70 0.10 195)' }}>{result.team}</span>
@@ -3202,18 +3302,16 @@ function App() {
                           </>
                         ) : null}
                         {result.player}
-                      </span>
-                      <TrendBadge
-                        header={resultBadgeHeader}
-                        value={String(resultBadge)}
-                        expanded={isExpanded}
-                        onToggle={canExpand ? () => togglePlayerExpanded(result.player) : undefined}
-                        ariaLabel={canExpand ? `Toggle details for ${result.player}` : undefined}
-                      />
-                    </div>
-
-                    {isExpanded && hasStreakDetails && result.streakDetails && (
-                      <div className="mt-2 space-y-1.5 pl-2">
+                      </>
+                    }
+                    badgeHeader={resultBadgeHeader}
+                    badgeValue={String(resultBadge)}
+                    expanded={isExpanded}
+                    onToggle={canExpand ? () => togglePlayerExpanded(result.player) : undefined}
+                    ariaLabel={canExpand ? `Toggle details for ${result.player}` : undefined}
+                  >
+                    {hasStreakDetails && result.streakDetails && (
+                      <>
                         {result.streakDetails.map((detail, detailIndex) => (
                           <div
                             key={`${result.player}-streak-${detailIndex}`}
@@ -3223,11 +3321,11 @@ function App() {
                             {`${detail.length} game streak ${detail.start} - ${detail.end}`}
                           </div>
                         ))}
-                      </div>
+                      </>
                     )}
 
-                    {isExpanded && hasMatchDetails && result.matchDetails && (
-                      <div className="mt-2 pl-2 font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+                    {hasMatchDetails && result.matchDetails && (
+                      <div className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
                         {isTrendRow && (
                           <span style={{ color: 'oklch(0.55 0 0)' }}>{formatMet(result.total, result.windowSize)} — </span>
                         )}
@@ -3236,7 +3334,7 @@ function App() {
                           .join(', ')}
                       </div>
                     )}
-                  </div>
+                  </ResultRow>
                 )
               })
             )}

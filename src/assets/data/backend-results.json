@@ -1,11 +1,11 @@
 {
   "kind": "mlb_stat_leaderboard",
-  "generated_at": "2026-09-18T17:00:29.708248Z",
+  "generated_at": "2026-09-19T10:44:52.306888Z",
   "query": {
-    "stat": "hits",
-    "field": "H",
-    "short": "H",
-    "threshold": 2,
+    "stat": "tb",
+    "field": "TB",
+    "short": "TB",
+    "threshold": 4,
     "year": 2026,
     "last_n": null
   },
@@ -15,179 +15,119 @@
   },
   "rows": [
     {
-      "player": "Luis Arraez",
-      "team": "SF",
-      "games_meeting": 55,
+      "player": "Ben Rice",
+      "team": "NYY",
+      "games_meeting": 42,
       "window_games": null,
-      "season_ab": 572,
-      "season_hits": 180,
-      "season_avg": 0.3147,
-      "last_match": "2026-09-15"
-    },
-    {
-      "player": "Chandler Simpson",
-      "team": "TB",
-      "games_meeting": 55,
-      "window_games": null,
-      "season_ab": 544,
-      "season_hits": 169,
-      "season_avg": 0.3107,
-      "last_match": "2026-09-17"
-    },
-    {
-      "player": "Otto Lopez",
-      "team": "MIA",
-      "games_meeting": 54,
-      "window_games": null,
-      "season_ab": 595,
-      "season_hits": 182,
-      "season_avg": 0.3059,
-      "last_match": "2026-09-16"
-    },
-    {
-      "player": "Nick Gonzales",
-      "team": "PIT",
-      "games_meeting": 54,
-      "window_games": null,
-      "season_ab": 526,
-      "season_hits": 160,
-      "season_avg": 0.3042,
-      "last_match": "2026-09-15"
-    },
-    {
-      "player": "Yandy Diaz",
-      "team": "TB",
-      "games_meeting": 51,
-      "window_games": null,
-      "season_ab": 587,
-      "season_hits": 173,
-      "season_avg": 0.2947,
-      "last_match": "2026-09-13"
-    },
-    {
-      "player": "Yordan Alvarez",
-      "team": "HOU",
-      "games_meeting": 49,
-      "window_games": null,
-      "season_ab": 533,
-      "season_hits": 166,
-      "season_avg": 0.3114,
-      "last_match": "2026-09-17"
-    },
-    {
-      "player": "Freddie Freeman",
-      "team": "LAD",
-      "games_meeting": 49,
-      "window_games": null,
-      "season_ab": 546,
-      "season_hits": 161,
-      "season_avg": 0.2949,
-      "last_match": "2026-09-17"
-    },
-    {
-      "player": "Brandon Nimmo",
-      "team": "TEX",
-      "games_meeting": 46,
-      "window_games": null,
-      "season_ab": 559,
-      "season_hits": 147,
-      "season_avg": 0.263,
-      "last_match": "2026-09-13"
-    },
-    {
-      "player": "Alec Burleson",
-      "team": "STL",
-      "games_meeting": 45,
-      "window_games": null,
-      "season_ab": 577,
-      "season_hits": 164,
-      "season_avg": 0.2842,
-      "last_match": "2026-09-14"
-    },
-    {
-      "player": "Shohei Ohtani",
-      "team": "LAD",
-      "games_meeting": 44,
-      "window_games": null,
-      "season_ab": 502,
-      "season_hits": 154,
-      "season_avg": 0.3068,
-      "last_match": "2026-08-26"
-    },
-    {
-      "player": "Fernando Tatis Jr",
-      "team": "SD",
-      "games_meeting": 44,
-      "window_games": null,
-      "season_ab": 595,
-      "season_hits": 170,
-      "season_avg": 0.2857,
-      "last_match": "2026-09-13"
-    },
-    {
-      "player": "Josh Naylor",
-      "team": "SEA",
-      "games_meeting": 44,
-      "window_games": null,
-      "season_ab": 562,
-      "season_hits": 153,
-      "season_avg": 0.2722,
-      "last_match": "2026-09-16"
-    },
-    {
-      "player": "Michael Harris II",
-      "team": "ATL",
-      "games_meeting": 43,
-      "window_games": null,
-      "season_ab": 559,
-      "season_hits": 162,
-      "season_avg": 0.2898,
-      "last_match": "2026-09-14"
-    },
-    {
-      "player": "Jordan Walker",
-      "team": "STL",
-      "games_meeting": 43,
-      "window_games": null,
-      "season_ab": 575,
-      "season_hits": 160,
-      "season_avg": 0.2783,
-      "last_match": "2026-09-11"
-    },
-    {
-      "player": "Drake Baldwin",
-      "team": "ATL",
-      "games_meeting": 43,
-      "window_games": null,
-      "season_ab": 515,
-      "season_hits": 143,
-      "season_avg": 0.2777,
-      "last_match": "2026-09-15"
+      "season_ab": 545,
+      "season_hits": 144,
+      "season_avg": 0.2642,
+      "last_match": "2026-09-18"
     },
     {
       "player": "Junior Caminero",
       "team": "TB",
-      "games_meeting": 43,
+      "games_meeting": 41,
       "window_games": null,
-      "season_ab": 581,
-      "season_hits": 161,
-      "season_avg": 0.2771,
-      "last_match": "2026-09-08"
+      "season_ab": 584,
+      "season_hits": 162,
+      "season_avg": 0.2774,
+      "last_match": "2026-09-15"
     },
     {
-      "player": "William Contreras",
-      "team": "MIL",
-      "games_meeting": 43,
+      "player": "Pete Alonso",
+      "team": "BAL",
+      "games_meeting": 41,
       "window_games": null,
-      "season_ab": 538,
-      "season_hits": 146,
-      "season_avg": 0.2714,
-      "last_match": "2026-09-11"
+      "season_ab": 577,
+      "season_hits": 154,
+      "season_avg": 0.2669,
+      "last_match": "2026-09-18"
+    },
+    {
+      "player": "Matt Olson",
+      "team": "ATL",
+      "games_meeting": 40,
+      "window_games": null,
+      "season_ab": 597,
+      "season_hits": 151,
+      "season_avg": 0.2529,
+      "last_match": "2026-09-18"
+    },
+    {
+      "player": "Yordan Alvarez",
+      "team": "HOU",
+      "games_meeting": 39,
+      "window_games": null,
+      "season_ab": 535,
+      "season_hits": 167,
+      "season_avg": 0.3121,
+      "last_match": "2026-09-17"
+    },
+    {
+      "player": "Pete Crow Armstrong",
+      "team": "CHC",
+      "games_meeting": 39,
+      "window_games": null,
+      "season_ab": 597,
+      "season_hits": 167,
+      "season_avg": 0.2797,
+      "last_match": "2026-09-16"
+    },
+    {
+      "player": "Rafael Devers",
+      "team": "SF",
+      "games_meeting": 39,
+      "window_games": null,
+      "season_ab": 558,
+      "season_hits": 144,
+      "season_avg": 0.2581,
+      "last_match": "2026-09-12"
+    },
+    {
+      "player": "Kyle Schwarber",
+      "team": "PHI",
+      "games_meeting": 39,
+      "window_games": null,
+      "season_ab": 554,
+      "season_hits": 130,
+      "season_avg": 0.2347,
+      "last_match": "2026-09-15"
+    },
+    {
+      "player": "Shohei Ohtani",
+      "team": "LAD",
+      "games_meeting": 37,
+      "window_games": null,
+      "season_ab": 502,
+      "season_hits": 154,
+      "season_avg": 0.3068,
+      "last_match": "2026-08-18"
+    },
+    {
+      "player": "James Wood",
+      "team": "WSH",
+      "games_meeting": 35,
+      "window_games": null,
+      "season_ab": 479,
+      "season_hits": 127,
+      "season_avg": 0.2651,
+      "last_match": "2026-09-04"
+    },
+    {
+      "player": "Brandon Lowe",
+      "team": "PIT",
+      "games_meeting": 35,
+      "window_games": null,
+      "season_ab": 557,
+      "season_hits": 145,
+      "season_avg": 0.2603,
+      "last_match": "2026-09-18"
     },
     {
       "player": "Sal Stewart",
       "team": "CIN",
-      "games_meeting": 43,
+      "games_meeting": 34,
       "window_games": null,
       "season_ab": 587,
       "season_hits": 159,
@@ -195,24 +135,84 @@
       "last_match": "2026-09-17"
     },
     {
-      "player": "Jackson Merrill",
-      "team": "SD",
-      "games_meeting": 43,
+      "player": "CJ Abrams",
+      "team": "WSH",
+      "games_meeting": 34,
       "window_games": null,
-      "season_ab": 583,
-      "season_hits": 149,
-      "season_avg": 0.2556,
+      "season_ab": 546,
+      "season_hits": 144,
+      "season_avg": 0.2637,
+      "last_match": "2026-09-06"
+    },
+    {
+      "player": "Kazuma Okamoto",
+      "team": "TOR",
+      "games_meeting": 34,
+      "window_games": null,
+      "season_ab": 540,
+      "season_hits": 127,
+      "season_avg": 0.2352,
+      "last_match": "2026-09-14"
+    },
+    {
+      "player": "Bryce Harper",
+      "team": "PHI",
+      "games_meeting": 33,
+      "window_games": null,
+      "season_ab": 545,
+      "season_hits": 148,
+      "season_avg": 0.2716,
+      "last_match": "2026-09-13"
+    },
+    {
+      "player": "Jordan Walker",
+      "team": "STL",
+      "games_meeting": 32,
+      "window_games": null,
+      "season_ab": 578,
+      "season_hits": 161,
+      "season_avg": 0.2785,
+      "last_match": "2026-09-01"
+    },
+    {
+      "player": "Jake Bauers",
+      "team": "MIL",
+      "games_meeting": 32,
+      "window_games": null,
+      "season_ab": 451,
+      "season_hits": 121,
+      "season_avg": 0.2683,
+      "last_match": "2026-09-13"
+    },
+    {
+      "player": "Michael Harris II",
+      "team": "ATL",
+      "games_meeting": 31,
+      "window_games": null,
+      "season_ab": 564,
+      "season_hits": 165,
+      "season_avg": 0.2926,
+      "last_match": "2026-09-18"
+    },
+    {
+      "player": "Elly De La Cruz",
+      "team": "CIN",
+      "games_meeting": 31,
+      "window_games": null,
+      "season_ab": 530,
+      "season_hits": 152,
+      "season_avg": 0.2868,
       "last_match": "2026-09-16"
     },
     {
-      "player": "Gabriel Moreno",
-      "team": "ARI",
-      "games_meeting": 42,
+      "player": "Luis Garcia Jr",
+      "team": "WSH",
+      "games_meeting": 31,
       "window_games": null,
-      "season_ab": 443,
-      "season_hits": 136,
-      "season_avg": 0.307,
-      "last_match": "2026-09-16"
+      "season_ab": 494,
+      "season_hits": 140,
+      "season_avg": 0.2834,
+      "last_match": "2026-09-10"
     }
   ]
 }

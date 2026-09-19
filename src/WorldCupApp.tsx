@@ -176,18 +176,14 @@ function DivisionsView({ conferences }: { conferences: NflSeasonData['conference
   )
 }
 
-// ---------------- matchup library ----------------
-// Replaces the old score-card schedule view — {nfl.season}'s primary
-// purpose is shifting from a per-division standings/score page to a weekly
-// slate of actionable matchup commands, per the conversation this was
-// redesigned in. Confirmed layouts: mobile gets a day-grouped 2-column card
-// grid, desktop gets a single dense day/time/matchup table — deliberately
-// not the same widget scaled up, per the explicit design discussion.
-// Scores are dropped entirely here (matchup insight — career history vs
-// this opponent — is meaningful whether or not this week's game has been
-// played yet); the old GameCard scoreboard-style rendering is gone with it
-// rather than kept as unused dead code, since it's specifically the "current
-// per-division/score style" being moved away from, not a shelved feature.
+// ---------------- matchup library (shelved) ----------------
+// This was the page's PRIMARY content for one session, then superseded when
+// power rankings took over that role — see WeekMatchupStrip below for what
+// replaced it (a compact horizontal header instead of the full dense table /
+// card grid). Left defined-but-unused rather than deleted, same as
+// DivisionsView below: the full slate view (with day-grouping and a real
+// week nav) is one call-site change away if a "see the whole week" surface
+// is wanted again later, e.g. as its own expanded view off the strip.
 
 function MatchupTile({
   game,
@@ -330,97 +326,201 @@ function MatchupLibraryView({
   )
 }
 
+// ---------------- week matchup strip ----------------
+// The weekly slate's new role: a compact, static horizontal header instead
+// of the page's main content — power rankings took that job over (see
+// below). One flat row per week (no day-grouping — that was useful when
+// this was the thing to browse, not when it's a glanceable header), same
+// week nav as before, same click-through into MatchupInsightOverlay via the
+// bracket-button affordance already established.
+
+function WeekMatchupStrip({
+  games,
+  totalWeeks,
+  abbrMap,
+  initialWeek,
+  onMatchupClick,
+}: {
+  games: Game[]
+  totalWeeks: number
+  abbrMap: Record<string, string>
+  initialWeek: number
+  onMatchupClick: (teamA: string, teamB: string) => void
+}) {
+  const [week, setWeek] = useState(initialWeek)
+  const weekGames = useMemo(() => games.filter((g) => g.week === week), [games, week])
+
+  return (
+    <div className="shrink-0">
+      <div className="flex items-center gap-3 mb-2">
+        <button type="button" onClick={() => setWeek((w) => Math.max(1, w - 1))} disabled={week === 1}
+          className="font-mono text-[16px] hover:opacity-70 transition-opacity disabled:opacity-20" style={{ color: C.accent }}>
+          ←
+        </button>
+        <span className="font-mono text-[13px]" style={{ color: C.value }}>
+          week <span style={{ color: C.accent }}>{week}</span>
+          <span style={{ color: C.label }}> · {totalWeeks}</span>
+        </span>
+        <button type="button" onClick={() => setWeek((w) => Math.min(totalWeeks, w + 1))} disabled={week === totalWeeks}
+          className="font-mono text-[16px] hover:opacity-70 transition-opacity disabled:opacity-20" style={{ color: C.accent }}>
+          →
+        </button>
+      </div>
+      <div className="flex gap-2 overflow-x-auto pb-2" style={{ scrollbarWidth: 'thin' }}>
+        {weekGames.length === 0 && (
+          <div className="font-mono text-[12px]" style={{ color: C.dim }}>schedule data pending</div>
+        )}
+        {weekGames.map((g, i) => {
+          const awayAbbr = abbrMap[g.awayTeam] ?? g.awayTeam.slice(0, 3).toUpperCase()
+          const homeAbbr = abbrMap[g.homeTeam] ?? g.homeTeam.slice(0, 3).toUpperCase()
+          return (
+            <button
+              key={i}
+              type="button"
+              onClick={() => onMatchupClick(awayAbbr, homeAbbr)}
+              className="shrink-0 rounded px-2.5 py-1.5 text-left hover:opacity-80 transition-opacity"
+              style={{ backgroundColor: 'oklch(0.10 0 0)', border: `1px solid ${C.green}` }}
+            >
+              <div className="font-mono text-[12px] font-bold whitespace-nowrap" style={{ color: C.accent }}>
+                {`{${awayAbbr} @ ${homeAbbr}}`}
+              </div>
+              <div className="font-mono text-[9px] uppercase tracking-wider" style={{ color: C.label }}>
+                {g.gameDate || 'tbd'} · {g.gameTime || 'tbd'}
+              </div>
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 // ---------------- power rankings ----------------
 // `nfl-power-rankings` engine — a backend-computed weekly composite score
-// per team. Styled after the existing {leaderboard} panel's row grammar
-// (rank/label/secondary/score, same color roles) but scaled up: this is a
-// full 32-team list, not a top-N, and desktop has the spare vertical space
-// in the dense matchup table to show all of it without scrolling — 16
-// teams per row, 2 rows, per the design call. Mobile gets its own
-// {nfl.rankings} button into a scrollable overlay instead, since a phone
-// screen doesn't have that spare room.
+// per team. This is now {nfl.rankings}'s PRIMARY content (the layout
+// inversion this was rebuilt for — see the conversation this was scoped in:
+// power rankings dominates, the weekly slate above is just a glanceable
+// strip now). Styled after the existing {leaderboard} panel's row grammar
+// (rank/label/secondary/score, same color roles). Desktop keeps the
+// no-scroll 16-per-row/2-row layout; mobile gets fewer columns (still no
+// separate overlay needed now — this IS the page, not a strip squeezed
+// under something else).
+// Team tiles are clickable into a team-only overview (record, time of
+// possession, red zone %, point margin — no roster, that stays in
+// MatchupInsightOverlay's player-level detail) built entirely from this
+// same payload's row data, no extra fetch needed.
 
 function formatRecord(row: PowerRankingsRow): string {
   return row.ties ? `${row.wins}-${row.losses}-${row.ties}` : `${row.wins}-${row.losses}`
 }
 
-function RankingTile({ row }: { row: PowerRankingsRow }) {
+function RankingTile({ row, onSelect }: { row: PowerRankingsRow; onSelect: (team: string) => void }) {
   return (
-    <div
-      className="rounded px-2 py-1.5 flex flex-col gap-1"
+    <button
+      type="button"
+      onClick={() => onSelect(row.team)}
+      className="rounded px-2 py-1.5 flex flex-col gap-1 text-left hover:opacity-80 transition-opacity"
       style={{ backgroundColor: 'oklch(0.10 0 0)', border: `1px solid ${C.border}` }}
     >
       <div className="flex items-baseline gap-1.5">
         <span className="font-mono text-[11px]" style={{ color: C.dim }}>{row.rank}</span>
-        <span className="font-mono text-[15px] font-bold" style={{ color: C.value }}>{row.team}</span>
+        <span className="font-mono text-[15px] font-bold" style={{ color: C.accent }}>{`{${row.team}}`}</span>
       </div>
       <div className="flex items-baseline justify-between">
         <span className="font-mono text-[11px]" style={{ color: C.label }}>{formatRecord(row)}</span>
         <span className="font-mono text-[13px] font-bold" style={{ color: C.green }}>{row.power_score.toFixed(1)}</span>
       </div>
-    </div>
+    </button>
   )
 }
 
-function PowerRankingsGrid({ rows }: { rows: PowerRankingsRow[] }) {
+function PowerRankingsGrid({ rows, onSelectTeam }: { rows: PowerRankingsRow[]; onSelectTeam: (team: string) => void }) {
+  const isMobile = useIsMobile()
   return (
-    <div className="grid gap-1.5" style={{ gridTemplateColumns: 'repeat(16, minmax(0, 1fr))' }}>
-      {rows.map((row) => <RankingTile key={row.team} row={row} />)}
+    <div className="grid gap-1.5" style={{ gridTemplateColumns: `repeat(${isMobile ? 4 : 16}, minmax(0, 1fr))` }}>
+      {rows.map((row) => <RankingTile key={row.team} row={row} onSelect={onSelectTeam} />)}
     </div>
   )
 }
 
-function PowerRankingsOverlay({
-  open,
+function formatPossession(seconds: number | undefined): string {
+  if (seconds == null) return '—'
+  const m = Math.floor(seconds / 60)
+  const s = Math.round(seconds % 60)
+  return `${m}:${s.toString().padStart(2, '0')}`
+}
+
+function formatPct(pct: number | undefined): string {
+  return pct == null ? '—' : `${(pct * 100).toFixed(1)}%`
+}
+
+function formatMargin(margin: number | undefined): string {
+  if (margin == null) return '—'
+  return margin > 0 ? `+${margin}` : `${margin}`
+}
+
+function TeamOverviewOverlay({
+  team,
   onClose,
-  rows,
 }: {
-  open: boolean
+  team: PowerRankingsRow | null
   onClose: () => void
-  rows: PowerRankingsRow[]
 }) {
-  if (!open) return null
+  if (!team) return null
   return (
     <div
-      className="fixed inset-0 z-50 flex flex-col"
-      style={{ backgroundColor: 'oklch(0.08 0 0)', fontFamily: 'monospace' }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ backgroundColor: 'rgba(0,0,0,0.80)' }}
+      onClick={onClose}
       role="dialog"
       aria-modal="true"
     >
       <div
-        className="flex items-center justify-between px-4 py-3 flex-none"
-        style={{ backgroundColor: 'oklch(0.14 0 0)', borderBottom: `1px solid ${C.border}` }}
+        className="w-full max-w-[420px] rounded-lg overflow-hidden shadow-2xl"
+        style={{ backgroundColor: 'oklch(0.12 0 0)', border: `1px solid ${C.border}`, fontFamily: 'monospace' }}
+        onClick={(e) => e.stopPropagation()}
       >
-        <span className="font-mono font-bold text-[17px]" style={{ color: C.accent }}>{'{nfl.rankings}'}</span>
-        <button
-          type="button"
-          onClick={onClose}
-          className="font-mono text-[18px] hover:opacity-70 transition-opacity"
-          style={{ color: C.accent }}
-          aria-label="Close"
+        <div
+          className="flex items-center justify-between px-5 py-3"
+          style={{ backgroundColor: 'oklch(0.16 0 0)', borderBottom: `1px solid ${C.border}` }}
         >
-          ✕
-        </button>
-      </div>
-      <div
-        className="grid items-center px-4 py-2 font-mono text-[12px] uppercase tracking-widest sticky top-0"
-        style={{ gridTemplateColumns: '32px 1fr 72px 72px', gap: '8px', backgroundColor: 'oklch(0.12 0 0)', borderBottom: `1px solid ${C.border}`, color: C.dim }}
-      >
-        <span>#</span><span>team</span><span>record</span><span className="text-right">score</span>
-      </div>
-      <div className="flex-1 overflow-y-auto">
-        {rows.map((row, idx) => (
-          <div
-            key={row.team}
-            className="grid items-center px-4 py-2.5 font-mono text-[16px]"
-            style={{ gridTemplateColumns: '32px 1fr 72px 72px', gap: '8px', borderBottom: idx === rows.length - 1 ? 'none' : `1px solid oklch(0.16 0 0)` }}
+          <span className="font-mono font-bold text-[15px]" style={{ color: C.accent }}>{`{${team.team}}`}</span>
+          <button
+            type="button"
+            onClick={onClose}
+            className="font-mono text-[16px] hover:opacity-70 transition-opacity"
+            style={{ color: C.accent }}
+            aria-label="Close"
           >
-            <span style={{ color: C.dim }}>{row.rank}</span>
-            <span className="font-bold" style={{ color: C.value }}>{row.team}</span>
-            <span style={{ color: C.label }}>{formatRecord(row)}</span>
-            <span className="text-right font-bold" style={{ color: C.green }}>{row.power_score.toFixed(1)}</span>
+            ✕
+          </button>
+        </div>
+        <div className="px-5 py-4 space-y-4">
+          <div className="flex items-baseline justify-between">
+            <span className="font-mono text-[12px] uppercase tracking-widest" style={{ color: C.label }}>record</span>
+            <span className="font-mono text-[16px] font-bold" style={{ color: C.value }}>{formatRecord(team)}</span>
           </div>
-        ))}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <div className="font-mono text-[10px] uppercase tracking-widest" style={{ color: C.label }}>time of poss.</div>
+              <div className="font-mono text-[16px] font-bold" style={{ color: C.value }}>{formatPossession(team.avg_possession_seconds as number | undefined)}</div>
+            </div>
+            <div>
+              <div className="font-mono text-[10px] uppercase tracking-widest" style={{ color: C.label }}>red zone %</div>
+              <div className="font-mono text-[16px] font-bold" style={{ color: C.value }}>{formatPct(team.red_zone_pct as number | undefined)}</div>
+            </div>
+            <div>
+              <div className="font-mono text-[10px] uppercase tracking-widest" style={{ color: C.label }}>pts margin</div>
+              <div className="font-mono text-[16px] font-bold" style={{ color: (team.point_margin ?? 0) >= 0 ? C.green : 'oklch(0.75 0.15 30)' }}>
+                {formatMargin(team.point_margin)}
+              </div>
+            </div>
+            <div>
+              <div className="font-mono text-[10px] uppercase tracking-widest" style={{ color: C.label }}>power score</div>
+              <div className="font-mono text-[16px] font-bold" style={{ color: C.green }}>{team.power_score.toFixed(1)}</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )
@@ -439,12 +539,12 @@ function PlayoffsView() {
 
 // ---------------- page ----------------
 
-type ActiveView = 'season' | 'schedule' | 'playoffs'
+type ActiveView = 'rankings' | 'schedule' | 'playoffs'
 
 export default function WorldCupApp() {
   const data = nflData as unknown as NflSeasonData
   const schedule = scheduleData as unknown as ScheduleData
-  const [activeView, setActiveView] = useState<ActiveView>('season')
+  const [activeView, setActiveView] = useState<ActiveView>('rankings')
   const abbrMap = useMemo(() => buildAbbrMap(data), [data])
   const weekLabel = data.current_week != null
     ? `week ${data.current_week} · ${data.total_weeks}`
@@ -498,13 +598,11 @@ export default function WorldCupApp() {
     }
   }
 
-  const isMobile = useIsMobile()
   const [powerRankings, setPowerRankings] = useState<PowerRankingsPayload | null>(null)
-  const [isRankingsOverlayOpen, setIsRankingsOverlayOpen] = useState(false)
+  const [selectedTeam, setSelectedTeam] = useState<PowerRankingsRow | null>(null)
   // Fetched once on page load rather than click-triggered like matchup
-  // insight — this fills fixed on-screen space (the dense desktop table's
-  // spare room, a dedicated mobile overlay) rather than responding to a
-  // specific user action, so it should just be there when the page is.
+  // insight — power rankings is this page's primary content now, so it
+  // should just be there when the page is, not behind an action.
   useEffect(() => {
     let cancelled = false
     ;(async () => {
@@ -538,7 +636,7 @@ export default function WorldCupApp() {
             ← nspe.dev
           </a>
           <div className="font-mono text-[26px] mt-1" style={{ color: C.value }}>
-            <span style={{ color: C.accent }}>nfl.season</span>
+            <span style={{ color: C.accent }}>nfl.rankings</span>
             <span style={{ color: C.label }}>{' · '}</span>
             <span style={{ color: C.green }}>{data.season}</span>
           </div>
@@ -546,15 +644,13 @@ export default function WorldCupApp() {
         </div>
 
         <div className="flex items-center gap-5 pt-2">
-          {/* {nfl.schedule}'s tab button is hidden, not removed — the tab
-              nav entry point isn't in use for now, since this whole view is
-              slated to become "the official matchup library" (a weekly
-              slate of actionable matchup commands) rather than keeping its
-              current per-division/score-card style. ScheduleView, GameCard,
-              and the mobile matchup buttons all stay wired underneath;
-              route/state (activeView) is untouched, just unreachable via
-              this nav until that redesign happens. */}
-          {(['season'] as const).map((view) => (
+          {/* {nfl.schedule}'s tab button is hidden, not removed — standings
+              (DivisionsView) live on this same 'schedule' activeView slot,
+              just unreachable via nav for now. See the comment above the
+              'rankings' section below for how the page itself was
+              restructured (rankings primary, matchup slate demoted to a
+              header strip). */}
+          {(['rankings'] as const).map((view) => (
             <button key={view} type="button" onClick={() => setActiveView(view)}
               className="font-mono font-bold text-[18px] underline-offset-4 hover:opacity-80 transition-opacity whitespace-nowrap"
               style={{ color: activeView === view ? C.accent : C.label, textDecoration: activeView === view ? 'underline' : 'none' }}>
@@ -570,41 +666,35 @@ export default function WorldCupApp() {
       </div>
 
       <div className="relative z-10 h-full pt-32 pb-8 px-6 max-w-[1480px] mx-auto">
-        {/* {nfl.season} now IS the matchup library, per the redesign
-            discussion — this replaces the old per-division standings as
-            the tab's primary content. DivisionsView isn't deleted, just
-            shelved onto the still-hidden 'schedule' activeView slot below
-            (unreachable via nav right now, same as before) so standings
-            stay one small nav change away if they need to come back. */}
-        {activeView === 'season' && (
+        {/* {nfl.rankings} — power rankings is now the page's primary
+            content (layout inversion from the previous matchup-library
+            build, per the conversation this was rescoped in). The weekly
+            slate that used to be the main event is now WeekMatchupStrip, a
+            compact static header above the rankings grid rather than the
+            centerpiece. DivisionsView isn't deleted, just shelved onto the
+            still-hidden 'schedule' activeView slot below. */}
+        {activeView === 'rankings' && (
           <section className="h-full flex flex-col">
-            {/* Dropped the total-season game count that used to sit here
-                ("· 272 games") — easy to misread as this week's count when
-                it was actually the full-season total. */}
-            <div className="font-mono text-[14px] uppercase tracking-widest mb-3 shrink-0" style={{ color: C.label }}>
-              this week's matchups
+            <WeekMatchupStrip
+              games={schedule.games}
+              totalWeeks={data.total_weeks}
+              abbrMap={abbrMap}
+              initialWeek={initialScheduleWeek}
+              onMatchupClick={requestMatchup}
+            />
+            <div className="font-mono text-[14px] uppercase tracking-widest mt-4 mb-2 shrink-0" style={{ color: C.label }}>
+              power rankings
             </div>
-            <div className={isMobile ? 'flex-1 min-h-0' : 'flex-1 min-h-0 basis-0'}>
-              <MatchupLibraryView
-                games={schedule.games}
-                totalWeeks={data.total_weeks}
-                abbrMap={abbrMap}
-                initialWeek={initialScheduleWeek}
-                onMatchupClick={requestMatchup}
-              />
+            <div className="flex-1 min-h-0 overflow-y-auto">
+              {powerRankings ? (
+                <PowerRankingsGrid rows={powerRankings.results} onSelectTeam={(team) => {
+                  const row = powerRankings.results.find((r) => r.team === team)
+                  if (row) setSelectedTeam(row)
+                }} />
+              ) : (
+                <div className="font-mono text-[13px]" style={{ color: C.dim }}>loading power rankings…</div>
+              )}
             </div>
-            {/* Power rankings: desktop only, filling the spare vertical room
-                the dense table leaves — mobile gets the same data through
-                the {nfl.rankings} button/overlay instead of squeezing it
-                into an already-tight layout. */}
-            {!isMobile && powerRankings && (
-              <div className="shrink-0 mt-4 pt-3" style={{ borderTop: `1px solid ${C.border}` }}>
-                <div className="font-mono text-[14px] uppercase tracking-widest mb-2" style={{ color: C.label }}>
-                  power rankings
-                </div>
-                <PowerRankingsGrid rows={powerRankings.results} />
-              </div>
-            )}
           </section>
         )}
         {activeView === 'schedule' && (
@@ -630,19 +720,8 @@ export default function WorldCupApp() {
           loading matchup…
         </div>
       )}
-      {isMobile && powerRankings && (
-        <button
-          type="button"
-          onClick={() => setIsRankingsOverlayOpen(true)}
-          className="fixed bottom-3 right-4 z-20 font-mono font-bold text-[16px] rounded px-3.5 py-2 hover:opacity-90 transition-opacity"
-          style={{ backgroundColor: 'oklch(0.16 0 0)', border: `1px solid ${C.border}`, color: C.accent }}
-          aria-label="Open power rankings"
-        >
-          {'{nfl.rankings}'}
-        </button>
-      )}
       <MatchupInsightOverlay open={isMatchupOpen} onClose={() => setIsMatchupOpen(false)} payload={matchupResult} />
-      <PowerRankingsOverlay open={isRankingsOverlayOpen} onClose={() => setIsRankingsOverlayOpen(false)} rows={powerRankings?.results ?? []} />
+      <TeamOverviewOverlay team={selectedTeam} onClose={() => setSelectedTeam(null)} />
     </div>
   )
 }
