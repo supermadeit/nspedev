@@ -34,15 +34,14 @@ export interface SampleQuery {
   /** Short scannable label, e.g. "nba trend · pts (1h)". */
   label: string
   command: string
-  // Lowercase substring of a real player's display name — set only on
-  // commands that showcase one specific player (mostly -ov and h2h). Used
-  // to surface this command in the predictive dropdown alongside that
-  // player's own profile match (e.g. typing "mahomes" shows both Patrick
-  // Mahomes' profile AND this command) — see App.tsx's
-  // playerSpotlightMatches. Matched via `entry.name.toLowerCase().includes
-  // (playerHint)`, not an exact slug, so it survives name-formatting
-  // differences between this catalog and the live player index without
-  // needing to know real slugs ahead of time.
+  // The literal substring inside THIS entry's own `command` that stands in
+  // for "a player" — set only on commands that showcase one specific player
+  // (mostly -ov and h2h). findPlayerSpotlightCommands (syntaxSuggestions.ts)
+  // replaces it with whichever real player the live search currently has
+  // topping the match list, so e.g. "nspe nfl long mahomes -ov" surfaces for
+  // ANY searched player, not just Mahomes — must exactly match a substring
+  // of `command` above (not the player's full real name) or the swap silently
+  // no-ops.
   playerHint?: string
 }
 
@@ -82,10 +81,16 @@ const NFL_COMMANDS: SampleQuery[] = [
   { label: 'nfl overview · long (-ov)', command: 'nspe nfl long mahomes -ov', playerHint: 'mahomes' },
   { label: 'nfl overview · 1h (-ov, career)', command: 'nspe nfl 1h dak -ov -career', playerHint: 'dak' },
   { label: 'nfl overview · q1 (-ov)', command: 'nspe nfl q1 kenneth -ov', playerHint: 'kenneth' },
-  { label: 'nfl overview · long (-ov, range)', command: 'nspe nfl long lamar -ov', playerHint: 'lamar jackson' },
+  { label: 'nfl overview · long (-ov, range)', command: 'nspe nfl long lamar -ov', playerHint: 'lamar' },
   { label: 'nfl overview · long (-ov)', command: 'nspe nfl long caleb -ov', playerHint: 'caleb' },
   { label: 'nfl overview · long (-ov)', command: 'nspe nfl long dak -ov 2025', playerHint: 'dak' },
   { label: 'nfl overview · q1 (-ov)', command: 'nspe nfl q1 dak -ov -career', playerHint: 'dak' },
+  // -statN -ov — third -ov shape (see nspe-payloads.ts's
+  // NflOverviewStatNPayload comment): "how many games has this player hit
+  // >=N of this stat," own match list, own view. No window defaults to
+  // current season; -career and YYYY-YYYY are also allowed, same as the
+  // other -ov variants above.
+  { label: 'nfl overview · 1h -yds150 (-ov, career)', command: 'nspe nfl dak 1h -yds150 -ov -career', playerHint: 'dak' },
   // h2h — divisional opponent (WSH is a real NFC East rival of DAL)
   { label: 'nfl h2h (career)', command: 'nspe nfl dak vs wsh -career', playerHint: 'dak' },
   // "-week" — career performance in one week number across every season,
@@ -156,6 +161,7 @@ const NBA_COMMANDS: SampleQuery[] = [
   { label: 'nba trend · blk', command: 'nspe nba -blk3 -last2/4' },
   { label: 'nba trend · stl', command: 'nspe nba -stl3 -last3/5' },
   { label: 'nba trend · total (pts+reb+ast)', command: 'nspe nba -total50 -last1/3' },
+  { label: 'nba trend · total (pts+reb+ast)', command: 'nspe nba -total40 -last2/4' },
   // Combo stats use each half separately dash-flagged, slash-joined
   // ("-pts/-ast35") — confirmed against a real backend response; sending
   // the old "-pts+ast35" form returns no results even locally.
@@ -172,6 +178,11 @@ const NBA_COMMANDS: SampleQuery[] = [
   { label: 'nba compute · reb', command: 'nspe nba -reb min60 -last10' },
   { label: 'nba compute · ast', command: 'nspe nba -ast min40 -last10' },
   { label: 'nba compute · total', command: 'nspe nba -total min80 -season' },
+  // Pinned to 2025, not bare -season — the 2026 season just started, so
+  // nobody would clear a 2000 cumulative pts+reb+ast threshold yet. Year
+  // filter is real, working QueryBuilder syntax (see QueryBuilder.tsx's
+  // builtCommand comment, "-season 2025"), not a new grammar.
+  { label: 'nba compute · total (2025)', command: 'nspe nba -total min2000 -season 2025' },
   { label: 'nba compute · 3pm', command: 'nspe nba -tpm min20 -last10' },
   // streak
   { label: 'nba streak · pts', command: 'nspe nba -pts20 -streak3' },
@@ -183,11 +194,19 @@ const NBA_COMMANDS: SampleQuery[] = [
 const NHL_COMMANDS: SampleQuery[] = [
   // trend
   { label: 'nhl trend · goals', command: 'nspe nhl -g1 -last2/5' },
-  { label: 'nhl trend · assists', command: 'nspe nhl -a1 -last2/5' },
+  // Real token is -ast, not -a — confirmed live against utils/nspe_cli.py;
+  // -a1 errored ("Unrecognized token for compute parser: a") on the actual
+  // backend. See nspedev-next-session-punchlist-2026-09-17 item 7.
+  { label: 'nhl trend · assists', command: 'nspe nhl -ast1 -last2/5' },
   { label: 'nhl trend · points', command: 'nspe nhl -pts2 -last3/5' },
   { label: 'nhl trend · shots on goal', command: 'nspe nhl -sog4 -last3/5' },
-  { label: 'nhl trend · blocks', command: 'nspe nhl -blk2 -last3/5' },
-  { label: 'nhl trend · penalty minutes', command: 'nspe nhl -pim2 -last2/5' },
+  // Blocks (-blk) and penalty minutes (-pim) shelved, not deleted — confirmed
+  // broken against the live backend (see punchlist item 7): raw NHL scrape
+  // data has no blocked-shots field at all (not a code fix, needs a scraper
+  // change), and pim is scraped but never wired into the stat vocabulary.
+  // Restore once the backend side is fixed.
+  // { label: 'nhl trend · blocks', command: 'nspe nhl -blk2 -last3/5' },
+  // { label: 'nhl trend · penalty minutes', command: 'nspe nhl -pim2 -last2/5' },
   { label: 'nhl trend · goals (single game)', command: 'nspe nhl -g1 -last1/1' },
   { label: 'nhl trend · sog (single game)', command: 'nspe nhl -sog5 -last1/1' },
   // period (p1 = first period, nhl's q1 equivalent)
@@ -196,10 +215,11 @@ const NHL_COMMANDS: SampleQuery[] = [
   { label: 'nhl trend · sog (p1)', command: 'nspe nhl p1 -sog2 -last2/5' },
   // compute
   { label: 'nhl compute · goals', command: 'nspe nhl -g min10 -last10' },
-  { label: 'nhl compute · assists', command: 'nspe nhl -a min15 -last10' },
+  { label: 'nhl compute · assists', command: 'nspe nhl -ast min15 -last10' },
   { label: 'nhl compute · points', command: 'nspe nhl -pts min25 -last10' },
   { label: 'nhl compute · sog', command: 'nspe nhl -sog min50 -last10' },
-  { label: 'nhl compute · blocks', command: 'nspe nhl -blk min20 -last10' },
+  // Shelved alongside the trend -blk entry above — same missing-data root cause.
+  // { label: 'nhl compute · blocks', command: 'nspe nhl -blk min20 -last10' },
   // streak
   { label: 'nhl streak · points', command: 'nspe nhl -pts1 -streak5' },
   { label: 'nhl streak · goals', command: 'nspe nhl -g1 -streak3' },

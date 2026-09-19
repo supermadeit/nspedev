@@ -1,218 +1,415 @@
 {
-  "kind": "mlb_stat_leaderboard",
-  "generated_at": "2026-09-19T10:44:52.306888Z",
+  "engine": "nfl_overview_statn",
+  "mode": "quarter",
+  "scope": "1h",
   "query": {
-    "stat": "tb",
-    "field": "TB",
-    "short": "TB",
-    "threshold": 4,
-    "year": 2026,
-    "last_n": null
+    "player": "DakPrescott",
+    "category": "pass",
+    "threshold": 150,
+    "stat_kind": "yds",
+    "window_label": "career"
   },
-  "thresholds": {
-    "min_ab_season": 20,
-    "top_n": 20
-  },
-  "rows": [
+  "count": 57,
+  "window": 140,
+  "matches": [
     {
-      "player": "Ben Rice",
-      "team": "NYY",
-      "games_meeting": 42,
-      "window_games": null,
-      "season_ab": 545,
-      "season_hits": 144,
-      "season_avg": 0.2642,
-      "last_match": "2026-09-18"
+      "game_id": "401772710",
+      "value": 174,
+      "seasonYear": "2025",
+      "opponent": "WSH",
+      "date_iso": "2025-12-25"
     },
     {
-      "player": "Junior Caminero",
-      "team": "TB",
-      "games_meeting": 41,
-      "window_games": null,
-      "season_ab": 584,
-      "season_hits": 162,
-      "season_avg": 0.2774,
-      "last_match": "2026-09-15"
+      "game_id": "401772910",
+      "value": 156,
+      "seasonYear": "2025",
+      "opponent": "LAC",
+      "date_iso": "2025-12-21"
     },
     {
-      "player": "Pete Alonso",
-      "team": "BAL",
-      "games_meeting": 41,
-      "window_games": null,
-      "season_ab": 577,
-      "season_hits": 154,
-      "season_avg": 0.2669,
-      "last_match": "2026-09-18"
+      "game_id": "401772947",
+      "value": 151,
+      "seasonYear": "2025",
+      "opponent": "DET",
+      "date_iso": "2025-12-04"
     },
     {
-      "player": "Matt Olson",
-      "team": "ATL",
-      "games_meeting": 40,
-      "window_games": null,
-      "season_ab": 597,
-      "season_hits": 151,
-      "season_avg": 0.2529,
-      "last_match": "2026-09-18"
+      "game_id": "401772694",
+      "value": 160,
+      "seasonYear": "2025",
+      "opponent": "KC",
+      "date_iso": "2025-11-27"
     },
     {
-      "player": "Yordan Alvarez",
-      "team": "HOU",
-      "games_meeting": 39,
-      "window_games": null,
-      "season_ab": 535,
-      "season_hits": 167,
-      "season_avg": 0.3121,
-      "last_match": "2026-09-17"
+      "game_id": "401772890",
+      "value": 159,
+      "seasonYear": "2025",
+      "opponent": "PHI",
+      "date_iso": "2025-11-23"
     },
     {
-      "player": "Pete Crow Armstrong",
-      "team": "CHC",
-      "games_meeting": 39,
-      "window_games": null,
-      "season_ab": 597,
-      "season_hits": 167,
-      "season_avg": 0.2797,
-      "last_match": "2026-09-16"
+      "game_id": "401772819",
+      "value": 185,
+      "seasonYear": "2025",
+      "opponent": "LV",
+      "date_iso": "2025-11-17"
     },
     {
-      "player": "Rafael Devers",
-      "team": "SF",
-      "games_meeting": 39,
-      "window_games": null,
-      "season_ab": 558,
-      "season_hits": 144,
-      "season_avg": 0.2581,
-      "last_match": "2026-09-12"
+      "game_id": "401772864",
+      "value": 207,
+      "seasonYear": "2025",
+      "opponent": "WSH",
+      "date_iso": "2025-10-19"
     },
     {
-      "player": "Kyle Schwarber",
-      "team": "PHI",
-      "games_meeting": 39,
-      "window_games": null,
-      "season_ab": 554,
-      "season_hits": 130,
-      "season_avg": 0.2347,
-      "last_match": "2026-09-15"
+      "game_id": "401772850",
+      "value": 164,
+      "seasonYear": "2025",
+      "opponent": "NYJ",
+      "date_iso": "2025-10-05"
     },
     {
-      "player": "Shohei Ohtani",
-      "team": "LAD",
-      "games_meeting": 37,
-      "window_games": null,
-      "season_ab": 502,
-      "season_hits": 154,
-      "season_avg": 0.3068,
-      "last_match": "2026-08-18"
+      "game_id": "401671784",
+      "value": 203,
+      "seasonYear": "2024",
+      "opponent": "PIT",
+      "date_iso": "2024-10-06"
     },
     {
-      "player": "James Wood",
-      "team": "WSH",
-      "games_meeting": 35,
-      "window_games": null,
-      "season_ab": 479,
-      "season_hits": 127,
-      "season_avg": 0.2651,
-      "last_match": "2026-09-04"
+      "game_id": "401671812",
+      "value": 154,
+      "seasonYear": "2024",
+      "opponent": "NYG",
+      "date_iso": "2024-09-26"
     },
     {
-      "player": "Brandon Lowe",
-      "team": "PIT",
-      "games_meeting": 35,
-      "window_games": null,
-      "season_ab": 557,
-      "season_hits": 145,
-      "season_avg": 0.2603,
-      "last_match": "2026-09-18"
+      "game_id": "401671709",
+      "value": 184,
+      "seasonYear": "2024",
+      "opponent": "NO",
+      "date_iso": "2024-09-15"
     },
     {
-      "player": "Sal Stewart",
-      "team": "CIN",
-      "games_meeting": 34,
-      "window_games": null,
-      "season_ab": 587,
-      "season_hits": 159,
-      "season_avg": 0.2709,
-      "last_match": "2026-09-17"
+      "game_id": "401671761",
+      "value": 156,
+      "seasonYear": "2024",
+      "opponent": "CLE",
+      "date_iso": "2024-09-08"
     },
     {
-      "player": "CJ Abrams",
-      "team": "WSH",
-      "games_meeting": 34,
-      "window_games": null,
-      "season_ab": 546,
-      "season_hits": 144,
-      "season_avg": 0.2637,
-      "last_match": "2026-09-06"
+      "game_id": "401547653",
+      "value": 182,
+      "seasonYear": "2023",
+      "opponent": "WSH",
+      "date_iso": "2024-01-07"
     },
     {
-      "player": "Kazuma Okamoto",
-      "team": "TOR",
-      "games_meeting": 34,
-      "window_games": null,
-      "season_ab": 540,
-      "season_hits": 127,
-      "season_avg": 0.2352,
-      "last_match": "2026-09-14"
+      "game_id": "401547624",
+      "value": 211,
+      "seasonYear": "2023",
+      "opponent": "DET",
+      "date_iso": "2023-12-30"
     },
     {
-      "player": "Bryce Harper",
-      "team": "PHI",
-      "games_meeting": 33,
-      "window_games": null,
-      "season_ab": 545,
-      "season_hits": 148,
-      "season_avg": 0.2716,
-      "last_match": "2026-09-13"
+      "game_id": "401547590",
+      "value": 172,
+      "seasonYear": "2023",
+      "opponent": "PHI",
+      "date_iso": "2023-12-10"
     },
     {
-      "player": "Jordan Walker",
-      "team": "STL",
-      "games_meeting": 32,
-      "window_games": null,
-      "season_ab": 578,
-      "season_hits": 161,
-      "season_avg": 0.2785,
-      "last_match": "2026-09-01"
+      "game_id": "401547566",
+      "value": 206,
+      "seasonYear": "2023",
+      "opponent": "SEA",
+      "date_iso": "2023-11-30"
     },
     {
-      "player": "Jake Bauers",
-      "team": "MIL",
-      "games_meeting": 32,
-      "window_games": null,
-      "season_ab": 451,
-      "season_hits": 121,
-      "season_avg": 0.2683,
-      "last_match": "2026-09-13"
+      "game_id": "401547551",
+      "value": 215,
+      "seasonYear": "2023",
+      "opponent": "WSH",
+      "date_iso": "2023-11-23"
     },
     {
-      "player": "Michael Harris II",
-      "team": "ATL",
-      "games_meeting": 31,
-      "window_games": null,
-      "season_ab": 564,
-      "season_hits": 165,
-      "season_avg": 0.2926,
-      "last_match": "2026-09-18"
+      "game_id": "401547534",
+      "value": 239,
+      "seasonYear": "2023",
+      "opponent": "NYG",
+      "date_iso": "2023-11-12"
     },
     {
-      "player": "Elly De La Cruz",
-      "team": "CIN",
-      "games_meeting": 31,
-      "window_games": null,
-      "season_ab": 530,
-      "season_hits": 152,
-      "season_avg": 0.2868,
-      "last_match": "2026-09-16"
+      "game_id": "401547522",
+      "value": 153,
+      "seasonYear": "2023",
+      "opponent": "PHI",
+      "date_iso": "2023-11-05"
     },
     {
-      "player": "Luis Garcia Jr",
-      "team": "WSH",
-      "games_meeting": 31,
-      "window_games": null,
-      "season_ab": 494,
-      "season_hits": 140,
-      "season_avg": 0.2834,
-      "last_match": "2026-09-10"
+      "game_id": "401547505",
+      "value": 225,
+      "seasonYear": "2023",
+      "opponent": "LAR",
+      "date_iso": "2023-10-29"
+    },
+    {
+      "game_id": "401547482",
+      "value": 176,
+      "seasonYear": "2023",
+      "opponent": "LAC",
+      "date_iso": "2023-10-16"
+    },
+    {
+      "game_id": "401547453",
+      "value": 196,
+      "seasonYear": "2023",
+      "opponent": "NE",
+      "date_iso": "2023-10-01"
+    },
+    {
+      "game_id": "401437932",
+      "value": 150,
+      "seasonYear": "2022",
+      "opponent": "TEN",
+      "date_iso": "2022-12-29"
+    },
+    {
+      "game_id": "401437927",
+      "value": 168,
+      "seasonYear": "2022",
+      "opponent": "PHI",
+      "date_iso": "2022-12-24"
+    },
+    {
+      "game_id": "401437891",
+      "value": 158,
+      "seasonYear": "2022",
+      "opponent": "HOU",
+      "date_iso": "2022-12-11"
+    },
+    {
+      "game_id": "401437807",
+      "value": 180,
+      "seasonYear": "2022",
+      "opponent": "CHI",
+      "date_iso": "2022-10-30"
+    },
+    {
+      "game_id": "401326595",
+      "value": 240,
+      "seasonYear": "2021",
+      "opponent": "PHI",
+      "date_iso": "2022-01-08"
+    },
+    {
+      "game_id": "401326567",
+      "value": 329,
+      "seasonYear": "2021",
+      "opponent": "WSH",
+      "date_iso": "2021-12-26"
+    },
+    {
+      "game_id": "401326509",
+      "value": 177,
+      "seasonYear": "2021",
+      "opponent": "NO",
+      "date_iso": "2021-12-02"
+    },
+    {
+      "game_id": "401326466",
+      "value": 219,
+      "seasonYear": "2021",
+      "opponent": "ATL",
+      "date_iso": "2021-11-14"
+    },
+    {
+      "game_id": "401326420",
+      "value": 172,
+      "seasonYear": "2021",
+      "opponent": "NE",
+      "date_iso": "2021-10-17"
+    },
+    {
+      "game_id": "401326407",
+      "value": 156,
+      "seasonYear": "2021",
+      "opponent": "NYG",
+      "date_iso": "2021-10-10"
+    },
+    {
+      "game_id": "401326359",
+      "value": 177,
+      "seasonYear": "2021",
+      "opponent": "LAC",
+      "date_iso": "2021-09-19"
+    },
+    {
+      "game_id": "401326322",
+      "value": 239,
+      "seasonYear": "2021",
+      "opponent": "TB",
+      "date_iso": "2021-09-09"
+    },
+    {
+      "game_id": "401220242",
+      "value": 170,
+      "seasonYear": "2020",
+      "opponent": "NYG",
+      "date_iso": "2020-10-11"
+    },
+    {
+      "game_id": "401220247",
+      "value": 197,
+      "seasonYear": "2020",
+      "opponent": "CLE",
+      "date_iso": "2020-10-04"
+    },
+    {
+      "game_id": "401220363",
+      "value": 186,
+      "seasonYear": "2020",
+      "opponent": "SEA",
+      "date_iso": "2020-09-27"
+    },
+    {
+      "game_id": "401220347",
+      "value": 177,
+      "seasonYear": "2020",
+      "opponent": "LAR",
+      "date_iso": "2020-09-13"
+    },
+    {
+      "game_id": "401128103",
+      "value": 160,
+      "seasonYear": "2019",
+      "opponent": "LAR",
+      "date_iso": "2019-12-15"
+    },
+    {
+      "game_id": "401128017",
+      "value": 164,
+      "seasonYear": "2019",
+      "opponent": "BUF",
+      "date_iso": "2019-11-28"
+    },
+    {
+      "game_id": "401128052",
+      "value": 274,
+      "seasonYear": "2019",
+      "opponent": "DET",
+      "date_iso": "2019-11-17"
+    },
+    {
+      "game_id": "401128041",
+      "value": 189,
+      "seasonYear": "2019",
+      "opponent": "MIN",
+      "date_iso": "2019-11-10"
+    },
+    {
+      "game_id": "401127987",
+      "value": 161,
+      "seasonYear": "2019",
+      "opponent": "PHI",
+      "date_iso": "2019-10-20"
+    },
+    {
+      "game_id": "401128007",
+      "value": 256,
+      "seasonYear": "2019",
+      "opponent": "NYG",
+      "date_iso": "2019-09-08"
+    },
+    {
+      "game_id": "401030854",
+      "value": 150,
+      "seasonYear": "2018",
+      "opponent": "PHI",
+      "date_iso": "2018-12-09"
+    },
+    {
+      "game_id": "401030899",
+      "value": 189,
+      "seasonYear": "2018",
+      "opponent": "NO",
+      "date_iso": "2018-11-29"
+    },
+    {
+      "game_id": "401030869",
+      "value": 176,
+      "seasonYear": "2018",
+      "opponent": "PHI",
+      "date_iso": "2018-11-11"
+    },
+    {
+      "game_id": "401030776",
+      "value": 151,
+      "seasonYear": "2018",
+      "opponent": "JAX",
+      "date_iso": "2018-10-14"
+    },
+    {
+      "game_id": "400951786",
+      "value": 168,
+      "seasonYear": "2017",
+      "opponent": "KC",
+      "date_iso": "2017-11-05"
+    },
+    {
+      "game_id": "400951661",
+      "value": 168,
+      "seasonYear": "2017",
+      "opponent": "GB",
+      "date_iso": "2017-10-08"
+    },
+    {
+      "game_id": "400951716",
+      "value": 155,
+      "seasonYear": "2017",
+      "opponent": "LAR",
+      "date_iso": "2017-10-01"
+    },
+    {
+      "game_id": "400951608",
+      "value": 183,
+      "seasonYear": "2017",
+      "opponent": "NYG",
+      "date_iso": "2017-09-10"
+    },
+    {
+      "game_id": "400874679",
+      "value": 191,
+      "seasonYear": "2016",
+      "opponent": "TB",
+      "date_iso": "2016-12-18"
+    },
+    {
+      "game_id": "400874638",
+      "value": 155,
+      "seasonYear": "2016",
+      "opponent": "BAL",
+      "date_iso": "2016-11-20"
+    },
+    {
+      "game_id": "400874538",
+      "value": 158,
+      "seasonYear": "2016",
+      "opponent": "PIT",
+      "date_iso": "2016-11-13"
+    },
+    {
+      "game_id": "400874733",
+      "value": 156,
+      "seasonYear": "2016",
+      "opponent": "GB",
+      "date_iso": "2016-10-16"
+    },
+    {
+      "game_id": "400874518",
+      "value": 182,
+      "seasonYear": "2016",
+      "opponent": "WSH",
+      "date_iso": "2016-09-18"
     }
   ]
 }

@@ -419,25 +419,31 @@ function RankingTile({ row, onSelect }: { row: PowerRankingsRow; onSelect: (team
     <button
       type="button"
       onClick={() => onSelect(row.team)}
-      className="rounded px-2 py-1.5 flex flex-col gap-1 text-left hover:opacity-80 transition-opacity"
+      className="rounded px-3 py-2.5 flex flex-col gap-1.5 text-left hover:opacity-80 transition-opacity"
       style={{ backgroundColor: 'oklch(0.10 0 0)', border: `1px solid ${C.border}` }}
     >
-      <div className="flex items-baseline gap-1.5">
-        <span className="font-mono text-[11px]" style={{ color: C.dim }}>{row.rank}</span>
-        <span className="font-mono text-[15px] font-bold" style={{ color: C.accent }}>{`{${row.team}}`}</span>
+      <div className="flex items-baseline gap-2">
+        <span className="font-mono text-[12px]" style={{ color: C.dim }}>{row.rank}</span>
+        <span className="font-mono text-[22px] font-bold leading-none" style={{ color: C.accent }}>{`{${row.team}}`}</span>
       </div>
-      <div className="flex items-baseline justify-between">
-        <span className="font-mono text-[11px]" style={{ color: C.label }}>{formatRecord(row)}</span>
-        <span className="font-mono text-[13px] font-bold" style={{ color: C.green }}>{row.power_score.toFixed(1)}</span>
-      </div>
+      {/* Record and score stacked on their own lines — sharing one row got
+          tight once the team text above grew, and they're different enough
+          concepts (season record vs. computed rank score) to not need to
+          compete side by side. */}
+      <span className="font-mono text-[12px]" style={{ color: C.label }}>{formatRecord(row)}</span>
+      <span className="font-mono text-[16px] font-bold" style={{ color: C.green }}>{row.power_score.toFixed(1)}</span>
     </button>
   )
 }
 
 function PowerRankingsGrid({ rows, onSelectTeam }: { rows: PowerRankingsRow[]; onSelectTeam: (team: string) => void }) {
   const isMobile = useIsMobile()
+  // Fewer, wider columns than the original 16/4 split — the tiles needed
+  // more room once the team text and stacked record/score grew, and with
+  // rankings now the page's primary content there's headroom to spend on
+  // width instead of forcing everything into one no-scroll block.
   return (
-    <div className="grid gap-1.5" style={{ gridTemplateColumns: `repeat(${isMobile ? 4 : 16}, minmax(0, 1fr))` }}>
+    <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${isMobile ? 3 : 8}, minmax(0, 1fr))` }}>
       {rows.map((row) => <RankingTile key={row.team} row={row} onSelect={onSelectTeam} />)}
     </div>
   )
@@ -546,9 +552,6 @@ export default function WorldCupApp() {
   const schedule = scheduleData as unknown as ScheduleData
   const [activeView, setActiveView] = useState<ActiveView>('rankings')
   const abbrMap = useMemo(() => buildAbbrMap(data), [data])
-  const weekLabel = data.current_week != null
-    ? `week ${data.current_week} · ${data.total_weeks}`
-    : 'pre-season'
   // Schedule tab opens on the active week (data.current_week), not always
   // week 1 — current_week is expected to already reflect the Tuesday-
   // morning rollover backend-side (games run through Monday Night Football,
@@ -630,51 +633,35 @@ export default function WorldCupApp() {
     <div className="relative w-screen h-screen bg-background overflow-hidden">
       <StarsBackground density={180} />
 
-      <div className="absolute top-6 left-6 right-6 z-20 flex items-start justify-between gap-6">
-        <div className="flex flex-col">
-          <a href="/" className="font-mono text-[16px] hover:opacity-70 transition-opacity" style={{ color: C.label }}>
+      {/* Slim utility row (back link + tabs) only — the old branded title
+          block ("nfl.rankings · 2026" / week label) is gone so the matchup
+          strip right below can be the page's actual top-of-screen header,
+          not something pushed down under a headline. */}
+      <div className="absolute top-0 left-0 right-0 z-20 px-4 pt-3 pb-2">
+        <div className="flex items-center justify-between gap-4 max-w-[1480px] mx-auto">
+          <a href="/" className="font-mono text-[13px] hover:opacity-70 transition-opacity" style={{ color: C.label }}>
             ← nspe.dev
           </a>
-          <div className="font-mono text-[26px] mt-1" style={{ color: C.value }}>
-            <span style={{ color: C.accent }}>nfl.rankings</span>
-            <span style={{ color: C.label }}>{' · '}</span>
-            <span style={{ color: C.green }}>{data.season}</span>
+          <div className="flex items-center gap-4">
+            {/* {nfl.schedule}'s tab button is hidden, not removed — standings
+                (DivisionsView) live on this same 'schedule' activeView slot,
+                just unreachable via nav for now. */}
+            {(['rankings'] as const).map((view) => (
+              <button key={view} type="button" onClick={() => setActiveView(view)}
+                className="font-mono font-bold text-[14px] underline-offset-4 hover:opacity-80 transition-opacity whitespace-nowrap"
+                style={{ color: activeView === view ? C.accent : C.label, textDecoration: activeView === view ? 'underline' : 'none' }}>
+                {`{nfl.${view}}`}
+              </button>
+            ))}
+            <span className="font-mono font-bold text-[14px] whitespace-nowrap inline-flex items-baseline gap-1.5"
+              style={{ color: C.dim, cursor: 'not-allowed', userSelect: 'none' }}>
+              <span>{'{nfl.playoffs}'}</span>
+              <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: C.label }}>(pending)</span>
+            </span>
           </div>
-          <div className="font-mono text-[14px] mt-0.5" style={{ color: C.label }}>{weekLabel}</div>
         </div>
-
-        <div className="flex items-center gap-5 pt-2">
-          {/* {nfl.schedule}'s tab button is hidden, not removed — standings
-              (DivisionsView) live on this same 'schedule' activeView slot,
-              just unreachable via nav for now. See the comment above the
-              'rankings' section below for how the page itself was
-              restructured (rankings primary, matchup slate demoted to a
-              header strip). */}
-          {(['rankings'] as const).map((view) => (
-            <button key={view} type="button" onClick={() => setActiveView(view)}
-              className="font-mono font-bold text-[18px] underline-offset-4 hover:opacity-80 transition-opacity whitespace-nowrap"
-              style={{ color: activeView === view ? C.accent : C.label, textDecoration: activeView === view ? 'underline' : 'none' }}>
-              {`{nfl.${view}}`}
-            </button>
-          ))}
-          <span className="font-mono font-bold text-[18px] whitespace-nowrap inline-flex items-baseline gap-1.5"
-            style={{ color: C.dim, cursor: 'not-allowed', userSelect: 'none' }}>
-            <span>{'{nfl.playoffs}'}</span>
-            <span className="font-mono text-[12px] uppercase tracking-widest" style={{ color: C.label }}>(pending)</span>
-          </span>
-        </div>
-      </div>
-
-      <div className="relative z-10 h-full pt-32 pb-8 px-6 max-w-[1480px] mx-auto">
-        {/* {nfl.rankings} — power rankings is now the page's primary
-            content (layout inversion from the previous matchup-library
-            build, per the conversation this was rescoped in). The weekly
-            slate that used to be the main event is now WeekMatchupStrip, a
-            compact static header above the rankings grid rather than the
-            centerpiece. DivisionsView isn't deleted, just shelved onto the
-            still-hidden 'schedule' activeView slot below. */}
         {activeView === 'rankings' && (
-          <section className="h-full flex flex-col">
+          <div className="max-w-[1480px] mx-auto mt-2">
             <WeekMatchupStrip
               games={schedule.games}
               totalWeeks={data.total_weeks}
@@ -682,7 +669,20 @@ export default function WorldCupApp() {
               initialWeek={initialScheduleWeek}
               onMatchupClick={requestMatchup}
             />
-            <div className="font-mono text-[14px] uppercase tracking-widest mt-4 mb-2 shrink-0" style={{ color: C.label }}>
+          </div>
+        )}
+      </div>
+
+      <div className="relative z-10 h-full pt-[148px] pb-8 px-6 max-w-[1480px] mx-auto">
+        {/* {nfl.rankings} — power rankings is now the page's primary
+            content (layout inversion from the previous matchup-library
+            build, per the conversation this was rescoped in). The weekly
+            slate that used to be the main event is now WeekMatchupStrip, a
+            true top-of-screen header (moved into the fixed utility bar
+            above) rather than living inside this scrollable section. */}
+        {activeView === 'rankings' && (
+          <section className="h-full flex flex-col">
+            <div className="font-mono text-[14px] uppercase tracking-widest mb-2 shrink-0" style={{ color: C.label }}>
               power rankings
             </div>
             <div className="flex-1 min-h-0 overflow-y-auto">

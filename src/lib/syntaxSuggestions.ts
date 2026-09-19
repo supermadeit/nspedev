@@ -50,6 +50,16 @@ function normalizeToken(token: string): string {
     .replace(/^(-[a-z]+)\d+$/, '$1#')
 }
 
+// Missing-leading-dash tolerance: driven entirely by the catalog token at
+// this same position, not a hardcoded keyword list (no need to special-case
+// "yds"/"last"/"career"/... one by one — every catalog entry already knows
+// where its own dashes go). If the catalog expects a flag here ("-yds150")
+// and the user typed the bare word ("yds150"), treat it as if the dash were
+// there before normalizing/comparing.
+function withToleratedDash(typed: string, catalogRaw: string): string {
+  return !typed.startsWith('-') && catalogRaw.startsWith('-') ? `-${typed}` : typed
+}
+
 // Token-shape match: every typed token except the last must equal the
 // catalog's token at that position (post-normalization); the last typed
 // token only needs to be a normalized *prefix* of the catalog's token there
@@ -59,10 +69,10 @@ function normalizeToken(token: string): string {
 function matchTokenShape(typedTokens: string[], catalogTokens: string[]): string[] | null {
   if (typedTokens.length === 0 || typedTokens.length > catalogTokens.length) return null
   for (let i = 0; i < typedTokens.length - 1; i++) {
-    if (normalizeToken(typedTokens[i]) !== normalizeToken(catalogTokens[i])) return null
+    if (normalizeToken(withToleratedDash(typedTokens[i], catalogTokens[i])) !== normalizeToken(catalogTokens[i])) return null
   }
   const lastIdx = typedTokens.length - 1
-  const typedLast = normalizeToken(typedTokens[lastIdx])
+  const typedLast = normalizeToken(withToleratedDash(typedTokens[lastIdx], catalogTokens[lastIdx]))
   const catalogLast = normalizeToken(catalogTokens[lastIdx])
   if (!catalogLast.startsWith(typedLast)) return null
   return catalogTokens.slice(typedTokens.length)
@@ -108,8 +118,17 @@ export function searchSyntax(query: string, limit = 50): SyntaxMatch[] {
       // before the user ever got a chance to type their own number.
       const typedLastRaw = typedTokens[lastIdx]
       const catalogLastRaw = catalogTokens[lastIdx]
-      const resolvedLastToken = /\d/.test(typedLastRaw) ? typedLastRaw : catalogLastRaw
-      const displayCommand = [...typedTokens.slice(0, lastIdx), resolvedLastToken, ...tail].join(' ')
+      const resolvedLastToken = /\d/.test(typedLastRaw)
+        ? withToleratedDash(typedLastRaw, catalogLastRaw)
+        : catalogLastRaw
+      // Dash-correct the already-typed tokens too (not just the last one) —
+      // otherwise a suggestion built from "nfl yds150 last1/1" would keep
+      // echoing the user's own missing dashes back at them instead of fixing
+      // the typo on select.
+      const correctedTyped = typedTokens
+        .slice(0, lastIdx)
+        .map((t, i) => withToleratedDash(t, catalogTokens[i]))
+      const displayCommand = [...correctedTyped, resolvedLastToken, ...tail].join(' ')
       prefixMatches.push({ query: q, matchedPrefix: trimmed, displayCommand })
     } else if (command.includes(trimmed) || q.label.toLowerCase().includes(trimmed)) {
       // Also checks the label, not just the literal command text — some
@@ -126,24 +145,42 @@ export function searchSyntax(query: string, limit = 50): SyntaxMatch[] {
 
 // Player-name lookup doesn't un-match syntax mode the way stat/window
 // prefixes do — a query only ever LOOKS like player search or syntax, but
-// once it's decided to look like player search, this surfaces any curated
-// commands that showcase one of the matched players (Patrick Mahomes ->
-// "nspe nfl long mahomes -ov") right alongside their profile match, so
-// typing a name promotes the moat commands the same way the syntax
-// dropdown already does for bare "nspe". Matched by substring against the
-// player's real display name, not an exact slug — see playerHint's comment
-// in predictiveCommands.ts for why. The explicit goal is showing ~all the
-// popular query shapes for one player (-ov in its 3 scopes, h2h, -week,
-// ...), not a token sample of them — 20 gives real headroom as each
-// player's set of tagged commands grows past the initial 5.
-export function findPlayerSpotlightCommands(playerNames: string[], limit = 20): SyntaxMatch[] {
-  const lowerNames = playerNames.map((n) => n.toLowerCase())
+// once it's decided to look like player search, this surfaces every
+// player-slot template (-ov in its 3 scopes, h2h, -week, ...) right
+// alongside the top match's profile, so typing a name promotes the moat
+// commands the same way the syntax dropdown already does for bare "nspe".
+//
+// Name-agnostic by substitution, not by list size: each tagged entry's
+// playerHint is the literal substring inside its own `command` that stands
+// in for "a player" (e.g. "mahomes" in "nspe nfl long mahomes -ov") — it's
+// swapped out for whichever real player the live search (playerSearch.ts's
+// PLAYER_INDEX) currently has topping the match list. That means every
+// player in the index gets the full template set for free, the same way a
+// catalog entry's threshold number was never tied to one hardcoded value —
+// no whitelist or per-player catalog growth needed as the index grows.
+// Every command in the catalog opens with "nspe {sport}" — reusing that
+// instead of a separate per-entry sport field, so a template's league is
+// never at risk of drifting out of sync with its own command text.
+function commandSport(command: string): string | undefined {
+  return tokenize(command)[1]
+}
+
+export function findPlayerSpotlightCommands(
+  playerName: string,
+  playerSport: string | undefined,
+  limit = 20,
+): SyntaxMatch[] {
+  const resolved = playerName.toLowerCase()
   const matches: SyntaxMatch[] = []
   for (const q of SYNTAX_CATALOG) {
     if (!q.playerHint) continue
-    if (lowerNames.some((name) => name.includes(q.playerHint!))) {
-      matches.push({ query: q, matchedPrefix: '', displayCommand: q.command })
-    }
+    // Only cross-check sport when the matched player's own sport is known —
+    // an NFL player must never surface "vs bos" MLB h2h templates. When it's
+    // unknown (index entry predates the sport field), fall back to showing
+    // everything rather than silently hiding real suggestions.
+    if (playerSport && commandSport(q.command) !== playerSport) continue
+    const displayCommand = q.command.toLowerCase().replace(q.playerHint, resolved)
+    matches.push({ query: q, matchedPrefix: '', displayCommand })
   }
   return matches.slice(0, limit)
 }

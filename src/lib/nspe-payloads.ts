@@ -930,6 +930,60 @@ export function extractNflOverviewScopesPayload(payload: unknown): NflOverviewSc
   return null
 }
 
+// ---------- NFL overview stat-threshold (`-statN -ov`) ----------
+// A third `-ov` shape, sibling to overview-long (bucketed histogram) and
+// overview-scopes (flat per-scope totals) above — this one answers "how
+// many games did this player hit >=N of this stat" (e.g. `nfl dak 1h
+// -yds150 -ov -career`: how many of Dak's halves he's thrown for 150+ pass
+// yards). Despite having a `matches` array like the generic trend-shaped
+// payloads elsewhere in this file, this is NOT a trend result — trend rows
+// are per-player entries inside a `results[]` list; this is a single
+// player/threshold query with its match list at the top level, and it's
+// part of the -ov family conceptually (a threshold overview, not a
+// live/upcoming trend). Rendered by its own view (NflOverviewStatNView in
+// App.tsx) rather than being caught by the generic queryResults path, so it
+// doesn't get mislabeled with trend-style "met=N" badge phrasing.
+
+export interface NflOverviewStatNMatch {
+  game_id: string
+  value: number
+  seasonYear: string
+  opponent: string
+  date_iso: string
+}
+
+export interface NflOverviewStatNPayload {
+  engine: 'nfl_overview_statn'
+  mode: string
+  scope: string
+  query: { player: string; category: string; threshold: number; stat_kind: string; window_label: string }
+  count: number
+  window: number
+  matches: NflOverviewStatNMatch[]
+}
+
+export function isNflOverviewStatNPayload(payload: unknown): payload is NflOverviewStatNPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return rec.engine === 'nfl_overview_statn' && Array.isArray(rec.matches)
+}
+
+export function extractNflOverviewStatNPayload(payload: unknown): NflOverviewStatNPayload | null {
+  if (isNflOverviewStatNPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isNflOverviewStatNPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isNflOverviewStatNPayload(v)) return v
+    }
+  }
+  return null
+}
+
 // ---------- MLB Home Run Distance (mlb long) ----------
 
 export interface MlbHrTrendMatch {

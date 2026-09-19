@@ -14,6 +14,13 @@ export interface PlayerIndexEntry {
   slug: string
   team: string
   position: string
+  // Lowercase league token ('nfl'/'mlb'/'nba'/'nhl'), when the backend index
+  // sends one — used to keep findPlayerSpotlightCommands (syntaxSuggestions.ts)
+  // from handing an NFL player MLB h2h templates and vice versa. Optional
+  // since this is a newer field on a still-settling endpoint (see
+  // databaseApi.ts's DatabaseIndexEntry comment) — treat its absence as
+  // "unknown," not "no sport."
+  sport?: string
   firstName: string
   lastName: string
   // Every searchable word in the display name, lowercased, generic
@@ -63,6 +70,7 @@ export function loadPlayerIndex(): Promise<void> {
             slug: e.slug,
             team: e.team,
             position: e.position,
+            sport: e.sport?.toLowerCase(),
             firstName: nameTokens[0] ?? '',
             lastName: nameTokens[nameTokens.length - 1] ?? '',
             nameTokens,

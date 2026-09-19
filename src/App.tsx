@@ -40,6 +40,7 @@ import {
   extractMlbTeamRunsPayload,
   extractExplosiveOverviewPayload,
   extractNflOverviewScopesPayload,
+  extractNflOverviewStatNPayload,
   isNflExplosivePayload,
   normalizeDisplayPlayer,
   normalizeQueryResults,
@@ -62,6 +63,7 @@ import {
   type MlbTeamRunsTrendResult,
   type ExplosiveOverviewPayload,
   type NflOverviewScopesPayload,
+  type NflOverviewStatNPayload,
   type NflExplosivePayload,
   type QueryResult,
 } from '@/lib/nspe-payloads'
@@ -842,6 +844,73 @@ function NflOverviewScopesView({ payload }: { payload: NflOverviewScopesPayload 
           </div>
         )
       })}
+    </div>
+  )
+}
+
+// ---------- NFL overview stat-threshold view (-statN -ov) ----------
+// Third -ov sibling — see NflOverviewStatNPayload's comment in
+// nspe-payloads.ts for why this isn't a trend view despite having a
+// `matches` array. Mirrors NflOverviewScopesView's structure (header ·
+// tiles · TrendBadge-toggled breakdown) for visual consistency across the
+// -ov family, even though the data shape is single-row rather than
+// multi-row.
+
+function NflOverviewStatNView({ payload }: { payload: NflOverviewStatNPayload }) {
+  const { isExpanded, toggle } = useExpandableRows()
+
+  const CYAN = 'oklch(0.85 0.15 195)'
+  const CYAN_BRIGHT = 'oklch(0.90 0.18 195)'
+  const DIM = 'oklch(0.55 0 0)'
+  const BORDER = 'oklch(0.22 0 0)'
+
+  const player = normalizeDisplayPlayer(payload.query.player)
+  const { category, threshold, stat_kind, window_label } = payload.query
+
+  return (
+    <div className="space-y-4 font-mono">
+      <div className="flex items-baseline gap-2 pb-2" style={{ borderBottom: `1px solid ${BORDER}` }}>
+        <span className="text-[14px] font-bold" style={{ color: CYAN_BRIGHT }}>
+          {player}
+        </span>
+        <span className="text-[12px]" style={{ color: DIM }}>
+          {category} · {scopeLabel(payload.scope)} · &ge;{threshold}{stat_kind} · {window_label}
+        </span>
+      </div>
+
+      <div className="flex flex-wrap gap-5 text-[12px]">
+        <div>
+          <div className="text-[9px] uppercase tracking-wider" style={{ color: DIM }}>Games</div>
+          <div className="text-[16px] font-bold" style={{ color: CYAN }}>{payload.count}</div>
+        </div>
+        <div>
+          <div className="text-[9px] uppercase tracking-wider" style={{ color: DIM }}>Window</div>
+          <div className="text-[16px] font-bold" style={{ color: CYAN }}>{payload.window}</div>
+        </div>
+      </div>
+
+      {payload.matches.length > 0 && (
+        <ResultRow
+          label={`${payload.count} of ${payload.window} games`}
+          badgeValue={isExpanded(0) ? 'hide' : 'view'}
+          expanded={isExpanded(0)}
+          onToggle={() => toggle(0)}
+        >
+          {payload.matches.map((m, j) => (
+            <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+              <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(m.date_iso) ?? m.date_iso}</span>
+              {m.opponent && (
+                <>
+                  <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
+                  <span style={{ color: 'oklch(0.75 0.08 220)' }}>{m.opponent}</span>
+                </>
+              )}
+              <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+              <span style={{ color: CYAN }}>{m.value}{stat_kind}</span>
+            </div>
+          ))}
+        </ResultRow>
+      )}
     </div>
   )
 }
@@ -2258,6 +2327,7 @@ function App() {
   const [nflExplosiveResult, setNflExplosiveResult] = useState<NflExplosivePayload | null>(null)
   const [explosiveOverviewResult, setExplosiveOverviewResult] = useState<ExplosiveOverviewPayload | null>(null)
   const [overviewScopesResult, setOverviewScopesResult] = useState<NflOverviewScopesPayload | null>(null)
+  const [overviewStatNResult, setOverviewStatNResult] = useState<NflOverviewStatNPayload | null>(null)
   const [hrResult, setHrResult] = useState<MlbHrPayload | null>(null)
   const [firstPaResult, setFirstPaResult] = useState<MlbFirstPaTrendPayload | null>(null)
   const [teamRunsResult, setTeamRunsResult] = useState<MlbTeamRunsPayload | null>(null)
@@ -2307,7 +2377,10 @@ function App() {
   // different questions ("here's his profile" vs "here's a popular query
   // that uses him").
   const playerSpotlightMatches = useMemo(
-    () => (playerMatches.length > 0 ? findPlayerSpotlightCommands(playerMatches.map((m) => m.entry.name)) : []),
+    () =>
+      playerMatches.length > 0
+        ? findPlayerSpotlightCommands(playerMatches[0].entry.name, playerMatches[0].entry.sport)
+        : [],
     [playerMatches],
   )
   // Predictive command-syntax suggestions (Option B: curated templates,
@@ -2423,6 +2496,7 @@ function App() {
     setNflExplosiveResult(null)
     setExplosiveOverviewResult(null)
     setOverviewScopesResult(null)
+    setOverviewStatNResult(null)
     setHrResult(null)
     setFirstPaResult(null)
     setTeamRunsResult(null)
@@ -2564,6 +2638,16 @@ function App() {
       const overviewScopesPayload = extractNflOverviewScopesPayload(payload)
       if (overviewScopesPayload) {
         setOverviewScopesResult(overviewScopesPayload)
+        setQueryResults([])
+        return
+      }
+
+      // NFL -statN overview (e.g. "nfl dak 1h -yds150 -ov -career") — a
+      // third -ov shape, single player/threshold with its own match list,
+      // not a generic trend row (see nspe-payloads.ts's comment)
+      const overviewStatNPayload = extractNflOverviewStatNPayload(payload)
+      if (overviewStatNPayload) {
+        setOverviewStatNResult(overviewStatNPayload)
         setQueryResults([])
         return
       }
@@ -3164,6 +3248,8 @@ function App() {
                 ? `${lastQuery} — explosive overview`
                 : overviewScopesResult
                 ? `${lastQuery} — overview`
+                : overviewStatNResult
+                ? `${lastQuery} — overview`
                 : hrResult
                 ? `${lastQuery} — hr`
                 : firstPaResult
@@ -3208,6 +3294,8 @@ function App() {
               <ExplosiveOverviewView payload={explosiveOverviewResult} />
             ) : overviewScopesResult ? (
               <NflOverviewScopesView payload={overviewScopesResult} />
+            ) : overviewStatNResult ? (
+              <NflOverviewStatNView payload={overviewStatNResult} />
             ) : hrResult ? (
               <MlbHrView payload={hrResult} />
             ) : firstPaResult ? (
