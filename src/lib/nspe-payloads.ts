@@ -900,11 +900,20 @@ export interface NflOverviewScopeRow {
   attempts: number | null
   completion_pct: number | null
   breakdown: NflOverviewScopeBreakdown[]
+  // Only present on the multi-scope ("bare -ov", one row per scope) shape —
+  // this scope's share of the "full" row's total_yards. Optional since the
+  // single-scope shape (a specific period requested) has never sent it.
+  share_pct?: number
 }
 
 export interface NflOverviewScopesPayload {
   engine: 'nfl_overview_scopes'
-  query: { player: string; category: string; scope: string; year_window: [number, number] | null }
+  // scope is null when no period was specified in the command (bare
+  // "nspe nfl {player} -ov") — the backend then returns one row per scope
+  // (q1/q2/q3/q4/1h/2h/full) instead of the single requested one. Confirmed
+  // live 2026-09-19 for both a QB (pass) and a WR (rec) — same shape either
+  // way, just a different category.
+  query: { player: string; category: string; scope: string | null; year_window: [number, number] | null }
   rows: NflOverviewScopeRow[]
 }
 
@@ -1726,6 +1735,20 @@ export function extractTeamFromRow(row: Record<string, unknown>): string {
   return ''
 }
 
+// extractDateToken always normalizes to "M/D/YY" regardless of the raw
+// engine's own format (ISO or slash) — parsed back into a real timestamp
+// here rather than compared lexically, since "9/18/26" < "9/9/26" as plain
+// strings ('1' < '9') would sort wrong.
+function dateTokenSortKey(token: string): number {
+  const m = token.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/)
+  if (!m) return 0
+  const month = Number(m[1])
+  const day = Number(m[2])
+  const yearPart = m[3]
+  const year = yearPart.length === 2 ? 2000 + Number(yearPart) : Number(yearPart)
+  return new Date(year, month - 1, day).getTime()
+}
+
 export function extractMatchDetails(row: Record<string, unknown>, ctx: StatContext | null): MatchDetail[] {
   if (!ctx) return []
   // Accept both `matches` (legacy) and `match` (new singular form).
@@ -1747,6 +1770,15 @@ export function extractMatchDetails(row: Record<string, unknown>, ctx: StatConte
     if (value === null || !date) continue
     out.push({ value, date, statLabel: label })
   }
+  // Normalized to ascending chronological order here, once, rather than
+  // trusting each raw engine's own ordering — confirmed live that this
+  // MLB -lastN/M trend shape sends its match array newest-first (descending),
+  // while h2h/HR-trend/first-PA send it oldest-first (ascending). Every
+  // "latest match" picker throughout App.tsx assumes matchDetails[length-1]
+  // is the most recent game; sorting here once makes that true unconditionally
+  // instead of silently breaking for whichever engine doesn't match the
+  // assumption.
+  out.sort((a, b) => dateTokenSortKey(a.date) - dateTokenSortKey(b.date))
   return out
 }
 

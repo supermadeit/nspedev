@@ -739,7 +739,8 @@ function ExplosiveOverviewView({ payload }: { payload: ExplosiveOverviewPayload 
   )
 }
 
-function scopeLabel(scope: string): string {
+function scopeLabel(scope: string | null): string {
+  if (scope === null) return 'every quarter/half'
   if (scope === 'q1') return 'Q1'
   if (scope === '1h') return '1H'
   return scope.toUpperCase()
@@ -779,8 +780,22 @@ function NflOverviewScopesView({ payload }: { payload: NflOverviewScopesPayload 
       {payload.rows.map((r, i) => {
         const isOpen = expanded.has(i)
         const hasCompletions = r.completions != null && r.attempts != null
+        // Only shown when there's more than one row (the bare "-ov" case,
+        // no period specified — one row per scope) — a single-row result
+        // already has its one scope named in the header above, repeating it
+        // per-row there would be redundant.
         return (
           <div key={i} className="space-y-3">
+            {payload.rows.length > 1 && (
+              <div className="text-[11px] font-bold uppercase tracking-wider" style={{ color: CYAN_BRIGHT }}>
+                {scopeLabel(r.scope)}
+                {r.share_pct != null && (
+                  <span className="font-normal normal-case ml-2" style={{ color: DIM }}>
+                    {r.share_pct.toFixed(1)}% of full game
+                  </span>
+                )}
+              </div>
+            )}
             <div className="flex flex-wrap gap-5 text-[12px]">
               <div>
                 <div className="text-[9px] uppercase tracking-wider" style={{ color: DIM }}>Games</div>
@@ -2277,7 +2292,7 @@ const SEARCH_GLOW = '0 0 8px 1px oklch(0.90 0.18 195 / 0.55), 0 0 20px 4px oklch
 // no hyphen and no leading token from this list is treated as a player-name
 // search instead of a malformed command.
 // Sport names plus every bare mode/category keyword that can start a real
-// command on its own (streak/team/first/long/h2h/week/1h/q1/pass/rush/rec)
+// command on its own (streak/team/first/long/h2h/week/1h/q1/pass/rush/rec/any)
 // — without these, typing e.g. "streak" alone has no "-" and isn't a sport,
 // so looksLikePlayerSearch treated it as a player-name search and syntax
 // matching never even ran, even though "-streak" commands are literally in
@@ -2285,7 +2300,7 @@ const SEARCH_GLOW = '0 0 8px 1px oklch(0.90 0.18 195 / 0.55), 0 0 20px 4px oklch
 const NSPE_COMMAND_TOKENS = [
   'nspe', 'mlb', 'nfl', 'nba', 'nhl', 'cfb', 'ncaaf', 'plus', 'help',
   'streak', 'team', 'first', 'long', 'h2h', 'week', '1h', 'q1',
-  'pass', 'rush', 'rec',
+  'pass', 'rush', 'rec', 'any',
 ]
 function looksLikePlayerSearch(value: string): boolean {
   const trimmed = value.trim().toLowerCase()
@@ -2293,6 +2308,33 @@ function looksLikePlayerSearch(value: string): boolean {
   const firstToken = trimmed.split(/\s+/)[0]
   if (NSPE_COMMAND_TOKENS.includes(firstToken)) return false
   return true
+}
+
+const SPORT_TOKENS = ['mlb', 'nfl', 'nba', 'nhl', 'cfb', 'ncaaf']
+
+// Strips a leading "nspe"/sport prefix so "nspe nfl saquon" can still
+// resolve "saquon" as a player-name search on its own — without this,
+// looksLikePlayerSearch(the whole string) sees the leading "nspe"/"nfl"
+// tokens and routes the entire thing to command-syntax mode instead, so
+// searchPlayers() never even gets to see the name portion (the exact
+// "{nspe nfl saquon} makes every {psc} suggestion disappear" bug: no
+// player match means playerSpotlightMatches never runs, and no catalog
+// command literally starts with "saquon" either, so syntaxMatches comes up
+// empty too). Reuses looksLikePlayerSearch on the remainder (not a fresh
+// check) so reserved mode keywords ("long"/"pass"/"streak"/...) still
+// correctly stay out of player-search mode — otherwise a real player
+// surnamed e.g. "Long" would hijack the "long" explosive-plays category the
+// moment someone typed "nspe nfl long".
+function stripSportPrefix(value: string): { sport?: string; rest: string } {
+  const tokens = value.trim().toLowerCase().split(/\s+/).filter(Boolean)
+  let i = 0
+  if (tokens[i] === 'nspe') i++
+  let sport: string | undefined
+  if (tokens[i] && SPORT_TOKENS.includes(tokens[i])) {
+    sport = tokens[i] === 'ncaaf' ? 'cfb' : tokens[i]
+    i++
+  }
+  return { sport, rest: tokens.slice(i).join(' ') }
 }
 
 function App() {
@@ -2349,6 +2391,9 @@ function App() {
   const [builderDragOffset, setBuilderDragOffset] = useState({ x: 0, y: 0 })
   const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(true)
   const [isMobileLeaderboardOpen, setIsMobileLeaderboardOpen] = useState(false)
+  // Score is hidden inline on the mobile leaderboard (no room for it next to
+  // a full player name on a phone width) — tapping a row reveals it instead.
+  const mobileLeaderboardRows = useExpandableRows()
   const [isGlossaryOpen, setIsGlossaryOpen] = useState(false)
   const [isH2hStaffOpen, setIsH2hStaffOpen] = useState(false)
   const leaderboard = leaderboardData as unknown as LeaderboardPayload
@@ -2366,10 +2411,15 @@ function App() {
   useEffect(() => {
     loadPlayerIndex().then(() => setIsPlayerIndexReady(true))
   }, [])
-  const playerMatches = useMemo(
-    () => (looksLikePlayerSearch(searchValue) ? searchPlayers(searchValue, 8) : []),
-    [searchValue, isPlayerIndexReady],
-  )
+  const playerMatches = useMemo(() => {
+    if (looksLikePlayerSearch(searchValue)) return searchPlayers(searchValue, 8)
+    // Sport already typed ("nspe nfl saquon") — see stripSportPrefix's
+    // comment for why the whole-string check above misses this case.
+    const { sport, rest } = stripSportPrefix(searchValue)
+    if (!rest || !looksLikePlayerSearch(rest)) return []
+    const matches = searchPlayers(rest, 8)
+    return sport ? matches.filter((m) => !m.entry.sport || m.entry.sport === sport) : matches
+  }, [searchValue, isPlayerIndexReady])
   // Any curated commands that showcase one of the currently-matched players
   // (e.g. typing "mahomes" surfaces "nspe nfl long mahomes -ov" alongside
   // his profile match) — shown as a second, stacked dropdown beneath the
@@ -3929,7 +3979,7 @@ function App() {
               <div
                 className="grid items-center px-4 py-1 font-mono text-[10px] uppercase tracking-widest sticky top-0"
                 style={{
-                  gridTemplateColumns: '22px 1fr 36px 84px 56px',
+                  gridTemplateColumns: '22px 1fr 36px 84px',
                   gap: '8px',
                   backgroundColor: 'oklch(0.14 0 0)',
                   borderBottom: '1px solid oklch(0.20 0 0)',
@@ -3940,19 +3990,18 @@ function App() {
                 <span>player</span>
                 <span>tm</span>
                 <span>stat(streak)</span>
-                <span className="text-right">score</span>
               </div>
               {leaderboard.rows.map((row, idx) => {
                 const rank = String(idx + 1).padStart(2, '0')
                 const player = normalizeLeaderboardPlayer(row.player)
                 const star = idx < 3 ? '★' : ' '
+                const expanded = mobileLeaderboardRows.isExpanded(idx)
                 return (
                   <div
                     key={`m-${row.player}-${idx}`}
-                    className="grid items-center px-4 py-2 font-mono text-[12px]"
+                    onClick={() => mobileLeaderboardRows.toggle(idx)}
+                    className="px-4 py-2 font-mono text-[12px] cursor-pointer"
                     style={{
-                      gridTemplateColumns: '22px 1fr 36px 84px 56px',
-                      gap: '8px',
                       borderBottom:
                         idx === leaderboard.rows.length - 1
                           ? 'none'
@@ -3960,20 +4009,32 @@ function App() {
                       color: 'oklch(0.85 0 0)',
                     }}
                   >
-                    <span style={{ color: 'oklch(0.48 0 0)' }}>{rank}</span>
-                    <span className="truncate" style={{ color: 'oklch(0.92 0 0)' }}>
-                      {player}
-                    </span>
-                    <span style={{ color: 'oklch(0.55 0 0)' }}>{row.team}</span>
-                    <span style={{ color: 'oklch(0.85 0.15 195)' }}>
-                      {row.streak_label}({row.streak_length}){star}
-                    </span>
-                    <span
-                      className="text-right"
-                      style={{ color: 'oklch(0.78 0.18 145)', fontWeight: 600 }}
+                    <div
+                      className="grid items-center"
+                      style={{ gridTemplateColumns: '22px 1fr 36px 84px', gap: '8px' }}
                     >
-                      {row.score.toFixed(1)}
-                    </span>
+                      <span style={{ color: 'oklch(0.48 0 0)' }}>{rank}</span>
+                      <span className="truncate" style={{ color: 'oklch(0.92 0 0)' }}>
+                        {player}
+                      </span>
+                      <span style={{ color: 'oklch(0.55 0 0)' }}>{row.team}</span>
+                      <span style={{ color: 'oklch(0.85 0.15 195)' }}>
+                        {row.streak_label}({row.streak_length}){star}
+                      </span>
+                    </div>
+                    {expanded && (
+                      <div
+                        className="flex items-center justify-between mt-1.5 pt-1.5"
+                        style={{ borderTop: '1px solid oklch(0.18 0 0)' }}
+                      >
+                        <span className="text-[10px] uppercase tracking-widest" style={{ color: 'oklch(0.42 0 0)' }}>
+                          score
+                        </span>
+                        <span style={{ color: 'oklch(0.78 0.18 145)', fontWeight: 600 }}>
+                          {row.score.toFixed(1)}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 )
               })}
