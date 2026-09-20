@@ -674,11 +674,9 @@ function pct(rate: number | undefined): string {
 
 function ParlayLegCard({ leg, showPlayer = true }: { leg: NflParlayLeg; showPlayer?: boolean }) {
   const stats: { text: string; color?: string }[] = [
-    { text: `season ${leg.overall} (${pct(leg.overall_rate)})` },
+    { text: `career ${leg.overall} (${pct(leg.overall_rate)})` },
     { text: `recent ${leg.recent} (${pct(leg.recent_rate)})` },
     { text: `vs ${leg.opponent} ${leg.vs_opp} (${pct(leg.vs_opp_rate)})` },
-    { text: `matchup ×${leg.matchup_mult}` },
-    { text: `tier ${leg.denom}`, color: PARLAY_DIM },
   ]
   return (
     <div
@@ -723,7 +721,7 @@ function NflParlayView({ payload }: { payload: NflParlayPayload }) {
     <div className="space-y-3">
       <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
         <span>nfl parlay</span>
-        <span style={{ color: PARLAY_DIM }}>
+        <span style={{ color: 'oklch(0.95 0 0)', fontWeight: 700 }}>
           {` · week ${q.week ?? '—'} · shape ${shape} · ${q.risk ?? 'standard'} · ${payload.parlay?.legs ?? picks.length} legs`}
         </span>
       </div>
@@ -761,7 +759,7 @@ function NflPlayerLegsView({ payload }: { payload: NflPlayerLegsPayload }) {
           </>
         ) : null}
         <span>{normalizeDisplayPlayer(payload.player || q.player || 'player')}</span>
-        <span style={{ color: PARLAY_DIM }}>
+        <span style={{ color: 'oklch(0.95 0 0)', fontWeight: 700 }}>
           {` · week ${q.week ?? '—'}${first ? ` · vs ${first.opponent}` : ''} · ${legs.length} leg${legs.length === 1 ? '' : 's'}`}
         </span>
       </div>
@@ -3303,6 +3301,15 @@ function App() {
             style={{ color: 'oklch(0.85 0.15 195)' }}
           >
             {'{nfl.season}'}
+          </a>
+        )}
+        {!isMobile && (
+          <a
+            href="/charts"
+            className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+            style={{ color: 'oklch(0.85 0.15 195)' }}
+          >
+            {'{charts}'}
           </a>
         )}
 

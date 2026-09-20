@@ -57,7 +57,9 @@ export function SyntaxSuggestionDropdown({ matches, activeIndex = -1, onSelect, 
             borderTop: i === 0 ? 'none' : `1px solid ${C.border}`,
           }}
         >
-          <span className="text-[9px] uppercase tracking-widest" style={{ color: C.textDim }}>
+          {/* Label in terminal green (was dim gray, hard to read) and a touch
+              larger — same green as the {tutorial} link. */}
+          <span className="text-[10px] uppercase tracking-widest" style={{ color: 'oklch(0.78 0.18 145)' }}>
             {m.query.label}
           </span>
           <span className="text-[13px] truncate" style={{ color: C.textBright }}>
