@@ -1885,3 +1885,77 @@ export function normalizeQueryResults(payload: ApiPayload, fallbackQuery = ''): 
     })
     .filter((row): row is QueryResult => row !== null)
 }
+
+// ---------- NFL parlay builder (-parlay) + player legs (-legs) ----------
+// Two engines, one leg shape: `nfl_parlay_builder` ("nspe nfl -parlay
+// -week2 -shape 3/3/3 -risk longshot") returns the picked legs for a whole
+// slate; `nfl_player_legs` ("nspe nfl jonathan taylor -week2 -legs") returns
+// every candidate leg for one player. Both carry the same per-leg record.
+export interface NflParlayLeg {
+  player: string
+  team: string
+  opponent: string
+  category: string
+  label: string
+  // Tier the leg was built for (its slot in the shape, e.g. 5 in 5/4/3/2/1).
+  denom: number
+  confidence: number
+  overall: string
+  overall_rate: number
+  overall_rate_adj?: number
+  recent: string
+  recent_rate: number
+  vs_opp: string
+  vs_opp_rate: number
+  matchup_mult: number
+  shadow?: boolean
+  pair_mult?: number
+  pair_reason?: string | null
+  pool_rank?: number | null
+  pool_size?: number
+}
+
+export interface NflParlayPayload {
+  engine: 'nfl_parlay_builder'
+  query: { season_year?: number; week?: number; shape?: string | null; risk?: string | null }
+  parlay: { legs: number; picks: NflParlayLeg[]; excluded_teams?: unknown[] }
+}
+
+export interface NflPlayerLegsPayload {
+  engine: 'nfl_player_legs'
+  query: { season_year?: number; week?: number; player?: string }
+  player: string
+  legs: NflParlayLeg[]
+}
+
+function isNflParlayPayload(v: unknown): v is NflParlayPayload {
+  if (!v || typeof v !== 'object' || Array.isArray(v)) return false
+  const r = v as Record<string, unknown>
+  const p = r.parlay as Record<string, unknown> | undefined
+  return r.engine === 'nfl_parlay_builder' && !!p && Array.isArray(p.picks)
+}
+
+function isNflPlayerLegsPayload(v: unknown): v is NflPlayerLegsPayload {
+  if (!v || typeof v !== 'object' || Array.isArray(v)) return false
+  const r = v as Record<string, unknown>
+  return r.engine === 'nfl_player_legs' && Array.isArray(r.legs)
+}
+
+// Same "top-level object, or wrapped in the run envelope" search every other
+// extractor here does.
+function findPayload<T>(payload: unknown, guard: (v: unknown) => v is T): T | null {
+  if (guard(payload)) return payload
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return null
+  const rec = payload as Record<string, unknown>
+  if (typeof rec.output === 'string') {
+    const inner = extractEnvelopeFromText(rec.output)
+    if (guard(inner)) return inner
+  }
+  for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+    if (guard(rec[key])) return rec[key] as T
+  }
+  return null
+}
+
+export const extractNflParlayPayload = (payload: unknown) => findPayload(payload, isNflParlayPayload)
+export const extractNflPlayerLegsPayload = (payload: unknown) => findPayload(payload, isNflPlayerLegsPayload)

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { StarsBackground } from '@/components/StarsBackground'
+import { getCurrentNflWeek } from '@/lib/nflWeek'
 import nflData from '@/assets/data/worldcup.json'
 import scheduleData from '@/assets/data/nfl_schedule.json'
 import { useIsMobile } from '@/hooks/use-mobile'
@@ -563,7 +564,7 @@ export default function WorldCupApp() {
   // morning rollover backend-side (games run through Monday Night Football,
   // so the "active" week doesn't advance until Tuesday). Clamped in case
   // current_week is ever missing/out of range before a season starts.
-  const initialScheduleWeek = Math.min(Math.max(data.current_week ?? 1, 1), data.total_weeks)
+  const initialScheduleWeek = getCurrentNflWeek(data.total_weeks, data.current_week)
 
   const [matchupResult, setMatchupResult] = useState<MatchupInsightPayload | null>(null)
   const [isMatchupOpen, setIsMatchupOpen] = useState(false)

@@ -172,11 +172,16 @@ const KEYWORD_ALIASES: Record<string, string[]> = {
   overview: ['ov'], summary: ['ov'], total: ['ov'], totals: ['ov'], stats: ['ov'],
   streaks: ['streak'], halves: ['1h'], half: ['1h'], quarter: ['q1'],
   year: ['season'], yr: ['season'], lifetime: ['career'],
+  // parlay -risk: the backend keyword is "safe"; "short" (short odds) is the
+  // natural word for it.
+  short: ['safe'], shorts: ['safe'], conservative: ['safe'], risky: ['longshot'],
 }
 
 // Words that signal "give me his numbers" — -ov commands get a small ranking
 // boost when one appears, since -ov is the command that answers those.
 const OV_TRIGGERS = new Set(['td', 'yds', 'season', 'career', 'ov', 'hr', 'rec', 'rush', 'pass'])
+
+const SLASH_NUMS = /\d+(?:\/\d+)+/g
 
 function commandWords(q: SampleQuery): Set<string> {
   const words = new Set<string>()
@@ -186,6 +191,8 @@ function commandWords(q: SampleQuery): Set<string> {
     const w = t.replace(/\d+$/, '')
     if (/^[a-z]{1,}$/.test(w)) words.add(w)
   }
+  // Slash-joined numbers (parlay shapes like 3/3/3) are keywords whole.
+  for (const m of q.command.match(SLASH_NUMS) ?? []) words.add(m)
   for (const w of q.label.toLowerCase().split(/[^a-z0-9]+/)) if (w.length >= 2) words.add(w)
   words.delete('nspe')
   return words
@@ -207,6 +214,7 @@ function wordHits(canon: string, word: string): boolean {
 
 export function extractKeywords(query: string): string[] {
   const out: string[] = []
+  for (const m of query.match(SLASH_NUMS) ?? []) if (VOCAB.has(m) && !out.includes(m)) out.push(m)
   for (const raw of query.toLowerCase().split(/[^a-z0-9-]+/)) {
     const t = raw.replace(/^-+/, '')
     if (t.length < 2 || STOPWORDS.has(t)) continue

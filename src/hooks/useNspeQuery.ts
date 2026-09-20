@@ -8,6 +8,7 @@
 
 import { useCallback, useState } from 'react'
 import { authHeader } from '@/lib/auth-token'
+import { loadPlayerIndex, resolvePlayerTeam } from '@/lib/playerSearch'
 import {
   RUN_ENDPOINTS,
   fetchFirstSuccessful,
@@ -29,7 +30,6 @@ import {
   extractMlbTeamRunsPayload,
   isNflExplosivePayload,
   normalizeQueryResults,
-  PLAYER_TEAM_MAP,
   type H2hPayload,
   type MlbBatTeamPayload,
   type MlbFirstPaTrendPayload,
@@ -100,7 +100,9 @@ export function useNspeQuery(): UseNspeQueryReturn {
           },
           body: JSON.stringify({ query: sanitizedQuery }),
         },
-        12000,
+        // -parlay/-legs build a whole slate server-side and run far longer than
+        // an ordinary query, so they get a much longer ceiling.
+        /(^|\s)-(parlay|legs)\b/.test(sanitizedQuery) ? 120000 : 12000,
       )
 
       const payload = await parseApiPayload(response)
@@ -172,9 +174,12 @@ export function useNspeQuery(): UseNspeQueryReturn {
         return
       }
 
+      // Same team fallback as the desktop path: live player index first, then
+      // the static leaderboard/hitlist map (see resolvePlayerTeam).
+      await loadPlayerIndex()
       const normalized = normalizeQueryResults(payload, sanitizedQuery)
       const enriched = normalized.map((r) =>
-        r.team ? r : { ...r, team: PLAYER_TEAM_MAP.get(r.player.toLowerCase()) || undefined },
+        r.team ? r : { ...r, team: resolvePlayerTeam(r.player) },
       )
       const payloadError = getPayloadError(payload)
       setResult({ kind: 'generic', rows: enriched })

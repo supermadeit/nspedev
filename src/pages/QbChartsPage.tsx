@@ -1,15 +1,16 @@
-// {chart} — 2025 QB pass-yards + explosive-play chart. Desktop-first: full
+// {chart} — 2026 QB pass-yards + explosive-play chart. Desktop-first: full
 // column set, ESPN-style sortable stat grid (click a header, it re-sorts
 // descending by that column; click again for ascending). Mobile isn't
 // getting its own condensed layout yet (explicitly deferred — see the
 // conversation this was built from), so this only guards against actually
 // breaking on a narrow screen via horizontal scroll, not a redesign.
 //
-// Data source: qb-explosives-2025.json, a stable copy of the sample dataset
-// used to design this page — 2025 is stale/full-roster (65 QBs, starters and
-// backups alike). Swap this import for the real 2026 starters-only feed once
-// the backend ships it; nothing else about this page should need to change,
-// since the column defs read off the same shape.
+// Data source: qb-explosives-2026.json, a bundled snapshot of the backend's
+// data/output/nfl_qb_explosives.json (2026, generated 2026-09-16). It is a
+// SNAPSHOT — the backend has no endpoint serving it yet, so refresh by
+// re-copying that file until one exists (then swap this import for a fetch,
+// like /database's live pivot). Same shape as the old 2025 file, so nothing
+// else on this page changed.
 //
 // Filtered down to just the QBs we actually have a /database profile for
 // (glob-imported so this stays correct automatically as more profiles land —
@@ -20,7 +21,7 @@
 // no games in the chart source (e.g. Deshaun Watson, who didn't play in
 // 2025) naturally drops out on its own — nothing special-cased for that.
 import { useMemo, useState } from 'react'
-import qbData from '@/assets/data/qb-explosives-2025.json'
+import qbData from '@/assets/data/qb-explosives-2026.json'
 import { normalizeDisplayPlayer } from '@/lib/nspe-payloads'
 
 function normalizePlayerKey(name: string): string {

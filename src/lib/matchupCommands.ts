@@ -10,6 +10,7 @@
 import nflData from '@/assets/data/worldcup.json'
 import scheduleData from '@/assets/data/nfl_schedule.json'
 import type { SampleQuery } from './predictiveCommands'
+import { getCurrentNflWeek } from './nflWeek'
 
 interface NflTeam {
   name: string
@@ -50,13 +51,18 @@ function buildAbbrMap(data: NflSeasonData): Record<string, string> {
   return map
 }
 
+// Last week number present in the schedule (the clamp ceiling).
+function scheduleWeeks(schedule: ScheduleData): number {
+  return schedule.games.reduce((m, g) => Math.max(m, g.week), 1)
+}
+
 // Computed once at module load — the schedule/standings files are static
 // bundled data (refreshed by a build+deploy, not a live fetch), so there's
 // nothing to recompute per keystroke.
 const WEEKLY_MATCHUP_COMMANDS: SampleQuery[] = (() => {
   const data = nflData as unknown as NflSeasonData
   const schedule = scheduleData as unknown as ScheduleData
-  const week = data.current_week ?? 1
+  const week = getCurrentNflWeek(scheduleWeeks(schedule), data.current_week)
   const abbrMap = buildAbbrMap(data)
   return schedule.games
     .filter((g) => g.week === week)

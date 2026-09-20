@@ -45,6 +45,8 @@ import {
   extractMlbTeamOverviewPayload,
   extractMlbTeamRunsPayload,
   extractExplosiveOverviewPayload,
+  extractNflParlayPayload,
+  extractNflPlayerLegsPayload,
   extractNflOverviewScopesPayload,
   extractNflOverviewStatNPayload,
   isNflExplosivePayload,
@@ -68,6 +70,9 @@ import {
   type MlbTeamRunsPayload,
   type MlbTeamRunsTrendResult,
   type ExplosiveOverviewPayload,
+  type NflParlayLeg,
+  type NflParlayPayload,
+  type NflPlayerLegsPayload,
   type NflOverviewScopesPayload,
   type NflOverviewStatNPayload,
   type NflExplosivePayload,
@@ -627,6 +632,150 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
           </ResultRow>
         )
       })}
+    </div>
+  )
+}
+
+// "Running query..." for ordinary commands; -parlay/-legs build a whole slate
+// server-side and take 45-70s, so they get a message that says so, with an
+// elapsed-seconds counter so it visibly isn't hung.
+function LoadingMessage({ query }: { query: string }) {
+  const isParlay = /(^|\s)-parlay\b/.test(query)
+  const isLegs = /(^|\s)-legs\b/.test(query)
+  const slow = isParlay || isLegs
+  const [elapsed, setElapsed] = useState(0)
+  useEffect(() => {
+    if (!slow) return
+    const id = window.setInterval(() => setElapsed((n) => n + 1), 1000)
+    return () => window.clearInterval(id)
+  }, [slow])
+  if (!slow) return <>Running query...</>
+  return (
+    <div className="space-y-1">
+      <div style={{ color: 'oklch(0.85 0.15 195)' }}>{isParlay ? 'building parlay…' : 'building legs…'}</div>
+      <div className="text-[11px]" style={{ color: 'oklch(0.55 0 0)' }}>
+        {`this can take up to a minute · ${elapsed}s`}
+      </div>
+    </div>
+  )
+}
+
+// ---- NFL parlay builder / player legs ----------------------------------
+// One boxed card per leg, same treatment as the h2h game log: player + matchup
+// + confidence on top, the leg's label under it, then its hit-rate evidence
+// left to right.
+const PARLAY_DIM = 'oklch(0.55 0 0)'
+const PARLAY_CYAN = 'oklch(0.70 0.10 195)'
+const PARLAY_GREEN = 'oklch(0.85 0.15 145)'
+
+function pct(rate: number | undefined): string {
+  return typeof rate === 'number' ? `${Math.round(rate * 100)}%` : '—'
+}
+
+function ParlayLegCard({ leg, showPlayer = true }: { leg: NflParlayLeg; showPlayer?: boolean }) {
+  const stats: { text: string; color?: string }[] = [
+    { text: `season ${leg.overall} (${pct(leg.overall_rate)})` },
+    { text: `recent ${leg.recent} (${pct(leg.recent_rate)})` },
+    { text: `vs ${leg.opponent} ${leg.vs_opp} (${pct(leg.vs_opp_rate)})` },
+    { text: `matchup ×${leg.matchup_mult}` },
+    { text: `tier ${leg.denom}`, color: PARLAY_DIM },
+  ]
+  return (
+    <div
+      className="rounded p-3 font-mono text-[12px]"
+      style={{ backgroundColor: 'oklch(0.18 0 0)', border: '1px solid oklch(0.28 0 0)' }}
+    >
+      <div className="flex items-baseline justify-between gap-2">
+        <span>
+          {showPlayer && (
+            <span className="font-bold text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+              {normalizeDisplayPlayer(leg.player)}
+            </span>
+          )}
+          <span style={{ color: PARLAY_CYAN }}>{`${showPlayer ? '  ' : ''}${leg.team} vs ${leg.opponent}`}</span>
+        </span>
+        <span className="font-bold text-[14px]" style={{ color: PARLAY_GREEN }}>{pct(leg.confidence)}</span>
+      </div>
+      <div className="mt-1" style={{ color: 'oklch(0.88 0 0)' }}>
+        {leg.label}
+        {leg.shadow ? <span style={{ color: PARLAY_DIM }}>{'  (shadow)'}</span> : null}
+      </div>
+      <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5" style={{ color: 'oklch(0.76 0 0)' }}>
+        {stats.map((st, i) => (
+          <span key={i} className="whitespace-nowrap" style={st.color ? { color: st.color } : undefined}>
+            {st.text}
+          </span>
+        ))}
+      </div>
+      {leg.pair_reason ? (
+        <div className="mt-1" style={{ color: PARLAY_DIM }}>{`pairing: ${leg.pair_reason}`}</div>
+      ) : null}
+    </div>
+  )
+}
+
+function NflParlayView({ payload }: { payload: NflParlayPayload }) {
+  const q = payload.query ?? {}
+  const picks = payload.parlay?.picks ?? []
+  const shape = (q.shape ?? '3/2/1').replace(/[{}]/g, '')
+  const excluded = (payload.parlay?.excluded_teams ?? []).filter((t): t is string => typeof t === 'string')
+  return (
+    <div className="space-y-3">
+      <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+        <span>nfl parlay</span>
+        <span style={{ color: PARLAY_DIM }}>
+          {` · week ${q.week ?? '—'} · shape ${shape} · ${q.risk ?? 'standard'} · ${payload.parlay?.legs ?? picks.length} legs`}
+        </span>
+      </div>
+      {picks.length === 0 ? (
+        <div className="text-center py-4 font-mono text-[12px]" style={{ color: 'oklch(0.70 0 0)' }}>
+          No legs qualified for this shape
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {picks.map((leg, i) => (
+            <ParlayLegCard key={`${leg.player}-${leg.category}-${i}`} leg={leg} />
+          ))}
+        </div>
+      )}
+      {excluded.length > 0 && (
+        <div className="font-mono text-[11px]" style={{ color: PARLAY_DIM }}>
+          {`excluded teams: ${excluded.join(', ')}`}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function NflPlayerLegsView({ payload }: { payload: NflPlayerLegsPayload }) {
+  const q = payload.query ?? {}
+  const legs = payload.legs ?? []
+  const first = legs[0]
+  return (
+    <div className="space-y-3">
+      <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+        {first?.team ? (
+          <>
+            <span style={{ color: PARLAY_CYAN }}>{first.team}</span>
+            <span style={{ color: PARLAY_DIM }}>{' — '}</span>
+          </>
+        ) : null}
+        <span>{normalizeDisplayPlayer(payload.player || q.player || 'player')}</span>
+        <span style={{ color: PARLAY_DIM }}>
+          {` · week ${q.week ?? '—'}${first ? ` · vs ${first.opponent}` : ''} · ${legs.length} leg${legs.length === 1 ? '' : 's'}`}
+        </span>
+      </div>
+      {legs.length === 0 ? (
+        <div className="text-center py-4 font-mono text-[12px]" style={{ color: 'oklch(0.70 0 0)' }}>
+          No legs for this player this week
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {legs.map((leg, i) => (
+            <ParlayLegCard key={`${leg.category}-${i}`} leg={leg} showPlayer={false} />
+          ))}
+        </div>
+      )}
     </div>
   )
 }
@@ -2342,7 +2491,7 @@ const SEARCH_GLOW = '0 0 8px 1px oklch(0.90 0.18 195 / 0.55), 0 0 20px 4px oklch
 const NSPE_COMMAND_TOKENS = [
   'nspe', 'mlb', 'nfl', 'nba', 'nhl', 'cfb', 'ncaaf', 'plus', 'help',
   'streak', 'team', 'first', 'long', 'h2h', 'week', '1h', 'q1',
-  'pass', 'rush', 'rec', 'any',
+  'pass', 'rush', 'rec', 'any', 'parlay',
 ]
 function looksLikePlayerSearch(value: string): boolean {
   const trimmed = value.trim().toLowerCase()
@@ -2410,6 +2559,8 @@ function App() {
   const [playerReportResult, setPlayerReportResult] = useState<MlbPlayerReportPayload | null>(null)
   const [nflExplosiveResult, setNflExplosiveResult] = useState<NflExplosivePayload | null>(null)
   const [explosiveOverviewResult, setExplosiveOverviewResult] = useState<ExplosiveOverviewPayload | null>(null)
+  const [parlayResult, setParlayResult] = useState<NflParlayPayload | null>(null)
+  const [playerLegsResult, setPlayerLegsResult] = useState<NflPlayerLegsPayload | null>(null)
   const [overviewScopesResult, setOverviewScopesResult] = useState<NflOverviewScopesPayload | null>(null)
   const [overviewStatNResult, setOverviewStatNResult] = useState<NflOverviewStatNPayload | null>(null)
   const [hrResult, setHrResult] = useState<MlbHrPayload | null>(null)
@@ -2619,6 +2770,8 @@ function App() {
     setPlayerReportResult(null)
     setNflExplosiveResult(null)
     setExplosiveOverviewResult(null)
+    setParlayResult(null)
+    setPlayerLegsResult(null)
     setOverviewScopesResult(null)
     setOverviewStatNResult(null)
     setHrResult(null)
@@ -2646,7 +2799,9 @@ function App() {
           },
           body: JSON.stringify({ query: sanitizedQuery }),
         },
-        12000,
+        // -parlay/-legs build a whole slate server-side and run far longer than
+        // an ordinary query, so they get a much longer ceiling.
+        /(^|\s)-(parlay|legs)\b/.test(sanitizedQuery) ? 120000 : 12000,
       )
 
       const payload = await parseApiPayload(response)
@@ -2744,6 +2899,20 @@ function App() {
       // NFL explosive (play-by-play long plays)
       if (isNflExplosivePayload(payload)) {
         setNflExplosiveResult(payload)
+        setQueryResults([])
+        return
+      }
+
+      // NFL parlay builder / single-player legs
+      const parlayPayload = extractNflParlayPayload(payload)
+      if (parlayPayload) {
+        setParlayResult(parlayPayload)
+        setQueryResults([])
+        return
+      }
+      const playerLegsPayload = extractNflPlayerLegsPayload(payload)
+      if (playerLegsPayload) {
+        setPlayerLegsResult(playerLegsPayload)
         setQueryResults([])
         return
       }
@@ -3105,6 +3274,16 @@ function App() {
             {'{sample-queries}'}
           </button>
         )}
+        {isMobile && (
+          <button
+            onClick={() => setIsTutorialOpen(true)}
+            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+            style={{ color: 'oklch(0.78 0.18 145)' }}
+            aria-label="Open tutorial"
+          >
+            {'{tutorial}'}
+          </button>
+        )}
       </div>
 
       <div
@@ -3127,13 +3306,25 @@ function App() {
           </a>
         )}
 
-        <a
-          href="/signup"
-          className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-          style={{ color: 'oklch(0.85 0.15 195)' }}
-        >
-          {'{sign-up}'}
-        </a>
+        {/* Mobile drops {sign-up} — {log-in} leads to the same place ("don't
+            have an account? sign up") — and uses the slot for {charts}. */}
+        {isMobile ? (
+          <a
+            href="/charts"
+            className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+            style={{ color: 'oklch(0.85 0.15 195)' }}
+          >
+            {'{charts}'}
+          </a>
+        ) : (
+          <a
+            href="/signup"
+            className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+            style={{ color: 'oklch(0.85 0.15 195)' }}
+          >
+            {'{sign-up}'}
+          </a>
+        )}
 
         <a
           href="/login"
@@ -3368,6 +3559,10 @@ function App() {
                 ? `${lastQuery} — player report`
                 : nflExplosiveResult
                 ? `${lastQuery} — explosive`
+                : parlayResult
+                ? `${lastQuery} — parlay`
+                : playerLegsResult
+                ? `${lastQuery} — legs`
                 : explosiveOverviewResult
                 ? `${lastQuery} — explosive overview`
                 : overviewScopesResult
@@ -3396,7 +3591,7 @@ function App() {
           <div className={`overflow-y-auto px-5 py-4 space-y-3 ${isMobile ? 'max-h-[calc(100dvh-130px)]' : 'max-h-[calc(62vh-50px)]'}`}>
             {isLoading ? (
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
-                Running query...
+                <LoadingMessage query={lastQuery} />
               </div>
             ) : h2hResult ? (
               <H2hView payload={h2hResult} />
@@ -3414,6 +3609,10 @@ function App() {
               <MlbPlayerReportView payload={playerReportResult} />
             ) : nflExplosiveResult ? (
               <NflExplosiveView payload={nflExplosiveResult} />
+            ) : parlayResult ? (
+              <NflParlayView payload={parlayResult} />
+            ) : playerLegsResult ? (
+              <NflPlayerLegsView payload={playerLegsResult} />
             ) : explosiveOverviewResult ? (
               <ExplosiveOverviewView payload={explosiveOverviewResult} />
             ) : overviewScopesResult ? (
@@ -3972,22 +4171,22 @@ function App() {
         </button>
       )}
 
-      {/* {glossary} removed (nav entry only, same shelve pattern noted in
-          the desktop group above) — {tutorial} takes its old slot. */}
+      {/* Mobile: {nfl.season} sits next to {leaderboard} (desktop has it in the
+          top-right nav); {tutorial} moved to the top-left under
+          {sample-queries}. */}
       {isMobile && (
-        <button
-          type="button"
-          onClick={() => setIsTutorialOpen(true)}
+        <a
+          href="/nfl.season"
           className="absolute z-20 font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
           style={{
             bottom: '46px',
             right: leaderboard?.rows?.length > 0 ? '128px' : '12px',
-            color: 'oklch(0.78 0.18 145)',
+            color: 'oklch(0.85 0.15 195)',
           }}
-          aria-label="Open tutorial"
+          aria-label="Open NFL season"
         >
-          {'{tutorial}'}
-        </button>
+          {'{nfl.season}'}
+        </a>
       )}
 
       {isMobile && isMobileLeaderboardOpen && (

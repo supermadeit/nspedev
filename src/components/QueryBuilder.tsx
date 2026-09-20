@@ -154,7 +154,9 @@ export const SPORT_STATS: Record<string, Array<{ value: string; label: string }>
     { value: 'a', label: 'A' },
     { value: 'pts', label: 'PTS' },
     { value: 'sog', label: 'SOG' },
-    { value: 'blk', label: 'BLK' },
+    // Shelved, not deleted — the backend has no NHL blocked-shots data yet
+    // (see predictiveCommands.ts's NHL notes). Restore with its presets below.
+    // { value: 'blk', label: 'BLK' },
   ],
   nfl: [
     { value: 'rush', label: 'RUSH' },
@@ -197,8 +199,8 @@ export const THRESHOLD_PRESETS: Record<string, Record<string, number[]>> = {
     g: [1, 2, 3],
     a: [1, 2, 3],
     pts: [1, 2, 3, 4],
-    sog: [3, 4, 5, 6, 8],
-    blk: [1, 2, 3, 4],
+    sog: [2, 3, 4, 5, 6, 8],
+    // blk: [1, 2, 3, 4], // shelved with the BLK stat button above
   },
 }
 export const NFL_YDS_PRESETS = [50, 100, 150, 200, 250, 300, 350, 400]
@@ -217,14 +219,28 @@ export const COMPUTE_WINDOW_N_PRESETS = [1, 3, 5, 10, 15, 20, 25, 30]
 // Scale up so the range (and the default, which uses the smallest value)
 // reflects a genuinely selective total instead of a floor everyone clears.
 export const COMPUTE_SCALE = 5
+// Legacy ×COMPUTE_SCALE totals — kept only because the paused mobile
+// calculator (BuilderScreen.tsx / useCalculatorQuery.ts) still imports them;
+// the desktop builder uses nflComputePresets below instead.
 export const NFL_YDS_COMPUTE_PRESETS = NFL_YDS_PRESETS.map((n) => n * COMPUTE_SCALE)
 export const NFL_TD_COMPUTE_PRESETS = NFL_TD_PRESETS.map((n) => n * COMPUTE_SCALE)
+// NFL compute defaults to a single-game window (-last1), so its presets are
+// single-game numbers a real performance can land on, by stat — not the
+// ×COMPUTE_SCALE totals the multi-game sports use. Combos ("-pr"/"-rr") and
+// touchdowns get their own ranges; a wider window is still reachable via
+// the number picker's "other".
+export function nflComputePresets(stat: string, statType: string, combo: boolean): number[] {
+  if (statType === 'td') return [1, 2, 3, 4, 5]
+  if (combo) return stat === 'pass' ? [200, 250, 300, 350, 400] : [60, 80, 100, 120, 150]
+  if (stat === 'pass') return [150, 200, 250, 300, 350, 400]
+  return [50, 75, 100, 125, 150, 200]
+}
 export const TEAM_RUNS_TREND_PRESETS = [3, 4, 5, 6, 7, 8, 10]
-export const TEAM_RUNS_COMPUTE_PRESETS = [200, 300, 400, 500, 600, 700, 800]
+export const TEAM_RUNS_COMPUTE_PRESETS = [10, 15, 20, 25, 30, 35, 40]
 export const EXPLOSIVE_NFL_TREND_PRESETS = [20, 25, 30, 40, 50, 60, 75, 100]
-export const EXPLOSIVE_NFL_COMPUTE_PRESETS = [200, 300, 400, 500, 600, 700, 800]
+export const EXPLOSIVE_NFL_COMPUTE_PRESETS = [20, 25, 30, 35, 40, 45, 50]
 export const EXPLOSIVE_MLB_TREND_PRESETS = [350, 375, 400, 425, 450, 475, 500, 525]
-export const EXPLOSIVE_MLB_COMPUTE_PRESETS = [600, 800, 1000, 1200, 1500, 2000]
+export const EXPLOSIVE_MLB_COMPUTE_PRESETS = [300, 400, 500, 600, 750, 1000]
 // Per-stat overrides for compute mode, when the generic COMPUTE_SCALE ×5
 // rule doesn't land on a sensible range (e.g. "total" points+rebounds+
 // assists is naturally larger-scale than a single stat, so ×5 overshoots).
@@ -239,8 +255,54 @@ export const COMPUTE_PRESET_OVERRIDES: Record<string, Record<string, number[]>> 
   },
 }
 
+// Compute-mode single-game bases that differ from the trend presets — NHL
+// points start at 2 (a "2 points over last 2" ask is reasonable; 1 is not
+// selective enough to be worth a chip).
+const COMPUTE_BASE_OVERRIDES: Record<string, Record<string, number[]>> = {
+  nhl: { pts: [2, 3, 4] },
+}
+
 export function thresholdPresetsFor(sport: string, stat: string): number[] {
   return THRESHOLD_PRESETS[sport]?.[stat] ?? GENERIC_THRESHOLD
+}
+
+// How much a compute window widens the reachable totals — deliberately
+// gentle (well under a straight ×window), since the per-game numbers are the
+// point of the presets and a wider window only needs a few bigger targets.
+function windowFactor(computeWindow: string, windowN: string): number {
+  if (computeWindow === '-season') return 10
+  if (computeWindow === '-career') return 15
+  const n = computeWindow === '-last' ? Number(windowN) || 1 : 1
+  if (n <= 1) return 1
+  if (n <= 3) return 2
+  if (n <= 5) return 3
+  if (n <= 10) return 5
+  if (n <= 20) return 8
+  return 12
+}
+
+// Compute presets for the window in play: the single-game values ALWAYS stay
+// (someone may genuinely want "200 rushing in one game" even on a -last10
+// window) with a few larger window-scaled targets added alongside. NBA's
+// hand-tuned overrides are treated as the ×5 ("last10") set and rescaled from
+// there.
+export function computePresetsForWindow(
+  sport: string,
+  stat: string,
+  computeWindow: string,
+  windowN: string,
+  nfl?: { statType: string; combo: boolean },
+): number[] {
+  const f = windowFactor(computeWindow, windowN)
+  if (sport === 'nfl' && nfl) {
+    const base = nflComputePresets(stat, nfl.statType, nfl.combo)
+    return f === 1 ? base : [...new Set([...base, ...base.map((n) => n * f)])].sort((a, b) => a - b)
+  }
+  const base = COMPUTE_BASE_OVERRIDES[sport]?.[stat] ?? thresholdPresetsFor(sport, stat)
+  if (f === 1) return base
+  const override = COMPUTE_PRESET_OVERRIDES[sport]?.[stat]
+  const scaled = override ? override.map((n) => Math.round((n * f) / 5)) : base.map((n) => n * f)
+  return [...new Set([...base, ...scaled])].sort((a, b) => a - b)
 }
 
 export function computeThresholdPresetsFor(sport: string, stat: string): number[] {
@@ -354,15 +416,17 @@ const selectStyle = {
   color: C.accent,
 }
 
-// Dropdown of common preset values with a "custom" escape hatch that reveals
-// a plain NumInput — mobile-friendly by default (native <select>), but never
-// blocks an unusual value the presets didn't anticipate.
+// Horizontal row of tappable preset chips with a trailing "other" chip that
+// turns into a numeric input (inputMode="numeric" -> phone numpad) for any
+// value the presets didn't anticipate. Replaced the native <select>: one tap
+// instead of open-list-then-pick, and the range of sensible values is
+// visible at a glance. The `w` prop is kept only so existing call sites
+// (which sized the old select) keep compiling; chips size themselves.
 function NumSelect({
   value,
   onChange,
   options,
   placeholder = 'N',
-  w = 90,
 }: {
   value: string
   onChange: (v: string) => void
@@ -371,66 +435,78 @@ function NumSelect({
   w?: number
 }) {
   const isCustom = value !== '' && !options.includes(Number(value))
-  const [showCustom, setShowCustom] = useState(isCustom)
-  // Only auto-focus the custom input when the user actively switches into it
-  // via "Other…" mid-session (so the numpad pops immediately, no extra tap
-  // needed) — never on a fresh mount where showCustom already starts true
-  // because a previously-persisted custom value was restored, which would
-  // otherwise steal focus (and pop the mobile keyboard) the instant the
-  // builder opens with no user action at all.
+  const [otherOpen, setOtherOpen] = useState(isCustom)
+  // Only auto-focus the input when the user actively taps "other" — never on
+  // a fresh mount that restored a persisted custom value, which would pop
+  // the mobile keyboard the instant the builder opens with no user action.
   const hasMountedRef = useRef(false)
   useEffect(() => {
     hasMountedRef.current = true
   }, [])
+  // A preset value arriving from elsewhere (default-fill, stat change)
+  // closes a stale open "other" input.
+  useEffect(() => {
+    if (value !== '' && options.includes(Number(value))) setOtherOpen(false)
+  }, [value, options])
 
-  if (showCustom) {
-    return (
-      <div className="flex items-center gap-1">
-        <NumInput
-          value={value}
-          onChange={onChange}
-          placeholder={placeholder}
-          w={w - 24}
-          autoFocus={hasMountedRef.current}
-        />
-        <button
-          type="button"
-          onClick={() => {
-            setShowCustom(false)
-            onChange('')
-          }}
-          className="font-mono text-[11px] px-1.5 py-1.5 rounded border"
-          style={{ ...selectStyle, cursor: 'pointer' }}
-          title="Back to presets"
-        >
-          ✕
-        </button>
-      </div>
-    )
-  }
+  const chip = (selected: boolean): React.CSSProperties => ({
+    backgroundColor: selected ? C.accent : C.surface2,
+    color: selected ? C.accentDark : C.textBright,
+    borderColor: selected ? C.accent : C.border,
+    fontWeight: selected ? 700 : 400,
+    cursor: 'pointer',
+  })
+  const chipClass = 'font-mono text-[12px] min-w-[38px] px-2.5 py-1.5 rounded border transition-colors select-none text-center'
 
   return (
-    <select
-      value={value}
-      onChange={(e) => {
-        if (e.target.value === '__custom__') {
-          setShowCustom(true)
-          onChange('')
-        } else {
-          onChange(e.target.value)
-        }
-      }}
-      className={selectClass}
-      style={{ ...selectStyle, width: `${w}px` }}
-    >
-      <option value="">{placeholder}</option>
-      {options.map((n) => (
-        <option key={n} value={n}>
-          {n}
-        </option>
-      ))}
-      <option value="__custom__">Other…</option>
-    </select>
+    <div className="flex flex-wrap items-center gap-1.5 max-w-[300px]">
+      {options.map((n) => {
+        const selected = !otherOpen && value === String(n)
+        return (
+          <button
+            key={n}
+            type="button"
+            className={chipClass}
+            style={chip(selected)}
+            onClick={() => {
+              setOtherOpen(false)
+              onChange(selected ? '' : String(n))
+            }}
+          >
+            {n}
+          </button>
+        )
+      })}
+      {otherOpen ? (
+        <div className="flex items-center gap-1">
+          <NumInput value={value} onChange={onChange} placeholder={placeholder} w={64} autoFocus={hasMountedRef.current} />
+          <button
+            type="button"
+            className="font-mono text-[11px] px-1.5 py-1.5 rounded border"
+            style={{ ...selectStyle, cursor: 'pointer' }}
+            title="Back to presets"
+            onClick={() => {
+              setOtherOpen(false)
+              onChange('')
+            }}
+          >
+            ✕
+          </button>
+        </div>
+      ) : (
+        <button
+          type="button"
+          className={chipClass}
+          style={{ ...chip(isCustom), borderStyle: 'dashed' }}
+          onClick={() => {
+            setOtherOpen(true)
+            onChange('')
+          }}
+        >
+          {isCustom ? value : 'other'}
+        </button>
+      )}
+    </div>
   )
 }
 
@@ -512,6 +588,16 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
   }, [storageKey, mode, sport, period, yearFilter, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, nflStatType, nflCombo, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds])
 
   const isNbaHalfPeriod = sport === 'nba' && period === '1h'
+  const computeMinPresets = computePresetsForWindow(sport, stat, computeWindow, windowN, {
+    statType: nflStatType,
+    combo: nflCombo,
+  })
+  // Optional controls (period, first PA, batter position, season) live behind
+  // one toggle so the default view is just sport / stat / threshold. Stays
+  // open on its own whenever one of them already holds a value, so a set
+  // option can never be hidden out from under the user.
+  const [showMore, setShowMore] = useState(false)
+  const optionalOpen = showMore || Boolean(period || mlbFirstFlag || batPosition || yearFilter)
   const allStats = SPORT_STATS[sport] ?? []
   const stats = isNbaHalfPeriod
     ? allStats.filter((s) => NBA_HALF_STATS.has(s.value))
@@ -732,7 +818,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
         const minDefault =
           nflCombo && nflStatType !== 'td'
             ? NFL_COMBO_DEFAULT[nflComboCode(stat)]
-            : (nflStatType === 'td' ? NFL_TD_PRESETS : NFL_YDS_PRESETS)[0]
+            : nflComputePresets(stat, nflStatType, nflCombo)[stat === 'pass' && nflStatType !== 'td' ? 1 : 0]
         setMinN(String(minDefault))
         setComputeWindow('-last')
         setWindowN('1')
@@ -1152,6 +1238,21 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
         </div>
       )}
 
+      {/* Optional-controls toggle — right under sport. */}
+      {isBuilderQuery && sport && !firstPaActive && (
+        <div className="mb-3">
+          <button
+            type="button"
+            onClick={() => setShowMore((v) => !v)}
+            disabled={Boolean(period || mlbFirstFlag || batPosition || yearFilter)}
+            className="font-mono text-[11px] underline underline-offset-4 hover:opacity-80 transition-opacity"
+            style={{ color: C.accentDim, cursor: 'pointer' }}
+          >
+            {optionalOpen ? '{fewer options}' : '{more options}'}
+          </button>
+        </div>
+      )}
+
       {/* Period — kept here (right after sport, before stat) since it's
           pushed onto the built command early (right after sport, before the
           stat/threshold tokens) — its position in the UI mirrors its actual
@@ -1164,7 +1265,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
           later as its own thing once MLB's October postseason starts — for
           now every command defaults to regular season same as before, just
           without a pointless button implying there's a choice to make. */}
-      {isBuilderQuery && !firstPaActive && (sport === 'nba' || sport === 'nhl') && (
+      {optionalOpen && isBuilderQuery && !firstPaActive && (sport === 'nba' || sport === 'nhl') && (
         <div className="mb-3">
           <SLabel>period</SLabel>
           <div className="flex gap-1.5 flex-wrap">
@@ -1184,7 +1285,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       )}
 
       {/* First plate appearance (MLB trend only — one PA per game, no threshold N) */}
-      {mode === 'trend' && sport === 'mlb' && (
+      {optionalOpen && mode === 'trend' && sport === 'mlb' && (
         <div className="mb-3">
           <SLabel>first plate appearance {'{optional}'}</SLabel>
           <div className="flex gap-1.5 flex-wrap">
@@ -1216,7 +1317,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       )}
 
       {/* Batter position (MLB only) */}
-      {isBuilderQuery && sport === 'mlb' && !firstPaActive && (
+      {optionalOpen && isBuilderQuery && sport === 'mlb' && !firstPaActive && (
         <div className="mb-3">
           <SLabel>batter position {'{optional}'}</SLabel>
           <div className="flex gap-1.5 flex-wrap">
@@ -1340,7 +1441,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
                 <NumSelect
                   value={minN}
                   onChange={setMinN}
-                  options={sport === 'nfl' ? (nflStatType === 'td' ? NFL_TD_COMPUTE_PRESETS : NFL_YDS_COMPUTE_PRESETS) : computeThresholdPresetsFor(sport, stat)}
+                  options={computeMinPresets}
                   w={80}
                 />
               </div>
@@ -1352,7 +1453,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
                   <NumSelect
                     value={minN}
                     onChange={setMinN}
-                    options={sport === 'nfl' ? (nflStatType === 'td' ? NFL_TD_COMPUTE_PRESETS : NFL_YDS_COMPUTE_PRESETS) : computeThresholdPresetsFor(sport, stat)}
+                    options={computeMinPresets}
                     w={80}
                   />
                 </div>
@@ -1362,7 +1463,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
                   <NumSelect
                     value={maxN}
                     onChange={setMaxN}
-                    options={sport === 'nfl' ? (nflStatType === 'td' ? NFL_TD_COMPUTE_PRESETS : NFL_YDS_COMPUTE_PRESETS) : computeThresholdPresetsFor(sport, stat)}
+                    options={computeMinPresets}
                     w={80}
                   />
                 </div>
@@ -1405,7 +1506,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
           covers 2010-2019. Pre-2010 (career-spanning players) isn't
           reachable here yet — planned manual-YYYY-input follow-up, not
           built. */}
-      {isBuilderQuery && !firstPaActive && (
+      {optionalOpen && isBuilderQuery && !firstPaActive && (
         <div className="mb-3">
           <SLabel>season {'{optional}'}</SLabel>
           <div className="flex gap-1.5 flex-wrap items-center">

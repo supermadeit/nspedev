@@ -26,6 +26,8 @@
 //   h2h (mlb)  nspe mlb {player} vs {TEAM}
 //   long       nspe {sport} long {nfl-category?} -{yds|hr}{N} -last{met}/{last}
 //   -ov (nfl)  nspe nfl {long|1h|q1} {player} -ov {YYYY | -career | YYYY-YYYY}?
+//   parlay(nfl)nspe nfl -parlay -week{N} -shape {S}? -risk {longshot|safe}?
+//   legs (nfl) nspe nfl {player} -week{N} -legs
 
 // Defined here (not sampleQueries.ts) since this is now the primary content
 // file — sampleQueries.ts re-exports it so existing imports elsewhere don't
@@ -51,6 +53,34 @@ export interface SampleQuery {
   // playerHint) instead of swapping in whoever was searched — for commands
   // that only work for a tracked subset (-staff needs data/output/mlb_bvp).
   onlyFor?: string
+}
+
+import { getCurrentNflWeek } from './nflWeek'
+
+// Parlay/legs commands take the slate's week. Tracks the current NFL week
+// (see nflWeek.ts) instead of a hardcoded number, so the examples stay
+// runnable as the season advances.
+const PARLAY_WEEK = getCurrentNflWeek(18, null)
+
+// Every shape the parlay builder accepts. Omitting -shape defaults to 3/2/1;
+// omitting -risk (or a bare -risk) defaults to standard. The backend's -risk
+// only recognizes "safe" and "longshot" (utils/nspe_cli.py) — any other word,
+// including "short", is silently ignored and returns the standard parlay, so
+// the examples use "safe". Typing "short" still finds them (see the keyword
+// alias in syntaxSuggestions.ts).
+const PARLAY_SHAPES = ['3/2/1', '3/3/3', '2/2', '5/4/3/2/1', '5/5/5/5/5', '6/6/6/6/6/6']
+
+function buildParlayCommands(): SampleQuery[] {
+  const out: SampleQuery[] = [
+    { label: 'nfl parlay · default', command: `nspe nfl -parlay -week${PARLAY_WEEK}` },
+  ]
+  for (const shape of PARLAY_SHAPES) {
+    out.push({ label: `nfl parlay · ${shape}`, command: `nspe nfl -parlay -week${PARLAY_WEEK} -shape ${shape}` })
+    out.push({ label: `nfl parlay · ${shape} longshot`, command: `nspe nfl -parlay -week${PARLAY_WEEK} -shape ${shape} -risk longshot` })
+    out.push({ label: `nfl parlay · ${shape} safe`, command: `nspe nfl -parlay -week${PARLAY_WEEK} -shape ${shape} -risk safe` })
+  }
+  out.push({ label: 'nfl parlay · 3/3/3 standard risk', command: `nspe nfl -parlay -week${PARLAY_WEEK} -shape 3/3/3 -risk` })
+  return out
 }
 
 const NFL_COMMANDS: SampleQuery[] = [
@@ -120,6 +150,9 @@ const NFL_COMMANDS: SampleQuery[] = [
   { label: 'nfl overview · scopes (-ov)', command: 'nspe nfl derrick henry -ov', playerHint: 'derrick henry' },
   { label: 'nfl overview · 1h -yds50 (-ov, career)', command: 'nspe nfl 1h derrick henry -yds50 -ov -career', playerHint: 'derrick henry' },
   { label: 'nfl overview · long (-ov)', command: 'nspe nfl long derrick henry -ov', playerHint: 'derrick henry' },
+  // Player legs — every candidate parlay leg for one NFL player this week.
+  // playerHint makes it surface for whichever NFL player is searched.
+  { label: 'nfl player legs', command: `nspe nfl jonathan taylor -week${PARLAY_WEEK} -legs`, playerHint: 'jonathan taylor' },
   // h2h — divisional opponent (WSH is a real NFC East rival of DAL)
   { label: 'nfl h2h (career)', command: 'nspe nfl dak vs wsh -career', playerHint: 'dak' },
   // "-week" — career performance in one week number across every season,
@@ -306,6 +339,7 @@ const NHL_COMMANDS: SampleQuery[] = [
 // readable in the same priority for anyone editing it directly.
 export const PREDICTIVE_COMMANDS: SampleQuery[] = [
   ...NFL_COMMANDS,
+  ...buildParlayCommands(),
   ...MLB_COMMANDS,
   ...NBA_COMMANDS,
   ...NHL_COMMANDS,

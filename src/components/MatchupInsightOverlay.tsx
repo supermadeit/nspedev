@@ -180,10 +180,17 @@ export function MatchupInsightOverlay({ open, onClose, payload }: MatchupInsight
         </div>
 
         <div className="px-5 py-3 flex-none flex items-center justify-between flex-wrap gap-2" style={{ borderBottom: `1px solid ${C.border}` }}>
+          {/* record is teamA's wins-losses. The team AHEAD is named (with its
+              own wins first), never teamA by default; equal wins reads
+              "series even". */}
           <span className="font-mono text-[13px]" style={{ color: C.textBright }}>
-            {teamA} leads series{' '}
+            {record.wins === record.losses ? (
+              <>series even </>
+            ) : (
+              <>{record.wins > record.losses ? teamA : teamB} leads series </>
+            )}
             <span style={{ color: C.accent, fontWeight: 700 }}>
-              {record.wins}-{record.losses}
+              {Math.max(record.wins, record.losses)}-{Math.min(record.wins, record.losses)}
               {record.ties ? `-${record.ties}` : ''}
             </span>
           </span>
