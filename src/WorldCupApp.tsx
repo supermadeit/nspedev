@@ -419,17 +419,23 @@ function RankingTile({ row, onSelect }: { row: PowerRankingsRow; onSelect: (team
     <button
       type="button"
       onClick={() => onSelect(row.team)}
-      className="rounded px-3 py-2.5 flex flex-col gap-1.5 text-left hover:opacity-80 transition-opacity"
+      className="rounded px-3 py-2.5 flex flex-col items-center gap-1.5 text-center hover:opacity-80 transition-opacity"
       style={{ backgroundColor: 'oklch(0.10 0 0)', border: `1px solid ${C.border}` }}
     >
-      <div className="flex items-baseline gap-2">
-        <span className="font-mono text-[12px]" style={{ color: C.dim }}>{row.rank}</span>
-        <span className="font-mono text-[22px] font-bold leading-none" style={{ color: C.accent }}>{`{${row.team}}`}</span>
+      <div className="flex items-center justify-center gap-2">
+        <span className="font-mono text-[16px] font-bold leading-none" style={{ color: 'oklch(0.98 0 0)' }}>{row.rank}</span>
+        {/* Team code gets its own bordered box inside the tile. */}
+        <span
+          className="font-mono text-[22px] font-bold leading-none rounded px-2 py-1"
+          style={{ color: C.accent, border: `1px solid ${C.accent}` }}
+        >
+          {row.team}
+        </span>
       </div>
-      {/* Record and score stacked on their own lines — sharing one row got
-          tight once the team text above grew, and they're different enough
-          concepts (season record vs. computed rank score) to not need to
-          compete side by side. */}
+      {/* Record and score stacked on their own lines, centered under the
+          team box — sharing one row got tight once the team text above
+          grew, and they're different enough concepts (season record vs.
+          computed rank score) to not need to compete side by side. */}
       <span className="font-mono text-[12px]" style={{ color: C.label }}>{formatRecord(row)}</span>
       <span className="font-mono text-[16px] font-bold" style={{ color: C.green }}>{row.power_score.toFixed(1)}</span>
     </button>
@@ -639,7 +645,7 @@ export default function WorldCupApp() {
           not something pushed down under a headline. */}
       <div className="absolute top-0 left-0 right-0 z-20 px-4 pt-3 pb-2">
         <div className="flex items-center justify-between gap-4 max-w-[1480px] mx-auto">
-          <a href="/" className="font-mono text-[13px] hover:opacity-70 transition-opacity" style={{ color: C.label }}>
+          <a href="/" className="font-mono font-bold text-[14px] hover:opacity-70 transition-opacity" style={{ color: 'oklch(0.95 0 0)' }}>
             ← nspe.dev
           </a>
           <div className="flex items-center gap-4">
@@ -682,7 +688,7 @@ export default function WorldCupApp() {
             above) rather than living inside this scrollable section. */}
         {activeView === 'rankings' && (
           <section className="h-full flex flex-col">
-            <div className="font-mono text-[14px] uppercase tracking-widest mb-2 shrink-0" style={{ color: C.label }}>
+            <div className="font-mono text-[14px] uppercase tracking-widest mb-2 shrink-0" style={{ color: 'oklch(0.95 0 0)' }}>
               power rankings
             </div>
             <div className="flex-1 min-h-0 overflow-y-auto">

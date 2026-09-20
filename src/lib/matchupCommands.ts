@@ -73,3 +73,18 @@ const WEEKLY_MATCHUP_COMMANDS: SampleQuery[] = (() => {
 export function getWeeklyMatchupCommands(): SampleQuery[] {
   return WEEKLY_MATCHUP_COMMANDS
 }
+
+// This week's opponent for an NFL team abbreviation (case-insensitive), from
+// the same slate WEEKLY_MATCHUP_COMMANDS is built from — parsed back out of
+// each "nspe nfl matchup {away} vs {home}" command rather than a second
+// schedule pass. Undefined on a bye week or an unknown abbreviation.
+export function getOpponentThisWeek(team: string | undefined): string | undefined {
+  if (!team) return undefined
+  const t = team.toLowerCase()
+  for (const q of WEEKLY_MATCHUP_COMMANDS) {
+    const [away, home] = q.command.replace('nspe nfl matchup ', '').split(' vs ')
+    if (away === t) return home
+    if (home === t) return away
+  }
+  return undefined
+}

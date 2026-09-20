@@ -43,6 +43,14 @@ export interface SampleQuery {
   // of `command` above (not the player's full real name) or the swap silently
   // no-ops.
   playerHint?: string
+  // The backend's -weekN engine only tracks QBs (confirmed live: "isn't in
+  // the tracked QB pool"), so this template is skipped for every other
+  // position by findPlayerSpotlightCommands.
+  qbOnly?: boolean
+  // Only surface for this exact player (lowercase full name, same string as
+  // playerHint) instead of swapping in whoever was searched — for commands
+  // that only work for a tracked subset (-staff needs data/output/mlb_bvp).
+  onlyFor?: string
 }
 
 const NFL_COMMANDS: SampleQuery[] = [
@@ -106,12 +114,18 @@ const NFL_COMMANDS: SampleQuery[] = [
   // current season; -career and YYYY-YYYY are also allowed, same as the
   // other -ov variants above.
   { label: 'nfl overview · 1h -yds150 (-ov, career)', command: 'nspe nfl dak 1h -yds150 -ov -career', playerHint: 'dak' },
+  // Position-agnostic player templates — the backend infers rush/rec/pass
+  // category from the player, so these work for every NFL player (verified
+  // live for Derrick Henry and CeeDee Lamb, not just QBs).
+  { label: 'nfl overview · scopes (-ov)', command: 'nspe nfl derrick henry -ov', playerHint: 'derrick henry' },
+  { label: 'nfl overview · 1h -yds50 (-ov, career)', command: 'nspe nfl 1h derrick henry -yds50 -ov -career', playerHint: 'derrick henry' },
+  { label: 'nfl overview · long (-ov)', command: 'nspe nfl long derrick henry -ov', playerHint: 'derrick henry' },
   // h2h — divisional opponent (WSH is a real NFC East rival of DAL)
   { label: 'nfl h2h (career)', command: 'nspe nfl dak vs wsh -career', playerHint: 'dak' },
   // "-week" — career performance in one week number across every season,
   // a different concept from h2h (opponent) despite reusing the same
   // totals/games rendering. Confirmed live against a real backend response.
-  { label: 'nfl career · week 1', command: 'nspe nfl dak -week1 -career', playerHint: 'dak' },
+  { label: 'nfl career · week 1', command: 'nspe nfl dak -week1 -career', playerHint: 'dak', qbOnly: true },
 ]
 
 const MLB_COMMANDS: SampleQuery[] = [
@@ -179,6 +193,16 @@ const MLB_COMMANDS: SampleQuery[] = [
   { label: 'mlb h2h', command: 'nspe mlb aaron judge vs bos', playerHint: 'aaron judge' },
   { label: 'mlb h2h', command: 'nspe mlb shohei ohtani vs sf', playerHint: 'shohei ohtani' },
   { label: 'mlb h2h', command: 'nspe mlb juan soto vs atl', playerHint: 'juan soto' },
+  // -staff — season vs the team + career vs their CURRENT pitching staff
+  // (engines/mlb/bvp.py). Backend only has per-pitcher data for a tracked
+  // set of batters, so each entry is pinned to its player via onlyFor.
+  { label: 'mlb h2h · staff', command: 'nspe mlb rafael devers vs bos -staff', playerHint: 'rafael devers', onlyFor: 'rafael devers' },
+  { label: 'mlb h2h · staff', command: 'nspe mlb aaron judge vs bos -staff', playerHint: 'aaron judge', onlyFor: 'aaron judge' },
+  { label: 'mlb h2h · staff', command: 'nspe mlb shohei ohtani vs sf -staff', playerHint: 'shohei ohtani', onlyFor: 'shohei ohtani' },
+  { label: 'mlb h2h · staff', command: 'nspe mlb yordan alvarez vs bos -staff', playerHint: 'yordan alvarez', onlyFor: 'yordan alvarez' },
+  { label: 'mlb h2h · staff', command: 'nspe mlb juan soto vs atl -staff', playerHint: 'juan soto', onlyFor: 'juan soto' },
+  { label: 'mlb h2h · staff', command: 'nspe mlb pete alonso vs bos -staff', playerHint: 'pete alonso', onlyFor: 'pete alonso' },
+  { label: 'mlb h2h · staff', command: 'nspe mlb pete crow armstrong vs stl -staff', playerHint: 'pete crow armstrong', onlyFor: 'pete crow armstrong' },
 ]
 
 const NBA_COMMANDS: SampleQuery[] = [

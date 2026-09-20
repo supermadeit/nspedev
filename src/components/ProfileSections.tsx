@@ -84,6 +84,9 @@ export interface MatchListRow {
 }
 
 export interface MatchListSection {
+  // Date/opponent own the top row, fields sit beneath left to right (the
+  // boxed h2h game-log style) instead of sharing one row with them.
+  stacked?: boolean
   type: 'match_list'
   label: string
   rows: MatchListRow[]
@@ -250,22 +253,23 @@ function MatchListView({ section }: { section: MatchListSection }) {
         {section.rows.map((row, i) => (
           <div
             key={i}
-            className="flex items-center gap-3 rounded px-3 py-2"
+            className={section.stacked ? 'flex flex-col gap-1.5 rounded px-3 py-2' : 'flex items-center gap-3 rounded px-3 py-2'}
             style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}` }}
           >
-            <span className="font-mono text-[11px]" style={{ color: C.textDim }}>
-              {extractDateToken(row.date) ?? row.date}
-            </span>
-            {row.opponent && (
+            <div className="flex items-center gap-3">
               <span className="font-mono text-[11px]" style={{ color: C.textDim }}>
-                {row.opponent}
+                {extractDateToken(row.date) ?? row.date}
               </span>
-            )}
-            <div className="flex gap-2 ml-auto flex-wrap justify-end">
+              {row.opponent && (
+                <span className="font-mono text-[11px]" style={{ color: C.textDim }}>
+                  {row.opponent}
+                </span>
+              )}
+            </div>
+            <div className={section.stacked ? 'flex gap-x-3 flex-wrap' : 'flex gap-2 ml-auto flex-wrap justify-end'}>
               {row.fields.map((f, j) => (
-                <span key={j} className="font-mono text-[11px] font-bold" style={{ color: C.textBright }}>
-                  {f.value}
-                  {f.label}
+                <span key={j} className="font-mono text-[11px] font-bold whitespace-nowrap" style={{ color: C.textBright }}>
+                  {section.stacked ? `${f.value}${f.label}` : <>{f.value}{f.label}</>}
                 </span>
               ))}
             </div>

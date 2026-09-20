@@ -160,3 +160,68 @@ export function searchPlayers(query: string, limit = 8): PlayerMatch[] {
 
   return matches.slice(0, limit)
 }
+
+// Words that can never be part of a player name in a typed command: the
+// command grammar's own keywords, flags, and numbers. Kept local (not
+// imported from App.tsx) to avoid a lib -> component dependency.
+const NON_NAME_TOKENS = new Set([
+  'nspe', 'mlb', 'nfl', 'nba', 'nhl', 'cfb', 'ncaaf', 'plus', 'help',
+  'streak', 'team', 'first', 'long', 'h2h', 'week', '1h', 'q1', 'p1',
+  'pass', 'rush', 'rec', 'any', 'vs', 'min', 'max', 'matchup',
+  // Everyday filler + stat words, so "how many tds does derrick henry have
+  // this season" reduces to just "derrick henry".
+  'how', 'many', 'much', 'does', 'do', 'did', 'have', 'has', 'had', 'this', 'that', 'the', 'what',
+  'whats', 'who', 'is', 'are', 'was', 'were', 'me', 'show', 'get', 'give', 'with', 'and', 'or',
+  'his', 'her', 'their', 'my', 'can', 'you', 'please', 'tell', 'for', 'of', 'in', 'on', 'to',
+  'td', 'tds', 'touchdown', 'touchdowns', 'yds', 'yards', 'season', 'career', 'total', 'stats',
+  'against', 'versus', 'ov', 'last', 'streak',
+])
+
+// Like searchPlayers, but tolerant of junk around the name: "xyz derrick",
+// "nspe nfl derrick henry vs cin" and "der -ov" all still find Derrick
+// Henry. Grammar tokens/flags/numbers split the input into runs of
+// candidate name words; every contiguous sub-run is tried (longest first,
+// then leftmost) and the first that matches anyone wins, so a real
+// full-name match beats a stray first-name-only one.
+export function searchPlayersLoose(query: string, limit = 8): PlayerMatch[] {
+  const words = query.trim().toLowerCase().split(/[\s/,]+/).filter(Boolean)
+  const runs: string[][] = []
+  let cur: string[] = []
+  for (const w of words) {
+    if (NON_NAME_TOKENS.has(w) || w.startsWith('-') || /\d/.test(w)) {
+      if (cur.length) runs.push(cur)
+      cur = []
+    } else {
+      cur.push(w)
+    }
+  }
+  if (cur.length) runs.push(cur)
+
+  const candidates: string[][] = []
+  for (const run of runs) {
+    for (let len = run.length; len >= 1; len--) {
+      for (let start = 0; start + len <= run.length; start++) {
+        candidates.push(run.slice(start, start + len))
+      }
+    }
+  }
+  // Longest run first (a full name beats a stray first name); among
+  // single words, one that IS a whole name token ("derrick") beats one that
+  // merely prefixes a name ("der..."), then longer words beat shorter ones.
+  const isExactToken = (w: string) => PLAYER_INDEX.some((e) => e.nameTokens.includes(w))
+  candidates.sort((a, b) => {
+    if (a.length !== b.length) return b.length - a.length
+    if (a.length === 1) {
+      const ea = isExactToken(a[0]) ? 1 : 0
+      const eb = isExactToken(b[0]) ? 1 : 0
+      if (ea !== eb) return eb - ea
+      return b[0].length - a[0].length
+    }
+    return 0
+  })
+  for (const c of candidates) {
+    const found = searchPlayers(c.join(' '), limit)
+    if (found.length) return found
+  }
+  return []
+}

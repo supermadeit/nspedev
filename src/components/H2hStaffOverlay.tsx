@@ -63,6 +63,7 @@ function buildSections(payload: H2hPayload): ProfileSection[] {
 
   const gameLog: MatchListSection = {
     type: 'match_list',
+    stacked: true,
     label: 'Game log',
     rows: games.map((g) => ({
       date: g.date_iso ?? g.date ?? '',

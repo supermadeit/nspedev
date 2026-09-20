@@ -12,8 +12,14 @@ import { H2hStaffOverlay } from '@/components/H2hStaffOverlay'
 import { MatchupInsightOverlay } from '@/components/MatchupInsightOverlay'
 import { PlayerSearchDropdown } from '@/components/PlayerSearchDropdown'
 import { SyntaxSuggestionDropdown } from '@/components/SyntaxSuggestionDropdown'
-import { loadPlayerIndex, resolvePlayerTeam, searchPlayers } from '@/lib/playerSearch'
-import { findPlayerSpotlightCommands, getMatchupSuggestions, searchSyntax } from '@/lib/syntaxSuggestions'
+import { loadPlayerIndex, resolvePlayerTeam, searchPlayers, searchPlayersLoose } from '@/lib/playerSearch'
+import {
+  findPlayerSpotlightCommands,
+  getMatchupSuggestions,
+  rankByKeywords,
+  searchKeywords,
+  searchSyntax,
+} from '@/lib/syntaxSuggestions'
 import { authHeader } from '@/lib/auth-token'
 import {
   asNumber,
@@ -121,7 +127,8 @@ const SAMPLE_COMMANDS: Array<{ label: string; command: string; comingSoon?: bool
   { label: 'nspe mlb -tb min20 -last10', command: 'nspe mlb -tb min20 -last10' },
   { label: 'nspe mlb -tb2 -streak5', command: 'nspe mlb -tb2 -streak5' },
   { label: 'nspe mlb shohei ohtani vs SF', command: 'nspe mlb shohei ohtani vs SF' },
-  { label: 'nspe mlb pitch wheeler -vfp', command: 'nspe mlb pitch wheeler -vfp' },
+  // Shelved (SHOW_PITCHER_FPV) — no pitcher first-pitch data right now.
+  // { label: 'nspe mlb pitch wheeler -vfp', command: 'nspe mlb pitch wheeler -vfp' },
   { label: 'nspe mlb pitch skenes -outs', command: 'nspe mlb pitch skenes -outs' },
   { label: 'nspe mlb pitch gavin -3down', command: 'nspe mlb pitch gavin -3down' },
   { label: 'nspe mlb bat LAD -outs -season', command: 'nspe mlb bat LAD -outs -season' },
@@ -1338,12 +1345,15 @@ function H2hView({ payload }: { payload: H2hPayload }) {
             No games found in window
           </div>
         ) : (
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             {games.map((g, i) => {
               const venuePrefix = g.venue === 'away' ? '@' : g.venue === 'home' ? 'vs' : ''
               const opp = g.opponent ?? ''
               const matchup = [venuePrefix, opp].filter(Boolean).join(' ')
-              const line = displayFields
+              // Stat pieces stay separate (not one comma-joined string) so the
+              // row beneath the date can wrap cleanly between whole stats
+              // instead of mid-"rush yds" when a line is long.
+              const line: string[] = displayFields
                 ? displayFields
                     // Skip a field entirely for this row when it's absent
                     // from the game object (not the same as a genuine 0) —
@@ -1353,7 +1363,6 @@ function H2hView({ payload }: { payload: H2hPayload }) {
                     // recorded per-game as an actual zero performance.
                     .filter((f) => typeof g[f] === 'number')
                     .map((f) => `${formatH2hFieldValue(f, g[f] as number)} ${H2H_FIELD_LABELS[f] ?? f.replace(/_/g, ' ')}`)
-                    .join(', ')
                 : [
                     `${g.AB ?? 0} AB`,
                     `${g.H ?? 0} H`,
@@ -1365,14 +1374,17 @@ function H2hView({ payload }: { payload: H2hPayload }) {
                     ...(g.BB ? [`${g.BB} BB`] : []),
                     ...(g.SO ? [`${g.SO} SO`] : []),
                     ...(g.SB ? [`${g.SB} SB`] : []),
-                  ].join(', ')
+                  ]
+              // Boxed like the totals card. Date/matchup owns the whole top
+              // row; stats sit beneath it left to right, so a full stat line
+              // fits one row instead of being squeezed beside the date.
               return (
                 <div
                   key={`${g.date_iso ?? g.date}-${i}`}
-                  className="flex items-baseline justify-between py-1.5 border-b font-mono text-[12px]"
-                  style={{ borderColor: 'oklch(0.22 0 0)' }}
+                  className="rounded p-3 font-mono text-[12px]"
+                  style={{ backgroundColor: 'oklch(0.18 0 0)', border: '1px solid oklch(0.28 0 0)' }}
                 >
-                  <span style={{ color: 'oklch(0.76 0 0)' }}>
+                  <div style={{ color: 'oklch(0.76 0 0)' }}>
                     <span style={{ color: 'oklch(0.55 0 0)' }}>{extractDateToken(g.date_iso ?? g.date) ?? g.date}</span>
                     {matchup ? (
                       <>
@@ -1380,8 +1392,14 @@ function H2hView({ payload }: { payload: H2hPayload }) {
                         <span style={{ color: 'oklch(0.70 0.10 195)' }}>{matchup}</span>
                       </>
                     ) : null}
-                  </span>
-                  <span style={{ color: 'oklch(0.85 0.15 145)' }}>{line}</span>
+                  </div>
+                  {line.length > 0 ? (
+                    <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5" style={{ color: 'oklch(0.85 0.15 145)' }}>
+                      {line.map((piece, pi) => (
+                        <span key={`${piece}-${pi}`} className="whitespace-nowrap">{piece}</span>
+                      ))}
+                    </div>
+                  ) : null}
                 </div>
               )
             })}
@@ -1399,12 +1417,60 @@ function formatIpFromOuts(outs?: number): string {
   return `${whole}.${rem}`
 }
 
+// Pitcher first-pitch-velocity data isn't available right now (coming back
+// soon) — every FPV/VFP surface below is gated on this instead of deleted,
+// so restoring it is flipping one flag.
+const SHOW_PITCHER_FPV = false
+
 const PITCH_STAT_PILL = 'oklch(0.18 0 0)'
 const PITCH_LABEL = 'oklch(0.55 0 0)'
 const PITCH_VALUE = 'oklch(0.88 0 0)'
 const PITCH_ACCENT = 'oklch(0.85 0.15 195)'
 const PITCH_GREEN = 'oklch(0.85 0.15 145)'
 const PITCH_BORDER = 'oklch(0.28 0 0)'
+
+// Boxed game-log row shared by the pitcher h2h / first-pitch-velocity views —
+// same treatment as H2hView's game boxes: date + matchup own the top row,
+// stats sit beneath left to right and wrap between whole stats.
+function PitchGameCard({
+  date,
+  matchup,
+  stats,
+}: {
+  date: string
+  matchup: string
+  stats: { text: string; color?: string; wrap?: boolean }[]
+}) {
+  return (
+    <div
+      className="rounded p-3 font-mono text-[12px]"
+      style={{ backgroundColor: 'oklch(0.18 0 0)', border: `1px solid ${PITCH_BORDER}` }}
+    >
+      <div>
+        <span style={{ color: PITCH_LABEL }}>{date}</span>
+        {matchup ? (
+          <>
+            <span style={{ color: 'oklch(0.40 0 0)' }}>{'  '}</span>
+            <span style={{ color: 'oklch(0.70 0.10 195)' }}>{matchup}</span>
+          </>
+        ) : null}
+      </div>
+      {stats.length > 0 ? (
+        <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5">
+          {stats.map((st, i) => (
+            <span
+              key={`${st.text}-${i}`}
+              className={st.wrap ? undefined : 'whitespace-nowrap'}
+              style={{ color: st.color ?? PITCH_VALUE }}
+            >
+              {st.text}
+            </span>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  )
+}
 
 function StatBox({ label, value, accent }: { label: string; value: string | number; accent?: string }) {
   return (
@@ -1640,7 +1706,7 @@ function MlbPitchH2hView({ payload, query }: { payload: MlbPitchH2hPayload; quer
             </div>
           </div>
         )}
-        {(typeof fp.avg === 'number' || typeof fp.median === 'number') && (
+        {SHOW_PITCHER_FPV && (typeof fp.avg === 'number' || typeof fp.median === 'number') && (
           <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.13 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
             <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
               first pitch
@@ -1668,35 +1734,22 @@ function MlbPitchH2hView({ payload, query }: { payload: MlbPitchH2hPayload; quer
         {games.length === 0 ? (
           <div className="text-center py-3 font-mono text-[12px]" style={{ color: PITCH_VALUE }}>No games found</div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full font-mono text-[12px] border-collapse">
-              <thead>
-                <tr style={{ color: PITCH_LABEL, borderBottom: `1px solid ${PITCH_BORDER}` }}>
-                  <th className="text-left py-1 pr-2 font-normal">Date</th>
-                  <th className="text-left py-1 pr-2 font-normal">Opp</th>
-                  <th className="text-right py-1 pr-2 font-normal">IP</th>
-                  <th className="text-right py-1 pr-2 font-normal">K</th>
-                  <th className="text-right py-1 pr-2 font-normal">BB</th>
-                  <th className="text-right py-1 pr-2 font-normal">HR</th>
-                  <th className="text-right py-1 pr-2 font-normal">P</th>
-                  <th className="text-right py-1 font-normal">VFP</th>
-                </tr>
-              </thead>
-              <tbody>
-                {games.map((g, i) => (
-                  <tr key={`${g.date_iso ?? g.date_display ?? i}`} style={{ borderBottom: '1px solid oklch(0.18 0 0)', color: PITCH_VALUE }}>
-                    <td className="py-1 pr-2" style={{ color: PITCH_LABEL }}>{g.date_display ?? g.date_iso ?? ''}</td>
-                    <td className="py-1 pr-2" style={{ color: 'oklch(0.70 0.10 195)' }}>{g.opponent_team ?? ''}</td>
-                    <td className="py-1 pr-2 text-right">{g.ip ?? ''}</td>
-                    <td className="py-1 pr-2 text-right" style={{ color: PITCH_GREEN }}>{g.k ?? 0}</td>
-                    <td className="py-1 pr-2 text-right">{g.bb ?? 0}</td>
-                    <td className="py-1 pr-2 text-right">{g.hr ?? 0}</td>
-                    <td className="py-1 pr-2 text-right">{g.pitches ?? 0}</td>
-                    <td className="py-1 text-right" style={{ color: PITCH_ACCENT }}>{typeof g.vfp === 'number' ? g.vfp.toFixed(1) : '—'}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="space-y-2">
+            {games.map((g, i) => (
+              <PitchGameCard
+                key={`${g.date_iso ?? g.date_display ?? i}`}
+                date={g.date_display ?? g.date_iso ?? ''}
+                matchup={g.opponent_team ?? ''}
+                stats={[
+                  { text: `${g.ip ?? ''} IP` },
+                  { text: `${g.k ?? 0} K`, color: PITCH_GREEN },
+                  { text: `${g.bb ?? 0} BB` },
+                  { text: `${g.hr ?? 0} HR` },
+                  { text: `${g.pitches ?? 0} P` },
+                  ...(SHOW_PITCHER_FPV ? [{ text: `${typeof g.vfp === 'number' ? g.vfp.toFixed(1) : '—'} VFP`, color: PITCH_ACCENT }] : []),
+                ]}
+              />
+            ))}
           </div>
         )}
       </div>
@@ -1751,37 +1804,26 @@ function MlbPitchFpvView({ payload }: { payload: MlbPitchFpvPayload }) {
         {games.length === 0 ? (
           <div className="text-center py-3 font-mono text-[12px]" style={{ color: PITCH_VALUE }}>No games found</div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full font-mono text-[12px] border-collapse">
-              <thead>
-                <tr style={{ color: PITCH_LABEL, borderBottom: `1px solid ${PITCH_BORDER}` }}>
-                  <th className="text-left py-1 pr-2 font-normal">Date</th>
-                  <th className="text-left py-1 pr-2 font-normal">Opp</th>
-                  <th className="text-left py-1 pr-2 font-normal">H/A</th>
-                  <th className="text-right py-1 pr-2 font-normal">FPV</th>
-                  <th className="text-left py-1 pr-2 font-normal">Pitch</th>
-                  <th className="text-right py-1 pr-2 font-normal">Inn</th>
-                  <th className="text-left py-1 font-normal">Result</th>
-                </tr>
-              </thead>
-              <tbody>
-                {games.map((g, i) => {
-                  const ha = (g.home_away || '').toUpperCase()
-                  const haLabel = ha === 'HOME' ? 'vs' : ha === 'AWAY' ? '@' : ha
-                  return (
-                    <tr key={`${g.date_iso ?? i}`} style={{ borderBottom: '1px solid oklch(0.18 0 0)', color: PITCH_VALUE }}>
-                      <td className="py-1 pr-2" style={{ color: PITCH_LABEL }}>{extractDateToken(g.date_iso) ?? g.date_iso ?? ''}</td>
-                      <td className="py-1 pr-2" style={{ color: 'oklch(0.70 0.10 195)' }}>{g.opponent_team ?? ''}</td>
-                      <td className="py-1 pr-2" style={{ color: PITCH_LABEL }}>{haLabel}</td>
-                      <td className="py-1 pr-2 text-right" style={{ color: PITCH_ACCENT }}>{typeof g.fpv === 'number' ? g.fpv.toFixed(1) : '—'}</td>
-                      <td className="py-1 pr-2">{g.pitch_type ?? ''}</td>
-                      <td className="py-1 pr-2 text-right" style={{ color: PITCH_LABEL }}>{g.inning ?? ''}</td>
-                      <td className="py-1" style={{ color: PITCH_VALUE }}>{g.batter_play ?? ''}</td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
+          <div className="space-y-2">
+            {games.map((g, i) => {
+              const ha = (g.home_away || '').toUpperCase()
+              const haLabel = ha === 'HOME' ? 'vs' : ha === 'AWAY' ? '@' : ha
+              return (
+                <PitchGameCard
+                  key={`${g.date_iso ?? i}`}
+                  date={extractDateToken(g.date_iso) ?? g.date_iso ?? ''}
+                  matchup={[haLabel, g.opponent_team ?? ''].filter(Boolean).join(' ')}
+                  stats={[
+                    { text: `${typeof g.fpv === 'number' ? g.fpv.toFixed(1) : '—'} FPV`, color: PITCH_ACCENT },
+                    ...(g.pitch_type ? [{ text: g.pitch_type }] : []),
+                    ...(g.inning ? [{ text: `inn ${g.inning}`, color: PITCH_LABEL }] : []),
+                    // Free-text play description — can be long, so it's
+                    // allowed to wrap instead of forcing horizontal overflow.
+                    ...(g.batter_play ? [{ text: g.batter_play, wrap: true }] : []),
+                  ]}
+                />
+              )
+            })}
           </div>
         )}
       </div>
@@ -1835,7 +1877,7 @@ function MlbBatTeamView({ payload }: { payload: MlbBatTeamPayload }) {
             <OutTypeGrid outTypes={out_types} totalOuts={totalOuts} />
           </div>
         )}
-        {(typeof fp.avg === 'number' || typeof fp.median === 'number') && (
+        {SHOW_PITCHER_FPV && (typeof fp.avg === 'number' || typeof fp.median === 'number') && (
           <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.13 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
             <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
               first pitch (opposing)
@@ -2326,7 +2368,7 @@ const SPORT_TOKENS = ['mlb', 'nfl', 'nba', 'nhl', 'cfb', 'ncaaf']
 // surnamed e.g. "Long" would hijack the "long" explosive-plays category the
 // moment someone typed "nspe nfl long".
 function stripSportPrefix(value: string): { sport?: string; rest: string } {
-  const tokens = value.trim().toLowerCase().split(/\s+/).filter(Boolean)
+  const tokens = value.trim().toLowerCase().split(/[\s/]+/).filter(Boolean)
   let i = 0
   if (tokens[i] === 'nspe') i++
   let sport: string | undefined
@@ -2412,12 +2454,17 @@ function App() {
     loadPlayerIndex().then(() => setIsPlayerIndexReady(true))
   }, [])
   const playerMatches = useMemo(() => {
-    if (looksLikePlayerSearch(searchValue)) return searchPlayers(searchValue, 8)
+    // Strict paths first (unchanged behavior); the loose fallback below only
+    // runs when they find nothing, so junk around a name ("xyz derrick",
+    // "nspe nfl derrick henry vs cin") still surfaces that player's
+    // profile + every {psc} command that uses their name.
+    let matches: ReturnType<typeof searchPlayers> = []
+    const { sport, rest } = stripSportPrefix(searchValue)
+    if (looksLikePlayerSearch(searchValue)) matches = searchPlayers(searchValue, 8)
     // Sport already typed ("nspe nfl saquon") — see stripSportPrefix's
     // comment for why the whole-string check above misses this case.
-    const { sport, rest } = stripSportPrefix(searchValue)
-    if (!rest || !looksLikePlayerSearch(rest)) return []
-    const matches = searchPlayers(rest, 8)
+    else if (rest && looksLikePlayerSearch(rest)) matches = searchPlayers(rest, 8)
+    if (matches.length === 0) matches = searchPlayersLoose(rest, 8)
     return sport ? matches.filter((m) => !m.entry.sport || m.entry.sport === sport) : matches
   }, [searchValue, isPlayerIndexReady])
   // Any curated commands that showcase one of the currently-matched players
@@ -2429,9 +2476,18 @@ function App() {
   const playerSpotlightMatches = useMemo(
     () =>
       playerMatches.length > 0
-        ? findPlayerSpotlightCommands(playerMatches[0].entry.name, playerMatches[0].entry.sport)
+        ? rankByKeywords(
+            findPlayerSpotlightCommands(
+              playerMatches[0].entry.name,
+              playerMatches[0].entry.sport,
+              playerMatches[0].entry.team,
+              playerMatches[0].entry.position,
+              searchValue,
+            ),
+            searchValue,
+          )
         : [],
-    [playerMatches],
+    [playerMatches, searchValue],
   )
   // Predictive command-syntax suggestions (Option B: curated templates,
   // filtered by prefix/substring — see syntaxSuggestions.ts) — the exact
@@ -2464,12 +2520,30 @@ function App() {
   // beneath the cyan player dropdown), real syntax matches exist (those,
   // matchup slate not needed since a real command match already won), or
   // neither (falls back to just the matchup slate, e.g. "matc").
+  // Keyword pass: every word in every catalog command is a keyword, and
+  // anything unrecognized in what was typed is ignored — so "axc derrick" or
+  // "how many tds does derrick henry have this season" still surface commands
+  // containing the words we DO recognize. Only used when the strict
+  // prefix/substring match found nothing, or (below) to append related
+  // generic commands after a matched player's own.
+  const keywordMatches = useMemo(
+    () => (searchValue.trim() && !suppressSyntaxDropdown ? searchKeywords(searchValue) : []),
+    [searchValue, suppressSyntaxDropdown],
+  )
   const greenMatches = suppressSyntaxDropdown
     ? []
     : playerMatches.length > 0
-    ? [...playerSpotlightMatches, ...matchupSuggestions]
+    ? [
+        ...playerSpotlightMatches,
+        ...keywordMatches
+          .filter((k) => !playerSpotlightMatches.some((p) => p.displayCommand === k.displayCommand))
+          .slice(0, 15),
+        ...matchupSuggestions,
+      ]
     : syntaxMatches.length > 0
     ? syntaxMatches
+    : keywordMatches.length > 0
+    ? keywordMatches
     : matchupSuggestions
   const searchInputRef = useRef<HTMLInputElement>(null)
   // Mobile only — tapping outside the search input/dropdown dismisses
@@ -3328,7 +3402,7 @@ function App() {
               <H2hView payload={h2hResult} />
             ) : pitchResult ? (
               <MlbPitchH2hView payload={pitchResult} query={lastQuery} />
-            ) : fpvResult ? (
+            ) : fpvResult && SHOW_PITCHER_FPV ? (
               <MlbPitchFpvView payload={fpvResult} />
             ) : batTeamResult ? (
               <MlbBatTeamView payload={batTeamResult} />

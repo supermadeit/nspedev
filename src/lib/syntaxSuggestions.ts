@@ -6,7 +6,8 @@
 // command text for the user to edit values in and then explicitly run —
 // it never auto-runs or navigates, unlike player search selection.
 import { buildSampleQueries, type SampleQuery } from './sampleQueries'
-import { getWeeklyMatchupCommands } from './matchupCommands'
+import { getOpponentThisWeek, getWeeklyMatchupCommands } from './matchupCommands'
+import { getTeamCodes } from './teams'
 
 export interface SyntaxMatch {
   query: SampleQuery
@@ -143,6 +144,122 @@ export function searchSyntax(query: string, limit = 50): SyntaxMatch[] {
   return [...prefixMatches, ...containsMatches].slice(0, limit)
 }
 
+// ---------------------------------------------------------------------------
+// Keyword matching — {psc} that ignores garbage. Every word that appears in
+// any catalog command or label is a keyword (flags with their digits and
+// dashes stripped: "-yds50" -> "yds", "-last1/1" -> "last"), plus a small
+// alias table for plain-English words ("tds", "yards", "against"). Whatever a
+// user types is split into words, unrecognized ones are dropped, and any
+// command containing the recognized ones is surfaced — so "sandwich mahomes
+// pass td vs den" and "axc derrick" still find their commands.
+// ---------------------------------------------------------------------------
+const STOPWORDS = new Set([
+  'how', 'many', 'much', 'does', 'do', 'did', 'have', 'has', 'had', 'this', 'that', 'the', 'an',
+  'of', 'in', 'on', 'for', 'to', 'what', 'whats', 'who', 'is', 'are', 'was', 'were', 'me', 'show',
+  'get', 'give', 'with', 'and', 'or', 'his', 'her', 'their', 'my', 'can', 'you', 'please', 'tell',
+  'it', 'at', 'be', 'so', 'if', 'by', 'from', 'about',
+])
+
+// plain word -> the catalog token(s) it stands for
+const KEYWORD_ALIASES: Record<string, string[]> = {
+  tds: ['td'], touchdown: ['td'], touchdowns: ['td'],
+  yards: ['yds'], yard: ['yds'], yds: ['yds'],
+  passing: ['pass'], rushing: ['rush'], receiving: ['rec'], receptions: ['rec'], catches: ['rec'],
+  against: ['vs'], versus: ['vs'], v: ['vs'],
+  homer: ['hr'], homers: ['hr'], homeruns: ['hr'], dingers: ['hr'],
+  points: ['pts'], rebounds: ['reb'], assists: ['ast'], steals: ['stl'], blocks: ['blk'],
+  threes: ['tpm'], shots: ['sog'], goals: ['g'], walks: ['bb'], strikeouts: ['k'],
+  overview: ['ov'], summary: ['ov'], total: ['ov'], totals: ['ov'], stats: ['ov'],
+  streaks: ['streak'], halves: ['1h'], half: ['1h'], quarter: ['q1'],
+  year: ['season'], yr: ['season'], lifetime: ['career'],
+}
+
+// Words that signal "give me his numbers" — -ov commands get a small ranking
+// boost when one appears, since -ov is the command that answers those.
+const OV_TRIGGERS = new Set(['td', 'yds', 'season', 'career', 'ov', 'hr', 'rec', 'rush', 'pass'])
+
+function commandWords(q: SampleQuery): Set<string> {
+  const words = new Set<string>()
+  for (const raw of q.command.toLowerCase().split(/[\s/]+/)) {
+    const t = raw.replace(/^-+/, '')
+    if (/^(1h|q[1-4]|p[1-3])$/.test(t)) { words.add(t); continue }
+    const w = t.replace(/\d+$/, '')
+    if (/^[a-z]{1,}$/.test(w)) words.add(w)
+  }
+  for (const w of q.label.toLowerCase().split(/[^a-z0-9]+/)) if (w.length >= 2) words.add(w)
+  words.delete('nspe')
+  return words
+}
+
+const COMMAND_WORDS = new Map<SampleQuery, Set<string>>()
+const VOCAB = new Set<string>()
+for (const q of SYNTAX_CATALOG) {
+  const w = commandWords(q)
+  COMMAND_WORDS.set(q, w)
+  w.forEach((x) => VOCAB.add(x))
+}
+
+// a canonical keyword "hits" a command word on equality, or — for 3+ chars —
+// as a prefix of it ("der" -> "derrick").
+function wordHits(canon: string, word: string): boolean {
+  return word === canon || (canon.length >= 3 && word.startsWith(canon))
+}
+
+export function extractKeywords(query: string): string[] {
+  const out: string[] = []
+  for (const raw of query.toLowerCase().split(/[^a-z0-9-]+/)) {
+    const t = raw.replace(/^-+/, '')
+    if (t.length < 2 || STOPWORDS.has(t)) continue
+    const stripped = /^(1h|q[1-4]|p[1-3])$/.test(t) ? t : t.replace(/\d+$/, '')
+    if (stripped.length < 2) continue
+    const canons = KEYWORD_ALIASES[stripped] ?? [stripped]
+    for (const c of canons) {
+      let known = false
+      for (const v of VOCAB) if (wordHits(c, v)) { known = true; break }
+      if (known && !out.includes(c)) out.push(c)
+    }
+  }
+  return out
+}
+
+function keywordScore(command: string, words: Set<string> | undefined, keywords: string[]): number {
+  const w = words ?? new Set(command.toLowerCase().split(/[^a-z0-9]+/))
+  let score = 0
+  for (const k of keywords) for (const cw of w) if (wordHits(k, cw)) { score++; break }
+  if (score > 0 && command.includes('-ov') && keywords.some((k) => OV_TRIGGERS.has(k))) score += 0.5
+  return score
+}
+
+// Catalog commands containing at least one recognized keyword, best first.
+export function searchKeywords(query: string, limit = 50): SyntaxMatch[] {
+  const keywords = extractKeywords(query)
+  if (keywords.length === 0) return []
+  const seen = new Set<string>()
+  const scored: { m: SyntaxMatch; score: number; i: number }[] = []
+  SYNTAX_CATALOG.forEach((q, i) => {
+    if (seen.has(q.command)) return
+    const score = keywordScore(q.command, COMMAND_WORDS.get(q), keywords)
+    if (score <= 0) return
+    seen.add(q.command)
+    scored.push({ m: { query: q, matchedPrefix: '', displayCommand: q.command }, score, i })
+  })
+  scored.sort((a, b) => b.score - a.score || a.i - b.i)
+  return scored.slice(0, limit).map((x) => x.m)
+}
+
+// Re-orders a player's commands by how many of the typed keywords they
+// contain (stable, so untouched ties keep catalog order).
+export function rankByKeywords(matches: SyntaxMatch[], query: string): SyntaxMatch[] {
+  const keywords = extractKeywords(query)
+  if (keywords.length === 0) return matches
+  return matches
+    .map((m, i) => ({ m, i, score: keywordScore(m.displayCommand, undefined, keywords), n: tokenize(m.displayCommand).length }))
+    // Ties: the simpler (fewer-token) command first, so a bare "-ov" leads
+    // the fancier window/scope variants.
+    .sort((a, b) => b.score - a.score || (a.score > 0 ? a.n - b.n : 0) || a.i - b.i)
+    .map((x) => x.m)
+}
+
 // Player-name lookup doesn't un-match syntax mode the way stat/window
 // prefixes do — a query only ever LOOKS like player search or syntax, but
 // once it's decided to look like player search, this surfaces every
@@ -168,10 +285,42 @@ function commandSport(command: string): string | undefined {
 export function findPlayerSpotlightCommands(
   playerName: string,
   playerSport: string | undefined,
-  limit = 20,
+  playerTeam?: string,
+  playerPosition?: string,
+  typedQuery = '',
+  limit = 60,
 ): SyntaxMatch[] {
   const resolved = playerName.toLowerCase()
+  const team = playerTeam?.toLowerCase()
   const matches: SyntaxMatch[] = []
+
+  const teamCodes = getTeamCodes(playerSport)
+  const pushH2h = (opp: string, label: string) => {
+    const command = `nspe ${playerSport} ${resolved} vs ${opp}`
+    if (!matches.some((m) => m.displayCommand === command)) {
+      matches.push({ query: { label, command }, matchedPrefix: '', displayCommand: command })
+    }
+  }
+
+  // Team codes the user actually typed ("vs den", or a bare "den") come
+  // first — exact codes only, so partial words never fabricate a matchup.
+  if (playerSport && teamCodes.length > 0) {
+    const words = typedQuery.toLowerCase().split(/[^a-z]+/).filter(Boolean)
+    words.forEach((w, i) => {
+      // 2-letter codes ("no", "sf") only count right after "vs" — bare, they
+      // collide with ordinary words.
+      const ok = w.length >= 3 || words[i - 1] === 'vs'
+      if (ok && w !== team && teamCodes.includes(w)) pushH2h(w, `${playerSport} h2h · ${w}`)
+    })
+  }
+
+  // This week's real opponent first (NFL only — the only schedule we have),
+  // so the most relevant h2h is always the top suggestion for that player.
+  if (playerSport === 'nfl') {
+    const opp = getOpponentThisWeek(team)
+    if (opp) pushH2h(opp, 'nfl h2h · this week')
+  }
+
   for (const q of SYNTAX_CATALOG) {
     if (!q.playerHint) continue
     // Only cross-check sport when the matched player's own sport is known —
@@ -179,9 +328,17 @@ export function findPlayerSpotlightCommands(
     // unknown (index entry predates the sport field), fall back to showing
     // everything rather than silently hiding real suggestions.
     if (playerSport && commandSport(q.command) !== playerSport) continue
+    if (q.onlyFor && q.onlyFor !== resolved) continue
+    if (q.qbOnly && playerPosition && playerPosition !== 'QB') continue
+    // Skip "vs X" templates where X is the player's own team.
+    if (team && q.command.toLowerCase().endsWith(` vs ${team}`)) continue
     const displayCommand = q.command.toLowerCase().replace(q.playerHint, resolved)
+    if (matches.some((m) => m.displayCommand === displayCommand)) continue
     matches.push({ query: q, matchedPrefix: '', displayCommand })
   }
+  // Every other team last, so any "player vs TEAM" is one scroll away
+  // without crowding out the -ov variants above.
+  for (const code of teamCodes) if (code !== team) pushH2h(code, `${playerSport} h2h · ${code}`)
   return matches.slice(0, limit)
 }
 
