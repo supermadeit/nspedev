@@ -1,145 +1,145 @@
 [
   {
-    "raw": "MLB 3hits+ {top20} {season}"
-  },
-  {
-    "team": "SF",
-    "player": "Luis Arraez",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 16
-  },
-  {
-    "team": "ATL",
-    "player": "Michael Harris II",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 16
-  },
-  {
-    "team": "SD",
-    "player": "Fernando Tatis Jr",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 16
-  },
-  {
-    "team": "SD",
-    "player": "Jackson Merrill",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 15
-  },
-  {
-    "team": "HOU",
-    "player": "Yordan Alvarez",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 14
-  },
-  {
-    "team": "MIA",
-    "player": "Otto Lopez",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 14
-  },
-  {
-    "team": "MIL",
-    "player": "Jackson Chourio",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 14
-  },
-  {
-    "team": "WSH",
-    "player": "Luis Garcia Jr",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 14
-  },
-  {
-    "team": "MIL",
-    "player": "Brice Turang",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 14
-  },
-  {
-    "team": "CHC",
-    "player": "Nico Hoerner",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 14
-  },
-  {
-    "team": "CHC",
-    "player": "Alex Bregman",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 14
-  },
-  {
-    "team": "BAL",
-    "player": "Gunnar Henderson",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 14
-  },
-  {
-    "team": "LAD",
-    "player": "Shohei Ohtani",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 13
-  },
-  {
-    "team": "COL",
-    "player": "TJ Rumfield",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 13
-  },
-  {
-    "team": "TB",
-    "player": "Yandy Diaz",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 13
-  },
-  {
-    "team": "SEA",
-    "player": "Randy Arozarena",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 13
+    "raw": "MLB 2tb+ {top20} {season}"
   },
   {
     "team": "CHC",
     "player": "Pete Crow Armstrong",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 13
+    "stat": "tb",
+    "threshold": 2,
+    "games_meeting": 76
   },
   {
-    "team": "LAD",
-    "player": "Mookie Betts",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 13
+    "team": "ATL",
+    "player": "Matt Olson",
+    "stat": "tb",
+    "threshold": 2,
+    "games_meeting": 75
   },
   {
-    "team": "LAD",
-    "player": "Freddie Freeman",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 12
+    "team": "TB",
+    "player": "Junior Caminero",
+    "stat": "tb",
+    "threshold": 2,
+    "games_meeting": 74
+  },
+  {
+    "team": "SD",
+    "player": "Fernando Tatis Jr",
+    "stat": "tb",
+    "threshold": 2,
+    "games_meeting": 71
   },
   {
     "team": "STL",
     "player": "Alec Burleson",
-    "stat": "hits",
-    "threshold": 3,
-    "games_meeting": 12
+    "stat": "tb",
+    "threshold": 2,
+    "games_meeting": 71
+  },
+  {
+    "team": "MIA",
+    "player": "Otto Lopez",
+    "stat": "tb",
+    "threshold": 2,
+    "games_meeting": 70
+  },
+  {
+    "team": "SF",
+    "player": "Luis Arraez",
+    "stat": "tb",
+    "threshold": 2,
+    "games_meeting": 69
+  },
+  {
+    "team": "HOU",
+    "player": "Yordan Alvarez",
+    "stat": "tb",
+    "threshold": 2,
+    "games_meeting": 69
+  },
+  {
+    "team": "SF",
+    "player": "Rafael Devers",
+    "stat": "tb",
+    "threshold": 2,
+    "games_meeting": 69
+  },
+  {
+    "team": "TB",
+    "player": "Yandy Diaz",
+    "stat": "tb",
+    "threshold": 2,
+    "games_meeting": 68
+  },
+  {
+    "team": "BAL",
+    "player": "Pete Alonso",
+    "stat": "tb",
+    "threshold": 2,
+    "games_meeting": 68
+  },
+  {
+    "team": "CIN",
+    "player": "Elly De La Cruz",
+    "stat": "tb",
+    "threshold": 2,
+    "games_meeting": 67
+  },
+  {
+    "team": "STL",
+    "player": "Jordan Walker",
+    "stat": "tb",
+    "threshold": 2,
+    "games_meeting": 67
+  },
+  {
+    "team": "PHI",
+    "player": "Bryce Harper",
+    "stat": "tb",
+    "threshold": 2,
+    "games_meeting": 67
+  },
+  {
+    "team": "PIT",
+    "player": "Brandon Lowe",
+    "stat": "tb",
+    "threshold": 2,
+    "games_meeting": 67
+  },
+  {
+    "team": "SD",
+    "player": "Jackson Merrill",
+    "stat": "tb",
+    "threshold": 2,
+    "games_meeting": 67
+  },
+  {
+    "team": "PIT",
+    "player": "Nick Gonzales",
+    "stat": "tb",
+    "threshold": 2,
+    "games_meeting": 66
+  },
+  {
+    "team": "NYY",
+    "player": "Ben Rice",
+    "stat": "tb",
+    "threshold": 2,
+    "games_meeting": 65
+  },
+  {
+    "team": "LAD",
+    "player": "Freddie Freeman",
+    "stat": "tb",
+    "threshold": 2,
+    "games_meeting": 64
+  },
+  {
+    "team": "ATL",
+    "player": "Michael Harris II",
+    "stat": "tb",
+    "threshold": 2,
+    "games_meeting": 64
   }
 ]

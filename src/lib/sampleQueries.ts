@@ -9,8 +9,16 @@ import { PREDICTIVE_COMMANDS } from './predictiveCommands'
 export type { SampleQuery } from './predictiveCommands'
 import type { SampleQuery } from './predictiveCommands'
 
+// Where 'middle'-placed entries land: the middle of the predictive dropdown's
+// 50-row cap (see searchSyntax's limit), so they're visible on a broad query
+// like bare "nspe" but never the first thing shown.
+const MIDDLE_INDEX = 25
+
 export function buildSampleQueries(): SampleQuery[] {
-  return promoteMoatCommands(PREDICTIVE_COMMANDS)
+  const ordered = promoteMoatCommands(PREDICTIVE_COMMANDS.filter((q) => q.placement !== 'middle'))
+  const middle = PREDICTIVE_COMMANDS.filter((q) => q.placement === 'middle')
+  ordered.splice(Math.min(MIDDLE_INDEX, ordered.length), 0, ...middle)
+  return ordered
 }
 
 // -ov, -long, q1/1h scope, etc. are the differentiated commands meant to be

@@ -53,6 +53,10 @@ export interface SampleQuery {
   // playerHint) instead of swapping in whoever was searched — for commands
   // that only work for a tracked subset (-staff needs data/output/mlb_bvp).
   onlyFor?: string
+  // 'middle' pins the entry near the middle of the ordered list instead of
+  // wherever promoteMoatCommands (sampleQueries.ts) would put it — for
+  // commands that match the moat pattern but shouldn't lead the dropdown.
+  placement?: 'middle'
 }
 
 import { getCurrentNflWeek } from './nflWeek'
@@ -210,8 +214,12 @@ const MLB_COMMANDS: SampleQuery[] = [
 
 
   // explosive (HR distance)
-  { label: 'mlb explosive · hr distance', command: 'nspe mlb long -hr350 -last1/5' },
-  { label: 'mlb explosive compute · hr distance', command: 'nspe mlb long -hr min800 -last10' },
+  // Restored 2026-09-21 after prod got data/output/mlb_hr_tracker.json (it was
+  // gitignored, so every `mlb long -hr...` returned zero rows). Pinned to the
+  // middle of the ordered list (placement: 'middle', see sampleQueries.ts)
+  // rather than promoted to the front like other `long` commands.
+  { label: 'mlb explosive · hr distance', command: 'nspe mlb long -hr350 -last1/5', placement: 'middle' },
+  { label: 'mlb explosive compute · hr distance', command: 'nspe mlb long -hr min800 -last10', placement: 'middle' },
   // first plate appearance — no threshold N, one PA per game
   { label: 'mlb first pa · hit', command: 'nspe mlb first -hit -last1/1' },
   { label: 'mlb first pa · xbh', command: 'nspe mlb first -xbh -last1/5' },

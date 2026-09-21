@@ -1089,6 +1089,18 @@ function NflOverviewStatNView({ payload }: { payload: NflOverviewStatNPayload })
 function MlbHrView({ payload }: { payload: MlbHrPayload }) {
   const { isExpanded, toggle } = useExpandableRows()
 
+  // A zero-row response used to render as a blank panel. Say so instead.
+  if (payload.results.length === 0) {
+    return (
+      <div className="text-center py-8 font-mono text-[13px] space-y-2" style={{ color: 'oklch(0.70 0 0)' }}>
+        <div>No home runs matched</div>
+        <div className="text-[11px]" style={{ color: 'oklch(0.50 0 0)' }}>
+          Try a lower distance or a wider window.
+        </div>
+      </div>
+    )
+  }
+
   if (payload.engine === 'mlb_hr_compute') {
     const results = payload.results as MlbHrComputeResult[]
     return (
