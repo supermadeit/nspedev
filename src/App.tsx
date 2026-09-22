@@ -46,6 +46,8 @@ import {
   extractMlbTeamRunsPayload,
   extractExplosiveOverviewPayload,
   extractNflParlayPayload,
+  extractNflPlayerSlotsPayload,
+  extractNflTeamSlotsPayload,
   extractNflPlayerLegsPayload,
   extractNflOverviewScopesPayload,
   extractNflOverviewStatNPayload,
@@ -72,6 +74,8 @@ import {
   type ExplosiveOverviewPayload,
   type NflParlayLeg,
   type NflParlayPayload,
+  type NflPlayerSlotsPayload,
+  type NflTeamSlotsPayload,
   type NflPlayerLegsPayload,
   type NflOverviewScopesPayload,
   type NflOverviewStatNPayload,
@@ -636,6 +640,168 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
   )
 }
 
+// ---- NFL primetime slots ------------------------------------------------
+const SLOT_WHITE = 'oklch(0.95 0 0)'
+
+function slotName(slot: string): string {
+  const t = slot.toLowerCase()
+  return t === 'primetime' ? 'PRIME' : slot.toUpperCase()
+}
+
+function fmtInt(n: number): string {
+  return n.toLocaleString()
+}
+
+// One boxed card per broadcast slot; PRIME and ALL are the rollups, so they
+// read a little stronger than the individual slots.
+function NflPlayerSlotsView({ payload }: { payload: NflPlayerSlotsPayload }) {
+  const q = payload.query
+  const s = payload.summary
+  const rollup = (slot: string) => slot === 'PRIME' || slot === 'ALL'
+  return (
+    <div className="space-y-3">
+      <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+        <span>{normalizeDisplayPlayer(q.player)}</span>
+        <span style={{ color: SLOT_WHITE, fontWeight: 700 }}>{` · ${q.category} by slot · ${q.window_label}`}</span>
+      </div>
+
+      {s && (
+        <div
+          className="rounded p-3 font-mono text-[12px]"
+          style={{ backgroundColor: 'oklch(0.18 0 0)', border: '1px solid oklch(0.28 0 0)' }}
+        >
+          <div style={{ color: 'oklch(0.88 0 0)' }}>
+            <span className="font-bold">primetime</span> {s.prime_avg.toFixed(1)} avg vs{' '}
+            <span className="font-bold">other slots</span> {s.other_avg.toFixed(1)} avg
+          </div>
+          <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5">
+            <span
+              className="font-bold whitespace-nowrap"
+              style={{ color: s.pct_diff >= 0 ? PARLAY_GREEN : 'oklch(0.75 0.15 25)' }}
+            >
+              {`${s.pct_diff >= 0 ? '+' : ''}${s.pct_diff.toFixed(1)}% in primetime`}
+            </span>
+            <span className="whitespace-nowrap" style={{ color: PARLAY_DIM }}>
+              {`${s.prime_games} prime · ${s.other_games} other games`}
+            </span>
+          </div>
+        </div>
+      )}
+
+      <div className="space-y-2">
+        {payload.rows.map((r) => {
+          const name = slotName(r.slot)
+          const strong = rollup(name)
+          return (
+            <div
+              key={r.slot}
+              className="rounded p-3 font-mono text-[12px]"
+              style={{
+                backgroundColor: 'oklch(0.18 0 0)',
+                border: `1px solid ${strong ? 'oklch(0.45 0.08 195)' : 'oklch(0.28 0 0)'}`,
+              }}
+            >
+              <div className="flex items-baseline justify-between gap-2">
+                <span className="font-bold text-[13px]" style={{ color: strong ? 'oklch(0.90 0.18 195)' : PARLAY_CYAN }}>
+                  {name}
+                </span>
+                <span style={{ color: PARLAY_DIM }}>{`${r.games} game${r.games === 1 ? '' : 's'}`}</span>
+              </div>
+              <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5" style={{ color: PARLAY_GREEN }}>
+                <span className="whitespace-nowrap font-bold">{`${r.avg.toFixed(1)} avg`}</span>
+                <span className="whitespace-nowrap">{`${fmtInt(r.yards)} yds`}</span>
+                <span className="whitespace-nowrap">{`${r.td} td (${r.td_per_game.toFixed(2)}/g)`}</span>
+                {r.extra ? <span className="whitespace-nowrap">{r.extra}</span> : null}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      {payload.unclassified_games ? (
+        <div className="font-mono text-[11px]" style={{ color: PARLAY_DIM }}>
+          {`${payload.unclassified_games} game${payload.unclassified_games === 1 ? '' : 's'} couldn't be classified into a slot`}
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
+// Team record in the requested slot(s): one card per team, plus each game
+// when a single team was named.
+function NflTeamSlotsView({ payload }: { payload: NflTeamSlotsPayload }) {
+  const q = payload.query
+  const slots = Array.from(new Set(q.slots.map(slotName))).join(' + ')
+  const games = payload.games ?? []
+  return (
+    <div className="space-y-3">
+      <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+        <span>{q.teams && q.teams.length > 0 ? q.teams.join(', ') : 'nfl teams'}</span>
+        <span style={{ color: SLOT_WHITE, fontWeight: 700 }}>{` · ${slots} · ${q.window_label}`}</span>
+      </div>
+
+      <div className="space-y-2">
+        {payload.rows.map((r) => (
+          <div
+            key={r.team}
+            className="rounded p-3 font-mono text-[12px]"
+            style={{ backgroundColor: 'oklch(0.18 0 0)', border: '1px solid oklch(0.28 0 0)' }}
+          >
+            <div className="flex items-baseline justify-between gap-2">
+              <span className="font-bold text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>{r.team}</span>
+              <span className="font-bold text-[14px]" style={{ color: PARLAY_GREEN }}>
+                {`${r.wins}-${r.losses}${r.ties ? `-${r.ties}` : ''}`}
+              </span>
+            </div>
+            <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5" style={{ color: 'oklch(0.76 0 0)' }}>
+              <span className="whitespace-nowrap">{`${(r.win_pct * 100).toFixed(1)}% win`}</span>
+              <span className="whitespace-nowrap">{`${r.games} game${r.games === 1 ? '' : 's'}`}</span>
+              <span className="whitespace-nowrap">{`${r.pf.toFixed(1)} pf`}</span>
+              <span className="whitespace-nowrap">{`${r.pa.toFixed(1)} pa`}</span>
+              <span className="whitespace-nowrap font-bold" style={{ color: r.diff >= 0 ? PARLAY_GREEN : 'oklch(0.75 0.15 25)' }}>
+                {`${r.diff >= 0 ? '+' : ''}${r.diff.toFixed(1)} diff`}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {games.length > 0 && (
+        <>
+          <div className="font-mono text-[10px] uppercase tracking-widest" style={{ color: 'oklch(0.48 0 0)' }}>
+            games
+          </div>
+          <div className="space-y-2">
+            {games.map((g, i) => {
+              const won = g.result.trim().toUpperCase().startsWith('W')
+              const lost = g.result.trim().toUpperCase().startsWith('L')
+              return (
+                <div
+                  key={`${g.date}-${i}`}
+                  className="rounded p-3 font-mono text-[12px]"
+                  style={{ backgroundColor: 'oklch(0.18 0 0)', border: '1px solid oklch(0.28 0 0)' }}
+                >
+                  <div>
+                    <span style={{ color: PARLAY_DIM }}>{extractDateToken(g.date) ?? g.date}</span>
+                    <span style={{ color: 'oklch(0.40 0 0)' }}>{'  '}</span>
+                    <span style={{ color: PARLAY_CYAN }}>{`${g.venue === 'away' ? '@' : 'vs'} ${g.opponent}`}</span>
+                  </div>
+                  <div className="mt-1.5 flex flex-wrap gap-x-3">
+                    <span className="whitespace-nowrap font-bold" style={{ color: won ? PARLAY_GREEN : lost ? 'oklch(0.75 0.15 25)' : 'oklch(0.76 0 0)' }}>
+                      {g.result}
+                    </span>
+                    <span className="whitespace-nowrap" style={{ color: PARLAY_DIM }}>{slotName(g.slot)}</span>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
 // "Running query..." for ordinary commands; -parlay/-legs build a whole slate
 // server-side and take 45-70s, so they get a message that says so, with an
 // elapsed-seconds counter so it visibly isn't hung.
@@ -1025,7 +1191,15 @@ function NflOverviewScopesView({ payload }: { payload: NflOverviewScopesPayload 
 // -ov family, even though the data shape is single-row rather than
 // multi-row.
 
-function NflOverviewStatNView({ payload }: { payload: NflOverviewStatNPayload }) {
+// Broadcast-slot tokens on a command ("-mnf", "-snf", "-tnf", "-prime",
+// "-1pm", "-4pm") -> a display label. Slot-filtered -statN -ov responses
+// don't echo the slot back, so the view reads it off the command instead.
+function slotLabelFromQuery(query: string): string {
+  const found = query.toLowerCase().match(/(?:^|\s)-(mnf|snf|tnf|prime|1pm|4pm)\b/g) ?? []
+  return found.map((t) => t.trim().slice(1).toUpperCase()).join('+')
+}
+
+function NflOverviewStatNView({ payload, query = '' }: { payload: NflOverviewStatNPayload; query?: string }) {
   const { isExpanded, toggle } = useExpandableRows()
 
   const CYAN = 'oklch(0.85 0.15 195)'
@@ -1035,6 +1209,7 @@ function NflOverviewStatNView({ payload }: { payload: NflOverviewStatNPayload })
 
   const player = normalizeDisplayPlayer(payload.query.player)
   const { category, threshold, stat_kind, window_label } = payload.query
+  const windowGames = payload.window ?? payload.games_in_window ?? payload.count
 
   return (
     <div className="space-y-4 font-mono">
@@ -1043,7 +1218,7 @@ function NflOverviewStatNView({ payload }: { payload: NflOverviewStatNPayload })
           {player}
         </span>
         <span className="text-[12px]" style={{ color: DIM }}>
-          {category} · {scopeLabel(payload.scope)} · &ge;{threshold}{stat_kind} · {window_label}
+          {category} · {payload.scope != null ? scopeLabel(payload.scope) : slotLabelFromQuery(query) || 'full game'} · &ge;{threshold}{stat_kind} · {window_label}
         </span>
       </div>
 
@@ -1054,20 +1229,20 @@ function NflOverviewStatNView({ payload }: { payload: NflOverviewStatNPayload })
         </div>
         <div>
           <div className="text-[9px] uppercase tracking-wider" style={{ color: DIM }}>Window</div>
-          <div className="text-[16px] font-bold" style={{ color: CYAN }}>{payload.window}</div>
+          <div className="text-[16px] font-bold" style={{ color: CYAN }}>{windowGames}</div>
         </div>
       </div>
 
       {payload.matches.length > 0 && (
         <ResultRow
-          label={`${payload.count} of ${payload.window} games`}
+          label={`${payload.count} of ${windowGames} games`}
           badgeValue={isExpanded(0) ? 'hide' : 'view'}
           expanded={isExpanded(0)}
           onToggle={() => toggle(0)}
         >
           {payload.matches.map((m, j) => (
             <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
-              <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(m.date_iso) ?? m.date_iso}</span>
+              <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(m.date_iso ?? m.date) ?? m.date_iso ?? m.date}</span>
               {m.opponent && (
                 <>
                   <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
@@ -1075,7 +1250,7 @@ function NflOverviewStatNView({ payload }: { payload: NflOverviewStatNPayload })
                 </>
               )}
               <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
-              <span style={{ color: CYAN }}>{m.value}{stat_kind}</span>
+              <span style={{ color: CYAN }}>{m.value ?? m.val}{stat_kind}</span>
             </div>
           ))}
         </ResultRow>
@@ -2571,6 +2746,8 @@ function App() {
   const [explosiveOverviewResult, setExplosiveOverviewResult] = useState<ExplosiveOverviewPayload | null>(null)
   const [parlayResult, setParlayResult] = useState<NflParlayPayload | null>(null)
   const [playerLegsResult, setPlayerLegsResult] = useState<NflPlayerLegsPayload | null>(null)
+  const [playerSlotsResult, setPlayerSlotsResult] = useState<NflPlayerSlotsPayload | null>(null)
+  const [teamSlotsResult, setTeamSlotsResult] = useState<NflTeamSlotsPayload | null>(null)
   const [overviewScopesResult, setOverviewScopesResult] = useState<NflOverviewScopesPayload | null>(null)
   const [overviewStatNResult, setOverviewStatNResult] = useState<NflOverviewStatNPayload | null>(null)
   const [hrResult, setHrResult] = useState<MlbHrPayload | null>(null)
@@ -2614,20 +2791,40 @@ function App() {
   useEffect(() => {
     loadPlayerIndex().then(() => setIsPlayerIndexReady(true))
   }, [])
-  const playerMatches = useMemo(() => {
-    // Strict paths first (unchanged behavior); the loose fallback below only
-    // runs when they find nothing, so junk around a name ("xyz derrick",
-    // "nspe nfl derrick henry vs cin") still surfaces that player's
-    // profile + every {psc} command that uses their name.
+  // Strict: the typed text (or the part after "nspe {sport}") really does
+  // look like just a player's name — no flags, no extra "vs TEAM" tokens.
+  // This alone drives Enter's "go straight to the profile" behavior below;
+  // it must NOT include the loose fallback, or typing a full command that
+  // merely CONTAINS a player's name (e.g. "james wood vs det") would hijack
+  // Enter into navigating away instead of running that command.
+  const strictPlayerMatches = useMemo(() => {
     let matches: ReturnType<typeof searchPlayers> = []
     const { sport, rest } = stripSportPrefix(searchValue)
     if (looksLikePlayerSearch(searchValue)) matches = searchPlayers(searchValue, 8)
     // Sport already typed ("nspe nfl saquon") — see stripSportPrefix's
     // comment for why the whole-string check above misses this case.
     else if (rest && looksLikePlayerSearch(rest)) matches = searchPlayers(rest, 8)
-    if (matches.length === 0) matches = searchPlayersLoose(rest, 8)
     return sport ? matches.filter((m) => !m.entry.sport || m.entry.sport === sport) : matches
   }, [searchValue, isPlayerIndexReady])
+  // Loose: falls back to searchPlayersLoose (junk-tolerant) only when the
+  // strict search above found nothing — this is what actually renders the
+  // cyan profile dropdown, so it still surfaces a player's profile as a
+  // selectable option even inside a full command like "... vs det" or
+  // "derrick henry -slots -ov -career". Selecting it (click, or arrow +
+  // Enter) still navigates — only the bare, no-navigation Enter keypress
+  // treats a loose-only match as "not a deliberate profile request."
+  const playerMatches = useMemo(() => {
+    if (strictPlayerMatches.length > 0) return strictPlayerMatches
+    const { sport, rest } = stripSportPrefix(searchValue)
+    const loose = searchPlayersLoose(rest, 8)
+    return sport ? loose.filter((m) => !m.entry.sport || m.entry.sport === sport) : loose
+  }, [searchValue, strictPlayerMatches, isPlayerIndexReady])
+  // True only once the user has actually pressed an arrow key to browse the
+  // player dropdown — a deliberate "I want to pick from this list" signal,
+  // as opposed to Enter being pressed the instant a loose match happens to
+  // exist. Reset to false on every real keystroke (see the input onChange
+  // handlers) and on any programmatic fill.
+  const [playerNavTouched, setPlayerNavTouched] = useState(false)
   // Any curated commands that showcase one of the currently-matched players
   // (e.g. typing "mahomes" surfaces "nspe nfl long mahomes -ov" alongside
   // his profile match) — shown as a second, stacked dropdown beneath the
@@ -2782,6 +2979,8 @@ function App() {
     setExplosiveOverviewResult(null)
     setParlayResult(null)
     setPlayerLegsResult(null)
+    setPlayerSlotsResult(null)
+    setTeamSlotsResult(null)
     setOverviewScopesResult(null)
     setOverviewStatNResult(null)
     setHrResult(null)
@@ -2923,6 +3122,20 @@ function App() {
       const playerLegsPayload = extractNflPlayerLegsPayload(payload)
       if (playerLegsPayload) {
         setPlayerLegsResult(playerLegsPayload)
+        setQueryResults([])
+        return
+      }
+
+      // NFL primetime slots (player table / team record)
+      const playerSlotsPayload = extractNflPlayerSlotsPayload(payload)
+      if (playerSlotsPayload) {
+        setPlayerSlotsResult(playerSlotsPayload)
+        setQueryResults([])
+        return
+      }
+      const teamSlotsPayload = extractNflTeamSlotsPayload(payload)
+      if (teamSlotsPayload) {
+        setTeamSlotsResult(teamSlotsPayload)
         setQueryResults([])
         return
       }
@@ -3135,6 +3348,7 @@ function App() {
 
   const goToPlayerProfile = (slug: string) => {
     setSearchValue('')
+    setPlayerNavTouched(false)
     navigate(`/database/${slug}`)
   }
 
@@ -3144,6 +3358,8 @@ function App() {
   const selectSyntaxSuggestion = (command: string) => {
     setSearchValue(command)
     setSyntaxActiveIndex(0)
+    setPlayerSearchActiveIndex(0)
+    setPlayerNavTouched(false)
     setSuppressSyntaxDropdown(true)
     searchInputRef.current?.focus()
   }
@@ -3152,19 +3368,31 @@ function App() {
     if (playerMatches.length > 0) {
       if (e.key === 'ArrowDown') {
         e.preventDefault()
+        setPlayerNavTouched(true)
         setPlayerSearchActiveIndex((i) => (i + 1) % playerMatches.length)
         return
       }
       if (e.key === 'ArrowUp') {
         e.preventDefault()
+        setPlayerNavTouched(true)
         setPlayerSearchActiveIndex((i) => (i - 1 + playerMatches.length) % playerMatches.length)
         return
       }
       if (e.key === 'Enter') {
-        e.preventDefault()
-        const match = playerMatches[playerSearchActiveIndex] ?? playerMatches[0]
-        goToPlayerProfile(match.entry.slug)
-        return
+        // Only treat Enter as "go to the profile" when that's a deliberate
+        // choice — a strict, name-only match (the classic "type a name, hit
+        // enter" flow), or the user has actually arrowed through this list.
+        // A loose-only match (the typed text is a fuller command that merely
+        // contains a player's name, e.g. "james wood vs det" or "derrick
+        // henry -slots -ov -career") falls through to run the typed command
+        // instead, same as clicking {search} — the whole point of that
+        // command was never "show me the profile."
+        if (strictPlayerMatches.length > 0 || playerNavTouched) {
+          e.preventDefault()
+          const match = playerMatches[playerSearchActiveIndex] ?? playerMatches[0]
+          goToPlayerProfile(match.entry.slug)
+          return
+        }
       }
       if (e.key === 'Escape') {
         setSearchValue('')
@@ -3582,6 +3810,10 @@ function App() {
                 ? `${lastQuery} — parlay`
                 : playerLegsResult
                 ? `${lastQuery} — legs`
+                : playerSlotsResult
+                ? `${lastQuery} — slots`
+                : teamSlotsResult
+                ? `${lastQuery} — team slots`
                 : explosiveOverviewResult
                 ? `${lastQuery} — explosive overview`
                 : overviewScopesResult
@@ -3632,12 +3864,16 @@ function App() {
               <NflParlayView payload={parlayResult} />
             ) : playerLegsResult ? (
               <NflPlayerLegsView payload={playerLegsResult} />
+            ) : playerSlotsResult ? (
+              <NflPlayerSlotsView payload={playerSlotsResult} />
+            ) : teamSlotsResult ? (
+              <NflTeamSlotsView payload={teamSlotsResult} />
             ) : explosiveOverviewResult ? (
               <ExplosiveOverviewView payload={explosiveOverviewResult} />
             ) : overviewScopesResult ? (
               <NflOverviewScopesView payload={overviewScopesResult} />
             ) : overviewStatNResult ? (
-              <NflOverviewStatNView payload={overviewStatNResult} />
+              <NflOverviewStatNView payload={overviewStatNResult} query={lastQuery} />
             ) : hrResult ? (
               <MlbHrView payload={hrResult} />
             ) : firstPaResult ? (
@@ -3790,6 +4026,7 @@ function App() {
                   onChange={(e) => {
                     setSearchValue(e.target.value)
                     setPlayerSearchActiveIndex(0)
+                    setPlayerNavTouched(false)
                     setSyntaxActiveIndex(0)
                     setSuppressSyntaxDropdown(false)
                     setIsMobileDropdownDismissed(false)
@@ -3871,6 +4108,7 @@ function App() {
                   onChange={(e) => {
                     setSearchValue(e.target.value)
                     setPlayerSearchActiveIndex(0)
+                    setPlayerNavTouched(false)
                     setSyntaxActiveIndex(0)
                     setSuppressSyntaxDropdown(false)
                   }}

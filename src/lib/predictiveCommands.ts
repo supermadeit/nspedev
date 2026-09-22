@@ -28,6 +28,7 @@
 //   -ov (nfl)  nspe nfl {long|1h|q1} {player} -ov {YYYY | -career | YYYY-YYYY}?
 //   parlay(nfl)nspe nfl -parlay -week{N} -shape {S}? -risk {longshot|safe}?
 //   legs (nfl) nspe nfl {player} -week{N} -legs
+//   slots(nfl) nspe nfl {player} -slots -ov [pass|rush|rec] [window] | {player} -mnf|-snf|-tnf|-prime|-1pm|-4pm -ov [-statN] | {pass|rush|rec} -statN -mnf -leaderboard | team [TEAM] -mnf|...
 
 // Defined here (not sampleQueries.ts) since this is now the primary content
 // file — sampleQueries.ts re-exports it so existing imports elsewhere don't
@@ -154,6 +155,40 @@ const NFL_COMMANDS: SampleQuery[] = [
   { label: 'nfl overview · scopes (-ov)', command: 'nspe nfl derrick henry -ov', playerHint: 'derrick henry' },
   { label: 'nfl overview · 1h -yds50 (-ov, career)', command: 'nspe nfl 1h derrick henry -yds50 -ov -career', playerHint: 'derrick henry' },
   { label: 'nfl overview · long (-ov)', command: 'nspe nfl long derrick henry -ov', playerHint: 'derrick henry' },
+  // Broadcast slots — MNF/SNF/TNF/FRI-SAT/PRIME (MNF+SNF+TNF+FRI/SAT)/1PM/4PM.
+  // Windows: -career, YYYY, YYYY-YYYY, or omitted (current season). Coverage
+  // is solid from ~2016; earlier games are partly missing. Backend: player
+  // tables are engine nfl_player_slots, team is nfl_team_slots.
+  // Player slot comparison table (default category, or pass|rush|rec named):
+  { label: 'nfl slots · compare all slots', command: 'nspe nfl derrick henry -slots -ov -career', playerHint: 'derrick henry' },
+  { label: 'nfl slots · this season', command: 'nspe nfl derrick henry -slots -ov', playerHint: 'derrick henry' },
+  { label: 'nfl slots · one season', command: 'nspe nfl derrick henry -slots -ov 2025', playerHint: 'derrick henry' },
+  { label: 'nfl slots · range', command: 'nspe nfl derrick henry -slots -ov 2020-2025', playerHint: 'derrick henry' },
+  { label: 'nfl slots · pass', command: 'nspe nfl mahomes -slots pass -ov -career' },
+  { label: 'nfl slots · rec', command: 'nspe nfl cmac -slots -ov rec -career' },
+  // Single-slot personal views (bare table, or "how many games hit N"):
+  { label: 'nfl slot · MNF', command: 'nspe nfl derrick henry -mnf -ov -career', playerHint: 'derrick henry' },
+  { label: 'nfl slot · SNF', command: 'nspe nfl derrick henry -snf -ov -career', playerHint: 'derrick henry' },
+  { label: 'nfl slot · TNF', command: 'nspe nfl derrick henry -tnf -ov -career', playerHint: 'derrick henry' },
+  { label: 'nfl slot · primetime', command: 'nspe nfl derrick henry -prime -ov -career', playerHint: 'derrick henry' },
+  { label: 'nfl slot · MNF td2', command: 'nspe nfl derrick henry -mnf -td2 -ov -career', playerHint: 'derrick henry' },
+  { label: 'nfl slot · SNF yds', command: 'nspe nfl mahomes -snf -yds300 -ov -career' },
+  { label: 'nfl slot · TNF combined td', command: 'nspe nfl cmac any -tnf -td2 -ov -career' },
+  { label: 'nfl slot · MNF rush+rec td', command: 'nspe nfl cmac rushrec -mnf -td2 -ov -career' },
+  // League leaderboards filtered by slot (slots can be combined; -topN):
+  { label: 'nfl slot leaderboard · MNF', command: 'nspe nfl pass -yds300 -mnf -leaderboard -career' },
+  { label: 'nfl slot leaderboard · primetime', command: 'nspe nfl pass -yds300 -prime -leaderboard -career -top10' },
+  { label: 'nfl slot leaderboard · SNF+TNF', command: 'nspe nfl pass -yds300 -snf -tnf -leaderboard 2025' },
+  { label: 'nfl slot leaderboard · rush', command: 'nspe nfl rush -yds100 -snf -leaderboard -career' },
+  { label: 'nfl slot leaderboard · rec', command: 'nspe nfl rec -yds100 -mnf -leaderboard -career -top10' },
+  // Team records by slot (one team also lists each game):
+  { label: 'nfl team slot · MNF', command: 'nspe nfl team -mnf -career' },
+  { label: 'nfl team slot · SNF', command: 'nspe nfl team -snf -career' },
+  { label: 'nfl team slot · TNF', command: 'nspe nfl team -tnf -career' },
+  { label: 'nfl team slot · 1PM', command: 'nspe nfl team -1pm -career' },
+  { label: 'nfl team slot · 4PM', command: 'nspe nfl team -4pm -career' },
+  { label: 'nfl team slot · primetime', command: 'nspe nfl team KC -prime -career' },
+  { label: 'nfl team slot · range', command: 'nspe nfl team dal -tnf 2020-2025' },
   // Player legs — every candidate parlay leg for one NFL player this week.
   // playerHint makes it surface for whichever NFL player is searched.
   { label: 'nfl player legs', command: `nspe nfl jonathan taylor -week${PARLAY_WEEK} -legs`, playerHint: 'jonathan taylor' },

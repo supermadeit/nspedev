@@ -1,219 +1,99 @@
 {
-  "engine": "mlb_hr_trend",
+  "engine": "nfl_player_slots",
   "query": {
-    "threshold": 400,
-    "last": 3,
-    "met": 1,
-    "first": false
+    "player": "PatrickMahomes",
+    "category": "pass",
+    "window_label": "career"
   },
-  "results": [
+  "rows": [
     {
-      "player": "Fernando Tatis Jr",
-      "team": "SD",
-      "met_count": 2,
-      "window": 3,
-      "matches": [
-        {
-          "game_id": "401817008",
-          "date": "2026-09-19",
-          "opponent": "vsMIA",
-          "inning": 4,
-          "half": "Bottom",
-          "distance_feet": 410,
-          "description": "Tatis Jr. homered to center (410 feet).",
-          "team": "SD"
-        },
-        {
-          "game_id": "401817023",
-          "date": "2026-09-20",
-          "opponent": "vsMIA",
-          "inning": 7,
-          "half": "Bottom",
-          "distance_feet": 406,
-          "description": "Tatis Jr. homered to center (406 feet).",
-          "team": "SD"
-        }
-      ]
+      "slot": "MNF",
+      "games": 13,
+      "yards": 3752,
+      "avg": 288.6,
+      "td": 30,
+      "td_per_game": 2.31,
+      "extra": "66.9% cmp"
     },
     {
-      "player": "Bo Bichette",
-      "team": "NYM",
-      "met_count": 1,
-      "window": 3,
-      "matches": [
-        {
-          "game_id": "401817017",
-          "date": "2026-09-20",
-          "opponent": "vsPHI",
-          "inning": 6,
-          "half": "Bottom",
-          "distance_feet": 419,
-          "description": "Bichette homered to left center (419 feet).",
-          "team": "NYM"
-        }
-      ]
+      "slot": "SNF",
+      "games": 22,
+      "yards": 6313,
+      "avg": 287.0,
+      "td": 46,
+      "td_per_game": 2.09,
+      "extra": "63.9% cmp"
     },
     {
-      "player": "Pete Crow Armstrong",
-      "team": "CHC",
-      "met_count": 1,
-      "window": 3,
-      "matches": [
-        {
-          "game_id": "401817014",
-          "date": "2026-09-20",
-          "opponent": "@CIN",
-          "inning": 5,
-          "half": "Top",
-          "distance_feet": 411,
-          "description": "Crow-Armstrong homered to center (411 feet), Ramirez scored.",
-          "team": "CHC"
-        }
-      ]
+      "slot": "TNF",
+      "games": 8,
+      "yards": 1998,
+      "avg": 249.8,
+      "td": 15,
+      "td_per_game": 1.88,
+      "extra": "69.2% cmp"
     },
     {
-      "player": "Ronald Acuna Jr",
-      "team": "ATL",
-      "met_count": 1,
-      "window": 3,
-      "matches": [
-        {
-          "game_id": "401817003",
-          "date": "2026-09-19",
-          "opponent": "@HOU",
-          "inning": 7,
-          "half": "Top",
-          "distance_feet": 411,
-          "description": "Acu\u00f1a Jr. homered to left center (411 feet), Yastrzemski scored, Riley scored and S. Murphy scored.",
-          "team": "ATL"
-        }
-      ]
+      "slot": "FRI/SAT",
+      "games": 1,
+      "yards": 258,
+      "avg": 258.0,
+      "td": 1,
+      "td_per_game": 1.0,
+      "extra": "61.5% cmp"
     },
     {
-      "player": "Riley Greene",
-      "team": "DET",
-      "met_count": 1,
-      "window": 3,
-      "matches": [
-        {
-          "game_id": "401816989",
-          "date": "2026-09-18",
-          "opponent": "@CHW",
-          "inning": 8,
-          "half": "Top",
-          "distance_feet": 413,
-          "description": "Greene homered to right center (413 feet), Dingler scored.",
-          "team": "DET"
-        }
-      ]
+      "slot": "PRIME",
+      "games": 44,
+      "yards": 12321,
+      "avg": 280.0,
+      "td": 92,
+      "td_per_game": 2.09,
+      "extra": "65.6% cmp"
     },
     {
-      "player": "Brandon Lowe",
-      "team": "PIT",
-      "met_count": 1,
-      "window": 3,
-      "matches": [
-        {
-          "game_id": "401816985",
-          "date": "2026-09-18",
-          "opponent": "vsKC",
-          "inning": 3,
-          "half": "Bottom",
-          "distance_feet": 417,
-          "description": "Lowe homered to center (417 feet), Griffin scored.",
-          "team": "PIT"
-        }
-      ]
+      "slot": "1PM",
+      "games": 40,
+      "yards": 12044,
+      "avg": 301.1,
+      "td": 92,
+      "td_per_game": 2.3,
+      "extra": "67.5% cmp"
     },
     {
-      "player": "Jose Ramirez",
-      "team": "CLE",
-      "met_count": 1,
-      "window": 3,
-      "matches": [
-        {
-          "game_id": "401816982",
-          "date": "2026-09-18",
-          "opponent": "vsATH",
-          "inning": 6,
-          "half": "Bottom",
-          "distance_feet": 401,
-          "description": "Ram\u00edrez homered to right (401 feet).",
-          "team": "CLE"
-        }
-      ]
+      "slot": "4PM",
+      "games": 41,
+      "yards": 11252,
+      "avg": 274.4,
+      "td": 83,
+      "td_per_game": 2.02,
+      "extra": "65.7% cmp"
     },
     {
-      "player": "Juan Soto",
-      "team": "NYM",
-      "met_count": 1,
-      "window": 3,
-      "matches": [
-        {
-          "game_id": "401816987",
-          "date": "2026-09-18",
-          "opponent": "vsPHI",
-          "inning": 6,
-          "half": "Bottom",
-          "distance_feet": 428,
-          "description": "Soto homered to center (428 feet), Semien scored and Torrens scored.",
-          "team": "NYM"
-        }
-      ]
+      "slot": "OTHER",
+      "games": 2,
+      "yards": 491,
+      "avg": 245.5,
+      "td": 3,
+      "td_per_game": 1.5,
+      "extra": "60.5% cmp"
     },
     {
-      "player": "Max Muncy",
-      "team": "LAD",
-      "met_count": 1,
-      "window": 3,
-      "matches": [
-        {
-          "game_id": "401816996",
-          "date": "2026-09-18",
-          "opponent": "vsSF",
-          "inning": 8,
-          "half": "Bottom",
-          "distance_feet": 420,
-          "description": "Muncy homered to right center (420 feet).",
-          "team": "LAD"
-        }
-      ]
-    },
-    {
-      "player": "Munetaka Murakami",
-      "team": "CHW",
-      "met_count": 1,
-      "window": 3,
-      "matches": [
-        {
-          "game_id": "401816978",
-          "date": "2026-09-17",
-          "opponent": "vsDET",
-          "inning": 1,
-          "half": "Bottom",
-          "distance_feet": 423,
-          "description": "Murakami homered to center (423 feet), Meidroth scored and Grichuk scored.",
-          "team": "CHW"
-        }
-      ]
-    },
-    {
-      "player": "Aaron Judge",
-      "team": "NYY",
-      "met_count": 1,
-      "window": 3,
-      "matches": [
-        {
-          "game_id": "401816938",
-          "date": "2026-09-14",
-          "opponent": "@MIN",
-          "inning": 8,
-          "half": "Top",
-          "distance_feet": 415,
-          "description": "Judge homered to left (415 feet), Rice scored and Bellinger scored.",
-          "team": "NYY"
-        }
-      ]
+      "slot": "ALL",
+      "games": 128,
+      "yards": 36505,
+      "avg": 285.2,
+      "td": 272,
+      "td_per_game": 2.12,
+      "extra": "66.1% cmp"
     }
-  ]
+  ],
+  "summary": {
+    "prime_avg": 280.0,
+    "other_avg": 286.6,
+    "pct_diff": -2.3,
+    "prime_games": 44,
+    "other_games": 83
+  },
+  "unclassified_games": 1
 }

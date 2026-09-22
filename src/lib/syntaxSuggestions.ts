@@ -174,6 +174,8 @@ const KEYWORD_ALIASES: Record<string, string[]> = {
   year: ['season'], yr: ['season'], lifetime: ['career'],
   // parlay -risk: the backend keyword is "safe"; "short" (short odds) is the
   // natural word for it.
+  // broadcast slots (-mnf/-snf/-tnf/-prime)
+  monday: ['mnf'], sunday: ['snf'], thursday: ['tnf'], primetime: ['prime'], slot: ['slots'],
   short: ['safe'], shorts: ['safe'], conservative: ['safe'], risky: ['longshot'],
 }
 

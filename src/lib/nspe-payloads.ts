@@ -954,20 +954,28 @@ export function extractNflOverviewScopesPayload(payload: unknown): NflOverviewSc
 // doesn't get mislabeled with trend-style "met=N" badge phrasing.
 
 export interface NflOverviewStatNMatch {
-  game_id: string
-  value: number
-  seasonYear: string
+  game_id?: string
+  // Period-scoped (1h/q1) matches send value/date_iso; slot-filtered
+  // whole-game matches ("-mnf -yds300 -ov") send val/date instead.
+  value?: number
+  val?: number
+  seasonYear?: string
   opponent: string
-  date_iso: string
+  date_iso?: string
+  date?: string
 }
 
 export interface NflOverviewStatNPayload {
   engine: 'nfl_overview_statn'
   mode: string
-  scope: string
+  // scope/window are absent on slot-filtered responses ("-mnf -yds300 -ov":
+  // mode "whole_game", and the window size arrives as games_in_window). The
+  // slot itself isn't echoed back, so the view reads it off the command.
+  scope?: string
   query: { player: string; category: string; threshold: number; stat_kind: string; window_label: string }
   count: number
-  window: number
+  window?: number
+  games_in_window?: number
   matches: NflOverviewStatNMatch[]
 }
 
@@ -1959,3 +1967,77 @@ function findPayload<T>(payload: unknown, guard: (v: unknown) => v is T): T | nu
 
 export const extractNflParlayPayload = (payload: unknown) => findPayload(payload, isNflParlayPayload)
 export const extractNflPlayerLegsPayload = (payload: unknown) => findPayload(payload, isNflPlayerLegsPayload)
+
+
+// ---------- NFL primetime slots (-slots / team -mnf|-snf|-tnf|-prime|-1pm|-4pm) ----------
+// `nspe nfl <player> -slots -ov [pass|rush|rec] [-career|YYYY|YYYY-YYYY]`:
+// one row per broadcast slot (MNF, SNF, TNF, FRI/SAT, PRIME, 1PM, 4PM, OTHER,
+// ALL) plus a prime-vs-other summary. `extra` is a category-specific
+// pre-formatted stat ("66.9% cmp" for pass, "5.2 ypc" rush, "5.7 rec/g" rec).
+export interface NflPlayerSlotRow {
+  slot: string
+  games: number
+  yards: number
+  avg: number
+  td: number
+  td_per_game: number
+  extra?: string | null
+}
+
+export interface NflPlayerSlotsPayload {
+  engine: 'nfl_player_slots'
+  query: { player: string; category: string; window_label: string }
+  rows: NflPlayerSlotRow[]
+  summary?: {
+    prime_avg: number
+    other_avg: number
+    pct_diff: number
+    prime_games: number
+    other_games: number
+  } | null
+  unclassified_games?: number
+}
+
+// `nspe nfl team [TEAM...] -mnf|-snf|-tnf|-prime|-1pm|-4pm [window]`: one
+// record row per team, plus a per-game list when a single team was named.
+export interface NflTeamSlotRow {
+  team: string
+  games: number
+  wins: number
+  losses: number
+  ties: number
+  win_pct: number
+  pf: number
+  pa: number
+  diff: number
+}
+
+export interface NflTeamSlotGame {
+  date: string
+  opponent: string
+  venue: string
+  slot: string
+  result: string
+}
+
+export interface NflTeamSlotsPayload {
+  engine: 'nfl_team_slots'
+  query: { slots: string[]; teams: string[] | null; window_label: string }
+  rows: NflTeamSlotRow[]
+  games?: NflTeamSlotGame[]
+}
+
+function isNflPlayerSlotsPayload(v: unknown): v is NflPlayerSlotsPayload {
+  if (!v || typeof v !== 'object' || Array.isArray(v)) return false
+  const r = v as Record<string, unknown>
+  return r.engine === 'nfl_player_slots' && Array.isArray(r.rows)
+}
+
+function isNflTeamSlotsPayload(v: unknown): v is NflTeamSlotsPayload {
+  if (!v || typeof v !== 'object' || Array.isArray(v)) return false
+  const r = v as Record<string, unknown>
+  return r.engine === 'nfl_team_slots' && Array.isArray(r.rows)
+}
+
+export const extractNflPlayerSlotsPayload = (payload: unknown) => findPayload(payload, isNflPlayerSlotsPayload)
+export const extractNflTeamSlotsPayload = (payload: unknown) => findPayload(payload, isNflTeamSlotsPayload)
