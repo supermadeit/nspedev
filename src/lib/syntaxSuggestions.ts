@@ -84,15 +84,14 @@ function matchTokenShape(typedTokens: string[], catalogTokens: string[]): string
 // somewhere in the middle) — typing "nba -pts" should surface pts-trend
 // commands before some unrelated command that merely happens to contain
 // "pts" deeper in its string.
-// 50 is a comfortable ceiling — the dropdown scrolls, so this isn't "how
-// many are visible at once," it's "how deep can you scroll for a bare
-// nspe." A bare "nspe" is the only realistic case that hits it at all —
-// prefix matching narrows well below this the moment a sport or stat is
-// typed. The product goal here is deliberately "aggressively informative"
-// rather than minimal — {psc} is meant to spark curiosity about what's
-// possible, so erring toward showing more command *types* up front (not
-// just a token sample) is the right trade once scrolling absorbs the cost.
-export function searchSyntax(query: string, limit = 50): SyntaxMatch[] {
+// A bare "nspe" is the only realistic case that hits this ceiling at all —
+// prefix matching narrows well below it the moment a sport or stat is
+// typed. Deliberately turned down from an earlier, more "aggressively
+// informative" 50 — per feedback that {psc} had started to bite rather
+// than help, this trades a little of that up-front breadth for staying out
+// of the way; the dropdown still scrolls, so nothing is hidden, just not
+// dumped all at once.
+export function searchSyntax(query: string, limit = 30): SyntaxMatch[] {
   const trimmed = query.trim().toLowerCase()
   if (!trimmed) return []
 
@@ -197,6 +196,14 @@ function commandWords(q: SampleQuery): Set<string> {
   for (const m of q.command.match(SLASH_NUMS) ?? []) words.add(m)
   for (const w of q.label.toLowerCase().split(/[^a-z0-9]+/)) if (w.length >= 2) words.add(w)
   words.delete('nspe')
+  // Every command in a sport's own bucket trivially contains that sport's
+  // name — keeping it as a "keyword" means matching e.g. "mlb" alone would
+  // score as a hit against the ENTIRE mlb catalog (real bug this surfaced:
+  // "nspe mlb primetime" matched 30 unrelated mlb commands purely because
+  // they all contain the word "mlb", not because any of them mention
+  // primetime). The sport is already the hard filter in scoreCatalog; it
+  // shouldn't also double as a soft-scoring keyword.
+  for (const s of ['mlb', 'nfl', 'nba', 'nhl', 'cfb', 'ncaaf']) words.delete(s)
   return words
 }
 
@@ -240,19 +247,42 @@ function keywordScore(command: string, words: Set<string> | undefined, keywords:
   return score
 }
 
-// Catalog commands containing at least one recognized keyword, best first.
-export function searchKeywords(query: string, limit = 50): SyntaxMatch[] {
-  const keywords = extractKeywords(query)
-  if (keywords.length === 0) return []
+// Only words with no real discriminating signal by themselves — "vs" and
+// "-ov" appear across nearly the whole catalog regardless of sport/stat, so
+// recognizing just one of them alone isn't a real ask. Deliberately NOT
+// here: mode words like "streak"/"team"/"long"/"week"/"parlay"/"safe"/
+// "longshot" each map to one coherent command family, so a single hit on
+// one of those is already a specific, useful narrowing on its own.
+const GENERIC_KEYWORDS = new Set(['vs', 'ov', 'last', 'season', 'career', 'min', 'max'])
+
+function isSpecificEnough(keywords: string[]): boolean {
+  return keywords.some((k) => !GENERIC_KEYWORDS.has(k)) || keywords.length >= 2
+}
+
+function scoreCatalog(keywords: string[], sport?: string): { m: SyntaxMatch; score: number; i: number }[] {
   const seen = new Set<string>()
   const scored: { m: SyntaxMatch; score: number; i: number }[] = []
   SYNTAX_CATALOG.forEach((q, i) => {
     if (seen.has(q.command)) return
+    if (sport && commandSport(q.command) !== sport) return
     const score = keywordScore(q.command, COMMAND_WORDS.get(q), keywords)
     if (score <= 0) return
     seen.add(q.command)
     scored.push({ m: { query: q, matchedPrefix: '', displayCommand: q.command }, score, i })
   })
+  return scored
+}
+
+// Catalog commands containing at least one recognized keyword, best first.
+// When `sport` is given (the user typed an explicit "nspe {sport}" prefix),
+// results stay native to that sport first — only falling back to the whole
+// catalog when that sport genuinely has nothing matching — so an MLB query
+// with no MLB answer doesn't get padded out with NFL/NBA noise instead.
+export function searchKeywords(query: string, sport?: string, limit = 30): SyntaxMatch[] {
+  const keywords = extractKeywords(query)
+  if (keywords.length === 0 || !isSpecificEnough(keywords)) return []
+  let scored = sport ? scoreCatalog(keywords, sport) : []
+  if (scored.length === 0) scored = scoreCatalog(keywords)
   scored.sort((a, b) => b.score - a.score || a.i - b.i)
   return scored.slice(0, limit).map((x) => x.m)
 }

@@ -1,99 +1,251 @@
 {
-  "engine": "nfl_player_slots",
+  "engine": "nfl-leaderboard",
+  "kind": "nfl_leaderboard",
   "query": {
-    "player": "PatrickMahomes",
-    "category": "pass",
-    "window_label": "career"
+    "league": "nfl",
+    "scope": "rec",
+    "stat": "rec_yds",
+    "threshold": 100,
+    "last": null,
+    "top": 25,
+    "post": false,
+    "slots": null,
+    "season_window": "2026",
+    "year_window": [
+      2026,
+      2026
+    ],
+    "date_range": null
   },
   "rows": [
     {
-      "slot": "MNF",
-      "games": 13,
-      "yards": 3752,
-      "avg": 288.6,
-      "td": 30,
-      "td_per_game": 2.31,
-      "extra": "66.9% cmp"
+      "player": "JaxonSmithNjigba",
+      "team": "SEA",
+      "count": 2,
+      "games_in_window": 2,
+      "latest": "2026-09-20",
+      "matches": [
+        {
+          "val": 155,
+          "date": "2026-09-20",
+          "opponent": "@ARI"
+        },
+        {
+          "val": 122,
+          "date": "2026-09-09",
+          "opponent": "vsNE"
+        }
+      ]
     },
     {
-      "slot": "SNF",
-      "games": 22,
-      "yards": 6313,
-      "avg": 287.0,
-      "td": 46,
-      "td_per_game": 2.09,
-      "extra": "63.9% cmp"
+      "player": "DavanteAdams",
+      "team": "LAR",
+      "count": 1,
+      "games_in_window": 2,
+      "latest": "2026-09-21",
+      "matches": [
+        {
+          "val": 195,
+          "date": "2026-09-21",
+          "opponent": "vsNYG"
+        }
+      ]
     },
     {
-      "slot": "TNF",
-      "games": 8,
-      "yards": 1998,
-      "avg": 249.8,
-      "td": 15,
-      "td_per_game": 1.88,
-      "extra": "69.2% cmp"
+      "player": "TetairoaMcmillan",
+      "team": "CAR",
+      "count": 1,
+      "games_in_window": 2,
+      "latest": "2026-09-20",
+      "matches": [
+        {
+          "val": 101,
+          "date": "2026-09-20",
+          "opponent": "@ATL"
+        }
+      ]
     },
     {
-      "slot": "FRI/SAT",
-      "games": 1,
-      "yards": 258,
-      "avg": 258.0,
-      "td": 1,
-      "td_per_game": 1.0,
-      "extra": "61.5% cmp"
+      "player": "JaylenWaddle",
+      "team": "DEN",
+      "count": 1,
+      "games_in_window": 2,
+      "latest": "2026-09-20",
+      "matches": [
+        {
+          "val": 138,
+          "date": "2026-09-20",
+          "opponent": "vsJAX"
+        }
+      ]
     },
     {
-      "slot": "PRIME",
-      "games": 44,
-      "yards": 12321,
-      "avg": 280.0,
-      "td": 92,
-      "td_per_game": 2.09,
-      "extra": "65.6% cmp"
+      "player": "DaltonSchultz",
+      "team": "HOU",
+      "count": 1,
+      "games_in_window": 2,
+      "latest": "2026-09-20",
+      "matches": [
+        {
+          "val": 140,
+          "date": "2026-09-20",
+          "opponent": "vsCIN"
+        }
+      ]
     },
     {
-      "slot": "1PM",
-      "games": 40,
-      "yards": 12044,
-      "avg": 301.1,
-      "td": 92,
-      "td_per_game": 2.3,
-      "extra": "67.5% cmp"
+      "player": "DevontaSmith",
+      "team": "PHI",
+      "count": 1,
+      "games_in_window": 2,
+      "latest": "2026-09-20",
+      "matches": [
+        {
+          "val": 117,
+          "date": "2026-09-20",
+          "opponent": "@TEN"
+        }
+      ]
     },
     {
-      "slot": "4PM",
-      "games": 41,
-      "yards": 11252,
-      "avg": 274.4,
-      "td": 83,
-      "td_per_game": 2.02,
-      "extra": "65.7% cmp"
+      "player": "CeedeeLamb",
+      "team": "DAL",
+      "count": 1,
+      "games_in_window": 2,
+      "latest": "2026-09-20",
+      "matches": [
+        {
+          "val": 153,
+          "date": "2026-09-20",
+          "opponent": "vsWSH"
+        }
+      ]
     },
     {
-      "slot": "OTHER",
-      "games": 2,
-      "yards": 491,
-      "avg": 245.5,
-      "td": 3,
-      "td_per_game": 1.5,
-      "extra": "60.5% cmp"
+      "player": "TravisKelce",
+      "team": "KC",
+      "count": 1,
+      "games_in_window": 2,
+      "latest": "2026-09-20",
+      "matches": [
+        {
+          "val": 101,
+          "date": "2026-09-20",
+          "opponent": "vsIND"
+        }
+      ]
     },
     {
-      "slot": "ALL",
-      "games": 128,
-      "yards": 36505,
-      "avg": 285.2,
-      "td": 272,
-      "td_per_game": 2.12,
-      "extra": "66.1% cmp"
+      "player": "TreTucker",
+      "team": "LV",
+      "count": 1,
+      "games_in_window": 2,
+      "latest": "2026-09-20",
+      "matches": [
+        {
+          "val": 119,
+          "date": "2026-09-20",
+          "opponent": "@LAC"
+        }
+      ]
+    },
+    {
+      "player": "AmonRaStBrown",
+      "team": "DET",
+      "count": 1,
+      "games_in_window": 2,
+      "latest": "2026-09-17",
+      "matches": [
+        {
+          "val": 142,
+          "date": "2026-09-17",
+          "opponent": "@BUF"
+        }
+      ]
+    },
+    {
+      "player": "DaltonKincaid",
+      "team": "BUF",
+      "count": 1,
+      "games_in_window": 2,
+      "latest": "2026-09-13",
+      "matches": [
+        {
+          "val": 130,
+          "date": "2026-09-13",
+          "opponent": "@HOU"
+        }
+      ]
+    },
+    {
+      "player": "DjMoore",
+      "team": "BUF",
+      "count": 1,
+      "games_in_window": 2,
+      "latest": "2026-09-13",
+      "matches": [
+        {
+          "val": 100,
+          "date": "2026-09-13",
+          "opponent": "@HOU"
+        }
+      ]
+    },
+    {
+      "player": "JalenCoker",
+      "team": "CAR",
+      "count": 1,
+      "games_in_window": 2,
+      "latest": "2026-09-13",
+      "matches": [
+        {
+          "val": 138,
+          "date": "2026-09-13",
+          "opponent": "vsCHI"
+        }
+      ]
+    },
+    {
+      "player": "ChristianWatson",
+      "team": "GB",
+      "count": 1,
+      "games_in_window": 2,
+      "latest": "2026-09-13",
+      "matches": [
+        {
+          "val": 147,
+          "date": "2026-09-13",
+          "opponent": "@MIN"
+        }
+      ]
+    },
+    {
+      "player": "ChrisOlave",
+      "team": "NO",
+      "count": 1,
+      "games_in_window": 2,
+      "latest": "2026-09-13",
+      "matches": [
+        {
+          "val": 182,
+          "date": "2026-09-13",
+          "opponent": "@DET"
+        }
+      ]
+    },
+    {
+      "player": "ZayFlowers",
+      "team": "BAL",
+      "count": 1,
+      "games_in_window": 1,
+      "latest": "2026-09-13",
+      "matches": [
+        {
+          "val": 150,
+          "date": "2026-09-13",
+          "opponent": "@IND"
+        }
+      ]
     }
-  ],
-  "summary": {
-    "prime_avg": 280.0,
-    "other_avg": 286.6,
-    "pct_diff": -2.3,
-    "prime_games": 44,
-    "other_games": 83
-  },
-  "unclassified_games": 1
+  ]
 }

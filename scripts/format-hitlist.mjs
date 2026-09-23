@@ -39,9 +39,26 @@ function sportFromKind(kind) {
   return match ? match[1].toLowerCase() : ''
 }
 
+// Mirrors App.tsx's STAT_LABELS (src/App.tsx, ~line 179) — kept in sync by
+// hand since this script runs standalone (no TS import). Only the header
+// banner's own text needs this; each row's own `stat` field is left as the
+// raw key (e.g. "rec_yds"), and App.tsx's STAT_LABELS maps that the same
+// way when rendering the per-player line, so the header and the rows read
+// the same unit ("100yds+" ... "{100yds 2G season}") instead of the header
+// alone showing the raw "rec_yds".
+const HEADER_STAT_LABELS = {
+  pass_yds: 'yds',
+  rush_yds: 'yds',
+  rec_yds: 'yds',
+  pass_td: 'td',
+  rush_td: 'td',
+  rec_td: 'td',
+}
+
 function buildRawHeader({ sport, query, topN, windowLabel }) {
   const sportLabel = (sport || '').toUpperCase()
-  const stat = String(query?.stat ?? query?.short ?? '').toLowerCase()
+  const rawStat = String(query?.stat ?? query?.short ?? '').toLowerCase()
+  const stat = HEADER_STAT_LABELS[rawStat] || rawStat
   const threshold = query?.threshold
   const thresholdPart = threshold !== undefined && threshold !== null
     ? `${threshold}${stat}+`
@@ -84,7 +101,10 @@ function transform(payload) {
   const threshold = query.threshold
   const lastN = typeof query.last_n === 'number' ? query.last_n : null
   const windowLabel = lastN ? `L${lastN}` : 'season'
-  const topN = payload.thresholds?.top_n
+  // MLB's stat-leaderboard payload nests the requested top-N under
+  // `thresholds.top_n`; the NFL leaderboard payload has no `thresholds`
+  // object at all and puts it directly on `query.top` instead.
+  const topN = payload.thresholds?.top_n ?? query.top
   const rows = Array.isArray(payload.rows) ? payload.rows : []
 
   const header = { raw: buildRawHeader({ sport, query, topN, windowLabel }) }

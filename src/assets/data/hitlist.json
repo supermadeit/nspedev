@@ -1,145 +1,117 @@
 [
   {
-    "raw": "MLB 2tb+ {top20} {season}"
+    "raw": "NFL 100yds+ {top25} {season}"
   },
   {
-    "team": "CHC",
-    "player": "Pete Crow Armstrong",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 76
+    "team": "SEA",
+    "player": "JaxonSmithNjigba",
+    "stat": "rec_yds",
+    "threshold": 100,
+    "games_meeting": 2
   },
   {
-    "team": "ATL",
-    "player": "Matt Olson",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 75
+    "team": "LAR",
+    "player": "DavanteAdams",
+    "stat": "rec_yds",
+    "threshold": 100,
+    "games_meeting": 1
   },
   {
-    "team": "TB",
-    "player": "Junior Caminero",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 74
+    "team": "CAR",
+    "player": "TetairoaMcmillan",
+    "stat": "rec_yds",
+    "threshold": 100,
+    "games_meeting": 1
   },
   {
-    "team": "SD",
-    "player": "Fernando Tatis Jr",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 71
-  },
-  {
-    "team": "STL",
-    "player": "Alec Burleson",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 71
-  },
-  {
-    "team": "MIA",
-    "player": "Otto Lopez",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 70
-  },
-  {
-    "team": "SF",
-    "player": "Luis Arraez",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 69
+    "team": "DEN",
+    "player": "JaylenWaddle",
+    "stat": "rec_yds",
+    "threshold": 100,
+    "games_meeting": 1
   },
   {
     "team": "HOU",
-    "player": "Yordan Alvarez",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 69
-  },
-  {
-    "team": "SF",
-    "player": "Rafael Devers",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 69
-  },
-  {
-    "team": "TB",
-    "player": "Yandy Diaz",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 68
-  },
-  {
-    "team": "BAL",
-    "player": "Pete Alonso",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 68
-  },
-  {
-    "team": "CIN",
-    "player": "Elly De La Cruz",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 67
-  },
-  {
-    "team": "STL",
-    "player": "Jordan Walker",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 67
+    "player": "DaltonSchultz",
+    "stat": "rec_yds",
+    "threshold": 100,
+    "games_meeting": 1
   },
   {
     "team": "PHI",
-    "player": "Bryce Harper",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 67
+    "player": "DevontaSmith",
+    "stat": "rec_yds",
+    "threshold": 100,
+    "games_meeting": 1
   },
   {
-    "team": "PIT",
-    "player": "Brandon Lowe",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 67
+    "team": "DAL",
+    "player": "CeedeeLamb",
+    "stat": "rec_yds",
+    "threshold": 100,
+    "games_meeting": 1
   },
   {
-    "team": "SD",
-    "player": "Jackson Merrill",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 67
+    "team": "KC",
+    "player": "TravisKelce",
+    "stat": "rec_yds",
+    "threshold": 100,
+    "games_meeting": 1
   },
   {
-    "team": "PIT",
-    "player": "Nick Gonzales",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 66
+    "team": "LV",
+    "player": "TreTucker",
+    "stat": "rec_yds",
+    "threshold": 100,
+    "games_meeting": 1
   },
   {
-    "team": "NYY",
-    "player": "Ben Rice",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 65
+    "team": "DET",
+    "player": "AmonRaStBrown",
+    "stat": "rec_yds",
+    "threshold": 100,
+    "games_meeting": 1
   },
   {
-    "team": "LAD",
-    "player": "Freddie Freeman",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 64
+    "team": "BUF",
+    "player": "DaltonKincaid",
+    "stat": "rec_yds",
+    "threshold": 100,
+    "games_meeting": 1
   },
   {
-    "team": "ATL",
-    "player": "Michael Harris II",
-    "stat": "tb",
-    "threshold": 2,
-    "games_meeting": 64
+    "team": "BUF",
+    "player": "DjMoore",
+    "stat": "rec_yds",
+    "threshold": 100,
+    "games_meeting": 1
+  },
+  {
+    "team": "CAR",
+    "player": "JalenCoker",
+    "stat": "rec_yds",
+    "threshold": 100,
+    "games_meeting": 1
+  },
+  {
+    "team": "GB",
+    "player": "ChristianWatson",
+    "stat": "rec_yds",
+    "threshold": 100,
+    "games_meeting": 1
+  },
+  {
+    "team": "NO",
+    "player": "ChrisOlave",
+    "stat": "rec_yds",
+    "threshold": 100,
+    "games_meeting": 1
+  },
+  {
+    "team": "BAL",
+    "player": "ZayFlowers",
+    "stat": "rec_yds",
+    "threshold": 100,
+    "games_meeting": 1
   }
 ]

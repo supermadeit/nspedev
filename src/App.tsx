@@ -2825,6 +2825,14 @@ function App() {
   // exist. Reset to false on every real keystroke (see the input onChange
   // handlers) and on any programmatic fill.
   const [playerNavTouched, setPlayerNavTouched] = useState(false)
+  // Same "deliberate keyboard browsing" gate as playerNavTouched, for the
+  // green {psc} dropdown — Enter only ever fills/selects a suggestion when
+  // the user actually arrowed to it; a bare Enter always runs whatever is
+  // literally typed, the same as clicking {search}. This is what used to be
+  // missing: a full, self-typed command that also happened to keyword-match
+  // the catalog would get silently replaced by the top suggestion on Enter
+  // instead of running.
+  const [syntaxNavTouched, setSyntaxNavTouched] = useState(false)
   // Any curated commands that showcase one of the currently-matched players
   // (e.g. typing "mahomes" surfaces "nspe nfl long mahomes -ov" alongside
   // his profile match) — shown as a second, stacked dropdown beneath the
@@ -2884,9 +2892,19 @@ function App() {
   // containing the words we DO recognize. Only used when the strict
   // prefix/substring match found nothing, or (below) to append related
   // generic commands after a matched player's own.
+  // Native-sport preference: when the query names a sport explicitly
+  // ("nspe mlb ..."), keyword suggestions stay MLB-first (only spilling
+  // into other sports if MLB truly has nothing) — same idea whether or not
+  // a player also matched, so the sport comes from whichever is relevant:
+  // the matched player's own sport when one exists, otherwise whatever the
+  // user typed.
+  const typedSport = stripSportPrefix(searchValue).sport
   const keywordMatches = useMemo(
-    () => (searchValue.trim() && !suppressSyntaxDropdown ? searchKeywords(searchValue) : []),
-    [searchValue, suppressSyntaxDropdown],
+    () =>
+      searchValue.trim() && !suppressSyntaxDropdown
+        ? searchKeywords(searchValue, playerMatches[0]?.entry.sport ?? typedSport)
+        : [],
+    [searchValue, suppressSyntaxDropdown, playerMatches, typedSport],
   )
   const greenMatches = suppressSyntaxDropdown
     ? []
@@ -2895,7 +2913,7 @@ function App() {
         ...playerSpotlightMatches,
         ...keywordMatches
           .filter((k) => !playerSpotlightMatches.some((p) => p.displayCommand === k.displayCommand))
-          .slice(0, 15),
+          .slice(0, 8),
         ...matchupSuggestions,
       ]
     : syntaxMatches.length > 0
@@ -2917,6 +2935,20 @@ function App() {
     const handlePointerDown = (e: PointerEvent) => {
       if (mobileSearchContainerRef.current && !mobileSearchContainerRef.current.contains(e.target as Node)) {
         setIsMobileDropdownDismissed(true)
+      }
+    }
+    document.addEventListener('pointerdown', handlePointerDown)
+    return () => document.removeEventListener('pointerdown', handlePointerDown)
+  }, [])
+  // Desktop equivalent — the dropdown previously had no outside-click
+  // dismissal at all on desktop, so clicking anywhere else on the page left
+  // it sitting open.
+  const [isDesktopDropdownDismissed, setIsDesktopDropdownDismissed] = useState(false)
+  const desktopSearchContainerRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const handlePointerDown = (e: PointerEvent) => {
+      if (desktopSearchContainerRef.current && !desktopSearchContainerRef.current.contains(e.target as Node)) {
+        setIsDesktopDropdownDismissed(true)
       }
     }
     document.addEventListener('pointerdown', handlePointerDown)
@@ -3349,6 +3381,7 @@ function App() {
   const goToPlayerProfile = (slug: string) => {
     setSearchValue('')
     setPlayerNavTouched(false)
+    setSyntaxNavTouched(false)
     navigate(`/database/${slug}`)
   }
 
@@ -3360,7 +3393,15 @@ function App() {
     setSyntaxActiveIndex(0)
     setPlayerSearchActiveIndex(0)
     setPlayerNavTouched(false)
+    setSyntaxNavTouched(false)
     setSuppressSyntaxDropdown(true)
+    // Close BOTH dropdowns immediately, not just the green one — the filled
+    // command text often still loosely matches a player (e.g. "... vs det"
+    // still finds that player), which used to leave the cyan profile
+    // dropdown sitting open after a selection. Cleared again by the next
+    // real keystroke, same as the outside-click dismissal.
+    setIsMobileDropdownDismissed(true)
+    setIsDesktopDropdownDismissed(true)
     searchInputRef.current?.focus()
   }
 
@@ -3402,15 +3443,20 @@ function App() {
     if (playerMatches.length === 0 && greenMatches.length > 0) {
       if (e.key === 'ArrowDown') {
         e.preventDefault()
+        setSyntaxNavTouched(true)
         setSyntaxActiveIndex((i) => (i + 1) % greenMatches.length)
         return
       }
       if (e.key === 'ArrowUp') {
         e.preventDefault()
+        setSyntaxNavTouched(true)
         setSyntaxActiveIndex((i) => (i - 1 + greenMatches.length) % greenMatches.length)
         return
       }
-      if (e.key === 'Enter') {
+      if (e.key === 'Enter' && syntaxNavTouched) {
+        // Only fires once the user has actually arrowed to a suggestion —
+        // a bare Enter with no navigation falls through below and runs
+        // whatever is literally typed, same as clicking {search}.
         e.preventDefault()
         const match = greenMatches[syntaxActiveIndex] ?? greenMatches[0]
         selectSyntaxSuggestion(match.displayCommand)
@@ -4028,6 +4074,7 @@ function App() {
                     setPlayerSearchActiveIndex(0)
                     setPlayerNavTouched(false)
                     setSyntaxActiveIndex(0)
+                    setSyntaxNavTouched(false)
                     setSuppressSyntaxDropdown(false)
                     setIsMobileDropdownDismissed(false)
                   }}
@@ -4100,7 +4147,7 @@ function App() {
             // exactly as before. {charts} removed from this row (still live
             // at /charts, just not linked from the homepage).
             <div className="flex items-center gap-3">
-              <div className="relative flex-1">
+              <div className="relative flex-1" ref={desktopSearchContainerRef}>
                 <input
                   ref={searchInputRef}
                   type="text"
@@ -4110,8 +4157,11 @@ function App() {
                     setPlayerSearchActiveIndex(0)
                     setPlayerNavTouched(false)
                     setSyntaxActiveIndex(0)
+                    setSyntaxNavTouched(false)
                     setSuppressSyntaxDropdown(false)
+                    setIsDesktopDropdownDismissed(false)
                   }}
+                  onFocus={() => setIsDesktopDropdownDismissed(false)}
                   onKeyDown={handleSearchSubmit}
                   className="w-full h-[52px] px-5 py-3 bg-card text-foreground font-mono text-[16px] rounded-lg border border-border outline-none focus:border-primary transition-colors duration-200"
                   style={{
@@ -4126,7 +4176,7 @@ function App() {
                     {PLACEHOLDER_TEXTS[0]}
                   </div>
                 )}
-                {(playerMatches.length > 0 || greenMatches.length > 0) && (
+                {(playerMatches.length > 0 || greenMatches.length > 0) && !isDesktopDropdownDismissed && (
                   <div className="absolute top-[60px] left-0 right-0 z-20 flex flex-col gap-2">
                     {playerMatches.length > 0 && (
                       <PlayerSearchDropdown
@@ -4709,11 +4759,18 @@ function App() {
         </div>
       )}
 
-      <div className="absolute bottom-0 left-0 right-0 z-10 overflow-hidden pointer-events-none border-t" style={{ borderColor: 'oklch(0.25 0 0)' }}>
-        <div 
+      {/* {hitlist} ticker — border and background now match {leaderboard}'s
+          header bar (oklch(0.28 0 0) border, oklch(0.18 0 0) fill) instead
+          of a plain 1px line over a transparent strip, which let the
+          starfield show through behind the scrolling text. */}
+      <div
+        className="absolute bottom-0 left-0 right-0 z-10 overflow-hidden pointer-events-none border-t"
+        style={{ borderColor: 'oklch(0.28 0 0)', backgroundColor: 'oklch(0.18 0 0)' }}
+      >
+        <div
           ref={tickerRef}
           className="whitespace-nowrap font-mono text-[13px] py-2"
-          style={{ 
+          style={{
             color: 'oklch(0.85 0.15 195)',
             willChange: 'transform'
           }}
