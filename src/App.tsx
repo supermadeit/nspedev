@@ -173,6 +173,10 @@ interface HitlistEntry {
   hit_dates?: string[]
   games_meeting?: number
   window_games?: number
+  // The specific game the leaderboard-style entry most recently hit this
+  // in — e.g. "101yds 9/20/26" appended after the {100yds 1G season} tag.
+  latest_value?: number
+  latest_date?: string
   raw?: string
 }
 
@@ -291,7 +295,14 @@ function formatTickerEntry(entry: HitlistEntry): string {
     const windowSuffix =
       typeof entry.window_games === 'number' ? `L${entry.window_games}` : 'season'
     const tag = `{${entry.threshold ?? ''}${statLabel} ${entry.games_meeting}G ${windowSuffix}}`
-    return `${entry.team} ${playerLabel} ${tag}`.trim()
+    // The actual game it happened in, e.g. "101yds 9/20/26" — same
+    // value-then-unit convention as the tag itself, date normalized to
+    // M/D/YY the same way every other date in this app is.
+    const latestPart =
+      typeof entry.latest_value === 'number' && entry.latest_date
+        ? ` ${entry.latest_value}${statLabel} ${extractDateToken(entry.latest_date) ?? entry.latest_date}`
+        : ''
+    return `${entry.team} ${playerLabel} ${tag}${latestPart}`.trim()
   }
 
   // Legacy per-player rolling entries. Also the current fallback path for

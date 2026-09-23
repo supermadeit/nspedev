@@ -7,111 +7,143 @@
     "player": "JaxonSmithNjigba",
     "stat": "rec_yds",
     "threshold": 100,
-    "games_meeting": 2
+    "games_meeting": 2,
+    "latest_value": 155,
+    "latest_date": "2026-09-20"
   },
   {
     "team": "LAR",
     "player": "DavanteAdams",
     "stat": "rec_yds",
     "threshold": 100,
-    "games_meeting": 1
+    "games_meeting": 1,
+    "latest_value": 195,
+    "latest_date": "2026-09-21"
   },
   {
     "team": "CAR",
     "player": "TetairoaMcmillan",
     "stat": "rec_yds",
     "threshold": 100,
-    "games_meeting": 1
+    "games_meeting": 1,
+    "latest_value": 101,
+    "latest_date": "2026-09-20"
   },
   {
     "team": "DEN",
     "player": "JaylenWaddle",
     "stat": "rec_yds",
     "threshold": 100,
-    "games_meeting": 1
+    "games_meeting": 1,
+    "latest_value": 138,
+    "latest_date": "2026-09-20"
   },
   {
     "team": "HOU",
     "player": "DaltonSchultz",
     "stat": "rec_yds",
     "threshold": 100,
-    "games_meeting": 1
+    "games_meeting": 1,
+    "latest_value": 140,
+    "latest_date": "2026-09-20"
   },
   {
     "team": "PHI",
     "player": "DevontaSmith",
     "stat": "rec_yds",
     "threshold": 100,
-    "games_meeting": 1
+    "games_meeting": 1,
+    "latest_value": 117,
+    "latest_date": "2026-09-20"
   },
   {
     "team": "DAL",
     "player": "CeedeeLamb",
     "stat": "rec_yds",
     "threshold": 100,
-    "games_meeting": 1
+    "games_meeting": 1,
+    "latest_value": 153,
+    "latest_date": "2026-09-20"
   },
   {
     "team": "KC",
     "player": "TravisKelce",
     "stat": "rec_yds",
     "threshold": 100,
-    "games_meeting": 1
+    "games_meeting": 1,
+    "latest_value": 101,
+    "latest_date": "2026-09-20"
   },
   {
     "team": "LV",
     "player": "TreTucker",
     "stat": "rec_yds",
     "threshold": 100,
-    "games_meeting": 1
+    "games_meeting": 1,
+    "latest_value": 119,
+    "latest_date": "2026-09-20"
   },
   {
     "team": "DET",
     "player": "AmonRaStBrown",
     "stat": "rec_yds",
     "threshold": 100,
-    "games_meeting": 1
+    "games_meeting": 1,
+    "latest_value": 142,
+    "latest_date": "2026-09-17"
   },
   {
     "team": "BUF",
     "player": "DaltonKincaid",
     "stat": "rec_yds",
     "threshold": 100,
-    "games_meeting": 1
+    "games_meeting": 1,
+    "latest_value": 130,
+    "latest_date": "2026-09-13"
   },
   {
     "team": "BUF",
     "player": "DjMoore",
     "stat": "rec_yds",
     "threshold": 100,
-    "games_meeting": 1
+    "games_meeting": 1,
+    "latest_value": 100,
+    "latest_date": "2026-09-13"
   },
   {
     "team": "CAR",
     "player": "JalenCoker",
     "stat": "rec_yds",
     "threshold": 100,
-    "games_meeting": 1
+    "games_meeting": 1,
+    "latest_value": 138,
+    "latest_date": "2026-09-13"
   },
   {
     "team": "GB",
     "player": "ChristianWatson",
     "stat": "rec_yds",
     "threshold": 100,
-    "games_meeting": 1
+    "games_meeting": 1,
+    "latest_value": 147,
+    "latest_date": "2026-09-13"
   },
   {
     "team": "NO",
     "player": "ChrisOlave",
     "stat": "rec_yds",
     "threshold": 100,
-    "games_meeting": 1
+    "games_meeting": 1,
+    "latest_value": 182,
+    "latest_date": "2026-09-13"
   },
   {
     "team": "BAL",
     "player": "ZayFlowers",
     "stat": "rec_yds",
     "threshold": 100,
-    "games_meeting": 1
+    "games_meeting": 1,
+    "latest_value": 150,
+    "latest_date": "2026-09-13"
   }
 ]

@@ -88,6 +88,21 @@ function buildEntry(row, { stat, threshold, windowGames }) {
   if (typeof windowGames === 'number') {
     out.window_games = windowGames
   }
+
+  // The specific game the player most recently hit this in — every
+  // leaderboard engine seen so far sorts `matches` newest-first, so
+  // matches[0] is the latest qualifying game. Field names vary by engine
+  // (val/date for the NFL leaderboard, value/date_iso for some others), so
+  // both are checked. Left off entirely when a row carries no matches (an
+  // engine that only sends a bare count with no game-level detail).
+  const latest = Array.isArray(row.matches) ? row.matches[0] : null
+  if (latest) {
+    const latestValue = latest.val ?? latest.value
+    const latestDate = latest.date ?? latest.date_iso
+    if (typeof latestValue === 'number') out.latest_value = latestValue
+    if (typeof latestDate === 'string') out.latest_date = latestDate
+  }
+
   return out
 }
 
