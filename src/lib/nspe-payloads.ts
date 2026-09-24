@@ -1232,6 +1232,11 @@ export const STAT_FIELDS: Record<string, Record<string, string | string[]>> = {
     // established "full lowercase word" convention (hits/doubles/triples).
     // Only affects per-match value extraction for -runs; flag/fix if wrong.
     runs: 'runs',
+    // Combined hits + runs + rbi — the compute engine returns this already
+    // summed as a single `total` field on each row, so this array is really
+    // only here for consistency with NBA's "total" entry above; nothing
+    // currently needs per-component extraction for it.
+    total: ['hits', 'runs', 'rbi'],
   },
   nhl: {
     g: 'goals',
@@ -1290,6 +1295,18 @@ export const STAT_DISPLAY_LABELS: Record<string, string> = {
   'rush+rec': 'yds',
   pr: 'yds',
   rr: 'yds',
+}
+
+// Same stat key can mean different things per sport — "total" is NBA's
+// pts+reb+ast (labeled "tot" above), but MLB's is hits+runs+rbi, which "tot"
+// alone doesn't convey. Checked first, before the flat STAT_DISPLAY_LABELS
+// fallback above.
+const SPORT_STAT_DISPLAY_LABELS: Record<string, Record<string, string>> = {
+  mlb: { total: 'h/r/r' },
+}
+
+export function statDisplayLabel(sport: string, stat: string): string {
+  return SPORT_STAT_DISPLAY_LABELS[sport]?.[stat] ?? STAT_DISPLAY_LABELS[stat] ?? stat
 }
 
 // Insert a space before any internal capital (e.g. "AaronJudge" -> "Aaron Judge").
@@ -1766,7 +1783,7 @@ export function extractMatchDetails(row: Record<string, unknown>, ctx: StatConte
     ? row.match
     : []
   const out: MatchDetail[] = []
-  const label = ctx.unitLabel ?? STAT_DISPLAY_LABELS[ctx.stat] ?? ctx.stat
+  const label = ctx.unitLabel ?? statDisplayLabel(ctx.sport, ctx.stat)
 
   for (const m of matches) {
     if (!m || typeof m !== 'object' || Array.isArray(m)) continue

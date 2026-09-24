@@ -5,21 +5,14 @@ import { authHeader } from '@/lib/auth-token'
 import { apiUrl } from '@/lib/api'
 import { REFILL_TIERS, SUBSCRIPTION_TIERS, type PricingTier } from '@/lib/pricing'
 import { PageShell } from './PageShell'
-import { Button } from '@/components/ui/button'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from '@/components/ui/card'
+import { C } from '@/components/ProfileSections'
+
+type Tab = 'refill' | 'subscribe'
 
 export default function RefillPage() {
   const { user } = useAuth()
   const navigate = useNavigate()
+  const [tab, setTab] = useState<Tab>('refill')
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
@@ -68,6 +61,8 @@ export default function RefillPage() {
     }
   }
 
+  const tiers = tab === 'refill' ? REFILL_TIERS : SUBSCRIPTION_TIERS
+
   return (
     <PageShell
       title="Pricing"
@@ -75,100 +70,105 @@ export default function RefillPage() {
       maxWidth="max-w-5xl"
     >
       {error ? (
-        <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
+        <div
+          className="rounded-lg px-4 py-3 text-sm font-mono"
+          style={{ border: '1px solid oklch(0.6 0.2 25)', backgroundColor: 'oklch(0.18 0.05 25)', color: 'oklch(0.85 0.15 25)' }}
+        >
+          {error}
+        </div>
       ) : null}
 
-      <Tabs defaultValue="refill">
-        <TabsList>
-          <TabsTrigger value="refill">Buy credits</TabsTrigger>
-          <TabsTrigger value="subscribe">Subscribe</TabsTrigger>
-        </TabsList>
+      {/* Tab toggle — bordered pill buttons instead of the generic shadcn
+          Tabs look, matching the bracketed-button convention used elsewhere
+          ({pricing}, {account}, ...). */}
+      <div className="flex items-center gap-2">
+        {(
+          [
+            ['refill', 'Buy credits'],
+            ['subscribe', 'Subscribe'],
+          ] as const
+        ).map(([key, label]) => {
+          const active = tab === key
+          return (
+            <button
+              key={key}
+              onClick={() => setTab(key)}
+              className="font-mono text-[13px] font-bold px-4 py-1.5 rounded-lg transition-colors"
+              style={{
+                border: `1px solid ${active ? C.accent : C.border}`,
+                backgroundColor: active ? C.surface2 : 'transparent',
+                color: active ? C.accent : C.textDim,
+              }}
+            >
+              {label}
+            </button>
+          )
+        })}
+      </div>
 
-        <TabsContent value="refill" className="mt-4">
-          <div className="grid gap-4 sm:grid-cols-2">
-            {REFILL_TIERS.map((tier) => (
-              <Card key={tier.plan} className="border-neutral-800 bg-neutral-950 flex flex-col">
-                <CardHeader>
-                  <CardTitle>{tier.name}</CardTitle>
-                </CardHeader>
-                <CardContent className="flex-1">
-                  <div className="text-3xl font-semibold">{tier.price}</div>
-                  <div className="text-sm text-neutral-400 mt-1">
-                    {tier.credits.toLocaleString()} credits
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button
-                    className="w-full"
-                    variant="secondary"
-                    disabled={loadingPlan !== null}
-                    onClick={() => buy(tier)}
-                  >
-                    {loadingPlan === tier.plan ? 'Starting…' : 'Buy'}
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
+      <div className="grid gap-4 sm:grid-cols-2">
+        {tiers.map((tier) => (
+          <div
+            key={tier.plan}
+            className="rounded-lg p-5 flex flex-col gap-3"
+            style={{
+              border: `1px solid ${tier.highlighted ? C.green : C.border}`,
+              backgroundColor: C.surface2,
+            }}
+          >
+            <div className="flex items-center justify-between">
+              <span className="font-mono font-bold text-[16px]" style={{ color: C.textBright }}>
+                {tier.name}
+              </span>
+              {tier.highlighted ? (
+                <span className="font-mono text-[11px] font-bold uppercase tracking-wide" style={{ color: C.green }}>
+                  Popular
+                </span>
+              ) : null}
+            </div>
 
-        <TabsContent value="subscribe" className="mt-4">
-          <div className="grid gap-4 sm:grid-cols-2">
-            {SUBSCRIPTION_TIERS.map((tier) => (
-              <Card
-                key={tier.plan}
-                className={
-                  tier.highlighted
-                    ? 'border-emerald-500 bg-neutral-950 flex flex-col'
-                    : 'border-neutral-800 bg-neutral-950 flex flex-col'
-                }
-              >
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
-                    <span>{tier.name}</span>
-                    {tier.highlighted ? (
-                      <span className="text-xs font-normal text-emerald-400">Popular</span>
-                    ) : null}
-                  </CardTitle>
-                  <CardDescription>
-                    {tier.credits.toLocaleString()} credits per month
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="flex-1 space-y-3">
-                  <div className="text-3xl font-semibold">
-                    {tier.price}
-                    <span className="text-base font-normal text-neutral-400">
-                      {tier.billingNote}
-                    </span>
-                  </div>
-                  {tier.features ? (
-                    <ul className="text-sm text-neutral-400 space-y-1.5">
-                      {tier.features.map((f) => (
-                        <li key={f} className="flex items-start gap-2">
-                          <span className="text-emerald-400">·</span>
-                          <span>{f}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : null}
-                </CardContent>
-                <CardFooter>
-                  <Button
-                    className="w-full"
-                    variant={tier.highlighted ? 'default' : 'secondary'}
-                    disabled={loadingPlan !== null}
-                    onClick={() => buy(tier)}
-                  >
-                    {loadingPlan === tier.plan ? 'Starting…' : 'Subscribe'}
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
+            <div>
+              <span className="font-mono text-[28px] font-bold" style={{ color: C.textBright }}>
+                {tier.price}
+              </span>
+              {tier.billingNote ? (
+                <span className="font-mono text-[13px]" style={{ color: C.textDim }}>
+                  {tier.billingNote}
+                </span>
+              ) : null}
+            </div>
+            <div className="font-mono text-[13px]" style={{ color: C.textDim }}>
+              {tier.credits.toLocaleString()} credits{tier.kind === 'subscription' ? ' per month' : ''}
+            </div>
+
+            {tier.features ? (
+              <ul className="flex-1 flex flex-col gap-1.5 font-mono text-[12px]" style={{ color: C.textDim }}>
+                {tier.features.map((f) => (
+                  <li key={f} className="flex items-start gap-2">
+                    <span style={{ color: C.green }}>·</span>
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="flex-1" />
+            )}
+
+            <button
+              onClick={() => buy(tier)}
+              disabled={loadingPlan !== null}
+              className="w-full font-mono text-[13px] font-bold py-2 rounded-lg transition-colors disabled:opacity-50"
+              style={{
+                border: `1px solid ${tier.highlighted ? C.green : C.accent}`,
+                color: tier.highlighted ? C.green : C.accent,
+                backgroundColor: 'transparent',
+              }}
+            >
+              {loadingPlan === tier.plan ? 'Starting…' : tier.kind === 'subscription' ? 'Subscribe' : 'Buy'}
+            </button>
           </div>
-        </TabsContent>
-      </Tabs>
+        ))}
+      </div>
     </PageShell>
   )
 }

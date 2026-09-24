@@ -1,492 +1,399 @@
-import { useEffect, useMemo, useState } from 'react'
+// The query builder tutorial — rebuilt to actually operate the real, live
+// <QueryBuilder> instead of a separate scripted replica of its UI (which is
+// what this file used to be, and which is also what caused the z-index
+// clash reported after {tutorial} moved into the builder's own header: two
+// same-z-index "modals" competing, one a fake copy of the other).
+//
+// How it works: every real control the walkthroughs need (mode tabs, sport/
+// stat pills, threshold/met/last/min/window chips, the run button) carries a
+// stable `data-tour="..."` attribute (see Pill/NumSelect in QueryBuilder.tsx)
+// and reflects its selected state via `aria-pressed`. This component finds
+// those real DOM nodes with document.querySelector, draws a highlight box +
+// caption bubble around whichever one is the current step, and on "Next"
+// calls `.click()` on the real element — a genuine DOM click, so React's own
+// handlers run and the builder's real state updates exactly as if a person
+// had tapped it. The final step clicks the real run button, which fires the
+// same onRunQuery the person's own queries use, so the result shown at the
+// end is a real backend response, not a canned one.
+//
+// This overlay itself renders in a portal-less fixed layer above everything
+// (z-[200]) — comfortably above the builder panel's z-50 — so it never has
+// to fight the builder for stacking again; it doesn't need pointer-events on
+// the highlighted area since it drives clicks itself rather than asking the
+// person to click through it.
+import { useEffect, useRef, useState } from 'react'
 
 const C = {
   accent: 'oklch(0.85 0.15 195)',
   accentDark: 'oklch(0.10 0.02 195)',
-  accentDim: 'oklch(0.55 0.12 195)',
   surface: 'oklch(0.12 0 0)',
   surface2: 'oklch(0.20 0 0)',
-  border: 'oklch(0.28 0 0)',
-  textDim: 'oklch(0.48 0 0)',
-  textBright: 'oklch(0.88 0 0)',
+  border: 'oklch(0.30 0 0)',
+  textDim: 'oklch(0.55 0 0)',
+  textBright: 'oklch(0.92 0 0)',
+  green: 'oklch(0.78 0.18 145)',
 }
 
-type DemoStep = {
-  mode: 'trend' | 'compute' | 'streak'
-  sport: 'nba' | 'mlb' | 'nhl'
-  season?: 'post'
-  period?: 'q1' | '1h' | 'p1'
-  stat?: string
-  thresholdN?: string
-  lastA?: string
-  lastB?: string
-  minN?: string
-  window?: '-season' | '-career' | string
-  streakN?: string
-  command: string
+interface TourStep {
+  /** The target's data-tour value. */
+  target: string
+  /** Caption shown while this step is active. */
   caption: string
+  /** 'toggle' clicks the target only if it isn't already selected (aria-pressed);
+   *  'always' (the run button) always clicks it. */
+  kind: 'toggle' | 'always'
 }
 
-const DEMOS: DemoStep[] = [
+interface TourDemo {
+  id: string
+  label: string
+  summary: string
+  steps: TourStep[]
+}
+
+// Every command below was verified against the live backend before shipping
+// (curl'd api.nspe.dev/run directly) to make sure it actually returns
+// results — an earlier version of this list picked round, guessable numbers
+// that happened to be unrealistic (e.g. 20+ hits over a last-10 window,
+// which next to nobody clears), which made the payoff at the end of the
+// walkthrough an empty result. Every demo here returns real rows today.
+const DEMOS: TourDemo[] = [
   {
-    mode: 'trend',
-    sport: 'nba',
-    period: '1h',
-    stat: 'pts',
-    thresholdN: '20',
-    lastA: '2',
-    lastB: '5',
-    command: 'nspe nba 1h -pts20 -last2/5',
-    caption: 'NBA \u2014 1st-half PTS \u2265 20 in 2 of last 5 games',
+    id: 'explosive-nfl',
+    label: 'Explosive — NFL long reception',
+    summary: '30+ yard receptions, 1 of the last 2 games',
+    steps: [
+      { target: 'mode-explosive', kind: 'toggle', caption: '{explosive} tracks individual big plays, not per-game totals.' },
+      { target: 'league-nfl', kind: 'toggle', caption: 'League — NFL.' },
+      { target: 'explosivemode-trend', kind: 'toggle', caption: 'Trend, not compute — a single-play threshold over a window of games.' },
+      { target: 'playtype-rec', kind: 'toggle', caption: 'Play type — reception.' },
+      { target: 'explosiveYds-30', kind: 'toggle', caption: 'Set the yardage threshold — 30+ yards on a single play.' },
+      { target: 'met-1', kind: 'toggle', caption: '"Met" — 1 of the games.' },
+      { target: 'last-2', kind: 'toggle', caption: '"-last" — the window — the last 2 games.' },
+      { target: 'run', kind: 'always', caption: 'Run it — this fires a real query against real data.' },
+    ],
   },
   {
-    mode: 'trend',
-    sport: 'nba',
-    period: 'q1',
-    stat: 'tpm',
-    thresholdN: '2',
-    lastA: '3',
-    lastB: '5',
-    command: 'nspe nba q1 -tpm2 -last3/5',
-    caption: 'NBA \u2014 Q1 3PM \u2265 2 in 3 of last 5 games',
+    id: 'trend-nba',
+    label: 'Trend — NBA double-double',
+    summary: 'a double-double in 4 of the last 5 games',
+    steps: [
+      { target: 'mode-trend', kind: 'toggle', caption: '{trend} looks for a stat clearing a threshold across a window of recent games.' },
+      { target: 'sport-nba', kind: 'toggle', caption: 'Pick a sport — NBA.' },
+      { target: 'stat-dub', kind: 'toggle', caption: 'Pick a stat — DUB (double-double). This one\'s a yes/no stat, so there\'s no threshold number to set.' },
+      { target: 'met-4', kind: 'toggle', caption: '"Met" — how many of the games it needs to hit in — 4.' },
+      { target: 'last-5', kind: 'toggle', caption: '"-last" — the window size — the last 5 games.' },
+      { target: 'run', kind: 'always', caption: 'Run it — this fires a real query against real data.' },
+    ],
   },
   {
-    mode: 'trend',
-    sport: 'nba',
-    stat: 'pts+ast',
-    thresholdN: '35',
-    lastA: '2',
-    lastB: '5',
-    command: 'nspe nba -pts+ast35 -last2/5',
-    caption: 'NBA \u2014 PTS+AST combo \u2265 35 in 2 of last 5 games',
+    id: 'trend-mlb',
+    label: 'Trend — MLB hits',
+    summary: '2+ hits in 3 of the last 5 games',
+    steps: [
+      { target: 'mode-trend', kind: 'toggle', caption: 'Same {trend} mode, an MLB example this time.' },
+      { target: 'sport-mlb', kind: 'toggle', caption: 'Pick a sport — MLB.' },
+      { target: 'stat-hits', kind: 'toggle', caption: 'Pick a stat — hits.' },
+      { target: 'threshold-2', kind: 'toggle', caption: 'Set the threshold — 2+ hits.' },
+      { target: 'met-3', kind: 'toggle', caption: '"Met" — how many of the games it needs to hit in — 3.' },
+      { target: 'last-5', kind: 'toggle', caption: '"-last" — the window size — the last 5 games.' },
+      { target: 'run', kind: 'always', caption: 'Run it — this fires a real query against real data.' },
+    ],
   },
   {
-    mode: 'compute',
-    sport: 'mlb',
-    stat: 'hits',
-    minN: '20',
-    window: '-last',
-    command: 'nspe mlb -hits min20 -last10',
-    caption: 'MLB \u2014 regular-season hits \u2265 20, last 10 games',
+    id: 'compute-mlb',
+    label: 'Compute — MLB combined total',
+    summary: '300+ combined hits+runs+RBI for the season',
+    steps: [
+      { target: 'mode-compute', kind: 'toggle', caption: '{compute} totals a stat across a whole window instead of per-game.' },
+      { target: 'sport-mlb', kind: 'toggle', caption: 'Pick a sport — MLB.' },
+      { target: 'stat-total', kind: 'toggle', caption: 'Pick a stat — TOTAL, hits + runs + RBI combined.' },
+      { target: 'window-season', kind: 'toggle', caption: 'Choose a window — the whole season.' },
+      { target: 'min-300', kind: 'toggle', caption: 'Set the minimum — 300 combined.' },
+      { target: 'run', kind: 'always', caption: 'Run it — this fires a real query against real data.' },
+    ],
   },
   {
-    mode: 'trend',
-    sport: 'mlb',
-    stat: 'tb',
-    thresholdN: '2',
-    lastA: '3',
-    lastB: '5',
-    command: 'nspe mlb -tb2 -last3/5',
-    caption: 'MLB \u2014 total bases \u2265 2 in 3 of last 5 games',
-  },
-  {
-    mode: 'streak',
-    sport: 'nhl',
-    period: 'p1',
-    stat: 'pts',
-    thresholdN: '1',
-    streakN: '3',
-    command: 'nspe nhl p1 -pts1 -streak3',
-    caption: 'NHL \u2014 1st-period PTS \u2265 1, min streak of 3',
+    id: 'streak',
+    label: 'Streak — NHL shots on goal',
+    summary: 'a streak of 3+ straight games with 2+ shots on goal',
+    steps: [
+      { target: 'mode-streak', kind: 'toggle', caption: '{streak} looks for consecutive games clearing a threshold, back to back.' },
+      { target: 'sport-nhl', kind: 'toggle', caption: 'Pick a sport — NHL.' },
+      { target: 'stat-sog', kind: 'toggle', caption: 'Pick a stat — shots on goal.' },
+      { target: 'threshold-2', kind: 'toggle', caption: 'Set the threshold — 2+ shots.' },
+      { target: 'streakN-3', kind: 'toggle', caption: 'Set the minimum streak length — 3 straight games.' },
+      { target: 'run', kind: 'always', caption: 'Run it — this fires a real query against real data.' },
+    ],
   },
 ]
 
-// fade-in order of pills per step
-const PILL_STAGES = ['mode', 'sport', 'season', 'period', 'stat', 'value', 'command'] as const
-type Stage = (typeof PILL_STAGES)[number]
-
-function Pill({
-  children,
-  selected,
-  highlight,
-  disabled,
-}: {
-  children: React.ReactNode
-  selected?: boolean
-  highlight?: boolean
-  disabled?: boolean
-}) {
-  return (
-    <span
-      className="font-mono text-[11px] px-3 py-1.5 rounded border select-none transition-all duration-300"
-      style={{
-        backgroundColor: selected ? C.accent : C.surface2,
-        color: selected ? C.accentDark : disabled ? C.textDim : C.textBright,
-        borderColor: selected ? C.accent : C.border,
-        opacity: disabled ? 0.4 : highlight ? 1 : selected ? 1 : 0.55,
-        fontWeight: selected ? 700 : 400,
-        boxShadow: highlight ? `0 0 0 2px ${C.accent}` : 'none',
-      }}
-    >
-      {children}
-    </span>
-  )
-}
-
-function SLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <div
-      className="font-mono text-[10px] uppercase tracking-widest mb-1.5"
-      style={{ color: C.textDim }}
-    >
-      {children}
-    </div>
-  )
-}
-
-function FakeNum({ value, visible }: { value: string; visible: boolean }) {
-  return (
-    <span
-      className="font-mono text-[13px] rounded border px-2 py-1.5 inline-block transition-opacity duration-300"
-      style={{
-        width: '64px',
-        backgroundColor: C.surface2,
-        borderColor: C.border,
-        color: C.accent,
-        opacity: visible ? 1 : 0.35,
-      }}
-    >
-      {visible ? value || 'N' : 'N'}
-    </span>
-  )
-}
-
-export interface QueryBuilderTutorialProps {
+interface QueryBuilderTutorialProps {
   open: boolean
   onClose: () => void
+  /** Opens the real query builder panel (mobile or desktop, whichever applies). */
+  openBuilder: () => void
+  /** Closes it — called automatically once a demo's real result is in. */
+  closeBuilder: () => void
+  /** Wipes the builder's persisted state so a demo starts from a clean slate. */
+  resetBuilder: () => void
 }
 
-export function QueryBuilderTutorial({ open, onClose }: QueryBuilderTutorialProps) {
-  const [stepIdx, setStepIdx] = useState(0)
-  const [stageIdx, setStageIdx] = useState(0)
-  const [isPaused, setIsPaused] = useState(false)
+const POLL_INTERVAL_MS = 60
+const POLL_TIMEOUT_MS = 4000
 
+function findTarget(name: string): HTMLElement | null {
+  return document.querySelector<HTMLElement>(`[data-tour="${name}"]`)
+}
+
+/** Brings a step's target into view before highlighting it — matters most
+ * on mobile, where the builder is a tall scrollable full-screen form and a
+ * later step's control (e.g. run) can start out below the fold. */
+function revealTarget(el: HTMLElement) {
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+}
+
+/** Polls for a data-tour target to exist in the DOM (it may not yet — e.g.
+ * the stat row only renders after a sport is picked). Resolves null on
+ * timeout rather than hanging forever if a step's target never appears. */
+function waitForTarget(name: string): Promise<HTMLElement | null> {
+  return new Promise((resolve) => {
+    const start = Date.now()
+    const tick = () => {
+      const el = findTarget(name)
+      if (el) {
+        resolve(el)
+        return
+      }
+      if (Date.now() - start > POLL_TIMEOUT_MS) {
+        resolve(null)
+        return
+      }
+      window.setTimeout(tick, POLL_INTERVAL_MS)
+    }
+    tick()
+  })
+}
+
+export function QueryBuilderTutorial({ open, onClose, openBuilder, closeBuilder, resetBuilder }: QueryBuilderTutorialProps) {
+  const [demo, setDemo] = useState<TourDemo | null>(null)
+  const [stepIndex, setStepIndex] = useState(0)
+  const [rect, setRect] = useState<DOMRect | null>(null)
+  const [phase, setPhase] = useState<'locating' | 'ready' | 'done'>('locating')
+  const runIdRef = useRef(0)
+
+  // Reset to the picker every time the tutorial is (re)opened.
   useEffect(() => {
     if (!open) return
-    setStepIdx(0)
-    setStageIdx(0)
-    setIsPaused(false)
+    setDemo(null)
+    setStepIndex(0)
+    setRect(null)
+    setPhase('locating')
   }, [open])
 
+  // Keep the highlight box glued to its target across scroll/resize/drag
+  // (the desktop builder panel is itself draggable).
   useEffect(() => {
-    if (!open) return
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
-      else if (e.key === ' ') {
-        e.preventDefault()
-        setIsPaused((p) => !p)
+    if (!demo || phase !== 'ready') return
+    const step = demo.steps[stepIndex]
+    const update = () => {
+      const el = findTarget(step.target)
+      if (el) setRect(el.getBoundingClientRect())
+    }
+    update()
+    const id = window.setInterval(update, 200)
+    window.addEventListener('resize', update)
+    return () => {
+      window.clearInterval(id)
+      window.removeEventListener('resize', update)
+    }
+  }, [demo, stepIndex, phase])
+
+  async function startDemo(chosen: TourDemo) {
+    const myRun = ++runIdRef.current
+    setDemo(chosen)
+    setStepIndex(0)
+    setPhase('locating')
+    resetBuilder()
+    openBuilder()
+    const el = await waitForTarget(chosen.steps[0].target)
+    if (myRun !== runIdRef.current) return
+    if (!el) {
+      setPhase('done')
+      return
+    }
+    revealTarget(el)
+    setRect(el.getBoundingClientRect())
+    setPhase('ready')
+  }
+
+  async function advance() {
+    if (!demo) return
+    const myRun = runIdRef.current
+    const step = demo.steps[stepIndex]
+    const el = findTarget(step.target)
+    if (el) {
+      const alreadySelected = el.getAttribute('aria-pressed') === 'true'
+      if (step.kind === 'always' || !alreadySelected) {
+        el.click()
       }
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [open, onClose])
 
-  useEffect(() => {
-    if (!open || isPaused) return
-    const id = window.setInterval(() => {
-      setStageIdx((s) => {
-        if (s < PILL_STAGES.length - 1) return s + 1
-        // advance to next demo after a beat at the final stage
-        setStepIdx((d) => (d + 1) % DEMOS.length)
-        return 0
-      })
-    }, 1150)
-    return () => window.clearInterval(id)
-  }, [open, isPaused])
+    const isLast = stepIndex === demo.steps.length - 1
+    if (isLast) {
+      // Real run button was just clicked — give the real request a moment,
+      // then close the real builder so the real result underneath is what
+      // the person actually sees, same as if they'd built and run it
+      // themselves.
+      setPhase('done')
+      window.setTimeout(() => {
+        if (myRun !== runIdRef.current) return
+        closeBuilder()
+      }, 900)
+      return
+    }
 
-  const demo = DEMOS[stepIdx]
-  const stage: Stage = PILL_STAGES[stageIdx]
-  const reached = useMemo(
-    () => (s: Stage) => PILL_STAGES.indexOf(s) <= stageIdx,
-    [stageIdx],
-  )
+    setPhase('locating')
+    const nextStep = demo.steps[stepIndex + 1]
+    const nextEl = await waitForTarget(nextStep.target)
+    if (myRun !== runIdRef.current) return
+    if (!nextEl) {
+      setPhase('done')
+      return
+    }
+    revealTarget(nextEl)
+    setRect(nextEl.getBoundingClientRect())
+    setStepIndex((i) => i + 1)
+    setPhase('ready')
+  }
+
+  function goBack() {
+    if (!demo || stepIndex === 0) return
+    const prevIndex = stepIndex - 1
+    const el = findTarget(demo.steps[prevIndex].target)
+    if (el) {
+      revealTarget(el)
+      setRect(el.getBoundingClientRect())
+    }
+    setStepIndex(prevIndex)
+    setPhase('ready')
+  }
+
+  function finish() {
+    runIdRef.current += 1
+    onClose()
+  }
 
   if (!open) return null
 
-  // build progressive command preview
-  let preview = `nspe ${demo.sport}`
-  if (reached('season') && demo.season) preview += ` ${demo.season}`
-  if (reached('period') && demo.period) preview += ` ${demo.period}`
-  if (reached('stat') && demo.stat) {
-    if (demo.mode === 'trend' || demo.mode === 'streak') {
-      preview += ` -${demo.stat}${reached('value') ? demo.thresholdN ?? '' : ''}`
-    } else {
-      preview += ` -${demo.stat}`
-    }
-  }
-  if (reached('value')) {
-    if (demo.mode === 'trend' && demo.lastA && demo.lastB) {
-      preview += ` -last${demo.lastA}/${demo.lastB}`
-    } else if (demo.mode === 'compute' && demo.minN) {
-      preview += ` min${demo.minN}${demo.window ? ' ' + demo.window : ''}`
-    } else if (demo.mode === 'streak' && demo.streakN) {
-      preview += ` -streak${demo.streakN}`
-    }
-  }
-  const finalCmd = reached('command') ? demo.command : preview
-
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ backgroundColor: 'rgba(0,0,0,0.78)' }}
-      onClick={onClose}
-      role="dialog"
-      aria-modal="true"
-      aria-label="Query builder tutorial"
-    >
-      <div
-        className="w-full max-w-[640px] max-h-[92vh] rounded-lg overflow-y-auto cursor-pointer"
-        style={{
-          backgroundColor: C.surface,
-          border: `1px solid ${C.border}`,
-          color: C.textBright,
-          fontFamily: 'monospace',
-        }}
-        onClick={(e) => {
-          e.stopPropagation()
-          setIsPaused((p) => !p)
-        }}
-        title={isPaused ? 'click to resume' : 'click to pause'}
-      >
-        {/* header */}
+  // Picker — no demo chosen yet.
+  if (!demo) {
+    return (
+      <div className="fixed inset-0 z-[200] flex items-center justify-center p-4" style={{ backgroundColor: 'oklch(0 0 0 / 0.6)' }}>
         <div
-          className="flex items-center justify-between px-5 py-3 sticky top-0"
-          style={{ backgroundColor: 'oklch(0.18 0 0)', borderBottom: `1px solid ${C.border}` }}
+          className="w-full max-w-md rounded-lg p-5"
+          style={{ backgroundColor: C.surface, border: `1px solid ${C.border}`, fontFamily: 'monospace' }}
         >
-          <span className="font-mono font-bold text-[14px]" style={{ color: C.accent }}>
-            {'{tutorial}'} — query builder
-          </span>
-          <div className="flex items-center gap-3">
-            <span
-              className="font-mono text-[10px] uppercase tracking-widest"
-              style={{ color: isPaused ? 'oklch(0.75 0.15 145)' : C.textDim }}
-            >
-              {isPaused ? '❙❙ paused' : '▸ playing'}
+          <div className="flex items-center justify-between mb-1">
+            <span className="font-bold text-[15px]" style={{ color: C.textBright }}>
+              {'{query builder tutorial}'}
             </span>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation()
-                onClose()
-              }}
-              className="font-mono text-[14px] hover:opacity-70 transition-opacity"
-              style={{ color: C.accent }}
-              aria-label="Close tutorial"
-            >
+            <button onClick={finish} className="text-[15px] hover:opacity-70 transition-opacity" style={{ color: C.textDim }}>
               ✕
             </button>
           </div>
-        </div>
-
-        <div className="p-5 space-y-4">
-          <div className="text-[11px] leading-relaxed" style={{ color: C.textDim }}>
-            Watch the builder light up step-by-step. Click anywhere to pause / resume (space also
-            works). Read-only — run real queries from the query builder or search bar.
-          </div>
-
-          {/* step caption */}
-          <div
-            className="rounded px-3 py-2 text-[12px]"
-            style={{ backgroundColor: 'oklch(0.10 0 0)', border: `1px solid ${C.border}`, color: C.accentDim }}
-          >
-            <span style={{ color: C.textDim }}>step {stepIdx + 1}/{DEMOS.length} · </span>
-            <span style={{ color: C.textBright }}>{demo.caption}</span>
-          </div>
-
-          {/* mock builder */}
-          <div className="rounded p-3" style={{ border: `1px solid ${C.border}`, backgroundColor: 'oklch(0.10 0 0)' }}>
-            {/* mode tabs */}
-            <div className="flex gap-2 mb-3">
-              {(['trend', 'compute', 'streak'] as const).map((m) => (
-                <div
-                  key={m}
-                  className="flex-1 py-2 text-[11px] font-bold rounded border uppercase tracking-wider text-center transition-all duration-300"
-                  style={{
-                    backgroundColor: demo.mode === m ? C.accent : C.surface2,
-                    color: demo.mode === m ? C.accentDark : C.accentDim,
-                    borderColor: demo.mode === m ? C.accent : C.border,
-                    opacity: reached('mode') ? 1 : 0.4,
-                    boxShadow: stage === 'mode' && demo.mode === m ? `0 0 0 2px ${C.accent}` : 'none',
-                  }}
-                >
-                  {m}
+          <p className="text-[12px] mb-4" style={{ color: C.textDim }}>
+            Pick an example — it'll open the real builder and walk the real controls for you, then run a real query.
+          </p>
+          <div className="flex flex-col gap-2">
+            {DEMOS.map((d) => (
+              <button
+                key={d.id}
+                onClick={() => startDemo(d)}
+                className="text-left rounded-lg px-3 py-2.5 transition-colors"
+                style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}` }}
+              >
+                <div className="font-bold text-[13px]" style={{ color: C.accent }}>
+                  {d.label}
                 </div>
-              ))}
-            </div>
-
-            {/* sport */}
-            <div className="mb-3">
-              <SLabel>sport</SLabel>
-              <div className="flex gap-2 flex-wrap">
-                {(['nba', 'mlb', 'nhl', 'nfl'] as const).map((s) => (
-                  <Pill
-                    key={s}
-                    selected={reached('sport') && demo.sport === s}
-                    highlight={stage === 'sport' && demo.sport === s}
-                    disabled={s === 'nfl'}
-                  >
-                    {s === 'nfl' ? '{NFL}' : s.toUpperCase()}
-                  </Pill>
-                ))}
-              </div>
-            </div>
-
-            {/* season + period */}
-            <div className="flex gap-6 mb-3 flex-wrap">
-              <div>
-                <SLabel>season</SLabel>
-                <div className="flex gap-1.5">
-                  {(['post'] as const).map((v) => (                    <Pill
-                      key={v}
-                      selected={reached('season') && demo.season === v}
-                      highlight={stage === 'season' && demo.season === v}
-                    >
-                      {v}
-                    </Pill>
-                  ))}
+                <div className="text-[11px] mt-0.5" style={{ color: C.textDim }}>
+                  {d.summary}
                 </div>
-              </div>
-              <div>
-                <SLabel>period</SLabel>
-                <div className="flex gap-1.5 flex-wrap">
-                  <Pill selected={reached('period') && !demo.period}>full</Pill>
-                  {demo.sport !== 'mlb' && (
-                    <Pill
-                      selected={reached('period') && (demo.period === 'q1' || demo.period === 'p1')}
-                      highlight={stage === 'period' && (demo.period === 'q1' || demo.period === 'p1')}
-                    >
-                      {demo.sport === 'nhl' ? 'p1' : 'q1'}
-                    </Pill>
-                  )}
-                  {demo.sport === 'nba' && (
-                    <Pill
-                      selected={reached('period') && demo.period === '1h'}
-                      highlight={stage === 'period' && demo.period === '1h'}
-                    >
-                      1h
-                    </Pill>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* stat */}
-            <div className="mb-3">
-              <SLabel>stat</SLabel>
-              <div className="flex gap-1.5 flex-wrap">
-                {(demo.sport === 'nba'
-                  ? ['pts', 'reb', 'ast', 'tpm', 'pts+ast']
-                  : demo.sport === 'mlb'
-                    ? ['hits', 'hr', 'rbi', 'tb']
-                    : ['g', 'a', 'pts', 'sog']
-                ).map((s) => (
-                  <Pill
-                    key={s}
-                    selected={reached('stat') && demo.stat === s}
-                    highlight={stage === 'stat' && demo.stat === s}
-                  >
-                    {s.toUpperCase()}
-                  </Pill>
-                ))}
-              </div>
-            </div>
-
-            {/* mode-specific values */}
-            {demo.mode === 'trend' && (
-              <div className="mb-1 flex items-end gap-5 flex-wrap">
-                <div>
-                  <SLabel>threshold</SLabel>
-                  <FakeNum value={demo.thresholdN ?? ''} visible={reached('value')} />
-                </div>
-                <div className="flex items-end gap-1.5">
-                  <div>
-                    <SLabel>met</SLabel>
-                    <FakeNum value={demo.lastA ?? ''} visible={reached('value')} />
-                  </div>
-                  <span style={{ color: C.textDim, paddingBottom: '8px' }}>/</span>
-                  <div>
-                    <SLabel>-last</SLabel>
-                    <FakeNum value={demo.lastB ?? ''} visible={reached('value')} />
-                  </div>
-                </div>
-              </div>
-            )}
-            {demo.mode === 'compute' && (
-              <div className="mb-1 flex items-end gap-5 flex-wrap">
-                <div>
-                  <SLabel>min</SLabel>
-                  <FakeNum value={demo.minN ?? ''} visible={reached('value')} />
-                </div>
-                <div>
-                  <SLabel>window</SLabel>
-                  <div className="flex gap-1.5">
-                    {(['-season', '-career', '-last'] as const).map((w) => (
-                      <Pill
-                        key={w}
-                        selected={reached('value') && demo.window === w}
-                        highlight={stage === 'value' && demo.window === w}
-                      >
-                        {w}
-                      </Pill>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-            {demo.mode === 'streak' && (
-              <div className="mb-1 flex items-end gap-5 flex-wrap">
-                <div>
-                  <SLabel>threshold</SLabel>
-                  <FakeNum value={demo.thresholdN ?? ''} visible={reached('value')} />
-                </div>
-                <div>
-                  <SLabel>min streak</SLabel>
-                  <FakeNum value={demo.streakN ?? ''} visible={reached('value')} />
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* command preview */}
-          <div
-            className="px-3 py-2.5 rounded text-[12px] break-all min-h-[38px] flex items-center"
-            style={{
-              backgroundColor: 'oklch(0.08 0 0)',
-              border: `1px solid ${C.border}`,
-            }}
-          >
-            <span style={{ color: C.textDim }}>▸ </span>
-            <span style={{ color: C.accent }}>{finalCmd}</span>
-          </div>
-
-          {/* step dots */}
-          <div className="flex items-center justify-center gap-1.5 pt-1">
-            {DEMOS.map((_, i) => (
-              <span
-                key={i}
-                className="w-1.5 h-1.5 rounded-full transition-opacity"
-                style={{
-                  backgroundColor: C.accent,
-                  opacity: i === stepIdx ? 1 : 0.3,
-                }}
-              />
+              </button>
             ))}
           </div>
+        </div>
+      </div>
+    )
+  }
 
-          <div className="text-center pt-1">
+  const step = demo.steps[stepIndex]
+  const isLast = stepIndex === demo.steps.length - 1
+
+  return (
+    <div className="fixed inset-0 z-[200] pointer-events-none">
+      {rect && phase === 'ready' && (
+        <div
+          className="absolute rounded-md transition-all duration-200"
+          style={{
+            left: `${rect.left - 6}px`,
+            top: `${rect.top - 6}px`,
+            width: `${rect.width + 12}px`,
+            height: `${rect.height + 12}px`,
+            border: `2px solid ${C.green}`,
+            boxShadow: '0 0 0 4000px oklch(0 0 0 / 0.45)',
+          }}
+        />
+      )}
+
+      {/* Bottom control bar — the one part of this overlay that accepts
+          clicks, everything else is pointer-events-none so it never blocks
+          the real builder underneath. */}
+      <div
+        className="absolute left-1/2 -translate-x-1/2 bottom-6 w-[min(92vw,480px)] rounded-lg p-4 pointer-events-auto"
+        style={{ backgroundColor: C.surface, border: `1px solid ${C.border}`, fontFamily: 'monospace' }}
+      >
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[11px] uppercase tracking-widest" style={{ color: C.textDim }}>
+            {demo.label} · step {Math.min(stepIndex + 1, demo.steps.length)}/{demo.steps.length}
+          </span>
+          <button onClick={finish} className="text-[13px] hover:opacity-70 transition-opacity" style={{ color: C.textDim }}>
+            skip tutorial
+          </button>
+        </div>
+
+        <p className="text-[13px] mb-3" style={{ color: C.textBright }}>
+          {phase === 'done' ? "That's a real result from a real query — nice work." : phase === 'locating' ? 'Locating the next control…' : step.caption}
+        </p>
+
+        <div className="flex items-center gap-2">
+          {phase === 'ready' && stepIndex > 0 && (
             <button
-              type="button"
-              onClick={onClose}
-              className="font-mono text-[12px] px-4 py-2 rounded border transition-colors"
-              style={{
-                backgroundColor: C.surface2,
-                borderColor: C.border,
-                color: C.textBright,
-              }}
+              onClick={goBack}
+              className="font-mono text-[12px] font-bold px-3 py-1.5 rounded-lg transition-colors"
+              style={{ border: `1px solid ${C.border}`, color: C.textDim }}
             >
-              close
+              ‹ back
             </button>
-          </div>
+          )}
+          {phase === 'ready' && (
+            <button
+              onClick={advance}
+              className="flex-1 font-mono text-[12px] font-bold px-3 py-2 rounded-lg transition-colors"
+              style={{ backgroundColor: C.accent, color: C.accentDark }}
+            >
+              {isLast ? 'run it →' : 'next →'}
+            </button>
+          )}
+          {phase === 'done' && (
+            <button
+              onClick={finish}
+              className="flex-1 font-mono text-[12px] font-bold px-3 py-2 rounded-lg transition-colors"
+              style={{ backgroundColor: C.accent, color: C.accentDark }}
+            >
+              done
+            </button>
+          )}
         </div>
       </div>
     </div>

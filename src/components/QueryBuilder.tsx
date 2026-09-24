@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect, useRef } from 'react'
 import { useIsMobile } from '@/hooks/use-mobile'
+import { getTeamCodes } from '@/lib/teams'
 
 export type QueryMode = 'trend' | 'compute' | 'streak' | 'h2h' | 'team' | 'explosive'
 export type SeasonType = 'post' | ''
@@ -63,6 +64,7 @@ interface PersistedBuilderState {
   computeWindow: ComputeWindow
   windowN: string
   streakN: string
+  h2hSport: 'mlb' | 'nfl'
   h2hPlayer: string
   h2hOpponent: string
   teamStat: TeamStat
@@ -93,15 +95,25 @@ const MLB_POSITIONS = [
   { value: 'dh', label: 'DH', title: 'Designated Hitter' },
 ]
 
-// All 30 MLB team abbreviations matching backend codes (e.g. ATH for Athletics).
-const MLB_TEAMS = [
-  'ARI', 'ATL', 'BAL', 'BOS', 'CHC', 'CWS', 'CIN', 'CLE', 'COL', 'DET',
-  'HOU', 'KC', 'LAA', 'LAD', 'MIA', 'MIL', 'MIN', 'NYM', 'NYY', 'ATH',
-  'PHI', 'PIT', 'SD', 'SEA', 'SF', 'STL', 'TB', 'TEX', 'TOR', 'WSH',
-]
-
 const STORAGE_KEY_DESKTOP = 'nspe.queryBuilder.desktop.v1'
 const STORAGE_KEY_MOBILE = 'nspe.queryBuilder.mobile.v1'
+
+// QueryBuilderTutorial calls this right before it opens the builder to run a
+// walkthrough — the builder otherwise restores whatever a real user last had
+// selected (see loadPersistedState below), which could leave a leftover
+// season year, sport, or mode that throws off a scripted step sequence
+// expecting a blank builder. QueryBuilder itself only reads these keys once
+// per mount, so this only takes effect on the fresh mount the tutorial
+// triggers right after — it's not clearing anything mid-session.
+export function clearPersistedBuilderState() {
+  if (typeof window === 'undefined') return
+  try {
+    window.localStorage.removeItem(STORAGE_KEY_DESKTOP)
+    window.localStorage.removeItem(STORAGE_KEY_MOBILE)
+  } catch {
+    // ignore quota / unavailable storage
+  }
+}
 
 function loadPersistedState(key: string): Partial<PersistedBuilderState> | null {
   if (typeof window === 'undefined') return null
@@ -136,6 +148,11 @@ export const SPORT_STATS: Record<string, Array<{ value: string; label: string }>
     { value: 'pts+reb', label: 'PTS+REB' },
     { value: 'reb+ast', label: 'REB+AST' },
     { value: 'stl+blk', label: 'STL+BLK' },
+    // Double-double / triple-double — boolean occurrence stats, not a
+    // count with a threshold, so they're handled as NBA_BOOLEAN_STATS below
+    // (no numeric threshold chip; the built command is a bare "-dub"/"-trip").
+    { value: 'dub', label: 'DUB' },
+    { value: 'trip', label: 'TRIP' },
     { value: 'total', label: 'TOTAL' },
   ],
   mlb: [
@@ -148,6 +165,9 @@ export const SPORT_STATS: Record<string, Array<{ value: string; label: string }>
     { value: 'sb', label: 'SB' },
     { value: 'bb', label: 'BB' },
     { value: 'tb', label: 'TB' },
+    // Combined hits + runs + rbi — compute-mode only in practice (a
+    // realistic threshold is a season/career total, not a single game's).
+    { value: 'total', label: 'TOTAL' },
   ],
   nhl: [
     { value: 'g', label: 'G' },
@@ -237,7 +257,7 @@ export function nflComputePresets(stat: string, statType: string, combo: boolean
 }
 export const TEAM_RUNS_TREND_PRESETS = [3, 4, 5, 6, 7, 8, 10]
 export const TEAM_RUNS_COMPUTE_PRESETS = [10, 15, 20, 25, 30, 35, 40]
-export const EXPLOSIVE_NFL_TREND_PRESETS = [20, 25, 30, 40, 50, 60, 75, 100]
+export const EXPLOSIVE_NFL_TREND_PRESETS = [20, 25, 30, 35, 40, 50, 60, 75, 100]
 export const EXPLOSIVE_NFL_COMPUTE_PRESETS = [20, 25, 30, 35, 40, 45, 50]
 export const EXPLOSIVE_MLB_TREND_PRESETS = [350, 375, 400, 425, 450, 475, 500, 525]
 export const EXPLOSIVE_MLB_COMPUTE_PRESETS = [300, 400, 500, 600, 750, 1000]
@@ -260,6 +280,12 @@ export const COMPUTE_PRESET_OVERRIDES: Record<string, Record<string, number[]>> 
 // selective enough to be worth a chip).
 const COMPUTE_BASE_OVERRIDES: Record<string, Record<string, number[]>> = {
   nhl: { pts: [2, 3, 4] },
+  // "total" (hits+runs+rbi) has no THRESHOLD_PRESETS entry, so without this
+  // it'd fall back to GENERIC_THRESHOLD (1/2/3/5/8/10) — far too low for a
+  // 3-stat combined total. These bases are scaled by the window factor same
+  // as everything else (window-factor 10 for -season -> a 30 base surfaces
+  // a 300 chip, matching real season leaders in the 300-400 range).
+  mlb: { total: [20, 25, 30, 35, 40] },
 }
 
 export function thresholdPresetsFor(sport: string, stat: string): number[] {
@@ -313,7 +339,7 @@ export function computeThresholdPresetsFor(sport: string, stat: string): number[
 
 // Season year selector — replaces the old postseason toggle entirely.
 // Visible as individual {YY} pills for the most recent 7 years (styled like
-// H2H's opponent-team buttons — see MLB_TEAMS above), plus an {older}
+// H2H's opponent-team buttons — see getTeamCodes above), plus an {older}
 // dropdown for 2010–2019. Bump both ranges by hand as seasons roll over
 // rather than deriving from the current date, same reasoning YEAR_OPTIONS
 // used to have — season-start timing doesn't map cleanly to a calendar
@@ -340,16 +366,26 @@ function Pill({
   selected,
   onClick,
   disabled,
+  dataTour,
 }: {
   children: string
   selected: boolean
   onClick: () => void
   disabled?: boolean
+  // Stable hook for QueryBuilderTutorial's walkthrough driver to find and
+  // click this exact real button (document.querySelector(`[data-tour="${x}"]`))
+  // — see that file's comment for why it drives the real UI instead of a
+  // scripted replica. aria-pressed doubles as the driver's "is this already
+  // the state I want" check, so it never blindly re-clicks a toggle that's
+  // already selected and flips it back off.
+  dataTour?: string
 }) {
   return (
     <button
       type="button"
       onClick={disabled ? undefined : onClick}
+      data-tour={dataTour}
+      aria-pressed={selected}
       className="font-mono text-[11px] px-3 py-1.5 rounded border transition-colors select-none"
       style={{
         backgroundColor: selected ? C.accent : C.surface2,
@@ -427,12 +463,17 @@ function NumSelect({
   onChange,
   options,
   placeholder = 'N',
+  dataTourPrefix,
 }: {
   value: string
   onChange: (v: string) => void
   options: number[]
   placeholder?: string
   w?: number
+  // Same driver hook as Pill's dataTour, one level down — each preset chip
+  // gets its own `${dataTourPrefix}-${n}` id (e.g. "threshold-25") since a
+  // NumSelect renders a whole row of them, not one single control.
+  dataTourPrefix?: string
 }) {
   const isCustom = value !== '' && !options.includes(Number(value))
   const [otherOpen, setOtherOpen] = useState(isCustom)
@@ -468,6 +509,8 @@ function NumSelect({
             type="button"
             className={chipClass}
             style={chip(selected)}
+            data-tour={dataTourPrefix ? `${dataTourPrefix}-${n}` : undefined}
+            aria-pressed={selected}
             onClick={() => {
               setOtherOpen(false)
               onChange(selected ? '' : String(n))
@@ -514,9 +557,12 @@ export interface QueryBuilderProps {
   onRunQuery: (query: string) => void
   isLoading: boolean
   popularPlayers?: PopularPlayer[]
+  /** Same idea as popularPlayers, but from the NFL leaderboard — h2h mode's
+   * own sport selector switches between the two lists. */
+  nflPopularPlayers?: PopularPlayer[]
 }
 
-export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: QueryBuilderProps) {
+export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPopularPlayers = [] }: QueryBuilderProps) {
   const isMobile = useIsMobile()
   const storageKey = isMobile ? STORAGE_KEY_MOBILE : STORAGE_KEY_DESKTOP
   const initial = useMemo(() => loadPersistedState(storageKey) ?? {}, [storageKey])
@@ -543,7 +589,8 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
   const [windowN, setWindowN] = useState(initial.windowN ?? '')
   // streak
   const [streakN, setStreakN] = useState(initial.streakN ?? '')
-  // h2h (batter)
+  // h2h (batter/skill-position player vs an opponent team)
+  const [h2hSport, setH2hSport] = useState<'mlb' | 'nfl'>(initial.h2hSport ?? 'mlb')
   const [h2hPlayer, setH2hPlayer] = useState(initial.h2hPlayer ?? '')
   const [h2hOpponent, setH2hOpponent] = useState(initial.h2hOpponent ?? '')
   // team (runs scored/allowed)
@@ -574,7 +621,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       thresholdN, lastA, lastB,
       minN, maxN, thresholdMode, computeWindow, windowN,
       streakN,
-      h2hPlayer, h2hOpponent,
+      h2hSport, h2hPlayer, h2hOpponent,
       teamStat, teamSubMode,
       batPosition, mlbFirstFlag, nflStatType, nflCombo,
       explosiveLeague, nflPlayType, nflYds,
@@ -585,9 +632,13 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     } catch {
       // ignore quota / unavailable storage
     }
-  }, [storageKey, mode, sport, period, yearFilter, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, nflStatType, nflCombo, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds])
+  }, [storageKey, mode, sport, period, yearFilter, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hSport, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, nflStatType, nflCombo, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds])
 
   const isNbaHalfPeriod = sport === 'nba' && period === '1h'
+  // Double-double / triple-double are boolean occurrence stats (did it
+  // happen, not how many) — the built command is a bare "-dub"/"-trip" with
+  // no numeric threshold, unlike every other stat here.
+  const isBooleanStat = sport === 'nba' && (stat === 'dub' || stat === 'trip')
   const computeMinPresets = computePresetsForWindow(sport, stat, computeWindow, windowN, {
     statType: nflStatType,
     combo: nflCombo,
@@ -622,8 +673,10 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
 
   const handleModeSelect = (m: QueryMode) => {
     setMode(m)
-    // h2h, team are MLB-only — force sport to mlb when switching in.
-    if ((m === 'h2h' || m === 'team') && sport !== 'mlb') {
+    // team (runs scored/allowed) is MLB-only — force sport to mlb when
+    // switching in. h2h has its own independent h2hSport toggle instead
+    // (mlb/nfl), so it doesn't touch the generic sport picker at all.
+    if (m === 'team' && sport !== 'mlb') {
       setSport('mlb')
       setStat('')
       if (period === '1h' || period === 'q1') setPeriod('')
@@ -669,7 +722,12 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     if (mode === 'h2h') {
       const player = h2hPlayer.trim()
       if (!player || !h2hOpponent) return ''
-      return `nspe mlb ${player.toLowerCase()} vs ${h2hOpponent}`
+      // Career, not the current-season-only default the backend otherwise
+      // applies — confirmed live: dropping this returned Judge's 3-game 2026
+      // total against Boston instead of his 115-game career total against
+      // them, which is what "how has this player done against this team" is
+      // actually asking.
+      return `nspe ${h2hSport} ${player.toLowerCase()} vs ${h2hOpponent} -career`
     }
 
     if (mode === 'team') {
@@ -773,7 +831,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
     if (yearFilter) parts.push(yearFilter)
 
     return parts.join(' ')
-  }, [mode, sport, period, yearFilter, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds, nflStatType, nflCombo])
+  }, [mode, sport, period, yearFilter, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hSport, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds, nflStatType, nflCombo])
 
   const canRun = Boolean(builtCommand) && !isLoading
 
@@ -787,6 +845,17 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
   useEffect(() => {
     if (mode === 'trend' || mode === 'streak') {
       if (!stat || firstPaActive) return
+      // Boolean stats have no threshold to default — just the window.
+      if (isBooleanStat) {
+        setThresholdN('')
+        if (mode === 'trend') {
+          setLastA('3')
+          setLastB('5')
+        } else {
+          setStreakN('3')
+        }
+        return
+      }
       // NFL's season just started — a 3/5-style multi-game trend window asks
       // for more games than any player has played yet. Pin to the tightest
       // possible window (met 1 of the last 1 game) instead, revisited once
@@ -875,6 +944,8 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
             key={m}
             type="button"
             onClick={() => handleModeSelect(m)}
+            data-tour={`mode-${m}`}
+            aria-pressed={mode === m}
             className="flex-1 min-w-[72px] py-2 text-[12px] font-bold rounded border uppercase tracking-wider transition-colors"
             style={{
               backgroundColor: mode === m ? C.accent : C.surface2,
@@ -898,7 +969,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
           : mode === 'streak'
           ? '▸ nspe {sport} {full/q1} {stat} -streakN'
           : mode === 'h2h'
-          ? '▸ nspe mlb {player name} vs {TEAM}'
+          ? `▸ nspe ${h2hSport} {player name} vs {TEAM} -career`
           : mode === 'explosive'
           ? (explosiveLeague === 'mlb'
             ? (nflExplosiveSubMode === 'compute'
@@ -922,12 +993,14 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
               <Pill
                 selected={explosiveLeague === 'mlb'}
                 onClick={() => setExplosiveLeague('mlb')}
+                dataTour="league-mlb"
               >
                 MLB
               </Pill>
               <Pill
                 selected={explosiveLeague === 'nfl'}
                 onClick={() => setExplosiveLeague('nfl')}
+                dataTour="league-nfl"
               >
                 NFL
               </Pill>
@@ -941,12 +1014,14 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
               <Pill
                 selected={nflExplosiveSubMode === 'trend'}
                 onClick={() => setNflExplosiveSubMode('trend')}
+                dataTour="explosivemode-trend"
               >
                 trend
               </Pill>
               <Pill
                 selected={nflExplosiveSubMode === 'compute'}
                 onClick={() => setNflExplosiveSubMode('compute')}
+                dataTour="explosivemode-compute"
               >
                 compute
               </Pill>
@@ -962,6 +1037,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
                     key={pt}
                     selected={nflPlayType === pt}
                     onClick={() => setNflPlayType((p) => (p === pt ? '' : pt))}
+                    dataTour={`playtype-${pt}`}
                   >
                     {pt.toUpperCase()}
                   </Pill>
@@ -1003,6 +1079,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
                     onChange={setNflYds}
                     options={explosiveLeague === 'mlb' ? EXPLOSIVE_MLB_TREND_PRESETS : EXPLOSIVE_NFL_TREND_PRESETS}
                     w={80}
+                    dataTourPrefix="explosiveYds"
                   />
                   <span className="font-mono text-[11px]" style={{ color: C.textDim }}>
                     {explosiveLeague === 'mlb' ? 'ft' : 'yds'}
@@ -1012,12 +1089,12 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
               <div className="flex items-end gap-1.5">
                 <div>
                   <SLabel>met</SLabel>
-                  <NumSelect value={lastA} onChange={setLastA} options={WINDOW_MET_PRESETS} w={64} />
+                  <NumSelect value={lastA} onChange={setLastA} options={WINDOW_MET_PRESETS} w={64} dataTourPrefix="met" />
                 </div>
                 <span style={{ color: C.textDim, paddingBottom: '8px' }}>/</span>
                 <div>
                   <SLabel>-last</SLabel>
-                  <NumSelect value={lastB} onChange={setLastB} options={WINDOW_LAST_PRESETS} w={64} />
+                  <NumSelect value={lastB} onChange={setLastB} options={WINDOW_LAST_PRESETS} w={64} dataTourPrefix="last" />
                 </div>
               </div>
             </div>
@@ -1025,21 +1102,52 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
         </>
       )}
 
-      {/* H2H: opponent team + player */}
+      {/* H2H: sport + opponent team + player. MLB-only originally — now NFL
+          too, since the backend's nfl-h2h engine covers skill positions the
+          same "{player} vs {TEAM}" way. Only these two for now. */}
       {mode === 'h2h' && (
         <>
           <div className="mb-3">
+            <SLabel>sport</SLabel>
+            <div className="flex gap-1.5">
+              <Pill
+                selected={h2hSport === 'mlb'}
+                onClick={() => {
+                  setH2hSport('mlb')
+                  setH2hOpponent('')
+                }}
+                dataTour="h2hsport-mlb"
+              >
+                MLB
+              </Pill>
+              <Pill
+                selected={h2hSport === 'nfl'}
+                onClick={() => {
+                  setH2hSport('nfl')
+                  setH2hOpponent('')
+                }}
+                dataTour="h2hsport-nfl"
+              >
+                NFL
+              </Pill>
+            </div>
+          </div>
+
+          <div className="mb-3">
             <SLabel>opponent team</SLabel>
             <div className="flex gap-1.5 flex-wrap">
-              {MLB_TEAMS.map((t) => (
-                <Pill
-                  key={t}
-                  selected={h2hOpponent === t}
-                  onClick={() => setH2hOpponent((prev) => (prev === t ? '' : t))}
-                >
-                  {t}
-                </Pill>
-              ))}
+              {getTeamCodes(h2hSport).map((lower) => {
+                const t = lower.toUpperCase()
+                return (
+                  <Pill
+                    key={t}
+                    selected={h2hOpponent === t}
+                    onClick={() => setH2hOpponent((prev) => (prev === t ? '' : t))}
+                  >
+                    {t}
+                  </Pill>
+                )
+              })}
             </div>
           </div>
 
@@ -1049,7 +1157,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
               type="text"
               value={h2hPlayer}
               onChange={(e) => setH2hPlayer(e.target.value)}
-              placeholder="type any MLB player (e.g. ketel marte)"
+              placeholder={h2hSport === 'mlb' ? 'type any MLB player (e.g. ketel marte)' : 'type any NFL player (e.g. josh allen)'}
               className="w-full font-mono text-[13px] rounded border px-3 py-2 outline-none"
               style={{
                 backgroundColor: C.surface2,
@@ -1059,28 +1167,32 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
             />
           </div>
 
-          {popularPlayers.length > 0 && (
-            <div className="mb-3">
-              <SLabel>popular {'{'}top {popularPlayers.length}{'}'}</SLabel>
-              <div className="flex gap-1.5 flex-wrap">
-                {popularPlayers.map((p) => {
-                  const selected = h2hPlayer.trim().toLowerCase() === p.player.toLowerCase()
-                  return (
-                    <Pill
-                      key={`${p.team}-${p.player}`}
-                      selected={selected}
-                      onClick={() => setH2hPlayer(selected ? '' : p.player)}
-                    >
-                      {`${p.team} ${p.player}`}
-                    </Pill>
-                  )
-                })}
+          {(() => {
+            const activePopularPlayers = h2hSport === 'mlb' ? popularPlayers : nflPopularPlayers
+            if (activePopularPlayers.length === 0) return null
+            return (
+              <div className="mb-3">
+                <SLabel>popular {'{'}top {activePopularPlayers.length}{'}'}</SLabel>
+                <div className="flex gap-1.5 flex-wrap">
+                  {activePopularPlayers.map((p) => {
+                    const selected = h2hPlayer.trim().toLowerCase() === p.player.toLowerCase()
+                    return (
+                      <Pill
+                        key={`${p.team}-${p.player}`}
+                        selected={selected}
+                        onClick={() => setH2hPlayer(selected ? '' : p.player)}
+                      >
+                        {`${p.team} ${p.player}`}
+                      </Pill>
+                    )
+                  })}
+                </div>
+                <div className="text-[10px] mt-2" style={{ color: C.textDim }}>
+                  or type any player name above — not limited to this list
+                </div>
               </div>
-              <div className="text-[10px] mt-2" style={{ color: C.textDim }}>
-                or type any player name above — not limited to this list
-              </div>
-            </div>
-          )}
+            )
+          })()}
         </>
       )}
 
@@ -1208,13 +1320,21 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       {/* Streak: threshold + streakN + year */}
       {mode === 'streak' && stat && (
         <div className="mb-3 flex items-end gap-5 flex-wrap">
-          <div>
-            <SLabel>threshold</SLabel>
-            <NumSelect value={thresholdN} onChange={setThresholdN} options={thresholdPresetsFor(sport, stat)} w={64} />
-          </div>
+          {!isBooleanStat && (
+            <div>
+              <SLabel>threshold</SLabel>
+              <NumSelect
+                value={thresholdN}
+                onChange={setThresholdN}
+                options={thresholdPresetsFor(sport, stat)}
+                w={64}
+                dataTourPrefix="threshold"
+              />
+            </div>
+          )}
           <div>
             <SLabel>min streak</SLabel>
-            <NumSelect value={streakN} onChange={setStreakN} options={STREAK_N_PRESETS} w={64} />
+            <NumSelect value={streakN} onChange={setStreakN} options={STREAK_N_PRESETS} w={64} dataTourPrefix="streakN" />
           </div>
         </div>
       )}
@@ -1230,6 +1350,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
                 selected={sport === s.value}
                 onClick={() => handleSportSelect(s.value)}
                 disabled={s.comingSoon}
+                dataTour={`sport-${s.value}`}
               >
                 {s.comingSoon ? `{${s.label}}` : s.label}
               </Pill>
@@ -1338,12 +1459,16 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       {isBuilderQuery && sport && stats.length > 0 && !firstPaActive && (
         <div className="mb-3">
           <SLabel>stat</SLabel>
-          <div className="flex gap-1.5 flex-wrap">
+          {/* justify-center so a wrapped partial last row (NBA's now has 13
+              stats) sits centered under the full rows above instead of
+              hugging the left edge looking lopsided. */}
+          <div className="flex gap-1.5 flex-wrap justify-center">
             {stats.map((s) => (
               <Pill
                 key={s.value}
                 selected={stat === s.value}
                 onClick={() => setStat((p) => (p === s.value ? '' : s.value))}
+                dataTour={`stat-${s.value}`}
               >
                 {s.label}
               </Pill>
@@ -1365,10 +1490,10 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
         <div className="mb-3">
           <SLabel>type</SLabel>
           <div className="flex gap-1.5 flex-wrap items-center">
-            <Pill selected={nflStatType === 'yds'} onClick={() => setNflStatType('yds')}>
+            <Pill selected={nflStatType === 'yds'} onClick={() => setNflStatType('yds')} dataTour="nfltype-yds">
               -yds
             </Pill>
-            <Pill selected={nflStatType === 'td'} onClick={() => setNflStatType('td')}>
+            <Pill selected={nflStatType === 'td'} onClick={() => setNflStatType('td')} dataTour="nfltype-td">
               -td
             </Pill>
             <span style={{ color: C.textDim }}>+</span>
@@ -1382,30 +1507,33 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
       {/* Trend: threshold + last */}
       {mode === 'trend' && stat && !firstPaActive && (
         <div className="mb-3 flex items-end gap-5 flex-wrap">
-          <div>
-            <SLabel>threshold</SLabel>
-            <NumSelect
-              value={thresholdN}
-              onChange={setThresholdN}
-              options={
-                sport === 'nfl'
-                  ? nflStatType === 'td'
-                    ? NFL_TD_PRESETS
-                    : NFL_YDS_PRESETS
-                  : thresholdPresetsFor(sport, stat)
-              }
-              w={sport === 'nfl' && nflStatType !== 'td' ? 80 : 64}
-            />
-          </div>
+          {!isBooleanStat && (
+            <div>
+              <SLabel>threshold</SLabel>
+              <NumSelect
+                value={thresholdN}
+                onChange={setThresholdN}
+                options={
+                  sport === 'nfl'
+                    ? nflStatType === 'td'
+                      ? NFL_TD_PRESETS
+                      : NFL_YDS_PRESETS
+                    : thresholdPresetsFor(sport, stat)
+                }
+                w={sport === 'nfl' && nflStatType !== 'td' ? 80 : 64}
+                dataTourPrefix="threshold"
+              />
+            </div>
+          )}
           <div className="flex items-end gap-1.5">
             <div>
               <SLabel>met</SLabel>
-              <NumSelect value={lastA} onChange={setLastA} options={WINDOW_MET_PRESETS} w={64} />
+              <NumSelect value={lastA} onChange={setLastA} options={WINDOW_MET_PRESETS} w={64} dataTourPrefix="met" />
             </div>
             <span style={{ color: C.textDim, paddingBottom: '8px' }}>/</span>
             <div>
               <SLabel>-last</SLabel>
-              <NumSelect value={lastB} onChange={setLastB} options={WINDOW_LAST_PRESETS} w={64} />
+              <NumSelect value={lastB} onChange={setLastB} options={WINDOW_LAST_PRESETS} w={64} dataTourPrefix="last" />
             </div>
           </div>
         </div>
@@ -1443,6 +1571,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
                   onChange={setMinN}
                   options={computeMinPresets}
                   w={80}
+                  dataTourPrefix="min"
                 />
               </div>
             )}
@@ -1477,6 +1606,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
                 key={w as string}
                 selected={computeWindow === w}
                 onClick={() => setComputeWindow((p) => (p === w ? '' : w))}
+                dataTour={`window-${(w as string).replace('-', '')}`}
               >
                 {w as string}
               </Pill>
@@ -1485,11 +1615,12 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
               <Pill
                 selected={computeWindow === '-last'}
                 onClick={() => setComputeWindow((p) => (p === '-last' ? '' : '-last'))}
+                dataTour="window-last"
               >
                 -last
               </Pill>
               {computeWindow === '-last' && (
-                <NumSelect value={windowN} onChange={setWindowN} options={COMPUTE_WINDOW_N_PRESETS} w={64} />
+                <NumSelect value={windowN} onChange={setWindowN} options={COMPUTE_WINDOW_N_PRESETS} w={64} dataTourPrefix="windowN" />
               )}
             </div>
           </div>
@@ -1501,7 +1632,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
           everything else in builtCommand's yearFilter push, regardless of
           mode) — e.g. "nspe mlb -hits min100 -season 2025". Replaces the old
           postseason toggle — pick a specific year instead. Styled like H2H's
-          opponent-team pills (MLB_TEAMS above): small buttons in a wrapping
+          opponent-team pills (getTeamCodes above): small buttons in a wrapping
           row. {YY} not {YYYY} to keep the row compact; the {older} dropdown
           covers 2010-2019. Pre-2010 (career-spanning players) isn't
           reachable here yet — planned manual-YYYY-input follow-up, not
@@ -1559,6 +1690,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [] }: Que
         type="button"
         onClick={() => canRun && onRunQuery(builtCommand)}
         disabled={!canRun}
+        data-tour="run"
         className="w-full mt-3 py-3 rounded font-mono font-bold text-[13px] uppercase tracking-wide border transition-colors"
         style={{
           backgroundColor: canRun ? C.accent : C.surface2,

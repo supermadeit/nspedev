@@ -336,7 +336,9 @@ export function findPlayerSpotlightCommands(
 
   const teamCodes = getTeamCodes(playerSport)
   const pushH2h = (opp: string, label: string) => {
-    const command = `nspe ${playerSport} ${resolved} vs ${opp}`
+    // -career, not the backend's current-season-only default (confirmed live
+    // — same reasoning as QueryBuilder's h2h mode default).
+    const command = `nspe ${playerSport} ${resolved} vs ${opp} -career`
     if (!matches.some((m) => m.displayCommand === command)) {
       matches.push({ query: { label, command }, matchedPrefix: '', displayCommand: command })
     }
@@ -370,8 +372,11 @@ export function findPlayerSpotlightCommands(
     if (playerSport && commandSport(q.command) !== playerSport) continue
     if (q.onlyFor && q.onlyFor !== resolved) continue
     if (q.qbOnly && playerPosition && playerPosition !== 'QB') continue
-    // Skip "vs X" templates where X is the player's own team.
-    if (team && q.command.toLowerCase().endsWith(` vs ${team}`)) continue
+    // Skip "vs X" templates where X is the player's own team. Matched as a
+    // whole word, not endsWith — h2h templates can carry trailing flags now
+    // (e.g. "... vs bos -career"), so "vs {team}" is no longer guaranteed to
+    // be the literal end of the command string.
+    if (team && new RegExp(`\\bvs ${team}\\b`).test(q.command.toLowerCase())) continue
     const displayCommand = q.command.toLowerCase().replace(q.playerHint, resolved)
     if (matches.some((m) => m.displayCommand === displayCommand)) continue
     matches.push({ query: q, matchedPrefix: '', displayCommand })

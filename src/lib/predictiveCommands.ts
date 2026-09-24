@@ -265,10 +265,12 @@ const MLB_COMMANDS: SampleQuery[] = [
   { label: 'mlb team trend · runs allowed', command: 'nspe mlb team -allowed4 -last2/5' },
   { label: 'mlb team compute · runs for', command: 'nspe mlb team -runs min120 -last25' },
   { label: 'mlb team compute · runs allowed', command: 'nspe mlb team -allowed min500 -season' },
-  // h2h
-  { label: 'mlb h2h', command: 'nspe mlb aaron judge vs bos', playerHint: 'aaron judge' },
-  { label: 'mlb h2h', command: 'nspe mlb shohei ohtani vs sf', playerHint: 'shohei ohtani' },
-  { label: 'mlb h2h', command: 'nspe mlb juan soto vs atl', playerHint: 'juan soto' },
+  // h2h — -career, not the backend's current-season-only default (confirmed
+  // live: without it, this returns a handful of this year's games instead of
+  // the player's full history against that team).
+  { label: 'mlb h2h', command: 'nspe mlb aaron judge vs bos -career', playerHint: 'aaron judge' },
+  { label: 'mlb h2h', command: 'nspe mlb shohei ohtani vs sf -career', playerHint: 'shohei ohtani' },
+  { label: 'mlb h2h', command: 'nspe mlb juan soto vs atl -career', playerHint: 'juan soto' },
   // -staff — season vs the team + career vs their CURRENT pitching staff
   // (engines/mlb/bvp.py). Backend only has per-pitcher data for a tracked
   // set of batters, so each entry is pinned to its player via onlyFor.

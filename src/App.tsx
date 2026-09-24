@@ -2,9 +2,12 @@ import { useState, useEffect, useMemo, useRef, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import hitlistData from '@/assets/data/hitlist.json'
 import leaderboardData from '@/assets/data/leaderboard.json'
+import nflLeaderboardData from '@/assets/data/nfl-leaderboard.json'
 import madeitLogo from '@/assets/images/madeit-tech-logo-v2.jpeg'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { QueryBuilder } from '@/components/QueryBuilder'
+import { useAuth } from '@/context/AuthContext'
+import { useUsername } from '@/hooks/useUsername'
+import { QueryBuilder, clearPersistedBuilderState } from '@/components/QueryBuilder'
 import { QueryBuilderTutorial } from '@/components/QueryBuilderTutorial'
 import { AutoDemo } from '@/components/AutoDemo'
 import { SampleQueriesModal } from '@/components/SampleQueriesModal'
@@ -54,7 +57,7 @@ import {
   isNflExplosivePayload,
   normalizeDisplayPlayer,
   normalizeQueryResults,
-  STAT_DISPLAY_LABELS,
+  statDisplayLabel,
   type H2hPayload,
   type MatchupInsightPayload,
   type MlbBatTeamPayload,
@@ -581,7 +584,12 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
         const matchList = r.matches ?? []
         const metCount = r.met_count ?? r.met ?? matchList.length
         const metLabel = formatMet(metCount, r.window)
-        const latest = matchList.length > 0 ? matchList[matchList.length - 1] : null
+        // matches arrays come back newest-first (same convention as every
+        // other engine — see format-hitlist.mjs's matches[0] comment) — the
+        // "latest" game is the first element, not the last. This used to
+        // read the last element instead, which silently showed the OLDEST
+        // qualifying game's date/value labeled "latest".
+        const latest = matchList.length > 0 ? matchList[0] : null
         const latestYds = latest ? (Array.isArray(latest.yards_list) ? latest.yards_list.join(', ') : latest.yards) : null
         const latestValue = latest
           ? `${latestYds}yds ${extractDateToken(latest.date_iso ?? latest.date) ?? (latest.date_iso ?? latest.date)}`
@@ -1334,7 +1342,12 @@ function MlbHrView({ payload }: { payload: MlbHrPayload }) {
         const matchList = r.matches ?? []
         const metCount = r.met_count ?? matchList.length
         const metLabel = formatMet(metCount, r.window)
-        const latest = matchList.length > 0 ? matchList[matchList.length - 1] : null
+        // matches arrays come back newest-first (same convention as every
+        // other engine — see format-hitlist.mjs's matches[0] comment) — the
+        // "latest" game is the first element, not the last. This used to
+        // read the last element instead, which silently showed the OLDEST
+        // qualifying game's date/value labeled "latest".
+        const latest = matchList.length > 0 ? matchList[0] : null
         const latestValue = latest ? `${latest.distance_feet}ft ${extractDateToken(latest.date) ?? latest.date}` : null
         return (
           <ResultRow
@@ -1393,7 +1406,12 @@ function MlbFirstPaTrendView({ payload }: { payload: MlbFirstPaTrendPayload }) {
         const matchList = r.matches ?? []
         const metCount = r.met_count ?? matchList.length
         const metLabel = formatMet(metCount, r.window)
-        const latest = matchList.length > 0 ? matchList[matchList.length - 1] : null
+        // matches arrays come back newest-first (same convention as every
+        // other engine — see format-hitlist.mjs's matches[0] comment) — the
+        // "latest" game is the first element, not the last. This used to
+        // read the last element instead, which silently showed the OLDEST
+        // qualifying game's date/value labeled "latest".
+        const latest = matchList.length > 0 ? matchList[0] : null
         const latestValue = latest
           ? `${latest.result}${latest.distance_feet != null ? ` (${latest.distance_feet}ft)` : ''} ${extractDateToken(latest.date) ?? latest.date}`
           : null
@@ -1481,7 +1499,12 @@ function MlbTeamRunsView({ payload }: { payload: MlbTeamRunsPayload }) {
         const matchList = r.matches ?? []
         const metCount = r.met_count ?? matchList.length
         const metLabel = formatMet(metCount, r.window)
-        const latest = matchList.length > 0 ? matchList[matchList.length - 1] : null
+        // matches arrays come back newest-first (same convention as every
+        // other engine — see format-hitlist.mjs's matches[0] comment) — the
+        // "latest" game is the first element, not the last. This used to
+        // read the last element instead, which silently showed the OLDEST
+        // qualifying game's date/value labeled "latest".
+        const latest = matchList.length > 0 ? matchList[0] : null
         const latestValue = latest
           ? `${latest.runs_for}-${latest.runs_allowed} ${extractDateToken(latest.date_iso) ?? latest.date_iso}`
           : null
@@ -2788,8 +2811,20 @@ function App() {
   const [isGlossaryOpen, setIsGlossaryOpen] = useState(false)
   const [isH2hStaffOpen, setIsH2hStaffOpen] = useState(false)
   const leaderboard = leaderboardData as unknown as LeaderboardPayload
+  // NFL h2h's "popular players" list — the leaderboard.json shape above is
+  // MLB's stat-threshold format; the NFL leaderboard is a different "heat"
+  // shape (rows keyed by streak/heater score, not a stat threshold), but all
+  // h2h needs from either one is player+team, which both carry.
+  const nflPopularPlayers = ((nflLeaderboardData as { rows?: { player: string; team: string }[] }).rows ?? [])
+    .slice(0, 20)
+    .map((r) => ({ player: r.player, team: r.team }))
   const isMobile = useIsMobile()
   const navigate = useNavigate()
+  // Top-right nav shows the signed-in user's handle instead of
+  // {sign-up}/{log-in} once there's a session — this page never checked
+  // auth state before, so it kept showing both buttons even while signed in.
+  const { user } = useAuth()
+  const { username } = useUsername()
   // Player-search dropdown, doubled up on the same input as the CLI (see
   // looksLikePlayerSearch above) — {database} has no static nav entry point,
   // this is the only way to reach a player's page short of a direct URL.
@@ -2969,6 +3004,15 @@ function App() {
   const miniRef = useRef<HTMLDivElement>(null)
   const builderRef = useRef<HTMLDivElement>(null)
   const tickerRef = useRef<HTMLDivElement>(null)
+  // Click-to-pause — a ref (not just the state below) since the rAF loop's
+  // `tick` closure is only re-created when tickerText changes, so it would
+  // otherwise keep seeing the isTickerPaused value from whenever that
+  // closure was last built, not the current one.
+  const [isTickerPaused, setIsTickerPaused] = useState(false)
+  const tickerPausedRef = useRef(false)
+  useEffect(() => {
+    tickerPausedRef.current = isTickerPaused
+  }, [isTickerPaused])
 
   const tickerText = hitlistEntries
     .map(formatTickerEntry)
@@ -2989,10 +3033,14 @@ function App() {
     const tick = (now: number) => {
       const dt = (now - lastTime) / 1000
       lastTime = now
-      const copyWidth = el.scrollWidth / 3
-      if (copyWidth > 0) {
-        offset = (offset + PIXELS_PER_SECOND * dt) % copyWidth
-        el.style.transform = `translateX(${-offset}px)`
+      // Still advances `lastTime` every frame while paused, so dt doesn't
+      // balloon into one huge jump the instant it's unpaused.
+      if (!tickerPausedRef.current) {
+        const copyWidth = el.scrollWidth / 3
+        if (copyWidth > 0) {
+          offset = (offset + PIXELS_PER_SECOND * dt) % copyWidth
+          el.style.transform = `translateX(${-offset}px)`
+        }
       }
       rafId = requestAnimationFrame(tick)
     }
@@ -3232,7 +3280,7 @@ function App() {
       )
       const payloadError = getPayloadError(payload)
       const statCtx = detectStatContext(payload, sanitizedQuery)
-      setQueryResultsStatLabel(statCtx ? statCtx.unitLabel ?? STAT_DISPLAY_LABELS[statCtx.stat] ?? statCtx.stat : '')
+      setQueryResultsStatLabel(statCtx ? statCtx.unitLabel ?? statDisplayLabel(statCtx.sport, statCtx.stat) : '')
       setQueryResults(enriched)
 
       if (payloadError) {
@@ -3569,16 +3617,10 @@ function App() {
             {'{sample-queries}'}
           </button>
         )}
-        {isMobile && (
-          <button
-            onClick={() => setIsTutorialOpen(true)}
-            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-            style={{ color: 'oklch(0.78 0.18 145)' }}
-            aria-label="Open tutorial"
-          >
-            {'{tutorial}'}
-          </button>
-        )}
+        {/* {tutorial} moved into the query builder panel's own header — it
+            walks through the query builder specifically, not the site as a
+            whole, so it belongs on that panel rather than up here (a
+            site-wide tutorial is a separate, future thing). */}
       </div>
 
       <div
@@ -3621,25 +3663,37 @@ function App() {
             {'{charts}'}
           </a>
         ) : (
-          <a
-            href="/signup"
-            className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-            style={{ color: 'oklch(0.85 0.15 195)' }}
-          >
-            {'{sign-up}'}
-          </a>
+          !user && (
+            <a
+              href="/signup"
+              className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+              style={{ color: 'oklch(0.85 0.15 195)' }}
+            >
+              {'{sign-up}'}
+            </a>
+          )
         )}
 
+        {/* Signed in -> the user's handle (falls back to "account" until the
+            username load resolves, or if one hasn't been set yet) linking to
+            /account, replacing {log-in} — this page never checked auth state
+            before, so both buttons stayed up even mid-session. */}
         <a
-          href="/login"
+          href={user ? '/account' : '/login'}
           className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
           style={{ color: 'oklch(0.85 0.15 195)' }}
         >
-          {'{log-in}'}
+          {user ? `{${username ?? 'account'}}` : '{log-in}'}
         </a>
       </div>
 
-      <QueryBuilderTutorial open={isTutorialOpen} onClose={() => setIsTutorialOpen(false)} />
+      <QueryBuilderTutorial
+        open={isTutorialOpen}
+        onClose={() => setIsTutorialOpen(false)}
+        openBuilder={() => setIsBuilderOpen(true)}
+        closeBuilder={() => setIsBuilderOpen(false)}
+        resetBuilder={clearPersistedBuilderState}
+      />
       <SampleQueriesModal open={isSampleQueriesOpen} onClose={() => setIsSampleQueriesOpen(false)} />
       <H2hStaffOverlay open={isH2hStaffOpen} onClose={() => setIsH2hStaffOpen(false)} payload={h2hResult} />
       <MatchupInsightOverlay open={isMatchupOpen} onClose={() => setIsMatchupOpen(false)} payload={matchupResult} />
@@ -3714,7 +3768,7 @@ function App() {
             return <div className="font-mono text-[12px]" style={{ color: 'oklch(0.48 0 0)' }}>no results</div>
           }
           const demoStatCtx = detectStatContext(payload, sanitized)
-          const demoStatLabel = demoStatCtx ? demoStatCtx.unitLabel ?? STAT_DISPLAY_LABELS[demoStatCtx.stat] ?? demoStatCtx.stat : ''
+          const demoStatLabel = demoStatCtx ? demoStatCtx.unitLabel ?? statDisplayLabel(demoStatCtx.sport, demoStatCtx.stat) : ''
           return (
             <div>
               {normalized.map((result, i) => {
@@ -4251,7 +4305,7 @@ function App() {
       {isBuilderOpen && isMobile && (
         <div className="fixed inset-0 z-50 flex flex-col" style={{ backgroundColor: 'oklch(0.08 0 0)' }}>
           <div
-            className="flex items-center gap-3 px-4 pt-4 pb-3 flex-none"
+            className="relative flex items-center gap-3 px-4 pt-4 pb-3 flex-none"
             style={{ borderBottom: '1px solid oklch(0.28 0 0)' }}
           >
             <button
@@ -4265,12 +4319,24 @@ function App() {
             <span className="font-mono font-bold text-[13px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
               {'{build}'}
             </span>
+            {/* Same {tutorial} entry as the desktop panel's header — a
+                walkthrough of the query builder, so it lives on the builder
+                itself rather than the homepage. */}
+            <button
+              type="button"
+              onClick={() => setIsTutorialOpen(true)}
+              className="absolute left-1/2 -translate-x-1/2 font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+              style={{ color: 'oklch(0.78 0.18 145)' }}
+            >
+              {'{tutorial}'}
+            </button>
           </div>
           <div className="flex-1 overflow-y-auto px-4 py-4">
             <QueryBuilder
               onRunQuery={handleRunFromBuilder}
               isLoading={isLoading}
               popularPlayers={(leaderboard?.rows ?? []).slice(0, 20).map((r) => ({ player: r.player, team: r.team }))}
+              nflPopularPlayers={nflPopularPlayers}
             />
           </div>
         </div>
@@ -4298,7 +4364,7 @@ function App() {
           }}
         >
           <div
-            className="flex items-center justify-between px-5 py-2.5 cursor-move select-none"
+            className="relative flex items-center justify-between px-5 py-2.5 cursor-move select-none"
             style={{
               backgroundColor: 'oklch(0.18 0 0)',
               borderBottom: '1px solid oklch(0.30 0 0)',
@@ -4317,6 +4383,21 @@ function App() {
                 DRAG TO MOVE
               </span>
             </span>
+            {/* Centered on this header rather than grouped with the site-wide
+                {sample-queries} button — this walks through the query
+                builder specifically, so it belongs on the builder's own
+                panel. Sits over the draggable row, but handleBuilderMouseDown
+                only starts a drag when the mousedown target is the row
+                itself (e.target === e.currentTarget), so clicking this
+                button never triggers a drag. */}
+            <button
+              type="button"
+              onClick={() => setIsTutorialOpen(true)}
+              className="absolute left-1/2 -translate-x-1/2 font-mono font-bold text-[12px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+              style={{ color: 'oklch(0.78 0.18 145)' }}
+            >
+              {'{tutorial}'}
+            </button>
             <button
               onClick={() => setIsBuilderOpen(false)}
               className="font-mono text-[14px] hover:opacity-70 transition-opacity"
@@ -4330,6 +4411,7 @@ function App() {
               onRunQuery={handleRunFromBuilder}
               isLoading={isLoading}
               popularPlayers={(leaderboard?.rows ?? []).slice(0, 20).map((r) => ({ player: r.player, team: r.team }))}
+              nflPopularPlayers={nflPopularPlayers}
             />
           </div>
         </div>
@@ -4348,23 +4430,15 @@ function App() {
         }}
       />
 
-      {/* {tutorial} and {sample-queries}, formerly in the top-right nav —
-          a flex group with gap rather than individually guessed pixel
-          offsets per label, so it doesn't need re-tuning if either label
-          changes length. {glossary} removed (nav entry only — its modal/
-          state is still in this file, just unreachable, same shelve pattern
-          as {sample-commands}/{database} until the tutorial/howto rework
-          replaces it). */}
+      {/* {sample-queries}, formerly in the top-right nav alongside
+          {tutorial} — {tutorial} itself now lives in the query builder
+          panel's own header (it's a walkthrough of the builder, not the
+          site), so this is just the one button now. {glossary} removed
+          (nav entry only — its modal/state is still in this file, just
+          unreachable, same shelve pattern as {sample-commands}/{database}
+          until the tutorial/howto rework replaces it). */}
       {!isMobile && (
         <div className="absolute z-20 flex items-center gap-4" style={{ bottom: '52px', right: '440px' }}>
-          <button
-            type="button"
-            onClick={() => setIsTutorialOpen(true)}
-            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-            style={{ color: 'oklch(0.78 0.18 145)' }}
-          >
-            {'{tutorial}'}
-          </button>
           <button
             type="button"
             onClick={() => setIsSampleQueriesOpen(true)}
@@ -4490,8 +4564,8 @@ function App() {
       )}
 
       {/* Mobile: {nfl.season} sits next to {leaderboard} (desktop has it in the
-          top-right nav); {tutorial} moved to the top-left under
-          {sample-queries}. */}
+          top-right nav); {tutorial} now lives in the query builder panel's
+          own header instead of up here. */}
       {isMobile && (
         <a
           href="/nfl.season"
@@ -4773,17 +4847,25 @@ function App() {
       {/* {hitlist} ticker — border and background now match {leaderboard}'s
           header bar (oklch(0.28 0 0) border, oklch(0.18 0 0) fill) instead
           of a plain 1px line over a transparent strip, which let the
-          starfield show through behind the scrolling text. */}
+          starfield show through behind the scrolling text. Click anywhere on
+          it to pause/resume — pointer-events was 'none' here (the ticker
+          used to just be decorative), switched to 'auto' so the click lands. */}
       <div
-        className="absolute bottom-0 left-0 right-0 z-10 overflow-hidden pointer-events-none border-t"
+        className="absolute bottom-0 left-0 right-0 z-10 overflow-hidden border-t cursor-pointer"
         style={{ borderColor: 'oklch(0.28 0 0)', backgroundColor: 'oklch(0.18 0 0)' }}
+        onClick={() => setIsTickerPaused((p) => !p)}
+        role="button"
+        aria-pressed={isTickerPaused}
+        aria-label={isTickerPaused ? 'Resume ticker' : 'Pause ticker'}
+        title={isTickerPaused ? 'Paused — click to resume' : 'Click to pause'}
       >
         <div
           ref={tickerRef}
-          className="whitespace-nowrap font-mono text-[13px] py-2"
+          className="whitespace-nowrap font-mono text-[13px] py-2 transition-opacity"
           style={{
             color: 'oklch(0.85 0.15 195)',
-            willChange: 'transform'
+            willChange: 'transform',
+            opacity: isTickerPaused ? 0.6 : 1,
           }}
         >
           {tickerText}    ★    {tickerText}    ★    {tickerText}

@@ -7,6 +7,7 @@ import {
 import { stripePromise } from '@/lib/stripe'
 import { PageShell } from './PageShell'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { C } from '@/components/ProfileSections'
 
 interface CheckoutState {
   clientSecret?: string
@@ -45,7 +46,10 @@ export default function CheckoutPage() {
       subtitle="Payments are securely processed by Stripe."
       maxWidth="max-w-2xl"
     >
-      <div className="rounded-lg bg-white p-1">
+      {/* Stripe's embedded checkout renders its own light-themed iframe — the
+          white background is Stripe's, not ours, so it stays; the bordered
+          frame around it is what ties it back into the terminal look. */}
+      <div className="rounded-lg bg-white p-1" style={{ border: `1px solid ${C.border}` }}>
         <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
           <EmbeddedCheckout />
         </EmbeddedCheckoutProvider>
