@@ -13,7 +13,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 interface Profile {
   credits: number
   plan?: string | null
-  api_key?: string | null
   username?: string | null
 }
 
@@ -54,7 +53,7 @@ export default function AccountPage() {
       // this table read already covers it.
       const { data, error } = await supabase
         .from('user_profiles')
-        .select('credits, plan, api_key, username')
+        .select('credits, plan, username')
         .eq('id', user.id)
         .single()
       if (!active) return
@@ -194,12 +193,6 @@ export default function AccountPage() {
           {profile?.plan ? (
             <div className="text-sm text-neutral-400">
               Plan: <span className="text-neutral-100">{profile.plan}</span>
-            </div>
-          ) : null}
-          {profile?.api_key ? (
-            <div className="text-sm text-neutral-400">
-              API key:{' '}
-              <code className="text-neutral-100 break-all">{profile.api_key}</code>
             </div>
           ) : null}
           <Button asChild>
