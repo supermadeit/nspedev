@@ -54,6 +54,7 @@ import {
   extractNflPlayerLegsPayload,
   extractNflOverviewScopesPayload,
   extractNflOverviewStatNPayload,
+  extractNflExplosivePayload,
   isNflExplosivePayload,
   normalizeDisplayPlayer,
   normalizeQueryResults,
@@ -3197,8 +3198,9 @@ function App() {
       }
 
       // NFL explosive (play-by-play long plays)
-      if (isNflExplosivePayload(payload)) {
-        setNflExplosiveResult(payload)
+      const nflExplosivePayload = extractNflExplosivePayload(payload)
+      if (nflExplosivePayload) {
+        setNflExplosiveResult(nflExplosivePayload)
         setQueryResults([])
         return
       }
@@ -4321,11 +4323,15 @@ function App() {
             </span>
             {/* Same {tutorial} entry as the desktop panel's header — a
                 walkthrough of the query builder, so it lives on the builder
-                itself rather than the homepage. */}
+                itself rather than the homepage. Right-aligned (ml-auto)
+                rather than centered like the desktop panel's — centering it
+                here overlapped "‹ back {build}" on a narrow mobile screen,
+                which has much less room to its left than the desktop panel
+                does. */}
             <button
               type="button"
               onClick={() => setIsTutorialOpen(true)}
-              className="absolute left-1/2 -translate-x-1/2 font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+              className="ml-auto font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
               style={{ color: 'oklch(0.78 0.18 145)' }}
             >
               {'{tutorial}'}

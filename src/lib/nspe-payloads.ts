@@ -734,13 +734,42 @@ export interface NflExplosivePayload {
   results: NflExplosiveResult[]
 }
 
+// Plain boolean, not a type predicate — NflExplosivePayload has no index
+// signature, so TS won't accept it as one narrowing a Record<string, unknown>
+// parameter. Callers cast explicitly once they've checked this.
+function matchesNflExplosiveShape(rec: Record<string, unknown>): boolean {
+  const queryHasLong =
+    (Array.isArray(rec.query) && (rec.query as unknown[]).includes('long')) ||
+    (typeof rec.query === 'string' && rec.query.includes('long'))
+  return rec.sport === 'nfl' && queryHasLong && Array.isArray(rec.results)
+}
+
 export function isNflExplosivePayload(payload: unknown): payload is NflExplosivePayload {
   if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
-  const p = payload as Record<string, unknown>
-  const queryHasLong =
-    (Array.isArray(p.query) && (p.query as string[]).includes('long')) ||
-    (typeof p.query === 'string' && p.query.includes('long'))
-  return p.sport === 'nfl' && queryHasLong && Array.isArray(p.results)
+  return matchesNflExplosiveShape(payload as Record<string, unknown>)
+}
+
+// The live /run endpoint wraps every response as {exit_code, output: "<json>
+// <plain-text summary lines>"} (confirmed live for "nfl long rec -yds30
+// -last1/2") — isNflExplosivePayload alone only matches an already-unwrapped
+// shape, which never happens for a real fetch response, so this NFL
+// explosive branch silently never fired and every "long" query fell through
+// to the generic results view instead (whose own match-detail parsing
+// doesn't recognize this command shape, hence the "met=N/N only, no value/
+// date" report). Same output-unwrap pattern every sibling extractXxxPayload
+// in this file already uses.
+export function extractNflExplosivePayload(payload: unknown): NflExplosivePayload | null {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return null
+  const rec = payload as Record<string, unknown>
+  if (matchesNflExplosiveShape(rec)) return rec as unknown as NflExplosivePayload
+  if (typeof rec.output === 'string') {
+    const inner = extractEnvelopeFromText(rec.output)
+    if (inner && typeof inner === 'object' && !Array.isArray(inner)) {
+      const innerRec = inner as Record<string, unknown>
+      if (matchesNflExplosiveShape(innerRec)) return innerRec as unknown as NflExplosivePayload
+    }
+  }
+  return null
 }
 
 // ---------- Explosive-play overview (single player, distance-bucketed) ----------
