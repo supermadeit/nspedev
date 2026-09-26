@@ -677,6 +677,9 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
         // disagree on order (NFL explosive/team-runs come newest-first, MLB
         // HR/first-PA oldest-first; verified live).
         const latest = newestMatch(matchList)
+        // The trend rows carry no row-level `team` — only each match does —
+        // so fall back to the newest match's team, then the player index.
+        const rowTeam = (r.team && r.team !== 'UNK' ? r.team : undefined) ?? latest?.team ?? resolvePlayerTeam(r.player)
         const latestYds = latest ? (Array.isArray(latest.yards_list) ? latest.yards_list.join(', ') : latest.yards) : null
         const latestValue = latest
           ? `${latestYds}yds ${extractDateToken(latest.date_iso ?? latest.date) ?? (latest.date_iso ?? latest.date)}`
@@ -686,9 +689,9 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
             key={i}
             label={
               <>
-                {r.team && r.team !== 'UNK' && (
+                {rowTeam && (
                   <>
-                    <span style={{ color: 'oklch(0.70 0.10 195)' }}>{r.team}</span>
+                    <span style={{ color: 'oklch(0.70 0.10 195)' }}>{rowTeam}</span>
                     <span style={{ color: 'oklch(0.55 0 0)' }}>{' — '}</span>
                   </>
                 )}
@@ -1315,7 +1318,12 @@ function NflOverviewStatNView({ payload, query = '' }: { payload: NflOverviewSta
 
   const player = normalizeDisplayPlayer(payload.query.player)
   const { category, threshold, stat_kind, window_label } = payload.query
-  const windowGames = payload.window ?? payload.games_in_window ?? payload.count
+  // window_games first — without it this fell back to the match count and
+  // read "56/56 games" for a 141-game window.
+  const windowGames = payload.window_games ?? payload.window ?? payload.games_in_window ?? payload.count
+  // mode "long" ("dak long -yds40 -ov"): counts games with a qualifying long
+  // play, plus how many plays / yards those were.
+  const isLong = payload.mode === 'long' || payload.total_plays != null
 
   return (
     <div className="space-y-4 font-mono">
@@ -1324,10 +1332,26 @@ function NflOverviewStatNView({ payload, query = '' }: { payload: NflOverviewSta
           {player}
         </span>
         <span className="text-[12px]" style={{ color: DIM }}>
-          {category} · {payload.scope != null ? scopeLabel(payload.scope) : slotLabelFromQuery(query) || 'full game'} · &ge;{threshold}{stat_kind} · {window_label}
+          {isLong
+            ? `${category} · ${threshold}${stat_kind}+ plays · ${window_label}`
+            : `${category} · ${payload.scope != null ? scopeLabel(payload.scope) : slotLabelFromQuery(query) || 'full game'} · ≥${threshold}${stat_kind} · ${window_label}`}
         </span>
       </div>
 
+      {isLong ? (
+        <div className="text-[13px]" style={{ color: 'oklch(0.76 0 0)' }}>
+          <span className="font-bold" style={{ color: CYAN }}>{`${payload.count}/${windowGames}`}</span>
+          <span> games with a qualifying play</span>
+          {(payload.total_plays != null || payload.total_yards != null) && (
+            <span style={{ color: DIM }}>
+              {` (${[
+                payload.total_plays != null && `${payload.total_plays} total plays`,
+                payload.total_yards != null && `${payload.total_yards.toLocaleString()} yards`,
+              ].filter(Boolean).join(', ')})`}
+            </span>
+          )}
+        </div>
+      ) : (
       <div className="flex flex-wrap gap-5 text-[12px]">
         <div>
           <div className="text-[9px] uppercase tracking-wider" style={{ color: DIM }}>Games</div>
@@ -1338,6 +1362,7 @@ function NflOverviewStatNView({ payload, query = '' }: { payload: NflOverviewSta
           <div className="text-[16px] font-bold" style={{ color: CYAN }}>{windowGames}</div>
         </div>
       </div>
+      )}
 
       {payload.matches.length > 0 && (
         <ResultRow
@@ -1357,7 +1382,16 @@ function NflOverviewStatNView({ payload, query = '' }: { payload: NflOverviewSta
                 </>
               )}
               <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
-              <span style={{ color: CYAN }}>{m.value ?? m.val}{stat_kind}</span>
+              {isLong && m.plays != null && m.yards != null ? (
+                <>
+                  <span style={{ color: CYAN }}>{`${m.plays} play${m.plays === 1 ? '' : 's'} · ${m.yards}${stat_kind}`}</span>
+                  {m.plays > 1 && m.value != null && (
+                    <span style={{ color: DIM }}>{` (longest ${m.value})`}</span>
+                  )}
+                </>
+              ) : (
+                <span style={{ color: CYAN }}>{m.value ?? m.val}{stat_kind}</span>
+              )}
             </div>
           ))}
         </ResultRow>
@@ -3362,6 +3396,8 @@ function stripSportPrefix(value: string): { sport?: string; rest: string } {
   return { sport, rest: tokens.slice(i).join(' ') }
 }
 
+const resultCountText = (n: number) => `${n} result${n === 1 ? '' : 's'}`
+
 const MINI_DEFAULT_W = 720
 const MINI_MIN_W = 420
 const MINI_MIN_H = 240
@@ -4784,7 +4820,7 @@ function App() {
                 : playerReportResult
                 ? `${lastQuery} — player report`
                 : nflExplosiveResult
-                ? `${lastQuery} — explosive`
+                ? `${lastQuery} — explosive · ${resultCountText(nflExplosiveResult.results.length)}`
                 : parlayResult
                 ? `${lastQuery} — parlay`
                 : playerLegsResult
@@ -4806,11 +4842,11 @@ function App() {
                 : statsOverviewResult || mlbOverviewResult
                 ? `${lastQuery} — overview`
                 : hrResult
-                ? `${lastQuery} — hr`
+                ? `${lastQuery} — hr · ${resultCountText(hrResult.results.length)}`
                 : firstPaResult
-                ? `${lastQuery} — first pa`
+                ? `${lastQuery} — first pa · ${resultCountText(firstPaResult.results.length)}`
                 : teamRunsResult
-                ? `${lastQuery} — team runs`
+                ? `${lastQuery} — team runs · ${resultCountText(teamRunsResult.results.length)}`
                 : queryResults
                 ? `${lastQuery} — ${queryResults.length}results`
                 : 'NSPE — Command Legend'}
@@ -5295,7 +5331,11 @@ function App() {
               search a player or type: nspe
             </p>
             {/* Desktop only — mobile keeps {sample-queries} in the top-left
-                stack. Moved here from the bottom-right group. */}
+                stack. Moved here from the bottom-right group. The bar keeps
+                "nspe" from reading as "nspe {sample-queries}". */}
+            {!isMobile && (
+              <span aria-hidden="true" className="font-mono text-[14px] -mx-2" style={{ color: 'oklch(0.45 0 0)' }}>|</span>
+            )}
             {!isMobile && (
               <button
                 type="button"

@@ -699,6 +699,9 @@ export interface NflExplosiveMatch {
   date_iso?: string
   yards: number
   opponent?: string
+  // Per-match team code — the row itself carries no `team` on the trend shape
+  // (only each match does), so the view reads it from here.
+  team?: string
   receiver?: string
   passer?: string
   touchdown?: boolean
@@ -992,6 +995,10 @@ export interface NflOverviewStatNMatch {
   opponent: string
   date_iso?: string
   date?: string
+  // mode "long" ("dak long -yds40 -ov"): value is the game's longest
+  // qualifying play; plays/yards are the count and summed yards of them.
+  plays?: number
+  yards?: number
 }
 
 export interface NflOverviewStatNPayload {
@@ -1003,8 +1010,15 @@ export interface NflOverviewStatNPayload {
   scope?: string
   query: { player: string; category: string; threshold: number; stat_kind: string; window_label: string }
   count: number
+  // Games in the window ("56/141"). Newer responses send window_games; older
+  // ones window / games_in_window depending on the scope.
+  window_games?: number
   window?: number
   games_in_window?: number
+  // mode "long": total qualifying plays / yards across the counted games.
+  total_plays?: number
+  total_yards?: number
+  coverage_note?: string | null
   matches: NflOverviewStatNMatch[]
 }
 
