@@ -1,11 +1,13 @@
-import { useState, useEffect, useMemo, useRef, type ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { createContext, isValidElement, useContext, useState, useEffect, useLayoutEffect, useMemo, useRef, type ReactNode } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import hitlistData from '@/assets/data/hitlist.json'
 import leaderboardData from '@/assets/data/leaderboard.json'
 import nflLeaderboardData from '@/assets/data/nfl-leaderboard.json'
 import madeitLogo from '@/assets/images/madeit-tech-logo-v2.jpeg'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { useAuth } from '@/context/AuthContext'
+import { PocketsModal } from '@/components/PocketsModal'
+import { PocketError, getPocket, savePocket, type Pocket } from '@/lib/pockets'
 import { useUsername } from '@/hooks/useUsername'
 import { QueryBuilder, clearPersistedBuilderState } from '@/components/QueryBuilder'
 import { QueryBuilderTutorial } from '@/components/QueryBuilderTutorial'
@@ -25,6 +27,7 @@ import {
 } from '@/lib/syntaxSuggestions'
 import { authHeader } from '@/lib/auth-token'
 import {
+  type ApiPayload,
   asNumber,
   fetchFirstSuccessful,
   formatQueryError,
@@ -54,6 +57,7 @@ import {
   extractNflPlayerLegsPayload,
   extractNflOverviewScopesPayload,
   extractNflOverviewStatNPayload,
+  extractOverviewStatNPayload,
   extractNflExplosivePayload,
   isNflExplosivePayload,
   normalizeDisplayPlayer,
@@ -83,6 +87,7 @@ import {
   type NflPlayerLegsPayload,
   type NflOverviewScopesPayload,
   type NflOverviewStatNPayload,
+  type OverviewStatNPayload,
   type NflExplosivePayload,
   type QueryResult,
 } from '@/lib/nspe-payloads'
@@ -398,6 +403,24 @@ function parseExplosiveThreshold(query: string | string[]): number | null {
   return m ? parseInt(m[1], 10) : null
 }
 
+// Newest match in a per-game list, chosen by date rather than position —
+// backend engines don't agree on ordering (verified live: NFL explosive and
+// MLB team-runs matches come newest-first, MLB HR and first-PA come
+// oldest-first). Falls back to the last element if no dates parse.
+function newestMatch<T extends { date?: string; date_iso?: string }>(list: T[]): T | null {
+  if (list.length === 0) return null
+  let best = list[list.length - 1]
+  let bestTime = Date.parse(best.date_iso ?? best.date ?? '')
+  for (const m of list) {
+    const t = Date.parse(m.date_iso ?? m.date ?? '')
+    if (!Number.isNaN(t) && (Number.isNaN(bestTime) || t > bestTime)) {
+      best = m
+      bestTime = t
+    }
+  }
+  return best
+}
+
 // "met=N" alone drops the window it was measured against — "met=2" reads
 // very differently depending on whether the window was -last2/3 or
 // -last2/10. Appending "/window" whenever the window size is known keeps
@@ -488,6 +511,33 @@ function useExpandableRows() {
   return { isExpanded: (i: number) => expanded.has(i), toggle }
 }
 
+// Results filter — the text typed into the results panel's filter box. Every
+// ResultRow reads it and hides itself when its label (player/team text) doesn't
+// match, so all row-based views get filtering without each one being wired up.
+const ResultsFilterContext = createContext('')
+
+// Plain text of a row label (labels are fragments of spans + strings).
+function nodeText(node: ReactNode): string {
+  if (node == null || typeof node === 'boolean') return ''
+  if (typeof node === 'string' || typeof node === 'number') return String(node)
+  if (Array.isArray(node)) return node.map(nodeText).join('')
+  if (isValidElement<{ children?: ReactNode }>(node)) return nodeText(node.props.children)
+  return ''
+}
+
+function normalizeFilterText(text: string): string {
+  return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+}
+
+// Every whitespace-separated term must appear (any order), so "judge nyy"
+// finds Aaron Judge on the Yankees and "mahomes" finds him anywhere.
+function rowMatchesFilter(filter: string, text: string): boolean {
+  const terms = normalizeFilterText(filter).split(/\s+/).filter(Boolean)
+  if (terms.length === 0) return true
+  const haystack = normalizeFilterText(text)
+  return terms.every((t) => haystack.includes(t))
+}
+
 // One shared row shell for every "one entity + a headline stat badge + an
 // optional expandable per-game breakdown" result — the shape every trend
 // AND compute engine in this app actually has. Centralizing it is what makes
@@ -505,6 +555,7 @@ function ResultRow({
   expanded,
   onToggle,
   ariaLabel,
+  filterable = true,
   children,
 }: {
   label: ReactNode
@@ -514,10 +565,39 @@ function ResultRow({
   expanded?: boolean
   onToggle?: () => void
   ariaLabel?: string
+  /** false for rows that aren't a player/team (e.g. a "N of M games" toggle) —
+   * they ignore the results filter and don't count toward its totals. */
+  filterable?: boolean
   children?: ReactNode
 }) {
+  const filter = useContext(ResultsFilterContext)
+  if (!filterable) {
+    return (
+      <div className="py-2 border-b" style={{ borderColor: PITCH_BORDER }}>
+        <div className="flex flex-wrap items-start gap-x-3 gap-y-1">
+          <span className="font-mono text-[13px] min-w-0" style={{ color: PITCH_ACCENT }}>
+            {label}
+          </span>
+          <TrendBadge
+            header={badgeHeader}
+            value={badgeValue}
+            expanded={expanded}
+            onToggle={onToggle}
+            accent={accent}
+            ariaLabel={ariaLabel}
+          />
+        </div>
+        {expanded && children && <div className="mt-2 space-y-1.5 pl-2">{children}</div>}
+      </div>
+    )
+  }
+  // Filtered-out rows leave a hidden marker (not nothing) so the panel can
+  // count "shown of total" straight from the DOM.
+  if (filter && !rowMatchesFilter(filter, nodeText(label))) {
+    return <div hidden data-result-row="hidden" />
+  }
   return (
-    <div className="py-2 border-b" style={{ borderColor: PITCH_BORDER }}>
+    <div className="py-2 border-b" data-result-row="shown" style={{ borderColor: PITCH_BORDER }}>
       <div className="flex flex-wrap items-start gap-x-3 gap-y-1">
         <span className="font-mono text-[13px] min-w-0" style={{ color: PITCH_ACCENT }}>
           {label}
@@ -585,12 +665,10 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
         const matchList = r.matches ?? []
         const metCount = r.met_count ?? r.met ?? matchList.length
         const metLabel = formatMet(metCount, r.window)
-        // matches arrays come back newest-first (same convention as every
-        // other engine — see format-hitlist.mjs's matches[0] comment) — the
-        // "latest" game is the first element, not the last. This used to
-        // read the last element instead, which silently showed the OLDEST
-        // qualifying game's date/value labeled "latest".
-        const latest = matchList.length > 0 ? matchList[0] : null
+        // Pick the newest match by date, not by array position — engines
+        // disagree on order (NFL explosive/team-runs come newest-first, MLB
+        // HR/first-PA oldest-first; verified live).
+        const latest = newestMatch(matchList)
         const latestYds = latest ? (Array.isArray(latest.yards_list) ? latest.yards_list.join(', ') : latest.yards) : null
         const latestValue = latest
           ? `${latestYds}yds ${extractDateToken(latest.date_iso ?? latest.date) ?? (latest.date_iso ?? latest.date)}`
@@ -1256,6 +1334,7 @@ function NflOverviewStatNView({ payload, query = '' }: { payload: NflOverviewSta
       {payload.matches.length > 0 && (
         <ResultRow
           label={`${payload.count} of ${windowGames} games`}
+          filterable={false}
           badgeValue={isExpanded(0) ? 'hide' : 'view'}
           expanded={isExpanded(0)}
           onToggle={() => toggle(0)}
@@ -1273,6 +1352,162 @@ function NflOverviewStatNView({ payload, query = '' }: { payload: NflOverviewSta
               <span style={{ color: CYAN }}>{m.value ?? m.val}{stat_kind}</span>
             </div>
           ))}
+        </ResultRow>
+      )}
+    </div>
+  )
+}
+
+// ---------- Stat-threshold overview view (-statN -ov, MLB / NBA / NHL) ----------
+// Mirrors the backend's text form:
+//   Connor McDavid | 3+ PTS | window: career | regular season
+//   17/82 games (total 138 PTS, last match 2026-04-16)
+//   Data on file: 2025-26 (1 season, regular season) -- ...
+// Stat labels come from the payload when the backend sends one (MLB's
+// `stat_label`, moving from "2B" to "doubles"); the maps only cover keys that
+// still arrive raw.
+const MLB_STAT_CODE_LABELS: Record<string, string> = {
+  '2B': 'doubles',
+  '3B': 'triples',
+  HR: 'home runs',
+  H: 'hits',
+  R: 'runs',
+  RBI: 'rbis',
+  BB: 'walks',
+  SO: 'strikeouts',
+  SB: 'stolen bases',
+  TB: 'total bases',
+}
+
+// Box-score column keys (NBA/NHL) -> short labels for headers and game rows.
+const BOX_STAT_LABELS: Record<string, string> = {
+  points: 'PTS',
+  rebounds: 'REB',
+  assists: 'AST',
+  three_made: '3PM',
+  steals: 'STL',
+  blocks: 'BLK',
+  toi: 'MIN',
+  goals: 'G',
+  shots_on_goal: 'SOG',
+  plus_minus: '+/-',
+  ppg: 'PPG',
+  ppa: 'PPA',
+  gwg: 'GWG',
+}
+
+function boxStatLabel(key: string): string {
+  return BOX_STAT_LABELS[key] ?? key.replace(/_/g, ' ')
+}
+
+const OVERVIEW_GAME_META_KEYS = new Set(['date', 'date_iso', 'season', 'game_id', 'opponent', 'result', 'outcome', 'value'])
+
+function OverviewStatNGenericView({ payload }: { payload: OverviewStatNPayload }) {
+  const { isExpanded, toggle } = useExpandableRows()
+  const CYAN = 'oklch(0.85 0.15 195)'
+  const CYAN_BRIGHT = 'oklch(0.90 0.18 195)'
+  const DIM = 'oklch(0.55 0 0)'
+  const BORDER = 'oklch(0.22 0 0)'
+
+  const q = payload.query
+  const player = normalizeDisplayPlayer(q.player)
+  const thresholds = q.thresholds ?? []
+  const thresholdKeys = new Set(thresholds.map((t) => t.stat))
+  // MLB's original shape names one stat; NBA/NHL send a thresholds list.
+  const mlbLabel = q.stat_label ?? (q.stat ? (MLB_STAT_CODE_LABELS[q.stat] ?? q.stat) : '')
+  const criteria = thresholds.length > 0
+    ? thresholds.map((t) => `${t.min}+ ${boxStatLabel(t.stat)}`).join(' & ')
+    : `${mlbLabel}${(q.threshold ?? 1) > 1 ? ` · ${q.threshold}+ per game` : ''}`
+  // Total(s) across the qualifying games, labeled per stat.
+  const totalText = payload.totals && Object.keys(payload.totals).length > 0
+    ? Object.entries(payload.totals).map(([k, v]) => `${v} ${boxStatLabel(k)}`).join(', ')
+    : payload.total != null
+    ? `${payload.total} ${mlbLabel}`
+    : ''
+  // Compact averages line: the stat's average in the games that qualified, and
+  // the season average when the backend sends it.
+  const avgParts: string[] = []
+  if (payload.avg_in_matches) {
+    const inMatches = Object.entries(payload.avg_in_matches).map(([k, v]) => `${v} ${boxStatLabel(k)}`).join(', ')
+    if (inMatches) avgParts.push(`avg ${inMatches} when met`)
+  }
+  if (payload.season_avg != null) avgParts.push(`season avg ${Number(payload.season_avg.toFixed(2))}`)
+  const avgText = avgParts.join(' · ')
+  // "-- earlier seasons are not in the scrape yet" is backend-internal; the
+  // "2025-26 (1 season, regular season)" part is all the reader needs.
+  const coverageLines = (payload.coverage ?? []).map((line) =>
+    line.replace(/\s*--\s*earlier seasons are not in the scrape yet\.?/i, ''),
+  )
+  const valueLabel = thresholds.length === 1 ? boxStatLabel(thresholds[0].stat) : (q.stat ?? '')
+  const games = payload.results
+  const latest = newestMatch(games)
+  const latestDate = latest ? (extractDateToken(latest.date_iso) ?? latest.date_iso) : null
+  const lastText = latest ? `last match ${latestDate}${latest.opponent ? ` ${latest.opponent}` : ''}` : ''
+
+  return (
+    <div className="space-y-4 font-mono">
+      <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 pb-2" style={{ borderBottom: `1px solid ${BORDER}` }}>
+        <span className="text-[14px] font-bold" style={{ color: CYAN_BRIGHT }}>{player}</span>
+        <span className="text-[12px]" style={{ color: DIM }}>
+          {criteria} · window: {q.window_label}
+          {q.source ? ` · ${q.source}` : ''}
+        </span>
+      </div>
+
+      <div className="text-[13px]" style={{ color: 'oklch(0.76 0 0)' }}>
+        <span className="font-bold" style={{ color: CYAN }}>{`${payload.count}/${payload.window_games}`}</span>
+        <span> games</span>
+        {(totalText || lastText) && (
+          <span style={{ color: DIM }}>{` (${[totalText && `total ${totalText}`, lastText].filter(Boolean).join(', ')})`}</span>
+        )}
+        {payload.pct_of_games != null && (
+          <span style={{ color: DIM }}>{` · ${payload.pct_of_games}%`}</span>
+        )}
+      </div>
+
+      {avgText && (
+        <div className="text-[12px]" style={{ color: DIM }}>{avgText}</div>
+      )}
+
+      {coverageLines.length > 0 && (
+        <div className="space-y-0.5 text-[11px]" style={{ color: DIM }}>
+          {coverageLines.map((line, i) => (
+            <div key={i}>{line}</div>
+          ))}
+        </div>
+      )}
+
+      {games.length > 0 && (
+        <ResultRow
+          label={`${payload.count} of ${payload.window_games} games`}
+          filterable={false}
+          badgeValue={isExpanded(0) ? 'hide' : 'view'}
+          expanded={isExpanded(0)}
+          onToggle={() => toggle(0)}
+        >
+          {games.map((g, j) => {
+            const box = Object.entries(g).filter(
+              ([k, v]) => !OVERVIEW_GAME_META_KEYS.has(k) && !thresholdKeys.has(k) && typeof v === 'number',
+            )
+            return (
+              <div key={g.game_id ?? j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+                <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(g.date_iso) ?? g.date_iso}</span>
+                {g.opponent && <span style={{ color: 'oklch(0.75 0.08 220)' }}>{` ${g.opponent}`}</span>}
+                {g.result && (
+                  <span style={{ color: g.outcome === 'W' ? 'oklch(0.78 0.18 145)' : g.outcome === 'L' ? 'oklch(0.70 0.15 25)' : 'oklch(0.55 0 0)' }}>
+                    {` ${g.result}`}
+                  </span>
+                )}
+                <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                <span style={{ color: CYAN }}>{`${g.value} ${valueLabel}`.trim()}</span>
+                {box.length > 0 && (
+                  <span style={{ color: 'oklch(0.55 0 0)' }}>
+                    {` · ${box.map(([k, v]) => `${v} ${boxStatLabel(k)}`).join(', ')}`}
+                  </span>
+                )}
+              </div>
+            )
+          })}
         </ResultRow>
       )}
     </div>
@@ -1343,12 +1578,10 @@ function MlbHrView({ payload }: { payload: MlbHrPayload }) {
         const matchList = r.matches ?? []
         const metCount = r.met_count ?? matchList.length
         const metLabel = formatMet(metCount, r.window)
-        // matches arrays come back newest-first (same convention as every
-        // other engine — see format-hitlist.mjs's matches[0] comment) — the
-        // "latest" game is the first element, not the last. This used to
-        // read the last element instead, which silently showed the OLDEST
-        // qualifying game's date/value labeled "latest".
-        const latest = matchList.length > 0 ? matchList[0] : null
+        // Pick the newest match by date, not by array position — engines
+        // disagree on order (NFL explosive/team-runs come newest-first, MLB
+        // HR/first-PA oldest-first; verified live).
+        const latest = newestMatch(matchList)
         const latestValue = latest ? `${latest.distance_feet}ft ${extractDateToken(latest.date) ?? latest.date}` : null
         return (
           <ResultRow
@@ -1407,12 +1640,10 @@ function MlbFirstPaTrendView({ payload }: { payload: MlbFirstPaTrendPayload }) {
         const matchList = r.matches ?? []
         const metCount = r.met_count ?? matchList.length
         const metLabel = formatMet(metCount, r.window)
-        // matches arrays come back newest-first (same convention as every
-        // other engine — see format-hitlist.mjs's matches[0] comment) — the
-        // "latest" game is the first element, not the last. This used to
-        // read the last element instead, which silently showed the OLDEST
-        // qualifying game's date/value labeled "latest".
-        const latest = matchList.length > 0 ? matchList[0] : null
+        // Pick the newest match by date, not by array position — engines
+        // disagree on order (NFL explosive/team-runs come newest-first, MLB
+        // HR/first-PA oldest-first; verified live).
+        const latest = newestMatch(matchList)
         const latestValue = latest
           ? `${latest.result}${latest.distance_feet != null ? ` (${latest.distance_feet}ft)` : ''} ${extractDateToken(latest.date) ?? latest.date}`
           : null
@@ -1500,12 +1731,10 @@ function MlbTeamRunsView({ payload }: { payload: MlbTeamRunsPayload }) {
         const matchList = r.matches ?? []
         const metCount = r.met_count ?? matchList.length
         const metLabel = formatMet(metCount, r.window)
-        // matches arrays come back newest-first (same convention as every
-        // other engine — see format-hitlist.mjs's matches[0] comment) — the
-        // "latest" game is the first element, not the last. This used to
-        // read the last element instead, which silently showed the OLDEST
-        // qualifying game's date/value labeled "latest".
-        const latest = matchList.length > 0 ? matchList[0] : null
+        // Pick the newest match by date, not by array position — engines
+        // disagree on order (NFL explosive/team-runs come newest-first, MLB
+        // HR/first-PA oldest-first; verified live).
+        const latest = newestMatch(matchList)
         const latestValue = latest
           ? `${latest.runs_for}-${latest.runs_allowed} ${extractDateToken(latest.date_iso) ?? latest.date_iso}`
           : null
@@ -2748,6 +2977,10 @@ function stripSportPrefix(value: string): { sport?: string; rest: string } {
   return { sport, rest: tokens.slice(i).join(' ') }
 }
 
+const MINI_DEFAULT_W = 720
+const MINI_MIN_W = 420
+const MINI_MIN_H = 240
+
 function App() {
   const [stars, setStars] = useState<Star[]>([])
   const [searchValue, setSearchValue] = useState('')
@@ -2756,10 +2989,37 @@ function App() {
   const [isTutorialOpen, setIsTutorialOpen] = useState(false)
   const [isSampleDemoOpen, setIsSampleDemoOpen] = useState(false)
   const [isSampleQueriesOpen, setIsSampleQueriesOpen] = useState(false)
-  const [miniPosition, setMiniPosition] = useState({
-    x: window.innerWidth / 2 - 310,
-    y: Math.max(80, Math.floor((window.innerHeight - window.innerHeight * 0.62) / 2)),
+  // Desktop results window: default is a little larger than it used to be
+  // (720 wide, up to 74vh tall) and the bottom-right grip resizes it. height
+  // stays null until the user drags, so it auto-sizes to its content.
+  const [miniSize, setMiniSize] = useState<{ w: number; h: number | null }>(() => {
+    try {
+      const raw = window.localStorage.getItem('nspe.resultsWindowSize')
+      if (raw) {
+        const parsed = JSON.parse(raw) as { w?: unknown; h?: unknown }
+        if (typeof parsed.w === 'number' && (parsed.h === null || typeof parsed.h === 'number')) {
+          return {
+            w: Math.min(Math.max(parsed.w, MINI_MIN_W), window.innerWidth - 16),
+            h: parsed.h === null ? null : Math.min(Math.max(parsed.h as number, MINI_MIN_H), window.innerHeight - 16),
+          }
+        }
+      }
+    } catch {
+      // storage unavailable — fall through to the default
+    }
+    return { w: MINI_DEFAULT_W, h: null }
   })
+  const [miniPosition, setMiniPosition] = useState({
+    x: Math.max(8, window.innerWidth / 2 - miniSize.w / 2),
+    y: Math.max(80, Math.floor((window.innerHeight - window.innerHeight * 0.74) / 2)),
+  })
+  const [isResizing, setIsResizing] = useState(false)
+  const resizeStartRef = useRef({ x: 0, y: 0, w: 0, h: 0 })
+  // Results filter box (player / team text) + "shown of total" counts read
+  // back from the rendered rows.
+  const [resultsFilter, setResultsFilter] = useState('')
+  const [rowCounts, setRowCounts] = useState({ shown: 0, total: 0 })
+  const resultsScrollRef = useRef<HTMLDivElement>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const [queryResults, setQueryResults] = useState<QueryResult[] | null>(null)
@@ -2778,6 +3038,16 @@ function App() {
   const [reportLeaderboardResult, setReportLeaderboardResult] = useState<MlbReportLeaderboardPayload | null>(null)
   const [playerReportResult, setPlayerReportResult] = useState<MlbPlayerReportPayload | null>(null)
   const [nflExplosiveResult, setNflExplosiveResult] = useState<NflExplosivePayload | null>(null)
+  // Pockets — the last /run payload (raw, so it can be saved and replayed
+  // through applyPayload), whether the panel is currently showing a saved
+  // snapshot rather than a live result, and the {pocket} button's status.
+  const [lastPayload, setLastPayload] = useState<ApiPayload | null>(null)
+  const [pocketSnapshot, setPocketSnapshot] = useState<{ savedAt: string } | null>(null)
+  const [isPocketsOpen, setIsPocketsOpen] = useState(false)
+  const [pocketsRefreshKey, setPocketsRefreshKey] = useState(0)
+  const [pocketNote, setPocketNote] = useState<{ text: string; ok: boolean } | null>(null)
+  const [isSavingPocket, setIsSavingPocket] = useState(false)
+  const { id: sharedPocketId } = useParams<{ id: string }>()
   const [explosiveOverviewResult, setExplosiveOverviewResult] = useState<ExplosiveOverviewPayload | null>(null)
   const [parlayResult, setParlayResult] = useState<NflParlayPayload | null>(null)
   const [playerLegsResult, setPlayerLegsResult] = useState<NflPlayerLegsPayload | null>(null)
@@ -2785,6 +3055,7 @@ function App() {
   const [teamSlotsResult, setTeamSlotsResult] = useState<NflTeamSlotsPayload | null>(null)
   const [overviewScopesResult, setOverviewScopesResult] = useState<NflOverviewScopesPayload | null>(null)
   const [overviewStatNResult, setOverviewStatNResult] = useState<NflOverviewStatNPayload | null>(null)
+  const [overviewStatNGenericResult, setOverviewStatNGenericResult] = useState<OverviewStatNPayload | null>(null)
   const [hrResult, setHrResult] = useState<MlbHrPayload | null>(null)
   const [firstPaResult, setFirstPaResult] = useState<MlbFirstPaTrendPayload | null>(null)
   const [teamRunsResult, setTeamRunsResult] = useState<MlbTeamRunsPayload | null>(null)
@@ -3050,12 +3321,10 @@ function App() {
     return () => cancelAnimationFrame(rafId)
   }, [tickerText])
 
-  const runQuery = async (query: string) => {
-    const sanitizedQuery = sanitizeQueryForApi(query)
-
-    setIsLoading(true)
-    setLastQuery(sanitizedQuery || query.trim())
-    setQueryError(null)
+  // Clears every result view's state — a fresh query, or opening a saved
+  // pocket, starts from nothing so two views can never render at once.
+  const resetResultState = () => {
+    setResultsFilter('')
     setExpandedPlayers({})
     setIsH2hStaffOpen(false)
     setH2hResult(null)
@@ -3075,9 +3344,290 @@ function App() {
     setTeamSlotsResult(null)
     setOverviewScopesResult(null)
     setOverviewStatNResult(null)
+    setOverviewStatNGenericResult(null)
     setHrResult(null)
     setFirstPaResult(null)
     setTeamRunsResult(null)
+  }
+
+  // Routes a parsed /run payload to whichever result view it belongs to.
+  // Split out of runQuery so a saved pocket (a stored payload) replays
+  // through exactly the same routing as a live query.
+  const applyPayload = (payload: ApiPayload, sanitizedQuery: string) => {
+    const h2hPayload = extractH2hPayload(payload)
+    if (h2hPayload) {
+      setH2hResult(h2hPayload)
+      setQueryResults([])
+      // -staff carries a real table's worth of extra data (a pitcher-by-
+      // pitcher breakdown) that doesn't fit the compact floating results
+      // panel — escalate to the full-screen overlay instead. Plain h2h
+      // (no staff_breakdown) keeps using the panel unchanged, since it
+      // already reads fine there.
+      if (h2hPayload.staff_breakdown) {
+        setIsMiniOpen(false)
+        setIsH2hStaffOpen(true)
+      }
+      return
+    }
+
+    const matchupPayload = extractMatchupInsightPayload(payload)
+    if (matchupPayload) {
+      setMatchupResult(matchupPayload)
+      setQueryResults([])
+      setIsMiniOpen(false)
+      setIsMatchupOpen(true)
+      return
+    }
+
+    const pitchPayload = extractMlbPitchH2hPayload(payload)
+    if (pitchPayload) {
+      setPitchResult(pitchPayload)
+      setQueryResults([])
+      return
+    }
+
+    const fpvPayload = extractMlbPitchFpvPayload(payload)
+    if (fpvPayload) {
+      setFpvResult(fpvPayload)
+      setQueryResults([])
+      return
+    }
+
+    const batTeamPayload = extractMlbBatTeamPayload(payload)
+    if (batTeamPayload) {
+      setBatTeamResult(batTeamPayload)
+      setQueryResults([])
+      return
+    }
+
+    const teamOverviewPayload = extractMlbTeamOverviewPayload(payload)
+    if (teamOverviewPayload) {
+      setTeamOverviewResult(teamOverviewPayload)
+      setQueryResults([])
+      return
+    }
+
+    const reportLeaderboardPayload = extractMlbReportLeaderboardPayload(payload)
+    if (reportLeaderboardPayload) {
+      setReportLeaderboardResult(reportLeaderboardPayload)
+      setQueryResults([])
+      return
+    }
+
+    const playerReportPayload = extractMlbPlayerReportPayload(payload)
+    if (playerReportPayload) {
+      setPlayerReportResult(playerReportPayload)
+      setQueryResults([])
+      return
+    }
+
+    const hrPayload = extractMlbHrPayload(payload)
+    if (hrPayload) {
+      setHrResult(hrPayload)
+      setQueryResults([])
+      return
+    }
+
+    const firstPaPayload = extractMlbFirstPaTrendPayload(payload)
+    if (firstPaPayload) {
+      setFirstPaResult(firstPaPayload)
+      setQueryResults([])
+      return
+    }
+
+    const teamRunsPayload = extractMlbTeamRunsPayload(payload)
+    if (teamRunsPayload) {
+      setTeamRunsResult(teamRunsPayload)
+      setQueryResults([])
+      return
+    }
+
+    // NFL explosive (play-by-play long plays)
+    const nflExplosivePayload = extractNflExplosivePayload(payload)
+    if (nflExplosivePayload) {
+      setNflExplosiveResult(nflExplosivePayload)
+      setQueryResults([])
+      return
+    }
+
+    // NFL parlay builder / single-player legs
+    const parlayPayload = extractNflParlayPayload(payload)
+    if (parlayPayload) {
+      setParlayResult(parlayPayload)
+      setQueryResults([])
+      return
+    }
+    const playerLegsPayload = extractNflPlayerLegsPayload(payload)
+    if (playerLegsPayload) {
+      setPlayerLegsResult(playerLegsPayload)
+      setQueryResults([])
+      return
+    }
+
+    // NFL primetime slots (player table / team record)
+    const playerSlotsPayload = extractNflPlayerSlotsPayload(payload)
+    if (playerSlotsPayload) {
+      setPlayerSlotsResult(playerSlotsPayload)
+      setQueryResults([])
+      return
+    }
+    const teamSlotsPayload = extractNflTeamSlotsPayload(payload)
+    if (teamSlotsPayload) {
+      setTeamSlotsResult(teamSlotsPayload)
+      setQueryResults([])
+      return
+    }
+
+    // NFL explosive-play overview (single player, distance-bucketed bar chart)
+    const explosiveOverviewPayload = extractExplosiveOverviewPayload(payload)
+    if (explosiveOverviewPayload) {
+      setExplosiveOverviewResult(explosiveOverviewPayload)
+      setQueryResults([])
+      return
+    }
+
+    // NFL q1/1h overview (flat per-game totals, no distance buckets — see
+    // nspe-payloads.ts's comment on why this isn't part of the engine
+    // family above despite sharing the "-ov" command suffix)
+    const overviewScopesPayload = extractNflOverviewScopesPayload(payload)
+    if (overviewScopesPayload) {
+      setOverviewScopesResult(overviewScopesPayload)
+      setQueryResults([])
+      return
+    }
+
+    // NFL -statN overview (e.g. "nfl dak 1h -yds150 -ov -career") — a
+    // third -ov shape, single player/threshold with its own match list,
+    // not a generic trend row (see nspe-payloads.ts's comment)
+    const overviewStatNPayload = extractNflOverviewStatNPayload(payload)
+    if (overviewStatNPayload) {
+      setOverviewStatNResult(overviewStatNPayload)
+      setQueryResults([])
+      return
+    }
+
+    // MLB -statN overview (e.g. "mlb yordan -dub1 -ov 2020-2026")
+    const mlbOverviewStatNPayload = extractOverviewStatNPayload(payload)
+    if (mlbOverviewStatNPayload) {
+      setOverviewStatNGenericResult(mlbOverviewStatNPayload)
+      setQueryResults([])
+      return
+    }
+
+    // Block non-explosive NFL queries that the REST API routes to the wrong
+    // handler. The response arrives as {exit_code, output: "json_string"} where
+    // the inner JSON has an array query without "long" and threshold: 0 for all
+    // results. Intercept before normalizeQueryResults shows garbage players.
+    if (!Array.isArray(payload) && payload && typeof payload === 'object') {
+      const outputStr = (payload as Record<string, unknown>).output
+      if (typeof outputStr === 'string') {
+        try {
+          const inner = JSON.parse(outputStr) as Record<string, unknown>
+          const _inner = inner // reserved for future envelope checks
+          void _inner
+        } catch { /* output is not JSON */ }
+      }
+    }
+
+    const normalized = normalizeQueryResults(payload, sanitizedQuery)
+    const enriched = normalized.map((r) =>
+      r.team ? r : { ...r, team: resolvePlayerTeam(r.player) }
+    )
+    const payloadError = getPayloadError(payload)
+    const statCtx = detectStatContext(payload, sanitizedQuery)
+    setQueryResultsStatLabel(statCtx ? statCtx.unitLabel ?? statDisplayLabel(statCtx.sport, statCtx.stat) : '')
+    setQueryResults(enriched)
+
+    if (payloadError) {
+      setQueryError(payloadError)
+    } else if (normalized.length === 0) {
+      // If backend returned plain stdout with no structured envelope, surface it.
+      const rec = (payload && typeof payload === 'object' && !Array.isArray(payload))
+        ? (payload as Record<string, unknown>)
+        : null
+      const stdout = rec && typeof rec.output === 'string' ? rec.output.trim() : ''
+      setQueryError(stdout || 'Connected to API, but response contained no recognizable result rows.')
+    }
+  }
+
+  const flashPocketNote = (text: string, ok: boolean) => {
+    setPocketNote({ text, ok })
+    window.setTimeout(() => setPocketNote(null), 2600)
+  }
+
+  // {pocket}/{pockets} need an account — logged-out users get sent to log in
+  // (and back here) instead of a dead click.
+  const requireLoginForPockets = () => {
+    if (user) return true
+    navigate('/login?redirect=%2F')
+    return false
+  }
+
+  const openPockets = () => {
+    if (requireLoginForPockets()) setIsPocketsOpen(true)
+  }
+
+  const handleSavePocket = async () => {
+    if (!requireLoginForPockets() || !lastPayload || !lastQuery) return
+    setIsSavingPocket(true)
+    try {
+      await savePocket(lastQuery, lastPayload)
+      setPocketsRefreshKey((k) => k + 1)
+      flashPocketNote('saved ✓', true)
+    } catch (e) {
+      flashPocketNote(e instanceof PocketError ? e.message : 'Could not save.', false)
+    } finally {
+      setIsSavingPocket(false)
+    }
+  }
+
+  // Replays a saved snapshot through the same routing a live query uses.
+  const openPocketSnapshot = (pocket: Pocket) => {
+    resetResultState()
+    setQueryError(null)
+    setIsLoading(false)
+    setLastQuery(pocket.command)
+    setLastPayload(pocket.payload)
+    setPocketSnapshot({ savedAt: pocket.created_at })
+    applyPayload(pocket.payload, sanitizeQueryForApi(pocket.command))
+    setIsMiniOpen(true)
+  }
+
+  // /p/:id share links — load the pocket once and show it.
+  useEffect(() => {
+    if (!sharedPocketId) return
+    let active = true
+    getPocket(sharedPocketId)
+      .then((pocket) => {
+        if (!active) return
+        if (pocket) openPocketSnapshot(pocket)
+        else {
+          resetResultState()
+          setQueryResults([])
+          setQueryError("That pocket doesn't exist or isn't shared.")
+          setIsMiniOpen(true)
+        }
+      })
+      .catch(() => {
+        if (!active) return
+        resetResultState()
+        setQueryResults([])
+        setQueryError("Couldn't load that pocket.")
+        setIsMiniOpen(true)
+      })
+    return () => {
+      active = false
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sharedPocketId])
+
+  const runQuery = async (query: string) => {
+    const sanitizedQuery = sanitizeQueryForApi(query)
+
+    setIsLoading(true)
+    setLastQuery(sanitizedQuery || query.trim())
+    setQueryError(null)
+    resetResultState()
 
     if (!sanitizedQuery) {
       setQueryResults([])
@@ -3109,192 +3659,9 @@ function App() {
 
       console.log('Query response:', payload, 'via', url)
 
-      const h2hPayload = extractH2hPayload(payload)
-      if (h2hPayload) {
-        setH2hResult(h2hPayload)
-        setQueryResults([])
-        // -staff carries a real table's worth of extra data (a pitcher-by-
-        // pitcher breakdown) that doesn't fit the compact floating results
-        // panel — escalate to the full-screen overlay instead. Plain h2h
-        // (no staff_breakdown) keeps using the panel unchanged, since it
-        // already reads fine there.
-        if (h2hPayload.staff_breakdown) {
-          setIsMiniOpen(false)
-          setIsH2hStaffOpen(true)
-        }
-        return
-      }
-
-      const matchupPayload = extractMatchupInsightPayload(payload)
-      if (matchupPayload) {
-        setMatchupResult(matchupPayload)
-        setQueryResults([])
-        setIsMiniOpen(false)
-        setIsMatchupOpen(true)
-        return
-      }
-
-      const pitchPayload = extractMlbPitchH2hPayload(payload)
-      if (pitchPayload) {
-        setPitchResult(pitchPayload)
-        setQueryResults([])
-        return
-      }
-
-      const fpvPayload = extractMlbPitchFpvPayload(payload)
-      if (fpvPayload) {
-        setFpvResult(fpvPayload)
-        setQueryResults([])
-        return
-      }
-
-      const batTeamPayload = extractMlbBatTeamPayload(payload)
-      if (batTeamPayload) {
-        setBatTeamResult(batTeamPayload)
-        setQueryResults([])
-        return
-      }
-
-      const teamOverviewPayload = extractMlbTeamOverviewPayload(payload)
-      if (teamOverviewPayload) {
-        setTeamOverviewResult(teamOverviewPayload)
-        setQueryResults([])
-        return
-      }
-
-      const reportLeaderboardPayload = extractMlbReportLeaderboardPayload(payload)
-      if (reportLeaderboardPayload) {
-        setReportLeaderboardResult(reportLeaderboardPayload)
-        setQueryResults([])
-        return
-      }
-
-      const playerReportPayload = extractMlbPlayerReportPayload(payload)
-      if (playerReportPayload) {
-        setPlayerReportResult(playerReportPayload)
-        setQueryResults([])
-        return
-      }
-
-      const hrPayload = extractMlbHrPayload(payload)
-      if (hrPayload) {
-        setHrResult(hrPayload)
-        setQueryResults([])
-        return
-      }
-
-      const firstPaPayload = extractMlbFirstPaTrendPayload(payload)
-      if (firstPaPayload) {
-        setFirstPaResult(firstPaPayload)
-        setQueryResults([])
-        return
-      }
-
-      const teamRunsPayload = extractMlbTeamRunsPayload(payload)
-      if (teamRunsPayload) {
-        setTeamRunsResult(teamRunsPayload)
-        setQueryResults([])
-        return
-      }
-
-      // NFL explosive (play-by-play long plays)
-      const nflExplosivePayload = extractNflExplosivePayload(payload)
-      if (nflExplosivePayload) {
-        setNflExplosiveResult(nflExplosivePayload)
-        setQueryResults([])
-        return
-      }
-
-      // NFL parlay builder / single-player legs
-      const parlayPayload = extractNflParlayPayload(payload)
-      if (parlayPayload) {
-        setParlayResult(parlayPayload)
-        setQueryResults([])
-        return
-      }
-      const playerLegsPayload = extractNflPlayerLegsPayload(payload)
-      if (playerLegsPayload) {
-        setPlayerLegsResult(playerLegsPayload)
-        setQueryResults([])
-        return
-      }
-
-      // NFL primetime slots (player table / team record)
-      const playerSlotsPayload = extractNflPlayerSlotsPayload(payload)
-      if (playerSlotsPayload) {
-        setPlayerSlotsResult(playerSlotsPayload)
-        setQueryResults([])
-        return
-      }
-      const teamSlotsPayload = extractNflTeamSlotsPayload(payload)
-      if (teamSlotsPayload) {
-        setTeamSlotsResult(teamSlotsPayload)
-        setQueryResults([])
-        return
-      }
-
-      // NFL explosive-play overview (single player, distance-bucketed bar chart)
-      const explosiveOverviewPayload = extractExplosiveOverviewPayload(payload)
-      if (explosiveOverviewPayload) {
-        setExplosiveOverviewResult(explosiveOverviewPayload)
-        setQueryResults([])
-        return
-      }
-
-      // NFL q1/1h overview (flat per-game totals, no distance buckets — see
-      // nspe-payloads.ts's comment on why this isn't part of the engine
-      // family above despite sharing the "-ov" command suffix)
-      const overviewScopesPayload = extractNflOverviewScopesPayload(payload)
-      if (overviewScopesPayload) {
-        setOverviewScopesResult(overviewScopesPayload)
-        setQueryResults([])
-        return
-      }
-
-      // NFL -statN overview (e.g. "nfl dak 1h -yds150 -ov -career") — a
-      // third -ov shape, single player/threshold with its own match list,
-      // not a generic trend row (see nspe-payloads.ts's comment)
-      const overviewStatNPayload = extractNflOverviewStatNPayload(payload)
-      if (overviewStatNPayload) {
-        setOverviewStatNResult(overviewStatNPayload)
-        setQueryResults([])
-        return
-      }
-
-      // Block non-explosive NFL queries that the REST API routes to the wrong
-      // handler. The response arrives as {exit_code, output: "json_string"} where
-      // the inner JSON has an array query without "long" and threshold: 0 for all
-      // results. Intercept before normalizeQueryResults shows garbage players.
-      if (!Array.isArray(payload) && payload && typeof payload === 'object') {
-        const outputStr = (payload as Record<string, unknown>).output
-        if (typeof outputStr === 'string') {
-          try {
-            const inner = JSON.parse(outputStr) as Record<string, unknown>
-            const _inner = inner // reserved for future envelope checks
-            void _inner
-          } catch { /* output is not JSON */ }
-        }
-      }
-
-      const normalized = normalizeQueryResults(payload, sanitizedQuery)
-      const enriched = normalized.map((r) =>
-        r.team ? r : { ...r, team: resolvePlayerTeam(r.player) }
-      )
-      const payloadError = getPayloadError(payload)
-      const statCtx = detectStatContext(payload, sanitizedQuery)
-      setQueryResultsStatLabel(statCtx ? statCtx.unitLabel ?? statDisplayLabel(statCtx.sport, statCtx.stat) : '')
-      setQueryResults(enriched)
-
-      if (payloadError) {
-        setQueryError(payloadError)
-      } else if (normalized.length === 0) {
-        // If backend returned plain stdout with no structured envelope, surface it.
-        const rec = (payload && typeof payload === 'object' && !Array.isArray(payload))
-          ? (payload as Record<string, unknown>)
-          : null
-        const stdout = rec && typeof rec.output === 'string' ? rec.output.trim() : ''
-        setQueryError(stdout || 'Connected to API, but response contained no recognizable result rows.')
-      }
+      setLastPayload(payload)
+      setPocketSnapshot(null)
+      applyPayload(payload, sanitizedQuery)
     } catch (error) {
       console.error('Query error:', error)
       setQueryResults([])
@@ -3358,6 +3725,53 @@ function App() {
       }
     }
   }, [isDragging, dragOffset])
+
+  const handleResizeMouseDown = (e: React.MouseEvent) => {
+    if (!miniRef.current) return
+    e.preventDefault()
+    e.stopPropagation()
+    const rect = miniRef.current.getBoundingClientRect()
+    resizeStartRef.current = { x: e.clientX, y: e.clientY, w: rect.width, h: rect.height }
+    setIsResizing(true)
+  }
+
+  useEffect(() => {
+    if (!isResizing) return
+    const onMove = (e: MouseEvent) => {
+      const start = resizeStartRef.current
+      setMiniSize({
+        w: Math.min(Math.max(start.w + (e.clientX - start.x), MINI_MIN_W), window.innerWidth - miniPosition.x - 8),
+        h: Math.min(Math.max(start.h + (e.clientY - start.y), MINI_MIN_H), window.innerHeight - miniPosition.y - 8),
+      })
+    }
+    const onUp = () => setIsResizing(false)
+    window.addEventListener('mousemove', onMove)
+    window.addEventListener('mouseup', onUp)
+    return () => {
+      window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('mouseup', onUp)
+    }
+  }, [isResizing, miniPosition.x, miniPosition.y])
+
+  // Remember the chosen size across visits (per-viewer convenience only).
+  useEffect(() => {
+    if (isResizing) return
+    try {
+      window.localStorage.setItem('nspe.resultsWindowSize', JSON.stringify(miniSize))
+    } catch {
+      // ignore
+    }
+  }, [miniSize, isResizing])
+
+  // Count rendered rows (shown vs filtered out) for the filter box. Runs
+  // after every render but only sets state when the numbers change.
+  useLayoutEffect(() => {
+    const root = resultsScrollRef.current
+    if (!root) return
+    const shown = root.querySelectorAll('[data-result-row="shown"]').length
+    const total = shown + root.querySelectorAll('[data-result-row="hidden"]').length
+    setRowCounts((prev) => (prev.shown === shown && prev.total === total ? prev : { shown, total }))
+  })
 
   const handleBuilderMouseDown = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -3619,6 +4033,16 @@ function App() {
             {'{sample-queries}'}
           </button>
         )}
+        {isMobile && (
+          <button
+            type="button"
+            onClick={openPockets}
+            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+            style={{ color: 'oklch(0.85 0.15 195)', opacity: user ? 1 : 0.45 }}
+          >
+            {'{pockets}'}
+          </button>
+        )}
         {/* {tutorial} moved into the query builder panel's own header — it
             walks through the query builder specifically, not the site as a
             whole, so it belongs on that panel rather than up here (a
@@ -3634,25 +4058,9 @@ function App() {
         ref={sampleMenuRef}
       >
         {/* {tutorial} and {sample-queries} moved down next to {glossary} —
-            see the bottom-row group near the leaderboard panel. */}
-        {!isMobile && (
-          <a
-            href="/nfl.season"
-            className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-            style={{ color: 'oklch(0.85 0.15 195)' }}
-          >
-            {'{nfl.season}'}
-          </a>
-        )}
-        {!isMobile && (
-          <a
-            href="/charts"
-            className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-            style={{ color: 'oklch(0.85 0.15 195)' }}
-          >
-            {'{charts}'}
-          </a>
-        )}
+            see the bottom-row group near the leaderboard panel. Desktop
+            {charts}/{nfl.season} now sit in that bottom row too, and
+            {pocket} stacks under the login/username link (see below). */}
 
         {/* Mobile drops {sign-up} — {log-in} leads to the same place ("don't
             have an account? sign up") — and uses the slot for {charts}. */}
@@ -3689,6 +4097,26 @@ function App() {
         </a>
       </div>
 
+      {/* Desktop {pocket}: directly under the login/username link, right edge
+          aligned with it. Greyed when logged out (click sends to log in). */}
+      {!isMobile && (
+        <button
+          type="button"
+          onClick={openPockets}
+          title={user ? 'Your saved results' : 'Log in to use pockets'}
+          className="absolute right-6 z-20 font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+          style={{ top: '52px', color: 'oklch(0.85 0.15 195)', opacity: user ? 1 : 0.45 }}
+        >
+          {'{pocket}'}
+        </button>
+      )}
+
+      <PocketsModal
+        open={isPocketsOpen}
+        onClose={() => setIsPocketsOpen(false)}
+        onOpenPocket={openPocketSnapshot}
+        refreshKey={pocketsRefreshKey}
+      />
       <QueryBuilderTutorial
         open={isTutorialOpen}
         onClose={() => setIsTutorialOpen(false)}
@@ -3894,15 +4322,23 @@ function App() {
           ref={miniRef}
           className={isMobile
             ? 'fixed inset-x-2 top-2 z-30 rounded-lg shadow-2xl overflow-hidden'
-            : 'absolute z-30 w-[620px] max-h-[62vh] rounded-lg shadow-2xl overflow-hidden'
+            : 'absolute z-30 flex flex-col rounded-lg shadow-2xl overflow-hidden'
           }
           style={isMobile
             ? { maxHeight: 'calc(100dvh - 80px)', backgroundColor: 'oklch(0.15 0 0)', border: '1px solid oklch(0.30 0 0)' }
-            : { left: `${miniPosition.x}px`, top: `${miniPosition.y}px`, backgroundColor: 'oklch(0.15 0 0)', border: '1px solid oklch(0.30 0 0)' }
+            : {
+                left: `${miniPosition.x}px`,
+                top: `${miniPosition.y}px`,
+                width: `${miniSize.w}px`,
+                ...(miniSize.h != null ? { height: `${miniSize.h}px` } : { maxHeight: '74vh' }),
+                backgroundColor: 'oklch(0.15 0 0)',
+                border: '1px solid oklch(0.30 0 0)',
+                userSelect: isResizing ? 'none' : undefined,
+              }
           }
         >
           <div
-            className="flex items-center justify-between px-5 py-3 cursor-move select-none"
+            className="flex flex-none items-center justify-between px-5 py-3 cursor-move select-none"
             style={{ backgroundColor: 'oklch(0.18 0 0)', borderBottom: '1px solid oklch(0.30 0 0)' }}
             onMouseDown={handleMouseDown}
           >
@@ -3933,6 +4369,8 @@ function App() {
                 ? `${lastQuery} — overview`
                 : overviewStatNResult
                 ? `${lastQuery} — overview`
+                : overviewStatNGenericResult
+                ? `${lastQuery} — overview`
                 : hrResult
                 ? `${lastQuery} — hr`
                 : firstPaResult
@@ -3943,16 +4381,101 @@ function App() {
                 ? `${lastQuery} — ${queryResults.length}results`
                 : 'NSPE — Command Legend'}
             </span>
-            <button
-              onClick={() => setIsMiniOpen(false)}
-              className="font-mono text-[14px] hover:opacity-70 transition-opacity"
-              style={{ color: 'oklch(0.85 0.15 195)' }}
-            >
-              ✕
-            </button>
+            <div className="flex items-center gap-3 flex-none">
+              {pocketNote && (
+                <span
+                  className="font-mono text-[11px]"
+                  style={{ color: pocketNote.ok ? 'oklch(0.78 0.18 145)' : 'oklch(0.70 0.18 25)' }}
+                >
+                  {pocketNote.text}
+                </span>
+              )}
+              {/* {pocket}: save this result. Greyed for logged-out users (click
+                  sends them to log in) and while there's nothing saveable —
+                  no payload yet, still loading, or a result that came back
+                  empty. */}
+              <button
+                type="button"
+                onClick={handleSavePocket}
+                disabled={isSavingPocket || isLoading || !lastPayload}
+                title={user ? 'Save this result to your pockets' : 'Log in to save pockets'}
+                className="font-mono font-bold text-[12px] underline hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
+                style={{ color: 'oklch(0.78 0.18 145)', opacity: user ? undefined : 0.45 }}
+              >
+                {isSavingPocket ? 'saving…' : '{pocket}'}
+              </button>
+              <button
+                onClick={() => setIsMiniOpen(false)}
+                className="font-mono text-[14px] hover:opacity-70 transition-opacity"
+                style={{ color: 'oklch(0.85 0.15 195)' }}
+              >
+                ✕
+              </button>
+            </div>
           </div>
 
-          <div className={`overflow-y-auto px-5 py-4 space-y-3 ${isMobile ? 'max-h-[calc(100dvh-130px)]' : 'max-h-[calc(62vh-50px)]'}`}>
+          <div
+            ref={resultsScrollRef}
+            className={`overflow-y-auto px-5 pb-4 space-y-3 ${isMobile ? 'max-h-[calc(100dvh-130px)]' : 'flex-1 min-h-0'}`}
+          >
+            {(rowCounts.total > 0 || resultsFilter) && !isLoading && (
+              <div
+                className="sticky top-0 z-10 -mx-5 px-5 pt-3 pb-2"
+                style={{ backgroundColor: 'oklch(0.15 0 0)' }}
+              >
+                <div
+                  className="flex items-center gap-2 rounded px-3 py-1.5 font-mono text-[12px]"
+                  style={{ backgroundColor: 'oklch(0.12 0 0)', border: '1px solid oklch(0.30 0 0)' }}
+                >
+                  <input
+                    type="text"
+                    value={resultsFilter}
+                    onChange={(e) => setResultsFilter(e.target.value)}
+                    placeholder="filter players or teams…"
+                    aria-label="Filter results by player or team"
+                    autoComplete="off"
+                    autoCorrect="off"
+                    spellCheck={false}
+                    className="min-w-0 flex-1 bg-transparent outline-none"
+                    style={{ color: 'oklch(0.90 0 0)', fontSize: isMobile ? '16px' : undefined }}
+                  />
+                  {resultsFilter && (
+                    <>
+                      <span style={{ color: 'oklch(0.55 0 0)' }}>{`${rowCounts.shown}/${rowCounts.total}`}</span>
+                      <button
+                        type="button"
+                        onClick={() => setResultsFilter('')}
+                        aria-label="Clear filter"
+                        className="hover:opacity-70 transition-opacity"
+                        style={{ color: 'oklch(0.85 0.15 195)' }}
+                      >
+                        ✕
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
+            <ResultsFilterContext.Provider value={resultsFilter}>
+            <div className={`space-y-3 ${rowCounts.total > 0 || resultsFilter ? '' : 'pt-4'}`}>
+            {pocketSnapshot && !isLoading && (
+              <div
+                className="flex items-center justify-between gap-3 font-mono text-[11px] rounded px-3 py-1.5"
+                style={{ color: 'oklch(0.70 0 0)', backgroundColor: 'oklch(0.20 0 0)', border: '1px solid oklch(0.30 0 0)' }}
+              >
+                <span>
+                  saved pocket · {new Date(pocketSnapshot.savedAt).toLocaleDateString(undefined, { month: 'numeric', day: 'numeric', year: '2-digit' })}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => runQuery(lastQuery)}
+                  className="underline hover:opacity-80 transition-opacity"
+                  style={{ color: 'oklch(0.78 0.18 145)' }}
+                >
+                  {'{re-run live}'}
+                </button>
+              </div>
+            )}
             {isLoading ? (
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
                 <LoadingMessage query={lastQuery} />
@@ -3987,6 +4510,8 @@ function App() {
               <NflOverviewScopesView payload={overviewScopesResult} />
             ) : overviewStatNResult ? (
               <NflOverviewStatNView payload={overviewStatNResult} query={lastQuery} />
+            ) : overviewStatNGenericResult ? (
+              <OverviewStatNGenericView payload={overviewStatNGenericResult} />
             ) : hrResult ? (
               <MlbHrView payload={hrResult} />
             ) : firstPaResult ? (
@@ -4117,7 +4642,27 @@ function App() {
                 )
               })
             )}
+            {resultsFilter && rowCounts.total > 0 && rowCounts.shown === 0 && !isLoading && (
+              <div className="text-center py-6 font-mono text-[13px]" style={{ color: 'oklch(0.60 0 0)' }}>
+                {`No players or teams match "${resultsFilter.trim()}"`}
+              </div>
+            )}
+            </div>
+            </ResultsFilterContext.Provider>
           </div>
+          {!isMobile && (
+            <div
+              onMouseDown={handleResizeMouseDown}
+              role="separator"
+              aria-label="Resize results window"
+              title="Drag to resize"
+              className="absolute bottom-0 right-0 z-20 h-5 w-5 cursor-nwse-resize"
+              style={{
+                background:
+                  'linear-gradient(135deg, transparent 0 55%, oklch(0.55 0.07 195) 55% 62%, transparent 62% 72%, oklch(0.55 0.07 195) 72% 79%, transparent 79%)',
+              }}
+            />
+          )}
         </div>
       )}
 
@@ -4293,10 +4838,25 @@ function App() {
               placeholder above — measured offset (~97px), not eyeballed.
               Mobile stays centered, narrower width makes an offset like
               this look arbitrary rather than deliberate. */}
-          <div className={`mt-6 ${isMobile ? 'text-center' : 'text-left'}`} style={isMobile ? undefined : { paddingLeft: '97px' }}>
+          <div
+            className={`mt-6 ${isMobile ? 'text-center' : 'text-left flex items-baseline gap-5'}`}
+            style={isMobile ? undefined : { paddingLeft: '97px' }}
+          >
             <p className="font-mono text-[14px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
               search a player or type: nspe
             </p>
+            {/* Desktop only — mobile keeps {sample-queries} in the top-left
+                stack. Moved here from the bottom-right group. */}
+            {!isMobile && (
+              <button
+                type="button"
+                onClick={() => setIsSampleQueriesOpen(true)}
+                className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+                style={{ color: 'oklch(0.65 0.12 145)' }}
+              >
+                {'{sample-queries}'}
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -4318,23 +4878,22 @@ function App() {
             >
               ‹ back
             </button>
-            <span className="font-mono font-bold text-[13px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
-              {'{build}'}
-            </span>
-            {/* Same {tutorial} entry as the desktop panel's header — a
-                walkthrough of the query builder, so it lives on the builder
+            {/* Same {build.tutorial} entry as the desktop panel's header — a
+                walkthrough of the query builder specifically (a separate
+                site-wide tutorial is coming), so it lives on the builder
                 itself rather than the homepage. Right-aligned (ml-auto)
                 rather than centered like the desktop panel's — centering it
-                here overlapped "‹ back {build}" on a narrow mobile screen,
+                here overlapped the back button on a narrow mobile screen,
                 which has much less room to its left than the desktop panel
-                does. */}
+                does. The old {build} label that used to sit next to "back"
+                was dropped. */}
             <button
               type="button"
               onClick={() => setIsTutorialOpen(true)}
               className="ml-auto font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
               style={{ color: 'oklch(0.78 0.18 145)' }}
             >
-              {'{tutorial}'}
+              {'{build.tutorial}'}
             </button>
           </div>
           <div className="flex-1 overflow-y-auto px-4 py-4">
@@ -4402,7 +4961,7 @@ function App() {
               className="absolute left-1/2 -translate-x-1/2 font-mono font-bold text-[12px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
               style={{ color: 'oklch(0.78 0.18 145)' }}
             >
-              {'{tutorial}'}
+              {'{build.tutorial}'}
             </button>
             <button
               onClick={() => setIsBuilderOpen(false)}
@@ -4436,23 +4995,30 @@ function App() {
         }}
       />
 
-      {/* {sample-queries}, formerly in the top-right nav alongside
-          {tutorial} — {tutorial} itself now lives in the query builder
-          panel's own header (it's a walkthrough of the builder, not the
-          site), so this is just the one button now. {glossary} removed
-          (nav entry only — its modal/state is still in this file, just
-          unreachable, same shelve pattern as {sample-commands}/{database}
-          until the tutorial/howto rework replaces it). */}
+      {/* Desktop bottom row, left to right: {charts} {nfl.season} {leaderboard}
+          (the leaderboard panel itself is unchanged, just to the right of
+          this group). {sample-queries} moved up under the search bar, and
+          {tutorial} lives in the query builder panel's own header.
+          {glossary} removed (nav entry only — its modal/state is still in
+          this file, just unreachable, same shelve pattern as
+          {sample-commands}/{database} until the tutorial/howto rework
+          replaces it). */}
       {!isMobile && (
         <div className="absolute z-20 flex items-center gap-4" style={{ bottom: '52px', right: '440px' }}>
-          <button
-            type="button"
-            onClick={() => setIsSampleQueriesOpen(true)}
+          <a
+            href="/charts"
             className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-            style={{ color: 'oklch(0.65 0.12 145)' }}
+            style={{ color: 'oklch(0.85 0.15 195)' }}
           >
-            {'{sample-queries}'}
-          </button>
+            {'{charts}'}
+          </a>
+          <a
+            href="/nfl.season"
+            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+            style={{ color: 'oklch(0.85 0.15 195)' }}
+          >
+            {'{nfl.season}'}
+          </a>
         </div>
       )}
 

@@ -64,6 +64,9 @@ createRoot(document.getElementById('root')!).render(
             }
           />
           <Route path="/success" element={<SuccessPage />} />
+          {/* Shared pocket link — same App, which reads :id and replays the saved
+              snapshot in the normal results panel. */}
+          <Route path="/p/:id" element={<App />} />
           <Route
             path="/account"
             element={

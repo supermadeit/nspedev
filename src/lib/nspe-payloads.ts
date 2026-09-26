@@ -1030,6 +1030,79 @@ export function extractNflOverviewStatNPayload(payload: unknown): NflOverviewSta
   return null
 }
 
+// ---------- Sport-agnostic stat-threshold overview (-statN -ov) ----------
+// "mlb yordan -dub1 -ov", "nba curry -tpm4 -ov -career", "nhl mcdavid -pts3
+// -ov -career": one player, one (or more) stat thresholds over a window ->
+// how many of the window's games qualified, plus the qualifying game log.
+// Matched by engine (`{mlb,nba,nhl}_overview_statn`) so a new sport is free;
+// NFL's `nfl_overview_statn` is a different shape (`matches`) with its own view.
+// Two generations of shape coexist and both are read: MLB's original
+// (`query.stat`/`threshold`, `total`, `season_avg`) and the richer NBA/NHL one
+// (`query.thresholds[]`, `totals{}`, `pct_of_games`, `coverage[]`, `source`).
+// Game rows carry `value` plus that sport's box-score columns as extra keys.
+export interface OverviewStatNGame {
+  date_iso: string
+  date?: string
+  season?: string | number
+  game_id?: string
+  opponent?: string | null
+  result?: string | null
+  outcome?: string | null
+  value: number
+  [boxScoreStat: string]: string | number | null | undefined
+}
+
+export interface OverviewStatNPayload {
+  engine: string
+  mode?: string
+  query: {
+    player: string
+    window_label: string
+    source?: string
+    last_n?: number | null
+    thresholds?: Array<{ stat: string; min: number }>
+    // MLB (original shape)
+    stat?: string
+    stat_label?: string
+    threshold?: number
+  }
+  count: number
+  window_games: number
+  pct_of_games?: number
+  avg_in_matches?: Record<string, number>
+  totals?: Record<string, number>
+  total?: number
+  season_avg?: number
+  coverage?: string[]
+  results: OverviewStatNGame[]
+}
+
+export function isOverviewStatNPayload(payload: unknown): payload is OverviewStatNPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return (
+    typeof rec.engine === 'string' &&
+    /^(?!nfl_)[a-z]+_overview_statn$/.test(rec.engine) &&
+    Array.isArray(rec.results)
+  )
+}
+
+export function extractOverviewStatNPayload(payload: unknown): OverviewStatNPayload | null {
+  if (isOverviewStatNPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isOverviewStatNPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isOverviewStatNPayload(v)) return v
+    }
+  }
+  return null
+}
+
 // ---------- MLB Home Run Distance (mlb long) ----------
 
 export interface MlbHrTrendMatch {
