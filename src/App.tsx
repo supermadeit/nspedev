@@ -1674,7 +1674,10 @@ function MlbOverviewBattingView({ payload }: { payload: MlbOverviewBattingPayloa
         total.G_2H != null && `2+ hit games ${total.G_2H}`,
         total.G_2R != null && `2+ run games ${total.G_2R}`,
         total.G_2RBI != null && `2+ RBI games ${total.G_2RBI}`,
-        total.G_1HR != null && `HR games ${total.G_1HR}`,
+        // Season totals, not "HR games" — a game count reads like a home-run
+        // total and looks ~40+ off next to the HR column.
+        `total bases ${total.TB.toLocaleString()}`,
+        `total HR ${total.HR.toLocaleString()}`,
       ].filter(Boolean)
     : []
 
@@ -3578,25 +3581,15 @@ function App() {
   const [suppressSyntaxDropdown, setSuppressSyntaxDropdown] = useState(false)
   // {psc} on/off — the green syntax-suggestion dropdown only. Player-name
   // search (the cyan dropdown) is unaffected, so with this off, Enter just
-  // runs whatever was typed. Remembered per browser.
-  const [isPscEnabled, setIsPscEnabled] = useState<boolean>(() => {
+  // runs whatever was typed. Set from the account settings page (the same
+  // 'nspe.psc' localStorage key), read once here.
+  const [isPscEnabled] = useState<boolean>(() => {
     try {
       return window.localStorage.getItem('nspe.psc') !== 'off'
     } catch {
       return true
     }
   })
-  const togglePsc = () => {
-    setIsPscEnabled((prev) => {
-      const next = !prev
-      try {
-        window.localStorage.setItem('nspe.psc', next ? 'on' : 'off')
-      } catch {
-        // ignore — the toggle still works for this session
-      }
-      return next
-    })
-  }
   const syntaxMatches = useMemo(
     () =>
       searchValue.trim() && !looksLikePlayerSearch(searchValue) && !suppressSyntaxDropdown
@@ -5211,21 +5204,7 @@ function App() {
             // anything to the backend; typing actual nspe syntax behaves
             // exactly as before. {charts} removed from this row (still live
             // at /charts, just not linked from the homepage).
-            <div className="relative flex items-center gap-3">
-              {/* {psc} toggle, just left of the search box — shows/hides the
-                  green syntax suggestions (player search stays on either
-                  way). Mobile has no homepage toggle; it lives in account
-                  settings. */}
-              <button
-                type="button"
-                onClick={togglePsc}
-                aria-pressed={isPscEnabled}
-                title={isPscEnabled ? 'Syntax suggestions on — click to turn off' : 'Syntax suggestions off — click to turn on'}
-                className="absolute right-full top-1/2 -translate-y-1/2 mr-3 font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-                style={{ color: isPscEnabled ? 'oklch(0.78 0.18 145)' : 'oklch(0.55 0 0)' }}
-              >
-                {`{psc: ${isPscEnabled ? 'on' : 'off'}}`}
-              </button>
+            <div className="flex items-center gap-3">
               <div className="relative flex-1" ref={desktopSearchContainerRef}>
                 <input
                   ref={searchInputRef}
