@@ -58,6 +58,9 @@ import {
   extractNflOverviewScopesPayload,
   extractNflOverviewStatNPayload,
   extractOverviewStatNPayload,
+  extractPvpPayload,
+  extractStatsOverviewPayload,
+  extractMlbOverviewBattingPayload,
   extractNflExplosivePayload,
   isNflExplosivePayload,
   normalizeDisplayPlayer,
@@ -88,6 +91,11 @@ import {
   type NflOverviewScopesPayload,
   type NflOverviewStatNPayload,
   type OverviewStatNPayload,
+  type PvpPayload,
+  type StatsOverviewPayload,
+  type StatsOverviewRow,
+  type MlbOverviewBattingRow,
+  type MlbOverviewBattingPayload,
   type NflExplosivePayload,
   type QueryResult,
 } from '@/lib/nspe-payloads'
@@ -1435,9 +1443,7 @@ function OverviewStatNGenericView({ payload }: { payload: OverviewStatNPayload }
   const avgText = avgParts.join(' · ')
   // "-- earlier seasons are not in the scrape yet" is backend-internal; the
   // "2025-26 (1 season, regular season)" part is all the reader needs.
-  const coverageLines = (payload.coverage ?? []).map((line) =>
-    line.replace(/\s*--\s*earlier seasons are not in the scrape yet\.?/i, ''),
-  )
+  const coverageLines = cleanCoverageLines(payload.coverage)
   const valueLabel = thresholds.length === 1 ? boxStatLabel(thresholds[0].stat) : (q.stat ?? '')
   const games = payload.results
   const latest = newestMatch(games)
@@ -1510,6 +1516,382 @@ function OverviewStatNGenericView({ payload }: { payload: OverviewStatNPayload }
           })}
         </ResultRow>
       )}
+    </div>
+  )
+}
+
+// "-- earlier seasons are not in the scrape yet" is backend-internal; the
+// "2025-26 (1 season, regular season)" part is all the reader needs.
+function cleanCoverageLines(lines: string[] | undefined): string[] {
+  return (lines ?? []).map((line) => line.replace(/\s*--\s*earlier seasons are not in the scrape yet\.?/i, ''))
+}
+
+// ---------- Player overview view (-ov, NBA / NHL) ----------
+// Self-describing table from the payload's `columns`; per-game by default with
+// a totals toggle. TOTAL is pinned first (multi-season windows list one row
+// per season below it).
+function fmtOverviewValue(key: string, v: number | undefined, kind: 'totals' | 'per_game'): string {
+  if (v == null || Number.isNaN(v)) return '—'
+  const signed = key === 'plus_minus' && v > 0 ? '+' : ''
+  if (kind === 'totals') return `${signed}${Number.isInteger(v) ? v : v.toFixed(1)}`
+  return `${signed}${Math.abs(v) < 1 ? v.toFixed(2) : v.toFixed(1)}`
+}
+
+function StatsOverviewView({ payload }: { payload: StatsOverviewPayload }) {
+  const [mode, setMode] = useState<'per_game' | 'totals'>('per_game')
+  const CYAN = 'oklch(0.85 0.15 195)'
+  const CYAN_BRIGHT = 'oklch(0.90 0.18 195)'
+  const GREEN = 'oklch(0.78 0.18 145)'
+  const DIM = 'oklch(0.55 0 0)'
+  const BORDER = 'oklch(0.22 0 0)'
+
+  const q = payload.query
+  const cols = payload.columns
+  const scopeOrder = (r: StatsOverviewRow) => (r.scope === 'total' ? 0 : r.scope === 'wins' ? 1 : r.scope === 'losses' ? 2 : 3)
+  const rows = payload.rows
+    .map((r, i) => ({ r, i }))
+    .sort((a, b) => scopeOrder(a.r) - scopeOrder(b.r) || a.i - b.i)
+    .map(({ r }) => r)
+  const gridCols = `minmax(74px,1.4fr) 38px repeat(${cols.length}, minmax(42px,1fr))`
+  const minWidth = 74 + 38 + cols.length * 46
+  const coverageLines = cleanCoverageLines(payload.coverage)
+  const games = payload.window_games ?? rows.find((r) => r.scope === 'total')?.games
+
+  const toggleBtn = (value: 'per_game' | 'totals', label: string) => (
+    <button
+      type="button"
+      onClick={() => setMode(value)}
+      aria-pressed={mode === value}
+      className="font-mono text-[11px] px-2 py-0.5 rounded border"
+      style={{
+        color: mode === value ? CYAN_BRIGHT : DIM,
+        borderColor: mode === value ? CYAN : BORDER,
+        backgroundColor: mode === value ? 'oklch(0.20 0.02 195)' : 'transparent',
+      }}
+    >
+      {label}
+    </button>
+  )
+
+  return (
+    <div className="space-y-3 font-mono">
+      <div className="pb-2" style={{ borderBottom: `1px solid ${BORDER}` }}>
+        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+          <span className="text-[14px] font-bold" style={{ color: CYAN_BRIGHT }}>{normalizeDisplayPlayer(q.player)}</span>
+          {q.team && <span className="text-[12px]" style={{ color: DIM }}>{q.team}</span>}
+        </div>
+        <div className="mt-1 text-[12px]" style={{ color: DIM }}>
+          {[q.window_label && `window: ${q.window_label}`, q.source].filter(Boolean).join(' · ')}
+        </div>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px]">
+        <span style={{ color: 'oklch(0.76 0 0)' }}>
+          <span className="font-bold" style={{ color: CYAN }}>{games ?? '—'}</span> games
+          {payload.record ? <span style={{ color: DIM }}>{` · record ${payload.record}`}</span> : null}
+        </span>
+        <span className="flex gap-1.5 ml-auto">
+          {toggleBtn('per_game', 'per game')}
+          {toggleBtn('totals', 'totals')}
+        </span>
+      </div>
+
+      <div className="overflow-x-auto">
+        <div style={{ minWidth }} className="text-[12px]">
+          <div
+            className="grid items-baseline gap-x-2 pb-1 text-[10px] uppercase tracking-widest"
+            style={{ gridTemplateColumns: gridCols, color: DIM, borderBottom: `1px solid ${BORDER}` }}
+          >
+            <span />
+            <span className="text-right">gp</span>
+            {cols.map((c) => (
+              <span key={c.key} className="text-right">{c.header}</span>
+            ))}
+          </div>
+          {rows.map((r, i) => {
+            const isTotal = r.scope === 'total'
+            return (
+              <div
+                key={`${r.scope}-${r.label}-${i}`}
+                className="grid items-baseline gap-x-2 py-1"
+                style={{ gridTemplateColumns: gridCols, borderBottom: `1px solid ${BORDER}` }}
+              >
+                <span
+                  className="truncate"
+                  style={{ color: isTotal ? CYAN_BRIGHT : r.scope === 'wins' ? GREEN : r.scope === 'losses' ? 'oklch(0.70 0.15 25)' : 'oklch(0.80 0 0)', fontWeight: isTotal ? 700 : 400 }}
+                >
+                  {r.label}
+                </span>
+                <span className="text-right" style={{ color: DIM }}>{r.games}</span>
+                {cols.map((c) => (
+                  <span key={c.key} className="text-right" style={{ color: isTotal ? 'oklch(0.92 0 0)' : 'oklch(0.80 0 0)', fontWeight: isTotal ? 700 : 400 }}>
+                    {fmtOverviewValue(c.key, (mode === 'totals' ? r.totals : r.per_game)[c.key], mode)}
+                  </span>
+                ))}
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      {coverageLines.length > 0 && (
+        <div className="space-y-0.5 text-[11px]" style={{ color: DIM }}>
+          {coverageLines.map((line, i) => (
+            <div key={i}>{line}</div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ---------- MLB batting overview view (-ov) ----------
+// Fixed batting line split home / away / total, plus the "multi" game counts
+// (2+ hit, 2+ run, 2+ RBI, HR games) the backend sends on each split.
+function MlbOverviewBattingView({ payload }: { payload: MlbOverviewBattingPayload }) {
+  const CYAN = 'oklch(0.85 0.15 195)'
+  const CYAN_BRIGHT = 'oklch(0.90 0.18 195)'
+  const DIM = 'oklch(0.55 0 0)'
+  const BORDER = 'oklch(0.22 0 0)'
+
+  const q = payload.query
+  const order: Record<string, number> = { total: 0, home: 1, away: 2 }
+  const rows = [...payload.rows].sort((a, b) => (order[a.split] ?? 3) - (order[b.split] ?? 3))
+  const total = rows.find((r) => r.split === 'total')
+  const counting: Array<[string, keyof MlbOverviewBattingRow]> = [
+    ['G', 'games'], ['AB', 'AB'], ['R', 'R'], ['H', 'H'], ['2B', '2B'], ['3B', '3B'], ['HR', 'HR'],
+    ['RBI', 'RBI'], ['BB', 'BB'], ['SO', 'SO'], ['SB', 'SB'], ['TB', 'TB'],
+  ]
+  const rates: Array<[string, keyof MlbOverviewBattingRow]> = [['AVG', 'AVG'], ['OBP', 'OBP'], ['SLG', 'SLG'], ['OPS', 'OPS']]
+  const all = [...counting, ...rates]
+  const gridCols = `54px repeat(${counting.length}, minmax(34px,1fr)) repeat(${rates.length}, minmax(46px,1fr))`
+  const minWidth = 54 + counting.length * 38 + rates.length * 50
+  // .304 style (no leading zero) for sub-1 rates; OPS above 1 keeps its digit.
+  const fmtRate = (v: number | undefined) => (v == null ? '—' : v.toFixed(3).replace(/^0(?=\.)/, ''))
+  const fmtCount = (v: number | undefined) => (v == null ? '—' : String(v))
+  const multi = total
+    ? [
+        total.G_2H != null && `2+ hit games ${total.G_2H}`,
+        total.G_2R != null && `2+ run games ${total.G_2R}`,
+        total.G_2RBI != null && `2+ RBI games ${total.G_2RBI}`,
+        total.G_1HR != null && `HR games ${total.G_1HR}`,
+      ].filter(Boolean)
+    : []
+
+  return (
+    <div className="space-y-3 font-mono">
+      <div className="pb-2" style={{ borderBottom: `1px solid ${BORDER}` }}>
+        <span className="text-[14px] font-bold" style={{ color: CYAN_BRIGHT }}>{normalizeDisplayPlayer(q.player)}</span>
+        <div className="mt-1 text-[12px]" style={{ color: DIM }}>
+          {payload.window_label ? `window: ${payload.window_label}` : ''}
+        </div>
+      </div>
+
+      <div className="overflow-x-auto">
+        <div style={{ minWidth }} className="text-[12px]">
+          <div
+            className="grid items-baseline gap-x-1.5 pb-1 text-[10px] uppercase tracking-widest"
+            style={{ gridTemplateColumns: gridCols, color: DIM, borderBottom: `1px solid ${BORDER}` }}
+          >
+            <span />
+            {all.map(([label]) => (
+              <span key={label} className="text-right">{label}</span>
+            ))}
+          </div>
+          {rows.map((r) => {
+            const isTotal = r.split === 'total'
+            return (
+              <div
+                key={r.split}
+                className="grid items-baseline gap-x-1.5 py-1"
+                style={{ gridTemplateColumns: gridCols, borderBottom: `1px solid ${BORDER}` }}
+              >
+                <span style={{ color: isTotal ? CYAN_BRIGHT : 'oklch(0.80 0 0)', fontWeight: isTotal ? 700 : 400 }}>{r.split}</span>
+                {counting.map(([label, key]) => (
+                  <span key={label} className="text-right" style={{ color: isTotal ? 'oklch(0.92 0 0)' : 'oklch(0.80 0 0)', fontWeight: isTotal ? 700 : 400 }}>
+                    {fmtCount(r[key] as number | undefined)}
+                  </span>
+                ))}
+                {rates.map(([label, key]) => (
+                  <span key={label} className="text-right" style={{ color: isTotal ? CYAN : 'oklch(0.80 0 0)', fontWeight: isTotal ? 700 : 400 }}>
+                    {fmtRate(r[key] as number | undefined)}
+                  </span>
+                ))}
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      {multi.length > 0 && (
+        <div className="text-[12px]" style={{ color: DIM }}>{multi.join(' · ')}</div>
+      )}
+    </div>
+  )
+}
+
+// ---------- Player vs player view (PvP, any sport) ----------
+// Header · record · side-by-side totals / per-game table · collapsible list of
+// the shared games. Columns come from the payload (each player's `columns`),
+// so it renders NFL QBs, NBA box scores, etc. without sport-specific code.
+// Stats where less is better don't get the "leader" highlight flipped by the
+// backend, so the few well-known ones are listed here.
+const PVP_LOWER_IS_BETTER = new Set(['INT', 'TO', 'TOV', 'FUM', 'SO', 'PF'])
+
+function formatPvpNumber(n: number | undefined): string {
+  if (n == null || Number.isNaN(n)) return '—'
+  return Number.isInteger(n) ? String(n) : n.toFixed(1)
+}
+
+// Fallback headline columns when the backend doesn't send `headline`: first
+// few of these the player actually has, in this order.
+const PVP_HEADLINE_PREFERENCE = ['PTS', 'REB', 'AST', 'YDS', 'TD', 'RTD', 'HR', 'RBI', 'H', 'G', 'SOG', 'RYD']
+
+function PvpView({ payload }: { payload: PvpPayload }) {
+  const { isExpanded, toggle } = useExpandableRows()
+  const CYAN_BRIGHT = 'oklch(0.90 0.18 195)'
+  const GREEN = 'oklch(0.78 0.18 145)'
+  const DIM = 'oklch(0.55 0 0)'
+  const BORDER = 'oklch(0.22 0 0)'
+
+  const q = payload.query
+  const [a, b] = payload.players
+  if (!a || !b) return null
+  const lastName = (n: string) => n.trim().split(/\s+/).slice(-1)[0]
+  const columns = a.columns.length > 0 ? a.columns : b.columns
+  const teammates = payload.as_teammates ?? 0
+
+  // One-line summary from the first player's perspective (the -ov style);
+  // the full matchup, including the second player's side, is behind {view}.
+  const headlineCols = (
+    payload.headline && payload.headline.length > 0
+      ? payload.headline.filter((c) => columns.includes(c))
+      : PVP_HEADLINE_PREFERENCE.filter((c) => columns.includes(c)).slice(0, 3)
+  )
+  const summary = headlineCols
+    .map((c, i) =>
+      i === 0 && a.per_game[c] != null
+        ? `${c} ${formatPvpNumber(a.totals[c])} · ${formatPvpNumber(a.per_game[c])}/g`
+        : `${c} ${formatPvpNumber(a.totals[c])}`,
+    )
+    .join(' · ')
+  const recordA = payload.record?.[a.name]
+
+  const subtitle = [
+    q.window_label && `window: ${q.window_label}`,
+    q.source,
+    `${payload.games} game${payload.games === 1 ? '' : 's'}${q.relation ? ` as ${q.relation}` : ''}`,
+    teammates > 0 ? `${teammates} as teammates` : '',
+    payload.unclassified ? `${payload.unclassified} unclassified` : '',
+  ].filter(Boolean).join(' · ')
+
+  // 1 = A leads, -1 = B leads, 0 = tie / n.a.
+  const leader = (col: string): number => {
+    const av = a.per_game[col]
+    const bv = b.per_game[col]
+    if (av == null || bv == null || av === bv) return 0
+    const aHigher = av > bv
+    return (PVP_LOWER_IS_BETTER.has(col) ? !aHigher : aHigher) ? 1 : -1
+  }
+  const cell = (value: number | undefined, isLeader: boolean, dim = false) => (
+    <span
+      className="text-right"
+      style={{ color: isLeader ? GREEN : dim ? DIM : 'oklch(0.85 0 0)', fontWeight: isLeader ? 700 : 400 }}
+    >
+      {formatPvpNumber(value)}
+    </span>
+  )
+  const gridCols = '44px 1fr 1fr 1fr 1fr'
+
+  return (
+    <div className="space-y-3 font-mono">
+      <div className="text-[12px]" style={{ color: DIM }}>{subtitle}</div>
+
+      <ResultRow
+        label={
+          <>
+            <span style={{ color: CYAN_BRIGHT }}>{a.name}</span>
+            <span style={{ color: DIM }}>{' vs '}</span>
+            <span style={{ color: CYAN_BRIGHT }}>{b.name}</span>
+            {recordA && <span style={{ color: GREEN }}>{` {${recordA}}`}</span>}
+          </>
+        }
+        filterable={false}
+        badgeHeader={isExpanded(0) ? 'hide' : 'view'}
+        badgeValue={summary || `${payload.games} games`}
+        expanded={isExpanded(0)}
+        onToggle={() => toggle(0)}
+        ariaLabel="Toggle full matchup"
+      >
+        {payload.record && (
+          <div className="text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+            {[a, b].map((p) => `${lastName(p.name)} ${payload.record?.[p.name] ?? '—'}`).join('  ·  ')}
+          </div>
+        )}
+
+        {columns.length > 0 && (
+          <div className="text-[12px]">
+            <div
+              className="grid items-baseline gap-x-2 pb-1 text-[10px] uppercase tracking-widest"
+              style={{ gridTemplateColumns: gridCols, color: DIM, borderBottom: `1px solid ${BORDER}` }}
+            >
+              <span />
+              <span className="text-right">{`${lastName(a.name)} tot`}</span>
+              <span className="text-right">/g</span>
+              <span className="text-right">{`${lastName(b.name)} tot`}</span>
+              <span className="text-right">/g</span>
+            </div>
+            {columns.map((col) => {
+              const lead = leader(col)
+              return (
+                <div
+                  key={col}
+                  className="grid items-baseline gap-x-2 py-1"
+                  style={{ gridTemplateColumns: gridCols, borderBottom: `1px solid ${BORDER}` }}
+                >
+                  <span style={{ color: DIM }}>{col}</span>
+                  {cell(a.totals[col], false, true)}
+                  {cell(a.per_game[col], lead === 1)}
+                  {cell(b.totals[col], false, true)}
+                  {cell(b.per_game[col], lead === -1)}
+                </div>
+              )
+            })}
+          </div>
+        )}
+
+        {payload.results.length > 0 && (
+          <div className="space-y-2 pt-1">
+            <div className="text-[10px] uppercase tracking-widest" style={{ color: DIM }}>shared games</div>
+            {payload.results.map((g, j) => {
+              const line = (who: string, stats: Record<string, number>) =>
+                `${who}: ${columns.map((c) => `${formatPvpNumber(stats[c])} ${c}`).join(', ')}`
+              return (
+                <div key={g.game_id ?? j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+                  <div>
+                    <span style={{ color: 'oklch(0.60 0 0)' }}>{g.date}</span>
+                    {g.result_a && (
+                      <span style={{ color: g.outcome_a === 'W' ? GREEN : g.outcome_a === 'L' ? 'oklch(0.70 0.15 25)' : DIM }}>
+                        {` ${lastName(a.name)} ${g.result_a}`}
+                      </span>
+                    )}
+                  </div>
+                  <div className="pl-2" style={{ color: 'oklch(0.66 0 0)' }}>{line(lastName(a.name), g.a)}</div>
+                  <div className="pl-2" style={{ color: 'oklch(0.66 0 0)' }}>{line(lastName(b.name), g.b)}</div>
+                </div>
+              )
+            })}
+          </div>
+        )}
+
+        {payload.notes && payload.notes.length > 0 && (
+          <div className="space-y-0.5 text-[11px]" style={{ color: DIM }}>
+            {payload.notes.map((n, i) => (
+              <div key={i}>{n}</div>
+            ))}
+          </div>
+        )}
+      </ResultRow>
     </div>
   )
 }
@@ -3056,6 +3438,9 @@ function App() {
   const [overviewScopesResult, setOverviewScopesResult] = useState<NflOverviewScopesPayload | null>(null)
   const [overviewStatNResult, setOverviewStatNResult] = useState<NflOverviewStatNPayload | null>(null)
   const [overviewStatNGenericResult, setOverviewStatNGenericResult] = useState<OverviewStatNPayload | null>(null)
+  const [pvpResult, setPvpResult] = useState<PvpPayload | null>(null)
+  const [statsOverviewResult, setStatsOverviewResult] = useState<StatsOverviewPayload | null>(null)
+  const [mlbOverviewResult, setMlbOverviewResult] = useState<MlbOverviewBattingPayload | null>(null)
   const [hrResult, setHrResult] = useState<MlbHrPayload | null>(null)
   const [firstPaResult, setFirstPaResult] = useState<MlbFirstPaTrendPayload | null>(null)
   const [teamRunsResult, setTeamRunsResult] = useState<MlbTeamRunsPayload | null>(null)
@@ -3083,6 +3468,12 @@ function App() {
   const [isGlossaryOpen, setIsGlossaryOpen] = useState(false)
   const [isH2hStaffOpen, setIsH2hStaffOpen] = useState(false)
   const leaderboard = leaderboardData as unknown as LeaderboardPayload
+  // Mobile leaderboard: the stat(streak) column is sized to its longest value
+  // (monospace, ~7.2px/char at 12px) and right-aligned to the same edge the
+  // expanded row's score sits on, so the player column gets all the rest.
+  const mobileStreakColPx = Math.ceil(
+    Math.max(6, ...(leaderboard?.rows ?? []).map((r) => `${r.streak_label}(${r.streak_length})★`.length)) * 7.2,
+  ) + 2
   // NFL h2h's "popular players" list — the leaderboard.json shape above is
   // MLB's stat-threshold format; the NFL leaderboard is a different "heat"
   // shape (rows keyed by streak/heater score, not a stat threshold), but all
@@ -3185,6 +3576,27 @@ function App() {
   // mobile). This suppresses matching right after a selection; any real
   // keystroke afterward (the input's onChange) clears it again.
   const [suppressSyntaxDropdown, setSuppressSyntaxDropdown] = useState(false)
+  // {psc} on/off — the green syntax-suggestion dropdown only. Player-name
+  // search (the cyan dropdown) is unaffected, so with this off, Enter just
+  // runs whatever was typed. Remembered per browser.
+  const [isPscEnabled, setIsPscEnabled] = useState<boolean>(() => {
+    try {
+      return window.localStorage.getItem('nspe.psc') !== 'off'
+    } catch {
+      return true
+    }
+  })
+  const togglePsc = () => {
+    setIsPscEnabled((prev) => {
+      const next = !prev
+      try {
+        window.localStorage.setItem('nspe.psc', next ? 'on' : 'off')
+      } catch {
+        // ignore — the toggle still works for this session
+      }
+      return next
+    })
+  }
   const syntaxMatches = useMemo(
     () =>
       searchValue.trim() && !looksLikePlayerSearch(searchValue) && !suppressSyntaxDropdown
@@ -3224,7 +3636,7 @@ function App() {
         : [],
     [searchValue, suppressSyntaxDropdown, playerMatches, typedSport],
   )
-  const greenMatches = suppressSyntaxDropdown
+  const greenMatches = suppressSyntaxDropdown || !isPscEnabled
     ? []
     : playerMatches.length > 0
     ? [
@@ -3345,6 +3757,9 @@ function App() {
     setOverviewScopesResult(null)
     setOverviewStatNResult(null)
     setOverviewStatNGenericResult(null)
+    setPvpResult(null)
+    setStatsOverviewResult(null)
+    setMlbOverviewResult(null)
     setHrResult(null)
     setFirstPaResult(null)
     setTeamRunsResult(null)
@@ -3510,6 +3925,28 @@ function App() {
     const mlbOverviewStatNPayload = extractOverviewStatNPayload(payload)
     if (mlbOverviewStatNPayload) {
       setOverviewStatNGenericResult(mlbOverviewStatNPayload)
+      setQueryResults([])
+      return
+    }
+
+    // Player vs player (any sport), e.g. "nfl lamar vs allen -career"
+    const pvpPayload = extractPvpPayload(payload)
+    if (pvpPayload) {
+      setPvpResult(pvpPayload)
+      setQueryResults([])
+      return
+    }
+
+    // Player overview (-ov type 1) for NBA/NHL and MLB
+    const statsOverviewPayload = extractStatsOverviewPayload(payload)
+    if (statsOverviewPayload) {
+      setStatsOverviewResult(statsOverviewPayload)
+      setQueryResults([])
+      return
+    }
+    const mlbOverviewPayload = extractMlbOverviewBattingPayload(payload)
+    if (mlbOverviewPayload) {
+      setMlbOverviewResult(mlbOverviewPayload)
       setQueryResults([])
       return
     }
@@ -4371,6 +4808,10 @@ function App() {
                 ? `${lastQuery} — overview`
                 : overviewStatNGenericResult
                 ? `${lastQuery} — overview`
+                : pvpResult
+                ? `${lastQuery} — pvp`
+                : statsOverviewResult || mlbOverviewResult
+                ? `${lastQuery} — overview`
                 : hrResult
                 ? `${lastQuery} — hr`
                 : firstPaResult
@@ -4512,6 +4953,12 @@ function App() {
               <NflOverviewStatNView payload={overviewStatNResult} query={lastQuery} />
             ) : overviewStatNGenericResult ? (
               <OverviewStatNGenericView payload={overviewStatNGenericResult} />
+            ) : pvpResult ? (
+              <PvpView payload={pvpResult} />
+            ) : statsOverviewResult ? (
+              <StatsOverviewView payload={statsOverviewResult} />
+            ) : mlbOverviewResult ? (
+              <MlbOverviewBattingView payload={mlbOverviewResult} />
             ) : hrResult ? (
               <MlbHrView payload={hrResult} />
             ) : firstPaResult ? (
@@ -4666,7 +5113,13 @@ function App() {
         </div>
       )}
 
-      <div className="relative z-10 flex flex-col items-center justify-start h-screen pt-[40vh]">
+      {/* Stacking: this wrapper deliberately creates no stacking context
+          (relative, no z-index), so it paints at the base layer — under
+          {leaderboard}/{charts}/{nfl.season} (z-20), which stay solid over
+          the search/build buttons and hint line. Only the search dropdowns
+          (z-[25]) rise above those and the footer logo, and still sit under
+          the {hitlist} ticker (z-[26]) and the results panel (z-30). */}
+      <div className="relative flex flex-col items-center justify-start h-screen pt-[40vh]">
         <div className="w-[65%] max-w-4xl min-w-[320px] px-4">
           {isMobile ? (
             <div className="flex flex-col items-center gap-3">
@@ -4703,7 +5156,7 @@ function App() {
                   </div>
                 )}
                 {(playerMatches.length > 0 || greenMatches.length > 0) && !isMobileDropdownDismissed && (
-                  <div className="absolute top-[60px] left-0 right-0 z-20 flex flex-col gap-2">
+                  <div className="absolute top-[60px] left-0 right-0 z-[25] flex flex-col gap-2">
                     {playerMatches.length > 0 && (
                       <PlayerSearchDropdown
                         matches={playerMatches}
@@ -4758,7 +5211,21 @@ function App() {
             // anything to the backend; typing actual nspe syntax behaves
             // exactly as before. {charts} removed from this row (still live
             // at /charts, just not linked from the homepage).
-            <div className="flex items-center gap-3">
+            <div className="relative flex items-center gap-3">
+              {/* {psc} toggle, just left of the search box — shows/hides the
+                  green syntax suggestions (player search stays on either
+                  way). Mobile has no homepage toggle; it lives in account
+                  settings. */}
+              <button
+                type="button"
+                onClick={togglePsc}
+                aria-pressed={isPscEnabled}
+                title={isPscEnabled ? 'Syntax suggestions on — click to turn off' : 'Syntax suggestions off — click to turn on'}
+                className="absolute right-full top-1/2 -translate-y-1/2 mr-3 font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+                style={{ color: isPscEnabled ? 'oklch(0.78 0.18 145)' : 'oklch(0.55 0 0)' }}
+              >
+                {`{psc: ${isPscEnabled ? 'on' : 'off'}}`}
+              </button>
               <div className="relative flex-1" ref={desktopSearchContainerRef}>
                 <input
                   ref={searchInputRef}
@@ -4789,7 +5256,7 @@ function App() {
                   </div>
                 )}
                 {(playerMatches.length > 0 || greenMatches.length > 0) && !isDesktopDropdownDismissed && (
-                  <div className="absolute top-[60px] left-0 right-0 z-20 flex flex-col gap-2">
+                  <div className="absolute top-[60px] left-0 right-0 z-[25] flex flex-col gap-2">
                     {playerMatches.length > 0 && (
                       <PlayerSearchDropdown
                         matches={playerMatches}
@@ -4838,8 +5305,11 @@ function App() {
               placeholder above — measured offset (~97px), not eyeballed.
               Mobile stays centered, narrower width makes an offset like
               this look arbitrary rather than deliberate. */}
+          {/* Always one line: if {sample-queries} runs under the {leaderboard}
+              panel at narrower widths, the leaderboard (solid, higher layer)
+              simply covers it — it never wraps to a second line. */}
           <div
-            className={`mt-6 ${isMobile ? 'text-center' : 'text-left flex items-baseline gap-5'}`}
+            className={`mt-6 flex items-baseline gap-x-5 whitespace-nowrap ${isMobile ? 'justify-center' : 'text-left'}`}
             style={isMobile ? undefined : { paddingLeft: '97px' }}
           >
             <p className="font-mono text-[14px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
@@ -5216,7 +5686,7 @@ function App() {
               <div
                 className="grid items-center px-4 py-1 font-mono text-[10px] uppercase tracking-widest sticky top-0"
                 style={{
-                  gridTemplateColumns: '22px 1fr 36px 84px',
+                  gridTemplateColumns: `22px minmax(0,1fr) 36px ${mobileStreakColPx}px`,
                   gap: '8px',
                   backgroundColor: 'oklch(0.14 0 0)',
                   borderBottom: '1px solid oklch(0.20 0 0)',
@@ -5226,7 +5696,7 @@ function App() {
                 <span>#</span>
                 <span>player</span>
                 <span>tm</span>
-                <span>stat(streak)</span>
+                <span className="text-right">streak</span>
               </div>
               {leaderboard.rows.map((row, idx) => {
                 const rank = String(idx + 1).padStart(2, '0')
@@ -5248,14 +5718,14 @@ function App() {
                   >
                     <div
                       className="grid items-center"
-                      style={{ gridTemplateColumns: '22px 1fr 36px 84px', gap: '8px' }}
+                      style={{ gridTemplateColumns: `22px minmax(0,1fr) 36px ${mobileStreakColPx}px`, gap: '8px' }}
                     >
                       <span style={{ color: 'oklch(0.48 0 0)' }}>{rank}</span>
                       <span className="truncate" style={{ color: 'oklch(0.92 0 0)' }}>
                         {player}
                       </span>
                       <span style={{ color: 'oklch(0.55 0 0)' }}>{row.team}</span>
-                      <span style={{ color: 'oklch(0.85 0.15 195)' }}>
+                      <span className="text-right whitespace-nowrap" style={{ color: 'oklch(0.85 0.15 195)' }}>
                         {row.streak_label}({row.streak_length}){star}
                       </span>
                     </div>
@@ -5423,7 +5893,7 @@ function App() {
           it to pause/resume — pointer-events was 'none' here (the ticker
           used to just be decorative), switched to 'auto' so the click lands. */}
       <div
-        className="absolute bottom-0 left-0 right-0 z-10 overflow-hidden border-t cursor-pointer"
+        className="absolute bottom-0 left-0 right-0 z-[26] overflow-hidden border-t cursor-pointer"
         style={{ borderColor: 'oklch(0.28 0 0)', backgroundColor: 'oklch(0.18 0 0)' }}
         onClick={() => setIsTickerPaused((p) => !p)}
         role="button"

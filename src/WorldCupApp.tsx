@@ -109,6 +109,19 @@ function buildAbbrMap(data: NflSeasonData): Record<string, string> {
   return map
 }
 
+// Abbreviation -> "Dallas Cowboys", from the same standings file.
+function buildFullNameMap(data: NflSeasonData): Record<string, string> {
+  const map: Record<string, string> = {}
+  for (const conf of ['AFC', 'NFC'] as const) {
+    for (const div of ['East', 'North', 'South', 'West'] as const) {
+      for (const team of data.conferences[conf][div].teams) {
+        map[team.abbr] = `${team.city} ${team.name}`
+      }
+    }
+  }
+  return map
+}
+
 // ---------------- division panel ----------------
 
 function DivisionPanel({ division }: { division: NflDivision }) {
@@ -474,9 +487,12 @@ function formatMargin(margin: number | undefined): string {
 
 function TeamOverviewOverlay({
   team,
+  fullName,
   onClose,
 }: {
   team: PowerRankingsRow | null
+  /** "Dallas Cowboys" — falls back to the team code if the lookup misses. */
+  fullName?: string
   onClose: () => void
 }) {
   if (!team) return null
@@ -497,16 +513,25 @@ function TeamOverviewOverlay({
           className="flex items-center justify-between px-5 py-3"
           style={{ backgroundColor: 'oklch(0.16 0 0)', borderBottom: `1px solid ${C.border}` }}
         >
-          <span className="font-mono font-bold text-[15px]" style={{ color: C.accent }}>{`{${team.team}}`}</span>
-          <button
-            type="button"
-            onClick={onClose}
-            className="font-mono text-[16px] hover:opacity-70 transition-opacity"
-            style={{ color: C.accent }}
-            aria-label="Close"
-          >
-            ✕
-          </button>
+          <span className="font-mono font-bold text-[15px]" style={{ color: C.accent }}>
+            {`{${(fullName ?? team.team).toUpperCase()}}`}
+          </span>
+          <span className="flex items-center gap-4">
+            {/* Power score lives in the header now (it used to be a stat cell). */}
+            <span className="flex items-baseline gap-1.5">
+              <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: C.label }}>power</span>
+              <span className="font-mono text-[16px] font-bold" style={{ color: C.green }}>{team.power_score.toFixed(1)}</span>
+            </span>
+            <button
+              type="button"
+              onClick={onClose}
+              className="font-mono text-[16px] hover:opacity-70 transition-opacity"
+              style={{ color: C.accent }}
+              aria-label="Close"
+            >
+              ✕
+            </button>
+          </span>
         </div>
         <div className="px-5 py-4 space-y-4">
           <div className="flex items-baseline justify-between">
@@ -529,8 +554,8 @@ function TeamOverviewOverlay({
               </div>
             </div>
             <div>
-              <div className="font-mono text-[10px] uppercase tracking-widest" style={{ color: C.label }}>power score</div>
-              <div className="font-mono text-[16px] font-bold" style={{ color: C.green }}>{team.power_score.toFixed(1)}</div>
+              <div className="font-mono text-[10px] uppercase tracking-widest" style={{ color: C.label }}>off. 3rd down %</div>
+              <div className="font-mono text-[16px] font-bold" style={{ color: C.value }}>{formatPct(team.third_down_pct)}</div>
             </div>
           </div>
         </div>
@@ -559,6 +584,7 @@ export default function WorldCupApp() {
   const schedule = scheduleData as unknown as ScheduleData
   const [activeView, setActiveView] = useState<ActiveView>('rankings')
   const abbrMap = useMemo(() => buildAbbrMap(data), [data])
+  const fullNames = useMemo(() => buildFullNameMap(data), [data])
   // Schedule tab opens on the active week (data.current_week), not always
   // week 1 — current_week is expected to already reflect the Tuesday-
   // morning rollover backend-side (games run through Monday Night Football,
@@ -728,7 +754,11 @@ export default function WorldCupApp() {
         </div>
       )}
       <MatchupInsightOverlay open={isMatchupOpen} onClose={() => setIsMatchupOpen(false)} payload={matchupResult} />
-      <TeamOverviewOverlay team={selectedTeam} onClose={() => setSelectedTeam(null)} />
+      <TeamOverviewOverlay
+        team={selectedTeam}
+        fullName={selectedTeam ? fullNames[selectedTeam.team] : undefined}
+        onClose={() => setSelectedTeam(null)}
+      />
     </div>
   )
 }

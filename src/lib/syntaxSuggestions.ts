@@ -23,7 +23,9 @@ export interface SyntaxMatch {
 
 // buildSampleQueries() is pure, reading static curated tables — safe to
 // compute once per module load rather than per keystroke.
-const SYNTAX_CATALOG = buildSampleQueries()
+// Entries flagged pscShelved stay in the catalog (and in {sample-queries}) but
+// aren't suggested here.
+const SYNTAX_CATALOG = buildSampleQueries().filter((q) => !q.pscShelved)
 
 function tokenize(s: string): string[] {
   return s.trim().split(/\s+/).filter(Boolean)
@@ -372,6 +374,7 @@ export function findPlayerSpotlightCommands(
     if (playerSport && commandSport(q.command) !== playerSport) continue
     if (q.onlyFor && q.onlyFor !== resolved) continue
     if (q.qbOnly && playerPosition && playerPosition !== 'QB') continue
+    if (q.positions && playerPosition && !q.positions.includes(playerPosition)) continue
     // Skip "vs X" templates where X is the player's own team. Matched as a
     // whole word, not endsWith — h2h templates can carry trailing flags now
     // (e.g. "... vs bos -career"), so "vs {team}" is no longer guaranteed to

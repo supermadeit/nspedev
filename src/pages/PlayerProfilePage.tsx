@@ -207,9 +207,16 @@ export default function PlayerProfilePage() {
           </div>
           {DATA.headerNote && (
             <div>
-              <div className="font-mono text-[9px] uppercase tracking-widest mb-1" style={{ color: C.textDim }}>
-                {DATA.headerNote.label}
-              </div>
+              {/* The backend's "Data on file: 2009-10 to 2025-26 (regular
+                  season) — earlier seasons may include some playoff games"
+                  caption is data-coverage detail readers don't need — the
+                  chips below stand on their own. Other header-note labels
+                  (e.g. "next opponent") still show. */}
+              {!/^data on file/i.test(DATA.headerNote.label) && (
+                <div className="font-mono text-[9px] uppercase tracking-widest mb-1" style={{ color: C.textDim }}>
+                  {DATA.headerNote.label}
+                </div>
+              )}
               <div className="flex flex-wrap gap-1.5">
                 {DATA.headerNote.entries.map((c) => (
                   <MiniStat key={c.key} label={c.label} value={c.value} accent={c.accent} />

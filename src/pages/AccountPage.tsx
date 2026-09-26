@@ -30,6 +30,23 @@ export default function AccountPage() {
   const { user, signOut } = useAuth()
   const navigate = useNavigate()
   const [profile, setProfile] = useState<Profile | null>(null)
+  // Same localStorage key the homepage's {psc} toggle reads.
+  const [pscOn, setPscOn] = useState<boolean>(() => {
+    try {
+      return window.localStorage.getItem('nspe.psc') !== 'off'
+    } catch {
+      return true
+    }
+  })
+  const togglePsc = () => {
+    const next = !pscOn
+    setPscOn(next)
+    try {
+      window.localStorage.setItem('nspe.psc', next ? 'on' : 'off')
+    } catch {
+      // ignore
+    }
+  }
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -197,6 +214,20 @@ export default function AccountPage() {
           ) : null}
           <Button asChild>
             <Link to="/refill">Buy more credits</Link>
+          </Button>
+        </CardContent>
+      </Card>
+
+      <Card className="border-neutral-800 bg-neutral-950">
+        <CardHeader>
+          <CardTitle>Search suggestions</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <p className="text-sm text-neutral-400">
+            Show command suggestions ({'{psc}'}) as you type in the search bar. Player search always stays on.
+          </p>
+          <Button variant="secondary" onClick={togglePsc} aria-pressed={pscOn} className="self-start">
+            {pscOn ? 'Suggestions: on' : 'Suggestions: off'}
           </Button>
         </CardContent>
       </Card>

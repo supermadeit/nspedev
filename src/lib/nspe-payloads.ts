@@ -1103,6 +1103,194 @@ export function extractOverviewStatNPayload(payload: unknown): OverviewStatNPayl
   return null
 }
 
+// ---------- Player overview (-ov, MLB / NBA / NHL) ----------
+// "nspe nba curry -ov -career", "nspe nhl mcdavid -ov", "nspe mlb judge -ov":
+// type 1 of the -ov family — everything about one player over a window.
+// NBA/NHL share a self-describing table: `columns` names the stats, each row
+// has `totals` and `per_game` keyed by them (rows: TOTAL, IN WINS, IN LOSSES
+// for a season/last-N window; one row per season + TOTAL for a multi-season
+// window). MLB's is a fixed batting line split home / away / total.
+export interface StatsOverviewRow {
+  scope: string
+  label: string
+  games: number
+  totals: Record<string, number>
+  per_game: Record<string, number>
+}
+
+export interface StatsOverviewPayload {
+  engine: string
+  mode?: string
+  query: {
+    player: string
+    team?: string
+    source?: string
+    window_label?: string
+    last_n?: number | null
+  }
+  columns: Array<{ header: string; key: string }>
+  rows: StatsOverviewRow[]
+  record?: string | null
+  record_games?: number
+  window_games?: number
+  coverage?: string[]
+}
+
+export function isStatsOverviewPayload(payload: unknown): payload is StatsOverviewPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return (
+    typeof rec.engine === 'string' &&
+    /^(?!nfl_)[a-z]+_overview$/.test(rec.engine) &&
+    Array.isArray(rec.columns) &&
+    Array.isArray(rec.rows)
+  )
+}
+
+export function extractStatsOverviewPayload(payload: unknown): StatsOverviewPayload | null {
+  if (isStatsOverviewPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isStatsOverviewPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isStatsOverviewPayload(v)) return v
+    }
+  }
+  return null
+}
+
+export interface MlbOverviewBattingRow {
+  split: string
+  games: number
+  AB: number
+  R: number
+  H: number
+  '2B': number
+  '3B': number
+  HR: number
+  RBI: number
+  BB: number
+  SO: number
+  SB: number
+  TB: number
+  G_2H?: number
+  G_2R?: number
+  G_2RBI?: number
+  G_1HR?: number
+  AVG: number
+  OBP: number
+  SLG: number
+  OPS: number
+}
+
+export interface MlbOverviewBattingPayload {
+  engine: 'mlb_overview_batting'
+  query: { player: string; year_window?: [number, number] | null }
+  window_label?: string
+  rows: MlbOverviewBattingRow[]
+}
+
+export function isMlbOverviewBattingPayload(payload: unknown): payload is MlbOverviewBattingPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return rec.engine === 'mlb_overview_batting' && Array.isArray(rec.rows)
+}
+
+export function extractMlbOverviewBattingPayload(payload: unknown): MlbOverviewBattingPayload | null {
+  if (isMlbOverviewBattingPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isMlbOverviewBattingPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isMlbOverviewBattingPayload(v)) return v
+    }
+  }
+  return null
+}
+
+// ---------- Player vs player (PvP) ----------
+// "nspe nfl lamar vs allen -career": every game two players shared, with each
+// player's box-score line. Sport-agnostic — matched by engine suffix `_pvp`;
+// each player carries its own `columns` (CMP/ATT/YDS… for an NFL QB) so the
+// view never needs to know the sport. `relation` says whether the two faced
+// each other ("opponents") or played together; per-game rows are keyed a/b in
+// the same order as `query.players`.
+export interface PvpPlayerSummary {
+  name: string
+  columns: string[]
+  totals: Record<string, number>
+  per_game: Record<string, number>
+}
+
+export interface PvpGame {
+  date: string
+  game_id?: string
+  season?: number | string
+  result_a?: string | null
+  outcome_a?: string | null
+  a: Record<string, number>
+  b: Record<string, number>
+}
+
+export interface PvpPayload {
+  engine: string
+  query: {
+    players: [string, string] | string[]
+    league?: string
+    source?: string
+    window_label?: string
+    relation?: string
+    resolved_from?: string[]
+  }
+  games: number
+  shared_games_total?: number
+  as_teammates?: number
+  unclassified?: number
+  classified_by?: string[]
+  /** Optional: which columns to feature on the one-line summary, in order
+   * (backend-driven since it varies by sport/position). */
+  headline?: string[]
+  record?: Record<string, string>
+  players: PvpPlayerSummary[]
+  results: PvpGame[]
+  notes?: string[]
+}
+
+export function isPvpPayload(payload: unknown): payload is PvpPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return (
+    typeof rec.engine === 'string' &&
+    /_pvp$/.test(rec.engine) &&
+    Array.isArray(rec.players) &&
+    Array.isArray(rec.results)
+  )
+}
+
+export function extractPvpPayload(payload: unknown): PvpPayload | null {
+  if (isPvpPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isPvpPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isPvpPayload(v)) return v
+    }
+  }
+  return null
+}
+
 // ---------- MLB Home Run Distance (mlb long) ----------
 
 export interface MlbHrTrendMatch {
