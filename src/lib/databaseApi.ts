@@ -7,9 +7,61 @@
 // of the app's networking.
 import { API_BASE_CANDIDATES, joinUrl } from './nspe-api'
 
-// A 404 is a definitive "not found" from the backend (it already tried both
-// the batter and QB builder) — stop immediately rather than treating it
-// like a transient failure and retrying the next candidate base URL.
+// The backend returns the profile already shaped as ProfilePayload, but
+// this fetch layer stays untyped on purpose — PlayerProfilePage.tsx does its
+// own light runtime shape check before trusting the response, same as every
+// other live-payload consumer in this app.
+//
+// `window` picks the profile window: omitted = the current season (the
+// backend default), a season year ("2025"), or "career". Outcomes:
+//   ok           -> the payload
+//   not-found    -> 404 (unknown player, or — with a window — a season that
+//                   isn't on file; `detail` carries the backend's message,
+//                   which lists what is on file)
+//   bad-window   -> 422 (a window value the backend can't parse)
+// Other failures throw, same as before. A 404/422 is definitive, so it stops
+// immediately instead of retrying the next candidate base URL.
+export type ProfileFetchResult =
+  | { status: 'ok'; payload: unknown }
+  | { status: 'not-found'; detail: string | null }
+  | { status: 'bad-window'; detail: string | null }
+
+function detailText(body: unknown): string | null {
+  if (!body || typeof body !== 'object') return null
+  const d = (body as Record<string, unknown>).detail
+  if (typeof d === 'string') return d
+  if (d && typeof d === 'object') {
+    try {
+      return JSON.stringify(d)
+    } catch {
+      return null
+    }
+  }
+  return null
+}
+
+export async function fetchPlayerProfile(slug: string, window?: string | null): Promise<ProfileFetchResult> {
+  const query = window ? `?window=${encodeURIComponent(window)}` : ''
+  const urls = API_BASE_CANDIDATES.map((base) => joinUrl(base, `/database/${encodeURIComponent(slug)}${query}`))
+  let lastError: unknown = null
+  for (const url of urls) {
+    try {
+      const res = await fetch(url)
+      if (res.ok) return { status: 'ok', payload: await res.json() }
+      if (res.status === 404 || res.status === 422) {
+        const body = await res.json().catch(() => null)
+        return { status: res.status === 404 ? 'not-found' : 'bad-window', detail: detailText(body) }
+      }
+      lastError = new Error(`${url} -> HTTP ${res.status} ${res.statusText}`)
+    } catch (err) {
+      lastError = err
+    }
+  }
+  throw lastError ?? new Error('No /database endpoint responded')
+}
+
+// Still used by the index fetch below: a 404 there is a definitive "not
+// found" too.
 async function fetchFirstOk(urls: string[]): Promise<Response | null> {
   let lastError: unknown = null
   for (const url of urls) {
@@ -23,17 +75,6 @@ async function fetchFirstOk(urls: string[]): Promise<Response | null> {
     }
   }
   throw lastError ?? new Error('No /database endpoint responded')
-}
-
-// The backend returns the profile already shaped as ProfilePayload, but
-// this fetch layer stays untyped on purpose — PlayerProfilePage.tsx does its
-// own light runtime shape check before trusting the response, same as every
-// other live-payload consumer in this app.
-export async function fetchPlayerProfile(slug: string): Promise<unknown | null> {
-  const urls = API_BASE_CANDIDATES.map((base) => joinUrl(base, `/database/${encodeURIComponent(slug)}`))
-  const res = await fetchFirstOk(urls)
-  if (!res) return null
-  return res.json()
 }
 
 export interface DatabaseIndexEntry {
