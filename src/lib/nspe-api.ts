@@ -133,7 +133,12 @@ export function getPayloadError(payload: ApiPayload): string | null {
   const output = typeof record.output === 'string' ? record.output.trim() : ''
 
   if (exitCode !== 0 && output) {
-    return output
+    // Some engines fail as a JSON envelope — {"engine": ..., "error": "vs
+    // <team> isn't available for ...", "results": []} — show just the message
+    // rather than the raw JSON.
+    const inner = extractEnvelopeFromText(output.split('\n').find((line) => line.trimStart().startsWith('{')) ?? '')
+    const message = inner && !Array.isArray(inner) ? (inner as Record<string, unknown>).error : null
+    return typeof message === 'string' && message.trim() ? message.trim() : output
   }
 
   return null

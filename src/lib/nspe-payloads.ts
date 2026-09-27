@@ -1147,7 +1147,11 @@ export interface StatsOverviewPayload {
   record?: string | null
   record_games?: number
   window_games?: number
+  games_on_file?: number
   coverage?: string[]
+  // "How many games cleared each common bar" — e.g. PTS 20+ 10/16, 30+ 3/16.
+  // Sent on the filtered views (`... -ov vs phi`); optional everywhere.
+  count_line?: Array<{ stat: string; label: string; min: number; count: number; window_games: number }>
 }
 
 export function isStatsOverviewPayload(payload: unknown): payload is StatsOverviewPayload {

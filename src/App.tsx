@@ -17,7 +17,7 @@ import { H2hStaffOverlay } from '@/components/H2hStaffOverlay'
 import { MatchupInsightOverlay } from '@/components/MatchupInsightOverlay'
 import { PlayerSearchDropdown } from '@/components/PlayerSearchDropdown'
 import { SyntaxSuggestionDropdown } from '@/components/SyntaxSuggestionDropdown'
-import { loadPlayerIndex, resolvePlayerTeam, searchPlayers, searchPlayersLoose } from '@/lib/playerSearch'
+import { PLAYER_INDEX, loadPlayerIndex, resolvePlayerTeam, searchPlayers, searchPlayersLoose } from '@/lib/playerSearch'
 import {
   findPlayerSpotlightCommands,
   getMatchupSuggestions,
@@ -1590,6 +1590,13 @@ function StatsOverviewView({ payload }: { payload: StatsOverviewPayload }) {
   const minWidth = 74 + 38 + cols.length * 46
   const coverageLines = cleanCoverageLines(payload.coverage)
   const games = payload.window_games ?? rows.find((r) => r.scope === 'total')?.games
+  // count_line grouped by stat, in the backend's order: PTS 20+ 10/16 30+ 3/16 …
+  const countGroups: Array<{ label: string; items: NonNullable<StatsOverviewPayload['count_line']> }> = []
+  for (const c of payload.count_line ?? []) {
+    const group = countGroups.find((g) => g.label === c.label)
+    if (group) group.items.push(c)
+    else countGroups.push({ label: c.label, items: [c] })
+  }
 
   const toggleBtn = (value: 'per_game' | 'totals', label: string) => (
     <button
@@ -1629,6 +1636,22 @@ function StatsOverviewView({ payload }: { payload: StatsOverviewPayload }) {
           {toggleBtn('totals', 'totals')}
         </span>
       </div>
+
+      {countGroups.length > 0 && (
+        <div className="flex flex-wrap gap-x-5 gap-y-1 text-[12px]">
+          {countGroups.map((g) => (
+            <span key={g.label} style={{ color: DIM }}>
+              <span className="font-bold" style={{ color: CYAN }}>{g.label}</span>
+              {g.items.map((it) => (
+                <span key={it.min}>
+                  {`  ${it.min}+ `}
+                  <span style={{ color: 'oklch(0.85 0 0)' }}>{`${it.count}/${it.window_games}`}</span>
+                </span>
+              ))}
+            </span>
+          ))}
+        </div>
+      )}
 
       <div className="overflow-x-auto">
         <div style={{ minWidth }} className="text-[12px]">
@@ -3536,6 +3559,28 @@ function App() {
   // loadPlayerIndex() resolves so playerMatches recomputes even if the user
   // already finished typing before the fetch came back.
   const [isPlayerIndexReady, setIsPlayerIndexReady] = useState(false)
+
+  // NBA has no leaderboard file to pull from, so h2h's "popular" chips are a
+  // curated set of stars, kept only if they have a profile in the live player
+  // index (which also supplies the team code shown on the chip).
+  const NBA_POPULAR_NAMES = [
+    'Stephen Curry', 'LeBron James', 'Kevin Durant', 'Nikola Jokic', 'Giannis Antetokounmpo',
+    'Luka Doncic', 'Jayson Tatum', 'Joel Embiid', 'Anthony Edwards', 'Shai Gilgeous-Alexander',
+    'Victor Wembanyama', 'Devin Booker', 'Jalen Brunson', 'Tyrese Haliburton', 'Donovan Mitchell',
+    'Jimmy Butler', 'Anthony Davis', 'Damian Lillard', 'Kawhi Leonard', 'Trae Young',
+  ]
+  const nbaPopularPlayers = useMemo(
+    () =>
+      NBA_POPULAR_NAMES.flatMap((name) => {
+        const key = name.toLowerCase().replace(/[^a-z]/g, '')
+        const hit = PLAYER_INDEX.find(
+          (e) => e.sport === 'nba' && e.name.toLowerCase().replace(/[^a-z]/g, '').startsWith(key),
+        )
+        return hit ? [{ player: hit.name, team: hit.team }] : []
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [isPlayerIndexReady],
+  )
   useEffect(() => {
     loadPlayerIndex().then(() => setIsPlayerIndexReady(true))
   }, [])
@@ -5391,6 +5436,7 @@ function App() {
               isLoading={isLoading}
               popularPlayers={(leaderboard?.rows ?? []).slice(0, 20).map((r) => ({ player: r.player, team: r.team }))}
               nflPopularPlayers={nflPopularPlayers}
+              nbaPopularPlayers={nbaPopularPlayers}
             />
           </div>
         </div>
@@ -5466,6 +5512,7 @@ function App() {
               isLoading={isLoading}
               popularPlayers={(leaderboard?.rows ?? []).slice(0, 20).map((r) => ({ player: r.player, team: r.team }))}
               nflPopularPlayers={nflPopularPlayers}
+              nbaPopularPlayers={nbaPopularPlayers}
             />
           </div>
         </div>

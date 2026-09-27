@@ -22,7 +22,16 @@ const MLB_TEAMS = [
   'phi', 'pit', 'sd', 'sf', 'sea', 'stl', 'tb', 'tex', 'tor', 'wsh',
 ]
 
-const TEAMS_BY_SPORT: Record<string, string[]> = { nfl: NFL_TEAMS, mlb: MLB_TEAMS }
+// The backend's own NBA team codes (ESPN-style — "gs", "ny", "sa", "no",
+// "utah", "wsh"). All 30 checked live: "nba jimmy butler vs <code> -career"
+// returns his "career vs <CODE>" overview for every one.
+const NBA_TEAMS = [
+  'atl', 'bos', 'bkn', 'cha', 'chi', 'cle', 'dal', 'den', 'det', 'gs',
+  'hou', 'ind', 'lac', 'lal', 'mem', 'mia', 'mil', 'min', 'no', 'ny',
+  'okc', 'orl', 'phi', 'phx', 'por', 'sac', 'sa', 'tor', 'utah', 'wsh',
+]
+
+const TEAMS_BY_SPORT: Record<string, string[]> = { nfl: NFL_TEAMS, mlb: MLB_TEAMS, nba: NBA_TEAMS }
 
 // Lowercase opponent codes for a sport; empty when h2h-by-team isn't offered.
 export function getTeamCodes(sport: string | undefined): string[] {

@@ -64,7 +64,7 @@ interface PersistedBuilderState {
   computeWindow: ComputeWindow
   windowN: string
   streakN: string
-  h2hSport: 'mlb' | 'nfl'
+  h2hSport: 'mlb' | 'nfl' | 'nba'
   h2hPlayer: string
   h2hOpponent: string
   teamStat: TeamStat
@@ -560,9 +560,11 @@ export interface QueryBuilderProps {
   /** Same idea as popularPlayers, but from the NFL leaderboard — h2h mode's
    * own sport selector switches between the two lists. */
   nflPopularPlayers?: PopularPlayer[]
+  /** NBA equivalent for h2h mode (no leaderboard file — curated stars that have profiles). */
+  nbaPopularPlayers?: PopularPlayer[]
 }
 
-export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPopularPlayers = [] }: QueryBuilderProps) {
+export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPopularPlayers = [], nbaPopularPlayers = [] }: QueryBuilderProps) {
   const isMobile = useIsMobile()
   const storageKey = isMobile ? STORAGE_KEY_MOBILE : STORAGE_KEY_DESKTOP
   const initial = useMemo(() => loadPersistedState(storageKey) ?? {}, [storageKey])
@@ -590,7 +592,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
   // streak
   const [streakN, setStreakN] = useState(initial.streakN ?? '')
   // h2h (batter/skill-position player vs an opponent team)
-  const [h2hSport, setH2hSport] = useState<'mlb' | 'nfl'>(initial.h2hSport ?? 'mlb')
+  const [h2hSport, setH2hSport] = useState<'mlb' | 'nfl' | 'nba'>(initial.h2hSport ?? 'mlb')
   const [h2hPlayer, setH2hPlayer] = useState(initial.h2hPlayer ?? '')
   const [h2hOpponent, setH2hOpponent] = useState(initial.h2hOpponent ?? '')
   // team (runs scored/allowed)
@@ -1103,8 +1105,8 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
       )}
 
       {/* H2H: sport + opponent team + player. MLB-only originally — now NFL
-          too, since the backend's nfl-h2h engine covers skill positions the
-          same "{player} vs {TEAM}" way. Only these two for now. */}
+          (nfl-h2h) and NBA ("{player} vs {TEAM}" -> the player's career-vs-team
+          overview) too. */}
       {mode === 'h2h' && (
         <>
           <div className="mb-3">
@@ -1129,6 +1131,16 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
                 dataTour="h2hsport-nfl"
               >
                 NFL
+              </Pill>
+              <Pill
+                selected={h2hSport === 'nba'}
+                onClick={() => {
+                  setH2hSport('nba')
+                  setH2hOpponent('')
+                }}
+                dataTour="h2hsport-nba"
+              >
+                NBA
               </Pill>
             </div>
           </div>
@@ -1157,7 +1169,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
               type="text"
               value={h2hPlayer}
               onChange={(e) => setH2hPlayer(e.target.value)}
-              placeholder={h2hSport === 'mlb' ? 'type any MLB player (e.g. ketel marte)' : 'type any NFL player (e.g. josh allen)'}
+              placeholder={h2hSport === 'mlb' ? 'type any MLB player (e.g. ketel marte)' : h2hSport === 'nba' ? 'type any NBA player (e.g. jimmy butler)' : 'type any NFL player (e.g. josh allen)'}
               className="w-full font-mono text-[13px] rounded border px-3 py-2 outline-none"
               style={{
                 backgroundColor: C.surface2,
@@ -1168,7 +1180,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
           </div>
 
           {(() => {
-            const activePopularPlayers = h2hSport === 'mlb' ? popularPlayers : nflPopularPlayers
+            const activePopularPlayers = h2hSport === 'mlb' ? popularPlayers : h2hSport === 'nba' ? nbaPopularPlayers : nflPopularPlayers
             if (activePopularPlayers.length === 0) return null
             return (
               <div className="mb-3">
