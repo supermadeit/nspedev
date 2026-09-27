@@ -2348,6 +2348,11 @@ function MlbTeamRunsView({ payload }: { payload: MlbTeamRunsPayload }) {
 // query.display_fields rather than MLB's fixed batting line — this is the
 // label map for whichever of those fields show up. Anything not listed
 // falls back to the raw field name (still readable, just not prettified).
+//
+// rec_yds/rec_lng/rec_td drop the "rec" prefix — the bare "rec" field
+// (receptions) already appears right next to them, so the group as a whole
+// reads as receiving without repeating it on every field. rush_* keeps its
+// prefix since it's a different category sitting in the same card.
 const H2H_FIELD_LABELS: Record<string, string> = {
   pass_cmp: 'cmp',
   pass_att: 'att',
@@ -2358,13 +2363,41 @@ const H2H_FIELD_LABELS: Record<string, string> = {
   pass_rtg: 'rtg',
   rush_yds: 'rush yds',
   rush_td: 'rush td',
-  rec_yds: 'rec yds',
-  rec_td: 'rec td',
+  rec_yds: 'yds',
+  rec_lng: 'lng',
+  rec_td: 'td',
   rec: 'rec',
   g: 'g',
   a: 'a',
   pts: 'pts',
   sog: 'sog',
+}
+
+// Field groups whose members only mean something as a set — e.g. rush_att/
+// rush_yds/rush_lng/rush_td for a pure receiver, or the reverse for a pure
+// rusher. The backend's display_fields list currently covers every offensive
+// skill stat regardless of position, so a receiver's card would otherwise
+// show a full row of "0 rush att · 0 rush yds · 0 rush lng · 0 rush td" —
+// not wrong, just noise. Hiding a group only when every field in it reads
+// zero across the whole totals line is a data-driven call, not a
+// position-based one, so it needs no backend change: a rusher whose card
+// legitimately has zero receiving in the window loses that row too, which
+// reads the same "nothing here" way either direction.
+const H2H_FIELD_GROUPS: string[][] = [
+  ['rush_att', 'rush_yds', 'rush_lng', 'rush_td'],
+  ['tgts', 'rec', 'rec_yds', 'rec_lng', 'rec_td'],
+  ['pass_cmp', 'pass_att', 'pass_yds', 'pass_td', 'pass_int', 'pass_lng', 'pass_rtg'],
+]
+
+function allZeroFieldsToHide(fields: string[], totals: Record<string, unknown>): Set<string> {
+  const hidden = new Set<string>()
+  for (const group of H2H_FIELD_GROUPS) {
+    const present = group.filter((f) => fields.includes(f))
+    if (present.length === 0) continue
+    const allZero = present.every((f) => !(typeof totals[f] === 'number' && totals[f] !== 0))
+    if (allZero) present.forEach((f) => hidden.add(f))
+  }
+  return hidden
 }
 
 function formatH2hFieldValue(field: string, value: number): string {
@@ -2422,13 +2455,20 @@ function H2hView({ payload }: { payload: H2hPayload }) {
     { label: 'SB', value: t.SB ?? 0 },
   ]
 
+  // Computed once here (not per group above) so both the totals grid below
+  // and each game-log row use the exact same hidden set — a field that's
+  // dropped from the summary shouldn't still show up per game.
+  const hiddenH2hFields = displayFields ? allZeroFieldsToHide(displayFields, t) : null
+
   const genericCounting: { label: string; value: string }[] | null = displayFields
     ? [
         { label: 'g', value: String(t.games ?? games.length) },
-        ...displayFields.map((f) => ({
-          label: H2H_FIELD_LABELS[f] ?? f.replace(/_/g, ' '),
-          value: formatH2hFieldValue(f, typeof t[f] === 'number' ? (t[f] as number) : 0),
-        })),
+        ...displayFields
+          .filter((f) => !hiddenH2hFields?.has(f))
+          .map((f) => ({
+            label: H2H_FIELD_LABELS[f] ?? f.replace(/_/g, ' '),
+            value: formatH2hFieldValue(f, typeof t[f] === 'number' ? (t[f] as number) : 0),
+          })),
       ]
     : null
 
@@ -2523,6 +2563,9 @@ function H2hView({ payload }: { payload: H2hPayload }) {
               // instead of mid-"rush yds" when a line is long.
               const line: string[] = displayFields
                 ? displayFields
+                    // Dropped from the totals card above (a whole group
+                    // reading zero across every game) stays dropped here too.
+                    .filter((f) => !hiddenH2hFields?.has(f))
                     // Skip a field entirely for this row when it's absent
                     // from the game object (not the same as a genuine 0) —
                     // some engines only carry certain fields (e.g. cmp/att)
@@ -3663,6 +3706,18 @@ function App() {
   const [builderDragOffset, setBuilderDragOffset] = useState({ x: 0, y: 0 })
   const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(true)
   const [isMobileLeaderboardOpen, setIsMobileLeaderboardOpen] = useState(false)
+  // Full-screen takeover (see the modal below) locks background scroll while
+  // open — without this, dragging through the leaderboard's own scroll area
+  // could still hand the gesture off to the homepage underneath once the
+  // list hit its top/bottom, scrolling the page behind the modal.
+  useEffect(() => {
+    if (!isMobileLeaderboardOpen) return
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = previousOverflow
+    }
+  }, [isMobileLeaderboardOpen])
   // Score is hidden inline on the mobile leaderboard (no room for it next to
   // a full player name on a phone width) — tapping a row reveals it instead.
   const mobileLeaderboardRows = useExpandableRows()
@@ -5875,82 +5930,82 @@ function App() {
         </a>
       )}
 
+      {/* Full-screen takeover, not a centered dialog — a max-width/max-height
+          card left visible edges of the homepage around it on mobile, which
+          is what forced a slight horizontal scroll to reach the {x} button
+          and let the background page catch scroll gestures meant for the
+          list. Covering the whole viewport removes both problems: there's no
+          backdrop left to accidentally interact with, and the scroll lock
+          above keeps the homepage from moving underneath. */}
       {isMobile && isMobileLeaderboardOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          style={{ backgroundColor: 'rgba(0,0,0,0.78)', whiteSpace: 'normal' }}
-          onClick={() => setIsMobileLeaderboardOpen(false)}
+          className="fixed inset-0 z-50 flex flex-col"
+          style={{
+            backgroundColor: 'oklch(0.12 0 0)',
+            color: 'oklch(0.88 0 0)',
+            fontFamily: 'monospace',
+            whiteSpace: 'normal',
+          }}
           role="dialog"
           aria-modal="true"
           aria-label="Leaderboard"
         >
           <div
-            className="w-full max-w-[640px] max-h-[92vh] overflow-y-auto rounded-lg"
+            className="flex items-center justify-between px-5 pt-4 pb-3 flex-none"
             style={{
-              backgroundColor: 'oklch(0.12 0 0)',
-              border: '1px solid oklch(0.28 0 0)',
-              color: 'oklch(0.88 0 0)',
-              fontFamily: 'monospace',
-              whiteSpace: 'normal',
+              backgroundColor: 'oklch(0.18 0 0)',
+              borderBottom: '1px solid oklch(0.28 0 0)',
             }}
-            onClick={(e) => e.stopPropagation()}
           >
+            <span className="flex items-baseline gap-2">
+              <span
+                className="font-mono font-bold text-[14px]"
+                style={{ color: 'oklch(0.85 0.15 195)' }}
+              >
+                {'{leaderboard}'}
+              </span>
+              <span
+                className="font-mono text-[10px] uppercase tracking-widest"
+                style={{ color: 'oklch(0.55 0 0)' }}
+              >
+                {leaderboardSportLabel(leaderboard.kind)} · top {leaderboard.rows.length}
+              </span>
+            </span>
+            <span className="flex items-baseline gap-3">
+              <span
+                className="font-mono text-[10px]"
+                style={{ color: 'oklch(0.48 0 0)' }}
+              >
+                {formatLeaderboardDate(leaderboard.generated_at)}
+              </span>
+              <button
+                type="button"
+                onClick={() => setIsMobileLeaderboardOpen(false)}
+                className="font-mono text-[16px] px-2 py-1 hover:opacity-70 transition-opacity"
+                style={{ color: 'oklch(0.85 0.15 195)' }}
+                aria-label="Close leaderboard"
+              >
+                ✕
+              </button>
+            </span>
+          </div>
+          <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain" style={{ backgroundColor: 'oklch(0.10 0 0)' }}>
             <div
-              className="flex items-center justify-between px-5 py-3 sticky top-0"
+              className="grid items-center px-4 py-1 font-mono text-[10px] uppercase tracking-widest sticky top-0"
               style={{
-                backgroundColor: 'oklch(0.18 0 0)',
-                borderBottom: '1px solid oklch(0.28 0 0)',
+                gridTemplateColumns: `22px minmax(0,1fr) 36px ${mobileStreakColPx}px`,
+                gap: '8px',
+                backgroundColor: 'oklch(0.14 0 0)',
+                borderBottom: '1px solid oklch(0.20 0 0)',
+                color: 'oklch(0.42 0 0)',
               }}
             >
-              <span className="flex items-baseline gap-2">
-                <span
-                  className="font-mono font-bold text-[14px]"
-                  style={{ color: 'oklch(0.85 0.15 195)' }}
-                >
-                  {'{leaderboard}'}
-                </span>
-                <span
-                  className="font-mono text-[10px] uppercase tracking-widest"
-                  style={{ color: 'oklch(0.55 0 0)' }}
-                >
-                  {leaderboardSportLabel(leaderboard.kind)} · top {leaderboard.rows.length}
-                </span>
-              </span>
-              <span className="flex items-baseline gap-3">
-                <span
-                  className="font-mono text-[10px]"
-                  style={{ color: 'oklch(0.48 0 0)' }}
-                >
-                  {formatLeaderboardDate(leaderboard.generated_at)}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setIsMobileLeaderboardOpen(false)}
-                  className="font-mono text-[14px] hover:opacity-70 transition-opacity"
-                  style={{ color: 'oklch(0.85 0.15 195)' }}
-                  aria-label="Close leaderboard"
-                >
-                  ✕
-                </button>
-              </span>
+              <span>#</span>
+              <span>player</span>
+              <span>tm</span>
+              <span className="text-right">streak</span>
             </div>
-            <div style={{ backgroundColor: 'oklch(0.10 0 0)' }}>
-              <div
-                className="grid items-center px-4 py-1 font-mono text-[10px] uppercase tracking-widest sticky top-0"
-                style={{
-                  gridTemplateColumns: `22px minmax(0,1fr) 36px ${mobileStreakColPx}px`,
-                  gap: '8px',
-                  backgroundColor: 'oklch(0.14 0 0)',
-                  borderBottom: '1px solid oklch(0.20 0 0)',
-                  color: 'oklch(0.42 0 0)',
-                }}
-              >
-                <span>#</span>
-                <span>player</span>
-                <span>tm</span>
-                <span className="text-right">streak</span>
-              </div>
-              {leaderboard.rows.map((row, idx) => {
+            {leaderboard.rows.map((row, idx) => {
                 const rank = String(idx + 1).padStart(2, '0')
                 const player = normalizeLeaderboardPlayer(row.player)
                 const star = idx < 3 ? '★' : ' '
@@ -5997,7 +6052,6 @@ function App() {
                   </div>
                 )
               })}
-            </div>
           </div>
         </div>
       )}
