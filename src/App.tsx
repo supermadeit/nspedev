@@ -13,6 +13,7 @@ import { QueryBuilder, clearPersistedBuilderState } from '@/components/QueryBuil
 import { QueryBuilderTutorial } from '@/components/QueryBuilderTutorial'
 import { AutoDemo } from '@/components/AutoDemo'
 import { SampleQueriesModal } from '@/components/SampleQueriesModal'
+import { LearnNspeModal } from '@/components/LearnNspeModal'
 import { H2hStaffOverlay } from '@/components/H2hStaffOverlay'
 import { MatchupInsightOverlay } from '@/components/MatchupInsightOverlay'
 import { PlayerSearchDropdown } from '@/components/PlayerSearchDropdown'
@@ -1039,12 +1040,16 @@ function QueryGateNotice({ gate, isLoggedIn, onRetry }: { gate: QueryGateState; 
 // fewer are left, and an urgent one right before the wall at 1. Nothing
 // renders once logged in (App.tsx clears `remaining` to null there) or before
 // the first response has told us a count at all.
-function GuestQuotaNotice({ remaining }: { remaining: number | null }) {
+//
+// `stacked` (mobile only): {sample-queries} now also lives in this same
+// left-edge slot on mobile, so this notice sits one line further up there
+// instead of sharing the row — desktop still has the slot to itself.
+function GuestQuotaNotice({ remaining, stacked }: { remaining: number | null; stacked?: boolean }) {
   if (remaining == null || remaining > 5) return null
   const urgent = remaining <= 1
   return (
     <span
-      className="absolute -top-6 left-0 font-mono font-bold text-[12px] whitespace-nowrap"
+      className={`absolute ${stacked ? '-top-11' : '-top-6'} left-0 font-mono font-bold text-[12px] whitespace-nowrap`}
       style={{ color: urgent ? 'oklch(0.78 0.18 145)' : 'oklch(0.55 0 0)' }}
     >
       {urgent ? '1 free query left today — ' : `${remaining} free queries left today`}
@@ -3555,6 +3560,7 @@ function App() {
   const [isTutorialOpen, setIsTutorialOpen] = useState(false)
   const [isSampleDemoOpen, setIsSampleDemoOpen] = useState(false)
   const [isSampleQueriesOpen, setIsSampleQueriesOpen] = useState(false)
+  const [isLearnOpen, setIsLearnOpen] = useState(false)
   // Desktop results window: default is a little larger than it used to be
   // (720 wide, up to 74vh tall) and the bottom-right grip resizes it. height
   // stays null until the user drags, so it auto-sizes to its content.
@@ -4693,17 +4699,9 @@ function App() {
             <span style={{ color: 'oklch(0.75 0.15 145)' }}>{'{preview}'}</span>
           </span>
         )}
-        {isMobile && (
-          <button
-            onClick={() => setIsSampleQueriesOpen(true)}
-            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-            style={{ color: 'oklch(0.65 0.12 145)' }}
-          >
-            {'{sample-queries}'}
-          </button>
-        )}
-        {/* {pocket} moved to above the search bar's right edge (both
-            platforms) — see the search block below. */}
+        {/* {sample-queries} moved to above the search bar's left edge on
+            mobile (mirrors {pocket} on the right) — see the search block
+            below. {pocket} moved there too, on both platforms. */}
         {/* {tutorial} moved into the query builder panel's own header — it
             walks through the query builder specifically, not the site as a
             whole, so it belongs on that panel rather than up here (a
@@ -4772,6 +4770,7 @@ function App() {
         resetBuilder={clearPersistedBuilderState}
       />
       <SampleQueriesModal open={isSampleQueriesOpen} onClose={() => setIsSampleQueriesOpen(false)} />
+      <LearnNspeModal open={isLearnOpen} onClose={() => setIsLearnOpen(false)} />
       <H2hStaffOverlay open={isH2hStaffOpen} onClose={() => setIsH2hStaffOpen(false)} payload={h2hResult} />
       <MatchupInsightOverlay open={isMatchupOpen} onClose={() => setIsMatchupOpen(false)} payload={matchupResult} />
       {/* {sample-commands}'s scripted-typing demo is shelved (not deleted) in
@@ -5344,8 +5343,10 @@ function App() {
               <div className="relative w-full" ref={mobileSearchContainerRef}>
                 {/* {pocket}: tucked above the search bar's right edge, same
                     spot as desktop. Greyed out logged-out (click sends to
-                    log in). GuestQuotaNotice takes the opposite (left) edge
-                    of the same strip, so the two never collide. */}
+                    log in). {sample-queries} takes the opposite (left) edge
+                    of the same strip, so the two never collide.
+                    GuestQuotaNotice shares that left edge — stacked one line
+                    above {sample-queries} rather than on top of it. */}
                 <button
                   type="button"
                   onClick={openPockets}
@@ -5355,7 +5356,15 @@ function App() {
                 >
                   {'{pocket}'}
                 </button>
-                {!user && <GuestQuotaNotice remaining={guestQueriesRemaining} />}
+                <button
+                  type="button"
+                  onClick={() => setIsSampleQueriesOpen(true)}
+                  className="absolute -top-6 left-0 font-mono font-bold text-[12px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+                  style={{ color: 'oklch(0.65 0.12 145)' }}
+                >
+                  {'{sample-queries}'}
+                </button>
+                {!user && <GuestQuotaNotice remaining={guestQueriesRemaining} stacked />}
                 <input
                   ref={searchInputRef}
                   type="text"
@@ -5538,12 +5547,21 @@ function App() {
             className={`mt-6 flex items-baseline gap-x-5 whitespace-nowrap ${isMobile ? 'justify-center' : 'text-left'}`}
             style={isMobile ? undefined : { paddingLeft: '97px' }}
           >
-            <p className="font-mono text-[14px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
-              search a player or type: nspe
-            </p>
-            {/* Desktop only — mobile keeps {sample-queries} in the top-left
-                stack. Moved here from the bottom-right group. The bar keeps
-                "nspe" from reading as "nspe {sample-queries}". */}
+            {/* Replaces the old static "search a player or type: nspe" hint —
+                opens a live answer (POST /learn, free/no-quota) instead of
+                just telling people the CLI exists. */}
+            <button
+              type="button"
+              onClick={() => setIsLearnOpen(true)}
+              className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+              style={{ color: 'oklch(0.90 0.18 195)' }}
+            >
+              {'{learn.nspe}'}
+            </button>
+            {/* Desktop only — mobile keeps {sample-queries} above the search
+                bar's left edge now (see above). Moved here from the
+                bottom-right group. The bar keeps "nspe" from reading as
+                "nspe {sample-queries}". */}
             {!isMobile && (
               <span aria-hidden="true" className="font-mono text-[14px] -mx-2" style={{ color: 'oklch(0.45 0 0)' }}>|</span>
             )}
