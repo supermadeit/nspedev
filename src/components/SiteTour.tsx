@@ -38,14 +38,14 @@ interface TourStep {
 // considered self-explanatory on their own.
 const STEPS: TourStep[] = [
   {
-    target: 'tour-pocket',
-    caption:
-      '{pocket} saves the result you\'re looking at so you can come back to it later. It needs an account — logged out, it sends you to log in instead.',
-  },
-  {
     target: 'tour-search',
     caption:
       'Type here and this bar suggests real, runnable commands as you go — that\'s predictive syntax ({psc}). Prefer a blank slate? Turn it off in Account Settings.',
+  },
+  {
+    target: 'tour-sample-queries',
+    caption:
+      '{sample-queries} is a list of ready-made commands — copy and paste any of them. One more thing worth knowing: this search bar also understands plain-English questions, not just commands — ask something like "how many times has Mahomes thrown for 300 yards" and it reads the question, runs it, and answers, no syntax required.',
   },
   {
     target: 'tour-build',
@@ -53,9 +53,9 @@ const STEPS: TourStep[] = [
       'Don\'t want to type a command at all? {build} assembles one from buttons instead — pick a mode, a sport, a stat, a number. It has its own walkthrough once you open it.',
   },
   {
-    target: 'tour-sample-queries',
+    target: 'tour-pocket',
     caption:
-      '{sample-queries} is a list of ready-made commands — copy and paste any of them. One more thing worth knowing: this search bar also understands plain-English questions, not just commands — ask something like "how many times has Mahomes thrown for 300 yards" and it reads the question, runs it, and answers, no syntax required.',
+      '{pocket} saves the result you\'re looking at so you can come back to it later. It needs an account — logged out, it sends you to log in instead.',
   },
 ]
 

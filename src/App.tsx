@@ -4681,26 +4681,19 @@ function App() {
       <div
         className={
           isMobile
-            ? 'absolute top-2 left-3 z-20 flex flex-col items-start gap-1 font-mono text-[11px]'
-            : 'absolute top-6 left-6 z-20 flex flex-col items-start gap-1 font-mono text-[14px]'
+            ? 'absolute top-2 left-3 z-20 flex flex-col items-start gap-1 font-mono text-[13px]'
+            : 'absolute top-6 left-6 z-20 flex flex-col items-start gap-1 font-mono text-[17px]'
         }
       >
-        {isMobile ? (
-          <span
-            className="flex items-center gap-2 whitespace-nowrap"
-            style={{ color: 'oklch(0.95 0 0)', fontWeight: 700 }}
-          >
-            <span>
-              nspe.dev{' '}
-              <span style={{ color: 'oklch(0.75 0.15 145)' }}>{'{preview}'}</span>
-            </span>
-          </span>
-        ) : (
-          <span style={{ color: 'oklch(0.95 0 0)', fontWeight: 700 }}>
-            nspe.dev{' '}
-            <span style={{ color: 'oklch(0.75 0.15 145)' }}>{'{preview}'}</span>
-          </span>
-        )}
+        {/* {preview} dropped — no longer needed. Bordered like the power-
+            rankings team-code box (RankingTile in WorldCupApp.tsx), same
+            shape, terminal green instead of that box's cyan. */}
+        <span
+          className="rounded px-2 py-1 font-bold whitespace-nowrap"
+          style={{ color: 'oklch(0.95 0 0)', border: '1px solid oklch(0.85 0.15 145)' }}
+        >
+          nspe.dev
+        </span>
         {/* {sample-queries} moved to above the search bar's left edge on
             mobile (mirrors {pocket} on the right) — see the search block
             below. {pocket} moved there too, on both platforms. */}
@@ -4721,28 +4714,22 @@ function App() {
         {/* {tutorial} and {sample-queries} moved down next to {glossary} —
             see the bottom-row group near the leaderboard panel. Desktop
             {charts}/{nfl.season} now sit in that bottom row too, and
-            {pocket} sits above the search bar's right edge (see below). */}
+            {pocket} sits above the search bar's right edge (see below).
+            Mobile's {charts} moved off the homepage entirely — it's now the
+            top-right link on the power-rankings page instead (WorldCupApp.tsx),
+            replacing {nfl.playoffs} there for now. */}
 
         {/* Mobile drops {sign-up} — {log-in} leads to the same place ("don't
-            have an account? sign up") — and uses the slot for {charts}. */}
-        {isMobile ? (
+            have an account? sign up") — this slot used to also hold {charts}
+            on mobile, now moved (see above). */}
+        {!isMobile && !user && (
           <a
-            href="/charts"
+            href="/signup"
             className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
             style={{ color: 'oklch(0.85 0.15 195)' }}
           >
-            {'{charts}'}
+            {'{sign-up}'}
           </a>
-        ) : (
-          !user && (
-            <a
-              href="/signup"
-              className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-              style={{ color: 'oklch(0.85 0.15 195)' }}
-            >
-              {'{sign-up}'}
-            </a>
-          )
         )}
 
         {/* Signed in -> the user's handle (falls back to "account" until the

@@ -581,6 +581,7 @@ function PlayoffsView() {
 type ActiveView = 'rankings' | 'schedule' | 'playoffs'
 
 export default function WorldCupApp() {
+  const isMobile = useIsMobile()
   const data = nflData as unknown as NflSeasonData
   const schedule = scheduleData as unknown as ScheduleData
   const [activeView, setActiveView] = useState<ActiveView>('rankings')
@@ -730,11 +731,21 @@ export default function WorldCupApp() {
                 {`{nfl.${view}}`}
               </button>
             ))}
-            <span className="font-mono font-bold text-[14px] whitespace-nowrap inline-flex items-baseline gap-1.5"
-              style={{ color: C.dim, cursor: 'not-allowed', userSelect: 'none' }}>
-              <span>{'{nfl.playoffs}'}</span>
-              <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: C.label }}>(pending)</span>
-            </span>
+            {/* Mobile: {charts} moved here from the homepage, taking
+                {nfl.playoffs}'s slot for now (shelved, not deleted — still
+                shown on desktop below). Desktop keeps {charts} where it
+                already was, on the homepage's bottom row. */}
+            {isMobile ? (
+              <a href="/charts" className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap" style={{ color: C.accent }}>
+                {'{charts}'}
+              </a>
+            ) : (
+              <span className="font-mono font-bold text-[14px] whitespace-nowrap inline-flex items-baseline gap-1.5"
+                style={{ color: C.dim, cursor: 'not-allowed', userSelect: 'none' }}>
+                <span>{'{nfl.playoffs}'}</span>
+                <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: C.label }}>(pending)</span>
+              </span>
+            )}
           </div>
         </div>
         {activeView === 'rankings' && (
