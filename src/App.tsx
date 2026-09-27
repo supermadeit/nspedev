@@ -13,6 +13,7 @@ import { QueryBuilder, clearPersistedBuilderState } from '@/components/QueryBuil
 import { QueryBuilderTutorial } from '@/components/QueryBuilderTutorial'
 import { AutoDemo } from '@/components/AutoDemo'
 import { SampleQueriesModal } from '@/components/SampleQueriesModal'
+import { contextFromResponse, detectFollowup, hasPendingDisambiguation, type LastNlContext } from '@/lib/followupQuery'
 import { LearnNspeModal } from '@/components/LearnNspeModal'
 import { SiteTour } from '@/components/SiteTour'
 import { H2hStaffOverlay } from '@/components/H2hStaffOverlay'
@@ -3680,6 +3681,14 @@ function App() {
   const [firstPaResult, setFirstPaResult] = useState<MlbFirstPaTrendPayload | null>(null)
   const [teamRunsResult, setTeamRunsResult] = useState<MlbTeamRunsPayload | null>(null)
   const [lastQuery, setLastQuery] = useState('')
+  // Conversational follow-ups ("what about receiving?") — client-side only,
+  // per the backend's spec (docs/frontend_spec_followup_questions_2026-09-27.md
+  // in nspe-v2). lastNlContext survives across queries (deliberately not
+  // cleared in resetResultState — an error/disambiguation shouldn't cost the
+  // conversation its only usable topic); followupSummary is tied to whatever
+  // result is currently shown, so it resets with everything else.
+  const [lastNlContext, setLastNlContext] = useState<LastNlContext | null>(null)
+  const [followupSummary, setFollowupSummary] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [queryError, setQueryError] = useState<string | null>(null)
   // The /run allowance gate (401 not logged in, 402 allowance used up) — kept
@@ -4006,6 +4015,7 @@ function App() {
   const resetResultState = () => {
     setResultsFilter('')
     setQueryGate(null)
+    setFollowupSummary(null)
     setExpandedPlayers({})
     setIsH2hStaffOpen(false)
     setH2hResult(null)
@@ -4330,12 +4340,25 @@ function App() {
   const runQuery = async (query: string) => {
     const sanitizedQuery = sanitizeQueryForApi(query)
 
+    // Conversational follow-up check — a match rewrites the fragment into a
+    // full sentence merging it with lastNlContext (see followupQuery.ts);
+    // that rewritten sentence, never the raw fragment, is what actually gets
+    // sent. A miss (including anything that names its own player) falls
+    // through unchanged, identical to before this feature existed.
+    const followup = detectFollowup(sanitizedQuery, lastNlContext)
+    const effectiveQuery = followup ? followup.sentence : sanitizedQuery
+
     setIsLoading(true)
-    setLastQuery(sanitizedQuery || query.trim())
+    // Showing the rewritten sentence here — the same header every result
+    // card already displays — doubles as the required "never merge
+    // silently" transparency: what's shown is exactly what was asked on the
+    // person's behalf, not the shorthand they actually typed.
+    setLastQuery(effectiveQuery || query.trim())
     setQueryError(null)
     resetResultState()
+    setFollowupSummary(followup?.summary ?? null)
 
-    if (!sanitizedQuery) {
+    if (!effectiveQuery) {
       setQueryResults([])
       setQueryError('Enter a valid query.')
       setIsLoading(false)
@@ -4359,16 +4382,33 @@ function App() {
             ...authHeader(),
             ...guestTokenHeader(),
           },
-          body: JSON.stringify({ query: sanitizedQuery }),
+          body: JSON.stringify({ query: effectiveQuery }),
         },
         // -parlay/-legs build a whole slate server-side and run far longer than
         // an ordinary query, so they get a much longer ceiling.
-        /(^|\s)-(parlay|legs)\b/.test(sanitizedQuery) ? 120000 : 12000,
+        /(^|\s)-(parlay|legs)\b/.test(effectiveQuery) ? 120000 : 12000,
       )
 
       const payload = await parseApiPayload(response)
 
       console.log('Query response:', payload, 'via', url)
+
+      // Remember this turn's topic for the next follow-up. A genuinely new
+      // topic replaces the old one outright (no accumulated history). A
+      // pending disambiguation leaves lastNlContext untouched — nothing
+      // valid resolved yet, so there's nothing to overwrite it with. But a
+      // response that succeeded (no error) and simply isn't NL-shaped — raw
+      // CLI syntax, or an nl block with no player subject — clears it
+      // rather than leaving the old topic sitting there: nobody expects
+      // "what about this season?" two messages later to reattach to
+      // whatever the conversation was about before an unrelated query ran
+      // successfully in between.
+      const newContext = contextFromResponse(payload)
+      if (newContext) {
+        setLastNlContext(newContext)
+      } else if (!hasPendingDisambiguation(payload) && !getPayloadError(payload)) {
+        setLastNlContext(null)
+      }
 
       // The guest-quota block rides in the body now (confirmed spec), not a
       // header — {kind:"guest", remaining, limit, token} anonymous,
@@ -4386,7 +4426,7 @@ function App() {
 
       setLastPayload(payload)
       setPocketSnapshot(null)
-      applyPayload(payload, sanitizedQuery)
+      applyPayload(payload, effectiveQuery)
     } catch (error) {
       console.error('Query error:', error)
       setQueryResults([])
@@ -5117,6 +5157,15 @@ function App() {
             ref={resultsScrollRef}
             className={`overflow-y-auto px-5 pb-4 space-y-3 ${isMobile ? 'max-h-[calc(100dvh-130px)]' : 'flex-1 min-h-0'}`}
           >
+            {/* Required "never merge silently" transparency for a follow-up
+                question — the header above already shows the full rewritten
+                sentence, this line makes explicit that it was inferred, not
+                typed, and names what carried over. */}
+            {followupSummary && !isLoading && (
+              <div className="pt-3 font-mono text-[11px]" style={{ color: 'oklch(0.55 0.10 195)' }}>
+                {followupSummary}
+              </div>
+            )}
             {(rowCounts.total > 0 || resultsFilter) && !isLoading && (
               <div
                 className="sticky top-0 z-10 -mx-5 px-5 pt-3 pb-2"
