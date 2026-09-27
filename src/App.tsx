@@ -33,6 +33,7 @@ import {
   formatQueryError,
   getPayloadError,
   parseApiPayload,
+  QueryGateError,
   RUN_ENDPOINTS,
   sanitizeQueryForApi,
 } from '@/lib/nspe-api'
@@ -930,6 +931,100 @@ function LoadingMessage({ query }: { query: string }) {
       <div style={{ color: 'oklch(0.85 0.15 195)' }}>{isParlay ? 'building parlay…' : 'building legs…'}</div>
       <div className="text-[11px]" style={{ color: 'oklch(0.55 0 0)' }}>
         {`this can take up to a minute · ${elapsed}s`}
+      </div>
+    </div>
+  )
+}
+
+export interface QueryGateState {
+  status: 401 | 402 | 429
+  detail: string | null
+  retryAfterSeconds: number | null
+}
+
+// The /run allowance gate: shown in place of results when fetchFirstSuccessful
+// throws a QueryGateError (401 not logged in, 402 allowance used up, 429 the
+// subscriber rate limit), instead of the plain error text every other failure
+// gets — 401/402 are real answers from the backend, not something gone wrong,
+// so they read as an invitation rather than an error. Copy differs by status
+// and by whether the visitor is already logged in (402 while logged in means
+// "buy more credits," not "sign up" — they already have an account). 429 is
+// its own case — no sign-up/login helps, the account is fine, it's just going
+// too fast — with a live countdown when the backend sends Retry-After.
+function QueryGateNotice({ gate, isLoggedIn, onRetry }: { gate: QueryGateState; isLoggedIn: boolean; onRetry?: () => void }) {
+  const ACCENT = 'oklch(0.78 0.18 145)'
+  const DIM = 'oklch(0.60 0 0)'
+  const [secondsLeft, setSecondsLeft] = useState(gate.retryAfterSeconds ?? 0)
+  useEffect(() => {
+    setSecondsLeft(gate.retryAfterSeconds ?? 0)
+    if (!gate.retryAfterSeconds) return
+    const id = window.setInterval(() => setSecondsLeft((s) => Math.max(0, s - 1)), 1000)
+    return () => window.clearInterval(id)
+  }, [gate.retryAfterSeconds])
+
+  if (gate.status === 429) {
+    return (
+      <div
+        className="rounded-lg px-4 py-4 space-y-2 text-center font-mono"
+        style={{ backgroundColor: 'oklch(0.16 0 0)', border: '1px solid oklch(0.55 0 0)' }}
+      >
+        <div className="text-[14px] font-bold" style={{ color: 'oklch(0.85 0 0)' }}>Too many queries at once</div>
+        <div className="text-[13px]" style={{ color: 'oklch(0.85 0 0)' }}>
+          {secondsLeft > 0 ? `Give it ${secondsLeft}s and try again.` : 'Give it a few seconds and try again.'}
+        </div>
+        {gate.detail && <div className="text-[11px]" style={{ color: DIM }}>{gate.detail}</div>}
+        {onRetry && (
+          <button
+            type="button"
+            onClick={onRetry}
+            disabled={secondsLeft > 0}
+            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
+            style={{ color: ACCENT }}
+          >
+            {'{try again}'}
+          </button>
+        )}
+      </div>
+    )
+  }
+
+  const isRefill = gate.status === 402 && isLoggedIn
+  const headline = isRefill
+    ? "You're out of credits for now"
+    : gate.status === 402
+    ? "You've used today's free queries"
+    : 'Your session has expired'
+  const body = isRefill
+    ? 'Refill to keep running queries.'
+    : gate.status === 402
+    ? 'Create a free account to keep going — or come back tomorrow for another free batch.'
+    : 'Log in again to keep running queries.'
+
+  return (
+    <div
+      className="rounded-lg px-4 py-4 space-y-3 text-center font-mono"
+      style={{ backgroundColor: 'oklch(0.16 0 0)', border: `1px solid ${ACCENT}` }}
+    >
+      <div className="text-[14px] font-bold" style={{ color: ACCENT }}>{headline}</div>
+      <div className="text-[13px]" style={{ color: 'oklch(0.85 0 0)' }}>{body}</div>
+      {gate.detail && (
+        <div className="text-[11px]" style={{ color: DIM }}>{gate.detail}</div>
+      )}
+      <div className="flex items-center justify-center gap-4 pt-1">
+        {isRefill ? (
+          <a href="/refill" className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: ACCENT }}>
+            {'{refill}'}
+          </a>
+        ) : (
+          <>
+            <a href="/signup" className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: ACCENT }}>
+              {'{sign-up}'}
+            </a>
+            <a href="/login" className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: 'oklch(0.85 0.15 195)' }}>
+              {'{log-in}'}
+            </a>
+          </>
+        )}
       </div>
     </div>
   )
@@ -3509,6 +3604,10 @@ function App() {
   const [lastQuery, setLastQuery] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [queryError, setQueryError] = useState<string | null>(null)
+  // The /run allowance gate (401 not logged in, 402 allowance used up) — kept
+  // separate from queryError so it renders as a sign-up/refill prompt instead
+  // of plain error text.
+  const [queryGate, setQueryGate] = useState<QueryGateState | null>(null)
   const [expandedPlayers, setExpandedPlayers] = useState<Record<string, boolean>>({})
   const [hitlistEntries, setHitlistEntries] = useState<HitlistEntry[]>(hitlistData as HitlistEntry[])
   const [isBuilderOpen, setIsBuilderOpen] = useState(false)
@@ -3811,6 +3910,7 @@ function App() {
   // pocket, starts from nothing so two views can never render at once.
   const resetResultState = () => {
     setResultsFilter('')
+    setQueryGate(null)
     setExpandedPlayers({})
     setIsH2hStaffOpen(false)
     setH2hResult(null)
@@ -4154,9 +4254,11 @@ function App() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            // Attach the Supabase JWT when the user is signed in. The /run gate
-            // is still commented out on the backend, so anonymous requests keep
-            // working until the backend flips it on.
+            // Attach the Supabase JWT when the user is signed in. Anonymous
+            // requests still go through with no header — the backend's /run
+            // gate allows a guest allowance before requiring login (see the
+            // QueryGateError handling below for what happens once that runs
+            // out, for either a guest or a signed-in user).
             ...authHeader(),
           },
           body: JSON.stringify({ query: sanitizedQuery }),
@@ -4176,7 +4278,14 @@ function App() {
     } catch (error) {
       console.error('Query error:', error)
       setQueryResults([])
-      setQueryError(formatQueryError(error))
+      // A real "you're gated" answer from the backend — a sign-up/refill
+      // prompt, not the generic connection-error text (which would make a
+      // working backend look like it's down).
+      if (error instanceof QueryGateError) {
+        setQueryGate({ status: error.status, detail: error.detail, retryAfterSeconds: error.retryAfterSeconds })
+      } else {
+        setQueryError(formatQueryError(error))
+      }
     } finally {
       setIsLoading(false)
     }
@@ -4995,6 +5104,8 @@ function App() {
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
                 <LoadingMessage query={lastQuery} />
               </div>
+            ) : queryGate ? (
+              <QueryGateNotice gate={queryGate} isLoggedIn={Boolean(user)} onRetry={() => runQuery(lastQuery)} />
             ) : h2hResult ? (
               <H2hView payload={h2hResult} />
             ) : pitchResult ? (

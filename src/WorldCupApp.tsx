@@ -5,7 +5,7 @@ import nflData from '@/assets/data/worldcup.json'
 import scheduleData from '@/assets/data/nfl_schedule.json'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { authHeader } from '@/lib/auth-token'
-import { fetchFirstSuccessful, parseApiPayload, RUN_ENDPOINTS } from '@/lib/nspe-api'
+import { fetchFirstSuccessful, parseApiPayload, QueryGateError, RUN_ENDPOINTS } from '@/lib/nspe-api'
 import {
   extractMatchupInsightPayload,
   extractPowerRankingsPayload,
@@ -595,6 +595,10 @@ export default function WorldCupApp() {
   const [matchupResult, setMatchupResult] = useState<MatchupInsightPayload | null>(null)
   const [isMatchupOpen, setIsMatchupOpen] = useState(false)
   const [isMatchupLoading, setIsMatchupLoading] = useState(false)
+  // A gate error here (401/402) used to just vanish into console.error, so a
+  // guest who ran out of allowance clicking a matchup would see the loading
+  // indicator stop with nothing happening — looks broken rather than gated.
+  const [matchupNotice, setMatchupNotice] = useState<{ message: string; showAuthLinks: boolean } | null>(null)
   // Self-contained on purpose — this page has no shared query-running
   // infrastructure with App.tsx (separate route, separate component tree),
   // so it hits /run directly with the same base-URL/auth helpers rather
@@ -606,6 +610,7 @@ export default function WorldCupApp() {
   // additive and doesn't block this one.
   const requestMatchup = async (teamA: string, teamB: string) => {
     setIsMatchupLoading(true)
+    setMatchupNotice(null)
     try {
       const { response } = await fetchFirstSuccessful(
         RUN_ENDPOINTS,
@@ -629,12 +634,29 @@ export default function WorldCupApp() {
       }
     } catch (err) {
       console.error('Failed to load matchup insight:', err)
+      if (err instanceof QueryGateError) {
+        setMatchupNotice({
+          message:
+            err.status === 402
+              ? "You've used today's free queries."
+              : err.status === 429
+              ? 'Too many queries at once — give it a few seconds.'
+              : 'Your session has expired.',
+          showAuthLinks: err.status !== 429,
+        })
+      } else {
+        setMatchupNotice({ message: "Couldn't load that matchup — try again in a moment.", showAuthLinks: false })
+      }
     } finally {
       setIsMatchupLoading(false)
     }
   }
 
   const [powerRankings, setPowerRankings] = useState<PowerRankingsPayload | null>(null)
+  // A failed fetch used to just leave "loading power rankings…" showing
+  // forever (the catch below only logged it) — this is what lets that state
+  // actually say what happened, gate or otherwise.
+  const [powerRankingsError, setPowerRankingsError] = useState<{ message: string; showAuthLinks: boolean } | null>(null)
   const [selectedTeam, setSelectedTeam] = useState<PowerRankingsRow | null>(null)
   // Fetched once on page load rather than click-triggered like matchup
   // insight — power rankings is this page's primary content now, so it
@@ -657,6 +679,20 @@ export default function WorldCupApp() {
         if (!cancelled && rankings) setPowerRankings(rankings)
       } catch (err) {
         console.error('Failed to load power rankings:', err)
+        if (cancelled) return
+        if (err instanceof QueryGateError) {
+          setPowerRankingsError({
+            message:
+              err.status === 402
+                ? "You've used today's free queries."
+                : err.status === 429
+                ? 'Too many queries at once — give it a few seconds and refresh.'
+                : 'Your session has expired.',
+            showAuthLinks: err.status !== 429,
+          })
+        } else {
+          setPowerRankingsError({ message: "Couldn't load power rankings — try refreshing.", showAuthLinks: false })
+        }
       }
     })()
     return () => { cancelled = true }
@@ -724,6 +760,15 @@ export default function WorldCupApp() {
                   const row = powerRankings.results.find((r) => r.team === team)
                   if (row) setSelectedTeam(row)
                 }} />
+              ) : powerRankingsError ? (
+                <div className="font-mono text-[13px] flex items-center gap-3" style={{ color: C.value }}>
+                  <span>{powerRankingsError.message}</span>
+                  {powerRankingsError.showAuthLinks && (
+                    <a href="/signup" className="underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
+                      {'{sign-up}'}
+                    </a>
+                  )}
+                </div>
               ) : (
                 <div className="font-mono text-[13px]" style={{ color: C.dim }}>loading power rankings…</div>
               )}
@@ -751,6 +796,28 @@ export default function WorldCupApp() {
           style={{ color: C.accent }}
         >
           loading matchup…
+        </div>
+      )}
+      {!isMatchupLoading && matchupNotice && (
+        <div
+          className="fixed bottom-3 right-4 z-20 flex items-center gap-3 font-mono text-[13px] rounded px-3 py-1.5"
+          style={{ backgroundColor: C.panel, border: `1px solid ${C.border}`, color: C.value }}
+        >
+          <span>{matchupNotice.message}</span>
+          {matchupNotice.showAuthLinks && (
+            <a href="/signup" className="underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
+              {'{sign-up}'}
+            </a>
+          )}
+          <button
+            type="button"
+            onClick={() => setMatchupNotice(null)}
+            className="hover:opacity-70 transition-opacity"
+            style={{ color: C.label }}
+            aria-label="Dismiss"
+          >
+            ✕
+          </button>
         </div>
       )}
       <MatchupInsightOverlay open={isMatchupOpen} onClose={() => setIsMatchupOpen(false)} payload={matchupResult} />

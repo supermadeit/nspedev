@@ -69,6 +69,57 @@ export const API_BASE_CANDIDATES = buildApiBaseCandidates()
 export const CONFIGURED_API_BASE = API_BASE_CANDIDATES[0] || 'https://api.nspe.dev'
 export const RUN_ENDPOINTS = buildRunEndpoints(API_BASE_CANDIDATES)
 
+// The /run query gate (daily allowance / login-required), as opposed to a
+// dead or unreachable endpoint. A 401/402 is a real answer from the backend
+// — not a reason to try the next candidate base URL, and not a "connection
+// failed" error — so fetchFirstSuccessful stops immediately and throws this
+// instead of falling through to its generic "No API endpoint responded"
+// message, which would otherwise make a fully-working backend look down.
+export class QueryGateError extends Error {
+  /** 401 = not logged in (or an expired session); 402 = allowance used up;
+   * 429 = subscriber rate limit (tightened 120/min -> 25/min server-side). */
+  status: 401 | 402 | 429
+  /** The backend's own message, when the body has one readable string field. */
+  detail: string | null
+  /** From a 429's Retry-After header, in seconds, when the backend sends one. */
+  retryAfterSeconds: number | null
+
+  constructor(status: 401 | 402 | 429, detail: string | null, retryAfterSeconds: number | null = null) {
+    super(
+      detail ||
+        (status === 401 ? 'Log in required.' : status === 402 ? 'Query allowance used up.' : 'Too many requests — slow down a little.'),
+    )
+    this.status = status
+    this.detail = detail
+    this.retryAfterSeconds = retryAfterSeconds
+  }
+}
+
+// Tries a few likely field names for the gate's message rather than assuming
+// one exact body shape — same tolerance-for-naming-drift approach every
+// engine-payload parser in this app already takes, since this endpoint's
+// exact response shape isn't finalized yet.
+async function readGateDetail(response: Response): Promise<string | null> {
+  try {
+    const body: unknown = await response.clone().json()
+    if (body && typeof body === 'object') {
+      const rec = body as Record<string, unknown>
+      for (const key of ['message', 'error', 'detail', 'reason']) {
+        const v = rec[key]
+        if (typeof v === 'string' && v.trim()) return v.trim()
+      }
+    }
+  } catch {
+    try {
+      const text = (await response.clone().text()).trim()
+      if (text && !text.startsWith('<')) return text.slice(0, 300)
+    } catch {
+      // fall through to null
+    }
+  }
+  return null
+}
+
 export async function fetchFirstSuccessful(
   urls: string[],
   init: RequestInit,
@@ -86,6 +137,13 @@ export async function fetchFirstSuccessful(
         signal: controller.signal,
       })
 
+      if (response.status === 401 || response.status === 402 || response.status === 429) {
+        window.clearTimeout(timeout)
+        const retryAfterHeader = response.headers.get('Retry-After')
+        const retryAfterSeconds = retryAfterHeader && /^\d+$/.test(retryAfterHeader) ? Number(retryAfterHeader) : null
+        throw new QueryGateError(response.status, await readGateDetail(response), retryAfterSeconds)
+      }
+
       if (!response.ok) {
         failures.push(`${url} -> HTTP ${response.status} ${response.statusText}`.trim())
         continue
@@ -93,6 +151,9 @@ export async function fetchFirstSuccessful(
 
       return { response, url }
     } catch (error) {
+      // A real gate answer, not a dead endpoint — propagate immediately
+      // instead of recording it as a failed candidate and moving on.
+      if (error instanceof QueryGateError) throw error
       const reason = error instanceof Error ? `${error.name}: ${error.message}` : 'Unknown error'
       const onlineState = navigator.onLine ? 'online' : 'offline'
       failures.push(`${url} -> ${reason} (browser ${onlineState})`)

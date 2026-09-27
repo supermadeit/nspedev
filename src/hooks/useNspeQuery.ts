@@ -15,6 +15,7 @@ import {
   formatQueryError,
   getPayloadError,
   parseApiPayload,
+  QueryGateError,
   sanitizeQueryForApi,
 } from '@/lib/nspe-api'
 import {
@@ -196,7 +197,17 @@ export function useNspeQuery(): UseNspeQueryReturn {
     } catch (err) {
       console.error('Query error:', err)
       setResult(null)
-      setError(formatQueryError(err))
+      // A real "you're gated" answer (401 not logged in, 402 allowance used
+      // up) reads as an invitation, not a broken connection.
+      setError(
+        err instanceof QueryGateError
+          ? err.status === 402
+            ? "You've used today's free queries — sign up (or log in) to keep going."
+            : err.status === 429
+            ? 'Too many queries at once — give it a few seconds and try again.'
+            : 'Your session has expired — log in to keep running queries.'
+          : formatQueryError(err),
+      )
     } finally {
       setIsLoading(false)
     }
