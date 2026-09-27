@@ -14,6 +14,7 @@ import { QueryBuilderTutorial } from '@/components/QueryBuilderTutorial'
 import { AutoDemo } from '@/components/AutoDemo'
 import { SampleQueriesModal } from '@/components/SampleQueriesModal'
 import { LearnNspeModal } from '@/components/LearnNspeModal'
+import { SiteTour } from '@/components/SiteTour'
 import { H2hStaffOverlay } from '@/components/H2hStaffOverlay'
 import { MatchupInsightOverlay } from '@/components/MatchupInsightOverlay'
 import { PlayerSearchDropdown } from '@/components/PlayerSearchDropdown'
@@ -3561,6 +3562,7 @@ function App() {
   const [isSampleDemoOpen, setIsSampleDemoOpen] = useState(false)
   const [isSampleQueriesOpen, setIsSampleQueriesOpen] = useState(false)
   const [isLearnOpen, setIsLearnOpen] = useState(false)
+  const [isSiteTourOpen, setIsSiteTourOpen] = useState(false)
   // Desktop results window: default is a little larger than it used to be
   // (720 wide, up to 74vh tall) and the bottom-right grip resizes it. height
   // stays null until the user drags, so it auto-sizes to its content.
@@ -4770,7 +4772,12 @@ function App() {
         resetBuilder={clearPersistedBuilderState}
       />
       <SampleQueriesModal open={isSampleQueriesOpen} onClose={() => setIsSampleQueriesOpen(false)} />
-      <LearnNspeModal open={isLearnOpen} onClose={() => setIsLearnOpen(false)} />
+      <LearnNspeModal
+        open={isLearnOpen}
+        onClose={() => setIsLearnOpen(false)}
+        onStartTour={() => setIsSiteTourOpen(true)}
+      />
+      <SiteTour open={isSiteTourOpen} onClose={() => setIsSiteTourOpen(false)} />
       <H2hStaffOverlay open={isH2hStaffOpen} onClose={() => setIsH2hStaffOpen(false)} payload={h2hResult} />
       <MatchupInsightOverlay open={isMatchupOpen} onClose={() => setIsMatchupOpen(false)} payload={matchupResult} />
       {/* {sample-commands}'s scripted-typing demo is shelved (not deleted) in
@@ -5349,6 +5356,7 @@ function App() {
                     above {sample-queries} rather than on top of it. */}
                 <button
                   type="button"
+                  data-tour="tour-pocket"
                   onClick={openPockets}
                   title={user ? 'Your saved results' : 'Log in to use pockets'}
                   className="absolute -top-6 right-0 font-mono font-bold text-[12px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
@@ -5358,6 +5366,7 @@ function App() {
                 </button>
                 <button
                   type="button"
+                  data-tour="tour-sample-queries"
                   onClick={() => setIsSampleQueriesOpen(true)}
                   className="absolute -top-6 left-0 font-mono font-bold text-[12px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
                   style={{ color: 'oklch(0.65 0.12 145)' }}
@@ -5367,6 +5376,7 @@ function App() {
                 {!user && <GuestQuotaNotice remaining={guestQueriesRemaining} stacked />}
                 <input
                   ref={searchInputRef}
+                  data-tour="tour-search"
                   type="text"
                   value={searchValue}
                   onChange={(e) => {
@@ -5430,6 +5440,7 @@ function App() {
                     full-screen bottom-sheet-turned-takeover below. */}
                 <button
                   type="button"
+                  data-tour="tour-build"
                   onClick={() => setIsBuilderOpen(true)}
                   className="h-[52px] shrink-0 rounded-lg border px-6 font-mono text-[14px] hover:opacity-80 transition-opacity"
                   style={{ color: 'oklch(0.85 0.15 195)', borderColor: 'oklch(0.85 0.15 195)' }}
@@ -5454,6 +5465,7 @@ function App() {
                     of the same strip, so the two never collide. */}
                 <button
                   type="button"
+                  data-tour="tour-pocket"
                   onClick={openPockets}
                   title={user ? 'Your saved results' : 'Log in to use pockets'}
                   className="absolute -top-6 right-0 font-mono font-bold text-[12px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
@@ -5464,6 +5476,7 @@ function App() {
                 {!user && <GuestQuotaNotice remaining={guestQueriesRemaining} />}
                 <input
                   ref={searchInputRef}
+                  data-tour="tour-search"
                   type="text"
                   value={searchValue}
                   onChange={(e) => {
@@ -5523,6 +5536,7 @@ function App() {
 
               <button
                 type="button"
+                data-tour="tour-build"
                 onClick={() => setIsBuilderOpen(true)}
                 className="h-[52px] shrink-0 rounded-lg border px-5 font-mono text-[14px] hover:opacity-80 transition-opacity"
                 style={{ color: 'oklch(0.85 0.15 195)', borderColor: 'oklch(0.85 0.15 195)' }}
@@ -5568,6 +5582,7 @@ function App() {
             {!isMobile && (
               <button
                 type="button"
+                data-tour="tour-sample-queries"
                 onClick={() => setIsSampleQueriesOpen(true)}
                 className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
                 style={{ color: 'oklch(0.65 0.12 145)' }}

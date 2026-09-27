@@ -35,6 +35,10 @@ const TABS = [
 export interface LearnNspeModalProps {
   open: boolean
   onClose: () => void
+  /** Closes this modal and opens {site.tour} — the "start" answer's own copy
+   * ends with "Take the {site.tour} for a hands on demo," so this is that
+   * button. */
+  onStartTour: () => void
 }
 
 function ExampleRow({ example }: { example: LearnTopic['examples'][number] }) {
@@ -62,7 +66,7 @@ function ExampleRow({ example }: { example: LearnTopic['examples'][number] }) {
   )
 }
 
-export function LearnNspeModal({ open, onClose }: LearnNspeModalProps) {
+export function LearnNspeModal({ open, onClose, onStartTour }: LearnNspeModalProps) {
   const [activeTab, setActiveTab] = useState<number>(0)
   const [topic, setTopic] = useState<LearnTopic | null>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
@@ -169,6 +173,26 @@ export function LearnNspeModal({ open, onClose }: LearnNspeModalProps) {
               )}
             </>
           )}
+        </div>
+
+        <div
+          className="flex items-center justify-between px-5 py-3 flex-none"
+          style={{ backgroundColor: 'oklch(0.16 0 0)', borderTop: `1px solid ${C.border}` }}
+        >
+          <span className="font-mono text-[11px]" style={{ color: C.textDim }}>
+            prefer a hands-on walkthrough?
+          </span>
+          <button
+            type="button"
+            onClick={() => {
+              onClose()
+              onStartTour()
+            }}
+            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+            style={{ color: C.green }}
+          >
+            {'{site.tour}'}
+          </button>
         </div>
       </div>
     </div>
