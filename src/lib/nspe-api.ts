@@ -184,6 +184,38 @@ export function sanitizeQueryForApi(query: string): string {
   return query.trim().replace(/^nspe\s+/i, '')
 }
 
+// The guest quota block the backend now sends on every /run response body
+// (confirmed spec, not the header this was originally speculatively read
+// from): {kind: "guest", remaining, limit, token} for an anonymous request,
+// {kind: "credits" | "subscriber", ...} once signed in — no ambiguity from
+// absence, every response says which it is. `token` is the per-browser
+// rollover token (see guestToken.ts) — it rides in the body, not a response
+// header, so no CORS expose_headers entry is needed for it.
+export interface GuestQuota {
+  kind: 'guest'
+  remaining: number
+  limit: number
+  token: string
+}
+
+export function readGuestQuota(payload: ApiPayload): GuestQuota | null {
+  if (!payload || Array.isArray(payload) || typeof payload !== 'object') return null
+  const rec = payload as Record<string, unknown>
+  if (rec.kind !== 'guest') return null
+  const { remaining, limit, token } = rec
+  if (typeof remaining !== 'number' || typeof limit !== 'number' || typeof token !== 'string' || !token) return null
+  return { kind: 'guest', remaining, limit, token }
+}
+
+// True once a response confirms the request was authenticated (credits or a
+// subscriber plan) — the counterpart to readGuestQuota, used to clear a
+// stale guest-quota banner the moment someone logs in mid-session.
+export function isAuthenticatedQuotaKind(payload: ApiPayload): boolean {
+  if (!payload || Array.isArray(payload) || typeof payload !== 'object') return false
+  const kind = (payload as Record<string, unknown>).kind
+  return kind === 'credits' || kind === 'subscriber'
+}
+
 export function getPayloadError(payload: ApiPayload): string | null {
   if (!payload || Array.isArray(payload) || typeof payload !== 'object') {
     return null

@@ -5,7 +5,8 @@ import nflData from '@/assets/data/worldcup.json'
 import scheduleData from '@/assets/data/nfl_schedule.json'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { authHeader } from '@/lib/auth-token'
-import { fetchFirstSuccessful, parseApiPayload, QueryGateError, RUN_ENDPOINTS } from '@/lib/nspe-api'
+import { guestTokenHeader, setGuestToken } from '@/lib/guestToken'
+import { fetchFirstSuccessful, parseApiPayload, QueryGateError, readGuestQuota, RUN_ENDPOINTS } from '@/lib/nspe-api'
 import {
   extractMatchupInsightPayload,
   extractPowerRankingsPayload,
@@ -616,7 +617,7 @@ export default function WorldCupApp() {
         RUN_ENDPOINTS,
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', ...authHeader() },
+          headers: { 'Content-Type': 'application/json', ...authHeader(), ...guestTokenHeader() },
           // Lowercased defensively — the confirmed-working command shape
           // from the backend spec used lowercase codes ("dal vs wsh"); the
           // abbreviations flowing in here (abbrMap / schedule data) are
@@ -627,6 +628,11 @@ export default function WorldCupApp() {
         12000,
       )
       const payload = await parseApiPayload(response)
+      // No quota banner on this page, but the guest token is shared storage
+      // (localStorage) — keep it synced so App.tsx's rollover claim on
+      // sign-in always has the latest one.
+      const guestQuota = readGuestQuota(payload)
+      if (guestQuota) setGuestToken(guestQuota.token)
       const matchup = extractMatchupInsightPayload(payload)
       if (matchup) {
         setMatchupResult(matchup)
@@ -669,12 +675,14 @@ export default function WorldCupApp() {
           RUN_ENDPOINTS,
           {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...authHeader() },
+            headers: { 'Content-Type': 'application/json', ...authHeader(), ...guestTokenHeader() },
             body: JSON.stringify({ query: `nspe nfl team -rankings ${data.season}` }),
           },
           12000,
         )
         const payload = await parseApiPayload(response)
+        const guestQuota = readGuestQuota(payload)
+        if (guestQuota) setGuestToken(guestQuota.token)
         const rankings = extractPowerRankingsPayload(payload)
         if (!cancelled && rankings) setPowerRankings(rankings)
       } catch (err) {

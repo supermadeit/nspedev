@@ -9,6 +9,7 @@ import {
 import type { Session, User } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase'
 import { setAccessToken } from '@/lib/auth-token'
+import { claimGuestCreditsIfAny, getGuestToken } from '@/lib/guestToken'
 
 interface AuthResult {
   error: string | null
@@ -43,16 +44,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let active = true
 
+    // Claims whatever's left on a stored guest-quota token (see
+    // guestToken.ts) once we know a session exists — covers both a
+    // just-completed sign-in/signup (the common case) and an already-logged-in
+    // visitor whose browser picked up a token from guest use in another tab.
+    // Safe to call speculatively: it's a no-op when no token is stored, and
+    // the backend guards replay of an already-redeemed token server-side too.
+    const claimIfSignedIn = (nextSession: Session | null) => {
+      if (nextSession && getGuestToken()) void claimGuestCreditsIfAny()
+    }
+
     supabase.auth.getSession().then(({ data }) => {
       if (!active) return
       setSession(data.session)
       setAccessToken(data.session?.access_token ?? null)
       setLoading(false)
+      claimIfSignedIn(data.session)
     })
 
     const { data: sub } = supabase.auth.onAuthStateChange((_event, nextSession) => {
       setSession(nextSession)
       setAccessToken(nextSession?.access_token ?? null)
+      claimIfSignedIn(nextSession)
     })
 
     return () => {

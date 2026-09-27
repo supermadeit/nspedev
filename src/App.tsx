@@ -32,11 +32,14 @@ import {
   fetchFirstSuccessful,
   formatQueryError,
   getPayloadError,
+  isAuthenticatedQuotaKind,
   parseApiPayload,
   QueryGateError,
+  readGuestQuota,
   RUN_ENDPOINTS,
   sanitizeQueryForApi,
 } from '@/lib/nspe-api'
+import { guestTokenHeader, setGuestToken } from '@/lib/guestToken'
 import {
   detectStatContext,
   extractDateToken,
@@ -1027,6 +1030,30 @@ function QueryGateNotice({ gate, isLoggedIn, onRetry }: { gate: QueryGateState; 
         )}
       </div>
     </div>
+  )
+}
+
+// Guest quota warning — sits above the search bar's left edge (right edge is
+// {pocket}), opposite corner so the two never collide. Three states, agreed
+// on before building this: quiet most of the time, a quiet nudge once 5 or
+// fewer are left, and an urgent one right before the wall at 1. Nothing
+// renders once logged in (App.tsx clears `remaining` to null there) or before
+// the first response has told us a count at all.
+function GuestQuotaNotice({ remaining }: { remaining: number | null }) {
+  if (remaining == null || remaining > 5) return null
+  const urgent = remaining <= 1
+  return (
+    <span
+      className="absolute -top-6 left-0 font-mono font-bold text-[12px] whitespace-nowrap"
+      style={{ color: urgent ? 'oklch(0.78 0.18 145)' : 'oklch(0.55 0 0)' }}
+    >
+      {urgent ? '1 free query left today — ' : `${remaining} free queries left today`}
+      {urgent && (
+        <a href="/signup" className="underline hover:opacity-80 transition-opacity">
+          {'{sign-up}'}
+        </a>
+      )}
+    </span>
   )
 }
 
@@ -3608,6 +3635,11 @@ function App() {
   // separate from queryError so it renders as a sign-up/refill prompt instead
   // of plain error text.
   const [queryGate, setQueryGate] = useState<QueryGateState | null>(null)
+  // The guest quota's remaining-count warning (25 free queries, no account
+  // needed) — updated from a response header on every successful query, so
+  // it appears before the wall (queryGate above), not just after it. null =
+  // not applicable (logged in, or the header hasn't arrived) — nothing shown.
+  const [guestQueriesRemaining, setGuestQueriesRemaining] = useState<number | null>(null)
   const [expandedPlayers, setExpandedPlayers] = useState<Record<string, boolean>>({})
   const [hitlistEntries, setHitlistEntries] = useState<HitlistEntry[]>(hitlistData as HitlistEntry[])
   const [isBuilderOpen, setIsBuilderOpen] = useState(false)
@@ -4258,8 +4290,11 @@ function App() {
             // requests still go through with no header — the backend's /run
             // gate allows a guest allowance before requiring login (see the
             // QueryGateError handling below for what happens once that runs
-            // out, for either a guest or a signed-in user).
+            // out, for either a guest or a signed-in user). guestTokenHeader
+            // is this browser's own rollover token (empty until the first
+            // guest response hands one back) — see guestToken.ts.
             ...authHeader(),
+            ...guestTokenHeader(),
           },
           body: JSON.stringify({ query: sanitizedQuery }),
         },
@@ -4271,6 +4306,20 @@ function App() {
       const payload = await parseApiPayload(response)
 
       console.log('Query response:', payload, 'via', url)
+
+      // The guest-quota block rides in the body now (confirmed spec), not a
+      // header — {kind:"guest", remaining, limit, token} anonymous,
+      // {kind:"credits"|"subscriber", ...} once signed in. Sync both the
+      // banner's count and this browser's rollover token from it; only clear
+      // the banner on a definitive "you're authenticated" answer, not on
+      // silence (some responses may not carry the block at all yet).
+      const guestQuota = readGuestQuota(payload)
+      if (guestQuota) {
+        setGuestQueriesRemaining(guestQuota.remaining)
+        setGuestToken(guestQuota.token)
+      } else if (isAuthenticatedQuotaKind(payload)) {
+        setGuestQueriesRemaining(null)
+      }
 
       setLastPayload(payload)
       setPocketSnapshot(null)
@@ -4653,16 +4702,8 @@ function App() {
             {'{sample-queries}'}
           </button>
         )}
-        {isMobile && (
-          <button
-            type="button"
-            onClick={openPockets}
-            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-            style={{ color: 'oklch(0.85 0.15 195)', opacity: user ? 1 : 0.45 }}
-          >
-            {'{pockets}'}
-          </button>
-        )}
+        {/* {pocket} moved to above the search bar's right edge (both
+            platforms) — see the search block below. */}
         {/* {tutorial} moved into the query builder panel's own header — it
             walks through the query builder specifically, not the site as a
             whole, so it belongs on that panel rather than up here (a
@@ -4680,7 +4721,7 @@ function App() {
         {/* {tutorial} and {sample-queries} moved down next to {glossary} —
             see the bottom-row group near the leaderboard panel. Desktop
             {charts}/{nfl.season} now sit in that bottom row too, and
-            {pocket} stacks under the login/username link (see below). */}
+            {pocket} sits above the search bar's right edge (see below). */}
 
         {/* Mobile drops {sign-up} — {log-in} leads to the same place ("don't
             have an account? sign up") — and uses the slot for {charts}. */}
@@ -4716,20 +4757,6 @@ function App() {
           {user ? `{${username ?? 'account'}}` : '{log-in}'}
         </a>
       </div>
-
-      {/* Desktop {pocket}: directly under the login/username link, right edge
-          aligned with it. Greyed when logged out (click sends to log in). */}
-      {!isMobile && (
-        <button
-          type="button"
-          onClick={openPockets}
-          title={user ? 'Your saved results' : 'Log in to use pockets'}
-          className="absolute right-6 z-20 font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-          style={{ top: '52px', color: 'oklch(0.85 0.15 195)', opacity: user ? 1 : 0.45 }}
-        >
-          {'{pocket}'}
-        </button>
-      )}
 
       <PocketsModal
         open={isPocketsOpen}
@@ -5315,6 +5342,20 @@ function App() {
                   single row: input+run on one line, {calculator}/{charts}
                   below. */}
               <div className="relative w-full" ref={mobileSearchContainerRef}>
+                {/* {pocket}: tucked above the search bar's right edge, same
+                    spot as desktop. Greyed out logged-out (click sends to
+                    log in). GuestQuotaNotice takes the opposite (left) edge
+                    of the same strip, so the two never collide. */}
+                <button
+                  type="button"
+                  onClick={openPockets}
+                  title={user ? 'Your saved results' : 'Log in to use pockets'}
+                  className="absolute -top-6 right-0 font-mono font-bold text-[12px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+                  style={{ color: 'oklch(0.85 0.15 195)', opacity: user ? 1 : 0.45 }}
+                >
+                  {'{pocket}'}
+                </button>
+                {!user && <GuestQuotaNotice remaining={guestQueriesRemaining} />}
                 <input
                   ref={searchInputRef}
                   type="text"
@@ -5398,6 +5439,20 @@ function App() {
             // at /charts, just not linked from the homepage).
             <div className="flex items-center gap-3">
               <div className="relative flex-1" ref={desktopSearchContainerRef}>
+                {/* {pocket}: tucked above the search bar's right edge, same
+                    spot as mobile. Greyed out logged-out (click sends to
+                    log in). GuestQuotaNotice takes the opposite (left) edge
+                    of the same strip, so the two never collide. */}
+                <button
+                  type="button"
+                  onClick={openPockets}
+                  title={user ? 'Your saved results' : 'Log in to use pockets'}
+                  className="absolute -top-6 right-0 font-mono font-bold text-[12px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+                  style={{ color: 'oklch(0.85 0.15 195)', opacity: user ? 1 : 0.45 }}
+                >
+                  {'{pocket}'}
+                </button>
+                {!user && <GuestQuotaNotice remaining={guestQueriesRemaining} />}
                 <input
                   ref={searchInputRef}
                   type="text"

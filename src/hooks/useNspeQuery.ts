@@ -8,6 +8,7 @@
 
 import { useCallback, useState } from 'react'
 import { authHeader } from '@/lib/auth-token'
+import { guestTokenHeader, setGuestToken } from '@/lib/guestToken'
 import { loadPlayerIndex, resolvePlayerTeam } from '@/lib/playerSearch'
 import {
   RUN_ENDPOINTS,
@@ -16,6 +17,7 @@ import {
   getPayloadError,
   parseApiPayload,
   QueryGateError,
+  readGuestQuota,
   sanitizeQueryForApi,
 } from '@/lib/nspe-api'
 import {
@@ -98,6 +100,7 @@ export function useNspeQuery(): UseNspeQueryReturn {
           headers: {
             'Content-Type': 'application/json',
             ...authHeader(),
+            ...guestTokenHeader(),
           },
           body: JSON.stringify({ query: sanitizedQuery }),
         },
@@ -108,6 +111,13 @@ export function useNspeQuery(): UseNspeQueryReturn {
 
       const payload = await parseApiPayload(response)
       console.log('Query response:', payload, 'via', url)
+
+      // This hook has no quota banner of its own, but the guest token is
+      // shared storage (localStorage) — keep it synced from every /run call
+      // regardless of which screen made it, so App.tsx's rollover claim
+      // always has the latest one.
+      const guestQuota = readGuestQuota(payload)
+      if (guestQuota) setGuestToken(guestQuota.token)
 
       const h2hPayload = extractH2hPayload(payload)
       if (h2hPayload) {
