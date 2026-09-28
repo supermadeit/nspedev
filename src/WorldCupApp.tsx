@@ -2,9 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { StarsBackground } from '@/components/StarsBackground'
 import { getCurrentNflWeek } from '@/lib/nflWeek'
 import nflData from '@/assets/data/worldcup.json'
-import scheduleData from '@/assets/data/nfl_schedule.json'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { fetchNflPowerRankings } from '@/lib/databaseApi'
+import { fetchNflPowerRankings, fetchSportSchedule, type SportGame } from '@/lib/databaseApi'
 import { API_BASE_CANDIDATES, fetchJsonCandidate, joinUrl, parseApiPayload } from '@/lib/nspe-api'
 import {
   extractMatchupInsightPayload,
@@ -49,21 +48,12 @@ interface NflSeasonData {
   }
 }
 
-interface Game {
-  week: number
-  awayTeam: string
-  homeTeam: string
-  gameTime: string
-  gameDate: string
-  score_away?: number | null
-  score_home?: number | null
-}
-
-interface ScheduleData {
-  season: number
-  totalGames: number
-  games: Game[]
-}
+// Game/ScheduleData (bundled nfl_schedule.json's shape — full team names, no
+// scores, no game_id) are gone. Every schedule-touching component below now
+// takes SportGame straight from databaseApi.ts — the same live, real-score-
+// carrying feed NBA/MLB/NHL already use (GET /api/data/output/nfl_games/
+// {season}.json, team codes already match the rest of the pipeline, so the
+// abbrMap conversion these components used to need is gone too).
 
 // ---------------- design tokens ----------------
 
@@ -88,6 +78,18 @@ function formatUpdated(iso: string | null): string {
   const hh = d.getHours().toString().padStart(2, '0')
   const mm = d.getMinutes().toString().padStart(2, '0')
   return `${m}/${day} ${hh}:${mm}`
+}
+
+function formatGameDate(dateIso: string): string {
+  const d = new Date(`${dateIso}T00:00:00`)
+  if (Number.isNaN(d.getTime())) return dateIso
+  return d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })
+}
+
+function formatGameTime(startTimeUtc: string): string {
+  const d = new Date(startTimeUtc)
+  if (Number.isNaN(d.getTime())) return 'tbd'
+  return d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })
 }
 
 function wlt(team: NflTeam): string {
@@ -200,19 +202,15 @@ function DivisionsView({ conferences }: { conferences: NflSeasonData['conference
 
 function MatchupTile({
   game,
-  abbrMap,
   onMatchupClick,
 }: {
-  game: Game
-  abbrMap: Record<string, string>
+  game: SportGame
   onMatchupClick: (teamA: string, teamB: string) => void
 }) {
-  const awayAbbr = abbrMap[game.awayTeam] ?? game.awayTeam.slice(0, 3).toUpperCase()
-  const homeAbbr = abbrMap[game.homeTeam] ?? game.homeTeam.slice(0, 3).toUpperCase()
   return (
     <button
       type="button"
-      onClick={() => onMatchupClick(awayAbbr, homeAbbr)}
+      onClick={() => onMatchupClick(game.away_team, game.home_team)}
       className="rounded p-3 text-left hover:opacity-80 transition-opacity"
       style={{ backgroundColor: 'oklch(0.10 0 0)', border: `1.5px solid ${C.green}` }}
     >
@@ -221,10 +219,10 @@ function MatchupTile({
           read as inert schedule info, not a button, which is what made the
           tap target invisible as an affordance. */}
       <div className="font-mono text-[17px] font-bold" style={{ color: C.accent }}>
-        {`{${awayAbbr} @ ${homeAbbr}}`}
+        {`{${game.away_team} @ ${game.home_team}}`}
       </div>
       <div className="font-mono text-[12px] uppercase tracking-wider mt-1.5" style={{ color: C.label }}>
-        {game.gameTime || 'tbd'}
+        {game.status === 'final' ? `final · ${game.away_score}-${game.home_score}` : formatGameTime(game.start_time_utc)}
       </div>
     </button>
   )
@@ -232,34 +230,30 @@ function MatchupTile({
 
 function MatchupTableRow({
   game,
-  abbrMap,
   onMatchupClick,
 }: {
-  game: Game
-  abbrMap: Record<string, string>
+  game: SportGame
   onMatchupClick: (teamA: string, teamB: string) => void
 }) {
-  const awayAbbr = abbrMap[game.awayTeam] ?? game.awayTeam.slice(0, 3).toUpperCase()
-  const homeAbbr = abbrMap[game.homeTeam] ?? game.homeTeam.slice(0, 3).toUpperCase()
   return (
     <button
       type="button"
-      onClick={() => onMatchupClick(awayAbbr, homeAbbr)}
+      onClick={() => onMatchupClick(game.away_team, game.home_team)}
       className="w-full grid items-center gap-x-3 py-2.5 px-3 rounded text-left hover:opacity-80 transition-opacity"
       style={{ gridTemplateColumns: '90px 100px 1fr 90px' }}
     >
       <span className="font-mono text-[13px] uppercase tracking-wider" style={{ color: C.label }}>
-        {game.gameDate || 'tbd'}
+        {formatGameDate(game.date_iso)}
       </span>
       <span className="font-mono text-[14px] tabular-nums" style={{ color: C.dim }}>
-        {game.gameTime || 'tbd'}
+        {game.status === 'final' ? `${game.away_score}-${game.home_score}` : formatGameTime(game.start_time_utc)}
       </span>
       {/* Bracket-wrapped like every other actionable command in this app
           ({leaderboard}, {chart}, {nfl.season}, ...) — plain team text here
           read as inert schedule info, not a button, which is what made the
           tap target invisible as an affordance. */}
       <span className="font-mono text-[17px] font-bold" style={{ color: C.accent }}>
-        {`{${awayAbbr} @ ${homeAbbr}}`}
+        {`{${game.away_team} @ ${game.home_team}}`}
       </span>
       <span className="font-mono text-[13px] text-right" style={{ color: C.dim }}>view →</span>
     </button>
@@ -269,13 +263,11 @@ function MatchupTableRow({
 function MatchupLibraryView({
   games,
   totalWeeks,
-  abbrMap,
   initialWeek,
   onMatchupClick,
 }: {
-  games: Game[]
+  games: SportGame[]
   totalWeeks: number
-  abbrMap: Record<string, string>
   initialWeek: number
   onMatchupClick: (teamA: string, teamB: string) => void
 }) {
@@ -284,9 +276,9 @@ function MatchupLibraryView({
   const weekGames = useMemo(() => games.filter((g) => g.week === week), [games, week])
   const byDate = useMemo(() => {
     const order: string[] = []
-    const map = new Map<string, Game[]>()
+    const map = new Map<string, SportGame[]>()
     for (const g of weekGames) {
-      const d = g.gameDate || 'TBD'
+      const d = g.date_iso || 'TBD'
       if (!map.has(d)) { map.set(d, []); order.push(d) }
       map.get(d)!.push(g)
     }
@@ -317,9 +309,9 @@ function MatchupLibraryView({
         {isMobile ? (
           byDate.map(({ date, games: dGames }) => (
             <div key={date}>
-              <div className="font-mono text-[13px] uppercase tracking-widest mb-2" style={{ color: C.label }}>{date}</div>
+              <div className="font-mono text-[13px] uppercase tracking-widest mb-2" style={{ color: C.label }}>{formatGameDate(date)}</div>
               <div className="grid grid-cols-2 gap-2">
-                {dGames.map((g, i) => <MatchupTile key={i} game={g} abbrMap={abbrMap} onMatchupClick={onMatchupClick} />)}
+                {dGames.map((g, i) => <MatchupTile key={i} game={g} onMatchupClick={onMatchupClick} />)}
               </div>
             </div>
           ))
@@ -331,7 +323,7 @@ function MatchupLibraryView({
             >
               <span>day</span><span>time</span><span>matchup</span><span />
             </div>
-            {weekGames.map((g, i) => <MatchupTableRow key={i} game={g} abbrMap={abbrMap} onMatchupClick={onMatchupClick} />)}
+            {weekGames.map((g, i) => <MatchupTableRow key={i} game={g} onMatchupClick={onMatchupClick} />)}
           </div>
         )}
       </div>
@@ -350,13 +342,11 @@ function MatchupLibraryView({
 function WeekMatchupStrip({
   games,
   totalWeeks,
-  abbrMap,
   initialWeek,
   onMatchupClick,
 }: {
-  games: Game[]
+  games: SportGame[]
   totalWeeks: number
-  abbrMap: Record<string, string>
   initialWeek: number
   onMatchupClick: (teamA: string, teamB: string) => void
 }) {
@@ -383,26 +373,27 @@ function WeekMatchupStrip({
         {weekGames.length === 0 && (
           <div className="font-mono text-[12px]" style={{ color: C.dim }}>schedule data pending</div>
         )}
-        {weekGames.map((g, i) => {
-          const awayAbbr = abbrMap[g.awayTeam] ?? g.awayTeam.slice(0, 3).toUpperCase()
-          const homeAbbr = abbrMap[g.homeTeam] ?? g.homeTeam.slice(0, 3).toUpperCase()
-          return (
-            <button
-              key={i}
-              type="button"
-              onClick={() => onMatchupClick(awayAbbr, homeAbbr)}
-              className="shrink-0 rounded px-2.5 py-1.5 text-left hover:opacity-80 transition-opacity"
-              style={{ backgroundColor: 'oklch(0.10 0 0)', border: `1px solid ${C.green}` }}
-            >
-              <div className="font-mono text-[12px] font-bold whitespace-nowrap" style={{ color: C.accent }}>
-                {`{${awayAbbr} @ ${homeAbbr}}`}
-              </div>
-              <div className="font-mono text-[9px] uppercase tracking-wider" style={{ color: C.label }}>
-                {g.gameDate || 'tbd'} · {g.gameTime || 'tbd'}
-              </div>
-            </button>
-          )
-        })}
+        {weekGames.map((g) => (
+          <button
+            key={g.game_id}
+            type="button"
+            onClick={() => onMatchupClick(g.away_team, g.home_team)}
+            className="shrink-0 rounded px-2.5 py-1.5 text-left hover:opacity-80 transition-opacity"
+            style={{ backgroundColor: 'oklch(0.10 0 0)', border: `1px solid ${C.green}` }}
+          >
+            <div className="font-mono text-[12px] font-bold whitespace-nowrap" style={{ color: C.accent }}>
+              {`{${g.away_team} @ ${g.home_team}}`}
+            </div>
+            {/* Concluded games show the real result now that the live feed
+                actually carries one — the bundled file this replaced never
+                had scores populated at all. */}
+            <div className="font-mono text-[9px] uppercase tracking-wider" style={{ color: C.label }}>
+              {g.status === 'final'
+                ? `final · ${g.away_score}-${g.home_score}`
+                : `${formatGameDate(g.date_iso)} · ${formatGameTime(g.start_time_utc)}`}
+            </div>
+          </button>
+        ))}
       </div>
     </div>
   )
@@ -581,16 +572,31 @@ type ActiveView = 'rankings' | 'schedule' | 'playoffs'
 export default function WorldCupApp() {
   const isMobile = useIsMobile()
   const data = nflData as unknown as NflSeasonData
-  const schedule = scheduleData as unknown as ScheduleData
   const [activeView, setActiveView] = useState<ActiveView>('rankings')
-  const abbrMap = useMemo(() => buildAbbrMap(data), [data])
   const fullNames = useMemo(() => buildFullNameMap(data), [data])
   // Schedule tab opens on the active week (data.current_week), not always
   // week 1 — current_week is expected to already reflect the Tuesday-
   // morning rollover backend-side (games run through Monday Night Football,
   // so the "active" week doesn't advance until Tuesday). Clamped in case
   // current_week is ever missing/out of range before a season starts.
+  // Still sourced from the bundled worldcup.json (team standings/records) —
+  // only the game-by-game schedule/scores below moved off bundled data, not
+  // this file, which is a separate data source that wasn't part of that ask.
   const initialScheduleWeek = getCurrentNflWeek(data.total_weeks, data.current_week)
+
+  const [games, setGames] = useState<SportGame[]>([])
+  // Live nfl_games/{season}.json — same free/unauthenticated, real-score-
+  // carrying feed NBA/MLB/NHL already run on (see SportSeasonPage.tsx). This
+  // replaces the old bundled nfl_schedule.json, which had zero games with a
+  // populated score, ever — WeekMatchupStrip couldn't show real results for
+  // a just-concluded week no matter how "current" current_week was.
+  useEffect(() => {
+    let cancelled = false
+    fetchSportSchedule('nfl', data.season)
+      .then((s) => { if (!cancelled) setGames(s.games) })
+      .catch((err) => console.error('Failed to load NFL schedule:', err))
+    return () => { cancelled = true }
+  }, [data.season])
 
   const [matchupResult, setMatchupResult] = useState<MatchupInsightPayload | null>(null)
   const [isMatchupOpen, setIsMatchupOpen] = useState(false)
@@ -735,9 +741,8 @@ export default function WorldCupApp() {
         {activeView === 'rankings' && (
           <div className="max-w-[1480px] mx-auto mt-2">
             <WeekMatchupStrip
-              games={schedule.games}
+              games={games}
               totalWeeks={data.total_weeks}
-              abbrMap={abbrMap}
               initialWeek={initialScheduleWeek}
               onMatchupClick={requestMatchup}
             />

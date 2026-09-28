@@ -220,3 +220,94 @@ export async function fetchNflPowerRankings(): Promise<NflPowerRankingsData> {
   if (!isNflPowerRankingsData(data)) throw new Error('Unrecognized power-rankings response shape.')
   return data
 }
+
+// ---------------- multi-sport power rankings / schedule ----------------
+// Generalized siblings of fetchNflPowerRankings/the NFL-only types above, for
+// the NBA/MLB/NHL rollout — same free/unauthenticated/daily-precomputed file
+// serve, just parameterized by sport instead of hardcoded to nfl_*.json.
+// NflPowerRankingsData/fetchNflPowerRankings are left exactly as they were
+// (WorldCupApp.tsx's only consumer of them) rather than routed through this,
+// to avoid touching the already-live, most-visited NFL page while this is
+// still new and unexercised.
+export type SportKey = 'nfl' | 'nba' | 'mlb' | 'nhl'
+
+export interface SportPowerRankingsRow {
+  rank: number
+  team: string
+  power_score: number
+  wins: number
+  losses: number
+  ties?: number
+  otl?: number
+  [key: string]: string | number | undefined
+}
+
+export interface SportPowerRankingsData {
+  engine: string
+  season: number
+  window: string
+  generated_at: string
+  teams: SportPowerRankingsRow[]
+}
+
+function isSportPowerRankingsData(value: unknown): value is SportPowerRankingsData {
+  return !!value && typeof value === 'object' && Array.isArray((value as Record<string, unknown>).teams)
+}
+
+export async function fetchPowerRankings(sport: SportKey): Promise<SportPowerRankingsData> {
+  const filename = `${sport}_power_rankings.json`
+  const urls = API_BASE_CANDIDATES.map((base) => joinUrl(base, `/api/data/output/${filename}`))
+  const res = await fetchFirstOk(urls)
+  if (!res) throw new Error(`${filename} not found`)
+  const data: unknown = await res.json()
+  if (!isSportPowerRankingsData(data)) throw new Error(`Unrecognized ${sport} power-rankings response shape.`)
+  return data
+}
+
+// One row per game — the flat, ungrouped schedule/fixture feed confirmed live
+// by scrape-room for nba/mlb/nhl (data/output/<sport>_games/<season>.json,
+// served via GET /api/data/output/{sport}_games/{season}.json). Deliberately
+// flat: these sports have no "week" concept the way NFL does, so grouping
+// (by date, by "next 7 days", whatever a page wants) happens client-side.
+export interface SportGame {
+  game_id: string
+  date_iso: string
+  start_time_utc: string
+  season_type: string
+  home_team: string
+  away_team: string
+  home_team_id?: string
+  away_team_id?: string
+  home_score: number
+  away_score: number
+  status: 'scheduled' | 'final' | 'postponed' | 'canceled'
+  status_detail?: string | null
+  round?: string | null
+  series_game?: string | null
+  broadcast?: string[]
+  // NFL-only — which week of the season this game belongs to. Absent on
+  // NBA/MLB/NHL rows, which have no week concept at all.
+  week?: number
+}
+
+export interface SportScheduleData {
+  sport: string
+  season: string
+  generated: string
+  count: number
+  games: SportGame[]
+}
+
+function isSportScheduleData(value: unknown): value is SportScheduleData {
+  return !!value && typeof value === 'object' && Array.isArray((value as Record<string, unknown>).games)
+}
+
+export async function fetchSportSchedule(sport: SportKey, season: string | number): Promise<SportScheduleData> {
+  const filename = `${sport}_games/${season}.json`
+  const urls = API_BASE_CANDIDATES.map((base) => joinUrl(base, `/api/data/output/${filename}`))
+  const res = await fetchFirstOk(urls)
+  if (!res) throw new Error(`${filename} not found`)
+  const data: unknown = await res.json()
+  if (!isSportScheduleData(data)) throw new Error(`Unrecognized ${sport} schedule response shape.`)
+  return data
+}

@@ -3715,6 +3715,14 @@ function App() {
   const [builderDragOffset, setBuilderDragOffset] = useState({ x: 0, y: 0 })
   const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(true)
   const [isMobileLeaderboardOpen, setIsMobileLeaderboardOpen] = useState(false)
+  // Mobile has no room to lay {nba.season}/{mlb.playoffs}/{nhl.season} out
+  // flat next to {nfl.season} the way desktop's bottom row does (four
+  // bracket labels don't fit a phone-width strip) — {nfl.season} stays
+  // directly visible since it's still the most popular, and a small
+  // {sports} toggle reveals the other three in a compact list above it,
+  // same "open a small panel" pattern as the site's other mobile popovers
+  // rather than hiding them behind desktop-only reach.
+  const [isMobileSportsMenuOpen, setIsMobileSportsMenuOpen] = useState(false)
   // Full-screen takeover (see the modal below) locks background scroll while
   // open — without this, dragging through the leaderboard's own scroll area
   // could still hand the gesture off to the homepage underneath once the
@@ -5821,14 +5829,18 @@ function App() {
         }}
       />
 
-      {/* Desktop bottom row, left to right: {charts} {nfl.season} {leaderboard}
-          (the leaderboard panel itself is unchanged, just to the right of
-          this group). {sample-queries} moved up under the search bar, and
-          {tutorial} lives in the query builder panel's own header.
-          {glossary} removed (nav entry only — its modal/state is still in
-          this file, just unreachable, same shelve pattern as
-          {sample-commands}/{database} until the tutorial/howto rework
-          replaces it). */}
+      {/* Desktop bottom row, left to right: {charts} {nfl.season} {nba.season}
+          {mlb.playoffs} {nhl.season} {leaderboard} (the leaderboard panel
+          itself is unchanged, just to the right of this group).
+          {sample-queries} moved up under the search bar, and {tutorial}
+          lives in the query builder panel's own header. {glossary} removed
+          (nav entry only — its modal/state is still in this file, just
+          unreachable, same shelve pattern as {sample-commands}/{database}
+          until the tutorial/howto rework replaces it). nfl.season stays
+          first/most-prominent per the user's call (still the most popular
+          sport); the other three are new, plain per-sport pages (one route
+          each, no shared switcher), same flat bracket-link style as
+          everything else in this row rather than tucked behind a dropdown. */}
       {!isMobile && (
         <div className="absolute z-20 flex items-center gap-4" style={{ bottom: '52px', right: '440px' }}>
           <a
@@ -5844,6 +5856,27 @@ function App() {
             style={{ color: 'oklch(0.85 0.15 195)' }}
           >
             {'{nfl.season}'}
+          </a>
+          <a
+            href="/nba.season"
+            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+            style={{ color: 'oklch(0.85 0.15 195)' }}
+          >
+            {'{nba.season}'}
+          </a>
+          <a
+            href="/mlb.playoffs"
+            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+            style={{ color: 'oklch(0.85 0.15 195)' }}
+          >
+            {'{mlb.playoffs}'}
+          </a>
+          <a
+            href="/nhl.season"
+            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+            style={{ color: 'oklch(0.85 0.15 195)' }}
+          >
+            {'{nhl.season}'}
           </a>
         </div>
       )}
@@ -5963,20 +5996,61 @@ function App() {
 
       {/* Mobile: {nfl.season} sits next to {leaderboard} (desktop has it in the
           top-right nav); {tutorial} now lives in the query builder panel's
-          own header instead of up here. */}
+          own header instead of up here. A {sports} toggle next to it opens a
+          small panel with the other three sports' pages — see
+          isMobileSportsMenuOpen's comment for why this isn't just 4 flat
+          links the way desktop does it. */}
       {isMobile && (
-        <a
-          href="/nfl.season"
-          className="absolute z-20 font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-          style={{
-            bottom: '46px',
-            right: leaderboard?.rows?.length > 0 ? '128px' : '12px',
-            color: 'oklch(0.85 0.15 195)',
-          }}
-          aria-label="Open NFL season"
+        <div
+          className="absolute z-20 flex items-center gap-3"
+          style={{ bottom: '46px', right: leaderboard?.rows?.length > 0 ? '128px' : '12px' }}
         >
-          {'{nfl.season}'}
-        </a>
+          <a
+            href="/nfl.season"
+            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+            style={{ color: 'oklch(0.85 0.15 195)' }}
+            aria-label="Open NFL season"
+          >
+            {'{nfl.season}'}
+          </a>
+          <button
+            type="button"
+            onClick={() => setIsMobileSportsMenuOpen((p) => !p)}
+            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+            style={{ color: 'oklch(0.85 0.15 195)' }}
+            aria-label="More sports"
+          >
+            {'{sports}'}
+          </button>
+          {isMobileSportsMenuOpen && (
+            <div
+              className="absolute bottom-[28px] right-0 flex flex-col items-end gap-2 rounded px-3 py-2"
+              style={{ backgroundColor: 'oklch(0.14 0 0)', border: '1px solid oklch(0.28 0 0)' }}
+            >
+              <a
+                href="/nba.season"
+                className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+                style={{ color: 'oklch(0.85 0.15 195)' }}
+              >
+                {'{nba.season}'}
+              </a>
+              <a
+                href="/mlb.playoffs"
+                className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+                style={{ color: 'oklch(0.85 0.15 195)' }}
+              >
+                {'{mlb.playoffs}'}
+              </a>
+              <a
+                href="/nhl.season"
+                className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+                style={{ color: 'oklch(0.85 0.15 195)' }}
+              >
+                {'{nhl.season}'}
+              </a>
+            </div>
+          )}
+        </div>
       )}
 
       {/* Full-screen takeover, not a centered dialog — a max-width/max-height

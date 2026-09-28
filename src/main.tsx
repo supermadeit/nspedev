@@ -17,6 +17,7 @@ import SuccessPage from './pages/SuccessPage.tsx'
 import AccountPage from './pages/AccountPage.tsx'
 import QbChartsPage from './pages/QbChartsPage.tsx'
 import PlayerProfilePage from './pages/PlayerProfilePage.tsx'
+import SportSeasonPage from './pages/SportSeasonPage.tsx'
 
 import "./main.css"
 import "./styles/theme.css"
@@ -42,6 +43,14 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/world-cup" element={<WorldCupApp />} />
           <Route path="/world.cup" element={<WorldCupApp />} />
           <Route path="/nfl.season" element={<WorldCupApp />} />
+          {/* One page per sport (not a unified hub with a sport switcher) —
+              each a thin wrapper around the shared SportSeasonPage, per the
+              route/label naming the user chose directly: mlb.playoffs (the
+              MLB season is in its playoff stretch right now), nba.season and
+              nhl.season (both just starting their regular seasons). */}
+          <Route path="/mlb.playoffs" element={<SportSeasonPage sport="mlb" label="mlb.playoffs" />} />
+          <Route path="/nba.season" element={<SportSeasonPage sport="nba" label="nba.season" />} />
+          <Route path="/nhl.season" element={<SportSeasonPage sport="nhl" label="nhl.season" />} />
 
           <Route path="/calculator" element={<CalculatorRoute />} />
           <Route path="/charts" element={<QbChartsPage />} />

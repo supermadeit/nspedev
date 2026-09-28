@@ -214,13 +214,19 @@ export interface MatchupTeamRecord {
   wins: number
   losses: number
   ties: number
+  // NHL-only — overtime losses. Optional since NFL/NBA/MLB records don't
+  // carry the concept at all.
+  otl?: number
 }
 
+// Was NFL-only rigid fields (total_yards/yards_per_play/turnovers/
+// possession_seconds) — NBA's meeting-history rows carry reb/ast/fg_pct/
+// fg3_pct, MLB's carry hits/errors, NHL's carry saves. Same loose-bag
+// treatment as MatchupPlayerSplit above, for the same reason: each sport's
+// engine emits its own, unrelated stat vocabulary on this identical wire
+// shape.
 export interface MatchupTeamGameStats {
-  total_yards: number
-  yards_per_play: number
-  turnovers: number
-  possession_seconds: number
+  [stat: string]: number | undefined
 }
 
 export interface MatchupMeeting {
@@ -233,16 +239,30 @@ export interface MatchupMeeting {
   b_stats: MatchupTeamGameStats
 }
 
+export interface MatchupQuarterSplit {
+  q1: number
+  q2: number
+  q3: number
+  q4: number
+  '1h': number
+  '2h': number
+}
+
+// Started as NFL-only rigid fields (attempts/completions/yards/td/int/long/
+// pct) back when this was the only sport with matchup-insight. NBA
+// ("scoring": pts/reb/ast/stl/blk/tpm/min), MLB ("batting": ab/h/hr/rbi/bb/
+// so/avg/obp/slg/ops), and NHL ("goals"/"assists"/"points"/pim/sog/
+// plus_minus) all carry a completely different, flat stat vocabulary on the
+// exact same wire shape — so this is now a loose bag keyed by whatever stat
+// names the sport's engine emits, same "don't hardcode one sport's fields"
+// principle as PowerRankingsRow below. `games` and `quarters` are still
+// called out explicitly since MatchupInsightOverlay renders both specially
+// (games first, quarters as its own strip) — `quarters` only exists on NFL's
+// payload today, every other sport simply omits the key.
 export interface MatchupPlayerSplit {
-  games: number
-  attempts?: number
-  completions?: number
-  yards: number
-  td: number
-  int?: number
-  long: number
-  pct?: number
-  quarters?: { q1: number; q2: number; q3: number; q4: number; '1h': number; '2h': number }
+  games?: number
+  quarters?: MatchupQuarterSplit
+  [stat: string]: number | MatchupQuarterSplit | undefined
 }
 
 export interface MatchupPlayer {

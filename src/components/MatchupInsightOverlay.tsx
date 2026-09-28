@@ -18,23 +18,31 @@ export interface MatchupInsightOverlayProps {
 
 type Tab = 'history' | 'players'
 
+// Was a fixed NFL column set (a/b yards + yards-per-play) — NBA's a_stats/
+// b_stats carry reb/ast/fg_pct/fg3_pct, MLB's carry hits/errors, NHL's carry
+// saves, so the extra columns beyond the universal date/season/result/pf/pa
+// ones are derived from whichever stat keys the first meeting actually has
+// (every meeting in one payload shares the same engine, so the first row's
+// keys are representative of the rest).
 function buildHistorySection(payload: MatchupInsightPayload): StatTableSection {
   const teamA = payload.query.team_a
   const teamB = payload.query.team_b
+  const sampleKeys = Object.keys(payload.meetings[0]?.a_stats ?? {})
+
+  const columns = [
+    { key: 'date', label: 'date' },
+    { key: 'season', label: 'season' },
+    { key: 'result', label: 'result' },
+    { key: 'pf', label: 'pf' },
+    { key: 'pa', label: 'pa' },
+    ...sampleKeys.map((k) => ({ key: `a_${k}`, label: `${teamA} ${statLabel(k)}` })),
+    ...sampleKeys.map((k) => ({ key: `b_${k}`, label: `${teamB} ${statLabel(k)}` })),
+  ]
+
   return {
     type: 'stat_table',
     label: 'meeting history',
-    columns: [
-      { key: 'date', label: 'date' },
-      { key: 'season', label: 'season' },
-      { key: 'result', label: 'result' },
-      { key: 'pf', label: 'pf' },
-      { key: 'pa', label: 'pa' },
-      { key: 'a_yds', label: `${teamA} yds` },
-      { key: 'a_ypp', label: `${teamA} ypp` },
-      { key: 'b_yds', label: `${teamB} yds` },
-      { key: 'b_ypp', label: `${teamB} ypp` },
-    ],
+    columns,
     rows: payload.meetings.map((m, i) => ({
       key: `${m.date_iso}-${i}`,
       label: extractDateToken(m.date_iso) ?? m.date_iso,
@@ -44,67 +52,77 @@ function buildHistorySection(payload: MatchupInsightPayload): StatTableSection {
         m.outcome,
         m.pts_for,
         m.pts_allowed,
-        m.a_stats.total_yards,
-        m.a_stats.yards_per_play.toFixed(1),
-        m.b_stats.total_yards,
-        m.b_stats.yards_per_play.toFixed(1),
+        ...sampleKeys.map((k) => {
+          const v = m.a_stats[k]
+          return typeof v === 'number' ? formatPlayerStatValue(k, v) : '—'
+        }),
+        ...sampleKeys.map((k) => {
+          const v = m.b_stats[k]
+          return typeof v === 'number' ? formatPlayerStatValue(k, v) : '—'
+        }),
       ],
     })),
   }
 }
 
-function getPlayerStatFields(category: string): { key: keyof MatchupPlayerSplit; label: string }[] {
-  if (category === 'rush') {
-    return [
-      { key: 'games', label: 'g' },
-      { key: 'attempts', label: 'att' },
-      { key: 'yards', label: 'yds' },
-      { key: 'td', label: 'td' },
-      { key: 'long', label: 'lng' },
-    ]
-  }
-  if (category === 'rec') {
-    return [
-      { key: 'games', label: 'g' },
-      { key: 'attempts', label: 'tgt' },
-      { key: 'completions', label: 'rec' },
-      { key: 'pct', label: 'pct' },
-      { key: 'yards', label: 'yds' },
-      { key: 'td', label: 'td' },
-      { key: 'long', label: 'lng' },
-    ]
-  }
-  // pass (default)
-  return [
-    { key: 'games', label: 'g' },
-    { key: 'attempts', label: 'att' },
-    { key: 'completions', label: 'cmp' },
-    { key: 'pct', label: 'pct' },
-    { key: 'yards', label: 'yds' },
-    { key: 'td', label: 'td' },
-    { key: 'int', label: 'int' },
-    { key: 'long', label: 'lng' },
-  ]
+// Was a per-category (rush/rec/pass) hardcoded field list — only worked
+// because NFL was the only sport with matchup-insight. Now that NBA
+// ("scoring"), MLB ("batting"), and NHL each carry their own flat, unrelated
+// stat vocabulary on the same wire shape (see MatchupPlayerSplit's comment in
+// nspe-payloads.ts), the field list is derived from whatever keys are
+// actually present on the split instead of guessed from `category` — same
+// "render what's there" principle as the h2h view's zero-field hiding. Order
+// follows the object's own key order (the backend already emits a sensible
+// stat order per sport); `games` is pulled to the front since every sport's
+// split includes it and it reads best first.
+const STAT_LABELS: Record<string, string> = {
+  games: 'g',
+  attempts: 'att', completions: 'cmp', yards: 'yds', td: 'td', int: 'int', long: 'lng', pct: 'pct',
+  pts: 'pts', reb: 'reb', ast: 'ast', stl: 'stl', blk: 'blk', tpm: '3pm', tov: 'tov', min: 'min',
+  fg_pct: 'fg%', ft_pct: 'ft%', tpm_pct: '3p%',
+  ab: 'ab', h: 'h', hr: 'hr', rbi: 'rbi', bb: 'bb', so: 'so', avg: 'avg', obp: 'obp', tb: 'tb', slg: 'slg', ops: 'ops', r: 'r', sb: 'sb',
+  goals: 'gls', assists: 'a', points: 'pts', pim: 'pim', sog: 'sog', plus_minus: '+/-',
 }
+
+function statLabel(key: string): string {
+  return STAT_LABELS[key] ?? key.replace(/_/g, ' ')
+}
+
+const RATE_STAT_KEYS = new Set(['pct', 'fg_pct', 'ft_pct', 'tpm_pct'])
+const AVERAGE_STAT_KEYS = new Set(['avg', 'obp', 'slg', 'ops'])
 
 function formatPlayerStatValue(key: string, value: number): string {
-  if (key === 'pct') return `${value.toFixed(1)}%`
-  if (key === 'long') return Number.isInteger(value) ? String(value) : value.toFixed(1)
-  return String(value)
+  if (RATE_STAT_KEYS.has(key) || key.endsWith('_pct')) {
+    return value <= 1 ? `${(value * 100).toFixed(1)}%` : `${value.toFixed(1)}%`
+  }
+  if (AVERAGE_STAT_KEYS.has(key)) {
+    return value < 1 ? value.toFixed(3).replace(/^0/, '') : value.toFixed(3)
+  }
+  if (key === 'long' || key === 'plus_minus') return Number.isInteger(value) ? String(value) : value.toFixed(1)
+  return Number.isInteger(value) ? String(value) : value.toFixed(1)
 }
 
-function SplitBlock({ label, split, category }: { label: string; split: MatchupPlayerSplit; category: string }) {
-  const fields = getPlayerStatFields(category)
+// NHL's `pim` (penalty minutes) read as an unexplained, easy-to-confuse-with-
+// `points` abbreviation once both showed up side by side in the same card —
+// dropped rather than relabeled, since relabeling it to "pts" would just
+// duplicate the `points` field that's already rendered right next to it.
+const EXCLUDED_SPLIT_KEYS = new Set(['pim'])
+
+function SplitBlock({ label, split }: { label: string; split: MatchupPlayerSplit }) {
+  const keys = Object.keys(split).filter(
+    (k) => k !== 'games' && k !== 'quarters' && !EXCLUDED_SPLIT_KEYS.has(k) && typeof split[k] === 'number',
+  )
+  const orderedKeys = split.games !== undefined ? ['games', ...keys] : keys
   return (
     <div>
       <div className="font-mono text-[9px] uppercase tracking-widest mb-1.5" style={{ color: C.textDim }}>
         {label}
       </div>
       <div className="flex flex-wrap gap-1.5 mb-1.5">
-        {fields.map(({ key, label: fieldLabel }) => {
+        {orderedKeys.map((key) => {
           const raw = split[key]
           if (typeof raw !== 'number') return null
-          return <MiniStat key={key} label={fieldLabel} value={formatPlayerStatValue(key, raw)} />
+          return <MiniStat key={key} label={statLabel(key)} value={formatPlayerStatValue(key, raw)} />
         })}
       </div>
       {split.quarters && (
@@ -133,8 +151,8 @@ function PlayerCard({ player, opponent }: { player: MatchupPlayer; opponent: str
         </span>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <SplitBlock label={`vs ${opponent}`} split={player.vs_opponent} category={player.category} />
-        <SplitBlock label="recent form" split={player.recent_form} category={player.category} />
+        <SplitBlock label={`vs ${opponent}`} split={player.vs_opponent} />
+        <SplitBlock label="recent form" split={player.recent_form} />
       </div>
     </div>
   )
@@ -192,6 +210,7 @@ export function MatchupInsightOverlay({ open, onClose, payload }: MatchupInsight
             <span style={{ color: C.accent, fontWeight: 700 }}>
               {Math.max(record.wins, record.losses)}-{Math.min(record.wins, record.losses)}
               {record.ties ? `-${record.ties}` : ''}
+              {record.otl ? ` (${record.otl} OTL)` : ''}
             </span>
           </span>
           <div className="flex gap-4">
