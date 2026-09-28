@@ -7,18 +7,81 @@
     "player": "JaxonSmithNjigba",
     "stat": "rec_yds",
     "threshold": 100,
+    "games_meeting": 3,
+    "latest_value": 128,
+    "latest_date": "2026-09-27"
+  },
+  {
+    "team": "DAL",
+    "player": "CeedeeLamb",
+    "stat": "rec_yds",
+    "threshold": 100,
     "games_meeting": 2,
-    "latest_value": 155,
-    "latest_date": "2026-09-20"
+    "latest_value": 112,
+    "latest_date": "2026-09-27"
   },
   {
     "team": "LAR",
     "player": "DavanteAdams",
     "stat": "rec_yds",
     "threshold": 100,
+    "games_meeting": 2,
+    "latest_value": 137,
+    "latest_date": "2026-09-27"
+  },
+  {
+    "team": "NO",
+    "player": "ChrisOlave",
+    "stat": "rec_yds",
+    "threshold": 100,
+    "games_meeting": 2,
+    "latest_value": 107,
+    "latest_date": "2026-09-27"
+  },
+  {
+    "team": "LV",
+    "player": "BrockBowers",
+    "stat": "rec_yds",
+    "threshold": 100,
     "games_meeting": 1,
-    "latest_value": 195,
-    "latest_date": "2026-09-21"
+    "latest_value": 116,
+    "latest_date": "2026-09-27"
+  },
+  {
+    "team": "NYJ",
+    "player": "KenyonSadiq",
+    "stat": "rec_yds",
+    "threshold": 100,
+    "games_meeting": 1,
+    "latest_value": 105,
+    "latest_date": "2026-09-27"
+  },
+  {
+    "team": "NYJ",
+    "player": "GarrettWilson",
+    "stat": "rec_yds",
+    "threshold": 100,
+    "games_meeting": 1,
+    "latest_value": 107,
+    "latest_date": "2026-09-27"
+  },
+  {
+    "team": "GB",
+    "player": "MatthewGolden",
+    "stat": "rec_yds",
+    "threshold": 100,
+    "games_meeting": 1,
+    "latest_value": 100,
+    "latest_date": "2026-09-24"
+  },
+  {
+    "team": "ATL",
+    "player": "DrakeLondon",
+    "stat": "rec_yds",
+    "threshold": 100,
+    "games_meeting": 1,
+    "latest_value": 194,
+    "latest_date": "2026-09-24"
   },
   {
     "team": "CAR",
@@ -54,15 +117,6 @@
     "threshold": 100,
     "games_meeting": 1,
     "latest_value": 117,
-    "latest_date": "2026-09-20"
-  },
-  {
-    "team": "DAL",
-    "player": "CeedeeLamb",
-    "stat": "rec_yds",
-    "threshold": 100,
-    "games_meeting": 1,
-    "latest_value": 153,
     "latest_date": "2026-09-20"
   },
   {
@@ -126,15 +180,6 @@
     "threshold": 100,
     "games_meeting": 1,
     "latest_value": 147,
-    "latest_date": "2026-09-13"
-  },
-  {
-    "team": "NO",
-    "player": "ChrisOlave",
-    "stat": "rec_yds",
-    "threshold": 100,
-    "games_meeting": 1,
-    "latest_value": 182,
     "latest_date": "2026-09-13"
   },
   {

@@ -1,58 +1,419 @@
-# The three `-ov` command types (for the predictive-syntax dropdown)
-
-Machine-readable copy: [ov_command_types.json](ov_command_types.json). Every example below was run against current data.
-All three types are the same idea: **`nspe <sport> <player> [-<stat>N] -ov [filter] [window]`** -- short, readable, and the
-same in NFL, MLB, NBA and NHL.
-
-## 1. Overview -- "everything about him"
-`nspe <sport> <player> -ov [window]`   window: season (default) | `YYYY` | `YYYY-YYYY` | `-career` | `-lastN`
-
-| Sport | Command | Shows |
-|---|---|---|
-| NFL | `nspe nfl mahomes -ov -career` | yards by quarter and half (Q1-Q4, 1H, 2H, FULL) |
-| MLB | `nspe mlb judge -ov 2025` | batting line split home / away / total |
-| NBA | `nspe nba curry -ov -career` | one row per season + totals, per-game lines, record |
-| NHL | `nspe nhl mcdavid -ov` | goals, assists, points, +/-, shots this season |
-
-## 2. Count line -- "how many games did he clear a number?"
-`nspe <sport> <player> -<stat>N -ov [window]`   (N = the threshold; N-or-more games)
-
-| Sport | Command | Shows |
-|---|---|---|
-| NFL | `nspe nfl mahomes -yds300 -ov -career` | 51/128 games, with dates |
-| NFL | `nspe nfl jamarr -rcpt10 -ov -career` | 10+ reception games |
-| MLB | `nspe mlb yordan -dub1 -ov 2020-2026` | 159/790 games (total 173 doubles, last match 2026-09-23 @ SEA) |
-| MLB | `nspe mlb judge -hr1 -ov -career` | home-run games (`-hits`/`-hr`/`-tb` also show batting AVG) |
-| NBA | `nspe nba curry -pts30 -ov -career` | 30+ point games |
-| NBA | `nspe nba durant -tpm4 -ov 2020-2026` | 4+ threes since 2020 |
-| NHL | `nspe nhl mcdavid -pts2 -ov` | multi-point games this season |
-
-Terminal: one count line (NFL also lists the games). Every game is always in the JSON `results` (newest first).
-
-## 3. Narrowed count -- "the same count, but only ..."
-`nspe <sport> <player> -<stat>N -ov <filter> [window]`
-
-| Filter | Command | Shows |
-|---|---|---|
-| `vs <team>` | `nspe nfl jamarr -rcpt10 vs pit -career` | 3/8 games against the Steelers |
-| `vs <team>` | `nspe mlb judge -hr1 vs bos -career` | home-run games against the Red Sox |
-| `vs <team>` | `nspe nhl mcdavid -pts2 -ov vs cgy -career` | multi-point games against the Flames |
-| half / quarter | `nspe nfl dak 1h -yds150 -ov -career` | 150+ first-half passing yards |
-| playoff round | `nspe nfl mahomes -yds250 -sb -ov` | 250+ yards in Super Bowls (`-wild -div -champ -sb`) |
-| last N | `nspe nfl mahomes -yds300 -ov -last10` | 300+ yards in his last 10 games |
-| last N | `nspe nba curry -pts30 -ov -last20` | 30+ points in his last 20 games |
-
-Notes: `vs <team>` defaults to career; `-lastN` with `vs` = the latest N meetings; 0/8 is a valid answer. NBA `vs <team>` is
-waiting on an opponent column in the scrape; MLB/NBA/NHL playoff-round flags are waiting on round labels; NFL also has
-`mnf`/`snf`/`tnf` and quarter scopes `q1`-`q4`.
-
-## Stat tokens by sport (the `<stat>` in `-<stat>N`)
-- **NFL:** `-yds` `-td` `-rcpt` `-tgt`   (category words `pass` / `rush` / `rec` pick which; `-td` counts that category's TDs)
-- **MLB:** `-hr` `-hits` `-rbi` `-runs` `-bb` `-sb` `-2b`/`-dub` `-3b` `-tb` `-total` `-hrr`
-- **NBA:** `-pts` `-reb` `-ast` `-stl` `-blk` `-tpm` `-min`
-- **NHL:** `-g` `-a` `-pts` `-sog` `-ppg` `-ppa` `-ppp` `-gwg` `-pm`
-
-## Tips for the dropdown
-- The player name is the only free-text part; everything else is a fixed vocabulary, so it completes well as the user types.
-- Suggest Type 2 first for a stat-minded user (`-pts30 -ov`), Type 1 when only a name has been typed.
-- Every command also works in plain English (`how many 10 reception games does chase have vs the steelers` maps to the syntax above).
+{
+  "engine": "nfl-leaderboard",
+  "kind": "nfl_leaderboard",
+  "query": {
+    "league": "nfl",
+    "scope": "rec",
+    "stat": "rec_yds",
+    "threshold": 100,
+    "last": null,
+    "top": 25,
+    "post": false,
+    "slots": null,
+    "season_window": "2026",
+    "year_window": [
+      2026,
+      2026
+    ],
+    "date_range": null
+  },
+  "rows": [
+    {
+      "player": "JaxonSmithNjigba",
+      "team": "SEA",
+      "count": 3,
+      "games_in_window": 3,
+      "latest": "2026-09-27",
+      "matches": [
+        {
+          "val": 128,
+          "date": "2026-09-27",
+          "opponent": "@WSH",
+          "game_id": "401872955",
+          "seasonYear": "2026",
+          "result": "L33-31"
+        },
+        {
+          "val": 155,
+          "date": "2026-09-20",
+          "opponent": "@ARI",
+          "game_id": "401872943",
+          "seasonYear": "2026",
+          "result": "W31-7"
+        },
+        {
+          "val": 122,
+          "date": "2026-09-09",
+          "opponent": "vsNE",
+          "game_id": "401872656",
+          "seasonYear": "2026",
+          "result": "W13-10"
+        }
+      ]
+    },
+    {
+      "player": "CeedeeLamb",
+      "team": "DAL",
+      "count": 2,
+      "games_in_window": 3,
+      "latest": "2026-09-27",
+      "matches": [
+        {
+          "val": 112,
+          "date": "2026-09-27",
+          "opponent": "vsBAL",
+          "game_id": "401872960",
+          "seasonYear": "2026",
+          "result": "L34-31"
+        },
+        {
+          "val": 153,
+          "date": "2026-09-20",
+          "opponent": "vsWSH",
+          "game_id": "401872944",
+          "seasonYear": "2026",
+          "result": "W37-20"
+        }
+      ]
+    },
+    {
+      "player": "DavanteAdams",
+      "team": "LAR",
+      "count": 2,
+      "games_in_window": 3,
+      "latest": "2026-09-27",
+      "matches": [
+        {
+          "val": 137,
+          "date": "2026-09-27",
+          "opponent": "@DEN",
+          "game_id": "401872962",
+          "seasonYear": "2026",
+          "result": "L30-26"
+        },
+        {
+          "val": 195,
+          "date": "2026-09-21",
+          "opponent": "vsNYG",
+          "game_id": "401872947",
+          "seasonYear": "2026",
+          "result": "W28-6"
+        }
+      ]
+    },
+    {
+      "player": "ChrisOlave",
+      "team": "NO",
+      "count": 2,
+      "games_in_window": 3,
+      "latest": "2026-09-27",
+      "matches": [
+        {
+          "val": 107,
+          "date": "2026-09-27",
+          "opponent": "vsLV",
+          "game_id": "401872961",
+          "seasonYear": "2026",
+          "result": "L35-27"
+        },
+        {
+          "val": 182,
+          "date": "2026-09-13",
+          "opponent": "@DET",
+          "game_id": "401872923",
+          "seasonYear": "2026",
+          "result": "L31-30 OT"
+        }
+      ]
+    },
+    {
+      "player": "BrockBowers",
+      "team": "LV",
+      "count": 1,
+      "games_in_window": 1,
+      "latest": "2026-09-27",
+      "matches": [
+        {
+          "val": 116,
+          "date": "2026-09-27",
+          "opponent": "@NO",
+          "game_id": "401872961",
+          "seasonYear": "2026",
+          "result": "W35-27"
+        }
+      ]
+    },
+    {
+      "player": "KenyonSadiq",
+      "team": "NYJ",
+      "count": 1,
+      "games_in_window": 3,
+      "latest": "2026-09-27",
+      "matches": [
+        {
+          "val": 105,
+          "date": "2026-09-27",
+          "opponent": "@DET",
+          "game_id": "401872954",
+          "seasonYear": "2026",
+          "result": "L31-24"
+        }
+      ]
+    },
+    {
+      "player": "GarrettWilson",
+      "team": "NYJ",
+      "count": 1,
+      "games_in_window": 3,
+      "latest": "2026-09-27",
+      "matches": [
+        {
+          "val": 107,
+          "date": "2026-09-27",
+          "opponent": "@DET",
+          "game_id": "401872954",
+          "seasonYear": "2026",
+          "result": "L31-24"
+        }
+      ]
+    },
+    {
+      "player": "MatthewGolden",
+      "team": "GB",
+      "count": 1,
+      "games_in_window": 3,
+      "latest": "2026-09-24",
+      "matches": [
+        {
+          "val": 100,
+          "date": "2026-09-24",
+          "opponent": "vsATL",
+          "game_id": "401872948",
+          "seasonYear": "2026",
+          "result": "L35-14"
+        }
+      ]
+    },
+    {
+      "player": "DrakeLondon",
+      "team": "ATL",
+      "count": 1,
+      "games_in_window": 3,
+      "latest": "2026-09-24",
+      "matches": [
+        {
+          "val": 194,
+          "date": "2026-09-24",
+          "opponent": "@GB",
+          "game_id": "401872948",
+          "seasonYear": "2026",
+          "result": "W35-14"
+        }
+      ]
+    },
+    {
+      "player": "TetairoaMcmillan",
+      "team": "CAR",
+      "count": 1,
+      "games_in_window": 3,
+      "latest": "2026-09-20",
+      "matches": [
+        {
+          "val": 101,
+          "date": "2026-09-20",
+          "opponent": "@ATL",
+          "game_id": "401872933",
+          "seasonYear": "2026",
+          "result": "W34-3"
+        }
+      ]
+    },
+    {
+      "player": "JaylenWaddle",
+      "team": "DEN",
+      "count": 1,
+      "games_in_window": 3,
+      "latest": "2026-09-20",
+      "matches": [
+        {
+          "val": 138,
+          "date": "2026-09-20",
+          "opponent": "vsJAX",
+          "game_id": "401872940",
+          "seasonYear": "2026",
+          "result": "W20-13"
+        }
+      ]
+    },
+    {
+      "player": "DaltonSchultz",
+      "team": "HOU",
+      "count": 1,
+      "games_in_window": 3,
+      "latest": "2026-09-20",
+      "matches": [
+        {
+          "val": 140,
+          "date": "2026-09-20",
+          "opponent": "vsCIN",
+          "game_id": "401872934",
+          "seasonYear": "2026",
+          "result": "L20-6"
+        }
+      ]
+    },
+    {
+      "player": "DevontaSmith",
+      "team": "PHI",
+      "count": 1,
+      "games_in_window": 2,
+      "latest": "2026-09-20",
+      "matches": [
+        {
+          "val": 117,
+          "date": "2026-09-20",
+          "opponent": "@TEN",
+          "game_id": "401872939",
+          "seasonYear": "2026",
+          "result": "W24-20"
+        }
+      ]
+    },
+    {
+      "player": "TravisKelce",
+      "team": "KC",
+      "count": 1,
+      "games_in_window": 3,
+      "latest": "2026-09-20",
+      "matches": [
+        {
+          "val": 101,
+          "date": "2026-09-20",
+          "opponent": "vsIND",
+          "game_id": "401872945",
+          "seasonYear": "2026",
+          "result": "W33-30 OT"
+        }
+      ]
+    },
+    {
+      "player": "TreTucker",
+      "team": "LV",
+      "count": 1,
+      "games_in_window": 3,
+      "latest": "2026-09-20",
+      "matches": [
+        {
+          "val": 119,
+          "date": "2026-09-20",
+          "opponent": "@LAC",
+          "game_id": "401872941",
+          "seasonYear": "2026",
+          "result": "W26-14"
+        }
+      ]
+    },
+    {
+      "player": "AmonRaStBrown",
+      "team": "DET",
+      "count": 1,
+      "games_in_window": 3,
+      "latest": "2026-09-17",
+      "matches": [
+        {
+          "val": 142,
+          "date": "2026-09-17",
+          "opponent": "@BUF",
+          "game_id": "401872932",
+          "seasonYear": "2026",
+          "result": "L41-31"
+        }
+      ]
+    },
+    {
+      "player": "DaltonKincaid",
+      "team": "BUF",
+      "count": 1,
+      "games_in_window": 3,
+      "latest": "2026-09-13",
+      "matches": [
+        {
+          "val": 130,
+          "date": "2026-09-13",
+          "opponent": "@HOU",
+          "game_id": "401872660",
+          "seasonYear": "2026",
+          "result": "W36-31"
+        }
+      ]
+    },
+    {
+      "player": "DjMoore",
+      "team": "BUF",
+      "count": 1,
+      "games_in_window": 3,
+      "latest": "2026-09-13",
+      "matches": [
+        {
+          "val": 100,
+          "date": "2026-09-13",
+          "opponent": "@HOU",
+          "game_id": "401872660",
+          "seasonYear": "2026",
+          "result": "W36-31"
+        }
+      ]
+    },
+    {
+      "player": "JalenCoker",
+      "team": "CAR",
+      "count": 1,
+      "games_in_window": 3,
+      "latest": "2026-09-13",
+      "matches": [
+        {
+          "val": 138,
+          "date": "2026-09-13",
+          "opponent": "vsCHI",
+          "game_id": "401872661",
+          "seasonYear": "2026",
+          "result": "L59-37"
+        }
+      ]
+    },
+    {
+      "player": "ChristianWatson",
+      "team": "GB",
+      "count": 1,
+      "games_in_window": 3,
+      "latest": "2026-09-13",
+      "matches": [
+        {
+          "val": 147,
+          "date": "2026-09-13",
+          "opponent": "@MIN",
+          "game_id": "401872927",
+          "seasonYear": "2026",
+          "result": "L39-22"
+        }
+      ]
+    },
+    {
+      "player": "ZayFlowers",
+      "team": "BAL",
+      "count": 1,
+      "games_in_window": 2,
+      "latest": "2026-09-13",
+      "matches": [
+        {
+          "val": 150,
+          "date": "2026-09-13",
+          "opponent": "@IND",
+          "game_id": "401872659",
+          "seasonYear": "2026",
+          "result": "W41-23"
+        }
+      ]
+    }
+  ]
+}

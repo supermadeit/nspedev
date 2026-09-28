@@ -114,3 +114,40 @@ export async function fetchPlayerIndex(): Promise<DatabaseIndexEntry[]> {
   if (!Array.isArray(candidate)) return []
   return candidate.filter(isDatabaseIndexEntry)
 }
+
+export interface QbExplosivesData {
+  season: number
+  players: Array<{
+    player_name: string
+    team: string
+    quarter_yards: { q1: number; q2: number; q3: number; q4: number; '1h': number; '2h': number }
+    explosive: {
+      '20-29': { count: number; td: number; yards: number }
+      '30-39': { count: number; td: number; yards: number }
+      '40-49': { count: number; td: number; yards: number }
+      '50+': { count: number; td: number; yards: number }
+    }
+  }>
+}
+
+function isQbExplosivesData(value: unknown): value is QbExplosivesData {
+  return !!value && typeof value === 'object' && Array.isArray((value as Record<string, unknown>).players)
+}
+
+// {chart}'s data source — used to be a bundled snapshot manually re-copied
+// from data/output/nfl_qb_explosives.json, since the backend had no endpoint
+// serving it (see the git history on qb-explosives-2026.json, and
+// QbChartsPage.tsx). Backend since added a live, allowlisted route serving
+// that exact file (GET /api/data/output/nfl_qb_explosives.json, ETag/
+// no-cache) — this is the live fetch that snapshot was always meant to be
+// swapped for. Throws on failure; QbChartsPage.tsx has no bundled fallback
+// to fall back to anymore, so a genuine outage should surface as an error,
+// not silently serve stale numbers.
+export async function fetchQbExplosives(): Promise<QbExplosivesData> {
+  const urls = API_BASE_CANDIDATES.map((base) => joinUrl(base, '/api/data/output/nfl_qb_explosives.json'))
+  const res = await fetchFirstOk(urls)
+  if (!res) throw new Error('nfl_qb_explosives.json not found')
+  const data: unknown = await res.json()
+  if (!isQbExplosivesData(data)) throw new Error('Unrecognized qb-explosives response shape.')
+  return data
+}

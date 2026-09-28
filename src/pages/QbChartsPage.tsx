@@ -5,12 +5,14 @@
 // conversation this was built from), so this only guards against actually
 // breaking on a narrow screen via horizontal scroll, not a redesign.
 //
-// Data source: qb-explosives-2026.json, a bundled snapshot of the backend's
-// data/output/nfl_qb_explosives.json (2026, generated 2026-09-16). It is a
-// SNAPSHOT — the backend has no endpoint serving it yet, so refresh by
-// re-copying that file until one exists (then swap this import for a fetch,
-// like /database's live pivot). Same shape as the old 2025 file, so nothing
-// else on this page changed.
+// Data source: GET /api/data/output/nfl_qb_explosives.json, live — this used
+// to be a bundled snapshot manually re-copied from the backend's own
+// data/output/nfl_qb_explosives.json, because no endpoint served it yet.
+// That's what was actually stale (a September 20 copy sitting in the
+// frontend bundle) even after the backend's own data was current — the
+// backend fixing "the problem" meant standing up this route, not something
+// that could show up here until the import was swapped for the fetch it was
+// always meant to become. See fetchQbExplosives in databaseApi.ts.
 //
 // Filtered down to just the QBs we actually have a /database profile for
 // (glob-imported so this stays correct automatically as more profiles land —
@@ -20,8 +22,8 @@
 // the profile has "MichaelPenixJr" without one). A player with a profile but
 // no games in the chart source (e.g. Deshaun Watson, who didn't play in
 // 2025) naturally drops out on its own — nothing special-cased for that.
-import { useMemo, useState } from 'react'
-import qbData from '@/assets/data/qb-explosives-2026.json'
+import { useEffect, useMemo, useState } from 'react'
+import { fetchQbExplosives, type QbExplosivesData } from '@/lib/databaseApi'
 import { normalizeDisplayPlayer } from '@/lib/nspe-payloads'
 
 function normalizePlayerKey(name: string): string {
@@ -52,17 +54,8 @@ interface ExplosiveBand {
   yards: number
 }
 
-interface QbRow {
-  player_name: string
-  team: string
-  quarter_yards: { q1: number; q2: number; q3: number; q4: number; '1h': number; '2h': number }
-  explosive: { '20-29': ExplosiveBand; '30-39': ExplosiveBand; '40-49': ExplosiveBand; '50+': ExplosiveBand }
-}
+type QbRow = QbExplosivesData['players'][number]
 
-const RAW_PLAYERS = (qbData as { season: number; players: QbRow[] }).players.filter((p) =>
-  PROFILED_PLAYER_KEYS.has(normalizePlayerKey(p.player_name)),
-)
-const SEASON = (qbData as { season: number }).season
 const BANDS: Array<keyof QbRow['explosive']> = ['20-29', '30-39', '40-49', '50+']
 
 interface DerivedRow {
@@ -80,23 +73,27 @@ interface DerivedRow {
   totalTd: number
 }
 
-const ROWS: DerivedRow[] = RAW_PLAYERS.map((p) => {
-  const bandEntries = BANDS.map((b) => p.explosive[b])
-  return {
-    player: normalizeDisplayPlayer(p.player_name),
-    team: p.team,
-    q1: p.quarter_yards.q1,
-    q2: p.quarter_yards.q2,
-    q3: p.quarter_yards.q3,
-    q4: p.quarter_yards.q4,
-    h1: p.quarter_yards['1h'],
-    h2: p.quarter_yards['2h'],
-    bands: p.explosive,
-    totalPlays: bandEntries.reduce((s, b) => s + b.count, 0),
-    totalYards: bandEntries.reduce((s, b) => s + b.yards, 0),
-    totalTd: bandEntries.reduce((s, b) => s + b.td, 0),
-  }
-})
+function deriveRows(players: QbRow[]): DerivedRow[] {
+  return players
+    .filter((p) => PROFILED_PLAYER_KEYS.has(normalizePlayerKey(p.player_name)))
+    .map((p) => {
+      const bandEntries = BANDS.map((b) => p.explosive[b])
+      return {
+        player: normalizeDisplayPlayer(p.player_name),
+        team: p.team,
+        q1: p.quarter_yards.q1,
+        q2: p.quarter_yards.q2,
+        q3: p.quarter_yards.q3,
+        q4: p.quarter_yards.q4,
+        h1: p.quarter_yards['1h'],
+        h2: p.quarter_yards['2h'],
+        bands: p.explosive,
+        totalPlays: bandEntries.reduce((s, b) => s + b.count, 0),
+        totalYards: bandEntries.reduce((s, b) => s + b.yards, 0),
+        totalTd: bandEntries.reduce((s, b) => s + b.td, 0),
+      }
+    })
+}
 
 interface ColumnDef {
   key: string
@@ -132,11 +129,30 @@ const COLUMNS: ColumnDef[] = [
 export default function QbChartsPage() {
   const [sortKey, setSortKey] = useState('totalYards')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
+  const [data, setData] = useState<QbExplosivesData | null>(null)
+  const [loadError, setLoadError] = useState<string | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    fetchQbExplosives()
+      .then((d) => {
+        if (!cancelled) setData(d)
+      })
+      .catch((err) => {
+        console.error('Failed to load qb-explosives:', err)
+        if (!cancelled) setLoadError("Couldn't load chart data — try refreshing.")
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const rows = useMemo(() => (data ? deriveRows(data.players) : []), [data])
 
   const sorted = useMemo(() => {
     const col = COLUMNS.find((c) => c.key === sortKey)
-    if (!col) return ROWS
-    const copy = [...ROWS]
+    if (!col) return rows
+    const copy = [...rows]
     copy.sort((a, b) => {
       const av = col.get(a)
       const bv = col.get(b)
@@ -144,7 +160,7 @@ export default function QbChartsPage() {
       return sortDir === 'asc' ? cmp : -cmp
     })
     return copy
-  }, [sortKey, sortDir])
+  }, [rows, sortKey, sortDir])
 
   const onSort = (key: string) => {
     if (key === sortKey) {
@@ -188,7 +204,7 @@ export default function QbChartsPage() {
             {'{chart}'}
           </span>
           <span className="ml-2 font-mono text-[12px]" style={{ color: C.textDim }}>
-            {SEASON} QB pass yds / quarter · explosive pass plays by distance band
+            {data?.season ?? '…'} QB pass yds / quarter · explosive pass plays by distance band
           </span>
         </div>
         <a href="/" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
@@ -197,9 +213,10 @@ export default function QbChartsPage() {
       </div>
 
       <div className="px-6 py-3 font-mono text-[11px]" style={{ color: C.textDim }}>
-        {ROWS.length} QBs · click any column to sort · TD counts are explosive-play TDs only, not season pass TD totals
+        {loadError ? loadError : !data ? 'loading…' : `${rows.length} QBs · click any column to sort · TD counts are explosive-play TDs only, not season pass TD totals`}
       </div>
 
+      {data && !loadError && (
       <div className="px-6 pb-10 overflow-x-auto">
         <table className="border-collapse font-mono text-[12px]" style={{ minWidth: '100%' }}>
           <thead>
@@ -275,6 +292,7 @@ export default function QbChartsPage() {
           </tbody>
         </table>
       </div>
+      )}
     </div>
   )
 }
