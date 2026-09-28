@@ -120,6 +120,63 @@ async function readGateDetail(response: Response): Promise<string | null> {
   return null
 }
 
+// Shared candidate-trying fetch for plain, free GET endpoints (/matchup,
+// /api/data/output/...) — a lighter sibling of fetchFirstSuccessful below,
+// which is shaped around /run's POST contract (gate-status codes, no
+// content-type guard). Two real bugs this exists to fix, found live:
+//
+// 1. No timeout at all — a hand-rolled loop over these candidates with a
+//    bare `fetch()` has nothing bounding how long a hung connection sits
+//    before the browser's own (very long) default timeout kicks in. That
+//    showed up as "really loading, like actually loading" on production.
+// 2. On localhost, the same-origin candidate (see shouldUseSameOriginApi)
+//    points at Vite's own dev server, which has no real /api backend behind
+//    it — verified live that a GET to an unmatched path there returns a
+//    fast `200 text/html` (Vite's SPA fallback serving index.html), NOT a
+//    404. A bare `response.ok` check accepts that as success and never
+//    even tries the real backend, which is exactly why these endpoints
+//    "don't work on localhost" despite being plain fetches to api.nspe.dev
+//    with no reason to actually differ from production. (POST requests
+//    like /run's don't trigger this — confirmed live too, Vite's fallback
+//    only intercepts GET — which is why /run never hit this.) Checking the
+//    content-type before trusting a 200 closes this off structurally,
+//    rather than needing every future free-GET caller to know to check it.
+//
+// A 404 is treated as a real, meaningful answer (e.g. "no matchup for these
+// team codes") and returned immediately rather than retried against the
+// next candidate — same reasoning fetchFirstSuccessful uses for 401/402/429
+// — but only when it actually looks like it came from the real API, not
+// Vite's fallback (which returns 200, not 404, but this guards the same way
+// regardless, defensively).
+export async function fetchJsonCandidate(
+  urls: string[],
+  timeoutMs: number,
+): Promise<Response> {
+  const failures: string[] = []
+  const looksLikeJson = (res: Response) => (res.headers.get('content-type') || '').toLowerCase().includes('json')
+
+  for (const url of urls) {
+    const controller = new AbortController()
+    const timeout = window.setTimeout(() => controller.abort(), timeoutMs)
+
+    try {
+      const response = await fetch(url, { signal: controller.signal })
+
+      if (response.ok && looksLikeJson(response)) return response
+      if (response.status === 404 && looksLikeJson(response)) return response
+
+      failures.push(`${url} -> HTTP ${response.status} ${response.statusText} (${response.headers.get('content-type') || 'no content-type'})`)
+    } catch (error) {
+      const reason = error instanceof Error ? `${error.name}: ${error.message}` : 'Unknown error'
+      failures.push(`${url} -> ${reason}`)
+    } finally {
+      window.clearTimeout(timeout)
+    }
+  }
+
+  throw new Error(`No API endpoint responded successfully. Attempts: ${failures.join(' | ')}`)
+}
+
 export async function fetchFirstSuccessful(
   urls: string[],
   init: RequestInit,

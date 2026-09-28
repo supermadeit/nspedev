@@ -62,16 +62,40 @@ export async function fetchPlayerProfile(slug: string, window?: string | null): 
 
 // Still used by the index fetch below: a 404 there is a definitive "not
 // found" too.
+//
+// Two real bugs fixed here, found live while chasing a "matchups page hangs,
+// then fails on localhost" report: no timeout at all (a hung connection sat
+// bound only by the browser's own very long default, showing up as a real,
+// long-looking hang on production), and no content-type check before
+// trusting a 200 — on localhost, the same-origin candidate (see
+// shouldUseSameOriginApi) hits Vite's own dev server, which has no real
+// backend behind /api and, verified live, answers an unmatched GET with a
+// fast `200 text/html` (its SPA fallback serving index.html) rather than a
+// 404. `res.ok` alone accepted that as success and never even tried the
+// real backend — exactly why these endpoints "don't work on localhost"
+// despite being plain fetches to api.nspe.dev with no reason to actually
+// behave differently there. (POST requests, like /run's, don't trigger
+// Vite's fallback — confirmed live too — which is why /run never hit this.)
+const FETCH_TIMEOUT_MS = 10000
+
+function looksLikeJson(res: Response): boolean {
+  return (res.headers.get('content-type') || '').toLowerCase().includes('json')
+}
+
 async function fetchFirstOk(urls: string[]): Promise<Response | null> {
   let lastError: unknown = null
   for (const url of urls) {
+    const controller = new AbortController()
+    const timeout = window.setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS)
     try {
-      const res = await fetch(url)
-      if (res.status === 404) return null
-      if (res.ok) return res
-      lastError = new Error(`${url} -> HTTP ${res.status} ${res.statusText}`)
+      const res = await fetch(url, { signal: controller.signal })
+      if (res.status === 404 && looksLikeJson(res)) return null
+      if (res.ok && looksLikeJson(res)) return res
+      lastError = new Error(`${url} -> HTTP ${res.status} ${res.statusText} (${res.headers.get('content-type') || 'no content-type'})`)
     } catch (err) {
       lastError = err
+    } finally {
+      window.clearTimeout(timeout)
     }
   }
   throw lastError ?? new Error('No /database endpoint responded')

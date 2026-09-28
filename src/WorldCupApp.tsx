@@ -5,7 +5,7 @@ import nflData from '@/assets/data/worldcup.json'
 import scheduleData from '@/assets/data/nfl_schedule.json'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { fetchNflPowerRankings } from '@/lib/databaseApi'
-import { API_BASE_CANDIDATES, joinUrl, parseApiPayload } from '@/lib/nspe-api'
+import { API_BASE_CANDIDATES, fetchJsonCandidate, joinUrl, parseApiPayload } from '@/lib/nspe-api'
 import {
   extractMatchupInsightPayload,
   type MatchupInsightPayload,
@@ -624,21 +624,11 @@ export default function WorldCupApp() {
       const urls = API_BASE_CANDIDATES.map((base) =>
         joinUrl(base, `/matchup/${teamA.toLowerCase()}/${teamB.toLowerCase()}`),
       )
-      let response: Response | null = null
-      let lastError: unknown = null
-      for (const url of urls) {
-        try {
-          const res = await fetch(url)
-          if (res.ok || res.status === 404) {
-            response = res
-            break
-          }
-          lastError = new Error(`${url} -> HTTP ${res.status} ${res.statusText}`)
-        } catch (err) {
-          lastError = err
-        }
-      }
-      if (!response) throw lastError ?? new Error('No /matchup endpoint responded')
+      // fetchJsonCandidate (not a hand-rolled loop) — bounds this to a real
+      // timeout instead of the browser's own very long default, and won't
+      // mistake Vite's localhost SPA-fallback HTML for a real answer. See
+      // its own comment in nspe-api.ts for the two bugs this fixes.
+      const response = await fetchJsonCandidate(urls, 10000)
 
       if (response.status === 404) {
         setMatchupNotice({ message: "Couldn't find a matchup for those two teams.", showAuthLinks: false })
