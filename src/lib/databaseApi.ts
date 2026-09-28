@@ -151,3 +151,48 @@ export async function fetchQbExplosives(): Promise<QbExplosivesData> {
   if (!isQbExplosivesData(data)) throw new Error('Unrecognized qb-explosives response shape.')
   return data
 }
+
+export interface NflPowerRankingsTeam {
+  rank: number
+  team: string
+  power_score: number
+  wins: number
+  losses: number
+  ties: number
+  yards_per_play?: number
+  point_margin?: number
+  turnover_margin?: number
+  third_down_pct?: number
+  red_zone_pct?: number
+  avg_possession_seconds?: number
+  [key: string]: string | number | undefined
+}
+
+export interface NflPowerRankingsData {
+  engine: string
+  season: number
+  window: string
+  generated_at: string
+  teams: NflPowerRankingsTeam[]
+}
+
+function isNflPowerRankingsData(value: unknown): value is NflPowerRankingsData {
+  return !!value && typeof value === 'object' && Array.isArray((value as Record<string, unknown>).teams)
+}
+
+// The power-rankings page's data source — used to be a metered /run call
+// ("nspe nfl team -rankings <season>") re-run live on every single page
+// visit, even though the ranking only changes once a day. Backend now
+// precomputes this once daily (scrape-room cron) and serves the static
+// result free/unauthenticated, same allowlisted-file pattern as
+// fetchQbExplosives above — this removes both the credit/guest-quota cost
+// AND the repeated compute, since every visitor between refreshes reads the
+// same cached file rather than triggering a fresh calculation.
+export async function fetchNflPowerRankings(): Promise<NflPowerRankingsData> {
+  const urls = API_BASE_CANDIDATES.map((base) => joinUrl(base, '/api/data/output/nfl_power_rankings.json'))
+  const res = await fetchFirstOk(urls)
+  if (!res) throw new Error('nfl_power_rankings.json not found')
+  const data: unknown = await res.json()
+  if (!isNflPowerRankingsData(data)) throw new Error('Unrecognized power-rankings response shape.')
+  return data
+}

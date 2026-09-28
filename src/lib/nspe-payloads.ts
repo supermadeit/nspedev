@@ -307,7 +307,10 @@ export function extractMatchupInsightPayload(payload: unknown): MatchupInsightPa
 
 export interface PowerRankingsRow {
   team: string
-  games: number
+  // Optional, not required — the live precomputed feed (see
+  // fetchNflPowerRankings in databaseApi.ts) doesn't include a games count
+  // at all, and nothing in the UI has ever read it.
+  games?: number
   wins: number
   losses: number
   ties: number
@@ -317,7 +320,10 @@ export interface PowerRankingsRow {
   pts_for?: number
   pts_allowed?: number
   yards_per_play?: number
+  turnover_margin?: number
   third_down_pct?: number
+  red_zone_pct?: number
+  avg_possession_seconds?: number
   [key: string]: string | number | undefined
 }
 

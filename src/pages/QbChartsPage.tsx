@@ -25,6 +25,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { fetchQbExplosives, type QbExplosivesData } from '@/lib/databaseApi'
 import { normalizeDisplayPlayer } from '@/lib/nspe-payloads'
+import { loadPlayerIndex, PLAYER_INDEX } from '@/lib/playerSearch'
 
 function normalizePlayerKey(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9]/g, '')
@@ -60,6 +61,10 @@ const BANDS: Array<keyof QbRow['explosive']> = ['20-29', '30-39', '40-49', '50+'
 
 interface DerivedRow {
   player: string
+  // Live /database/{slug} route for this player, when the live player index
+  // has a match — absent (rare: index not loaded yet, or genuinely no
+  // match) falls back to plain unlinked text rather than a broken link.
+  slug?: string
   team: string
   q1: number
   q2: number
@@ -73,13 +78,14 @@ interface DerivedRow {
   totalTd: number
 }
 
-function deriveRows(players: QbRow[]): DerivedRow[] {
+function deriveRows(players: QbRow[], slugByKey: Map<string, string>): DerivedRow[] {
   return players
     .filter((p) => PROFILED_PLAYER_KEYS.has(normalizePlayerKey(p.player_name)))
     .map((p) => {
       const bandEntries = BANDS.map((b) => p.explosive[b])
       return {
         player: normalizeDisplayPlayer(p.player_name),
+        slug: slugByKey.get(normalizePlayerKey(p.player_name)),
         team: p.team,
         q1: p.quarter_yards.q1,
         q2: p.quarter_yards.q2,
@@ -131,6 +137,11 @@ export default function QbChartsPage() {
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
   const [data, setData] = useState<QbExplosivesData | null>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
+  // Same live index every player-search dropdown/leaderboard link already
+  // uses — keyed the same punctuation-stripped way as PROFILED_PLAYER_KEYS
+  // above, since the chart's own names ("JordanLove") and the index's
+  // display names ("Jordan Love") don't share exact formatting either.
+  const [slugByKey, setSlugByKey] = useState<Map<string, string>>(new Map())
 
   useEffect(() => {
     let cancelled = false
@@ -142,12 +153,16 @@ export default function QbChartsPage() {
         console.error('Failed to load qb-explosives:', err)
         if (!cancelled) setLoadError("Couldn't load chart data — try refreshing.")
       })
+    loadPlayerIndex().then(() => {
+      if (cancelled) return
+      setSlugByKey(new Map(PLAYER_INDEX.map((e) => [normalizePlayerKey(e.name), e.slug])))
+    })
     return () => {
       cancelled = true
     }
   }, [])
 
-  const rows = useMemo(() => (data ? deriveRows(data.players) : []), [data])
+  const rows = useMemo(() => (data ? deriveRows(data.players, slugByKey) : []), [data, slugByKey])
 
   const sorted = useMemo(() => {
     const col = COLUMNS.find((c) => c.key === sortKey)
@@ -283,7 +298,17 @@ export default function QbChartsPage() {
                         ...dividerStyle(col.key),
                       }}
                     >
-                      {v}
+                      {/* Linked when the live player index has a match for
+                          this row; plain text otherwise (index not loaded
+                          yet, or genuinely no profile match) rather than a
+                          link to a slug that doesn't exist. */}
+                      {col.key === 'player' && r.slug ? (
+                        <a href={`/database/${r.slug}`} className="hover:underline">
+                          {v}
+                        </a>
+                      ) : (
+                        v
+                      )}
                     </td>
                   )
                 })}

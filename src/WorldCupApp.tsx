@@ -4,12 +4,10 @@ import { getCurrentNflWeek } from '@/lib/nflWeek'
 import nflData from '@/assets/data/worldcup.json'
 import scheduleData from '@/assets/data/nfl_schedule.json'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { authHeader } from '@/lib/auth-token'
-import { guestTokenHeader, setGuestToken } from '@/lib/guestToken'
-import { fetchFirstSuccessful, parseApiPayload, QueryGateError, readGuestQuota, RUN_ENDPOINTS } from '@/lib/nspe-api'
+import { fetchNflPowerRankings } from '@/lib/databaseApi'
+import { API_BASE_CANDIDATES, joinUrl, parseApiPayload } from '@/lib/nspe-api'
 import {
   extractMatchupInsightPayload,
-  extractPowerRankingsPayload,
   type MatchupInsightPayload,
   type PowerRankingsPayload,
   type PowerRankingsRow,
@@ -610,50 +608,54 @@ export default function WorldCupApp() {
   // undecided homepage-header entry point (bypassing this page entirely)
   // was discussed too, tangled up with an upcoming logo redesign, but that's
   // additive and doesn't block this one.
+  // Was a metered /run call ("nfl matchup <a> vs <b>") — swapped for the
+  // free, unauthenticated GET /matchup/{a}/{b} once backend confirmed it
+  // exists and verified live to return the exact same MatchupInsightPayload
+  // shape. No guest-quota/credit gate applies here at all anymore, so no
+  // QueryGateError handling, no guest-token sync, no auth header — this
+  // genuinely doesn't touch the metered pipeline. NFL-only for now (a bad
+  // pair of codes 404s with "could not resolve team(s)", confirmed live);
+  // other sports still go through their own /run-based paths until backend
+  // extends this route to them.
   const requestMatchup = async (teamA: string, teamB: string) => {
     setIsMatchupLoading(true)
     setMatchupNotice(null)
     try {
-      const { response } = await fetchFirstSuccessful(
-        RUN_ENDPOINTS,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', ...authHeader(), ...guestTokenHeader() },
-          // Lowercased defensively — the confirmed-working command shape
-          // from the backend spec used lowercase codes ("dal vs wsh"); the
-          // abbreviations flowing in here (abbrMap / schedule data) are
-          // uppercase, and this was never actually exercised against the
-          // real backend with real codes before now.
-          body: JSON.stringify({ query: `nfl matchup ${teamA.toLowerCase()} vs ${teamB.toLowerCase()}` }),
-        },
-        12000,
+      const urls = API_BASE_CANDIDATES.map((base) =>
+        joinUrl(base, `/matchup/${teamA.toLowerCase()}/${teamB.toLowerCase()}`),
       )
+      let response: Response | null = null
+      let lastError: unknown = null
+      for (const url of urls) {
+        try {
+          const res = await fetch(url)
+          if (res.ok || res.status === 404) {
+            response = res
+            break
+          }
+          lastError = new Error(`${url} -> HTTP ${res.status} ${res.statusText}`)
+        } catch (err) {
+          lastError = err
+        }
+      }
+      if (!response) throw lastError ?? new Error('No /matchup endpoint responded')
+
+      if (response.status === 404) {
+        setMatchupNotice({ message: "Couldn't find a matchup for those two teams.", showAuthLinks: false })
+        return
+      }
+
       const payload = await parseApiPayload(response)
-      // No quota banner on this page, but the guest token is shared storage
-      // (localStorage) — keep it synced so App.tsx's rollover claim on
-      // sign-in always has the latest one.
-      const guestQuota = readGuestQuota(payload)
-      if (guestQuota) setGuestToken(guestQuota.token)
       const matchup = extractMatchupInsightPayload(payload)
       if (matchup) {
         setMatchupResult(matchup)
         setIsMatchupOpen(true)
-      }
-    } catch (err) {
-      console.error('Failed to load matchup insight:', err)
-      if (err instanceof QueryGateError) {
-        setMatchupNotice({
-          message:
-            err.status === 402
-              ? "You've used today's free queries."
-              : err.status === 429
-              ? 'Too many queries at once — give it a few seconds.'
-              : 'Your session has expired.',
-          showAuthLinks: err.status !== 429,
-        })
       } else {
         setMatchupNotice({ message: "Couldn't load that matchup — try again in a moment.", showAuthLinks: false })
       }
+    } catch (err) {
+      console.error('Failed to load matchup insight:', err)
+      setMatchupNotice({ message: "Couldn't load that matchup — try again in a moment.", showAuthLinks: false })
     } finally {
       setIsMatchupLoading(false)
     }
@@ -668,42 +670,34 @@ export default function WorldCupApp() {
   // Fetched once on page load rather than click-triggered like matchup
   // insight — power rankings is this page's primary content now, so it
   // should just be there when the page is, not behind an action.
+  //
+  // Was a metered /run call ("nspe nfl team -rankings <season>") re-run live
+  // on every visit — swapped for the free, unauthenticated, daily-precomputed
+  // GET /api/data/output/nfl_power_rankings.json (fetchNflPowerRankings),
+  // same win as /matchup/{a}/{b} above: no credit/guest-quota cost, and
+  // (unlike /matchup) this one also cuts the repeated compute, since it's a
+  // static file refreshed once a day rather than recalculated per request.
+  // No QueryGateError handling needed here either — this route doesn't touch
+  // the metered pipeline at all. The wire shape ({teams: [...]}) gets mapped
+  // into the existing PowerRankingsPayload shape (`results`) so nothing else
+  // reading `powerRankings` downstream needs to change.
   useEffect(() => {
     let cancelled = false
-    ;(async () => {
-      try {
-        const { response } = await fetchFirstSuccessful(
-          RUN_ENDPOINTS,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...authHeader(), ...guestTokenHeader() },
-            body: JSON.stringify({ query: `nspe nfl team -rankings ${data.season}` }),
-          },
-          12000,
-        )
-        const payload = await parseApiPayload(response)
-        const guestQuota = readGuestQuota(payload)
-        if (guestQuota) setGuestToken(guestQuota.token)
-        const rankings = extractPowerRankingsPayload(payload)
-        if (!cancelled && rankings) setPowerRankings(rankings)
-      } catch (err) {
-        console.error('Failed to load power rankings:', err)
+    fetchNflPowerRankings()
+      .then((rankings) => {
         if (cancelled) return
-        if (err instanceof QueryGateError) {
-          setPowerRankingsError({
-            message:
-              err.status === 402
-                ? "You've used today's free queries."
-                : err.status === 429
-                ? 'Too many queries at once — give it a few seconds and refresh.'
-                : 'Your session has expired.',
-            showAuthLinks: err.status !== 429,
-          })
-        } else {
+        setPowerRankings({
+          engine: rankings.engine,
+          query: { season: rankings.season, year_range: null, window: rankings.window },
+          results: rankings.teams,
+        })
+      })
+      .catch((err) => {
+        console.error('Failed to load power rankings:', err)
+        if (!cancelled) {
           setPowerRankingsError({ message: "Couldn't load power rankings — try refreshing.", showAuthLinks: false })
         }
-      }
-    })()
+      })
     return () => { cancelled = true }
   }, [])
 
