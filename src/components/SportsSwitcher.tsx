@@ -30,7 +30,20 @@ const ACCENT = 'oklch(0.85 0.15 195)'
 // {sports} on the charts page), "matchups" on the homepage itself, where
 // it's the discovery entry point into this whole feature rather than a
 // same-page switch.
-export function SportsSwitcher({ current, label = 'sports' }: { current?: SportKey; label?: string }) {
+// `direction` picks which way the menu opens — "down" (default) for every
+// per-page header placement, which all sit near the top of the screen;
+// "up" for the homepage's {matchups} entry point specifically, which sits
+// near the BOTTOM of the screen on both platforms, where a downward-opening
+// menu would either run off-screen or read backwards.
+export function SportsSwitcher({
+  current,
+  label = 'sports',
+  direction = 'down',
+}: {
+  current?: SportKey
+  label?: string
+  direction?: 'up' | 'down'
+}) {
   const [open, setOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -58,7 +71,7 @@ export function SportsSwitcher({ current, label = 'sports' }: { current?: SportK
       </button>
       {open && (
         <div
-          className="absolute right-0 top-[26px] z-30 flex flex-col items-end gap-2 rounded px-3 py-2"
+          className={`absolute right-0 z-30 flex flex-col items-end gap-2 rounded px-3 py-2 ${direction === 'up' ? 'bottom-[26px]' : 'top-[26px]'}`}
           style={{ backgroundColor: 'oklch(0.14 0 0)', border: '1px solid oklch(0.28 0 0)' }}
         >
           {others.map((l) => (

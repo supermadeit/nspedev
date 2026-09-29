@@ -1583,6 +1583,219 @@ function boxStatLabel(key: string): string {
 
 const OVERVIEW_GAME_META_KEYS = new Set(['date', 'date_iso', 'season', 'game_id', 'opponent', 'result', 'outcome', 'value'])
 
+// ---------- shared filterable game log (NBA/MLB/NHL "vs team" game lists) ----------
+// A long-running rivalry's h2h-shaped game log (either engine family: the
+// dedicated -h2h engine's H2hView, or the -ov/statN engine's
+// OverviewStatNGenericView) can run 40-60+ games — every row already carries
+// its full box-score line, so filtering down to notable games (20+ pts, a
+// hat trick, etc.) is a pure client-side array filter over data already
+// on hand, no new endpoint for any sport. NFL keeps its own existing
+// h2h layout untouched (rush/rec/pass field grouping is football-specific
+// and doesn't map onto this); this is for NBA/MLB/NHL, which now share one
+// compact per-game row format and one filter-chip bar between them.
+
+interface GameLogCategory {
+  id: string
+  label: string
+  predicate: (game: Record<string, unknown>) => boolean
+}
+
+function numField(g: Record<string, unknown>, key: string): number {
+  return typeof g[key] === 'number' ? (g[key] as number) : 0
+}
+
+// Counted the same way engines/nba/player_profile.py already does for
+// double-double/triple-double: 2 (or 3) of these five categories at 10+ in
+// one game.
+const NBA_DOUBLE_DOUBLE_KEYS = ['points', 'rebounds', 'assists', 'steals', 'blocks']
+
+// customTotal is the user's own typed threshold for the one open-ended
+// category per sport ("totalN") — omitted entirely until they type a number,
+// rather than showing a chip with no meaningful threshold yet.
+function buildGameLogCategories(sport: string, customTotal: number | null): GameLogCategory[] {
+  if (sport === 'nba') {
+    const cats: GameLogCategory[] = [
+      { id: 'pts20', label: '20+ PTS', predicate: (g) => numField(g, 'points') >= 20 },
+      { id: 'pts30', label: '30+ PTS', predicate: (g) => numField(g, 'points') >= 30 },
+      { id: 'dd', label: 'double-double', predicate: (g) => NBA_DOUBLE_DOUBLE_KEYS.filter((k) => numField(g, k) >= 10).length >= 2 },
+      { id: 'td', label: 'triple-double', predicate: (g) => NBA_DOUBLE_DOUBLE_KEYS.filter((k) => numField(g, k) >= 10).length >= 3 },
+      { id: 'tpm3', label: '3+ 3PM', predicate: (g) => numField(g, 'three_made') >= 3 },
+      { id: 'tpm4', label: '4+ 3PM', predicate: (g) => numField(g, 'three_made') >= 4 },
+      { id: 'tpm5', label: '5+ 3PM', predicate: (g) => numField(g, 'three_made') >= 5 },
+    ]
+    if (customTotal != null) {
+      cats.push({
+        id: 'total',
+        label: `${customTotal}+ PTS+REB+AST`,
+        predicate: (g) => numField(g, 'points') + numField(g, 'rebounds') + numField(g, 'assists') >= customTotal,
+      })
+    }
+    return cats
+  }
+  if (sport === 'mlb') {
+    const cats: GameLogCategory[] = [
+      { id: 'h2', label: '2+ hits', predicate: (g) => numField(g, 'H') >= 2 },
+      { id: 'h3', label: '3+ hits', predicate: (g) => numField(g, 'H') >= 3 },
+      { id: 'hr1', label: 'HR game', predicate: (g) => numField(g, 'HR') >= 1 },
+      { id: 'hr2', label: 'multi-HR game', predicate: (g) => numField(g, 'HR') >= 2 },
+      { id: 'rbi3', label: '3+ RBI', predicate: (g) => numField(g, 'RBI') >= 3 },
+      { id: 'r2', label: 'multi-run game', predicate: (g) => numField(g, 'R') >= 2 },
+    ]
+    if (customTotal != null) {
+      cats.push({
+        id: 'total',
+        label: `${customTotal}+ H+R+RBI`,
+        predicate: (g) => numField(g, 'H') + numField(g, 'R') + numField(g, 'RBI') >= customTotal,
+      })
+    }
+    return cats
+  }
+  if (sport === 'nhl') {
+    // No separate "totalN" category here — in hockey, points already IS
+    // goals+assists combined, so a customizable points threshold fills the
+    // same role a combined "total" plays for NBA/MLB.
+    const cats: GameLogCategory[] = [
+      { id: 'goal1', label: 'goal', predicate: (g) => numField(g, 'g') >= 1 },
+      { id: 'goal2', label: 'multi-goal game', predicate: (g) => numField(g, 'g') >= 2 },
+      { id: 'hat', label: 'hat trick', predicate: (g) => numField(g, 'g') >= 3 },
+      { id: 'pts3', label: '3+ points', predicate: (g) => numField(g, 'pts') >= 3 },
+    ]
+    if (customTotal != null) {
+      cats.push({ id: 'ptsN', label: `${customTotal}+ points`, predicate: (g) => numField(g, 'pts') >= customTotal })
+    }
+    return cats
+  }
+  return []
+}
+
+const CHIP_ACTIVE = 'oklch(0.90 0.18 195)'
+const CHIP_INACTIVE = 'oklch(0.55 0 0)'
+const CHIP_BORDER_ACTIVE = 'oklch(0.85 0.15 195)'
+const CHIP_BORDER_INACTIVE = 'oklch(0.28 0 0)'
+
+// Render-prop rather than a fixed row renderer — H2hView and
+// OverviewStatNGenericView keep their own exact per-game JSX (see
+// GameLogRow below, which both now use), this component only owns the chip
+// bar, the custom-total input, and the filtering itself. Chips are OR'd
+// together (a game matching ANY active chip shows) rather than AND'd — these
+// are for spotlighting notable games, not narrowing to a rare intersection
+// of several thresholds at once.
+function GameLogFilterBar({
+  sport,
+  games,
+  children,
+}: {
+  sport: string
+  games: Record<string, unknown>[]
+  children: (filteredGames: Record<string, unknown>[]) => React.ReactNode
+}) {
+  const [activeIds, setActiveIds] = useState<Set<string>>(new Set())
+  const [customTotalInput, setCustomTotalInput] = useState('')
+  const parsedCustomTotal = customTotalInput.trim() && Number.isFinite(Number(customTotalInput))
+    ? Number(customTotalInput)
+    : null
+  const categories = useMemo(() => buildGameLogCategories(sport, parsedCustomTotal), [sport, parsedCustomTotal])
+
+  if (categories.length === 0) {
+    // Sport not covered by a category list (yet) — render unfiltered rather
+    // than hiding the game log entirely.
+    return <>{children(games)}</>
+  }
+
+  const toggle = (id: string) =>
+    setActiveIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  const activeCategories = categories.filter((c) => activeIds.has(c.id))
+  const filtered = activeCategories.length === 0 ? games : games.filter((g) => activeCategories.some((c) => c.predicate(g)))
+
+  return (
+    <div className="space-y-2">
+      <div className="flex flex-wrap items-center gap-1.5">
+        {categories.map((c) => (
+          <button
+            key={c.id}
+            type="button"
+            onClick={() => toggle(c.id)}
+            className="font-mono text-[11px] px-2 py-0.5 rounded border transition-opacity hover:opacity-80"
+            style={{
+              borderColor: activeIds.has(c.id) ? CHIP_BORDER_ACTIVE : CHIP_BORDER_INACTIVE,
+              color: activeIds.has(c.id) ? CHIP_ACTIVE : CHIP_INACTIVE,
+              backgroundColor: activeIds.has(c.id) ? 'oklch(0.22 0.04 195)' : 'transparent',
+            }}
+          >
+            {c.label}
+          </button>
+        ))}
+        <input
+          type="number"
+          value={customTotalInput}
+          onChange={(e) => setCustomTotalInput(e.target.value)}
+          placeholder="custom total"
+          className="font-mono text-[11px] w-[92px] px-2 py-0.5 rounded border bg-transparent outline-none"
+          style={{ borderColor: CHIP_BORDER_INACTIVE, color: 'oklch(0.85 0 0)' }}
+        />
+        {activeIds.size > 0 && (
+          <button
+            type="button"
+            onClick={() => setActiveIds(new Set())}
+            className="font-mono text-[11px] underline hover:opacity-80"
+            style={{ color: CHIP_INACTIVE }}
+          >
+            clear
+          </button>
+        )}
+      </div>
+      {activeCategories.length > 0 && (
+        <div className="font-mono text-[11px]" style={{ color: CHIP_INACTIVE }}>
+          {filtered.length} of {games.length} games
+        </div>
+      )}
+      {children(filtered)}
+    </div>
+  )
+}
+
+// One compact line per game — date, opponent, W/L result (when present),
+// the query's own headline value (when present, OverviewStatN-style), then
+// every other numeric field as a comma-joined box-score tail. `metaKeys`
+// tells it which fields are already shown some other way (date/opponent/
+// etc, plus each caller's own already-highlighted fields) so they don't
+// double up in the box-score tail.
+function GameLogRow({ g, valueLabel, metaKeys }: { g: Record<string, unknown>; valueLabel?: string; metaKeys: Set<string> }) {
+  const dateRaw = (g.date_iso as string) ?? (g.date as string) ?? ''
+  const opponent = typeof g.opponent === 'string' ? g.opponent : ''
+  const result = typeof g.result === 'string' ? g.result : ''
+  const outcome = typeof g.outcome === 'string' ? g.outcome : ''
+  const hasValue = typeof g.value === 'number'
+  const box = Object.entries(g).filter(([k, v]) => !metaKeys.has(k) && typeof v === 'number')
+  return (
+    <div className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+      <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(dateRaw) ?? dateRaw}</span>
+      {opponent && <span style={{ color: 'oklch(0.75 0.08 220)' }}>{` ${opponent}`}</span>}
+      {result && (
+        <span style={{ color: outcome === 'W' ? 'oklch(0.78 0.18 145)' : outcome === 'L' ? 'oklch(0.70 0.15 25)' : 'oklch(0.55 0 0)' }}>
+          {` ${result}`}
+        </span>
+      )}
+      {hasValue && (
+        <>
+          <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+          <span style={{ color: 'oklch(0.85 0.15 195)' }}>{`${g.value} ${valueLabel ?? ''}`.trim()}</span>
+        </>
+      )}
+      {box.length > 0 && (
+        <span style={{ color: 'oklch(0.55 0 0)' }}>
+          {` · ${box.map(([k, v]) => `${v} ${boxStatLabel(k)}`).join(', ')}`}
+        </span>
+      )}
+    </div>
+  )
+}
+
 function OverviewStatNGenericView({ payload }: { payload: OverviewStatNPayload }) {
   const { isExpanded, toggle } = useExpandableRows()
   const CYAN = 'oklch(0.85 0.15 195)'
@@ -1619,6 +1832,10 @@ function OverviewStatNGenericView({ payload }: { payload: OverviewStatNPayload }
   const coverageLines = cleanCoverageLines(payload.coverage)
   const valueLabel = thresholds.length === 1 ? boxStatLabel(thresholds[0].stat) : (q.stat ?? '')
   const games = payload.results
+  // engine is "{sport}_overview_statn" (underscore-joined) — drives which
+  // game-log filter-chip set applies (see buildGameLogCategories).
+  const sport = payload.engine.split('_')[0]
+  const gameLogMetaKeys = new Set([...OVERVIEW_GAME_META_KEYS, ...thresholdKeys])
   const latest = newestMatch(games)
   const latestDate = latest ? (extractDateToken(latest.date_iso) ?? latest.date_iso) : null
   const lastText = latest ? `last match ${latestDate}${latest.opponent ? ` ${latest.opponent}` : ''}` : ''
@@ -1664,29 +1881,13 @@ function OverviewStatNGenericView({ payload }: { payload: OverviewStatNPayload }
           expanded={isExpanded(0)}
           onToggle={() => toggle(0)}
         >
-          {games.map((g, j) => {
-            const box = Object.entries(g).filter(
-              ([k, v]) => !OVERVIEW_GAME_META_KEYS.has(k) && !thresholdKeys.has(k) && typeof v === 'number',
-            )
-            return (
-              <div key={g.game_id ?? j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
-                <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(g.date_iso) ?? g.date_iso}</span>
-                {g.opponent && <span style={{ color: 'oklch(0.75 0.08 220)' }}>{` ${g.opponent}`}</span>}
-                {g.result && (
-                  <span style={{ color: g.outcome === 'W' ? 'oklch(0.78 0.18 145)' : g.outcome === 'L' ? 'oklch(0.70 0.15 25)' : 'oklch(0.55 0 0)' }}>
-                    {` ${g.result}`}
-                  </span>
-                )}
-                <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
-                <span style={{ color: CYAN }}>{`${g.value} ${valueLabel}`.trim()}</span>
-                {box.length > 0 && (
-                  <span style={{ color: 'oklch(0.55 0 0)' }}>
-                    {` · ${box.map(([k, v]) => `${v} ${boxStatLabel(k)}`).join(', ')}`}
-                  </span>
-                )}
-              </div>
-            )
-          })}
+          <GameLogFilterBar sport={sport} games={games as unknown as Record<string, unknown>[]}>
+            {(filteredGames) =>
+              filteredGames.map((g, j) => (
+                <GameLogRow key={(g.game_id as string) ?? j} g={g} valueLabel={valueLabel} metaKeys={gameLogMetaKeys} />
+              ))
+            }
+          </GameLogFilterBar>
         </ResultRow>
       )}
     </div>
@@ -2415,10 +2616,21 @@ function formatH2hFieldValue(field: string, value: number): string {
   return /rtg|avg|pct/i.test(field) ? value.toFixed(1) : String(value)
 }
 
+// GameLogRow's `metaKeys` for MLB/NHL h2h games (see H2hView's non-NFL
+// branch) — date/venue/opponent are all already shown some other way, same
+// role OVERVIEW_GAME_META_KEYS plays for OverviewStatNGenericView's rows.
+const H2H_GAME_LOG_META_KEYS = new Set(['date', 'date_iso', 'venue', 'opponent'])
+
 function H2hView({ payload }: { payload: H2hPayload }) {
   const q = payload.query ?? {}
   const t = payload.totals ?? {}
   const games = payload.games ?? []
+  // engine is "{sport}-h2h"/"{sport}-week" (dash-joined) — NFL keeps its own
+  // existing game-log layout below untouched (its rush/rec/pass field
+  // grouping is football-specific); MLB/NHL get the same compact,
+  // filterable game-log layout NBA's OverviewStatNGenericView already has
+  // (see GameLogFilterBar/GameLogRow, shared between both views).
+  const sport = payload.engine.split('-')[0]
 
   const playerLabel = normalizeDisplayPlayer(q.player_display || q.player_query || 'player')
   const playerTeam = q.player_team || ''
@@ -2563,7 +2775,7 @@ function H2hView({ payload }: { payload: H2hPayload }) {
           <div className="text-center py-4 font-mono text-[12px]" style={{ color: 'oklch(0.70 0 0)' }}>
             No games found in window
           </div>
-        ) : (
+        ) : sport === 'nfl' ? (
           <div className="space-y-2">
             {games.map((g, i) => {
               const venuePrefix = g.venue === 'away' ? '@' : g.venue === 'home' ? 'vs' : ''
@@ -2626,6 +2838,34 @@ function H2hView({ payload }: { payload: H2hPayload }) {
               )
             })}
           </div>
+        ) : (
+          // MLB/NHL: same compact, filterable layout NBA's
+          // OverviewStatNGenericView uses (GameLogFilterBar/GameLogRow,
+          // shared between both views) — venue+opponent merged into one
+          // display string up front so GameLogRow's generic `opponent`
+          // lookup finds a ready-made "@ CHI"/"vs CHI" string, matching the
+          // convention OverviewStatNGame's `opponent` field already carries
+          // baked in. Filtering itself only ever looks at the original
+          // numeric stat fields, untouched by this merge.
+          <GameLogFilterBar
+            sport={sport}
+            games={games.map((g) => ({
+              ...g,
+              opponent: [g.venue === 'away' ? '@' : g.venue === 'home' ? 'vs' : '', g.opponent ?? '']
+                .filter(Boolean)
+                .join(' '),
+            })) as unknown as Record<string, unknown>[]}
+          >
+            {(filteredGames) =>
+              filteredGames.map((g, i) => (
+                <GameLogRow
+                  key={`${g.date_iso ?? g.date}-${i}`}
+                  g={g}
+                  metaKeys={H2H_GAME_LOG_META_KEYS}
+                />
+              ))
+            }
+          </GameLogFilterBar>
         )}
       </div>
     </div>
@@ -5457,21 +5697,21 @@ function App() {
                   single row: input+run on one line, {calculator}/{charts}
                   below. */}
               <div className="relative w-full" ref={mobileSearchContainerRef}>
-                {/* {pocket}: tucked above the search bar's right edge, same
-                    spot as desktop. Greyed out logged-out (click sends to
-                    log in). {sample-queries} takes the opposite (left) edge
-                    of the same strip, so the two never collide.
+                {/* {learn.nspe}: tucked above the search bar's right edge on
+                    mobile — swapped with {pocket} (now down in the hint line
+                    below, see the shared hint-line block further down),
+                    per the user's explicit ask to swap their mobile
+                    placements. {sample-queries} still takes the opposite
+                    (left) edge of the same strip, unaffected by the swap.
                     GuestQuotaNotice shares that left edge — stacked one line
                     above {sample-queries} rather than on top of it. */}
                 <button
                   type="button"
-                  data-tour="tour-pocket"
-                  onClick={openPockets}
-                  title={user ? 'Your saved results' : 'Log in to use pockets'}
+                  onClick={() => setIsLearnOpen(true)}
                   className="absolute -top-6 right-0 font-mono font-bold text-[12px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-                  style={{ color: 'oklch(0.85 0.15 195)', opacity: user ? 1 : 0.45 }}
+                  style={{ color: 'oklch(0.90 0.18 195)' }}
                 >
-                  {'{pocket}'}
+                  {'{learn.nspe}'}
                 </button>
                 <button
                   type="button"
@@ -5670,17 +5910,34 @@ function App() {
             className={`mt-6 flex items-baseline gap-x-5 whitespace-nowrap ${isMobile ? 'justify-center' : 'text-left'}`}
             style={isMobile ? undefined : { paddingLeft: '97px' }}
           >
-            {/* Replaces the old static "search a player or type: nspe" hint —
-                opens a live answer (POST /learn, free/no-quota) instead of
-                just telling people the CLI exists. */}
-            <button
-              type="button"
-              onClick={() => setIsLearnOpen(true)}
-              className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-              style={{ color: 'oklch(0.90 0.18 195)' }}
-            >
-              {'{learn.nspe}'}
-            </button>
+            {/* Desktop: {learn.nspe} — replaces the old static "search a
+                player or type: nspe" hint, opens a live answer (POST
+                /learn, free/no-quota) instead of just telling people the
+                CLI exists. Mobile: {pocket} instead, swapped down here from
+                the search bar's top-right corner (which now shows
+                {learn.nspe} — see the search-container block above) per the
+                user's explicit ask to swap their mobile placements. */}
+            {isMobile ? (
+              <button
+                type="button"
+                data-tour="tour-pocket"
+                onClick={openPockets}
+                title={user ? 'Your saved results' : 'Log in to use pockets'}
+                className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+                style={{ color: 'oklch(0.85 0.15 195)', opacity: user ? 1 : 0.45 }}
+              >
+                {'{pocket}'}
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setIsLearnOpen(true)}
+                className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+                style={{ color: 'oklch(0.90 0.18 195)' }}
+              >
+                {'{learn.nspe}'}
+              </button>
+            )}
             {/* Desktop only — mobile keeps {sample-queries} above the search
                 bar's left edge now (see above). Moved here from the
                 bottom-right group. The bar keeps "nspe" from reading as
@@ -5862,7 +6119,7 @@ function App() {
           >
             {'{charts}'}
           </a>
-          <SportsSwitcher label="matchups" />
+          <SportsSwitcher label="matchups" direction="up" />
         </div>
       )}
 
@@ -5995,7 +6252,7 @@ function App() {
           className="absolute z-20"
           style={{ bottom: '46px', right: leaderboard?.rows?.length > 0 ? '128px' : '12px' }}
         >
-          <SportsSwitcher label="matchups" />
+          <SportsSwitcher label="matchups" direction="up" />
         </div>
       )}
 
