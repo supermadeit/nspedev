@@ -20,7 +20,8 @@ import { H2hStaffOverlay } from '@/components/H2hStaffOverlay'
 import { MatchupInsightOverlay } from '@/components/MatchupInsightOverlay'
 import { PlayerSearchDropdown } from '@/components/PlayerSearchDropdown'
 import { SyntaxSuggestionDropdown } from '@/components/SyntaxSuggestionDropdown'
-import { PLAYER_INDEX, loadPlayerIndex, resolvePlayerTeam, searchPlayers, searchPlayersLoose } from '@/lib/playerSearch'
+import { SportsSwitcher } from '@/components/SportsSwitcher'
+import { PLAYER_INDEX, loadPlayerIndex, resolvePlayerTeam, searchPlayers, searchPlayersFuzzy, searchPlayersLoose } from '@/lib/playerSearch'
 import {
   findPlayerSpotlightCommands,
   getMatchupSuggestions,
@@ -375,7 +376,16 @@ function formatLeaderboardDate(iso: string): string {
 }
 
 function leaderboardSportLabel(kind: string): string {
-  const m = /^([a-z]+)_leaderboard$/i.exec(kind)
+  // NFL's real live `kind` is "nfl_leaderboard_heat" (an extra "_heat" suffix
+  // other sports' plain "<sport>_leaderboard" kind doesn't have) — the old
+  // exact-match regex missed that suffix entirely and fell through to
+  // rendering the raw kind string, which the header's `uppercase` styling
+  // then displayed literally as "NFL_LEADERBOARD_HEAT" instead of "NFL".
+  // Matching an optional trailing "_anything" instead of requiring an exact
+  // end-of-string makes this tolerant of that (and any future) suffix, same
+  // "don't hardcode one sport's exact string" principle as the engine-name
+  // regexes in nspe-payloads.ts.
+  const m = /^([a-z]+)_leaderboard(?:_.+)?$/i.exec(kind)
   return m ? m[1].toLowerCase() : kind
 }
 
@@ -3715,14 +3725,6 @@ function App() {
   const [builderDragOffset, setBuilderDragOffset] = useState({ x: 0, y: 0 })
   const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(true)
   const [isMobileLeaderboardOpen, setIsMobileLeaderboardOpen] = useState(false)
-  // Mobile has no room to lay {nba.season}/{mlb.playoffs}/{nhl.season} out
-  // flat next to {nfl.season} the way desktop's bottom row does (four
-  // bracket labels don't fit a phone-width strip) — {nfl.season} stays
-  // directly visible since it's still the most popular, and a small
-  // {sports} toggle reveals the other three in a compact list above it,
-  // same "open a small panel" pattern as the site's other mobile popovers
-  // rather than hiding them behind desktop-only reach.
-  const [isMobileSportsMenuOpen, setIsMobileSportsMenuOpen] = useState(false)
   // Full-screen takeover (see the modal below) locks background scroll while
   // open — without this, dragging through the leaderboard's own scroll area
   // could still hand the gesture off to the homepage underneath once the
@@ -3821,7 +3823,15 @@ function App() {
     if (strictPlayerMatches.length > 0) return strictPlayerMatches
     const { sport, rest } = stripSportPrefix(searchValue)
     const loose = searchPlayersLoose(rest, 8)
-    return sport ? loose.filter((m) => !m.entry.sport || m.entry.sport === sport) : loose
+    if (loose.length > 0) return sport ? loose.filter((m) => !m.entry.sport || m.entry.sport === sport) : loose
+    // Typo tolerance, tried last — only reached when both the strict and
+    // junk-tolerant prefix searches above found nothing at all (see
+    // searchPlayersFuzzy's own comment for why it's safe to be more
+    // generous here specifically). This is what makes "saqoun vs chi"
+    // surface Saquon Barkley's own {psc} templates instead of falling back
+    // to a generic, unsubstituted catalog example.
+    const fuzzy = searchPlayersFuzzy(rest, 8)
+    return sport ? fuzzy.filter((m) => !m.entry.sport || m.entry.sport === sport) : fuzzy
   }, [searchValue, strictPlayerMatches, isPlayerIndexReady])
   // True only once the user has actually pressed an arrow key to browse the
   // player dropdown — a deliberate "I want to pick from this list" signal,
@@ -5829,18 +5839,20 @@ function App() {
         }}
       />
 
-      {/* Desktop bottom row, left to right: {charts} {nfl.season} {nba.season}
-          {mlb.playoffs} {nhl.season} {leaderboard} (the leaderboard panel
-          itself is unchanged, just to the right of this group).
-          {sample-queries} moved up under the search bar, and {tutorial}
-          lives in the query builder panel's own header. {glossary} removed
-          (nav entry only — its modal/state is still in this file, just
-          unreachable, same shelve pattern as {sample-commands}/{database}
-          until the tutorial/howto rework replaces it). nfl.season stays
-          first/most-prominent per the user's call (still the most popular
-          sport); the other three are new, plain per-sport pages (one route
-          each, no shared switcher), same flat bracket-link style as
-          everything else in this row rather than tucked behind a dropdown. */}
+      {/* Desktop bottom row, left to right: {charts} {matchups} {leaderboard}
+          (the leaderboard panel itself is unchanged, just to the right of
+          this group). {sample-queries} moved up under the search bar, and
+          {tutorial} lives in the query builder panel's own header.
+          {glossary} removed (nav entry only — its modal/state is still in
+          this file, just unreachable, same shelve pattern as
+          {sample-commands}/{database} until the tutorial/howto rework
+          replaces it). The old flat {nfl.season}/{nba.season}/
+          {mlb.playoffs}/{nhl.season} links are gone — {matchups} is the
+          single homepage entry point into all four now (SportsSwitcher with
+          no `current`, so every sport shows; `label="matchups"` since this
+          is the discovery entry point rather than a same-page lateral
+          switch, which is what every other placement of this component
+          still calls {sports}). */}
       {!isMobile && (
         <div className="absolute z-20 flex items-center gap-4" style={{ bottom: '52px', right: '440px' }}>
           <a
@@ -5850,34 +5862,7 @@ function App() {
           >
             {'{charts}'}
           </a>
-          <a
-            href="/nfl.season"
-            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-            style={{ color: 'oklch(0.85 0.15 195)' }}
-          >
-            {'{nfl.season}'}
-          </a>
-          <a
-            href="/nba.season"
-            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-            style={{ color: 'oklch(0.85 0.15 195)' }}
-          >
-            {'{nba.season}'}
-          </a>
-          <a
-            href="/mlb.playoffs"
-            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-            style={{ color: 'oklch(0.85 0.15 195)' }}
-          >
-            {'{mlb.playoffs}'}
-          </a>
-          <a
-            href="/nhl.season"
-            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-            style={{ color: 'oklch(0.85 0.15 195)' }}
-          >
-            {'{nhl.season}'}
-          </a>
+          <SportsSwitcher label="matchups" />
         </div>
       )}
 
@@ -5994,62 +5979,23 @@ function App() {
         </button>
       )}
 
-      {/* Mobile: {nfl.season} sits next to {leaderboard} (desktop has it in the
-          top-right nav); {tutorial} now lives in the query builder panel's
-          own header instead of up here. A {sports} toggle next to it opens a
-          small panel with the other three sports' pages — see
-          isMobileSportsMenuOpen's comment for why this isn't just 4 flat
-          links the way desktop does it. */}
+      {/* Mobile's homepage-level entry point into the sports pages — same
+          {matchups}-labeled SportsSwitcher desktop uses next to {charts},
+          just in mobile's own corner next to {leaderboard} since {charts}
+          isn't on the homepage row here (it moved to the power-rankings
+          page's top-right a while back). Used to be a plain {nfl.season}
+          link plus a separate {sports} toggle for the other three; both
+          collapsed into this one control once every sport's own page got a
+          uniform in-page {sports} switcher, which is what made a
+          homepage-level per-sport link redundant in the first place. Real
+          click-outside-to-close now too, which the old hand-rolled toggle
+          didn't have. */}
       {isMobile && (
         <div
-          className="absolute z-20 flex items-center gap-3"
+          className="absolute z-20"
           style={{ bottom: '46px', right: leaderboard?.rows?.length > 0 ? '128px' : '12px' }}
         >
-          <a
-            href="/nfl.season"
-            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-            style={{ color: 'oklch(0.85 0.15 195)' }}
-            aria-label="Open NFL season"
-          >
-            {'{nfl.season}'}
-          </a>
-          <button
-            type="button"
-            onClick={() => setIsMobileSportsMenuOpen((p) => !p)}
-            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-            style={{ color: 'oklch(0.85 0.15 195)' }}
-            aria-label="More sports"
-          >
-            {'{sports}'}
-          </button>
-          {isMobileSportsMenuOpen && (
-            <div
-              className="absolute bottom-[28px] right-0 flex flex-col items-end gap-2 rounded px-3 py-2"
-              style={{ backgroundColor: 'oklch(0.14 0 0)', border: '1px solid oklch(0.28 0 0)' }}
-            >
-              <a
-                href="/nba.season"
-                className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-                style={{ color: 'oklch(0.85 0.15 195)' }}
-              >
-                {'{nba.season}'}
-              </a>
-              <a
-                href="/mlb.playoffs"
-                className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-                style={{ color: 'oklch(0.85 0.15 195)' }}
-              >
-                {'{mlb.playoffs}'}
-              </a>
-              <a
-                href="/nhl.season"
-                className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-                style={{ color: 'oklch(0.85 0.15 195)' }}
-              >
-                {'{nhl.season}'}
-              </a>
-            </div>
-          )}
+          <SportsSwitcher label="matchups" />
         </div>
       )}
 

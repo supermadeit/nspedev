@@ -30,6 +30,7 @@ import {
 import { API_BASE_CANDIDATES, fetchJsonCandidate, joinUrl, parseApiPayload } from '@/lib/nspe-api'
 import { extractMatchupInsightPayload, type MatchupInsightPayload } from '@/lib/nspe-payloads'
 import { MatchupInsightOverlay } from '@/components/MatchupInsightOverlay'
+import { SportsSwitcher } from '@/components/SportsSwitcher'
 
 const C = {
   label: 'oklch(0.55 0 0)',
@@ -365,9 +366,15 @@ export default function SportSeasonPage({ sport, label }: SportSeasonPageProps) 
           <a href="/" className="font-mono font-bold text-[14px] hover:opacity-70 transition-opacity" style={{ color: 'oklch(0.95 0 0)' }}>
             ← nspe.dev
           </a>
-          <span className="font-mono font-bold text-[14px] whitespace-nowrap" style={{ color: C.accent, textDecoration: 'underline' }}>
-            {`{${label}}`}
-          </span>
+          {/* {sports} sits in the same uniform spot WorldCupApp.tsx (NFL)
+              carries it — a visitor can jump to any other sport's page from
+              here without routing back through the homepage. */}
+          <div className="flex items-center gap-4">
+            <span className="font-mono font-bold text-[14px] whitespace-nowrap" style={{ color: C.accent, textDecoration: 'underline' }}>
+              {`{${label}}`}
+            </span>
+            <SportsSwitcher current={sport} />
+          </div>
         </div>
         <div className="max-w-[1480px] mx-auto mt-2">
           <DailyMatchupStrip games={games} onMatchupClick={requestMatchup} />

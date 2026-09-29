@@ -12,6 +12,7 @@ import {
   type PowerRankingsRow,
 } from '@/lib/nspe-payloads'
 import { MatchupInsightOverlay } from '@/components/MatchupInsightOverlay'
+import { SportsSwitcher } from '@/components/SportsSwitcher'
 
 // ---------------- types ----------------
 
@@ -711,16 +712,16 @@ export default function WorldCupApp() {
             ← nspe.dev
           </a>
           <div className="flex items-center gap-4">
-            {/* {nfl.schedule}'s tab button is hidden, not removed — standings
-                (DivisionsView) live on this same 'schedule' activeView slot,
-                just unreachable via nav for now. */}
-            {(['rankings'] as const).map((view) => (
-              <button key={view} type="button" onClick={() => setActiveView(view)}
-                className="font-mono font-bold text-[14px] underline-offset-4 hover:opacity-80 transition-opacity whitespace-nowrap"
-                style={{ color: activeView === view ? C.accent : C.label, textDecoration: activeView === view ? 'underline' : 'none' }}>
-                {`{nfl.${view}}`}
-              </button>
-            ))}
+            {/* {nfl.rankings}'s old tab button (a vestigial single-item toggle
+                — activeView never actually left 'rankings' via any live nav
+                path) is gone in favor of {sports}, in the same uniform spot
+                every sport's page now carries it — this is what lets a
+                visitor jump straight to another sport without going back to
+                the homepage first. {nfl.schedule}'s hidden tab (standings/
+                DivisionsView) is still unreachable via nav, same as before —
+                this swap doesn't change that, activeView just never flips
+                off 'rankings' anymore. */}
+            <SportsSwitcher current="nfl" />
             {/* Mobile: {charts} moved here from the homepage, taking
                 {nfl.playoffs}'s slot for now (shelved, not deleted — still
                 shown on desktop below). Desktop keeps {charts} where it

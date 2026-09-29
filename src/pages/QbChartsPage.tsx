@@ -26,6 +26,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { fetchQbExplosives, type QbExplosivesData } from '@/lib/databaseApi'
 import { normalizeDisplayPlayer } from '@/lib/nspe-payloads'
 import { loadPlayerIndex, PLAYER_INDEX } from '@/lib/playerSearch'
+import { SportsSwitcher } from '@/components/SportsSwitcher'
 
 function normalizePlayerKey(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9]/g, '')
@@ -222,9 +223,18 @@ export default function QbChartsPage() {
             {data?.season ?? '…'} QB pass yds / quarter · explosive pass plays by distance band
           </span>
         </div>
-        <a href="/" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
-          {'{homepage}'}
-        </a>
+        {/* {sports} next to {homepage} — this is an NFL chart (QB
+            explosives), so `current="nfl"` hides the redundant self-link and
+            lists the other three, same as every other sport's page. NBA/MLB/
+            NHL don't have a charts page yet (see fetchQbExplosives.ts's own
+            history/nspe-v2-da's data-availability answer) — once one exists
+            for any of them, it should carry this same pairing too. */}
+        <div className="flex items-center gap-4">
+          <a href="/" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
+            {'{homepage}'}
+          </a>
+          <SportsSwitcher current="nfl" />
+        </div>
       </div>
 
       <div className="px-6 py-3 font-mono text-[11px]" style={{ color: C.textDim }}>

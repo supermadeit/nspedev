@@ -2123,8 +2123,23 @@ export function extractMatchDetails(row: Record<string, unknown>, ctx: StatConte
     if (!m || typeof m !== 'object' || Array.isArray(m)) continue
     const rec = m as Record<string, unknown>
     const value = computeMatchValue(rec, ctx)
+    // `date_raw` is a third real spelling, not a hypothetical — confirmed
+    // against a live NBA q1/1h period-trend response, whose match objects
+    // are `{val, date_raw}` with neither `date_iso` nor `date` present at
+    // all. Missing this meant `date` here always resolved to '' for that
+    // engine, which the `!date` guard below then (correctly, per its own
+    // logic) treated as "no usable match," silently dropping every row even
+    // though `value` parsed fine — the actual cause of period-scoped trend
+    // rows falling back to the bare met=N/window badge instead of a real
+    // latest-value/date one.
     const dateRaw =
-      typeof rec.date_iso === 'string' ? rec.date_iso : typeof rec.date === 'string' ? rec.date : ''
+      typeof rec.date_iso === 'string'
+        ? rec.date_iso
+        : typeof rec.date === 'string'
+          ? rec.date
+          : typeof rec.date_raw === 'string'
+            ? rec.date_raw
+            : ''
     const date = extractDateToken(dateRaw) ?? ''
     if (value === null || !date) continue
     out.push({ value, date, statLabel: label })
