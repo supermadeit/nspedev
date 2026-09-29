@@ -45,8 +45,62 @@ function speechSupported(): boolean {
   return typeof window !== 'undefined' && 'speechSynthesis' in window
 }
 
+// Best-effort male voice pick — the Web Speech API exposes no gender field,
+// just a name/lang per installed voice, so this matches against the known
+// male system voices per platform (macOS/iOS Safari's "Daniel"/"Alex",
+// Windows' "David"/"Mark"/"Guy", Chrome's "Google UK English Male", etc.),
+// in rough quality order. Falls through to "first English voice whose name
+// isn't a known female one" so something reasonable still gets picked on a
+// platform/browser we didn't list by name, and finally to `undefined` (the
+// browser's own default voice) if that still finds nothing.
+const PREFERRED_MALE_VOICES = [
+  'Google UK English Male',
+  'Microsoft David - English (United States)',
+  'Microsoft Guy - English (United States)',
+  'Microsoft Mark - English (United States)',
+  'Microsoft David',
+  'Daniel',
+  'Alex',
+  'Aaron',
+  'Arthur',
+  'Oliver',
+  'Gordon',
+  'Rishi',
+  'Eddy (English (US))',
+  'Eddy',
+]
+const KNOWN_FEMALE_VOICE_NAMES = [
+  'samantha', 'victoria', 'karen', 'moira', 'tessa', 'zira', 'susan', 'fiona',
+  'kate', 'serena', 'ava', 'allison', 'nicky', 'sandy', 'shelley', 'catherine',
+  'hazel', 'amy', 'emma', 'joanna', 'kendra', 'salli', 'kimberly', 'zoe',
+]
+
+function pickMaleVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | undefined {
+  for (const name of PREFERRED_MALE_VOICES) {
+    const match = voices.find((v) => v.name === name)
+    if (match) return match
+  }
+  return voices.find(
+    (v) => v.lang.toLowerCase().startsWith('en') && !KNOWN_FEMALE_VOICE_NAMES.some((f) => v.name.toLowerCase().includes(f)),
+  )
+}
+
 function SpeakButton({ text }: { text: string }) {
   const [speaking, setSpeaking] = useState(false)
+  // Voice list loads async in most browsers (empty until 'voiceschanged'
+  // fires) — read once on mount and again on that event rather than at
+  // speak-time, so the first click doesn't race an empty list.
+  const voicesRef = useRef<SpeechSynthesisVoice[]>([])
+
+  useEffect(() => {
+    if (!speechSupported()) return
+    const loadVoices = () => {
+      voicesRef.current = window.speechSynthesis.getVoices()
+    }
+    loadVoices()
+    window.speechSynthesis.addEventListener('voiceschanged', loadVoices)
+    return () => window.speechSynthesis.removeEventListener('voiceschanged', loadVoices)
+  }, [])
 
   useEffect(() => {
     // Cancels on tab switch (text changes under an already-speaking button)
@@ -68,7 +122,13 @@ function SpeakButton({ text }: { text: string }) {
     }
     window.speechSynthesis.cancel()
     const utter = new SpeechSynthesisUtterance(text)
-    utter.rate = 0.98
+    const voice = pickMaleVoice(voicesRef.current)
+    if (voice) utter.voice = voice
+    // Slower and a step lower in pitch than the default — the plain default
+    // voice/rate/pitch read as thin and rushed ("nervous"), this reads
+    // calmer and deeper.
+    utter.rate = 0.88
+    utter.pitch = 0.8
     utter.onend = () => setSpeaking(false)
     utter.onerror = () => setSpeaking(false)
     window.speechSynthesis.speak(utter)
