@@ -13,7 +13,7 @@
 // Examples are click-to-copy, same interaction as {sample-queries}'s rows
 // (SampleQueriesModal) — not click-to-run, so this stays consistent with how
 // every other command list on the site already behaves.
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { fetchLearnTopic, type LearnTopic } from '@/lib/learnNspe'
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 
@@ -31,6 +31,62 @@ const TABS = [
   { label: 'what is nspe', question: 'what is nspe' },
   { label: 'syntax', question: 'how does the syntax work' },
 ] as const
+
+// Reads a topic's answer aloud via the browser's built-in SpeechSynthesis —
+// no backend involvement, no generated audio file to keep in sync. That
+// matters here specifically because learn.py's copy "gets rewritten there
+// often" (see the file banner above): a pre-generated voiceover would need
+// re-recording on every text edit, while this always reads whatever text is
+// currently on screen. Quality is OS/browser-dependent (solid on Mac/iOS
+// Safari and Chrome, more robotic elsewhere), which is the trade for zero
+// cost and zero staleness — swap this for a cached TTS-API clip later if the
+// robotic voice becomes the complaint instead of "there's no voice at all."
+function speechSupported(): boolean {
+  return typeof window !== 'undefined' && 'speechSynthesis' in window
+}
+
+function SpeakButton({ text }: { text: string }) {
+  const [speaking, setSpeaking] = useState(false)
+
+  useEffect(() => {
+    // Cancels on tab switch (text changes under an already-speaking button)
+    // and on modal close (this component unmounts) — never leave narration
+    // running over an answer that's no longer on screen.
+    return () => {
+      window.speechSynthesis?.cancel()
+      setSpeaking(false)
+    }
+  }, [text])
+
+  if (!speechSupported()) return null
+
+  const toggle = () => {
+    if (speaking) {
+      window.speechSynthesis.cancel()
+      setSpeaking(false)
+      return
+    }
+    window.speechSynthesis.cancel()
+    const utter = new SpeechSynthesisUtterance(text)
+    utter.rate = 0.98
+    utter.onend = () => setSpeaking(false)
+    utter.onerror = () => setSpeaking(false)
+    window.speechSynthesis.speak(utter)
+    setSpeaking(true)
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      className="font-mono text-[11px] px-2 py-1 rounded hover:opacity-90 transition-opacity flex-none whitespace-nowrap"
+      style={{ color: speaking ? C.green : C.textDim, border: `1px solid ${speaking ? C.green : C.border}` }}
+      aria-label={speaking ? 'Stop reading aloud' : 'Read answer aloud'}
+    >
+      {speaking ? '{stop}' : '{listen}'}
+    </button>
+  )
+}
 
 export interface LearnNspeModalProps {
   open: boolean
@@ -155,12 +211,15 @@ export function LearnNspeModal({ open, onClose, onStartTour }: LearnNspeModalPro
           )}
           {topic && (
             <>
-              <p
-                className="font-mono text-[13px] leading-relaxed whitespace-pre-line"
-                style={{ color: C.textBright }}
-              >
-                {topic.answer}
-              </p>
+              <div className="flex items-start justify-between gap-3">
+                <p
+                  className="font-mono text-[13px] leading-relaxed whitespace-pre-line"
+                  style={{ color: C.textBright }}
+                >
+                  {topic.answer}
+                </p>
+                <SpeakButton text={topic.answer} />
+              </div>
               {topic.examples.length > 0 && (
                 <div className="space-y-2">
                   <span className="font-mono text-[9px] uppercase tracking-widest" style={{ color: C.textDim }}>
