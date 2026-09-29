@@ -481,11 +481,20 @@ function TrendBadge({
   accent?: string
   ariaLabel?: string
 }) {
+  // Clickability hint — appended to the small header line so a real stat
+  // value (met=N/window, a yardage total, etc.) can stay the headline text
+  // instead of being replaced by the word "view" itself. Skipped when `value`
+  // IS already "view"/"hide" (the {overview} row shape, where that word is
+  // the badge's own primary text) to avoid saying it twice.
+  const isValueItselfToggleLabel = value.toLowerCase() === 'view' || value.toLowerCase() === 'hide'
+  const toggleHint = onToggle && !isValueItselfToggleLabel ? (expanded ? 'hide' : 'view') : null
+  const headerLine = header && toggleHint ? `${header} · ${toggleHint}` : header || toggleHint
+
   const inner = (
     <span className="flex flex-col items-end gap-0.5 leading-none">
-      {header && (
+      {headerLine && (
         <span className="text-[9px] lowercase tracking-wide" style={{ color: 'oklch(0.55 0.07 195)' }}>
-          {header}
+          {headerLine}
         </span>
       )}
       <span className="font-bold text-[13px]" style={{ color: accent }}>
@@ -3846,6 +3855,11 @@ const resultCountText = (n: number) => `${n} result${n === 1 ? '' : 's'}`
 const MINI_DEFAULT_W = 720
 const MINI_MIN_W = 420
 const MINI_MIN_H = 240
+// Reserves room at the bottom of the viewport so the results window's
+// initial position clears the {hitlist} ticker (absolute bottom-0 of the
+// page) instead of centering against the full window height and letting the
+// panel's bottom edge land underneath it.
+const RESULTS_BOTTOM_SAFE = 56
 
 function App() {
   const [stars, setStars] = useState<Star[]>([])
@@ -3879,8 +3893,24 @@ function App() {
   })
   const [miniPosition, setMiniPosition] = useState({
     x: Math.max(8, window.innerWidth / 2 - miniSize.w / 2),
-    y: Math.max(80, Math.floor((window.innerHeight - window.innerHeight * 0.74) / 2)),
+    // Centered within the space actually above the {hitlist} ticker, using
+    // the panel's real starting height (a resized-and-persisted miniSize.h
+    // if there is one, else the 74vh cap it opens at otherwise) rather than
+    // a flat 74vh assumption — that mismatch is what let the panel's bottom
+    // edge drift down onto the ticker on reload. Nudged another 24px above
+    // dead-center per request ("appear slightly higher").
+    y: Math.max(
+      24,
+      Math.floor((window.innerHeight - RESULTS_BOTTOM_SAFE - (miniSize.h ?? window.innerHeight * 0.74)) / 2) - 24,
+    ),
   })
+  // Mobile results window position — null until the user first drags the
+  // header, meaning "use the default docked spot" (8px from the top/sides,
+  // matching the old fixed inset-x-2 top-2 layout exactly). Session-only,
+  // like desktop's miniPosition; only miniSize (dimensions) persists.
+  const [mobileMiniPosition, setMobileMiniPosition] = useState<{ x: number; y: number } | null>(null)
+  const [isMobileDragging, setIsMobileDragging] = useState(false)
+  const mobileDragOffsetRef = useRef({ x: 0, y: 0 })
   const [isResizing, setIsResizing] = useState(false)
   const resizeStartRef = useRef({ x: 0, y: 0, w: 0, h: 0 })
   // Results filter box (player / team text) + "shown of total" counts read
@@ -3955,11 +3985,11 @@ function App() {
   const [isBuilderOpen, setIsBuilderOpen] = useState(false)
   const [builderPosition, setBuilderPosition] = useState({
     x: Math.max(16, Math.floor(window.innerWidth / 2 - 320)),
-    // ~16% down from the top — center/top-half of the screen rather than
-    // hugging the very top edge. Safe to push down because the panel's own
-    // maxHeight (below) now actually accounts for this offset instead of
-    // assuming the panel starts at y=0.
-    y: Math.max(48, Math.floor(window.innerHeight * 0.16)),
+    // ~10% down from the top — centered on screen but sitting a little
+    // higher than dead-center rather than hugging the very top edge. Safe to
+    // push down because the panel's own maxHeight (below) actually accounts
+    // for this offset instead of assuming the panel starts at y=0.
+    y: Math.max(32, Math.floor(window.innerHeight * 0.10)),
   })
   const [isBuilderDragging, setIsBuilderDragging] = useState(false)
   const [builderDragOffset, setBuilderDragOffset] = useState({ x: 0, y: 0 })
@@ -4756,6 +4786,49 @@ function App() {
     }
   }, [isDragging, dragOffset])
 
+  // Mobile results window drag — same "grab the header, not a button inside
+  // it" gate as desktop's handleMouseDown, just on touch events instead of
+  // mouse ones (mobile has no mousedown from a finger). Position is a plain
+  // {x, y} rather than desktop's offset-from-parent math since the panel is
+  // `fixed` on mobile with no positioned ancestor.
+  const MOBILE_MINI_MARGIN = 4
+  const handleMobileHeaderTouchStart = (e: React.TouchEvent) => {
+    if (e.target !== e.currentTarget) return
+    const touch = e.touches[0]
+    if (!touch || !miniRef.current) return
+    const rect = miniRef.current.getBoundingClientRect()
+    mobileDragOffsetRef.current = { x: touch.clientX - rect.left, y: touch.clientY - rect.top }
+    setIsMobileDragging(true)
+  }
+
+  useEffect(() => {
+    if (!isMobileDragging) return
+    const onMove = (e: TouchEvent) => {
+      const touch = e.touches[0]
+      if (!touch || !miniRef.current) return
+      e.preventDefault() // don't let the page scroll behind the drag
+      const { width, height } = miniRef.current.getBoundingClientRect()
+      const x = Math.max(
+        MOBILE_MINI_MARGIN,
+        Math.min(window.innerWidth - width - MOBILE_MINI_MARGIN, touch.clientX - mobileDragOffsetRef.current.x),
+      )
+      const y = Math.max(
+        MOBILE_MINI_MARGIN,
+        Math.min(window.innerHeight - height - MOBILE_MINI_MARGIN, touch.clientY - mobileDragOffsetRef.current.y),
+      )
+      setMobileMiniPosition({ x, y })
+    }
+    const onEnd = () => setIsMobileDragging(false)
+    window.addEventListener('touchmove', onMove, { passive: false })
+    window.addEventListener('touchend', onEnd)
+    window.addEventListener('touchcancel', onEnd)
+    return () => {
+      window.removeEventListener('touchmove', onMove)
+      window.removeEventListener('touchend', onEnd)
+      window.removeEventListener('touchcancel', onEnd)
+    }
+  }, [isMobileDragging])
+
   const handleResizeMouseDown = (e: React.MouseEvent) => {
     if (!miniRef.current) return
     e.preventDefault()
@@ -5314,11 +5387,18 @@ function App() {
         <div
           ref={miniRef}
           className={isMobile
-            ? 'fixed inset-x-2 top-2 z-30 rounded-lg shadow-2xl overflow-hidden'
+            ? 'fixed z-30 rounded-lg shadow-2xl overflow-hidden'
             : 'absolute z-30 flex flex-col rounded-lg shadow-2xl overflow-hidden'
           }
           style={isMobile
-            ? { maxHeight: 'calc(100dvh - 80px)', backgroundColor: 'oklch(0.15 0 0)', border: '1px solid oklch(0.30 0 0)' }
+            ? {
+                left: `${(mobileMiniPosition ?? { x: 8, y: 8 }).x}px`,
+                top: `${(mobileMiniPosition ?? { x: 8, y: 8 }).y}px`,
+                width: 'calc(100vw - 16px)',
+                maxHeight: 'calc(100dvh - 80px)',
+                backgroundColor: 'oklch(0.15 0 0)',
+                border: '1px solid oklch(0.30 0 0)',
+              }
             : {
                 left: `${miniPosition.x}px`,
                 top: `${miniPosition.y}px`,
@@ -5331,9 +5411,10 @@ function App() {
           }
         >
           <div
-            className="flex flex-none items-center justify-between px-5 py-3 cursor-move select-none"
-            style={{ backgroundColor: 'oklch(0.18 0 0)', borderBottom: '1px solid oklch(0.30 0 0)' }}
+            className="flex flex-none items-center justify-between px-5 py-3 select-none"
+            style={{ backgroundColor: 'oklch(0.18 0 0)', borderBottom: '1px solid oklch(0.30 0 0)', touchAction: 'none' }}
             onMouseDown={handleMouseDown}
+            onTouchStart={isMobile ? handleMobileHeaderTouchStart : undefined}
           >
             <span className="font-mono font-bold text-[14px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
               {h2hResult
