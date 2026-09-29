@@ -41,6 +41,13 @@ const TABS = [
 // Safari and Chrome, more robotic elsewhere), which is the trade for zero
 // cost and zero staleness — swap this for a cached TTS-API clip later if the
 // robotic voice becomes the complaint instead of "there's no voice at all."
+// SHELVED (2026-09-29): the {listen} button below read this via browser
+// SpeechSynthesis, but the default system voices read as "nervous" even
+// after tuning rate/pitch/voice — pulled from the render below pending a
+// decision on a real voice (possibly a cloned one, still undecided — see
+// conversation). Left in place rather than deleted since the plumbing
+// (voice-picking, rate/pitch tuning, cleanup-on-unmount) is still valid,
+// whatever the eventual voice source turns out to be.
 function speechSupported(): boolean {
   return typeof window !== 'undefined' && 'speechSynthesis' in window
 }
@@ -271,15 +278,12 @@ export function LearnNspeModal({ open, onClose, onStartTour }: LearnNspeModalPro
           )}
           {topic && (
             <>
-              <div className="flex items-start justify-between gap-3">
-                <p
-                  className="font-mono text-[13px] leading-relaxed whitespace-pre-line"
-                  style={{ color: C.textBright }}
-                >
-                  {topic.answer}
-                </p>
-                <SpeakButton text={topic.answer} />
-              </div>
+              <p
+                className="font-mono text-[13px] leading-relaxed whitespace-pre-line"
+                style={{ color: C.textBright }}
+              >
+                {topic.answer}
+              </p>
               {topic.examples.length > 0 && (
                 <div className="space-y-2">
                   <span className="font-mono text-[9px] uppercase tracking-widest" style={{ color: C.textDim }}>
