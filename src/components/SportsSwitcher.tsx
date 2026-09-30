@@ -19,11 +19,13 @@ const RANKINGS_LINKS: { sport: SportKey; href: string; label: string }[] = [
 ]
 
 // Charts pages stay on charts pages when switching sport, same as rankings
-// pages stay on rankings pages — NFL's is the original bare "/charts" (no
-// "nfl." prefix, predates the other three existing at all); NBA/MLB/NHL's
-// follow the established "{sport}.feature" route convention instead.
+// pages stay on rankings pages. NFL's route is still the original bare
+// "/charts" (no "nfl." prefix, predates the other three existing at all) —
+// not worth a route migration just for naming symmetry — but its *label* in
+// this menu reads "nfl.charts" to match the other three's uniform
+// "{sport}.charts" naming, even though the URL itself stays "/charts".
 const CHARTS_LINKS: { sport: SportKey; href: string; label: string }[] = [
-  { sport: 'nfl', href: '/charts', label: 'chart' },
+  { sport: 'nfl', href: '/charts', label: 'nfl.charts' },
   { sport: 'nba', href: '/nba.charts', label: 'nba.charts' },
   { sport: 'mlb', href: '/mlb.charts', label: 'mlb.charts' },
   { sport: 'nhl', href: '/nhl.charts', label: 'nhl.charts' },
