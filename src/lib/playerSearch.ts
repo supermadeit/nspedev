@@ -102,6 +102,17 @@ export function resolvePlayerTeam(player: string): string | undefined {
   return PLAYER_TEAM_MAP.get(normalized)
 }
 
+// Punctuation/case/whitespace-insensitive key for matching a name between two
+// sources that don't agree on formatting — a precomputed stat file's
+// concatenated "PeteCrowArmstrong"/"MichaelPenixJr." style vs. PLAYER_INDEX's
+// spaced, punctuated display names (or, on some files, a spaced name already
+// — "Connor McDavid" — which this normalizes the same way regardless).
+// Originally local to QbChartsPage.tsx; shared here once the NBA/MLB/NHL
+// charts pages needed the exact same matching, all against this same index.
+export function normalizePlayerKey(name: string): string {
+  return name.toLowerCase().replace(/[^a-z0-9]/g, '')
+}
+
 export interface PlayerMatch {
   entry: PlayerIndexEntry
   // 'first' = query token matched the player's actual first name (ranked

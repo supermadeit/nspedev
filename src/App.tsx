@@ -563,6 +563,23 @@ function normalizeFilterText(text: string): string {
   return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
 }
 
+// Shared by every sport's curated "popular players" h2h chip list (NBA, and
+// MLB as of the leaderboard.json swap to NFL \u2014 see mlbPopularPlayers below)
+// \u2014 matches a hand-typed star name against the live player index regardless
+// of a trailing "Jr."/"Sr."/"II"/"III" being present on one side and not the
+// other (a real risk for this exact roster: Acuna Jr., Witt Jr., Guerrero
+// Jr., Tatis Jr.). Suffix words are dropped entirely before comparing, on
+// both sides, rather than assumed to match a fixed spelling.
+const NAME_SUFFIX_WORDS = new Set(['jr', 'sr', 'ii', 'iii', 'iv'])
+function normalizeNameForCuratedMatch(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z\s]/g, '')
+    .split(/\s+/)
+    .filter((w) => w && !NAME_SUFFIX_WORDS.has(w))
+    .join('')
+}
+
 // Every whitespace-separated term must appear (any order), so "judge nyy"
 // finds Aaron Judge on the Yankees and "mahomes" finds him anywhere.
 function rowMatchesFilter(filter: string, text: string): boolean {
@@ -4057,10 +4074,34 @@ function App() {
   const nbaPopularPlayers = useMemo(
     () =>
       NBA_POPULAR_NAMES.flatMap((name) => {
-        const key = name.toLowerCase().replace(/[^a-z]/g, '')
-        const hit = PLAYER_INDEX.find(
-          (e) => e.sport === 'nba' && e.name.toLowerCase().replace(/[^a-z]/g, '').startsWith(key),
-        )
+        const key = normalizeNameForCuratedMatch(name)
+        const hit = PLAYER_INDEX.find((e) => e.sport === 'nba' && normalizeNameForCuratedMatch(e.name).startsWith(key))
+        return hit ? [{ player: hit.name, team: hit.team }] : []
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [isPlayerIndexReady],
+  )
+
+  // MLB h2h's "popular players" list — deliberately decoupled from the
+  // `leaderboard` state on purpose, same reasoning as nflPopularPlayers
+  // above: leaderboard.json now holds NFL rows (2026-09-30, the owner's own
+  // leaderboard swap), so reusing `leaderboard.rows` here would surface NFL
+  // names in MLB's own h2h picker — which is exactly the bug this replaces.
+  // Same fix shape as NBA above: a curated list of current stars, resolved
+  // against the live player index for team codes, rather than a live
+  // "who's hot" feed — needs occasional manual upkeep as stars change, but
+  // needed no backend/data dependency to fix immediately.
+  const MLB_POPULAR_NAMES = [
+    'Shohei Ohtani', 'Aaron Judge', 'Juan Soto', 'Mookie Betts', 'Ronald Acuna Jr.',
+    'Bobby Witt Jr.', 'Jose Ramirez', 'Freddie Freeman', 'Gunnar Henderson', 'Corbin Carroll',
+    'Yordan Alvarez', 'Vladimir Guerrero Jr.', 'Julio Rodriguez', 'Fernando Tatis Jr.', 'Francisco Lindor',
+    'Pete Alonso', 'Kyle Tucker', 'Elly De La Cruz', 'Paul Skenes', 'Bryce Harper',
+  ]
+  const mlbPopularPlayers = useMemo(
+    () =>
+      MLB_POPULAR_NAMES.flatMap((name) => {
+        const key = normalizeNameForCuratedMatch(name)
+        const hit = PLAYER_INDEX.find((e) => e.sport === 'mlb' && normalizeNameForCuratedMatch(e.name).startsWith(key))
         return hit ? [{ player: hit.name, team: hit.team }] : []
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -6089,7 +6130,7 @@ function App() {
             <QueryBuilder
               onRunQuery={handleRunFromBuilder}
               isLoading={isLoading}
-              popularPlayers={(leaderboard?.rows ?? []).slice(0, 20).map((r) => ({ player: r.player, team: r.team }))}
+              popularPlayers={mlbPopularPlayers}
               nflPopularPlayers={nflPopularPlayers}
               nbaPopularPlayers={nbaPopularPlayers}
             />
@@ -6165,7 +6206,7 @@ function App() {
             <QueryBuilder
               onRunQuery={handleRunFromBuilder}
               isLoading={isLoading}
-              popularPlayers={(leaderboard?.rows ?? []).slice(0, 20).map((r) => ({ player: r.player, team: r.team }))}
+              popularPlayers={mlbPopularPlayers}
               nflPopularPlayers={nflPopularPlayers}
               nbaPopularPlayers={nbaPopularPlayers}
             />
@@ -6199,16 +6240,14 @@ function App() {
           no `current`, so every sport shows; `label="matchups"` since this
           is the discovery entry point rather than a same-page lateral
           switch, which is what every other placement of this component
-          still calls {sports}). */}
+          still calls {sports}). {charts} is the same SportsSwitcher, just
+          `variant="charts"` — was a plain link straight to NFL's /charts
+          (the only one that existed at the time), now that MLB/NBA/NHL have
+          their own it opens the same up-popping four-sport menu {matchups}
+          does rather than silently only ever reaching NFL's. */}
       {!isMobile && (
         <div className="absolute z-20 flex items-center gap-4" style={{ bottom: '52px', right: '440px' }}>
-          <a
-            href="/charts"
-            className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-            style={{ color: 'oklch(0.85 0.15 195)' }}
-          >
-            {'{charts}'}
-          </a>
+          <SportsSwitcher label="charts" variant="charts" direction="up" />
           <SportsSwitcher label="matchups" direction="up" />
         </div>
       )}

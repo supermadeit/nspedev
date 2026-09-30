@@ -11,11 +11,22 @@ import { useEffect, useRef, useState } from 'react'
 
 export type SportKey = 'nfl' | 'nba' | 'mlb' | 'nhl'
 
-const SPORT_LINKS: { sport: SportKey; href: string; label: string }[] = [
+const RANKINGS_LINKS: { sport: SportKey; href: string; label: string }[] = [
   { sport: 'nfl', href: '/nfl.season', label: 'nfl.season' },
   { sport: 'nba', href: '/nba.season', label: 'nba.season' },
   { sport: 'mlb', href: '/mlb.playoffs', label: 'mlb.playoffs' },
   { sport: 'nhl', href: '/nhl.season', label: 'nhl.season' },
+]
+
+// Charts pages stay on charts pages when switching sport, same as rankings
+// pages stay on rankings pages — NFL's is the original bare "/charts" (no
+// "nfl." prefix, predates the other three existing at all); NBA/MLB/NHL's
+// follow the established "{sport}.feature" route convention instead.
+const CHARTS_LINKS: { sport: SportKey; href: string; label: string }[] = [
+  { sport: 'nfl', href: '/charts', label: 'chart' },
+  { sport: 'nba', href: '/nba.charts', label: 'nba.charts' },
+  { sport: 'mlb', href: '/mlb.charts', label: 'mlb.charts' },
+  { sport: 'nhl', href: '/nhl.charts', label: 'nhl.charts' },
 ]
 
 const ACCENT = 'oklch(0.85 0.15 195)'
@@ -35,14 +46,20 @@ const ACCENT = 'oklch(0.85 0.15 195)'
 // "up" for the homepage's {matchups} entry point specifically, which sits
 // near the BOTTOM of the screen on both platforms, where a downward-opening
 // menu would either run off-screen or read backwards.
+// `variant` picks which link set to switch between — "rankings" (default)
+// for every sport's rankings/matchups page, "charts" for every sport's
+// {chart} page, so switching sport from a charts page lands on the next
+// sport's charts page rather than dropping you onto its rankings page.
 export function SportsSwitcher({
   current,
   label = 'sports',
   direction = 'down',
+  variant = 'rankings',
 }: {
   current?: SportKey
   label?: string
   direction?: 'up' | 'down'
+  variant?: 'rankings' | 'charts'
 }) {
   const [open, setOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -56,7 +73,7 @@ export function SportsSwitcher({
     return () => document.removeEventListener('mousedown', onClickOutside)
   }, [open])
 
-  const others = SPORT_LINKS.filter((l) => l.sport !== current)
+  const others = (variant === 'charts' ? CHARTS_LINKS : RANKINGS_LINKS).filter((l) => l.sport !== current)
 
   return (
     <div ref={containerRef} className="relative">

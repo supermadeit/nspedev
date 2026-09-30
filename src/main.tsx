@@ -16,6 +16,9 @@ import CheckoutPage from './pages/CheckoutPage.tsx'
 import SuccessPage from './pages/SuccessPage.tsx'
 import AccountPage from './pages/AccountPage.tsx'
 import QbChartsPage from './pages/QbChartsPage.tsx'
+import MlbChartsPage from './pages/MlbChartsPage.tsx'
+import NbaChartsPage from './pages/NbaChartsPage.tsx'
+import NhlChartsPage from './pages/NhlChartsPage.tsx'
 import PlayerProfilePage from './pages/PlayerProfilePage.tsx'
 import SportSeasonPage from './pages/SportSeasonPage.tsx'
 
@@ -54,6 +57,13 @@ createRoot(document.getElementById('root')!).render(
 
           <Route path="/calculator" element={<CalculatorRoute />} />
           <Route path="/charts" element={<QbChartsPage />} />
+          {/* NBA/MLB/NHL's own {chart} pages — uniform to NFL's format (see
+              SortableStatChart.tsx), route-named to match each sport's own
+              "{sport}.feature" convention rather than NFL's bare "/charts"
+              (which predates the other three existing at all). */}
+          <Route path="/mlb.charts" element={<MlbChartsPage />} />
+          <Route path="/nba.charts" element={<NbaChartsPage />} />
+          <Route path="/nhl.charts" element={<NhlChartsPage />} />
           {/* Every profiled player shares the same qb-profiles/*.json section
               shape (verified across all 36 files), so this is a real dynamic
               route now — PlayerProfilePage looks the slug up in the same

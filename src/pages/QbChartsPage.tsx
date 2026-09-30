@@ -225,15 +225,15 @@ export default function QbChartsPage() {
         </div>
         {/* {sports} next to {homepage} — this is an NFL chart (QB
             explosives), so `current="nfl"` hides the redundant self-link and
-            lists the other three, same as every other sport's page. NBA/MLB/
-            NHL don't have a charts page yet (see fetchQbExplosives.ts's own
-            history/nspe-v2-da's data-availability answer) — once one exists
-            for any of them, it should carry this same pairing too. */}
+            lists the other three. `variant="charts"` keeps this switcher
+            landing on each sport's own {chart} page (MlbChartsPage.tsx/
+            NbaChartsPage.tsx/NhlChartsPage.tsx) instead of its rankings
+            page, now that all three exist. */}
         <div className="flex items-center gap-4">
           <a href="/" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
             {'{homepage}'}
           </a>
-          <SportsSwitcher current="nfl" />
+          <SportsSwitcher current="nfl" variant="charts" />
         </div>
       </div>
 

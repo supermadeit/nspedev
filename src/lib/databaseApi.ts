@@ -311,3 +311,114 @@ export async function fetchSportSchedule(sport: SportKey, season: string | numbe
   if (!isSportScheduleData(data)) throw new Error(`Unrecognized ${sport} schedule response shape.`)
   return data
 }
+
+// ---------------- per-player stat-bucket charts (MLB/NBA/NHL) ----------------
+// {charts}' NFL page (fetchQbExplosives above) is a per-player, per-quarter
+// stat grid with distance-band breakdowns. Per nspe-v2-da's data-availability
+// answer (2026-09-30), the same "grid + bands" shape is real for these three
+// sports too, precomputed the same allowlisted-static-file way, and — per
+// their follow-up, confirmed directly off the live files — the exact same
+// envelope as nfl_qb_explosives.json too: {generated_at, season, players}.
+// Just a different filename and row shape per sport (see each interface's
+// own comment for the exact field set, taken straight from their message).
+
+export interface MlbBatterBucketRow {
+  player_name: string
+  team: string
+  games: number
+  buckets: {
+    games_2plus_hits: number
+    games_3plus_hits: number
+    games_2plus_rbi: number
+    games_3plus_rbi: number
+    total_doubles: number
+    total_bases: number
+    games_1plus_xbh: number
+    games_2plus_xbh: number
+  }
+}
+
+export interface MlbBatterBucketsData {
+  season: number
+  generated_at: string
+  players: MlbBatterBucketRow[]
+}
+
+function isMlbBatterBucketsData(v: unknown): v is MlbBatterBucketsData {
+  return !!v && typeof v === 'object' && Array.isArray((v as Record<string, unknown>).players)
+}
+
+export async function fetchMlbBatterBuckets(): Promise<MlbBatterBucketsData> {
+  const urls = API_BASE_CANDIDATES.map((base) => joinUrl(base, '/api/data/output/mlb_batter_buckets.json'))
+  const res = await fetchFirstOk(urls)
+  if (!res) throw new Error('mlb_batter_buckets.json not found')
+  const data: unknown = await res.json()
+  if (!isMlbBatterBucketsData(data)) throw new Error('Unrecognized mlb-batter-buckets response shape.')
+  return data
+}
+
+export interface NbaScoringBucketRow {
+  player_name: string
+  team: string
+  games: number
+  quarter_points: { q1: number; q2: number; q3: number; q4: number; '1h': number; '2h': number; ot: number }
+  bands: {
+    points: Record<string, number>
+    rebounds: Record<string, number>
+    assists: Record<string, number>
+    total_pra: Record<string, number>
+  }
+  defense: { steals_total: number; blocks_total: number; stocks_total: number }
+}
+
+export interface NbaScoringBucketsData {
+  season: number
+  generated_at: string
+  players: NbaScoringBucketRow[]
+}
+
+function isNbaScoringBucketsData(v: unknown): v is NbaScoringBucketsData {
+  return !!v && typeof v === 'object' && Array.isArray((v as Record<string, unknown>).players)
+}
+
+export async function fetchNbaScoringBuckets(): Promise<NbaScoringBucketsData> {
+  const urls = API_BASE_CANDIDATES.map((base) => joinUrl(base, '/api/data/output/nba_scoring_buckets.json'))
+  const res = await fetchFirstOk(urls)
+  if (!res) throw new Error('nba_scoring_buckets.json not found')
+  const data: unknown = await res.json()
+  if (!isNbaScoringBucketsData(data)) throw new Error('Unrecognized nba-scoring-buckets response shape.')
+  return data
+}
+
+export interface NhlScoringBucketRow {
+  player_name: string
+  team: string
+  position: string
+  games: number
+  bands: {
+    goals: Record<string, number>
+    points: Record<string, number>
+    assists: Record<string, number>
+    sog: Record<string, number>
+  }
+  totals: { goals: number; assists: number; points: number; sog: number; pim: number }
+}
+
+export interface NhlScoringBucketsData {
+  season: number
+  generated_at: string
+  players: NhlScoringBucketRow[]
+}
+
+function isNhlScoringBucketsData(v: unknown): v is NhlScoringBucketsData {
+  return !!v && typeof v === 'object' && Array.isArray((v as Record<string, unknown>).players)
+}
+
+export async function fetchNhlScoringBuckets(): Promise<NhlScoringBucketsData> {
+  const urls = API_BASE_CANDIDATES.map((base) => joinUrl(base, '/api/data/output/nhl_scoring_buckets.json'))
+  const res = await fetchFirstOk(urls)
+  if (!res) throw new Error('nhl_scoring_buckets.json not found')
+  const data: unknown = await res.json()
+  if (!isNhlScoringBucketsData(data)) throw new Error('Unrecognized nhl-scoring-buckets response shape.')
+  return data
+}
