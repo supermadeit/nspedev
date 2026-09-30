@@ -595,6 +595,11 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
   const [h2hSport, setH2hSport] = useState<'mlb' | 'nfl' | 'nba'>(initial.h2hSport ?? 'mlb')
   const [h2hPlayer, setH2hPlayer] = useState(initial.h2hPlayer ?? '')
   const [h2hOpponent, setH2hOpponent] = useState(initial.h2hOpponent ?? '')
+  // Collapses the "popular {top N}" pill list below the player-name input —
+  // up to 20 names, which is a lot of scanning/scrolling once you already
+  // know who you want. Expanded by default (unchanged first-open behavior);
+  // not persisted, since it's a per-visit declutter toggle, not a setting.
+  const [showH2hPopularPlayers, setShowH2hPopularPlayers] = useState(true)
   // team (runs scored/allowed)
   const [teamStat, setTeamStat] = useState<TeamStat>(initial.teamStat ?? '')
   const [teamSubMode, setTeamSubMode] = useState<'trend' | 'compute'>(initial.teamSubMode ?? 'trend')
@@ -1184,24 +1189,38 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
             if (activePopularPlayers.length === 0) return null
             return (
               <div className="mb-3">
-                <SLabel>popular {'{'}top {activePopularPlayers.length}{'}'}</SLabel>
-                <div className="flex gap-1.5 flex-wrap">
-                  {activePopularPlayers.map((p) => {
-                    const selected = h2hPlayer.trim().toLowerCase() === p.player.toLowerCase()
-                    return (
-                      <Pill
-                        key={`${p.team}-${p.player}`}
-                        selected={selected}
-                        onClick={() => setH2hPlayer(selected ? '' : p.player)}
-                      >
-                        {`${p.team} ${p.player}`}
-                      </Pill>
-                    )
-                  })}
+                <div className="flex items-center justify-between gap-3">
+                  <SLabel>popular {'{'}top {activePopularPlayers.length}{'}'}</SLabel>
+                  <button
+                    type="button"
+                    onClick={() => setShowH2hPopularPlayers((p) => !p)}
+                    className="font-mono text-[11px] underline hover:opacity-80 transition-opacity mb-1.5"
+                    style={{ color: C.textDim }}
+                  >
+                    {showH2hPopularPlayers ? '{hide}' : '{show}'}
+                  </button>
                 </div>
-                <div className="text-[10px] mt-2" style={{ color: C.textDim }}>
-                  or type any player name above — not limited to this list
-                </div>
+                {showH2hPopularPlayers && (
+                  <>
+                    <div className="flex gap-1.5 flex-wrap">
+                      {activePopularPlayers.map((p) => {
+                        const selected = h2hPlayer.trim().toLowerCase() === p.player.toLowerCase()
+                        return (
+                          <Pill
+                            key={`${p.team}-${p.player}`}
+                            selected={selected}
+                            onClick={() => setH2hPlayer(selected ? '' : p.player)}
+                          >
+                            {`${p.team} ${p.player}`}
+                          </Pill>
+                        )
+                      })}
+                    </div>
+                    <div className="text-[10px] mt-2" style={{ color: C.textDim }}>
+                      or type any player name above — not limited to this list
+                    </div>
+                  </>
+                )}
               </div>
             )
           })()}

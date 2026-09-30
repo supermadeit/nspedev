@@ -1592,16 +1592,19 @@ function boxStatLabel(key: string): string {
 
 const OVERVIEW_GAME_META_KEYS = new Set(['date', 'date_iso', 'season', 'game_id', 'opponent', 'result', 'outcome', 'value'])
 
-// ---------- shared filterable game log (NBA/MLB/NHL "vs team" game lists) ----------
+// ---------- shared filterable game log (NFL/NBA/MLB/NHL "vs team" game lists) ----------
 // A long-running rivalry's h2h-shaped game log (either engine family: the
 // dedicated -h2h engine's H2hView, or the -ov/statN engine's
 // OverviewStatNGenericView) can run 40-60+ games — every row already carries
 // its full box-score line, so filtering down to notable games (20+ pts, a
 // hat trick, etc.) is a pure client-side array filter over data already
-// on hand, no new endpoint for any sport. NFL keeps its own existing
-// h2h layout untouched (rush/rec/pass field grouping is football-specific
-// and doesn't map onto this); this is for NBA/MLB/NHL, which now share one
-// compact per-game row format and one filter-chip bar between them.
+// on hand, no new endpoint for any sport. Every sport now shares one compact
+// per-game row format and one filter-chip bar (NFL's own bespoke rush/rec/
+// pass boxed-card layout was retired in favor of this one — see H2hView).
+// buildGameLogCategories below has no NFL entry yet (its stat-threshold
+// chips are position-dependent in a way NBA/MLB/NHL's aren't), so NFL's
+// rows render unfiltered for now — GameLogFilterBar already falls back to
+// that when a sport has no category list.
 
 interface GameLogCategory {
   id: string
@@ -1647,7 +1650,7 @@ function buildGameLogCategories(sport: string, customTotal: number | null): Game
       { id: 'h3', label: '3+ hits', predicate: (g) => numField(g, 'H') >= 3 },
       { id: 'hr1', label: 'HR game', predicate: (g) => numField(g, 'HR') >= 1 },
       { id: 'hr2', label: 'multi-HR game', predicate: (g) => numField(g, 'HR') >= 2 },
-      { id: 'rbi3', label: '3+ RBI', predicate: (g) => numField(g, 'RBI') >= 3 },
+      { id: 'rbi2', label: '2+ RBI', predicate: (g) => numField(g, 'RBI') >= 2 },
       { id: 'r2', label: 'multi-run game', predicate: (g) => numField(g, 'R') >= 2 },
     ]
     if (customTotal != null) {
@@ -2582,8 +2585,15 @@ const H2H_FIELD_LABELS: Record<string, string> = {
   pass_int: 'int',
   pass_lng: 'long',
   pass_rtg: 'rtg',
-  rush_yds: 'rush yds',
-  rush_td: 'rush td',
+  // Bare labels (no "rush" prefix) — the rushing group now always renders
+  // together and in its own block (see NFL_FIELD_ORDER below), so the
+  // prefix was pure redundancy that only showed up as its own wrapped line
+  // above "ATT"/"YDS"/etc in the narrow totals-grid cells.
+  rush_att: 'att',
+  rush_yds: 'yds',
+  rush_lng: 'lng',
+  rush_td: 'td',
+  tgts: 'tgts',
   rec_yds: 'yds',
   rec_lng: 'lng',
   rec_td: 'td',
@@ -2610,6 +2620,32 @@ const H2H_FIELD_GROUPS: string[][] = [
   ['pass_cmp', 'pass_att', 'pass_yds', 'pass_td', 'pass_int', 'pass_lng', 'pass_rtg'],
 ]
 
+// Flattened group order — backend's display_fields (and each game's own key
+// order) don't necessarily list tgts right after the receiving fields it
+// belongs with, which is what let it land in the same visual row as the
+// rushing stats above. Sorting against this fixed order instead guarantees
+// rushing, then receiving (tgts included), then passing, every time,
+// regardless of what order the backend actually sent them in. A no-op for
+// any sport whose fields aren't in this list at all (MLB/NHL) — every field
+// ties, so the original order is kept (Array#sort is stable).
+const NFL_FIELD_ORDER = H2H_FIELD_GROUPS.flat()
+
+function sortByFieldOrder<T>(items: T[], keyOf: (item: T) => string, order: string[]): T[] {
+  const priority = new Map(order.map((f, i) => [f, i]))
+  const rank = (item: T) => priority.get(keyOf(item)) ?? Number.MAX_SAFE_INTEGER
+  return [...items].sort((a, b) => rank(a) - rank(b))
+}
+
+// Rebuilds a per-game record with its own keys in the same group order, so
+// GameLogRow's box-score tail (which just walks Object.entries in whatever
+// order the object's keys were set) reads rushing-then-receiving-then-passing
+// too, matching the totals card above it.
+function reorderRecordByFieldOrder(rec: Record<string, unknown>, order: string[]): Record<string, unknown> {
+  const result: Record<string, unknown> = {}
+  for (const k of sortByFieldOrder(Object.keys(rec), (k) => k, order)) result[k] = rec[k]
+  return result
+}
+
 function allZeroFieldsToHide(fields: string[], totals: Record<string, unknown>): Set<string> {
   const hidden = new Set<string>()
   for (const group of H2H_FIELD_GROUPS) {
@@ -2634,11 +2670,13 @@ function H2hView({ payload }: { payload: H2hPayload }) {
   const q = payload.query ?? {}
   const t = payload.totals ?? {}
   const games = payload.games ?? []
-  // engine is "{sport}-h2h"/"{sport}-week" (dash-joined) — NFL keeps its own
-  // existing game-log layout below untouched (its rush/rec/pass field
-  // grouping is football-specific); MLB/NHL get the same compact,
-  // filterable game-log layout NBA's OverviewStatNGenericView already has
-  // (see GameLogFilterBar/GameLogRow, shared between both views).
+  // engine is "{sport}-h2h"/"{sport}-week" (dash-joined) — every sport now
+  // shares the same compact, filterable game-log layout (GameLogFilterBar/
+  // GameLogRow), the one NBA's OverviewStatNGenericView introduced. NFL used
+  // to keep its own bespoke rush/rec/pass boxed-card layout here; that's
+  // gone as of the "uniform for every sport" change — its field order is
+  // still football-specific (see NFL_FIELD_ORDER), just rendered through the
+  // shared row component now like everyone else's fields are.
   const sport = payload.engine.split('-')[0]
 
   const playerLabel = normalizeDisplayPlayer(q.player_display || q.player_query || 'player')
@@ -2695,7 +2733,7 @@ function H2hView({ payload }: { payload: H2hPayload }) {
   const genericCounting: { label: string; value: string }[] | null = displayFields
     ? [
         { label: 'g', value: String(t.games ?? games.length) },
-        ...displayFields
+        ...sortByFieldOrder(displayFields, (f) => f, NFL_FIELD_ORDER)
           .filter((f) => !hiddenH2hFields?.has(f))
           .map((f) => ({
             label: H2H_FIELD_LABELS[f] ?? f.replace(/_/g, ' '),
@@ -2784,86 +2822,35 @@ function H2hView({ payload }: { payload: H2hPayload }) {
           <div className="text-center py-4 font-mono text-[12px]" style={{ color: 'oklch(0.70 0 0)' }}>
             No games found in window
           </div>
-        ) : sport === 'nfl' ? (
-          <div className="space-y-2">
-            {games.map((g, i) => {
-              const venuePrefix = g.venue === 'away' ? '@' : g.venue === 'home' ? 'vs' : ''
-              const opp = g.opponent ?? ''
-              const matchup = [venuePrefix, opp].filter(Boolean).join(' ')
-              // Stat pieces stay separate (not one comma-joined string) so the
-              // row beneath the date can wrap cleanly between whole stats
-              // instead of mid-"rush yds" when a line is long.
-              const line: string[] = displayFields
-                ? displayFields
-                    // Dropped from the totals card above (a whole group
-                    // reading zero across every game) stays dropped here too.
-                    .filter((f) => !hiddenH2hFields?.has(f))
-                    // Skip a field entirely for this row when it's absent
-                    // from the game object (not the same as a genuine 0) —
-                    // some engines only carry certain fields (e.g. cmp/att)
-                    // on the totals object, not per game. Showing "0 cmp"
-                    // there would misreport a stat that was simply never
-                    // recorded per-game as an actual zero performance.
-                    .filter((f) => typeof g[f] === 'number')
-                    .map((f) => `${formatH2hFieldValue(f, g[f] as number)} ${H2H_FIELD_LABELS[f] ?? f.replace(/_/g, ' ')}`)
-                : [
-                    `${g.AB ?? 0} AB`,
-                    `${g.H ?? 0} H`,
-                    ...(g.HR ? [`${g.HR} HR`] : []),
-                    ...(g.RBI ? [`${g.RBI} RBI`] : []),
-                    ...(g.R ? [`${g.R} R`] : []),
-                    ...(g['2B'] ? [`${g['2B']} 2B`] : []),
-                    ...(g['3B'] ? [`${g['3B']} 3B`] : []),
-                    ...(g.BB ? [`${g.BB} BB`] : []),
-                    ...(g.SO ? [`${g.SO} SO`] : []),
-                    ...(g.SB ? [`${g.SB} SB`] : []),
-                  ]
-              // Boxed like the totals card. Date/matchup owns the whole top
-              // row; stats sit beneath it left to right, so a full stat line
-              // fits one row instead of being squeezed beside the date.
-              return (
-                <div
-                  key={`${g.date_iso ?? g.date}-${i}`}
-                  className="rounded p-3 font-mono text-[12px]"
-                  style={{ backgroundColor: 'oklch(0.18 0 0)', border: '1px solid oklch(0.28 0 0)' }}
-                >
-                  <div style={{ color: 'oklch(0.76 0 0)' }}>
-                    <span style={{ color: 'oklch(0.55 0 0)' }}>{extractDateToken(g.date_iso ?? g.date) ?? g.date}</span>
-                    {matchup ? (
-                      <>
-                        <span style={{ color: 'oklch(0.40 0 0)' }}>{'  '}</span>
-                        <span style={{ color: 'oklch(0.70 0.10 195)' }}>{matchup}</span>
-                      </>
-                    ) : null}
-                  </div>
-                  {line.length > 0 ? (
-                    <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5" style={{ color: 'oklch(0.85 0.15 145)' }}>
-                      {line.map((piece, pi) => (
-                        <span key={`${piece}-${pi}`} className="whitespace-nowrap">{piece}</span>
-                      ))}
-                    </div>
-                  ) : null}
-                </div>
-              )
-            })}
-          </div>
         ) : (
-          // MLB/NHL: same compact, filterable layout NBA's
-          // OverviewStatNGenericView uses (GameLogFilterBar/GameLogRow,
-          // shared between both views) — venue+opponent merged into one
+          // Every sport shares this compact, filterable game-log layout now
+          // (GameLogFilterBar/GameLogRow, the same one NBA's
+          // OverviewStatNGenericView uses) — venue+opponent merged into one
           // display string up front so GameLogRow's generic `opponent`
-          // lookup finds a ready-made "@ CHI"/"vs CHI" string, matching the
-          // convention OverviewStatNGame's `opponent` field already carries
-          // baked in. Filtering itself only ever looks at the original
-          // numeric stat fields, untouched by this merge.
+          // lookup finds a ready-made "@ CHI"/"vs CHI" string. For NFL
+          // specifically: whole-zero field groups (allZeroFieldsToHide
+          // above — e.g. a pure rusher's always-empty passing line) are
+          // stripped from each game's own record too, not just the totals
+          // card, so a rusher/receiver's row doesn't fill up with "0 pass
+          // cmp, 0 pass att, ..." for a group that never applies to them;
+          // and fields are reordered to rushing-then-receiving-then-passing
+          // to match the totals card above. Both steps are no-ops for
+          // MLB/NHL, whose fields never appear in NFL_FIELD_ORDER and whose
+          // hiddenH2hFields is always null.
           <GameLogFilterBar
             sport={sport}
-            games={games.map((g) => ({
-              ...g,
-              opponent: [g.venue === 'away' ? '@' : g.venue === 'home' ? 'vs' : '', g.opponent ?? '']
-                .filter(Boolean)
-                .join(' '),
-            })) as unknown as Record<string, unknown>[]}
+            games={games.map((g) => {
+              const merged: Record<string, unknown> = {
+                ...g,
+                opponent: [g.venue === 'away' ? '@' : g.venue === 'home' ? 'vs' : '', g.opponent ?? '']
+                  .filter(Boolean)
+                  .join(' '),
+              }
+              if (hiddenH2hFields) {
+                for (const f of hiddenH2hFields) delete merged[f]
+              }
+              return reorderRecordByFieldOrder(merged, NFL_FIELD_ORDER)
+            }) as unknown as Record<string, unknown>[]}
           >
             {(filteredGames) =>
               filteredGames.map((g, i) => (
