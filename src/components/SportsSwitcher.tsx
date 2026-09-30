@@ -52,16 +52,22 @@ const ACCENT = 'oklch(0.85 0.15 195)'
 // for every sport's rankings/matchups page, "charts" for every sport's
 // {chart} page, so switching sport from a charts page lands on the next
 // sport's charts page rather than dropping you onto its rankings page.
+// `triggerSizePx` overrides the closed-button text size — 14px everywhere by
+// default (unchanged), but the homepage's {charts}/{matchups} pair use 15px
+// so they read the same size as the {chart} title text on the page they
+// actually link to, rather than looking a size smaller by comparison.
 export function SportsSwitcher({
   current,
   label = 'sports',
   direction = 'down',
   variant = 'rankings',
+  triggerSizePx = 14,
 }: {
   current?: SportKey
   label?: string
   direction?: 'up' | 'down'
   variant?: 'rankings' | 'charts'
+  triggerSizePx?: number
 }) {
   const [open, setOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -82,8 +88,8 @@ export function SportsSwitcher({
       <button
         type="button"
         onClick={() => setOpen((p) => !p)}
-        className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-        style={{ color: ACCENT }}
+        className="font-mono font-bold underline hover:opacity-80 transition-opacity whitespace-nowrap"
+        style={{ color: ACCENT, fontSize: `${triggerSizePx}px` }}
         aria-label="Switch sport"
       >
         {`{${label}}`}

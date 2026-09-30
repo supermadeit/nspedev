@@ -175,6 +175,13 @@ export function isH2hPayload(payload: unknown): payload is H2hPayload {
   const engine = typeof rec.engine === 'string' ? rec.engine : ''
   // Pitcher h2h has its own dedicated view.
   if (engine === 'mlb-pitch-h2h') return false
+  // The NFL quarter/half-scope family also ends in "-h2h"/"-week" and would
+  // otherwise structurally match (totals object + games array) — but its
+  // totals keys are scope-specific (q1_pass_td, 1h_pass_yds, ...), not the
+  // fixed display_fields/classic-MLB shape H2hView actually knows how to
+  // read, so it silently rendered as an all-zero MLB stat box before this
+  // exclusion existed. Own dedicated view (NflQuarterMatchupView) instead.
+  if (engine === 'nfl-quarter-h2h' || engine === 'nfl-quarter-week') return false
   // "-week" (e.g. "nfl-week") is the same totals/games/display_fields
   // envelope as h2h, just keyed by week number instead of an opponent —
   // H2hView branches its header on query.week vs query.opponent_code.
@@ -200,6 +207,453 @@ export function extractH2hPayload(payload: unknown): H2hPayload | null {
     }
   }
 
+  return null
+}
+
+// ---------- MLB batter-vs-pitcher career line (`mlb <batter> vs <pitcher> -career`) ----------
+// A single lifetime totals row, not a per-game h2h — no `games` list at all,
+// so this is genuinely its own shape rather than a variant of H2hPayload
+// (which always carries one). Same classic-MLB batting fields H2hView's own
+// no-display_fields branch already renders (AVG/OBP/SLG/OPS + counting
+// stats), just K instead of SO and no R/SB/TB/games — bvp doesn't track
+// those. Surfaced 2026-09-30: this engine shipped on the backend with no
+// frontend renderer at all, so it fell through to the raw-JSON-as-error
+// fallback (see runQuery's applyPayload in App.tsx).
+export interface MlbBvpPitcherRow {
+  batter: string
+  pitcher: string
+  team?: string
+  AB: number
+  H: number
+  '2B': number
+  '3B': number
+  HR: number
+  RBI: number
+  BB: number
+  K: number
+  AVG: number
+  OBP: number
+  SLG: number
+  OPS: number
+}
+
+export interface MlbBvpPitcherPayload {
+  engine: 'mlb-bvp-pitcher'
+  query: { player_query?: string; pitcher_query?: string }
+  row: MlbBvpPitcherRow
+}
+
+export function isMlbBvpPitcherPayload(payload: unknown): payload is MlbBvpPitcherPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return rec.engine === 'mlb-bvp-pitcher' && !!rec.row && typeof rec.row === 'object'
+}
+
+export function extractMlbBvpPitcherPayload(payload: unknown): MlbBvpPitcherPayload | null {
+  if (isMlbBvpPitcherPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isMlbBvpPitcherPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isMlbBvpPitcherPayload(v)) return v
+    }
+  }
+  return null
+}
+
+// ---------- NFL/CFB player reference — win/loss game list (`nfl ref <player> -wins -career`) ----------
+// A flat list of every game meeting the outcome filter (W/L, optional
+// min_margin), not a stat trend — no threshold/value per game, just the
+// game's own real result. Surfaced 2026-09-30 (nspe-v2-da audit) as a
+// confirmed gap: this engine had no frontend renderer at all.
+export interface RefGame {
+  date: string
+  date_iso?: string
+  opponent: string
+  result: string
+  margin?: number | null
+}
+
+export interface RefPayload {
+  engine: string // 'nfl-ref' | 'cfb-ref'
+  query: {
+    player_query?: string
+    player_display?: string
+    player_team?: string
+    outcome?: string
+    min_margin?: number | null
+    source?: string
+    window_label?: string
+    count?: number
+  }
+  count: number
+  games: RefGame[]
+}
+
+export function isRefPayload(payload: unknown): payload is RefPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return (rec.engine === 'nfl-ref' || rec.engine === 'cfb-ref') && Array.isArray(rec.games)
+}
+
+export function extractRefPayload(payload: unknown): RefPayload | null {
+  if (isRefPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isRefPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isRefPayload(v)) return v
+    }
+  }
+  return null
+}
+
+// ---------- NFL team leaders (`nfl team -yds -leaders -top5`) ----------
+// A ranked team table for one metric — for/against per-game averages plus
+// season totals. Distinct from the {rankings} page's own power-rankings feed
+// (a composite z-scored score across many stats); this is one single stat,
+// ranked. Surfaced 2026-09-30 (nspe-v2-da audit) as a confirmed gap.
+export interface NflTeamLeadersRow {
+  team: string
+  games: number
+  for: number
+  against: number
+  for_total: number
+  against_total: number
+  rank: number
+}
+
+export interface NflTeamLeadersPayload {
+  engine: 'nfl_team_leaders'
+  query: {
+    metric?: string
+    side?: string
+    window?: string
+    last_n?: number | null
+    slots?: unknown
+  }
+  rows: NflTeamLeadersRow[]
+}
+
+export function isNflTeamLeadersPayload(payload: unknown): payload is NflTeamLeadersPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return rec.engine === 'nfl_team_leaders' && Array.isArray(rec.rows)
+}
+
+export function extractNflTeamLeadersPayload(payload: unknown): NflTeamLeadersPayload | null {
+  if (isNflTeamLeadersPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isNflTeamLeadersPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isNflTeamLeadersPayload(v)) return v
+    }
+  }
+  return null
+}
+
+// ---------- NFL quarter/half-scope matchup (`nfl q1 <player> vs <team> -career`, `nfl q1 <player> -week1 -career`) ----------
+// Single-player, quarter/half-scoped — structurally similar to H2hPayload
+// (totals object + games array) but explicitly excluded from isH2hPayload
+// above since its totals keys are scope-specific (q1_pass_td, 1h_pass_yds),
+// not H2hView's fixed display_fields/classic-MLB field set. `nfl-quarter-h2h`
+// keys by opponent, `nfl-quarter-week` by week# — same envelope otherwise.
+export interface NflQuarterMatchupGame {
+  date_iso: string
+  venue?: string
+  slot?: string | null
+  opponent?: string
+  value?: number | null
+  td?: number | null
+  h1_value?: number | null
+  [key: string]: unknown
+}
+
+export interface NflQuarterMatchupPayload {
+  engine: 'nfl-quarter-h2h' | 'nfl-quarter-week'
+  query: {
+    player?: string
+    player_team?: string
+    opponent_code?: string
+    home_away?: string
+    scope?: string
+    category?: string
+    window_label?: string
+    week?: number
+    week_end?: number
+  }
+  totals: Record<string, number>
+  games: NflQuarterMatchupGame[]
+}
+
+export function isNflQuarterMatchupPayload(payload: unknown): payload is NflQuarterMatchupPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return (
+    (rec.engine === 'nfl-quarter-h2h' || rec.engine === 'nfl-quarter-week') &&
+    typeof rec.totals === 'object' &&
+    Array.isArray(rec.games)
+  )
+}
+
+export function extractNflQuarterMatchupPayload(payload: unknown): NflQuarterMatchupPayload | null {
+  if (isNflQuarterMatchupPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isNflQuarterMatchupPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isNflQuarterMatchupPayload(v)) return v
+    }
+  }
+  return null
+}
+
+// ---------- NFL quarter/half-scope league-wide (compute/trend/team-allowed) ----------
+// Three sibling shapes, same scope/category concept as the matchup family
+// above but league-wide rather than one player/team — grouped into one
+// payload type + one view since they only differ in which of
+// results[].{total,games} / results[].matches / results[].avg is present.
+export interface NflQuarterComputeRow {
+  player: string
+  team: string
+  total: number
+  games: number
+}
+
+export interface NflQuarterTrendMatch {
+  game_id?: string
+  value?: number
+  td?: number | null
+  seasonYear?: string
+  opponent?: string
+  date_iso?: string
+  team?: string
+}
+
+export interface NflQuarterTrendRow {
+  player: string
+  team: string
+  met_count: number
+  window: number
+  matches: NflQuarterTrendMatch[]
+}
+
+export interface NflQuarterTeamAllowedRow {
+  team: string
+  total: number
+  games: number
+  avg: number
+}
+
+export interface NflQuarterLeaguePayload {
+  engine: 'nfl_quarter_compute' | 'nfl_quarter_trend' | 'nfl_quarter_team_allowed'
+  query: {
+    scope?: string
+    category?: string
+    min?: number | null
+    max?: number | null
+    first?: boolean
+    window_label?: string
+    threshold?: number
+    last?: number
+    met?: number
+  }
+  results: (NflQuarterComputeRow | NflQuarterTrendRow | NflQuarterTeamAllowedRow)[]
+}
+
+export function isNflQuarterLeaguePayload(payload: unknown): payload is NflQuarterLeaguePayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return (
+    (rec.engine === 'nfl_quarter_compute' || rec.engine === 'nfl_quarter_trend' || rec.engine === 'nfl_quarter_team_allowed') &&
+    Array.isArray(rec.results)
+  )
+}
+
+export function extractNflQuarterLeaguePayload(payload: unknown): NflQuarterLeaguePayload | null {
+  if (isNflQuarterLeaguePayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isNflQuarterLeaguePayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isNflQuarterLeaguePayload(v)) return v
+    }
+  }
+  return null
+}
+
+// ---------- NFL/MLB specific-date box score (`nfl mahomes 9/14/26`, `mlb judge 9/20/25`) ----------
+// One calendar date, not a window — same totals/games envelope shape as
+// H2hPayload's own classic branch would expect for MLB (AVG/OBP/SLG/OPS +
+// counting stats), but the engine name ends in "-date", not "-h2h"/"-week",
+// so isH2hPayload's suffix check never catches it; kept as its own type
+// rather than folded into H2hPayload so a genuinely different envelope
+// (NFL's `pbp` sub-object below, absent from the MLB shape) doesn't have to
+// be shoehorned into H2hPayload's fields as all-optional noise.
+export interface DateBoxScorePbp {
+  category?: string
+  explosive_bands?: Record<string, number>
+  explosive_total?: number
+  half_splits?: Record<string, Array<{ game_id?: string; value?: number; date_iso?: string }>>
+}
+
+export interface DateBoxScorePayload {
+  engine: 'mlb-h2h-date' | 'nfl-h2h-date'
+  query: {
+    player_query?: string
+    player_display?: string
+    player_team?: string
+    opponent_code?: string
+    home_away?: string
+    window_label?: string
+    gamelog_seasons?: { first?: number; last?: number; games?: number }
+  }
+  totals: Record<string, number>
+  pbp?: DateBoxScorePbp
+  games: Array<Record<string, unknown>>
+}
+
+export function isDateBoxScorePayload(payload: unknown): payload is DateBoxScorePayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return (
+    (rec.engine === 'mlb-h2h-date' || rec.engine === 'nfl-h2h-date') &&
+    typeof rec.totals === 'object' &&
+    Array.isArray(rec.games)
+  )
+}
+
+export function extractDateBoxScorePayload(payload: unknown): DateBoxScorePayload | null {
+  if (isDateBoxScorePayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isDateBoxScorePayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isDateBoxScorePayload(v)) return v
+    }
+  }
+  return null
+}
+
+// ---------- NFL team, single week, career/window (`nfl kc -week1 -career`) ----------
+// Distinct from plain "nfl-week" (player-scoped, part of H2hPayload's own
+// family) — this is team-scoped, no player at all, a W/L + points-for/
+// against record across every occurrence of one week number.
+export interface NflWeekTeamGame {
+  season?: number
+  week?: number
+  date_iso?: string
+  opponent?: string
+  venue?: string
+  pts_for?: number
+  pts_allowed?: number
+  outcome?: string
+}
+
+export interface NflWeekTeamPayload {
+  engine: 'nfl-week-team'
+  query: {
+    team?: string
+    week?: number
+    week_end?: number
+    career?: boolean
+    window_label?: string
+  }
+  totals: { games: number; pts_for: number; pts_allowed: number; wins: number; losses: number; ties: number }
+  games: NflWeekTeamGame[]
+}
+
+export function isNflWeekTeamPayload(payload: unknown): payload is NflWeekTeamPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return rec.engine === 'nfl-week-team' && typeof rec.totals === 'object' && Array.isArray(rec.games)
+}
+
+export function extractNflWeekTeamPayload(payload: unknown): NflWeekTeamPayload | null {
+  if (isNflWeekTeamPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isNflWeekTeamPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isNflWeekTeamPayload(v)) return v
+    }
+  }
+  return null
+}
+
+// ---------- NFL teammate split (`nfl <player> with <teammate> -career`) ----------
+// "How does X do with/without Y" — two rows (with/without), each its own
+// games count + a flat totals bag (field set varies by category: pass/rush/
+// rec), so `totals`/`per_game` stay untyped Record<string, number> rather
+// than a fixed field list, same reasoning as H2hGame's own index signature.
+// Surfaced 2026-09-30 (nspe-v2-da audit) as a confirmed gap.
+export interface NflTeammateSplitRow {
+  split: string
+  label: string
+  games: number
+  totals: Record<string, number>
+  per_game?: Record<string, number>
+}
+
+export interface NflTeammateSplitPayload {
+  engine: 'nfl_teammate_split'
+  query: {
+    player?: string
+    teammate?: string
+    category?: string
+    window_label?: string
+  }
+  rows: NflTeammateSplitRow[]
+}
+
+export function isNflTeammateSplitPayload(payload: unknown): payload is NflTeammateSplitPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return rec.engine === 'nfl_teammate_split' && Array.isArray(rec.rows)
+}
+
+export function extractNflTeammateSplitPayload(payload: unknown): NflTeammateSplitPayload | null {
+  if (isNflTeammateSplitPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isNflTeammateSplitPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isNflTeammateSplitPayload(v)) return v
+    }
+  }
   return null
 }
 
@@ -1095,12 +1549,18 @@ export interface OverviewStatNGame {
 export interface OverviewStatNPayload {
   engine: string
   mode?: string
+  // Present on the period-scoped variant (`nba_overview_scope_statn`, e.g.
+  // "1h"/"q1") — absent on the plain full-game shape. Also echoed inside
+  // `query.scope` on that variant; kept at both levels since that's the real
+  // shape (confirmed live via nspe-v2-da, 2026-09-30), not assumed either way.
+  scope?: string
   query: {
     player: string
     window_label: string
     source?: string
     last_n?: number | null
     thresholds?: Array<{ stat: string; min: number }>
+    scope?: string
     // MLB (original shape)
     stat?: string
     stat_label?: string
@@ -1117,12 +1577,20 @@ export interface OverviewStatNPayload {
   results: OverviewStatNGame[]
 }
 
+// Matches both the plain `{sport}_overview_statn` shape and the period-
+// scoped `{sport}_overview_scope_statn` variant (confirmed live,
+// 2026-09-30 — "nba 1h curry -pts10 -ov" returns `nba_overview_scope_statn`,
+// which the old exact "_overview_statn" suffix match silently missed
+// entirely, sending every NBA quarter/half-scoped -ov query through the
+// generic fallback instead of this dedicated, richer view). `(?:_[a-z0-9]+)*`
+// allows that extra "_scope" segment (or any future one) between "_overview"
+// and the required "_statn" ending.
 export function isOverviewStatNPayload(payload: unknown): payload is OverviewStatNPayload {
   if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
   const rec = payload as Record<string, unknown>
   return (
     typeof rec.engine === 'string' &&
-    /^(?!nfl_)[a-z]+_overview_statn$/.test(rec.engine) &&
+    /^(?!nfl_)[a-z]+_overview(?:_[a-z0-9]+)*_statn$/.test(rec.engine) &&
     Array.isArray(rec.results)
   )
 }
@@ -1264,14 +1732,26 @@ export function extractMlbOverviewBattingPayload(payload: unknown): MlbOverviewB
 // "nspe nfl lamar vs allen -career": every game two players shared, with each
 // player's box-score line. Sport-agnostic — matched by engine suffix `_pvp`;
 // each player carries its own `columns` (CMP/ATT/YDS… for an NFL QB) so the
-// view never needs to know the sport. `relation` says whether the two faced
-// each other ("opponents") or played together; per-game rows are keyed a/b in
-// the same order as `query.players`.
+// view never needs to know the sport.
+//
+// RESHAPED 2026-09-30 (nspe-v2-da) — teammate meetings used to only be
+// counted (`as_teammates: N`), never given real stats; now both relationships
+// ("opponents"/"teammates") are real output, plus a genuine combined
+// (summed) total per shared stat. `games`/`record`/`players`/`results` moved
+// from the top level into each item of the new `relations` array — a pair
+// can have BOTH blocks at once (e.g. division rivals who later became
+// teammates), which is exactly why this became an array instead of the old
+// flat single-relation shape. The old flat shape (`games`/`as_teammates`/
+// top-level `players`/`results`) no longer exists; not kept as a fallback
+// since the engine won't send it anymore.
 export interface PvpPlayerSummary {
   name: string
   columns: string[]
   totals: Record<string, number>
   per_game: Record<string, number>
+  longest?: Record<string, number>
+  pass_rtg?: number
+  [key: string]: unknown
 }
 
 export interface PvpGame {
@@ -1284,6 +1764,18 @@ export interface PvpGame {
   b: Record<string, number>
 }
 
+export interface PvpRelation {
+  relation: 'opponents' | 'teammates' | string
+  games: number
+  record?: Record<string, string>
+  combined?: {
+    totals: Record<string, number>
+    per_game: Record<string, number>
+  }
+  players: PvpPlayerSummary[]
+  results?: PvpGame[]
+}
+
 export interface PvpPayload {
   engine: string
   query: {
@@ -1291,20 +1783,12 @@ export interface PvpPayload {
     league?: string
     source?: string
     window_label?: string
-    relation?: string
     resolved_from?: string[]
   }
-  games: number
   shared_games_total?: number
-  as_teammates?: number
   unclassified?: number
   classified_by?: string[]
-  /** Optional: which columns to feature on the one-line summary, in order
-   * (backend-driven since it varies by sport/position). */
-  headline?: string[]
-  record?: Record<string, string>
-  players: PvpPlayerSummary[]
-  results: PvpGame[]
+  relations: PvpRelation[]
   notes?: string[]
 }
 
@@ -1314,8 +1798,7 @@ export function isPvpPayload(payload: unknown): payload is PvpPayload {
   return (
     typeof rec.engine === 'string' &&
     /_pvp$/.test(rec.engine) &&
-    Array.isArray(rec.players) &&
-    Array.isArray(rec.results)
+    Array.isArray(rec.relations)
   )
 }
 
@@ -1468,14 +1951,26 @@ export interface MlbTeamRunsTrendResult {
   matches: MlbTeamRunsTrendMatch[]
 }
 
-// Shape inferred from the structurally adjacent mlb_team_runs_leaderboard engine —
-// the only captured mlb_team_runs_compute example returned an empty results array,
-// so this is defensively typed with optional fields rather than verified exactly.
+export interface MlbTeamRunsComputeWindowGame {
+  game_id: string
+  date_iso: string
+  opponent: string
+  result?: string
+  runs_for: number
+  runs_allowed: number
+}
+
+// Confirmed live 2026-09-30 (nspe-v2-da) — the earlier capture that shaped
+// this had an empty `results` array, which is why `window_games` (the
+// per-game drill-down behind each team's total/avg) was missing entirely
+// until now; MlbTeamRunsView's compute branch rendered a flat, non-
+// expandable row as a result even though the engine always carried this.
 export interface MlbTeamRunsComputeResult {
   team: string
   total?: number
   games?: number
   avg?: number
+  window_games?: MlbTeamRunsComputeWindowGame[]
 }
 
 export interface MlbTeamRunsPayload {

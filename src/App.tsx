@@ -50,6 +50,7 @@ import {
   extractH2hPayload,
   extractMatchupInsightPayload,
   extractMlbBatTeamPayload,
+  extractMlbBvpPitcherPayload,
   extractMlbFirstPaTrendPayload,
   extractMlbHrPayload,
   extractMlbPitchFpvPayload,
@@ -66,7 +67,14 @@ import {
   extractNflOverviewScopesPayload,
   extractNflOverviewStatNPayload,
   extractOverviewStatNPayload,
+  extractDateBoxScorePayload,
+  extractNflQuarterLeaguePayload,
+  extractNflQuarterMatchupPayload,
+  extractNflTeamLeadersPayload,
+  extractNflTeammateSplitPayload,
+  extractNflWeekTeamPayload,
   extractPvpPayload,
+  extractRefPayload,
   extractStatsOverviewPayload,
   extractMlbOverviewBattingPayload,
   extractNflExplosivePayload,
@@ -77,6 +85,7 @@ import {
   type H2hPayload,
   type MatchupInsightPayload,
   type MlbBatTeamPayload,
+  type MlbBvpPitcherPayload,
   type MlbFirstPaTrendPayload,
   type MlbHrComputeResult,
   type MlbHrPayload,
@@ -99,7 +108,17 @@ import {
   type NflOverviewScopesPayload,
   type NflOverviewStatNPayload,
   type OverviewStatNPayload,
+  type DateBoxScorePayload,
+  type NflQuarterLeaguePayload,
+  type NflQuarterMatchupPayload,
+  type NflQuarterComputeRow,
+  type NflQuarterTrendRow,
+  type NflQuarterTeamAllowedRow,
+  type NflTeamLeadersPayload,
+  type NflTeammateSplitPayload,
+  type NflWeekTeamPayload,
   type PvpPayload,
+  type RefPayload,
   type StatsOverviewPayload,
   type StatsOverviewRow,
   type MlbOverviewBattingRow,
@@ -2176,6 +2195,13 @@ function formatPvpNumber(n: number | undefined): string {
 // few of these the player actually has, in this order.
 const PVP_HEADLINE_PREFERENCE = ['PTS', 'REB', 'AST', 'YDS', 'TD', 'RTD', 'HR', 'RBI', 'H', 'G', 'SOG', 'RYD']
 
+// Reshaped 2026-09-30 (nspe-v2-da) — a pair can carry BOTH an "opponents"
+// and a "teammates" block at once (division rivals who later became
+// teammates, etc.), so this renders one independently-expandable ResultRow
+// per relation instead of assuming exactly one relationship exists. Each
+// relation also now carries a real `combined` (summed) total per shared
+// stat — new, shown as its own line below the two players' side-by-side
+// comparison rather than only ever showing player A's own totals.
 function PvpView({ payload }: { payload: PvpPayload }) {
   const { isExpanded, toggle } = useExpandableRows()
   const CYAN_BRIGHT = 'oklch(0.90 0.18 195)'
@@ -2184,143 +2210,172 @@ function PvpView({ payload }: { payload: PvpPayload }) {
   const BORDER = 'oklch(0.22 0 0)'
 
   const q = payload.query
-  const [a, b] = payload.players
-  if (!a || !b) return null
+  const relations = payload.relations ?? []
+  if (relations.length === 0) return null
   const lastName = (n: string) => n.trim().split(/\s+/).slice(-1)[0]
-  const columns = a.columns.length > 0 ? a.columns : b.columns
-  const teammates = payload.as_teammates ?? 0
+  const gridCols = '44px 1fr 1fr 1fr 1fr'
 
-  // One-line summary from the first player's perspective (the -ov style);
-  // the full matchup, including the second player's side, is behind {view}.
-  const headlineCols = (
-    payload.headline && payload.headline.length > 0
-      ? payload.headline.filter((c) => columns.includes(c))
-      : PVP_HEADLINE_PREFERENCE.filter((c) => columns.includes(c)).slice(0, 3)
-  )
-  const summary = headlineCols
-    .map((c, i) =>
-      i === 0 && a.per_game[c] != null
-        ? `${c} ${formatPvpNumber(a.totals[c])} · ${formatPvpNumber(a.per_game[c])}/g`
-        : `${c} ${formatPvpNumber(a.totals[c])}`,
-    )
-    .join(' · ')
-  const recordA = payload.record?.[a.name]
-
-  const subtitle = [
+  const topSubtitle = [
     q.window_label && `window: ${q.window_label}`,
     q.source,
-    `${payload.games} game${payload.games === 1 ? '' : 's'}${q.relation ? ` as ${q.relation}` : ''}`,
-    teammates > 0 ? `${teammates} as teammates` : '',
+    payload.shared_games_total != null
+      ? `${payload.shared_games_total} shared game${payload.shared_games_total === 1 ? '' : 's'}`
+      : '',
     payload.unclassified ? `${payload.unclassified} unclassified` : '',
   ].filter(Boolean).join(' · ')
 
-  // 1 = A leads, -1 = B leads, 0 = tie / n.a.
-  const leader = (col: string): number => {
-    const av = a.per_game[col]
-    const bv = b.per_game[col]
-    if (av == null || bv == null || av === bv) return 0
-    const aHigher = av > bv
-    return (PVP_LOWER_IS_BETTER.has(col) ? !aHigher : aHigher) ? 1 : -1
-  }
-  const cell = (value: number | undefined, isLeader: boolean, dim = false) => (
-    <span
-      className="text-right"
-      style={{ color: isLeader ? GREEN : dim ? DIM : 'oklch(0.85 0 0)', fontWeight: isLeader ? 700 : 400 }}
-    >
-      {formatPvpNumber(value)}
-    </span>
-  )
-  const gridCols = '44px 1fr 1fr 1fr 1fr'
-
   return (
     <div className="space-y-3 font-mono">
-      <div className="text-[12px]" style={{ color: DIM }}>{subtitle}</div>
+      <div className="text-[12px]" style={{ color: DIM }}>{topSubtitle}</div>
 
-      <ResultRow
-        label={
-          <>
-            <span style={{ color: CYAN_BRIGHT }}>{a.name}</span>
-            <span style={{ color: DIM }}>{' vs '}</span>
-            <span style={{ color: CYAN_BRIGHT }}>{b.name}</span>
-            {recordA && <span style={{ color: GREEN }}>{` {${recordA}}`}</span>}
-          </>
+      {relations.map((rel, ri) => {
+        const [a, b] = rel.players
+        if (!a || !b) return null
+        const columns = a.columns.length > 0 ? a.columns : b.columns
+        const combinedTotals = rel.combined?.totals ?? {}
+        const combinedPerGame = rel.combined?.per_game ?? {}
+
+        // One-line summary from the combined (both players' shared) totals —
+        // reads more like a matchup headline than showing just one side.
+        const headlineCols = PVP_HEADLINE_PREFERENCE.filter((c) => columns.includes(c)).slice(0, 3)
+        const summary = headlineCols.length > 0
+          ? headlineCols
+              .map((c) =>
+                combinedPerGame[c] != null
+                  ? `${c} ${formatPvpNumber(combinedTotals[c])} · ${formatPvpNumber(combinedPerGame[c])}/g`
+                  : `${c} ${formatPvpNumber(combinedTotals[c])}`,
+              )
+              .join(' · ')
+          : `${rel.games} games`
+        const recordA = rel.record?.[a.name]
+
+        // 1 = A leads, -1 = B leads, 0 = tie / n.a.
+        const leader = (col: string): number => {
+          const av = a.per_game[col]
+          const bv = b.per_game[col]
+          if (av == null || bv == null || av === bv) return 0
+          const aHigher = av > bv
+          return (PVP_LOWER_IS_BETTER.has(col) ? !aHigher : aHigher) ? 1 : -1
         }
-        filterable={false}
-        badgeHeader={isExpanded(0) ? 'hide' : 'view'}
-        badgeValue={summary || `${payload.games} games`}
-        expanded={isExpanded(0)}
-        onToggle={() => toggle(0)}
-        ariaLabel="Toggle full matchup"
-      >
-        {payload.record && (
-          <div className="text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
-            {[a, b].map((p) => `${lastName(p.name)} ${payload.record?.[p.name] ?? '—'}`).join('  ·  ')}
-          </div>
-        )}
+        const cell = (value: number | undefined, isLeader: boolean, dim = false) => (
+          <span
+            className="text-right"
+            style={{ color: isLeader ? GREEN : dim ? DIM : 'oklch(0.85 0 0)', fontWeight: isLeader ? 700 : 400 }}
+          >
+            {formatPvpNumber(value)}
+          </span>
+        )
 
-        {columns.length > 0 && (
-          <div className="text-[12px]">
-            <div
-              className="grid items-baseline gap-x-2 pb-1 text-[10px] uppercase tracking-widest"
-              style={{ gridTemplateColumns: gridCols, color: DIM, borderBottom: `1px solid ${BORDER}` }}
-            >
-              <span />
-              <span className="text-right">{`${lastName(a.name)} tot`}</span>
-              <span className="text-right">/g</span>
-              <span className="text-right">{`${lastName(b.name)} tot`}</span>
-              <span className="text-right">/g</span>
-            </div>
-            {columns.map((col) => {
-              const lead = leader(col)
-              return (
+        return (
+          <ResultRow
+            key={rel.relation}
+            label={
+              <>
+                <span style={{ color: CYAN_BRIGHT }}>{a.name}</span>
+                <span style={{ color: DIM }}>{' vs '}</span>
+                <span style={{ color: CYAN_BRIGHT }}>{b.name}</span>
+                <span style={{ color: DIM }}>{` (${rel.relation})`}</span>
+                {recordA && <span style={{ color: GREEN }}>{` {${recordA}}`}</span>}
+              </>
+            }
+            filterable={false}
+            badgeHeader={isExpanded(ri) ? 'hide' : 'view'}
+            badgeValue={summary}
+            expanded={isExpanded(ri)}
+            onToggle={() => toggle(ri)}
+            ariaLabel={`Toggle ${rel.relation} matchup`}
+          >
+            {rel.record && (
+              <div className="text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+                {[a, b].map((p) => `${lastName(p.name)} ${rel.record?.[p.name] ?? '—'}`).join('  ·  ')}
+              </div>
+            )}
+
+            {columns.length > 0 && (
+              <div className="text-[12px]">
                 <div
-                  key={col}
-                  className="grid items-baseline gap-x-2 py-1"
-                  style={{ gridTemplateColumns: gridCols, borderBottom: `1px solid ${BORDER}` }}
+                  className="grid items-baseline gap-x-2 pb-1 text-[10px] uppercase tracking-widest"
+                  style={{ gridTemplateColumns: gridCols, color: DIM, borderBottom: `1px solid ${BORDER}` }}
                 >
-                  <span style={{ color: DIM }}>{col}</span>
-                  {cell(a.totals[col], false, true)}
-                  {cell(a.per_game[col], lead === 1)}
-                  {cell(b.totals[col], false, true)}
-                  {cell(b.per_game[col], lead === -1)}
+                  <span />
+                  <span className="text-right">{`${lastName(a.name)} tot`}</span>
+                  <span className="text-right">/g</span>
+                  <span className="text-right">{`${lastName(b.name)} tot`}</span>
+                  <span className="text-right">/g</span>
                 </div>
-              )
-            })}
-          </div>
-        )}
-
-        {payload.results.length > 0 && (
-          <div className="space-y-2 pt-1">
-            <div className="text-[10px] uppercase tracking-widest" style={{ color: DIM }}>shared games</div>
-            {payload.results.map((g, j) => {
-              const line = (who: string, stats: Record<string, number>) =>
-                `${who}: ${columns.map((c) => `${formatPvpNumber(stats[c])} ${c}`).join(', ')}`
-              return (
-                <div key={g.game_id ?? j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
-                  <div>
-                    <span style={{ color: 'oklch(0.60 0 0)' }}>{g.date}</span>
-                    {g.result_a && (
-                      <span style={{ color: g.outcome_a === 'W' ? GREEN : g.outcome_a === 'L' ? 'oklch(0.70 0.15 25)' : DIM }}>
-                        {` ${lastName(a.name)} ${g.result_a}`}
-                      </span>
-                    )}
+                {columns.map((col) => {
+                  const lead = leader(col)
+                  return (
+                    <div
+                      key={col}
+                      className="grid items-baseline gap-x-2 py-1"
+                      style={{ gridTemplateColumns: gridCols, borderBottom: `1px solid ${BORDER}` }}
+                    >
+                      <span style={{ color: DIM }}>{col}</span>
+                      {cell(a.totals[col], false, true)}
+                      {cell(a.per_game[col], lead === 1)}
+                      {cell(b.totals[col], false, true)}
+                      {cell(b.per_game[col], lead === -1)}
+                    </div>
+                  )
+                })}
+                {Object.keys(combinedTotals).length > 0 && (
+                  <div className="mt-2 pt-1.5" style={{ borderTop: `1px solid ${BORDER}` }}>
+                    <div className="text-[10px] uppercase tracking-widest mb-1" style={{ color: DIM }}>
+                      combined
+                    </div>
+                    <div className="flex flex-wrap gap-x-3 gap-y-0.5">
+                      {columns
+                        .filter((c) => combinedTotals[c] != null)
+                        .map((c) => (
+                          <span key={c} className="text-[12px]" style={{ color: 'oklch(0.85 0 0)' }}>
+                            <span style={{ color: DIM }}>{`${c} `}</span>
+                            {formatPvpNumber(combinedTotals[c])}
+                            {combinedPerGame[c] != null && (
+                              <span style={{ color: DIM }}>{` (${formatPvpNumber(combinedPerGame[c])}/g)`}</span>
+                            )}
+                          </span>
+                        ))}
+                    </div>
                   </div>
-                  <div className="pl-2" style={{ color: 'oklch(0.66 0 0)' }}>{line(lastName(a.name), g.a)}</div>
-                  <div className="pl-2" style={{ color: 'oklch(0.66 0 0)' }}>{line(lastName(b.name), g.b)}</div>
-                </div>
-              )
-            })}
-          </div>
-        )}
+                )}
+              </div>
+            )}
 
-        {payload.notes && payload.notes.length > 0 && (
-          <div className="space-y-0.5 text-[11px]" style={{ color: DIM }}>
-            {payload.notes.map((n, i) => (
-              <div key={i}>{n}</div>
-            ))}
-          </div>
-        )}
-      </ResultRow>
+            {(rel.results?.length ?? 0) > 0 && (
+              <div className="space-y-2 pt-1">
+                <div className="text-[10px] uppercase tracking-widest" style={{ color: DIM }}>shared games</div>
+                {rel.results!.map((g, j) => {
+                  const line = (who: string, stats: Record<string, number>) =>
+                    `${who}: ${columns.map((c) => `${formatPvpNumber(stats[c])} ${c}`).join(', ')}`
+                  return (
+                    <div key={g.game_id ?? j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+                      <div>
+                        <span style={{ color: 'oklch(0.60 0 0)' }}>{g.date}</span>
+                        {g.result_a && (
+                          <span style={{ color: g.outcome_a === 'W' ? GREEN : g.outcome_a === 'L' ? 'oklch(0.70 0.15 25)' : DIM }}>
+                            {` ${lastName(a.name)} ${g.result_a}`}
+                          </span>
+                        )}
+                      </div>
+                      <div className="pl-2" style={{ color: 'oklch(0.66 0 0)' }}>{line(lastName(a.name), g.a)}</div>
+                      <div className="pl-2" style={{ color: 'oklch(0.66 0 0)' }}>{line(lastName(b.name), g.b)}</div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </ResultRow>
+        )
+      })}
+
+      {payload.notes && payload.notes.length > 0 && (
+        <div className="space-y-0.5 text-[11px]" style={{ color: DIM }}>
+          {payload.notes.map((n, i) => (
+            <div key={i}>{n}</div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
@@ -2522,15 +2577,35 @@ function MlbTeamRunsView({ payload }: { payload: MlbTeamRunsPayload }) {
     }
     return (
       <div className="space-y-0">
-        {results.map((r, i) => (
-          <ResultRow
-            key={i}
-            label={r.team}
-            badgeHeader={`${r.games ?? '—'}gp`}
-            badgeValue={`${r.total ?? '—'} total · ${r.avg ?? '—'} avg`}
-            accent={PITCH_GREEN}
-          />
-        ))}
+        {results.map((r, i) => {
+          const windowGames = r.window_games ?? []
+          return (
+            <ResultRow
+              key={i}
+              label={r.team}
+              badgeHeader={`${r.games ?? '—'}gp`}
+              badgeValue={`${r.total ?? '—'} total · ${r.avg ?? '—'} avg`}
+              accent={PITCH_GREEN}
+              expanded={isExpanded(i)}
+              onToggle={windowGames.length > 0 ? () => toggle(i) : undefined}
+            >
+              {windowGames.map((g, j) => (
+                <div key={g.game_id ?? j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+                  <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(g.date_iso) ?? g.date_iso}</span>
+                  {g.opponent && (
+                    <>
+                      <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
+                      <span style={{ color: 'oklch(0.75 0.08 220)' }}>{g.opponent}</span>
+                    </>
+                  )}
+                  <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                  <span style={{ color: PITCH_GREEN }}>{`${g.runs_for}-${g.runs_allowed}`}</span>
+                  {g.result && <span style={{ color: 'oklch(0.55 0 0)' }}>{` ${g.result}`}</span>}
+                </div>
+              ))}
+            </ResultRow>
+          )
+        })}
       </div>
     )
   }
@@ -3391,6 +3466,442 @@ function MlbBatTeamView({ payload }: { payload: MlbBatTeamPayload }) {
   )
 }
 
+// mlb-bvp-pitcher — a batter's lifetime line against one pitcher ("mlb
+// <batter> vs <pitcher> -career"). Single totals row, no game log at all
+// (this engine doesn't carry one) — same classic-MLB slash-line + counting
+// stat treatment H2hView's own no-display_fields branch uses, just via
+// StatBox blocks since there's no game-log section underneath it to share a
+// layout with.
+function MlbBvpPitcherView({ payload }: { payload: MlbBvpPitcherPayload }) {
+  const r = payload.row
+  const formatAvg = (n?: number) => (typeof n === 'number' ? n.toFixed(3).replace(/^0+/, '') : '—')
+
+  return (
+    <div className="space-y-4">
+      <div className="font-mono text-[13px]" style={{ color: PITCH_ACCENT }}>
+        <span style={{ color: 'oklch(0.90 0.18 195)' }}>{r.batter}</span>
+        <span style={{ color: 'oklch(0.55 0 0)' }}> vs </span>
+        <span style={{ color: 'oklch(0.70 0.10 195)' }}>{r.pitcher}</span>
+        {r.team && <span style={{ color: PITCH_LABEL }}>{` · ${r.team}`}</span>}
+        <span style={{ color: PITCH_LABEL }}>{' · career'}</span>
+      </div>
+
+      <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.18 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+        <div className="grid grid-cols-4 gap-2 mb-3">
+          <StatBox label="AVG" value={formatAvg(r.AVG)} accent={PITCH_GREEN} />
+          <StatBox label="OBP" value={formatAvg(r.OBP)} />
+          <StatBox label="SLG" value={formatAvg(r.SLG)} />
+          <StatBox label="OPS" value={formatAvg(r.OPS)} />
+        </div>
+        <div className="grid grid-cols-4 gap-2">
+          <StatBox label="AB" value={r.AB} />
+          <StatBox label="H" value={r.H} />
+          <StatBox label="2B" value={r['2B']} />
+          <StatBox label="3B" value={r['3B']} />
+          <StatBox label="HR" value={r.HR} />
+          <StatBox label="RBI" value={r.RBI} />
+          <StatBox label="BB" value={r.BB} />
+          <StatBox label="K" value={r.K} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// nfl-ref / cfb-ref — every game meeting a win/loss (+ optional min-margin)
+// filter, in career or a windowed scope. Flat chronological list, not a
+// trend/threshold shape — each game's own real result is the whole point,
+// not a met-count against a window.
+function RefView({ payload }: { payload: RefPayload }) {
+  const q = payload.query
+  const player = normalizeDisplayPlayer(q.player_display || q.player_query || 'player')
+  const outcomeLabel = q.outcome === 'W' ? 'wins' : q.outcome === 'L' ? 'losses' : q.outcome ? `${q.outcome} games` : 'games'
+  const games = payload.games ?? []
+  const count = payload.count ?? games.length
+
+  return (
+    <div className="space-y-3">
+      <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+        <span>{player}</span>
+        {q.player_team && <span style={{ color: 'oklch(0.70 0.10 195)' }}>{` · ${q.player_team}`}</span>}
+        <span style={{ color: 'oklch(0.55 0 0)' }}>
+          {` · ${outcomeLabel}${q.min_margin ? ` by ${q.min_margin}+` : ''}${q.window_label ? ` · ${q.window_label}` : ''}`}
+        </span>
+      </div>
+      <div className="font-mono text-[11px]" style={{ color: 'oklch(0.55 0 0)' }}>
+        {count} game{count === 1 ? '' : 's'}
+      </div>
+      <div className="space-y-1.5">
+        {games.map((g, i) => {
+          const won = g.result?.startsWith('W')
+          const lost = g.result?.startsWith('L')
+          return (
+            <div key={`${g.date_iso ?? g.date}-${i}`} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+              <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(g.date_iso ?? g.date) ?? g.date}</span>
+              {g.opponent && (
+                <>
+                  <span style={{ color: 'oklch(0.45 0 0)' }}>{'  '}</span>
+                  <span style={{ color: 'oklch(0.75 0.08 220)' }}>{g.opponent}</span>
+                </>
+              )}
+              <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+              <span style={{ color: won ? 'oklch(0.78 0.18 145)' : lost ? 'oklch(0.70 0.15 25)' : 'oklch(0.85 0 0)' }}>
+                {g.result}
+              </span>
+              {typeof g.margin === 'number' && (
+                <span style={{ color: 'oklch(0.55 0 0)' }}>{` (${g.margin > 0 ? '+' : ''}${g.margin})`}</span>
+              )}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+// nfl_team_leaders — one metric, ranked across teams, for/against per-game
+// averages plus season totals. Distinct from the {rankings} page's own
+// composite power-rankings feed (a z-scored blend of many stats) — this is
+// a single stat leaderboard, not a power score.
+function NflTeamLeadersView({ payload }: { payload: NflTeamLeadersPayload }) {
+  const q = payload.query
+  const rows = payload.rows ?? []
+  const metricLabel = q.metric ? q.metric.toUpperCase() : 'metric'
+  const sideLabel = q.side === 'against' ? 'allowed' : 'for'
+
+  return (
+    <div className="space-y-3">
+      <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+        <span>{`${metricLabel} ${sideLabel} leaders`}</span>
+        <span style={{ color: 'oklch(0.55 0 0)' }}>
+          {`${q.window ? ` · ${q.window}` : ''}${q.last_n ? ` · last ${q.last_n}` : ''}`}
+        </span>
+      </div>
+      <div className="space-y-0">
+        {rows.map((r) => (
+          <div
+            key={r.team}
+            className="flex items-center justify-between py-1.5 border-b"
+            style={{ borderColor: PITCH_BORDER }}
+          >
+            <span className="font-mono text-[13px]" style={{ color: PITCH_ACCENT }}>
+              <span style={{ color: 'oklch(0.55 0 0)' }}>{`#${r.rank} `}</span>
+              {r.team}
+              <span style={{ color: 'oklch(0.48 0 0)' }}>{` · ${r.games}gp`}</span>
+            </span>
+            <span className="font-mono text-[12px] flex items-center gap-3">
+              <span style={{ color: PITCH_GREEN }}>{`${Number(r.for).toFixed(1)} for`}</span>
+              <span style={{ color: 'oklch(0.70 0.15 25)' }}>{`${Number(r.against).toFixed(1)} agst`}</span>
+              <span style={{ color: 'oklch(0.55 0 0)' }}>{`${r.for_total} / ${r.against_total} tot`}</span>
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// nfl_teammate_split — "how does X do with/without Y", two rows side by
+// side. `totals` is a flat, category-dependent bag (pass/rush/rec fields
+// differ), so this just walks its own keys rather than a fixed column list.
+function NflTeammateSplitView({ payload }: { payload: NflTeammateSplitPayload }) {
+  const q = payload.query
+  const rows = payload.rows ?? []
+
+  return (
+    <div className="space-y-4">
+      <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+        <span>{normalizeDisplayPlayer(q.player || 'player')}</span>
+        <span style={{ color: 'oklch(0.55 0 0)' }}>{' with/without '}</span>
+        <span style={{ color: 'oklch(0.70 0.10 195)' }}>{normalizeDisplayPlayer(q.teammate || 'teammate')}</span>
+        <span style={{ color: 'oklch(0.55 0 0)' }}>{q.window_label ? ` · ${q.window_label}` : ''}</span>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {rows.map((r) => {
+          const entries = Object.entries(r.totals ?? {})
+          return (
+            <div key={r.split} className="rounded p-3" style={{ backgroundColor: 'oklch(0.18 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+              <div className="font-mono text-[11px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
+                {r.label}
+                <span style={{ color: 'oklch(0.48 0 0)' }}>{` · ${r.games}gp`}</span>
+              </div>
+              <div className="grid grid-cols-4 gap-2">
+                {entries.map(([k, v]) => (
+                  <StatBox key={k} label={k} value={v} />
+                ))}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+// nfl-quarter-h2h / nfl-quarter-week — single player, quarter/half-scoped,
+// vs one opponent or one week#. totals keys are scope-specific (q1_pass_td,
+// 1h_pass_yds, ...) so this walks them generically rather than a fixed
+// field-label map the way H2hView's classic branch does.
+function NflQuarterMatchupView({ payload }: { payload: NflQuarterMatchupPayload }) {
+  const q = payload.query
+  const totals = payload.totals ?? {}
+  const games = payload.games ?? []
+  const isWeekQuery = q.week != null
+  const scopeLabel = q.scope ? q.scope.toUpperCase() : ''
+
+  return (
+    <div className="space-y-4">
+      <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+        <span>{normalizeDisplayPlayer(q.player || 'player')}</span>
+        {q.player_team && <span style={{ color: 'oklch(0.70 0.10 195)' }}>{` · ${q.player_team}`}</span>}
+        {isWeekQuery ? (
+          <span style={{ color: 'oklch(0.55 0 0)' }}>{` · week ${q.week}${q.week_end && q.week_end !== q.week ? `-${q.week_end}` : ''}`}</span>
+        ) : (
+          <>
+            <span style={{ color: 'oklch(0.55 0 0)' }}> vs </span>
+            <span style={{ color: 'oklch(0.70 0.10 195)' }}>{q.opponent_code || '—'}</span>
+          </>
+        )}
+        <span style={{ color: 'oklch(0.55 0 0)' }}>
+          {` · ${scopeLabel}${q.category ? ` ${q.category}` : ''}${q.window_label ? ` · ${q.window_label}` : ''}`}
+        </span>
+      </div>
+
+      <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.18 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+        <div className="grid grid-cols-4 gap-2">
+          {Object.entries(totals).map(([k, v]) => (
+            <StatBox key={k} label={k.replace(/_/g, ' ')} value={v} />
+          ))}
+        </div>
+      </div>
+
+      <div className="space-y-1.5">
+        {games.map((g, i) => (
+          <div key={`${g.date_iso}-${i}`} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+            <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(g.date_iso) ?? g.date_iso}</span>
+            {g.opponent && (
+              <>
+                <span style={{ color: 'oklch(0.45 0 0)' }}>{'  '}</span>
+                <span style={{ color: 'oklch(0.75 0.08 220)' }}>{g.opponent}</span>
+              </>
+            )}
+            {typeof g.value === 'number' && (
+              <>
+                <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                <span style={{ color: PITCH_GREEN }}>{`${g.value} ${scopeLabel}`}</span>
+              </>
+            )}
+            {typeof g.h1_value === 'number' && (
+              <span style={{ color: 'oklch(0.55 0 0)' }}>{` · ${g.h1_value} 1H`}</span>
+            )}
+            {typeof g.td === 'number' && g.td > 0 && (
+              <span style={{ color: PITCH_GREEN }}>{` · ${g.td} td`}</span>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// nfl_quarter_compute / nfl_quarter_trend / nfl_quarter_team_allowed —
+// league-wide quarter/half-scoped lists, grouped into one view since they
+// only differ in which fields each result row carries.
+function NflQuarterLeagueView({ payload }: { payload: NflQuarterLeaguePayload }) {
+  const { isExpanded, toggle } = useExpandableRows()
+  const q = payload.query
+  const scopeLabel = q.scope ? q.scope.toUpperCase() : ''
+  const header = (
+    <div className="font-mono text-[13px] mb-3" style={{ color: 'oklch(0.90 0.18 195)' }}>
+      <span>{`${scopeLabel}${q.category ? ` ${q.category}` : ''}`}</span>
+      <span style={{ color: 'oklch(0.55 0 0)' }}>{q.window_label ? ` · ${q.window_label}` : ''}</span>
+    </div>
+  )
+
+  if (payload.engine === 'nfl_quarter_team_allowed') {
+    const results = payload.results as NflQuarterTeamAllowedRow[]
+    return (
+      <div className="space-y-0">
+        {header}
+        {results.map((r, i) => (
+          <div key={r.team} className="flex items-center justify-between py-1.5 border-b" style={{ borderColor: PITCH_BORDER }}>
+            <span className="font-mono text-[13px]" style={{ color: PITCH_ACCENT }}>
+              <span style={{ color: 'oklch(0.55 0 0)' }}>{`#${i + 1} `}</span>
+              {r.team}
+            </span>
+            <span className="font-mono text-[12px]" style={{ color: 'oklch(0.85 0 0)' }}>
+              {`${r.avg} avg · ${r.total} tot · ${r.games}gp`}
+            </span>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  if (payload.engine === 'nfl_quarter_compute') {
+    const results = payload.results as NflQuarterComputeRow[]
+    return (
+      <div className="space-y-0">
+        {header}
+        {results.map((r, i) => (
+          <ResultRow
+            key={i}
+            label={<><span>{normalizeDisplayPlayer(r.player)}</span><span style={{ color: 'oklch(0.55 0 0)' }}>{` ${r.team}`}</span></>}
+            badgeHeader={`${r.games}gp`}
+            badgeValue={String(r.total)}
+            accent={PITCH_GREEN}
+          />
+        ))}
+      </div>
+    )
+  }
+
+  const results = payload.results as NflQuarterTrendRow[]
+  return (
+    <div className="space-y-0">
+      {header}
+      {results.map((r, i) => {
+        const metLabel = formatMet(r.met_count, r.window)
+        const latest = newestMatch(r.matches)
+        const latestValue = latest ? `${latest.value ?? '—'} ${extractDateToken(latest.date_iso) ?? latest.date_iso}` : null
+        return (
+          <ResultRow
+            key={i}
+            label={<><span>{normalizeDisplayPlayer(r.player)}</span><span style={{ color: 'oklch(0.55 0 0)' }}>{` ${r.team}`}</span></>}
+            badgeHeader={latestValue ? `${metLabel} · latest` : null}
+            badgeValue={latestValue ?? metLabel}
+            accent={PITCH_GREEN}
+            expanded={isExpanded(i)}
+            onToggle={() => toggle(i)}
+          >
+            {r.matches.map((m, j) => (
+              <div key={m.game_id ?? j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+                <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(m.date_iso) ?? m.date_iso}</span>
+                {m.opponent && (
+                  <>
+                    <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
+                    <span style={{ color: 'oklch(0.75 0.08 220)' }}>{m.opponent}</span>
+                  </>
+                )}
+                {typeof m.value === 'number' && (
+                  <>
+                    <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                    <span style={{ color: PITCH_GREEN }}>{m.value}</span>
+                  </>
+                )}
+              </div>
+            ))}
+          </ResultRow>
+        )
+      })}
+    </div>
+  )
+}
+
+// mlb-h2h-date / nfl-h2h-date — one specific calendar date, not a window.
+// NFL's carries an extra `pbp` sub-object (explosive bands + half splits)
+// the MLB shape doesn't — shown only when present.
+function DateBoxScoreView({ payload }: { payload: DateBoxScorePayload }) {
+  const q = payload.query
+  const totals = payload.totals ?? {}
+  const pbp = payload.pbp
+  const games = payload.games ?? []
+
+  return (
+    <div className="space-y-4">
+      <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+        <span>{normalizeDisplayPlayer(q.player_display || q.player_query || 'player')}</span>
+        {q.player_team && <span style={{ color: 'oklch(0.70 0.10 195)' }}>{` · ${q.player_team}`}</span>}
+        <span style={{ color: 'oklch(0.55 0 0)' }}> vs </span>
+        <span style={{ color: 'oklch(0.70 0.10 195)' }}>{q.opponent_code || '—'}</span>
+        <span style={{ color: 'oklch(0.55 0 0)' }}>{q.window_label ? ` · ${q.window_label}` : ''}</span>
+      </div>
+
+      <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.18 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+        <div className="grid grid-cols-4 gap-2">
+          {Object.entries(totals)
+            .filter(([k]) => k !== 'games')
+            .map(([k, v]) => (
+              <StatBox key={k} label={k.replace(/_/g, ' ')} value={v} />
+            ))}
+        </div>
+      </div>
+
+      {pbp && (
+        <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.13 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+          <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
+            {`explosive ${pbp.category ?? ''} plays${typeof pbp.explosive_total === 'number' ? ` · ${pbp.explosive_total} total` : ''}`}
+          </div>
+          <div className="grid grid-cols-4 gap-2">
+            {Object.entries(pbp.explosive_bands ?? {}).map(([band, count]) => (
+              <StatBox key={band} label={band} value={count} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="space-y-1.5">
+        {games.map((g, i) => (
+          <div key={i} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+            {typeof g.result === 'string' && <span style={{ color: 'oklch(0.85 0 0)' }}>{`${g.result} · `}</span>}
+            {Object.entries(g)
+              .filter(([k]) => !['date', 'date_iso', 'venue', 'opponent', 'result'].includes(k) && typeof g[k] === 'number')
+              .map(([k, v]) => `${v} ${k.replace(/_/g, ' ')}`)
+              .join(', ')}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// nfl-week-team — team-scoped (not player), every occurrence of one week#
+// across career or a window, with the team's W/L + pts for/against record.
+function NflWeekTeamView({ payload }: { payload: NflWeekTeamPayload }) {
+  const q = payload.query
+  const t = payload.totals
+  const games = payload.games ?? []
+
+  return (
+    <div className="space-y-4">
+      <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+        <span style={{ color: 'oklch(0.70 0.10 195)' }}>{q.team || 'TEAM'}</span>
+        <span style={{ color: 'oklch(0.55 0 0)' }}>
+          {` · week ${q.week}${q.week_end && q.week_end !== q.week ? `-${q.week_end}` : ''}${q.window_label ? ` · ${q.window_label}` : ''}`}
+        </span>
+      </div>
+
+      <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.18 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+        <div className="grid grid-cols-4 gap-2">
+          <StatBox label="record" value={`${t.wins}-${t.losses}${t.ties ? `-${t.ties}` : ''}`} accent={PITCH_GREEN} />
+          <StatBox label="games" value={t.games} />
+          <StatBox label="pts for" value={t.pts_for} />
+          <StatBox label="pts allowed" value={t.pts_allowed} />
+        </div>
+      </div>
+
+      <div className="space-y-1.5">
+        {games.map((g, i) => (
+          <div key={i} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+            <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(g.date_iso) ?? g.date_iso}</span>
+            {g.season && <span style={{ color: 'oklch(0.48 0 0)' }}>{` (${g.season})`}</span>}
+            {g.opponent && (
+              <>
+                <span style={{ color: 'oklch(0.45 0 0)' }}>{'  '}</span>
+                <span style={{ color: 'oklch(0.75 0.08 220)' }}>{`${g.venue === 'away' ? '@' : 'vs'} ${g.opponent}`}</span>
+              </>
+            )}
+            <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+            <span style={{ color: g.outcome === 'W' ? 'oklch(0.78 0.18 145)' : g.outcome === 'L' ? 'oklch(0.70 0.15 25)' : 'oklch(0.85 0 0)' }}>
+              {`${g.outcome ?? ''} ${g.pts_for}-${g.pts_allowed}`}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function MlbTeamOverviewView({ payload }: { payload: MlbTeamOverviewPayload }) {
   const team = payload.team || 'TEAM'
   const season = payload.season
@@ -3949,6 +4460,14 @@ function App() {
   const [pitchResult, setPitchResult] = useState<MlbPitchH2hPayload | null>(null)
   const [fpvResult, setFpvResult] = useState<MlbPitchFpvPayload | null>(null)
   const [batTeamResult, setBatTeamResult] = useState<MlbBatTeamPayload | null>(null)
+  const [bvpResult, setBvpResult] = useState<MlbBvpPitcherPayload | null>(null)
+  const [refResult, setRefResult] = useState<RefPayload | null>(null)
+  const [teamLeadersResult, setTeamLeadersResult] = useState<NflTeamLeadersPayload | null>(null)
+  const [teammateSplitResult, setTeammateSplitResult] = useState<NflTeammateSplitPayload | null>(null)
+  const [quarterMatchupResult, setQuarterMatchupResult] = useState<NflQuarterMatchupPayload | null>(null)
+  const [quarterLeagueResult, setQuarterLeagueResult] = useState<NflQuarterLeaguePayload | null>(null)
+  const [dateBoxScoreResult, setDateBoxScoreResult] = useState<DateBoxScorePayload | null>(null)
+  const [weekTeamResult, setWeekTeamResult] = useState<NflWeekTeamPayload | null>(null)
   const [teamOverviewResult, setTeamOverviewResult] = useState<MlbTeamOverviewPayload | null>(null)
   const [reportLeaderboardResult, setReportLeaderboardResult] = useState<MlbReportLeaderboardPayload | null>(null)
   const [playerReportResult, setPlayerReportResult] = useState<MlbPlayerReportPayload | null>(null)
@@ -4355,6 +4874,14 @@ function App() {
     setPitchResult(null)
     setFpvResult(null)
     setBatTeamResult(null)
+    setBvpResult(null)
+    setRefResult(null)
+    setTeamLeadersResult(null)
+    setTeammateSplitResult(null)
+    setQuarterMatchupResult(null)
+    setQuarterLeagueResult(null)
+    setDateBoxScoreResult(null)
+    setWeekTeamResult(null)
     setTeamOverviewResult(null)
     setReportLeaderboardResult(null)
     setPlayerReportResult(null)
@@ -4421,6 +4948,70 @@ function App() {
     const batTeamPayload = extractMlbBatTeamPayload(payload)
     if (batTeamPayload) {
       setBatTeamResult(batTeamPayload)
+      setQueryResults([])
+      return
+    }
+
+    // MLB batter-vs-pitcher career line (`mlb <batter> vs <pitcher> -career`)
+    const bvpPayload = extractMlbBvpPitcherPayload(payload)
+    if (bvpPayload) {
+      setBvpResult(bvpPayload)
+      setQueryResults([])
+      return
+    }
+
+    // NFL/CFB player reference — win/loss game list (`nfl ref <player> -wins -career`)
+    const refPayload = extractRefPayload(payload)
+    if (refPayload) {
+      setRefResult(refPayload)
+      setQueryResults([])
+      return
+    }
+
+    // NFL team leaders (`nfl team -yds -leaders -top5`)
+    const teamLeadersPayload = extractNflTeamLeadersPayload(payload)
+    if (teamLeadersPayload) {
+      setTeamLeadersResult(teamLeadersPayload)
+      setQueryResults([])
+      return
+    }
+
+    // NFL teammate split (`nfl <player> with <teammate> -career`)
+    const teammateSplitPayload = extractNflTeammateSplitPayload(payload)
+    if (teammateSplitPayload) {
+      setTeammateSplitResult(teammateSplitPayload)
+      setQueryResults([])
+      return
+    }
+
+    // NFL quarter/half-scope matchup (`nfl q1 <player> vs <team>`/`-week1`)
+    const quarterMatchupPayload = extractNflQuarterMatchupPayload(payload)
+    if (quarterMatchupPayload) {
+      setQuarterMatchupResult(quarterMatchupPayload)
+      setQueryResults([])
+      return
+    }
+
+    // NFL quarter/half-scope league-wide (compute/trend/team-allowed)
+    const quarterLeaguePayload = extractNflQuarterLeaguePayload(payload)
+    if (quarterLeaguePayload) {
+      setQuarterLeagueResult(quarterLeaguePayload)
+      setQueryResults([])
+      return
+    }
+
+    // NFL/MLB specific-date box score (`nfl mahomes 9/14/26`)
+    const dateBoxScorePayload = extractDateBoxScorePayload(payload)
+    if (dateBoxScorePayload) {
+      setDateBoxScoreResult(dateBoxScorePayload)
+      setQueryResults([])
+      return
+    }
+
+    // NFL team, single week, career/window (`nfl kc -week1 -career`)
+    const weekTeamPayload = extractNflWeekTeamPayload(payload)
+    if (weekTeamPayload) {
+      setWeekTeamResult(weekTeamPayload)
       setQueryResults([])
       return
     }
@@ -5473,6 +6064,22 @@ function App() {
                 ? `${lastQuery} — pitch`
                 : batTeamResult
                 ? `${lastQuery} — team`
+                : bvpResult
+                ? `${lastQuery} — bvp`
+                : refResult
+                ? `${lastQuery} — ref`
+                : teamLeadersResult
+                ? `${lastQuery} — team leaders`
+                : teammateSplitResult
+                ? `${lastQuery} — teammate split`
+                : quarterMatchupResult
+                ? `${lastQuery} — quarter`
+                : quarterLeagueResult
+                ? `${lastQuery} — quarter`
+                : dateBoxScoreResult
+                ? `${lastQuery} — box score`
+                : weekTeamResult
+                ? `${lastQuery} — team week`
                 : reportLeaderboardResult
                 ? `${lastQuery} — report`
                 : playerReportResult
@@ -5627,6 +6234,22 @@ function App() {
               <MlbPitchFpvView payload={fpvResult} />
             ) : batTeamResult ? (
               <MlbBatTeamView payload={batTeamResult} />
+            ) : bvpResult ? (
+              <MlbBvpPitcherView payload={bvpResult} />
+            ) : refResult ? (
+              <RefView payload={refResult} />
+            ) : teamLeadersResult ? (
+              <NflTeamLeadersView payload={teamLeadersResult} />
+            ) : teammateSplitResult ? (
+              <NflTeammateSplitView payload={teammateSplitResult} />
+            ) : quarterMatchupResult ? (
+              <NflQuarterMatchupView payload={quarterMatchupResult} />
+            ) : quarterLeagueResult ? (
+              <NflQuarterLeagueView payload={quarterLeagueResult} />
+            ) : dateBoxScoreResult ? (
+              <DateBoxScoreView payload={dateBoxScoreResult} />
+            ) : weekTeamResult ? (
+              <NflWeekTeamView payload={weekTeamResult} />
             ) : teamOverviewResult ? (
               <MlbTeamOverviewView payload={teamOverviewResult} />
             ) : reportLeaderboardResult ? (
@@ -6247,8 +6870,8 @@ function App() {
           does rather than silently only ever reaching NFL's. */}
       {!isMobile && (
         <div className="absolute z-20 flex items-center gap-4" style={{ bottom: '52px', right: '440px' }}>
-          <SportsSwitcher label="charts" variant="charts" direction="up" />
-          <SportsSwitcher label="matchups" direction="up" />
+          <SportsSwitcher label="charts" variant="charts" direction="up" triggerSizePx={15} />
+          <SportsSwitcher label="matchups" direction="up" triggerSizePx={15} />
         </div>
       )}
 
