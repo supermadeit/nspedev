@@ -3839,6 +3839,19 @@ function stripSportPrefix(value: string): { sport?: string; rest: string } {
 
 const resultCountText = (n: number) => `${n} result${n === 1 ? '' : 's'}`
 
+// SHELVED (2026-09-29, per owner via nspe-v2-da): a normal command errored
+// then worked a few retries later; disambiguation (backend) and follow-ups
+// (this, entirely client-side) were the two suspects, both pulled completely
+// while that's investigated. The single gate for the whole follow-up
+// mechanism (see lastNlContext/followupSummary/runQuery below) — flip back
+// to true to re-enable, no other code changes needed. Confirmed via code
+// read (not just belief) that this file's "never update lastContext from an
+// error or disambiguation response" guardrail was in fact being honored —
+// runQuery's catch block never touches lastNlContext at all, and the one
+// place that clears it is gated on `!hasPendingDisambiguation(payload) &&
+// !getPayloadError(payload)`.
+const FOLLOWUP_QUESTIONS_ENABLED = false
+
 const MINI_DEFAULT_W = 720
 const MINI_MIN_W = 420
 const MINI_MIN_H = 240
@@ -3950,10 +3963,12 @@ function App() {
   const [lastQuery, setLastQuery] = useState('')
   // Conversational follow-ups ("what about receiving?") — client-side only,
   // per the backend's spec (docs/frontend_spec_followup_questions_2026-09-27.md
-  // in nspe-v2). lastNlContext survives across queries (deliberately not
-  // cleared in resetResultState — an error/disambiguation shouldn't cost the
-  // conversation its only usable topic); followupSummary is tied to whatever
-  // result is currently shown, so it resets with everything else.
+  // in nspe-v2). SHELVED as of 2026-09-29 (see FOLLOWUP_QUESTIONS_ENABLED
+  // near the top of this file) — lastNlContext survives across queries
+  // (deliberately not cleared in resetResultState — an error/disambiguation
+  // shouldn't cost the conversation its only usable topic); followupSummary
+  // is tied to whatever result is currently shown, so it resets with
+  // everything else.
   const [lastNlContext, setLastNlContext] = useState<LastNlContext | null>(null)
   const [followupSummary, setFollowupSummary] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -4619,8 +4634,10 @@ function App() {
     // full sentence merging it with lastNlContext (see followupQuery.ts);
     // that rewritten sentence, never the raw fragment, is what actually gets
     // sent. A miss (including anything that names its own player) falls
-    // through unchanged, identical to before this feature existed.
-    const followup = detectFollowup(sanitizedQuery, lastNlContext)
+    // through unchanged, identical to before this feature existed. SHELVED
+    // (FOLLOWUP_QUESTIONS_ENABLED) — always null while off, so every query
+    // sends exactly as typed, same as before this feature ever existed.
+    const followup = FOLLOWUP_QUESTIONS_ENABLED ? detectFollowup(sanitizedQuery, lastNlContext) : null
     const effectiveQuery = followup ? followup.sentence : sanitizedQuery
 
     setIsLoading(true)
@@ -4677,12 +4694,17 @@ function App() {
       // rather than leaving the old topic sitting there: nobody expects
       // "what about this season?" two messages later to reattach to
       // whatever the conversation was about before an unrelated query ran
-      // successfully in between.
-      const newContext = contextFromResponse(payload)
-      if (newContext) {
-        setLastNlContext(newContext)
-      } else if (!hasPendingDisambiguation(payload) && !getPayloadError(payload)) {
-        setLastNlContext(null)
+      // successfully in between. SHELVED (FOLLOWUP_QUESTIONS_ENABLED) —
+      // skipped entirely while off, so lastNlContext just stays null forever
+      // (its initial value) and detectFollowup above never has anything to
+      // match against even if this gate were somehow bypassed.
+      if (FOLLOWUP_QUESTIONS_ENABLED) {
+        const newContext = contextFromResponse(payload)
+        if (newContext) {
+          setLastNlContext(newContext)
+        } else if (!hasPendingDisambiguation(payload) && !getPayloadError(payload)) {
+          setLastNlContext(null)
+        }
       }
 
       // The guest-quota block rides in the body now (confirmed spec), not a
