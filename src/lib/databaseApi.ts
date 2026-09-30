@@ -361,7 +361,23 @@ export interface NbaScoringBucketRow {
   player_name: string
   team: string
   games: number
-  quarter_points: { q1: number; q2: number; q3: number; q4: number; '1h': number; '2h': number; ot: number }
+  // Nullable per-field: reported 2026-09-30 that most players (373/470) come
+  // back with a literal 0 across every quarter/half/OT despite real minutes
+  // played (Deni Avdija, Jay Huff, ...) — per-quarter scoring apparently
+  // isn't tracked for most of the league yet. Backend may start sending
+  // `null` instead of a false 0 once that's sorted out (see the message to
+  // nspe-v2-da this was flagged in) — typed nullable now so the chart's
+  // "—" / sort-to-bottom handling is ready whenever that ships, with no
+  // second round-trip needed.
+  quarter_points: {
+    q1: number | null
+    q2: number | null
+    q3: number | null
+    q4: number | null
+    '1h': number | null
+    '2h': number | null
+    ot: number | null
+  }
   bands: {
     points: Record<string, number>
     rebounds: Record<string, number>

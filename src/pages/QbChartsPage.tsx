@@ -25,7 +25,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { fetchQbExplosives, type QbExplosivesData } from '@/lib/databaseApi'
 import { normalizeDisplayPlayer } from '@/lib/nspe-payloads'
-import { loadPlayerIndex, PLAYER_INDEX } from '@/lib/playerSearch'
+import { loadPlayerIndex, PLAYER_INDEX, type PlayerIndexEntry } from '@/lib/playerSearch'
 import { SportsSwitcher } from '@/components/SportsSwitcher'
 
 function normalizePlayerKey(name: string): string {
@@ -79,14 +79,18 @@ interface DerivedRow {
   totalTd: number
 }
 
-function deriveRows(players: QbRow[], slugByKey: Map<string, string>): DerivedRow[] {
+function deriveRows(players: QbRow[], indexByKey: Map<string, PlayerIndexEntry>): DerivedRow[] {
   return players
     .filter((p) => PROFILED_PLAYER_KEYS.has(normalizePlayerKey(p.player_name)))
     .map((p) => {
       const bandEntries = BANDS.map((b) => p.explosive[b])
+      // See MlbChartsPage.tsx's deriveRows for why the index's real display
+      // name wins over regex-reconstructing p.player_name's squashed key
+      // (matters for names like "CJ Stroud" -> "CjStroud").
+      const indexed = indexByKey.get(normalizePlayerKey(p.player_name))
       return {
-        player: normalizeDisplayPlayer(p.player_name),
-        slug: slugByKey.get(normalizePlayerKey(p.player_name)),
+        player: indexed?.name ?? normalizeDisplayPlayer(p.player_name),
+        slug: indexed?.slug,
         team: p.team,
         q1: p.quarter_yards.q1,
         q2: p.quarter_yards.q2,
@@ -142,7 +146,7 @@ export default function QbChartsPage() {
   // uses — keyed the same punctuation-stripped way as PROFILED_PLAYER_KEYS
   // above, since the chart's own names ("JordanLove") and the index's
   // display names ("Jordan Love") don't share exact formatting either.
-  const [slugByKey, setSlugByKey] = useState<Map<string, string>>(new Map())
+  const [indexByKey, setIndexByKey] = useState<Map<string, PlayerIndexEntry>>(new Map())
 
   useEffect(() => {
     let cancelled = false
@@ -156,14 +160,14 @@ export default function QbChartsPage() {
       })
     loadPlayerIndex().then(() => {
       if (cancelled) return
-      setSlugByKey(new Map(PLAYER_INDEX.map((e) => [normalizePlayerKey(e.name), e.slug])))
+      setIndexByKey(new Map(PLAYER_INDEX.map((e) => [normalizePlayerKey(e.name), e])))
     })
     return () => {
       cancelled = true
     }
   }, [])
 
-  const rows = useMemo(() => (data ? deriveRows(data.players, slugByKey) : []), [data, slugByKey])
+  const rows = useMemo(() => (data ? deriveRows(data.players, indexByKey) : []), [data, indexByKey])
 
   const sorted = useMemo(() => {
     const col = COLUMNS.find((c) => c.key === sortKey)

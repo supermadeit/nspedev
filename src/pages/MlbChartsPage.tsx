@@ -12,7 +12,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { fetchMlbBatterBuckets, type MlbBatterBucketRow, type MlbBatterBucketsData } from '@/lib/databaseApi'
 import { normalizeDisplayPlayer } from '@/lib/nspe-payloads'
-import { loadPlayerIndex, PLAYER_INDEX, normalizePlayerKey } from '@/lib/playerSearch'
+import { loadPlayerIndex, PLAYER_INDEX, normalizePlayerKey, type PlayerIndexEntry } from '@/lib/playerSearch'
 import { SportsSwitcher } from '@/components/SportsSwitcher'
 import { CHART_COLORS as C, SortableStatChart, type StatChartColumn } from '@/components/SortableStatChart'
 
@@ -24,14 +24,24 @@ interface Row {
   b: MlbBatterBucketRow['buckets']
 }
 
-function deriveRows(players: MlbBatterBucketRow[], slugByKey: Map<string, string>): Row[] {
-  return players.map((p) => ({
-    player: normalizeDisplayPlayer(p.player_name),
-    slug: slugByKey.get(normalizePlayerKey(p.player_name)),
-    team: p.team,
-    games: p.games,
-    b: p.buckets,
-  }))
+function deriveRows(players: MlbBatterBucketRow[], indexByKey: Map<string, PlayerIndexEntry>): Row[] {
+  return players.map((p) => {
+    // p.player_name is a squashed alias key (e.g. "MichaelHarrisIi",
+    // "CjAbrams") with no recoverable case/hyphen info — regex-reinserting
+    // spaces before capitals can't tell "Ii" was really "II" or that
+    // "PeteCrowArmstrong" had a hyphen. The live player index carries the
+    // real display name (same match used for the /database/{slug} link), so
+    // use that whenever there's a match and only fall back to the
+    // best-effort regex reconstruction for names the index doesn't have.
+    const indexed = indexByKey.get(normalizePlayerKey(p.player_name))
+    return {
+      player: indexed?.name ?? normalizeDisplayPlayer(p.player_name),
+      slug: indexed?.slug,
+      team: p.team,
+      games: p.games,
+      b: p.buckets,
+    }
+  })
 }
 
 const COLUMNS: StatChartColumn<Row>[] = [
@@ -51,12 +61,16 @@ const COLUMNS: StatChartColumn<Row>[] = [
   },
   { key: 'team', label: 'Team', get: (r) => r.team },
   { key: 'games', label: 'GP', get: (r) => r.games, numeric: true },
-  { key: 'h2', label: '2+H', group: 'Hitting games', get: (r) => r.b.games_2plus_hits, numeric: true },
-  { key: 'h3', label: '3+H', group: 'Hitting games', get: (r) => r.b.games_3plus_hits, numeric: true },
-  { key: 'rbi2', label: '2+RBI', group: 'RBI games', get: (r) => r.b.games_2plus_rbi, numeric: true },
-  { key: 'rbi3', label: '3+RBI', group: 'RBI games', get: (r) => r.b.games_3plus_rbi, numeric: true },
-  { key: 'xbh1', label: '1+XBH', group: 'Extra-base hits', get: (r) => r.b.games_1plus_xbh, numeric: true },
-  { key: 'xbh2', label: '2+XBH', group: 'Extra-base hits', get: (r) => r.b.games_2plus_xbh, numeric: true },
+  // rateOf on the threshold-*game-count* columns only — a raw count unfairly
+  // buries a 66-GP player under a 155-GP one on the same threshold, reported
+  // 2026-09-30 ("Giannis (36 GP) looks worse than he is next to guys with 70
+  // GP"). Season totals (doubles, TB below) aren't game counts, so no toggle.
+  { key: 'h2', label: '2+H', group: 'Hitting games', get: (r) => r.b.games_2plus_hits, numeric: true, rateOf: (r) => r.games },
+  { key: 'h3', label: '3+H', group: 'Hitting games', get: (r) => r.b.games_3plus_hits, numeric: true, rateOf: (r) => r.games },
+  { key: 'rbi2', label: '2+RBI', group: 'RBI games', get: (r) => r.b.games_2plus_rbi, numeric: true, rateOf: (r) => r.games },
+  { key: 'rbi3', label: '3+RBI', group: 'RBI games', get: (r) => r.b.games_3plus_rbi, numeric: true, rateOf: (r) => r.games },
+  { key: 'xbh1', label: '1+XBH', group: 'Extra-base hits', get: (r) => r.b.games_1plus_xbh, numeric: true, rateOf: (r) => r.games },
+  { key: 'xbh2', label: '2+XBH', group: 'Extra-base hits', get: (r) => r.b.games_2plus_xbh, numeric: true, rateOf: (r) => r.games },
   { key: 'doubles', label: '2B', group: 'Extra-base hits', get: (r) => r.b.total_doubles, numeric: true },
   { key: 'tb', label: 'TB', group: 'Extra-base hits', get: (r) => r.b.total_bases, numeric: true },
 ]
@@ -64,7 +78,7 @@ const COLUMNS: StatChartColumn<Row>[] = [
 export default function MlbChartsPage() {
   const [data, setData] = useState<MlbBatterBucketsData | null>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
-  const [slugByKey, setSlugByKey] = useState<Map<string, string>>(new Map())
+  const [indexByKey, setIndexByKey] = useState<Map<string, PlayerIndexEntry>>(new Map())
 
   useEffect(() => {
     let cancelled = false
@@ -78,14 +92,14 @@ export default function MlbChartsPage() {
       })
     loadPlayerIndex().then(() => {
       if (cancelled) return
-      setSlugByKey(new Map(PLAYER_INDEX.map((e) => [normalizePlayerKey(e.name), e.slug])))
+      setIndexByKey(new Map(PLAYER_INDEX.map((e) => [normalizePlayerKey(e.name), e])))
     })
     return () => {
       cancelled = true
     }
   }, [])
 
-  const rows = useMemo(() => (data ? deriveRows(data.players, slugByKey) : []), [data, slugByKey])
+  const rows = useMemo(() => (data ? deriveRows(data.players, indexByKey) : []), [data, indexByKey])
 
   return (
     <div className="h-dvh w-full overflow-y-auto" style={{ backgroundColor: C.surface, color: C.textBright, fontFamily: 'monospace' }}>

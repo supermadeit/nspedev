@@ -12,7 +12,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { fetchNbaScoringBuckets, type NbaScoringBucketRow, type NbaScoringBucketsData } from '@/lib/databaseApi'
 import { normalizeDisplayPlayer } from '@/lib/nspe-payloads'
-import { loadPlayerIndex, PLAYER_INDEX, normalizePlayerKey } from '@/lib/playerSearch'
+import { loadPlayerIndex, PLAYER_INDEX, normalizePlayerKey, type PlayerIndexEntry } from '@/lib/playerSearch'
 import { SportsSwitcher } from '@/components/SportsSwitcher'
 import { CHART_COLORS as C, SortableStatChart, type StatChartColumn } from '@/components/SortableStatChart'
 
@@ -26,16 +26,21 @@ interface Row {
   defense: NbaScoringBucketRow['defense']
 }
 
-function deriveRows(players: NbaScoringBucketRow[], slugByKey: Map<string, string>): Row[] {
-  return players.map((p) => ({
-    player: normalizeDisplayPlayer(p.player_name),
-    slug: slugByKey.get(normalizePlayerKey(p.player_name)),
-    team: p.team,
-    games: p.games,
-    qp: p.quarter_points,
-    bands: p.bands,
-    defense: p.defense,
-  }))
+function deriveRows(players: NbaScoringBucketRow[], indexByKey: Map<string, PlayerIndexEntry>): Row[] {
+  return players.map((p) => {
+    // See MlbChartsPage.tsx's deriveRows for why the index's real display
+    // name wins over regex-reconstructing p.player_name's squashed key.
+    const indexed = indexByKey.get(normalizePlayerKey(p.player_name))
+    return {
+      player: indexed?.name ?? normalizeDisplayPlayer(p.player_name),
+      slug: indexed?.slug,
+      team: p.team,
+      games: p.games,
+      qp: p.quarter_points,
+      bands: p.bands,
+      defense: p.defense,
+    }
+  })
 }
 
 const band = (key: string) => (r: Row, category: keyof NbaScoringBucketRow['bands']) => r.bands[category]?.[key] ?? 0
@@ -64,23 +69,28 @@ const COLUMNS: StatChartColumn<Row>[] = [
   { key: 'h1', label: '1H', group: 'Points / quarter', get: (r) => r.qp['1h'], numeric: true },
   { key: 'h2', label: '2H', group: 'Points / quarter', get: (r) => r.qp['2h'], numeric: true },
   { key: 'ot', label: 'OT', group: 'Points / quarter', get: (r) => r.qp.ot, numeric: true },
-  { key: 'pts25', label: '25+', group: 'Point games', get: (r) => band('25+')(r, 'points'), numeric: true },
-  { key: 'pts30', label: '30+', group: 'Point games', get: (r) => band('30+')(r, 'points'), numeric: true },
-  { key: 'pts35', label: '35+', group: 'Point games', get: (r) => band('35+')(r, 'points'), numeric: true },
-  { key: 'pts40', label: '40+', group: 'Point games', get: (r) => band('40+')(r, 'points'), numeric: true },
-  { key: 'reb6', label: '6+', group: 'Rebound games', get: (r) => band('6+')(r, 'rebounds'), numeric: true },
-  { key: 'reb8', label: '8+', group: 'Rebound games', get: (r) => band('8+')(r, 'rebounds'), numeric: true },
-  { key: 'reb10', label: '10+', group: 'Rebound games', get: (r) => band('10+')(r, 'rebounds'), numeric: true },
-  { key: 'reb12', label: '12+', group: 'Rebound games', get: (r) => band('12+')(r, 'rebounds'), numeric: true },
-  { key: 'ast6', label: '6+', group: 'Assist games', get: (r) => band('6+')(r, 'assists'), numeric: true },
-  { key: 'ast8', label: '8+', group: 'Assist games', get: (r) => band('8+')(r, 'assists'), numeric: true },
-  { key: 'ast10', label: '10+', group: 'Assist games', get: (r) => band('10+')(r, 'assists'), numeric: true },
-  { key: 'ast12', label: '12+', group: 'Assist games', get: (r) => band('12+')(r, 'assists'), numeric: true },
-  { key: 'pra30', label: '30+', group: 'PRA games', get: (r) => band('30+')(r, 'total_pra'), numeric: true },
-  { key: 'pra35', label: '35+', group: 'PRA games', get: (r) => band('35+')(r, 'total_pra'), numeric: true },
-  { key: 'pra40', label: '40+', group: 'PRA games', get: (r) => band('40+')(r, 'total_pra'), numeric: true },
-  { key: 'pra45', label: '45+', group: 'PRA games', get: (r) => band('45+')(r, 'total_pra'), numeric: true },
-  { key: 'pra50', label: '50+', group: 'PRA games', get: (r) => band('50+')(r, 'total_pra'), numeric: true },
+  // rateOf on every threshold-*game-count* column below — a raw count
+  // unfairly buries a low-GP player under a high-GP one on the same
+  // threshold, reported 2026-09-30 ("Giannis (36 GP) looks worse than he is
+  // next to guys with 70 GP. A count/% toggle fixes that."). Season totals
+  // (steals/blocks below) aren't game counts, so they're left out of it.
+  { key: 'pts25', label: '25+', group: 'Point games', get: (r) => band('25+')(r, 'points'), numeric: true, rateOf: (r) => r.games },
+  { key: 'pts30', label: '30+', group: 'Point games', get: (r) => band('30+')(r, 'points'), numeric: true, rateOf: (r) => r.games },
+  { key: 'pts35', label: '35+', group: 'Point games', get: (r) => band('35+')(r, 'points'), numeric: true, rateOf: (r) => r.games },
+  { key: 'pts40', label: '40+', group: 'Point games', get: (r) => band('40+')(r, 'points'), numeric: true, rateOf: (r) => r.games },
+  { key: 'reb6', label: '6+', group: 'Rebound games', get: (r) => band('6+')(r, 'rebounds'), numeric: true, rateOf: (r) => r.games },
+  { key: 'reb8', label: '8+', group: 'Rebound games', get: (r) => band('8+')(r, 'rebounds'), numeric: true, rateOf: (r) => r.games },
+  { key: 'reb10', label: '10+', group: 'Rebound games', get: (r) => band('10+')(r, 'rebounds'), numeric: true, rateOf: (r) => r.games },
+  { key: 'reb12', label: '12+', group: 'Rebound games', get: (r) => band('12+')(r, 'rebounds'), numeric: true, rateOf: (r) => r.games },
+  { key: 'ast6', label: '6+', group: 'Assist games', get: (r) => band('6+')(r, 'assists'), numeric: true, rateOf: (r) => r.games },
+  { key: 'ast8', label: '8+', group: 'Assist games', get: (r) => band('8+')(r, 'assists'), numeric: true, rateOf: (r) => r.games },
+  { key: 'ast10', label: '10+', group: 'Assist games', get: (r) => band('10+')(r, 'assists'), numeric: true, rateOf: (r) => r.games },
+  { key: 'ast12', label: '12+', group: 'Assist games', get: (r) => band('12+')(r, 'assists'), numeric: true, rateOf: (r) => r.games },
+  { key: 'pra30', label: '30+', group: 'PRA games', get: (r) => band('30+')(r, 'total_pra'), numeric: true, rateOf: (r) => r.games },
+  { key: 'pra35', label: '35+', group: 'PRA games', get: (r) => band('35+')(r, 'total_pra'), numeric: true, rateOf: (r) => r.games },
+  { key: 'pra40', label: '40+', group: 'PRA games', get: (r) => band('40+')(r, 'total_pra'), numeric: true, rateOf: (r) => r.games },
+  { key: 'pra45', label: '45+', group: 'PRA games', get: (r) => band('45+')(r, 'total_pra'), numeric: true, rateOf: (r) => r.games },
+  { key: 'pra50', label: '50+', group: 'PRA games', get: (r) => band('50+')(r, 'total_pra'), numeric: true, rateOf: (r) => r.games },
   { key: 'stl', label: 'STL', group: 'Defense (season)', get: (r) => r.defense.steals_total, numeric: true },
   { key: 'blk', label: 'BLK', group: 'Defense (season)', get: (r) => r.defense.blocks_total, numeric: true },
   { key: 'stocks', label: 'STOCKS', group: 'Defense (season)', get: (r) => r.defense.stocks_total, numeric: true },
@@ -89,7 +99,7 @@ const COLUMNS: StatChartColumn<Row>[] = [
 export default function NbaChartsPage() {
   const [data, setData] = useState<NbaScoringBucketsData | null>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
-  const [slugByKey, setSlugByKey] = useState<Map<string, string>>(new Map())
+  const [indexByKey, setIndexByKey] = useState<Map<string, PlayerIndexEntry>>(new Map())
 
   useEffect(() => {
     let cancelled = false
@@ -103,14 +113,14 @@ export default function NbaChartsPage() {
       })
     loadPlayerIndex().then(() => {
       if (cancelled) return
-      setSlugByKey(new Map(PLAYER_INDEX.map((e) => [normalizePlayerKey(e.name), e.slug])))
+      setIndexByKey(new Map(PLAYER_INDEX.map((e) => [normalizePlayerKey(e.name), e])))
     })
     return () => {
       cancelled = true
     }
   }, [])
 
-  const rows = useMemo(() => (data ? deriveRows(data.players, slugByKey) : []), [data, slugByKey])
+  const rows = useMemo(() => (data ? deriveRows(data.players, indexByKey) : []), [data, indexByKey])
 
   return (
     <div className="h-dvh w-full overflow-y-auto" style={{ backgroundColor: C.surface, color: C.textBright, fontFamily: 'monospace' }}>

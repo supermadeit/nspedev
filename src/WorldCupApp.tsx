@@ -291,7 +291,17 @@ function MatchupLibraryView({
 }) {
   const isMobile = useIsMobile()
   const [week, setWeek] = useState(initialWeek)
-  const weekGames = useMemo(() => games.filter((g) => g.week === week), [games, week])
+  // Excludes preseason: preseason and regular season both number their weeks
+  // starting at 1, so a bare `g.week === week` match collides preseason
+  // week N with regular-season week N once the regular season is underway
+  // (e.g. WSH's preseason week 4 loss to BAL, 8/28, showing up marked FINAL
+  // under "week 4" while the real regular week 4 game hadn't been played
+  // yet — reported 2026-09-30). getCurrentNflWeek/totalWeeks are already
+  // regular-season-only, so this just makes the game list agree with that.
+  const weekGames = useMemo(
+    () => games.filter((g) => g.week === week && g.season_type !== 'preseason'),
+    [games, week],
+  )
   const byDate = useMemo(() => {
     const order: string[] = []
     const map = new Map<string, SportGame[]>()
@@ -371,7 +381,12 @@ function WeekMatchupStrip({
   onMatchupClick: (teamA: string, teamB: string) => void
 }) {
   const [week, setWeek] = useState(initialWeek)
-  const weekGames = useMemo(() => games.filter((g) => g.week === week), [games, week])
+  // See the matching comment on MatchupLibraryView's weekGames above — same
+  // preseason/regular-season week-number collision fix.
+  const weekGames = useMemo(
+    () => games.filter((g) => g.week === week && g.season_type !== 'preseason'),
+    [games, week],
+  )
 
   return (
     <div className="shrink-0">
@@ -720,7 +735,7 @@ export default function WorldCupApp() {
 
   return (
     <div className="relative w-screen h-screen bg-background overflow-hidden">
-      <StarsBackground density={180} />
+      <StarsBackground density={180} dim />
 
       {/* Slim utility row (back link + tabs) only — the old branded title
           block ("nfl.rankings · 2026" / week label) is gone so the matchup

@@ -360,7 +360,7 @@ export default function SportSeasonPage({ sport, label }: SportSeasonPageProps) 
 
   return (
     <div className="relative w-screen h-screen bg-background overflow-hidden">
-      <StarsBackground density={180} />
+      <StarsBackground density={180} dim />
 
       <div className="absolute top-0 left-0 right-0 z-20 px-4 pt-3 pb-2">
         <div className="flex items-center justify-between gap-4 max-w-[1480px] mx-auto">

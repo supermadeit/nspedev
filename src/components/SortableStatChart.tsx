@@ -29,15 +29,29 @@ export interface StatChartColumn<T> {
    * header above their own — same as NFL's "20-29 yd plays" spanning its
    * count/TD/yards trio. */
   group?: string
-  get: (row: T) => number | string
+  // `null` means "no data for this player," distinct from a real 0 — e.g.
+  // NBA's per-quarter scoring isn't tracked for most players yet (reported
+  // 2026-09-30: Deni Avdija/Jay Huff showing 0 across every quarter despite
+  // real minutes, silently ranking last in a sortable column). Renders as
+  // "—" and always sorts to the bottom regardless of sort direction.
+  get: (row: T) => number | string | null
   numeric?: boolean
   /** Overrides the plain value for this one column (e.g. the player-name
    * cell, linked when a slug is known) — every other column just renders
    * `get(row)` as-is. */
-  renderCell?: (row: T, value: number | string) => React.ReactNode
+  renderCell?: (row: T, value: number | string | null) => React.ReactNode
   /** Cell text color override — e.g. NFL's "green when this TD column is
    * greater than zero" treatment. Falls back to textBright. */
-  cellColor?: (row: T, value: number | string) => string | undefined
+  cellColor?: (row: T, value: number | string | null) => string | undefined
+  /** Marks a raw threshold-game *count* column as convertible to a rate —
+   * reported 2026-09-30: "Giannis (36 GP) looks worse than he is next to
+   * guys with 70 GP. A count/% toggle fixes that." `rateOf(row)` supplies
+   * the denominator (almost always games played). Only used when the
+   * table's count/% toggle (auto-shown whenever any column has this) is
+   * switched to "%" — sorts and displays as `(count / rateOf(row)) * 100`,
+   * one decimal, with a trailing "%". Columns without this are unaffected
+   * by the toggle (GP itself, season totals like TB/PIM, etc. stay counts). */
+  rateOf?: (row: T) => number
 }
 
 export function SortableStatChart<T>({
@@ -55,20 +69,42 @@ export function SortableStatChart<T>({
 }) {
   const [sortKey, setSortKey] = useState(defaultSortKey)
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>(defaultSortDir)
+  const hasRateColumns = useMemo(() => columns.some((c) => c.rateOf), [columns])
+  const [rateMode, setRateMode] = useState(false)
+
+  // The value actually sorted/displayed for a cell — the raw count, or (in
+  // rate mode, for a column that opts in via rateOf) that count as a percent
+  // of its denominator. One decimal; a zero denominator reads as "no data"
+  // rather than a division-by-zero NaN/Infinity.
+  const cellValue = (col: StatChartColumn<T>, row: T): number | string | null => {
+    const raw = col.get(row)
+    if (rateMode && col.rateOf && typeof raw === 'number') {
+      const denom = col.rateOf(row)
+      if (!denom) return null
+      return Math.round((raw / denom) * 1000) / 10
+    }
+    return raw
+  }
 
   const sorted = useMemo(() => {
     const col = columns.find((c) => c.key === sortKey)
     if (!col) return rows
     const copy = [...rows]
     copy.sort((a, b) => {
-      const av = col.get(a)
-      const bv = col.get(b)
+      const av = cellValue(col, a)
+      const bv = cellValue(col, b)
+      // Missing data always sinks to the bottom regardless of sort
+      // direction — an ascending sort shouldn't put "no data" at the top
+      // just because null reads as "smaller than everything."
+      if (av == null && bv == null) return 0
+      if (av == null) return 1
+      if (bv == null) return -1
       const cmp = typeof av === 'number' && typeof bv === 'number' ? av - bv : String(av).localeCompare(String(bv))
       return sortDir === 'asc' ? cmp : -cmp
     })
     return copy
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rows, columns, sortKey, sortDir])
+  }, [rows, columns, sortKey, sortDir, rateMode])
 
   const onSort = (key: string) => {
     if (key === sortKey) {
@@ -96,7 +132,37 @@ export function SortableStatChart<T>({
   const C = CHART_COLORS
 
   return (
-    <table className="border-collapse font-mono text-[12px]" style={{ minWidth: '100%' }}>
+    <div>
+      {hasRateColumns && (
+        <div className="flex items-center gap-2 mb-2 font-mono text-[11px]" style={{ color: C.textDim }}>
+          <span>threshold columns:</span>
+          <button
+            type="button"
+            onClick={() => setRateMode(false)}
+            className="px-2 py-0.5 rounded transition-opacity hover:opacity-80"
+            style={{
+              backgroundColor: !rateMode ? 'oklch(0.20 0.03 195)' : C.surface2,
+              color: !rateMode ? C.accent : C.textDim,
+              border: `1px solid ${C.border}`,
+            }}
+          >
+            count
+          </button>
+          <button
+            type="button"
+            onClick={() => setRateMode(true)}
+            className="px-2 py-0.5 rounded transition-opacity hover:opacity-80"
+            style={{
+              backgroundColor: rateMode ? 'oklch(0.20 0.03 195)' : C.surface2,
+              color: rateMode ? C.accent : C.textDim,
+              border: `1px solid ${C.border}`,
+            }}
+          >
+            % of GP
+          </button>
+        </div>
+      )}
+      <table className="border-collapse font-mono text-[12px]" style={{ minWidth: '100%' }}>
       <thead>
         <tr>
           <th
@@ -149,7 +215,8 @@ export function SortableStatChart<T>({
               {i + 1}
             </td>
             {columns.map((col) => {
-              const v = col.get(r)
+              const v = cellValue(col, r)
+              const isRateCell = rateMode && !!col.rateOf && typeof v === 'number'
               return (
                 <td
                   key={col.key}
@@ -160,13 +227,22 @@ export function SortableStatChart<T>({
                     ...dividerStyle(col.key),
                   }}
                 >
-                  {col.renderCell ? col.renderCell(r, v) : v}
+                  {v == null ? (
+                    <span style={{ color: C.textDim }}>—</span>
+                  ) : col.renderCell ? (
+                    col.renderCell(r, v)
+                  ) : isRateCell ? (
+                    `${v}%`
+                  ) : (
+                    v
+                  )}
                 </td>
               )
             })}
           </tr>
         ))}
       </tbody>
-    </table>
+      </table>
+    </div>
   )
 }

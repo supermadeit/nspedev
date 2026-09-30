@@ -8,7 +8,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { fetchNhlScoringBuckets, type NhlScoringBucketRow, type NhlScoringBucketsData } from '@/lib/databaseApi'
 import { normalizeDisplayPlayer } from '@/lib/nspe-payloads'
-import { loadPlayerIndex, PLAYER_INDEX, normalizePlayerKey } from '@/lib/playerSearch'
+import { loadPlayerIndex, PLAYER_INDEX, normalizePlayerKey, type PlayerIndexEntry } from '@/lib/playerSearch'
 import { SportsSwitcher } from '@/components/SportsSwitcher'
 import { CHART_COLORS as C, SortableStatChart, type StatChartColumn } from '@/components/SortableStatChart'
 
@@ -22,16 +22,21 @@ interface Row {
   totals: NhlScoringBucketRow['totals']
 }
 
-function deriveRows(players: NhlScoringBucketRow[], slugByKey: Map<string, string>): Row[] {
-  return players.map((p) => ({
-    player: normalizeDisplayPlayer(p.player_name),
-    slug: slugByKey.get(normalizePlayerKey(p.player_name)),
-    team: p.team,
-    position: p.position,
-    games: p.games,
-    bands: p.bands,
-    totals: p.totals,
-  }))
+function deriveRows(players: NhlScoringBucketRow[], indexByKey: Map<string, PlayerIndexEntry>): Row[] {
+  return players.map((p) => {
+    // See MlbChartsPage.tsx's deriveRows for why the index's real display
+    // name wins over regex-reconstructing p.player_name's squashed key.
+    const indexed = indexByKey.get(normalizePlayerKey(p.player_name))
+    return {
+      player: indexed?.name ?? normalizeDisplayPlayer(p.player_name),
+      slug: indexed?.slug,
+      team: p.team,
+      position: p.position,
+      games: p.games,
+      bands: p.bands,
+      totals: p.totals,
+    }
+  })
 }
 
 const band = (key: string) => (r: Row, category: keyof NhlScoringBucketRow['bands']) => r.bands[category]?.[key] ?? 0
@@ -54,18 +59,24 @@ const COLUMNS: StatChartColumn<Row>[] = [
   { key: 'team', label: 'Team', get: (r) => r.team },
   { key: 'position', label: 'Pos', get: (r) => r.position },
   { key: 'games', label: 'GP', get: (r) => r.games, numeric: true },
-  { key: 'g2', label: '2+', group: 'Goal games', get: (r) => band('2+')(r, 'goals'), numeric: true },
-  { key: 'g3', label: '3+', group: 'Goal games', get: (r) => band('3+')(r, 'goals'), numeric: true },
-  { key: 'p2', label: '2+', group: 'Point games', get: (r) => band('2+')(r, 'points'), numeric: true },
-  { key: 'p3', label: '3+', group: 'Point games', get: (r) => band('3+')(r, 'points'), numeric: true },
-  { key: 'p4', label: '4+', group: 'Point games', get: (r) => band('4+')(r, 'points'), numeric: true },
-  { key: 'a2', label: '2+', group: 'Assist games', get: (r) => band('2+')(r, 'assists'), numeric: true },
-  { key: 'a3', label: '3+', group: 'Assist games', get: (r) => band('3+')(r, 'assists'), numeric: true },
-  { key: 'a4', label: '4+', group: 'Assist games', get: (r) => band('4+')(r, 'assists'), numeric: true },
-  { key: 'sog3', label: '3+', group: 'SOG games', get: (r) => band('3+')(r, 'sog'), numeric: true },
-  { key: 'sog4', label: '4+', group: 'SOG games', get: (r) => band('4+')(r, 'sog'), numeric: true },
-  { key: 'sog5', label: '5+', group: 'SOG games', get: (r) => band('5+')(r, 'sog'), numeric: true },
-  { key: 'sog6', label: '6+', group: 'SOG games', get: (r) => band('6+')(r, 'sog'), numeric: true },
+  // rateOf on every threshold-*game-count* column below — a raw count
+  // unfairly buries a low-GP player under a high-GP one on the same
+  // threshold, reported 2026-09-30 ("Giannis (36 GP) looks worse than he is
+  // next to guys with 70 GP. A count/% toggle fixes that."). Season totals
+  // (goals/assists/points/SOG/PIM below) aren't game counts, so they're left
+  // out of it.
+  { key: 'g2', label: '2+', group: 'Goal games', get: (r) => band('2+')(r, 'goals'), numeric: true, rateOf: (r) => r.games },
+  { key: 'g3', label: '3+', group: 'Goal games', get: (r) => band('3+')(r, 'goals'), numeric: true, rateOf: (r) => r.games },
+  { key: 'p2', label: '2+', group: 'Point games', get: (r) => band('2+')(r, 'points'), numeric: true, rateOf: (r) => r.games },
+  { key: 'p3', label: '3+', group: 'Point games', get: (r) => band('3+')(r, 'points'), numeric: true, rateOf: (r) => r.games },
+  { key: 'p4', label: '4+', group: 'Point games', get: (r) => band('4+')(r, 'points'), numeric: true, rateOf: (r) => r.games },
+  { key: 'a2', label: '2+', group: 'Assist games', get: (r) => band('2+')(r, 'assists'), numeric: true, rateOf: (r) => r.games },
+  { key: 'a3', label: '3+', group: 'Assist games', get: (r) => band('3+')(r, 'assists'), numeric: true, rateOf: (r) => r.games },
+  { key: 'a4', label: '4+', group: 'Assist games', get: (r) => band('4+')(r, 'assists'), numeric: true, rateOf: (r) => r.games },
+  { key: 'sog3', label: '3+', group: 'SOG games', get: (r) => band('3+')(r, 'sog'), numeric: true, rateOf: (r) => r.games },
+  { key: 'sog4', label: '4+', group: 'SOG games', get: (r) => band('4+')(r, 'sog'), numeric: true, rateOf: (r) => r.games },
+  { key: 'sog5', label: '5+', group: 'SOG games', get: (r) => band('5+')(r, 'sog'), numeric: true, rateOf: (r) => r.games },
+  { key: 'sog6', label: '6+', group: 'SOG games', get: (r) => band('6+')(r, 'sog'), numeric: true, rateOf: (r) => r.games },
   { key: 'tg', label: 'G', group: 'Season totals', get: (r) => r.totals.goals, numeric: true },
   { key: 'ta', label: 'A', group: 'Season totals', get: (r) => r.totals.assists, numeric: true },
   { key: 'tp', label: 'PTS', group: 'Season totals', get: (r) => r.totals.points, numeric: true },
@@ -76,7 +87,7 @@ const COLUMNS: StatChartColumn<Row>[] = [
 export default function NhlChartsPage() {
   const [data, setData] = useState<NhlScoringBucketsData | null>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
-  const [slugByKey, setSlugByKey] = useState<Map<string, string>>(new Map())
+  const [indexByKey, setIndexByKey] = useState<Map<string, PlayerIndexEntry>>(new Map())
 
   useEffect(() => {
     let cancelled = false
@@ -90,14 +101,14 @@ export default function NhlChartsPage() {
       })
     loadPlayerIndex().then(() => {
       if (cancelled) return
-      setSlugByKey(new Map(PLAYER_INDEX.map((e) => [normalizePlayerKey(e.name), e.slug])))
+      setIndexByKey(new Map(PLAYER_INDEX.map((e) => [normalizePlayerKey(e.name), e])))
     })
     return () => {
       cancelled = true
     }
   }, [])
 
-  const rows = useMemo(() => (data ? deriveRows(data.players, slugByKey) : []), [data, slugByKey])
+  const rows = useMemo(() => (data ? deriveRows(data.players, indexByKey) : []), [data, indexByKey])
 
   return (
     <div className="h-dvh w-full overflow-y-auto" style={{ backgroundColor: C.surface, color: C.textBright, fontFamily: 'monospace' }}>

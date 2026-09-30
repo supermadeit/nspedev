@@ -408,6 +408,55 @@ function leaderboardSportLabel(kind: string): string {
   return m ? m[1].toLowerCase() : kind
 }
 
+// Best-effort expansion of a leaderboard streak_type code ("3PASSRUSHTD",
+// "150RECYDS") into plain words for a hover tooltip — reported 2026-09-30:
+// "'3PrTD(3)★' and a 99.6 score mean nothing to a new visitor." The old
+// {glossary} nav entry that explained this is shelved (see the comment on
+// its removal further down), so this reuses the same GLOSSARY_STREAK_LABELS-
+// style knowledge inline via `title` tooltips instead of trying to resurrect
+// that whole panel. Longest/most-specific patterns first so "PASSRUSHTD"
+// matches before the plainer "PASSTD"/"RUSHTD" it contains.
+const STREAK_TOKEN_LABELS: [RegExp, string][] = [
+  [/PASSRUSHTD/i, 'Pass + Rush TDs'],
+  [/RUSHRECTD/i, 'Rush + Rec TDs'],
+  [/PASSTD/i, 'Passing TDs'],
+  [/RUSHTD/i, 'Rushing TDs'],
+  [/RECTD/i, 'Receiving TDs'],
+  [/RECYDS/i, 'Receiving Yards'],
+  [/RUSHREC/i, 'Rush + Rec Yards'],
+  [/RUSHYDS/i, 'Rushing Yards'],
+  [/PASSYDS/i, 'Passing Yards'],
+  [/YDS/i, 'Yards'],
+  [/TB\b/i, 'Total Bases'],
+  [/RBI/i, 'RBI'],
+  [/HR\b/i, 'Home Runs'],
+  [/OB\b/i, 'On-Base'],
+]
+
+function describeStreakType(streakType: string): string {
+  const m = /^(\d+)?(.*)$/.exec(streakType || '')
+  const threshold = m?.[1]
+  let rest = (m?.[2] ?? streakType).trim()
+  for (const [re, label] of STREAK_TOKEN_LABELS) {
+    if (re.test(rest)) {
+      rest = label
+      break
+    }
+  }
+  return threshold ? `${threshold}+ ${rest}` : rest
+}
+
+// Hover text for a leaderboard row's "stat(streak)" cell — explains what the
+// abbreviation + parenthesized number actually mean, since neither is
+// self-evident on first look.
+function leaderboardStreakTooltip(row: LeaderboardRow, isTop3: boolean): string {
+  const desc = describeStreakType(row.streak_type || row.streak_label)
+  const activePart = row.streak_active ? 'active streak' : 'streak'
+  return `${desc} — ${row.streak_length}-game ${activePart}${isTop3 ? ' · ★ = top 3 by score' : ''}`
+}
+
+const LEADERBOARD_SCORE_TOOLTIP = 'Composite ranking value combining streak length, type weight, and recent form'
+
 function normalizeLeaderboardPlayer(name: string): string {
   if (!name) return ''
   if (name.includes(' ')) return name
@@ -6944,13 +6993,14 @@ function App() {
                 <span>#</span>
                 <span>player</span>
                 <span>tm</span>
-                <span>stat(streak)</span>
-                <span className="text-right">score</span>
+                <span title="e.g. 3PrTD(2) = 3+ Pass+Rush TDs, active 2 games. ★ = top 3 by score">stat(streak)</span>
+                <span className="text-right" title={LEADERBOARD_SCORE_TOOLTIP}>score</span>
               </div>
               {leaderboard.rows.map((row, idx) => {
                 const rank = String(idx + 1).padStart(2, '0')
                 const player = normalizeLeaderboardPlayer(row.player)
-                const star = idx < 3 ? '★' : ' '
+                const isTop3 = idx < 3
+                const star = isTop3 ? '★' : ' '
                 return (
                   <div
                     key={`${row.player}-${idx}`}
@@ -6965,10 +7015,10 @@ function App() {
                     <span style={{ color: 'oklch(0.48 0 0)' }}>{rank}</span>
                     <span className="truncate" style={{ color: 'oklch(0.92 0 0)' }}>{player}</span>
                     <span style={{ color: 'oklch(0.55 0 0)' }}>{row.team}</span>
-                    <span style={{ color: 'oklch(0.85 0.15 195)' }}>
+                    <span style={{ color: 'oklch(0.85 0.15 195)' }} title={leaderboardStreakTooltip(row, isTop3)}>
                       {row.streak_label}({row.streak_length}){star}
                     </span>
-                    <span className="text-right" style={{ color: 'oklch(0.78 0.18 145)', fontWeight: 600 }}>
+                    <span className="text-right" style={{ color: 'oklch(0.78 0.18 145)', fontWeight: 600 }} title={LEADERBOARD_SCORE_TOOLTIP}>
                       {row.score.toFixed(1)}
                     </span>
                   </div>
@@ -7088,12 +7138,13 @@ function App() {
               <span>#</span>
               <span>player</span>
               <span>tm</span>
-              <span className="text-right">streak</span>
+              <span className="text-right" title="e.g. 3PrTD(2) = 3+ Pass+Rush TDs, active 2 games. ★ = top 3 by score. Tap a row for score.">streak</span>
             </div>
             {leaderboard.rows.map((row, idx) => {
                 const rank = String(idx + 1).padStart(2, '0')
                 const player = normalizeLeaderboardPlayer(row.player)
-                const star = idx < 3 ? '★' : ' '
+                const isTop3 = idx < 3
+                const star = isTop3 ? '★' : ' '
                 const expanded = mobileLeaderboardRows.isExpanded(idx)
                 return (
                   <div
@@ -7117,7 +7168,11 @@ function App() {
                         {player}
                       </span>
                       <span style={{ color: 'oklch(0.55 0 0)' }}>{row.team}</span>
-                      <span className="text-right whitespace-nowrap" style={{ color: 'oklch(0.85 0.15 195)' }}>
+                      <span
+                        className="text-right whitespace-nowrap"
+                        style={{ color: 'oklch(0.85 0.15 195)' }}
+                        title={leaderboardStreakTooltip(row, isTop3)}
+                      >
                         {row.streak_label}({row.streak_length}){star}
                       </span>
                     </div>
@@ -7126,7 +7181,11 @@ function App() {
                         className="flex items-center justify-between mt-1.5 pt-1.5"
                         style={{ borderTop: '1px solid oklch(0.18 0 0)' }}
                       >
-                        <span className="text-[10px] uppercase tracking-widest" style={{ color: 'oklch(0.42 0 0)' }}>
+                        <span
+                          className="text-[10px] uppercase tracking-widest"
+                          style={{ color: 'oklch(0.42 0 0)' }}
+                          title={LEADERBOARD_SCORE_TOOLTIP}
+                        >
                           score
                         </span>
                         <span style={{ color: 'oklch(0.78 0.18 145)', fontWeight: 600 }}>
