@@ -124,6 +124,23 @@ function buildFullNameMap(data: NflSeasonData): Record<string, string> {
   return map
 }
 
+// Abbreviation -> "Cowboys" (nickname only, no city) — for the matchup-box
+// display convention adopted app-wide ("{DAL @ PHI}" reads as "{Cowboys @
+// Eagles}"; see teamNicknames.ts for MLB/NBA/NHL's equivalent). Derived from
+// this same standings file rather than a hand-maintained list, so it can
+// never drift from what the game codes actually are.
+function buildNicknameMap(data: NflSeasonData): Record<string, string> {
+  const map: Record<string, string> = {}
+  for (const conf of ['AFC', 'NFC'] as const) {
+    for (const div of ['East', 'North', 'South', 'West'] as const) {
+      for (const team of data.conferences[conf][div].teams) {
+        map[team.abbr] = team.name
+      }
+    }
+  }
+  return map
+}
+
 // ---------------- division panel ----------------
 
 function DivisionPanel({ division }: { division: NflDivision }) {
@@ -344,11 +361,13 @@ function WeekMatchupStrip({
   games,
   totalWeeks,
   initialWeek,
+  nicknames,
   onMatchupClick,
 }: {
   games: SportGame[]
   totalWeeks: number
   initialWeek: number
+  nicknames: Record<string, string>
   onMatchupClick: (teamA: string, teamB: string) => void
 }) {
   const [week, setWeek] = useState(initialWeek)
@@ -383,7 +402,7 @@ function WeekMatchupStrip({
             style={{ backgroundColor: 'oklch(0.10 0 0)', border: `1px solid ${C.green}` }}
           >
             <div className="font-mono text-[12px] font-bold whitespace-nowrap" style={{ color: C.accent }}>
-              {`{${g.away_team} @ ${g.home_team}}`}
+              {`{${nicknames[g.away_team] ?? g.away_team} @ ${nicknames[g.home_team] ?? g.home_team}}`}
             </div>
             {/* Concluded games show the real result now that the live feed
                 actually carries one — the bundled file this replaced never
@@ -575,6 +594,7 @@ export default function WorldCupApp() {
   const data = nflData as unknown as NflSeasonData
   const [activeView, setActiveView] = useState<ActiveView>('rankings')
   const fullNames = useMemo(() => buildFullNameMap(data), [data])
+  const nicknames = useMemo(() => buildNicknameMap(data), [data])
   // Schedule tab opens on the active week (data.current_week), not always
   // week 1 — current_week is expected to already reflect the Tuesday-
   // morning rollover backend-side (games run through Monday Night Football,
@@ -745,6 +765,7 @@ export default function WorldCupApp() {
               games={games}
               totalWeeks={data.total_weeks}
               initialWeek={initialScheduleWeek}
+              nicknames={nicknames}
               onMatchupClick={requestMatchup}
             />
           </div>

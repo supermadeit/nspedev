@@ -31,6 +31,7 @@ import { API_BASE_CANDIDATES, fetchJsonCandidate, joinUrl, parseApiPayload } fro
 import { extractMatchupInsightPayload, type MatchupInsightPayload } from '@/lib/nspe-payloads'
 import { MatchupInsightOverlay } from '@/components/MatchupInsightOverlay'
 import { SportsSwitcher } from '@/components/SportsSwitcher'
+import { teamNickname } from '@/lib/teamNicknames'
 
 const C = {
   label: 'oklch(0.55 0 0)',
@@ -193,7 +194,7 @@ function formatGameTime(startTimeUtc: string): string {
   return d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })
 }
 
-function DailyMatchupStrip({ games, onMatchupClick }: { games: SportGame[]; onMatchupClick: (teamA: string, teamB: string) => void }) {
+function DailyMatchupStrip({ games, sport, onMatchupClick }: { games: SportGame[]; sport: SportKey; onMatchupClick: (teamA: string, teamB: string) => void }) {
   const grouped = useMemo(() => {
     const startOfToday = new Date()
     startOfToday.setHours(0, 0, 0, 0)
@@ -234,7 +235,7 @@ function DailyMatchupStrip({ games, onMatchupClick }: { games: SportGame[]; onMa
                 style={{ backgroundColor: 'oklch(0.10 0 0)', border: `1px solid ${C.green}` }}
               >
                 <div className="font-mono text-[12px] font-bold whitespace-nowrap" style={{ color: C.accent }}>
-                  {`{${g.away_team} @ ${g.home_team}}`}
+                  {`{${teamNickname(sport, g.away_team)} @ ${teamNickname(sport, g.home_team)}}`}
                 </div>
                 {/* Concluded games show the real result (already on the same
                     row — home_score/away_score aren't placeholders, they're
@@ -377,7 +378,7 @@ export default function SportSeasonPage({ sport, label }: SportSeasonPageProps) 
           </div>
         </div>
         <div className="max-w-[1480px] mx-auto mt-2">
-          <DailyMatchupStrip games={games} onMatchupClick={requestMatchup} />
+          <DailyMatchupStrip games={games} sport={sport} onMatchupClick={requestMatchup} />
         </div>
       </div>
 
