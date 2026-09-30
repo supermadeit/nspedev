@@ -191,6 +191,19 @@ function commandWords(q: SampleQuery): Set<string> {
   for (const raw of q.command.toLowerCase().split(/[\s/]+/)) {
     const t = raw.replace(/^-+/, '')
     if (/^(1h|q[1-4]|p[1-3])$/.test(t)) { words.add(t); continue }
+    // Fused compute-threshold tokens ("ydsmin250", "prmin250", "longmax25")
+    // collapse to one meaningless blob under the plain trailing-digit strip
+    // below — split the stat and min/max apart first, so "yds"/"min"/"long"
+    // stay findable as their own keywords the way the old two-token spelling
+    // ("-yds min250") always let them be. Confirmed live 2026-09-30:
+    // -{stat}min{N}/-{stat}max{N} (including -long's own -longmin{N}/
+    // -longmax{N}) are fused, single-token forms now, not two words.
+    const fused = t.match(/^([a-z]+?)(min|max)\d+$/)
+    if (fused) {
+      words.add(fused[1])
+      words.add(fused[2])
+      continue
+    }
     const w = t.replace(/\d+$/, '')
     if (/^[a-z]{1,}$/.test(w)) words.add(w)
   }

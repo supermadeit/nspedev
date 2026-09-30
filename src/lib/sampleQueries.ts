@@ -15,10 +15,14 @@ import type { SampleQuery } from './predictiveCommands'
 const MIDDLE_INDEX = 25
 
 export function buildSampleQueries(): SampleQuery[] {
-  const ordered = promoteMoatCommands(PREDICTIVE_COMMANDS.filter((q) => q.placement !== 'middle'))
+  const top = PREDICTIVE_COMMANDS.filter((q) => q.placement === 'top')
+  const ordered = promoteMoatCommands(PREDICTIVE_COMMANDS.filter((q) => !q.placement))
   const middle = PREDICTIVE_COMMANDS.filter((q) => q.placement === 'middle')
   ordered.splice(Math.min(MIDDLE_INDEX, ordered.length), 0, ...middle)
-  return ordered
+  // 'top' entries lead everything — including the moat commands, which stay
+  // in whatever relative order/position promoteMoatCommands already gives
+  // them (see the placement doc comment in predictiveCommands.ts).
+  return [...top, ...ordered]
 }
 
 // -ov, -long, q1/1h scope, etc. are the differentiated commands meant to be
@@ -52,7 +56,14 @@ function bySeasonPriority(queries: SampleQuery[]): SampleQuery[] {
 }
 
 function promoteMoatCommands(queries: SampleQuery[]): SampleQuery[] {
-  const isMoat = (q: SampleQuery) => /-ov\b|\blong\b|\b1h\b|\bq1\b/i.test(q.command)
+  // \blong\b alone stopped catching the "long" family once predictiveCommands.ts
+  // switched those entries to the compact -long{N}/-longmin{N}/-longmax{N}
+  // flag form (2026-09-30) — \b requires a non-word char right after "long",
+  // which a digit doesn't provide, so "-long30" silently fell out of the moat
+  // bucket without this. The bare \blong\b branch stays for the "-ov" scope
+  // keyword's own "long" (e.g. "nfl long mahomes -ov"), which is unrelated
+  // and still spelled as a standalone word.
+  const isMoat = (q: SampleQuery) => /-ov\b|\blong\b|-long(?:min|max)?\d+\b|\b1h\b|\bq1\b/i.test(q.command)
   const moat = bySeasonPriority(queries.filter(isMoat))
   const rest = bySeasonPriority(queries.filter((q) => !isMoat(q)))
   return [...moat, ...rest]

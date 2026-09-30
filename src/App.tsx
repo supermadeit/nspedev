@@ -1526,6 +1526,7 @@ function NflOverviewStatNView({ payload, query = '' }: { payload: NflOverviewSta
         <div className="text-[13px]" style={{ color: 'oklch(0.76 0 0)' }}>
           <span className="font-bold" style={{ color: CYAN }}>{`${payload.count}/${windowGames}`}</span>
           <span> games with a qualifying play</span>
+          {payload.pct_of_games != null && <span style={{ color: DIM }}>{` (${payload.pct_of_games}%)`}</span>}
           {(payload.total_plays != null || payload.total_yards != null) && (
             <span style={{ color: DIM }}>
               {` (${[
@@ -1545,6 +1546,12 @@ function NflOverviewStatNView({ payload, query = '' }: { payload: NflOverviewSta
           <div className="text-[9px] uppercase tracking-wider" style={{ color: DIM }}>Window</div>
           <div className="text-[16px] font-bold" style={{ color: CYAN }}>{windowGames}</div>
         </div>
+        {payload.pct_of_games != null && (
+          <div>
+            <div className="text-[9px] uppercase tracking-wider" style={{ color: DIM }}>Pct</div>
+            <div className="text-[16px] font-bold" style={{ color: CYAN }}>{`${payload.pct_of_games}%`}</div>
+          </div>
+        )}
       </div>
       )}
 

@@ -1499,6 +1499,11 @@ export interface NflOverviewStatNPayload {
   total_plays?: number
   total_yards?: number
   coverage_note?: string | null
+  // Real percentage (already rounded to 1 decimal, e.g. 24.3), added
+  // 2026-09-30 across all four NFL -ov sub-modes (whole-game, long,
+  // per-quarter yardage, per-quarter receptions) — safe to render directly
+  // rather than computing count/windowGames client-side.
+  pct_of_games?: number
   matches: NflOverviewStatNMatch[]
 }
 

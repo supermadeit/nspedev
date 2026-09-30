@@ -19,16 +19,25 @@
 //
 // Grammar per mode (mirrors QueryBuilder.tsx's builtCommand exactly):
 //   trend      nspe {sport} {period?} {nfl-category?} -{stat}{N} -last{met}/{last}
-//   compute    nspe {sport} {nfl-category?} -{stat} min{N} {-season|-career|-last{N}}
+//   compute    nspe {sport} {nfl-category?} -{stat}min{N} {-season|-career|-last{N}}
 //   streak     nspe {sport} {nfl-category?} -{stat}{N} -streak{N}
 //   team (mlb) nspe mlb team -{runs|allowed}{N} -last{met}/{last}  |  min{N} {window}
 //   first (mlb)nspe mlb first -{xbh|walk|single|hit} -last{met}/{last}
 //   h2h (mlb)  nspe mlb {player} vs {TEAM}
-//   long       nspe {sport} long {nfl-category?} -{yds|hr}{N} -last{met}/{last}
+//   long       nspe nfl {nfl-category?} -long{N} -last{met}/{last}  |  nspe mlb -long{N} -last{met}/{last}
+//              (compute: -longmin{N}/-longmax{N} in place of -long{N}; CFB has
+//              no explosive-play data source at all, so no -long there)
 //   -ov (nfl)  nspe nfl {long|1h|q1} {player} -ov {YYYY | -career | YYYY-YYYY}?
 //   parlay(nfl)nspe nfl -parlay -week{N} -shape {S}? -risk {longshot|safe}?
 //   legs (nfl) nspe nfl {player} -week{N} -legs
 //   slots(nfl) nspe nfl {player} -slots -ov [pass|rush|rec] [window] | {player} -mnf|-snf|-tnf|-prime|-1pm|-4pm -ov [-statN] | {pass|rush|rec} -statN -mnf -leaderboard | team [TEAM] -mnf|...
+//
+// Compact-over-verbose (2026-09-30, nspe-v2-da confirmed both black-box and
+// against utils/nspe_cli.py's rewrite code): "-{stat}min{N}"/"-{stat}max{N}"
+// (fused, one token) and "long"'s own "-long{N}"/"-longmin{N}"/"-longmax{N}"
+// shorthand are the promoted forms everywhere below — byte-identical output
+// to the older two-token "-{stat} min{N}" / "long {category} -{yds|hr}{N}"
+// spellings, which still work but are no longer what this catalog shows.
 
 // Defined here (not sampleQueries.ts) since this is now the primary content
 // file — sampleQueries.ts re-exports it so existing imports elsewhere don't
@@ -68,7 +77,12 @@ export interface SampleQuery {
   // 'middle' pins the entry near the middle of the ordered list instead of
   // wherever promoteMoatCommands (sampleQueries.ts) would put it — for
   // commands that match the moat pattern but shouldn't lead the dropdown.
-  placement?: 'middle'
+  // 'top' pins ahead of even the moat commands, for the small staple set
+  // (one plain trend example per sport, plus a couple PvP combos) the owner
+  // wants visible immediately on a bare "nspe" — moat/compute commands stay
+  // exactly where promoteMoatCommands already puts them relative to each
+  // other, this just adds a short list in front of that whole ordering.
+  placement?: 'middle' | 'top'
 }
 
 import { getCurrentNflWeek } from './nflWeek'
@@ -173,7 +187,11 @@ const NFL_COMMANDS: SampleQuery[] = [
   { label: 'nfl trend · rec -td', command: 'nspe nfl rec -td2 -last1/1', pscShelved: true },
   { label: 'nfl trend · pass+rush (-pr)', command: 'nspe nfl -pr200 -last1/1' },
   { label: 'nfl trend · pass+rush (-pr)', command: 'nspe nfl -pr250 -last1/1', pscShelved: true },
-  { label: 'nfl trend · pass+rush (-pr)', command: 'nspe nfl -pr300 -last1/1' },
+  // placement:'top' — one of the {psc} staple examples pinned to the very
+  // front of the dropdown (see predictiveCommands.ts's placement doc
+  // comment), so a bare "nspe" always shows one plain trend example per
+  // sport ahead of the moat/compute commands, not just after them.
+  { label: 'nfl trend · pass+rush (-pr)', command: 'nspe nfl -pr300 -last2/3', placement: 'top' },
   { label: 'nfl trend · pass+rush (-pr)', command: 'nspe nfl -pr350 -last1/1', pscShelved: true },
   { label: 'nfl trend · rush+rec (-rr)', command: 'nspe nfl -rr80 -last1/1' },
   { label: 'nfl trend · rush+rec (-rr)', command: 'nspe nfl -rr100 -last1/1', pscShelved: true },
@@ -183,10 +201,10 @@ const NFL_COMMANDS: SampleQuery[] = [
   { label: 'nfl trend · anytime TD', command: 'nspe nfl any -td2 -last1/1', pscShelved: true },
   { label: 'nfl trend · anytime TD', command: 'nspe nfl any -td3 -last1/1' },
   // compute
-  { label: 'nfl compute · pass_yds', command: 'nspe nfl pass -yds min300 -last1' },
-  { label: 'nfl compute · rush_yds', command: 'nspe nfl rush -yds min100 -last1' },
-  { label: 'nfl compute · pass+rush (-pr)', command: 'nspe nfl -pr min250 -last1' },
-  { label: 'nfl compute · rush+rec (-rr)', command: 'nspe nfl -rr min80 -last1' },
+  { label: 'nfl compute · pass_yds', command: 'nspe nfl pass -ydsmin300 -last1' },
+  { label: 'nfl compute · rush_yds', command: 'nspe nfl rush -ydsmin100 -last1' },
+  { label: 'nfl compute · pass+rush (-pr)', command: 'nspe nfl -prmin250 -last1' },
+  { label: 'nfl compute · rush+rec (-rr)', command: 'nspe nfl -rrmin80 -last1' },
   // streak
   { label: 'nfl streak · pass -td', command: 'nspe nfl pass -td1 -streak3 2025' },
   { label: 'nfl streak · rush -yds', command: 'nspe nfl rush -yds50 -streak2 2025' },
@@ -194,11 +212,12 @@ const NFL_COMMANDS: SampleQuery[] = [
   { label: 'nfl trend · pass (1h)', command: 'nspe nfl 1h pass -yds100 -last1/1' },
   { label: 'nfl trend · pass (1h)', command: 'nspe nfl 1h pass -yds120 -last1/1', pscShelved: true },
   { label: 'nfl trend · pass (1h)', command: 'nspe nfl 1h pass -yds150 -last1/1' },
-  // explosive
-  { label: 'nfl explosive · pass', command: 'nspe nfl long pass -yds30 -last1/1' },
-  { label: 'nfl explosive · rush', command: 'nspe nfl long rush -yds20 -last1/1' },
-  { label: 'nfl explosive · rec', command: 'nspe nfl long rec -yds25 -last1/1' },
-  { label: 'nfl explosive compute · pass', command: 'nspe nfl long pass -yds min400 -season' },
+  // explosive — compact -long{N} form (byte-identical to the old
+  // "long {category} -yds{N}"; see the file-header note above).
+  { label: 'nfl explosive · pass', command: 'nspe nfl pass -long30 -last1/1' },
+  { label: 'nfl explosive · rush', command: 'nspe nfl rush -long20 -last1/1' },
+  { label: 'nfl explosive · rec', command: 'nspe nfl rec -long25 -last1/1' },
+  { label: 'nfl explosive compute · pass', command: 'nspe nfl pass -longmin400 -season' },
   // -ov — windows: bare YYYY, -career, YYYY-YYYY, or omitted (current season)
   { label: 'nfl overview · long (-ov)', command: 'nspe nfl long mahomes -ov', playerHint: 'mahomes' },
   { label: 'nfl overview · 1h (-ov, career)', command: 'nspe nfl 1h dak -ov -career', playerHint: 'dak', pscShelved: true },
@@ -276,7 +295,10 @@ const MLB_COMMANDS: SampleQuery[] = [
   { label: 'mlb trend/yst · rbi', command: 'nspe mlb -rbi2 -yst' },
   { label: 'mlb trend/yst · rbi', command: 'nspe mlb -rbi1 -yst', pscShelved: true },
   { label: 'mlb trend · hits', command: 'nspe mlb -hits1 -last3/5' },
-  { label: 'mlb trend · hits', command: 'nspe mlb -hits2 -last3/5', pscShelved: true },
+  // placement:'top' — {psc} staple set (see the -pr300 entry's comment above
+  // for why); un-shelved specifically for this purpose, since it was the
+  // exact example the owner asked for.
+  { label: 'mlb trend · hits', command: 'nspe mlb -hits2 -last3/5', placement: 'top' },
   { label: 'mlb trend · hits', command: 'nspe mlb -hits3 -last3/5' },
   { label: 'mlb trend · hr', command: 'nspe mlb -hr1 -last1/1' },
   { label: 'mlb trend · hr', command: 'nspe mlb -hr2 -last1/1', pscShelved: true },
@@ -296,9 +318,9 @@ const MLB_COMMANDS: SampleQuery[] = [
   { label: 'mlb trend · walks', command: 'nspe mlb -bb1 -last3/5' },
   { label: 'mlb trend · walks', command: 'nspe mlb -bb2 -last3/5', pscShelved: true },
   // compute
-  { label: 'mlb compute · runs', command: 'nspe mlb -runs min20 -last25' },
-  { label: 'mlb compute · rbi', command: 'nspe mlb -rbi min10 -last10' },
-  { label: 'mlb compute · tb', command: 'nspe mlb -tb min100 -season' },
+  { label: 'mlb compute · runs', command: 'nspe mlb -runsmin20 -last25' },
+  { label: 'mlb compute · rbi', command: 'nspe mlb -rbimin10 -last10' },
+  { label: 'mlb compute · tb', command: 'nspe mlb -tbmin100 -season' },
   // streak
   { label: 'mlb streak · hits', command: 'nspe mlb -hits1 -streak5' },
   // -hr1 -streak3 (HR in 3 straight games) is rare enough it can genuinely
@@ -317,8 +339,10 @@ const MLB_COMMANDS: SampleQuery[] = [
   // gitignored, so every `mlb long -hr...` returned zero rows). Pinned to the
   // middle of the ordered list (placement: 'middle', see sampleQueries.ts)
   // rather than promoted to the front like other `long` commands.
-  { label: 'mlb explosive · hr distance', command: 'nspe mlb long -hr350 -last1/5', placement: 'middle' },
-  { label: 'mlb explosive compute · hr distance', command: 'nspe mlb long -hr min800 -last10', placement: 'middle' },
+  // Compact -long{N} form — byte-identical to the old "long -hr{N}" (MLB's
+  // "long" is always HR distance, no category token to keep).
+  { label: 'mlb explosive · hr distance', command: 'nspe mlb -long350 -last1/5', placement: 'middle' },
+  { label: 'mlb explosive compute · hr distance', command: 'nspe mlb -longmin800 -last10', placement: 'middle' },
   // first plate appearance — no threshold N, one PA per game
   { label: 'mlb first pa · hit', command: 'nspe mlb first -hit -last1/1' },
   { label: 'mlb first pa · xbh', command: 'nspe mlb first -xbh -last1/5' },
@@ -327,8 +351,8 @@ const MLB_COMMANDS: SampleQuery[] = [
   // team
   { label: 'mlb team trend · runs for', command: 'nspe mlb team -runs5 -last2/5' },
   { label: 'mlb team trend · runs allowed', command: 'nspe mlb team -allowed4 -last2/5' },
-  { label: 'mlb team compute · runs for', command: 'nspe mlb team -runs min120 -last25' },
-  { label: 'mlb team compute · runs allowed', command: 'nspe mlb team -allowed min500 -season' },
+  { label: 'mlb team compute · runs for', command: 'nspe mlb team -runsmin120 -last25' },
+  { label: 'mlb team compute · runs allowed', command: 'nspe mlb team -allowedmin500 -season' },
   // h2h — -career, not the backend's current-season-only default (confirmed
   // live: without it, this returns a handful of this year's games instead of
   // the player's full history against that team).
@@ -351,7 +375,8 @@ const NBA_COMMANDS: SampleQuery[] = [
   // trend
   { label: 'nba trend · pts', command: 'nspe nba -pts20 -last3/5' },
   { label: 'nba trend · pts', command: 'nspe nba -pts25 -last3/5', pscShelved: true },
-  { label: 'nba trend · pts', command: 'nspe nba -pts30 -last3/5' },
+  // placement:'top' — {psc} staple set (see the -pr300 entry's comment).
+  { label: 'nba trend · pts', command: 'nspe nba -pts30 -last2/5', placement: 'top' },
   { label: 'nba trend · reb', command: 'nspe nba -reb6 -last2/5' },
   { label: 'nba trend · reb', command: 'nspe nba -reb8 -last2/5', pscShelved: true },
   { label: 'nba trend · reb', command: 'nspe nba -reb10 -last2/5' },
@@ -384,16 +409,16 @@ const NBA_COMMANDS: SampleQuery[] = [
   { label: 'nba trend · pts (1h)', command: 'nspe nba 1h -pts20 -last2/3' },
   { label: 'nba trend · reb (1h)', command: 'nspe nba 1h -reb6 -last2/5' },
   // compute
-  { label: 'nba compute · pts', command: 'nspe nba -pts min30 -last10' },
-  { label: 'nba compute · reb', command: 'nspe nba -reb min60 -last10' },
-  { label: 'nba compute · ast', command: 'nspe nba -ast min40 -last10' },
-  { label: 'nba compute · total', command: 'nspe nba -total min80 -season' },
+  { label: 'nba compute · pts', command: 'nspe nba -ptsmin30 -last10' },
+  { label: 'nba compute · reb', command: 'nspe nba -rebmin60 -last10' },
+  { label: 'nba compute · ast', command: 'nspe nba -astmin40 -last10' },
+  { label: 'nba compute · total', command: 'nspe nba -totalmin80 -season' },
   // Pinned to 2025, not bare -season — the 2026 season just started, so
   // nobody would clear a 2000 cumulative pts+reb+ast threshold yet. Year
   // filter is real, working QueryBuilder syntax (see QueryBuilder.tsx's
   // builtCommand comment, "-season 2025"), not a new grammar.
-  { label: 'nba compute · total (2025)', command: 'nspe nba -total min2000 -season 2025' },
-  { label: 'nba compute · 3pm', command: 'nspe nba -tpm min20 -last10' },
+  { label: 'nba compute · total (2025)', command: 'nspe nba -totalmin2000 -season 2025' },
+  { label: 'nba compute · 3pm', command: 'nspe nba -tpmmin20 -last10' },
   // streak
   { label: 'nba streak · pts', command: 'nspe nba -pts20 -streak3' },
   { label: 'nba streak · ast', command: 'nspe nba -ast8 -streak5' },
@@ -412,7 +437,9 @@ const NHL_COMMANDS: SampleQuery[] = [
   { label: 'nhl trend · assists', command: 'nspe nhl -ast2 -last2/5', pscShelved: true },
   { label: 'nhl trend · points', command: 'nspe nhl -pts1 -last3/5' },
   { label: 'nhl trend · points', command: 'nspe nhl -pts2 -last3/5', pscShelved: true },
-  { label: 'nhl trend · points', command: 'nspe nhl -pts3 -last3/5' },
+  // placement:'top' — {psc} staple set (see the -pr300 entry's comment);
+  // NHL's own entry in the "one plain trend example per sport" pinned set.
+  { label: 'nhl trend · points', command: 'nspe nhl -pts3 -last3/5', placement: 'top' },
   { label: 'nhl trend · shots on goal', command: 'nspe nhl -sog3 -last3/5' },
   { label: 'nhl trend · shots on goal', command: 'nspe nhl -sog4 -last3/5', pscShelved: true },
   { label: 'nhl trend · shots on goal', command: 'nspe nhl -sog5 -last3/5' },
@@ -430,16 +457,27 @@ const NHL_COMMANDS: SampleQuery[] = [
   { label: 'nhl trend · points (p1)', command: 'nspe nhl p1 -pts1 -last2/5' },
   { label: 'nhl trend · sog (p1)', command: 'nspe nhl p1 -sog2 -last2/5' },
   // compute
-  { label: 'nhl compute · goals', command: 'nspe nhl -g min10 -last10' },
-  { label: 'nhl compute · assists', command: 'nspe nhl -ast min15 -last10' },
-  { label: 'nhl compute · points', command: 'nspe nhl -pts min25 -last10' },
-  { label: 'nhl compute · sog', command: 'nspe nhl -sog min50 -last10' },
+  { label: 'nhl compute · goals', command: 'nspe nhl -gmin10 -last10' },
+  { label: 'nhl compute · assists', command: 'nspe nhl -astmin15 -last10' },
+  { label: 'nhl compute · points', command: 'nspe nhl -ptsmin25 -last10' },
+  { label: 'nhl compute · sog', command: 'nspe nhl -sogmin50 -last10' },
   // Shelved alongside the trend -blk entry above — same missing-data root cause.
-  // { label: 'nhl compute · blocks', command: 'nspe nhl -blk min20 -last10' },
+  // { label: 'nhl compute · blocks', command: 'nspe nhl -blkmin20 -last10' },
   // streak
   { label: 'nhl streak · points', command: 'nspe nhl -pts1 -streak5' },
   { label: 'nhl streak · goals', command: 'nspe nhl -g1 -streak3' },
   { label: 'nhl streak · sog', command: 'nspe nhl -sog3 -streak4' },
+]
+
+// PvP (player vs player) — sport-agnostic, its own dedicated engine
+// (`{sport}_pvp`), not previously represented anywhere in this catalog at
+// all. Both pinned to the {psc} top set per the owner's ask ("a couple
+// player combo examples"); the MLB one doubles as a real dual-relation
+// showcase — division rivals AND teammates inside the same query (see
+// PvpView's relations[] handling in App.tsx, reshaped 2026-09-30).
+const PVP_COMMANDS: SampleQuery[] = [
+  { label: 'nfl pvp · combo', command: 'nspe nfl ceedee vs pickens -career', placement: 'top' },
+  { label: 'mlb pvp · combo', command: 'nspe mlb judge vs juan soto -career', placement: 'top' },
 ]
 
 // nfl/mlb listed first — promoteMoatCommands (sampleQueries.ts) additionally
@@ -453,4 +491,5 @@ export const PREDICTIVE_COMMANDS: SampleQuery[] = [
   ...MLB_COMMANDS,
   ...NBA_COMMANDS,
   ...NHL_COMMANDS,
+  ...PVP_COMMANDS,
 ]
