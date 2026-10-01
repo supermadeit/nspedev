@@ -31,6 +31,14 @@ const CHARTS_LINKS: { sport: SportKey; href: string; label: string }[] = [
   { sport: 'nhl', href: '/nhl.charts', label: 'nhl.charts' },
 ]
 
+// Exported for pages that want a direct, non-popup {charts} link next to
+// their {sports} switcher (rankings/matchups pages, per the owner's
+// 2026-09-30 ask) rather than the full switcher UI — they already know
+// their own sport, so no popup/choice is needed, just "go to my charts page."
+export function chartsHrefFor(sport: SportKey): string {
+  return CHARTS_LINKS.find((l) => l.sport === sport)?.href ?? '/charts'
+}
+
 const ACCENT = 'oklch(0.85 0.15 195)'
 
 // `current` is left off the list (no point linking a page to itself) —

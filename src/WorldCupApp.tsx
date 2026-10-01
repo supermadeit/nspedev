@@ -757,15 +757,16 @@ export default function WorldCupApp() {
                 this swap doesn't change that, activeView just never flips
                 off 'rankings' anymore. */}
             <SportsSwitcher current="nfl" />
-            {/* Mobile: {charts} moved here from the homepage, taking
-                {nfl.playoffs}'s slot for now (shelved, not deleted — still
-                shown on desktop below). Desktop keeps {charts} where it
-                already was, on the homepage's bottom row. */}
-            {isMobile ? (
-              <a href="/charts" className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap" style={{ color: C.accent }}>
-                {'{charts}'}
-              </a>
-            ) : (
+            {/* {charts} — originally mobile-only (it took {nfl.playoffs}'s
+                slot there since mobile had no room for both), now shown
+                unconditionally next to {sports} on desktop too (2026-09-30
+                ask). {nfl.playoffs}'s pending placeholder stays desktop-only,
+                shelved not deleted, same as before — just no longer swapped
+                out in favor of {charts}, both show now. */}
+            <a href="/charts" className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap" style={{ color: C.accent }}>
+              {'{charts}'}
+            </a>
+            {!isMobile && (
               <span className="font-mono font-bold text-[14px] whitespace-nowrap inline-flex items-baseline gap-1.5"
                 style={{ color: C.dim, cursor: 'not-allowed', userSelect: 'none' }}>
                 <span>{'{nfl.playoffs}'}</span>
