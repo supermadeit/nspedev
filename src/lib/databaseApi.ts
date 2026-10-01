@@ -438,3 +438,114 @@ export async function fetchNhlScoringBuckets(): Promise<NhlScoringBucketsData> {
   if (!isNhlScoringBucketsData(data)) throw new Error('Unrecognized nhl-scoring-buckets response shape.')
   return data
 }
+
+// {team.metrics} — GET /team-metrics/{sport}/{team}?window=... (nfl/nba/nhl
+// only; mlb 404s, its team feed has no opponent side — per nspe-v2-da
+// 2026-10-01). One shared envelope across all three sports: `metrics` is a
+// flat map of stat-key -> {for, against, unit, ...}, `allows` is a flat map
+// of threshold-key -> {label, pct, count, games}. Per-sport field sets
+// differ completely (see TeamMetricsCard.tsx's per-sport FIELD_GROUPS,
+// which is what actually drives which keys render and in what order/
+// grouping) — this file only types the shapes those keys can take, not
+// which keys exist for which sport.
+export interface TeamMetricsWindow {
+  /** Always shows both forms for NBA/NHL ("2026 (2025-26)") so the typed
+   * year's season-start-vs-season-end convention can't be misread. */
+  label: string
+  requested: string
+}
+
+// A metric's `for`/`against` is almost always a plain number, but the
+// quarter/period-split entries (NBA's points_by_quarter, NHL's
+// goals_by_period) carry a fixed-length array instead (one avg per quarter/
+// period) — and either can be null when there's nothing to compute (e.g.
+// overtime metrics for a team with zero OT games this window).
+export type TeamMetricsValue = number | number[] | null
+
+export interface TeamMetricsMetricEntry {
+  for: TeamMetricsValue
+  against?: TeamMetricsValue
+  unit: string
+  games?: number
+  against_games?: number
+  /** NHL's penalty_kill_pct: "for" and "against" mean different things
+   * (this team's own kill rate vs. opponents' kill rate against this team's
+   * power play) — shown as a footnote when present rather than assumed. */
+  note?: string
+  /** NFL's explosive_plays only. */
+  threshold_yards?: number
+}
+
+export interface TeamMetricsAllowsEntry {
+  label: string
+  pct: number
+  count: number
+  games: number
+}
+
+export interface TeamMetricsRecord {
+  wins: number
+  losses: number
+  /** NHL only. */
+  ot_losses?: number
+  home?: string
+  road?: string
+  points_for?: number
+  points_against?: number
+  /** NHL spells these goals_for/goals_against instead — see
+   * normalizeTeamMetricsRecord below, which folds both spellings into one
+   * shape so TeamMetricsCard.tsx doesn't need to care which sport it's
+   * rendering here. */
+  goals_for?: number
+  goals_against?: number
+  margin?: number
+  record: string
+}
+
+export interface TeamMetricsPayload {
+  sport: 'nfl' | 'nba' | 'nhl'
+  team: string
+  window: TeamMetricsWindow
+  games: number
+  // Absent entirely on NFL's payload (reported 2026-10-01 as new-vs-NFL) —
+  // optional, not nullable, since NFL's response doesn't carry the key at
+  // all rather than carrying it as null.
+  record?: TeamMetricsRecord
+  metrics: Record<string, TeamMetricsMetricEntry>
+  allows: Record<string, TeamMetricsAllowsEntry>
+  box_score_coverage?: string | null
+}
+
+function isTeamMetricsPayload(v: unknown): v is TeamMetricsPayload {
+  if (!v || typeof v !== 'object') return false
+  const r = v as Record<string, unknown>
+  return typeof r.team === 'string' && typeof r.metrics === 'object' && r.metrics !== null
+}
+
+// NHL's record block uses goals_for/goals_against instead of
+// points_for/points_against — this reads either spelling into one shape so
+// the card component never has to branch on sport just for this.
+export function normalizeTeamMetricsRecord(record: TeamMetricsRecord | undefined): (TeamMetricsRecord & { pointsFor?: number; pointsAgainst?: number }) | undefined {
+  if (!record) return undefined
+  return {
+    ...record,
+    pointsFor: record.points_for ?? record.goals_for,
+    pointsAgainst: record.points_against ?? record.goals_against,
+  }
+}
+
+export type TeamMetricsWindowParam = 'season' | 'history' | string
+
+export async function fetchTeamMetrics(
+  sport: 'nfl' | 'nba' | 'nhl',
+  team: string,
+  window: TeamMetricsWindowParam = 'season',
+): Promise<TeamMetricsPayload> {
+  const query = `?window=${encodeURIComponent(window)}`
+  const urls = API_BASE_CANDIDATES.map((base) => joinUrl(base, `/team-metrics/${sport}/${encodeURIComponent(team)}${query}`))
+  const res = await fetchFirstOk(urls)
+  if (!res) throw new Error(`No team-metrics found for ${sport}/${team}`)
+  const data: unknown = await res.json()
+  if (!isTeamMetricsPayload(data)) throw new Error('Unrecognized team-metrics response shape.')
+  return data
+}

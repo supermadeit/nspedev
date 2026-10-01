@@ -417,6 +417,7 @@ function leaderboardSportLabel(kind: string): string {
 // that whole panel. Longest/most-specific patterns first so "PASSRUSHTD"
 // matches before the plainer "PASSTD"/"RUSHTD" it contains.
 const STREAK_TOKEN_LABELS: [RegExp, string][] = [
+  [/LONGCOMP/i, 'Yard Completion'],
   [/PASSRUSHTD/i, 'Pass + Rush TDs'],
   [/RUSHRECTD/i, 'Rush + Rec TDs'],
   [/PASSTD/i, 'Passing TDs'],
@@ -431,6 +432,10 @@ const STREAK_TOKEN_LABELS: [RegExp, string][] = [
   [/RBI/i, 'RBI'],
   [/HR\b/i, 'Home Runs'],
   [/OB\b/i, 'On-Base'],
+  // Exact-match only (anchored) — "2R" is a real backend streak_type (also
+  // native to nfl-leaderboard.json, not a leftover) for "2+ TD", a bare
+  // letter too short/generic to substring-match safely like the others above.
+  [/^R$/i, 'Touchdowns'],
 ]
 
 function describeStreakType(streakType: string): string {

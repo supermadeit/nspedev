@@ -766,6 +766,11 @@ export default function WorldCupApp() {
             <a href="/charts" className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap" style={{ color: C.accent }}>
               {'{charts}'}
             </a>
+            {/* {team.metrics} added 2026-10-01, same slot/treatment as
+                {charts} above. */}
+            <a href="/nfl.team.metrics" className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap" style={{ color: C.accent }}>
+              {'{team.metrics}'}
+            </a>
             {!isMobile && (
               <span className="font-mono font-bold text-[14px] whitespace-nowrap inline-flex items-baseline gap-1.5"
                 style={{ color: C.dim, cursor: 'not-allowed', userSelect: 'none' }}>

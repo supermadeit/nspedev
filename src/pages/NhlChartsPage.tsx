@@ -126,6 +126,9 @@ export default function NhlChartsPage() {
             {'{homepage}'}
           </a>
           <SportsSwitcher current="nhl" variant="charts" />
+          <a href="/nhl.team.metrics" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
+            {'{team.metrics}'}
+          </a>
         </div>
       </div>
 

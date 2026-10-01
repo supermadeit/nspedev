@@ -116,6 +116,25 @@ const NHL_NICKNAMES: Record<string, string> = {
   WPG: 'Jets',
 }
 
+// NFL has its own nickname source elsewhere (buildNicknameMap off
+// worldcup.json, used by WorldCupApp.tsx's own matchup display) — this map
+// exists only for {team.metrics}'s team picker below, which needs a flat
+// code/nickname list for all three sports that endpoint covers (nfl/nba/nhl,
+// not mlb) in one place rather than reaching into a page-local helper.
+// Deliberately NOT added to NICKNAME_MAPS/teamNickname() below — nothing
+// calls teamNickname('nfl', ...) today, and this avoids any chance of that
+// changing this function's behavior for a caller that isn't expecting it.
+const NFL_NICKNAMES: Record<string, string> = {
+  ARI: 'Cardinals', ATL: 'Falcons', BAL: 'Ravens', BUF: 'Bills',
+  CAR: 'Panthers', CHI: 'Bears', CIN: 'Bengals', CLE: 'Browns',
+  DAL: 'Cowboys', DEN: 'Broncos', DET: 'Lions', GB: 'Packers',
+  HOU: 'Texans', IND: 'Colts', JAX: 'Jaguars', KC: 'Chiefs',
+  LAC: 'Chargers', LAR: 'Rams', LV: 'Raiders', MIA: 'Dolphins',
+  MIN: 'Vikings', NE: 'Patriots', NO: 'Saints', NYG: 'Giants',
+  NYJ: 'Jets', PHI: 'Eagles', PIT: 'Steelers', SEA: 'Seahawks',
+  SF: 'Niners', TB: 'Buccaneers', TEN: 'Titans', WSH: 'Commanders',
+}
+
 const NICKNAME_MAPS: Record<string, Record<string, string>> = {
   mlb: MLB_NICKNAMES,
   nba: NBA_NICKNAMES,
@@ -126,4 +145,28 @@ export function teamNickname(sport: string, code: string): string {
   const map = NICKNAME_MAPS[sport]
   if (!map || !code) return code
   return map[code.toUpperCase()] ?? code
+}
+
+const ROSTER_MAPS: Record<'nfl' | 'nba' | 'nhl', Record<string, string>> = {
+  nfl: NFL_NICKNAMES,
+  nba: NBA_NICKNAMES,
+  nhl: NHL_NICKNAMES,
+}
+
+// {team.metrics}'s team picker — one entry per real team, alias codes
+// (CWS/CHW-style duplicates) collapsed to whichever code is listed first in
+// the map above. GET /team-metrics/{sport}/{team} accepts a code, city or
+// nickname and resolves it server-side, so which alias we send barely
+// matters — this just needs to not show the same team twice in a dropdown.
+export function teamRoster(sport: 'nfl' | 'nba' | 'nhl'): { code: string; nickname: string }[] {
+  const map = ROSTER_MAPS[sport]
+  const seen = new Set<string>()
+  const out: { code: string; nickname: string }[] = []
+  for (const [code, nickname] of Object.entries(map)) {
+    if (seen.has(nickname)) continue
+    seen.add(nickname)
+    out.push({ code, nickname })
+  }
+  out.sort((a, b) => a.nickname.localeCompare(b.nickname))
+  return out
 }

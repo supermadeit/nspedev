@@ -39,6 +39,21 @@ export function chartsHrefFor(sport: SportKey): string {
   return CHARTS_LINKS.find((l) => l.sport === sport)?.href ?? '/charts'
 }
 
+// {team.metrics} — nfl/nba/nhl only (mlb's team feed has no opponent side,
+// per nspe-v2-da 2026-10-01, so there's no mlb page for this to link to).
+// Deliberately NOT in CHARTS_LINKS/RANKINGS_LINKS' pattern of "include every
+// sport" — a caller on an mlb page should just not render this link at all
+// rather than get a route that 404s.
+const METRICS_LINKS: { sport: SportKey; href: string; label: string }[] = [
+  { sport: 'nfl', href: '/nfl.team.metrics', label: 'nfl.team.metrics' },
+  { sport: 'nba', href: '/nba.team.metrics', label: 'nba.team.metrics' },
+  { sport: 'nhl', href: '/nhl.team.metrics', label: 'nhl.team.metrics' },
+]
+
+export function metricsHrefFor(sport: SportKey): string | undefined {
+  return METRICS_LINKS.find((l) => l.sport === sport)?.href
+}
+
 const ACCENT = 'oklch(0.85 0.15 195)'
 
 // `current` is left off the list (no point linking a page to itself) —
@@ -58,8 +73,10 @@ const ACCENT = 'oklch(0.85 0.15 195)'
 // menu would either run off-screen or read backwards.
 // `variant` picks which link set to switch between — "rankings" (default)
 // for every sport's rankings/matchups page, "charts" for every sport's
-// {chart} page, so switching sport from a charts page lands on the next
-// sport's charts page rather than dropping you onto its rankings page.
+// {chart} page, "metrics" for {team.metrics} (nfl/nba/nhl only — no mlb
+// entry exists, see METRICS_LINKS above) — so switching sport from any one
+// of these lands on the same kind of page for the next sport, not a
+// different one.
 // `triggerSizePx` overrides the closed-button text size — 14px everywhere by
 // default (unchanged), but the homepage's {charts}/{matchups} pair use 15px
 // so they read the same size as the {chart} title text on the page they
@@ -74,7 +91,7 @@ export function SportsSwitcher({
   current?: SportKey
   label?: string
   direction?: 'up' | 'down'
-  variant?: 'rankings' | 'charts'
+  variant?: 'rankings' | 'charts' | 'metrics'
   triggerSizePx?: number
 }) {
   const [open, setOpen] = useState(false)
@@ -89,7 +106,8 @@ export function SportsSwitcher({
     return () => document.removeEventListener('mousedown', onClickOutside)
   }, [open])
 
-  const others = (variant === 'charts' ? CHARTS_LINKS : RANKINGS_LINKS).filter((l) => l.sport !== current)
+  const linkSet = variant === 'charts' ? CHARTS_LINKS : variant === 'metrics' ? METRICS_LINKS : RANKINGS_LINKS
+  const others = linkSet.filter((l) => l.sport !== current)
 
   return (
     <div ref={containerRef} className="relative">

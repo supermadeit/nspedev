@@ -21,6 +21,7 @@ import NbaChartsPage from './pages/NbaChartsPage.tsx'
 import NhlChartsPage from './pages/NhlChartsPage.tsx'
 import PlayerProfilePage from './pages/PlayerProfilePage.tsx'
 import SportSeasonPage from './pages/SportSeasonPage.tsx'
+import TeamMetricsPage from './pages/TeamMetricsPage.tsx'
 
 import "./main.css"
 import "./styles/theme.css"
@@ -64,6 +65,12 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/mlb.charts" element={<MlbChartsPage />} />
           <Route path="/nba.charts" element={<NbaChartsPage />} />
           <Route path="/nhl.charts" element={<NhlChartsPage />} />
+          {/* {team.metrics} — nfl/nba/nhl only, no mlb (its team feed has no
+              opponent side, per nspe-v2-da 2026-10-01). Same "thin wrapper
+              around a shared page" pattern as SportSeasonPage above. */}
+          <Route path="/nfl.team.metrics" element={<TeamMetricsPage sport="nfl" label="nfl.team.metrics" />} />
+          <Route path="/nba.team.metrics" element={<TeamMetricsPage sport="nba" label="nba.team.metrics" />} />
+          <Route path="/nhl.team.metrics" element={<TeamMetricsPage sport="nhl" label="nhl.team.metrics" />} />
           {/* Every profiled player shares the same qb-profiles/*.json section
               shape (verified across all 36 files), so this is a real dynamic
               route now — PlayerProfilePage looks the slug up in the same

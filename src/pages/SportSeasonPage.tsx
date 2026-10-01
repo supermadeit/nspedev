@@ -30,7 +30,7 @@ import {
 import { API_BASE_CANDIDATES, fetchJsonCandidate, joinUrl, parseApiPayload } from '@/lib/nspe-api'
 import { extractMatchupInsightPayload, type MatchupInsightPayload } from '@/lib/nspe-payloads'
 import { MatchupInsightOverlay } from '@/components/MatchupInsightOverlay'
-import { SportsSwitcher, chartsHrefFor } from '@/components/SportsSwitcher'
+import { SportsSwitcher, chartsHrefFor, metricsHrefFor } from '@/components/SportsSwitcher'
 import { teamNickname } from '@/lib/teamNicknames'
 
 const C = {
@@ -372,7 +372,10 @@ export default function SportSeasonPage({ sport, label }: SportSeasonPageProps) 
               here without routing back through the homepage. {charts} added
               next to it 2026-09-30 — a direct link to this sport's own
               charts page (no popup needed, this page already knows its
-              sport), same slot NFL's page carries it in. */}
+              sport), same slot NFL's page carries it in. {team.metrics}
+              added 2026-10-01, same treatment — mlb has no team-metrics page
+              (metricsHrefFor returns undefined), so this page's mlb mount
+              just won't render the link, nothing else needs to change. */}
           <div className="flex items-center gap-4">
             <span className="font-mono font-bold text-[14px] whitespace-nowrap" style={{ color: C.accent, textDecoration: 'underline' }}>
               {`{${label}}`}
@@ -385,6 +388,15 @@ export default function SportSeasonPage({ sport, label }: SportSeasonPageProps) 
             >
               {'{charts}'}
             </a>
+            {metricsHrefFor(sport) && (
+              <a
+                href={metricsHrefFor(sport)}
+                className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+                style={{ color: C.accent }}
+              >
+                {'{team.metrics}'}
+              </a>
+            )}
           </div>
         </div>
         <div className="max-w-[1480px] mx-auto mt-2">
