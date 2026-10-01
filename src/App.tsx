@@ -1842,9 +1842,9 @@ const CHIP_BORDER_ACTIVE = 'oklch(0.85 0.15 195)'
 const CHIP_BORDER_INACTIVE = 'oklch(0.28 0 0)'
 
 // Render-prop rather than a fixed row renderer — H2hView and
-// OverviewStatNGenericView keep their own exact per-game JSX (see
-// GameLogRow below, which both now use), this component only owns the chip
-// bar, the custom-total input, and the filtering itself. Chips are OR'd
+// OverviewStatNGenericView each pass their own meta-key set into the shared
+// table (see GameLogTable below, which both now use), this component only
+// owns the chip bar, the custom-total input, and the filtering itself. Chips are OR'd
 // together (a game matching ANY active chip shows) rather than AND'd — these
 // are for spotlighting notable games, not narrowing to a rare intersection
 // of several thresholds at once.
@@ -1933,39 +1933,83 @@ function GameLogFilterBar({
   )
 }
 
-// One compact line per game — date, opponent, W/L result (when present),
-// the query's own headline value (when present, OverviewStatN-style), then
-// every other numeric field as a comma-joined box-score tail. `metaKeys`
-// tells it which fields are already shown some other way (date/opponent/
-// etc, plus each caller's own already-highlighted fields) so they don't
-// double up in the box-score tail.
-function GameLogRow({ g, valueLabel, metaKeys }: { g: Record<string, unknown>; valueLabel?: string; metaKeys: Set<string> }) {
-  const dateRaw = (g.date_iso as string) ?? (g.date as string) ?? ''
-  const opponent = typeof g.opponent === 'string' ? g.opponent : ''
-  const result = typeof g.result === 'string' ? g.result : ''
-  const outcome = typeof g.outcome === 'string' ? g.outcome : ''
-  const hasValue = typeof g.value === 'number'
-  const box = Object.entries(g).filter(([k, v]) => !metaKeys.has(k) && typeof v === 'number')
+// A real box-score table for the game log — one header row (date/opp/
+// result/stat columns), then one aligned row per game. Replaces the old
+// GameLogRow, which rendered each game as a single comma-joined line of
+// "9 rush att, 135 rush yds, 28 rush lng, ..." — fine for a sport with 2-3
+// box fields, but NFL's 7-11 display_fields made that line wrap across 5-6
+// ragged lines per game (reported 2026-10-01 as reading like "loose text").
+// `metaKeys` tells it which fields are already shown as their own column
+// (date/opponent/etc, plus each caller's own already-highlighted fields) so
+// they don't also show up as a stat column. Every game in one h2h/overview
+// response shares the same field shape, so the column set is built once
+// from the union of fields actually present (first-seen order) and reused
+// for every row — wrapped in its own horizontal scroll for NFL's wider rows,
+// same pattern as StatsOverviewBody's table above it.
+function GameLogTable({ games, valueLabel, metaKeys }: { games: Record<string, unknown>[]; valueLabel?: string; metaKeys: Set<string> }) {
+  const DIM = 'oklch(0.92 0 0)'
+  const BORDER = 'oklch(0.22 0 0)'
+
+  const statKeys: string[] = []
+  for (const g of games) {
+    for (const [k, v] of Object.entries(g)) {
+      if (!metaKeys.has(k) && typeof v === 'number' && !statKeys.includes(k)) statKeys.push(k)
+    }
+  }
+  const hasValue = games.some((g) => typeof g.value === 'number')
+  const hasResult = games.some((g) => typeof g.result === 'string' && g.result)
+  const gridCols = `56px minmax(50px,1fr)${hasResult ? ' 64px' : ''}${hasValue ? ' 44px' : ''} repeat(${statKeys.length}, minmax(40px, 1fr))`
+  const minWidth = 56 + 50 + (hasResult ? 64 : 0) + (hasValue ? 44 : 0) + statKeys.length * 42
+
+  if (games.length === 0) return null
+
   return (
-    <div className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
-      <span style={{ color: 'oklch(0.92 0 0)' }}>{extractDateToken(dateRaw) ?? dateRaw}</span>
-      {opponent && <span style={{ color: 'oklch(0.75 0.08 220)' }}>{` ${opponent}`}</span>}
-      {result && (
-        <span style={{ color: outcome === 'W' ? 'oklch(0.78 0.18 145)' : outcome === 'L' ? 'oklch(0.70 0.15 25)' : 'oklch(0.92 0 0)' }}>
-          {` ${result}`}
-        </span>
-      )}
-      {hasValue && (
-        <>
-          <span style={{ color: 'oklch(0.92 0 0)' }}>{' · '}</span>
-          <span style={{ color: 'oklch(0.85 0.15 195)' }}>{`${g.value} ${valueLabel ?? ''}`.trim()}</span>
-        </>
-      )}
-      {box.length > 0 && (
-        <span style={{ color: 'oklch(0.92 0 0)' }}>
-          {` · ${box.map(([k, v]) => `${v} ${boxStatLabel(k)}`).join(', ')}`}
-        </span>
-      )}
+    <div className="overflow-x-auto">
+      <div style={{ minWidth }} className="font-mono text-[11px]">
+        <div
+          className="grid items-baseline gap-x-2 pb-1 text-[9px] uppercase tracking-widest"
+          style={{ gridTemplateColumns: gridCols, color: DIM, borderBottom: `1px solid ${BORDER}` }}
+        >
+          <span>date</span>
+          <span>opp</span>
+          {hasResult && <span>result</span>}
+          {hasValue && <span className="text-right">{valueLabel ?? 'val'}</span>}
+          {statKeys.map((k) => (
+            <span key={k} className="text-right">{boxStatLabel(k)}</span>
+          ))}
+        </div>
+        {games.map((g, i) => {
+          const dateRaw = (g.date_iso as string) ?? (g.date as string) ?? ''
+          const opponent = typeof g.opponent === 'string' ? g.opponent : ''
+          const result = typeof g.result === 'string' ? g.result : ''
+          const outcome = typeof g.outcome === 'string' ? g.outcome : ''
+          return (
+            <div
+              key={(g.game_id as string) ?? `${dateRaw}-${i}`}
+              className="grid items-baseline gap-x-2 py-1"
+              style={{ gridTemplateColumns: gridCols, borderBottom: `1px solid ${BORDER}` }}
+            >
+              <span style={{ color: DIM }}>{extractDateToken(dateRaw) ?? dateRaw}</span>
+              <span className="truncate" style={{ color: 'oklch(0.75 0.08 220)' }}>{opponent || '—'}</span>
+              {hasResult && (
+                <span style={{ color: outcome === 'W' ? 'oklch(0.78 0.18 145)' : outcome === 'L' ? 'oklch(0.70 0.15 25)' : DIM }}>
+                  {result || '—'}
+                </span>
+              )}
+              {hasValue && (
+                <span className="text-right" style={{ color: 'oklch(0.85 0.15 195)' }}>
+                  {typeof g.value === 'number' ? g.value : '—'}
+                </span>
+              )}
+              {statKeys.map((k) => (
+                <span key={k} className="text-right" style={{ color: DIM }}>
+                  {typeof g[k] === 'number' ? (g[k] as number) : '—'}
+                </span>
+              ))}
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }
@@ -2056,11 +2100,7 @@ function OverviewStatNGenericView({ payload }: { payload: OverviewStatNPayload }
           onToggle={() => toggle(0)}
         >
           <GameLogFilterBar sport={sport} games={games as unknown as Record<string, unknown>[]}>
-            {(filteredGames) =>
-              filteredGames.map((g, j) => (
-                <GameLogRow key={(g.game_id as string) ?? j} g={g} valueLabel={valueLabel} metaKeys={gameLogMetaKeys} />
-              ))
-            }
+            {(filteredGames) => <GameLogTable games={filteredGames} valueLabel={valueLabel} metaKeys={gameLogMetaKeys} />}
           </GameLogFilterBar>
         </ResultRow>
       )}
@@ -2174,12 +2214,18 @@ function StatsOverviewBody({ payload }: { payload: StatsOverviewPayload }) {
       {countGroups.length > 0 && (
         <div className="flex flex-wrap gap-x-5 gap-y-1 text-[12px]">
           {countGroups.map((g) => (
-            <span key={g.label} style={{ color: DIM }}>
+            <span key={g.label}>
               <span className="font-bold" style={{ color: CYAN }}>{g.label}</span>
               {g.items.map((it) => (
                 <span key={it.min}>
-                  {`  ${it.min}+ `}
-                  <span style={{ color: 'oklch(0.85 0 0)' }}>{`${it.count}/${it.window_games}`}</span>
+                  {/* The threshold ("250+") shares PASS YDS's cyan so it
+                      reads as part of that category, not as the result —
+                      reported 2026-10-01 as blending into the games-met
+                      count next to it when both were the same dim/white
+                      shade. The count itself stays the brightest text here
+                      since it's the actual answer. */}
+                  <span style={{ color: CYAN }}>{`  ${it.min}+`}</span>
+                  <span style={{ color: 'oklch(0.92 0 0)' }}>{` ${it.count}/${it.window_games}`}</span>
                 </span>
               ))}
             </span>
@@ -2841,9 +2887,9 @@ function sortByFieldOrder<T>(items: T[], keyOf: (item: T) => string, order: stri
 }
 
 // Rebuilds a per-game record with its own keys in the same group order, so
-// GameLogRow's box-score tail (which just walks Object.entries in whatever
-// order the object's keys were set) reads rushing-then-receiving-then-passing
-// too, matching the totals card above it.
+// GameLogTable's column order (built from each game's own key insertion
+// order) reads rushing-then-receiving-then-passing too, matching the totals
+// card above it.
 function reorderRecordByFieldOrder(rec: Record<string, unknown>, order: string[]): Record<string, unknown> {
   const result: Record<string, unknown> = {}
   for (const k of sortByFieldOrder(Object.keys(rec), (k) => k, order)) result[k] = rec[k]
@@ -2861,7 +2907,7 @@ function allZeroFieldsToHide(fields: string[], totals: Record<string, unknown>):
   return hidden
 }
 
-// GameLogRow's `metaKeys` for MLB/NHL h2h games (see H2hView's non-NFL
+// GameLogTable's `metaKeys` for MLB/NHL h2h games (see H2hView's non-NFL
 // branch) — date/venue/opponent are all already shown some other way, same
 // role OVERVIEW_GAME_META_KEYS plays for OverviewStatNGenericView's rows.
 const H2H_GAME_LOG_META_KEYS = new Set(['date', 'date_iso', 'venue', 'opponent'])
@@ -2871,12 +2917,12 @@ function H2hView({ payload }: { payload: H2hPayload }) {
   const t = payload.totals ?? {}
   const games = payload.games ?? []
   // engine is "{sport}-h2h"/"{sport}-week" (dash-joined) — every sport now
-  // shares the same compact, filterable game-log layout (GameLogFilterBar/
-  // GameLogRow), the one NBA's OverviewStatNGenericView introduced. NFL used
+  // shares the same filterable game-log table (GameLogFilterBar/
+  // GameLogTable), the one NBA's OverviewStatNGenericView introduced. NFL used
   // to keep its own bespoke rush/rec/pass boxed-card layout here; that's
   // gone as of the "uniform for every sport" change — its field order is
   // still football-specific (see NFL_FIELD_ORDER), just rendered through the
-  // shared row component now like everyone else's fields are.
+  // shared table component now like everyone else's fields are.
   const sport = payload.engine.split('-')[0]
 
   const playerLabel = normalizeDisplayPlayer(q.player_display || q.player_query || 'player')
@@ -2997,10 +3043,10 @@ function H2hView({ payload }: { payload: H2hPayload }) {
             No games found in window
           </div>
         ) : (
-          // Every sport shares this compact, filterable game-log layout now
-          // (GameLogFilterBar/GameLogRow, the same one NBA's
+          // Every sport shares this filterable game-log table now
+          // (GameLogFilterBar/GameLogTable, the same one NBA's
           // OverviewStatNGenericView uses) — venue+opponent merged into one
-          // display string up front so GameLogRow's generic `opponent`
+          // display string up front so GameLogTable's generic `opponent`
           // lookup finds a ready-made "@ CHI"/"vs CHI" string. For NFL
           // specifically: whole-zero field groups (allZeroFieldsToHide
           // above — e.g. a pure rusher's always-empty passing line) are
@@ -3027,15 +3073,7 @@ function H2hView({ payload }: { payload: H2hPayload }) {
               return reorderRecordByFieldOrder(merged, NFL_FIELD_ORDER)
             }) as unknown as Record<string, unknown>[]}
           >
-            {(filteredGames) =>
-              filteredGames.map((g, i) => (
-                <GameLogRow
-                  key={`${g.date_iso ?? g.date}-${i}`}
-                  g={g}
-                  metaKeys={H2H_GAME_LOG_META_KEYS}
-                />
-              ))
-            }
+            {(filteredGames) => <GameLogTable games={filteredGames} metaKeys={H2H_GAME_LOG_META_KEYS} />}
           </GameLogFilterBar>
         )}
       </div>
