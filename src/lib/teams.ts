@@ -31,7 +31,19 @@ const NBA_TEAMS = [
   'okc', 'orl', 'phi', 'phx', 'por', 'sac', 'sa', 'tor', 'utah', 'wsh',
 ]
 
-const TEAMS_BY_SPORT: Record<string, string[]> = { nfl: NFL_TEAMS, mlb: MLB_TEAMS, nba: NBA_TEAMS }
+// NHL team codes (2026-10-01, NHL joining h2h) — one canonical code per team.
+// Checked live against nhl-h2h's "vs {team}" normalization: alternate
+// spellings for the same franchise (tb/tbl, nj/njd, la/lak, sj/sjs, wsh/was,
+// utah/uta) all resolve identically ("window_label": "career vs TB" etc.),
+// so this picks one spelling per team rather than listing every alias.
+const NHL_TEAMS = [
+  'ana', 'bos', 'buf', 'cgy', 'car', 'chi', 'col', 'cbj', 'dal', 'det',
+  'edm', 'fla', 'la', 'min', 'mtl', 'nsh', 'nj', 'nyi', 'nyr', 'ott',
+  'phi', 'pit', 'sj', 'sea', 'stl', 'tb', 'tor', 'utah', 'van', 'vgk',
+  'wsh', 'wpg',
+]
+
+const TEAMS_BY_SPORT: Record<string, string[]> = { nfl: NFL_TEAMS, mlb: MLB_TEAMS, nba: NBA_TEAMS, nhl: NHL_TEAMS }
 
 // Lowercase opponent codes for a sport; empty when h2h-by-team isn't offered.
 export function getTeamCodes(sport: string | undefined): string[] {

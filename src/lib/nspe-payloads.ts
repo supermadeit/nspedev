@@ -1680,6 +1680,187 @@ export function extractStatsOverviewPayload(payload: unknown): StatsOverviewPayl
   return null
 }
 
+// ---------- NFL/MLB h2h -> StatsOverviewPayload adapter (2026-10-01) ----------
+// NBA/NHL's "vs team" command hits a dedicated nba_overview/nhl_overview
+// engine that already sends a record line, threshold hit-rate badges, and a
+// TOTAL/IN WINS/IN LOSSES/season-by-season table (StatsOverviewPayload
+// above). NFL/MLB's "vs team" command hits a different engine (nfl-h2h/
+// mlb-h2h, H2hPayload) with no such breakdown — but checked live 2026-10-01:
+// nfl-h2h's own per-game rows already carry a `result` field ("L 13-20") and
+// a real date, which is everything needed to compute the same win/loss
+// split and season grouping client-side, no new backend engine required.
+// mlb-h2h's game rows don't carry a `result` field on the live API as of
+// 2026-10-01, so its rows skip IN WINS/IN LOSSES until then (season grouping
+// still works from the date alone) — confirmed with backend the same day
+// that a `result` field ("W 7-6"/"L 3-0", with "F/10" appended on
+// extra-inning games) has already been built and is just not deployed yet;
+// parseH2hResultCode below only reads the first character, so MLB's win/loss
+// split and record line will start working with zero code changes here the
+// moment that ships. This builds a StatsOverviewPayload from an H2hPayload so
+// H2hView can render through the exact same StatsOverviewBody component
+// NBA/NHL use, instead of a separately-maintained lookalike.
+function h2hNumField(g: Record<string, unknown>, key: string): number {
+  return typeof g[key] === 'number' ? (g[key] as number) : 0
+}
+
+function parseH2hResultCode(result: unknown): 'W' | 'L' | 'T' | null {
+  if (typeof result !== 'string') return null
+  const c = result.trim()[0]?.toUpperCase()
+  return c === 'W' || c === 'L' || c === 'T' ? c : null
+}
+
+// NFL seasons span two calendar years (Sept-Feb) and are conventionally
+// labeled by the year they started — a January/February game belongs to the
+// season that began the previous August/September.
+function nflSeasonLabelFromDate(dateIso: string | undefined): string | null {
+  if (!dateIso) return null
+  const d = new Date(dateIso)
+  if (Number.isNaN(d.getTime())) return null
+  const month = d.getUTCMonth() + 1
+  return String(month <= 2 ? d.getUTCFullYear() - 1 : d.getUTCFullYear())
+}
+
+// MLB seasons are plain calendar years (confirmed against TeamMetricsPage's
+// own year-label rule, 2026-09).
+function mlbSeasonLabelFromDate(dateIso: string | undefined): string | null {
+  if (!dateIso) return null
+  const d = new Date(dateIso)
+  if (Number.isNaN(d.getTime())) return null
+  return String(d.getUTCFullYear())
+}
+
+// Up to 4 headline columns for NFL's table, in priority order, filtered down
+// to whichever of this player's display_fields are actually present (a
+// receiver's h2h has no pass_* fields, a QB's has no rec_* fields, etc).
+const NFL_H2H_OVERVIEW_PRIORITY: { key: string; header: string }[] = [
+  { key: 'pass_yds', header: 'PASS YDS' },
+  { key: 'pass_td', header: 'PASS TD' },
+  { key: 'rush_yds', header: 'RUSH YDS' },
+  { key: 'rush_td', header: 'RUSH TD' },
+  { key: 'rec_yds', header: 'REC YDS' },
+  { key: 'rec', header: 'REC' },
+  { key: 'rec_td', header: 'REC TD' },
+]
+
+// MLB's classic h2h has no display_fields (fixed batting-line shape) — AVG/
+// OBP/SLG/OPS are rate stats that don't toggle/sum sensibly into this
+// per-game/totals table, so they stay as the static slash-line H2hView
+// already shows above this table; the table itself uses plain counting
+// stats, same toggle semantics as NFL's columns.
+const MLB_H2H_OVERVIEW_COLUMNS: { key: string; header: string }[] = [
+  { key: 'H', header: 'H' },
+  { key: 'HR', header: 'HR' },
+  { key: 'RBI', header: 'RBI' },
+  { key: 'R', header: 'R' },
+]
+
+export function buildStatsOverviewFromH2h(payload: H2hPayload): StatsOverviewPayload {
+  const games = payload.games ?? []
+  const q = payload.query ?? {}
+  const displayFields = q.display_fields && q.display_fields.length > 0 ? q.display_fields : null
+
+  const columns = displayFields
+    ? NFL_H2H_OVERVIEW_PRIORITY.filter((c) => displayFields.includes(c.key)).slice(0, 4)
+    : MLB_H2H_OVERVIEW_COLUMNS
+
+  const seasonLabelOf = (g: H2hGame) => (displayFields ? nflSeasonLabelFromDate(g.date_iso) : mlbSeasonLabelFromDate(g.date_iso))
+
+  const sumCols = (list: H2hGame[]): Record<string, number> => {
+    const out: Record<string, number> = {}
+    for (const c of columns) out[c.key] = list.reduce((sum, g) => sum + h2hNumField(g as Record<string, unknown>, c.key), 0)
+    return out
+  }
+  const perGameCols = (totals: Record<string, number>, n: number): Record<string, number> => {
+    const out: Record<string, number> = {}
+    for (const c of columns) out[c.key] = n > 0 ? totals[c.key] / n : 0
+    return out
+  }
+  const rowFor = (scope: string, label: string, list: H2hGame[]): StatsOverviewRow => {
+    const totals = sumCols(list)
+    return { scope, label, games: list.length, totals, per_game: perGameCols(totals, list.length) }
+  }
+
+  const rows: StatsOverviewRow[] = [rowFor('total', 'TOTAL', games)]
+
+  // Win/loss split — only possible where a per-game `result` field exists
+  // (NFL today; see this section's header comment for MLB's status).
+  if (displayFields) {
+    const wins = games.filter((g) => parseH2hResultCode((g as Record<string, unknown>).result) === 'W')
+    const losses = games.filter((g) => parseH2hResultCode((g as Record<string, unknown>).result) === 'L')
+    if (wins.length > 0) rows.push(rowFor('wins', 'IN WINS', wins))
+    if (losses.length > 0) rows.push(rowFor('losses', 'IN LOSSES', losses))
+  }
+
+  // Season-by-season, most recent first.
+  const bySeason = new Map<string, H2hGame[]>()
+  for (const g of games) {
+    const label = seasonLabelOf(g)
+    if (!label) continue
+    const list = bySeason.get(label)
+    if (list) list.push(g)
+    else bySeason.set(label, [g])
+  }
+  for (const label of [...bySeason.keys()].sort((a, b) => Number(b) - Number(a))) {
+    rows.push(rowFor('season', label, bySeason.get(label)!))
+  }
+
+  let record: string | null = null
+  if (displayFields) {
+    const w = games.filter((g) => parseH2hResultCode((g as Record<string, unknown>).result) === 'W').length
+    const l = games.filter((g) => parseH2hResultCode((g as Record<string, unknown>).result) === 'L').length
+    const ties = games.filter((g) => parseH2hResultCode((g as Record<string, unknown>).result) === 'T').length
+    if (w + l + ties > 0) record = ties > 0 ? `${w}-${l}-${ties}` : `${w}-${l}`
+  }
+
+  // Threshold hit-rate badges — the exact same thresholds the GAME LOG's own
+  // filter chips use (buildGameLogCategories in App.tsx), just reshaped into
+  // count_line's {stat,label,min,count,window_games} grouping so they render
+  // as "PASS YDS 250+ 3/5  300+ 1/5" instead of chip buttons.
+  const countLine: NonNullable<StatsOverviewPayload['count_line']> = []
+  const pushCount = (stat: string, label: string, min: number) => {
+    countLine.push({
+      stat,
+      label,
+      min,
+      count: games.filter((g) => h2hNumField(g as Record<string, unknown>, stat) >= min).length,
+      window_games: games.length,
+    })
+  }
+  if (displayFields) {
+    const has = (f: string) => displayFields.includes(f)
+    if (has('pass_yds')) {
+      pushCount('pass_yds', 'PASS YDS', 250)
+      pushCount('pass_yds', 'PASS YDS', 300)
+    }
+    if (has('pass_td')) pushCount('pass_td', 'PASS TD', 3)
+    if (has('rush_yds')) pushCount('rush_yds', 'RUSH YDS', 100)
+    if (has('rush_td')) pushCount('rush_td', 'RUSH TD', 2)
+    if (has('rec_yds')) pushCount('rec_yds', 'REC YDS', 100)
+    if (has('rec')) pushCount('rec', 'REC', 10)
+  } else {
+    pushCount('H', 'HITS', 2)
+    pushCount('H', 'HITS', 3)
+    pushCount('HR', 'HR', 1)
+    pushCount('RBI', 'RBI', 2)
+  }
+
+  return {
+    engine: payload.engine,
+    mode: 'multi_season',
+    query: {
+      player: q.player_display || q.player_query || 'player',
+      team: q.player_team,
+      source: q.source,
+      window_label: q.window_label,
+    },
+    columns,
+    rows,
+    record,
+    window_games: games.length,
+    count_line: countLine,
+  }
+}
+
 export interface MlbOverviewBattingRow {
   split: string
   games: number

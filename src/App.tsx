@@ -45,6 +45,7 @@ import {
 } from '@/lib/nspe-api'
 import { guestTokenHeader, setGuestToken } from '@/lib/guestToken'
 import {
+  buildStatsOverviewFromH2h,
   detectStatContext,
   extractDateToken,
   extractH2hPayload,
@@ -1012,7 +1013,7 @@ function NflTeamSlotsView({ payload }: { payload: NflTeamSlotsPayload }) {
                     <span style={{ color: PARLAY_CYAN }}>{`${g.venue === 'away' ? '@' : 'vs'} ${g.opponent}`}</span>
                   </div>
                   <div className="mt-1.5 flex flex-wrap gap-x-3">
-                    <span className="whitespace-nowrap font-bold" style={{ color: won ? PARLAY_GREEN : lost ? 'oklch(0.75 0.15 25)' : 'oklch(0.76 0 0)' }}>
+                    <span className="whitespace-nowrap font-bold" style={{ color: won ? PARLAY_GREEN : lost ? 'oklch(0.75 0.15 25)' : 'oklch(0.92 0 0)' }}>
                       {g.result}
                     </span>
                     <span className="whitespace-nowrap" style={{ color: PARLAY_DIM }}>{slotName(g.slot)}</span>
@@ -1068,7 +1069,7 @@ export interface QueryGateState {
 // too fast — with a live countdown when the backend sends Retry-After.
 function QueryGateNotice({ gate, isLoggedIn, onRetry }: { gate: QueryGateState; isLoggedIn: boolean; onRetry?: () => void }) {
   const ACCENT = 'oklch(0.78 0.18 145)'
-  const DIM = 'oklch(0.60 0 0)'
+  const DIM = 'oklch(0.92 0 0)'
   const [secondsLeft, setSecondsLeft] = useState(gate.retryAfterSeconds ?? 0)
   useEffect(() => {
     setSecondsLeft(gate.retryAfterSeconds ?? 0)
@@ -1161,7 +1162,7 @@ function GuestQuotaNotice({ remaining, stacked }: { remaining: number | null; st
   return (
     <span
       className={`absolute ${stacked ? '-top-11' : '-top-6'} left-0 font-mono font-bold text-[12px] whitespace-nowrap`}
-      style={{ color: urgent ? 'oklch(0.78 0.18 145)' : 'oklch(0.55 0 0)' }}
+      style={{ color: urgent ? 'oklch(0.78 0.18 145)' : 'oklch(0.92 0 0)' }}
     >
       {urgent ? '1 free query left today — ' : `${remaining} free queries left today`}
       {urgent && (
@@ -1177,7 +1178,7 @@ function GuestQuotaNotice({ remaining, stacked }: { remaining: number | null; st
 // One boxed card per leg, same treatment as the h2h game log: player + matchup
 // + confidence on top, the leg's label under it, then its hit-rate evidence
 // left to right.
-const PARLAY_DIM = 'oklch(0.55 0 0)'
+const PARLAY_DIM = 'oklch(0.92 0 0)'
 const PARLAY_CYAN = 'oklch(0.70 0.10 195)'
 const PARLAY_GREEN = 'oklch(0.85 0.15 145)'
 
@@ -1305,7 +1306,7 @@ function ExplosiveOverviewView({ payload }: { payload: ExplosiveOverviewPayload 
   const CYAN = 'oklch(0.85 0.15 195)'
   const CYAN_BRIGHT = 'oklch(0.90 0.18 195)'
   const GREEN = 'oklch(0.75 0.16 145)'
-  const DIM = 'oklch(0.55 0 0)'
+  const DIM = 'oklch(0.92 0 0)'
   const BORDER = 'oklch(0.22 0 0)'
 
   const player = normalizeDisplayPlayer(payload.query.player)
@@ -1425,7 +1426,7 @@ function NflOverviewScopesView({ payload }: { payload: NflOverviewScopesPayload 
 
   const CYAN = 'oklch(0.85 0.15 195)'
   const CYAN_BRIGHT = 'oklch(0.90 0.18 195)'
-  const DIM = 'oklch(0.55 0 0)'
+  const DIM = 'oklch(0.92 0 0)'
   const BORDER = 'oklch(0.22 0 0)'
 
   const player = normalizeDisplayPlayer(payload.query.player)
@@ -1551,7 +1552,7 @@ function NflOverviewStatNView({ payload, query = '' }: { payload: NflOverviewSta
 
   const CYAN = 'oklch(0.85 0.15 195)'
   const CYAN_BRIGHT = 'oklch(0.90 0.18 195)'
-  const DIM = 'oklch(0.55 0 0)'
+  const DIM = 'oklch(0.92 0 0)'
   const BORDER = 'oklch(0.22 0 0)'
 
   const player = normalizeDisplayPlayer(payload.query.player)
@@ -1562,17 +1563,28 @@ function NflOverviewStatNView({ payload, query = '' }: { payload: NflOverviewSta
   // mode "long" ("dak long -yds40 -ov"): counts games with a qualifying long
   // play, plus how many plays / yards those were.
   const isLong = payload.mode === 'long' || payload.total_plays != null
+  const scopeText = payload.scope != null ? scopeLabel(payload.scope) : slotLabelFromQuery(query) || 'full game'
+  // "rcpt" (receptions) already names its own category — showing "rec" in
+  // front of it is pure repetition. "yds"/"td" don't carry that same
+  // information on their own (rush/rec/pass yards and TDs all read "yds"/
+  // "td"), so category stays for those — dropping it there would make the
+  // subtitle genuinely ambiguous, not just wordy. Reported 2026-10-01: the
+  // full "rec · full game · ≥10rcpt · career" line was wide enough to wrap
+  // the player's own name onto two lines on mobile.
+  const showCategory = stat_kind !== 'rcpt'
+  const showScope = scopeText !== 'full game'
+  const subtitle = [showCategory ? category : null, showScope ? scopeText : null, `≥${threshold}${stat_kind}`, window_label]
+    .filter(Boolean)
+    .join(' · ')
 
   return (
     <div className="space-y-4 font-mono">
-      <div className="flex items-baseline gap-2 pb-2" style={{ borderBottom: `1px solid ${BORDER}` }}>
-        <span className="text-[14px] font-bold" style={{ color: CYAN_BRIGHT }}>
+      <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 pb-2" style={{ borderBottom: `1px solid ${BORDER}` }}>
+        <span className="text-[14px] font-bold whitespace-nowrap shrink-0" style={{ color: CYAN_BRIGHT }}>
           {player}
         </span>
         <span className="text-[12px]" style={{ color: DIM }}>
-          {isLong
-            ? `${category} · ${threshold}${stat_kind}+ plays · ${window_label}`
-            : `${category} · ${payload.scope != null ? scopeLabel(payload.scope) : slotLabelFromQuery(query) || 'full game'} · ≥${threshold}${stat_kind} · ${window_label}`}
+          {isLong ? `${category} · ${threshold}${stat_kind}+ plays · ${window_label}` : subtitle}
         </span>
       </div>
 
@@ -1825,7 +1837,7 @@ function buildGameLogCategories(sport: string, customTotal: number | null, displ
 }
 
 const CHIP_ACTIVE = 'oklch(0.90 0.18 195)'
-const CHIP_INACTIVE = 'oklch(0.55 0 0)'
+const CHIP_INACTIVE = 'oklch(0.92 0 0)'
 const CHIP_BORDER_ACTIVE = 'oklch(0.85 0.15 195)'
 const CHIP_BORDER_INACTIVE = 'oklch(0.28 0 0)'
 
@@ -1939,7 +1951,7 @@ function GameLogRow({ g, valueLabel, metaKeys }: { g: Record<string, unknown>; v
       <span style={{ color: 'oklch(0.92 0 0)' }}>{extractDateToken(dateRaw) ?? dateRaw}</span>
       {opponent && <span style={{ color: 'oklch(0.75 0.08 220)' }}>{` ${opponent}`}</span>}
       {result && (
-        <span style={{ color: outcome === 'W' ? 'oklch(0.78 0.18 145)' : outcome === 'L' ? 'oklch(0.70 0.15 25)' : 'oklch(0.55 0 0)' }}>
+        <span style={{ color: outcome === 'W' ? 'oklch(0.78 0.18 145)' : outcome === 'L' ? 'oklch(0.70 0.15 25)' : 'oklch(0.92 0 0)' }}>
           {` ${result}`}
         </span>
       )}
@@ -1962,7 +1974,7 @@ function OverviewStatNGenericView({ payload }: { payload: OverviewStatNPayload }
   const { isExpanded, toggle } = useExpandableRows()
   const CYAN = 'oklch(0.85 0.15 195)'
   const CYAN_BRIGHT = 'oklch(0.90 0.18 195)'
-  const DIM = 'oklch(0.55 0 0)'
+  const DIM = 'oklch(0.92 0 0)'
   const BORDER = 'oklch(0.22 0 0)'
 
   const q = payload.query
@@ -2074,14 +2086,44 @@ function fmtOverviewValue(key: string, v: number | undefined, kind: 'totals' | '
 }
 
 function StatsOverviewView({ payload }: { payload: StatsOverviewPayload }) {
+  const DIM = 'oklch(0.92 0 0)'
+  const CYAN_BRIGHT = 'oklch(0.90 0.18 195)'
+  const BORDER = 'oklch(0.22 0 0)'
+  const q = payload.query
+
+  return (
+    <div className="space-y-3 font-mono">
+      <div className="pb-2" style={{ borderBottom: `1px solid ${BORDER}` }}>
+        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+          <span className="text-[14px] font-bold" style={{ color: CYAN_BRIGHT }}>{normalizeDisplayPlayer(q.player)}</span>
+          {q.team && <span className="text-[12px]" style={{ color: DIM }}>{q.team}</span>}
+        </div>
+        <div className="mt-1 text-[12px]" style={{ color: DIM }}>
+          {[q.window_label && `window: ${q.window_label}`, q.source].filter(Boolean).join(' · ')}
+        </div>
+      </div>
+      <StatsOverviewBody payload={payload} />
+    </div>
+  )
+}
+
+// Record line + threshold hit-rate badges + per-game/totals toggle + the
+// TOTAL/IN WINS/IN LOSSES/season-by-season table — split out from
+// StatsOverviewView above (2026-10-01) so H2hView can reuse this exact body
+// under its own richer header ("{player} vs {TEAM} · home & away · window")
+// instead of StatsOverviewView's plainer one, without duplicating the
+// table/toggle/badge rendering. NFL/MLB's h2h card builds a StatsOverviewPayload
+// client-side from its own totals+games (see buildStatsOverviewFromH2h in
+// nspe-payloads.ts) specifically to reuse this component, rather than this
+// component being NBA/NHL-only.
+function StatsOverviewBody({ payload }: { payload: StatsOverviewPayload }) {
   const [mode, setMode] = useState<'per_game' | 'totals'>('per_game')
   const CYAN = 'oklch(0.85 0.15 195)'
   const CYAN_BRIGHT = 'oklch(0.90 0.18 195)'
   const GREEN = 'oklch(0.78 0.18 145)'
-  const DIM = 'oklch(0.55 0 0)'
+  const DIM = 'oklch(0.92 0 0)'
   const BORDER = 'oklch(0.22 0 0)'
 
-  const q = payload.query
   const cols = payload.columns
   const scopeOrder = (r: StatsOverviewRow) => (r.scope === 'total' ? 0 : r.scope === 'wins' ? 1 : r.scope === 'losses' ? 2 : 3)
   const rows = payload.rows
@@ -2117,17 +2159,7 @@ function StatsOverviewView({ payload }: { payload: StatsOverviewPayload }) {
   )
 
   return (
-    <div className="space-y-3 font-mono">
-      <div className="pb-2" style={{ borderBottom: `1px solid ${BORDER}` }}>
-        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-          <span className="text-[14px] font-bold" style={{ color: CYAN_BRIGHT }}>{normalizeDisplayPlayer(q.player)}</span>
-          {q.team && <span className="text-[12px]" style={{ color: DIM }}>{q.team}</span>}
-        </div>
-        <div className="mt-1 text-[12px]" style={{ color: DIM }}>
-          {[q.window_label && `window: ${q.window_label}`, q.source].filter(Boolean).join(' · ')}
-        </div>
-      </div>
-
+    <>
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px]">
         <span style={{ color: 'oklch(0.92 0 0)' }}>
           <span className="font-bold" style={{ color: CYAN }}>{games ?? '—'}</span> games
@@ -2200,7 +2232,7 @@ function StatsOverviewView({ payload }: { payload: StatsOverviewPayload }) {
           ))}
         </div>
       )}
-    </div>
+    </>
   )
 }
 
@@ -2210,7 +2242,7 @@ function StatsOverviewView({ payload }: { payload: StatsOverviewPayload }) {
 function MlbOverviewBattingView({ payload }: { payload: MlbOverviewBattingPayload }) {
   const CYAN = 'oklch(0.85 0.15 195)'
   const CYAN_BRIGHT = 'oklch(0.90 0.18 195)'
-  const DIM = 'oklch(0.55 0 0)'
+  const DIM = 'oklch(0.92 0 0)'
   const BORDER = 'oklch(0.22 0 0)'
 
   const q = payload.query
@@ -2320,7 +2352,7 @@ function PvpView({ payload }: { payload: PvpPayload }) {
   const { isExpanded, toggle } = useExpandableRows()
   const CYAN_BRIGHT = 'oklch(0.90 0.18 195)'
   const GREEN = 'oklch(0.78 0.18 145)'
-  const DIM = 'oklch(0.55 0 0)'
+  const DIM = 'oklch(0.92 0 0)'
   const BORDER = 'oklch(0.22 0 0)'
 
   const q = payload.query
@@ -2776,40 +2808,6 @@ function MlbTeamRunsView({ payload }: { payload: MlbTeamRunsPayload }) {
 // Non-MLB h2h engines (e.g. "nfl-h2h") reuse the same totals/games envelope
 // but with an entirely different stat set, named explicitly by
 // query.display_fields rather than MLB's fixed batting line — this is the
-// label map for whichever of those fields show up. Anything not listed
-// falls back to the raw field name (still readable, just not prettified).
-//
-// rec_yds/rec_lng/rec_td drop the "rec" prefix — the bare "rec" field
-// (receptions) already appears right next to them, so the group as a whole
-// reads as receiving without repeating it on every field. rush_* keeps its
-// prefix since it's a different category sitting in the same card.
-const H2H_FIELD_LABELS: Record<string, string> = {
-  pass_cmp: 'cmp',
-  pass_att: 'att',
-  pass_yds: 'pass yds',
-  pass_td: 'pass td',
-  pass_int: 'int',
-  pass_lng: 'long',
-  pass_rtg: 'rtg',
-  // Bare labels (no "rush" prefix) — the rushing group now always renders
-  // together and in its own block (see NFL_FIELD_ORDER below), so the
-  // prefix was pure redundancy that only showed up as its own wrapped line
-  // above "ATT"/"YDS"/etc in the narrow totals-grid cells.
-  rush_att: 'att',
-  rush_yds: 'yds',
-  rush_lng: 'lng',
-  rush_td: 'td',
-  tgts: 'tgts',
-  rec_yds: 'yds',
-  rec_lng: 'lng',
-  rec_td: 'td',
-  rec: 'rec',
-  g: 'g',
-  a: 'a',
-  pts: 'pts',
-  sog: 'sog',
-}
-
 // Field groups whose members only mean something as a set — e.g. rush_att/
 // rush_yds/rush_lng/rush_td for a pure receiver, or the reverse for a pure
 // rusher. The backend's display_fields list currently covers every offensive
@@ -2863,10 +2861,6 @@ function allZeroFieldsToHide(fields: string[], totals: Record<string, unknown>):
   return hidden
 }
 
-function formatH2hFieldValue(field: string, value: number): string {
-  return /rtg|avg|pct/i.test(field) ? value.toFixed(1) : String(value)
-}
-
 // GameLogRow's `metaKeys` for MLB/NHL h2h games (see H2hView's non-NFL
 // branch) — date/venue/opponent are all already shown some other way, same
 // role OVERVIEW_GAME_META_KEYS plays for OverviewStatNGenericView's rows.
@@ -2902,59 +2896,38 @@ function H2hView({ payload }: { payload: H2hPayload }) {
     : ''
 
   // display_fields present -> a non-MLB sport's stat line (see
-  // H2H_FIELD_LABELS above); absent -> assume classic MLB batting fields,
+  // H2H_FIELD_GROUPS above); absent -> assume classic MLB batting fields,
   // exactly as this view always has — zero behavior change for every h2h
   // response that predates display_fields.
   const displayFields = q.display_fields && q.display_fields.length > 0 ? q.display_fields : null
 
   const formatAvg = (n?: number) => (typeof n === 'number' ? n.toFixed(3).replace(/^0+/, '') : '—')
 
-  // Computed once here (not per group above) so both the totals grid below
-  // and each game-log row use the exact same hidden set — a field that's
-  // dropped from the summary shouldn't still show up per game.
+  // Computed once here (not per group above) so each game-log row uses the
+  // exact same hidden set — a field dropped from the summary shouldn't still
+  // show up per game.
   const hiddenH2hFields = displayFields ? allZeroFieldsToHide(displayFields, t) : null
 
-  const genericCounting: { label: string; value: string }[] | null = displayFields
-    ? [
-        { label: 'g', value: String(t.games ?? games.length) },
-        ...sortByFieldOrder(displayFields, (f) => f, NFL_FIELD_ORDER)
-          .filter((f) => !hiddenH2hFields?.has(f))
-          .map((f) => ({
-            label: H2H_FIELD_LABELS[f] ?? f.replace(/_/g, ' '),
-            value: formatH2hFieldValue(f, typeof t[f] === 'number' ? (t[f] as number) : 0),
-          })),
+  // MLB's classic h2h (no display_fields) has no equivalent to NFL's own
+  // field list, so its AVG/OBP/SLG/OPS slash-line stays as its own small
+  // static strip above the table below — rate stats that don't toggle/sum
+  // the way the table's plain counting columns do (see
+  // buildStatsOverviewFromH2h's comment in nspe-payloads.ts).
+  const mlbSlashLine: { label: string; value: string }[] | null = displayFields
+    ? null
+    : [
+        { label: 'AVG', value: formatAvg(t.AVG) },
+        { label: 'OBP', value: formatAvg(t.OBP) },
+        { label: 'SLG', value: formatAvg(t.SLG) },
+        { label: 'OPS', value: formatAvg(t.OPS) },
       ]
-    : null
 
-  // Classic MLB fallback (no display_fields from the backend — still true
-  // for mlb-h2h as of 2026-10-01, see the comment on `displayFields` above).
-  // Used to render as two visually different stacked grids (a bold green
-  // AVG/OBP/SLG/OPS slash line, then a separate plainer 12-box counting
-  // grid below it) — reported 2026-10-01 as reading jumbled next to NFL's
-  // (and NBA's stat-overview's) single uniform grid of equally-styled
-  // boxes. Flattened into one list sharing genericCounting's exact box
-  // style/rendering below, so MLB's classic path isn't visually a second,
-  // different layout anymore.
-  const mlbClassicCounting: { label: string; value: string }[] = [
-    { label: 'AVG', value: formatAvg(t.AVG) },
-    { label: 'OBP', value: formatAvg(t.OBP) },
-    { label: 'SLG', value: formatAvg(t.SLG) },
-    { label: 'OPS', value: formatAvg(t.OPS) },
-    { label: 'G', value: String(t.games ?? 0) },
-    { label: 'AB', value: String(t.AB ?? 0) },
-    { label: 'H', value: String(t.H ?? 0) },
-    { label: 'R', value: String(t.R ?? 0) },
-    { label: 'HR', value: String(t.HR ?? 0) },
-    { label: 'RBI', value: String(t.RBI ?? 0) },
-    { label: 'TB', value: String(t.TB ?? 0) },
-    { label: '2B', value: String(t['2B'] ?? 0) },
-    { label: '3B', value: String(t['3B'] ?? 0) },
-    { label: 'BB', value: String(t.BB ?? 0) },
-    { label: 'SO', value: String(t.SO ?? 0) },
-    { label: 'SB', value: String(t.SB ?? 0) },
-  ]
-
-  const totalsBoxes = genericCounting ?? mlbClassicCounting
+  // The uniform "overview" card (record line, threshold hit-rate badges, a
+  // per-game/totals toggle, and TOTAL/IN WINS/IN LOSSES/season-by-season
+  // rows) NBA/NHL's own dedicated engine already sends — built client-side
+  // from this same totals+games payload (2026-10-01) so every sport's h2h
+  // looks uniform, per the owner's call to standardize on NBA/NHL's shape.
+  const overviewPayload = games.length > 0 ? buildStatsOverviewFromH2h(payload) : null
 
   return (
     <div className="space-y-4">
@@ -2979,29 +2952,40 @@ function H2hView({ payload }: { payload: H2hPayload }) {
         <span style={{ color: 'oklch(0.92 0 0)' }}>{windowLabel ? ` · ${windowLabel}` : ''}</span>
       </div>
 
-      {/* Totals card — one uniform grid of equally-styled boxes for every
-          sport (NFL's real display_fields, MLB's classic fallback, and any
-          future sport that sends display_fields all land here the same
-          way). Previously MLB's classic branch was its own, differently-
-          styled two-grid layout — reported 2026-10-01 as reading jumbled
-          next to this. */}
-      <div
-        className="rounded p-3"
-        style={{ backgroundColor: 'oklch(0.18 0 0)', border: '1px solid oklch(0.28 0 0)' }}
-      >
-        <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${Math.min(totalsBoxes.length, 6)}, minmax(0, 1fr))` }}>
-          {totalsBoxes.map((s) => (
-            <div key={s.label} className="flex flex-col items-center">
-              <span className="font-mono text-[10px] uppercase tracking-wider" style={{ color: 'oklch(0.92 0 0)' }}>
-                {s.label}
-              </span>
-              <span className="font-mono font-bold text-[15px]" style={{ color: 'oklch(0.85 0.15 145)' }}>
-                {s.value}
-              </span>
-            </div>
-          ))}
+      {/* MLB's rate-stat slash-line — not part of the table below (see the
+          comment on mlbSlashLine above). */}
+      {mlbSlashLine && (
+        <div
+          className="rounded p-3"
+          style={{ backgroundColor: 'oklch(0.18 0 0)', border: '1px solid oklch(0.28 0 0)' }}
+        >
+          <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${mlbSlashLine.length}, minmax(0, 1fr))` }}>
+            {mlbSlashLine.map((s) => (
+              <div key={s.label} className="flex flex-col items-center">
+                <span className="font-mono text-[10px] uppercase tracking-wider" style={{ color: 'oklch(0.92 0 0)' }}>
+                  {s.label}
+                </span>
+                <span className="font-mono font-bold text-[15px]" style={{ color: 'oklch(0.85 0.15 145)' }}>
+                  {s.value}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* Uniform overview card — record, hit-rate badges, per-game/totals
+          toggle, TOTAL/IN WINS/IN LOSSES/season rows. Same body component
+          NBA/NHL's dedicated overview engine renders through (StatsOverviewBody),
+          fed a payload built client-side from this h2h response above. */}
+      {overviewPayload && (
+        <div
+          className="rounded p-3"
+          style={{ backgroundColor: 'oklch(0.18 0 0)', border: '1px solid oklch(0.28 0 0)' }}
+        >
+          <StatsOverviewBody payload={overviewPayload} />
+        </div>
+      )}
 
       {/* Game log */}
       <div>
@@ -3072,7 +3056,7 @@ function formatIpFromOuts(outs?: number): string {
 const SHOW_PITCHER_FPV = false
 
 const PITCH_STAT_PILL = 'oklch(0.18 0 0)'
-const PITCH_LABEL = 'oklch(0.55 0 0)'
+const PITCH_LABEL = 'oklch(0.92 0 0)'
 const PITCH_VALUE = 'oklch(0.88 0 0)'
 const PITCH_ACCENT = 'oklch(0.85 0.15 195)'
 const PITCH_GREEN = 'oklch(0.85 0.15 145)'
@@ -4466,6 +4450,19 @@ function stripSportPrefix(value: string): { sport?: string; rest: string } {
 
 const resultCountText = (n: number) => `${n} result${n === 1 ? '' : 's'}`
 
+// Results-pane header for "-ov" overview-statn commands (NflOverviewStatNView
+// / OverviewStatNGenericView) — reported 2026-10-01: showing the raw typed
+// query plus an appended "— overview" suffix was doubly redundant with the
+// command's own "-ov" flag, and the trailing window flag (-career/-season)
+// is already restated in the card body below, so the header just needs the
+// command's identity, not its full flag list. Prepends "nspe" since the
+// typed/built query itself doesn't always include it, and this header is
+// meant to read as a real, pasteable command.
+function formatOverviewHeaderQuery(query: string): string {
+  const trimmed = query.trim().replace(/\s+-(career|season|last\d+(?:\/\d+)?)\s*$/i, '')
+  return /^nspe\b/i.test(trimmed) ? trimmed : `nspe ${trimmed}`
+}
+
 // SHELVED (2026-09-29, per owner via nspe-v2-da): a normal command errored
 // then worked a few retries later; disambiguation (backend) and follow-ups
 // (this, entirely client-side) were the two suspects, both pulled completely
@@ -4720,6 +4717,36 @@ function App() {
       MLB_POPULAR_NAMES.flatMap((name) => {
         const key = normalizeNameForCuratedMatch(name)
         const hit = PLAYER_INDEX.find((e) => e.sport === 'mlb' && normalizeNameForCuratedMatch(e.name).startsWith(key))
+        return hit ? [{ player: hit.name, team: hit.team }] : []
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [isPlayerIndexReady],
+  )
+
+  // NHL h2h's "popular players" list — same curated-stars-against-the-live-
+  // index shape as NBA/MLB above (2026-10-01, NHL joining h2h). Checked each
+  // name's team/position against the live index before including it. Auston
+  // Matthews/Igor Shesterkin/Matthew Tkachuk have no profile in the index
+  // (confirmed with backend 2026-10-01: the index is an owner-curated
+  // skater whitelist, not everyone on file — Matthews is a pending add,
+  // Shesterkin's a goalie and goalie profiles aren't built yet, Matthew
+  // Tkachuk has a career-backfill gap) — dropped silently by the flatMap
+  // below anyway, but left off here too. Quinn Hughes (MIN) and Brady
+  // Tkachuk (FLA) looked like data bugs at first glance but aren't — both
+  // were actually traded, and the index correctly derives team from each
+  // player's most recent game on file rather than a hardcoded roster.
+  const NHL_POPULAR_NAMES = [
+    'Connor McDavid', 'Nathan MacKinnon', 'Nikita Kucherov', 'Leon Draisaitl', 'Kirill Kaprizov',
+    'Jack Hughes', 'Quinn Hughes', 'David Pastrnak', 'Jason Robertson', 'Mikko Rantanen',
+    'Cale Makar', 'Sidney Crosby', 'Mitch Marner', 'William Nylander', 'Kyle Connor',
+    'Alex Ovechkin', 'Jack Eichel', 'Sam Reinhart', 'Dylan Larkin', 'Rasmus Dahlin',
+    'Seth Jarvis', 'Brady Tkachuk',
+  ]
+  const nhlPopularPlayers = useMemo(
+    () =>
+      NHL_POPULAR_NAMES.flatMap((name) => {
+        const key = normalizeNameForCuratedMatch(name)
+        const hit = PLAYER_INDEX.find((e) => e.sport === 'nhl' && normalizeNameForCuratedMatch(e.name).startsWith(key))
         return hit ? [{ player: hit.name, team: hit.team }] : []
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -6106,7 +6133,7 @@ function App() {
                     disabled={Boolean(sample.comingSoon)}
                     className="block w-full rounded px-3 py-3 text-left font-mono text-[13px] transition-opacity"
                     style={{
-                      color: sample.comingSoon ? 'oklch(0.56 0 0)' : 'oklch(0.90 0.18 195)',
+                      color: sample.comingSoon ? 'oklch(0.92 0 0)' : 'oklch(0.90 0.18 195)',
                       backgroundColor: sample.comingSoon ? 'transparent' : 'oklch(0.18 0 0)',
                       opacity: sample.comingSoon ? 0.8 : 1,
                       cursor: sample.comingSoon ? 'not-allowed' : 'pointer',
@@ -6198,9 +6225,9 @@ function App() {
                 : overviewScopesResult
                 ? `${lastQuery} — overview`
                 : overviewStatNResult
-                ? `${lastQuery} — overview`
+                ? formatOverviewHeaderQuery(lastQuery)
                 : overviewStatNGenericResult
-                ? `${lastQuery} — overview`
+                ? formatOverviewHeaderQuery(lastQuery)
                 : pvpResult
                 ? `${lastQuery} — pvp`
                 : statsOverviewResult || mlbOverviewResult
@@ -6855,6 +6882,7 @@ function App() {
               popularPlayers={mlbPopularPlayers}
               nflPopularPlayers={nflPopularPlayers}
               nbaPopularPlayers={nbaPopularPlayers}
+              nhlPopularPlayers={nhlPopularPlayers}
             />
           </div>
         </div>
@@ -6931,6 +6959,7 @@ function App() {
               popularPlayers={mlbPopularPlayers}
               nflPopularPlayers={nflPopularPlayers}
               nbaPopularPlayers={nbaPopularPlayers}
+              nhlPopularPlayers={nhlPopularPlayers}
             />
           </div>
         </div>
