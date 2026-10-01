@@ -297,6 +297,7 @@ export interface SportSeasonPageProps {
 }
 
 export default function SportSeasonPage({ sport, label }: SportSeasonPageProps) {
+  const isMobile = useIsMobile()
   const [powerRankings, setPowerRankings] = useState<SportPowerRankingsRow[] | null>(null)
   const [powerRankingsError, setPowerRankingsError] = useState<string | null>(null)
   const [generatedAt, setGeneratedAt] = useState<string | null>(null)
@@ -363,31 +364,39 @@ export default function SportSeasonPage({ sport, label }: SportSeasonPageProps) 
       <StarsBackground density={180} dim />
 
       <div className="absolute top-0 left-0 right-0 z-20 px-4 pt-3 pb-2">
-        <div className="flex items-center justify-between gap-4 max-w-[1480px] mx-auto">
+        {/* {sports} sits in the same uniform spot WorldCupApp.tsx (NFL)
+            carries it — a visitor can jump to any other sport's page from
+            here without routing back through the homepage. {charts} added
+            next to it 2026-09-30 — a direct link to this sport's own charts
+            page (no popup needed, this page already knows its sport), same
+            slot NFL's page carries it in. {team.metrics} added 2026-10-01,
+            same treatment — mlb has no team-metrics page (metricsHrefFor
+            returns undefined), so this page's mlb mount just won't render
+            the link, nothing else needs to change.
+            Mobile (reported 2026-10-01): four items ({label}/{sports}/
+            {charts}/{team.metrics}) plus the back link don't fit one row
+            once team.metrics joined them, so this stacks into three rows on
+            mobile — back link alone, then {label}+{sports}+{charts}
+            together, then {team.metrics} on its own underneath — while
+            staying the original single row on desktop. */}
+        <div className={`flex gap-2 max-w-[1480px] mx-auto ${isMobile ? 'flex-col' : 'items-center justify-between'}`}>
           <a href="/" className="font-mono font-bold text-[14px] hover:opacity-70 transition-opacity" style={{ color: 'oklch(0.95 0 0)' }}>
             ← nspe.dev
           </a>
-          {/* {sports} sits in the same uniform spot WorldCupApp.tsx (NFL)
-              carries it — a visitor can jump to any other sport's page from
-              here without routing back through the homepage. {charts} added
-              next to it 2026-09-30 — a direct link to this sport's own
-              charts page (no popup needed, this page already knows its
-              sport), same slot NFL's page carries it in. {team.metrics}
-              added 2026-10-01, same treatment — mlb has no team-metrics page
-              (metricsHrefFor returns undefined), so this page's mlb mount
-              just won't render the link, nothing else needs to change. */}
-          <div className="flex items-center gap-4">
-            <span className="font-mono font-bold text-[14px] whitespace-nowrap" style={{ color: C.accent, textDecoration: 'underline' }}>
-              {`{${label}}`}
-            </span>
-            <SportsSwitcher current={sport} />
-            <a
-              href={chartsHrefFor(sport)}
-              className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-              style={{ color: C.accent }}
-            >
-              {'{charts}'}
-            </a>
+          <div className={`flex gap-2 ${isMobile ? 'flex-col items-start' : 'items-center gap-4'}`}>
+            <div className="flex items-center gap-4">
+              <span className="font-mono font-bold text-[14px] whitespace-nowrap" style={{ color: C.accent, textDecoration: 'underline' }}>
+                {`{${label}}`}
+              </span>
+              <SportsSwitcher current={sport} />
+              <a
+                href={chartsHrefFor(sport)}
+                className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+                style={{ color: C.accent }}
+              >
+                {'{charts}'}
+              </a>
+            </div>
             {metricsHrefFor(sport) && (
               <a
                 href={metricsHrefFor(sport)}
@@ -404,7 +413,10 @@ export default function SportSeasonPage({ sport, label }: SportSeasonPageProps) 
         </div>
       </div>
 
-      <div className="relative z-10 h-full pt-[128px] pb-8 px-6 max-w-[1480px] mx-auto">
+      {/* The fixed header above grew from 1 row to 3 on mobile (team.metrics
+          nav restructure, 2026-10-01) — this reserved top padding has to grow
+          with it or the extra rows overlap "power rankings" below. */}
+      <div className={`relative z-10 h-full ${isMobile ? 'pt-[180px]' : 'pt-[128px]'} pb-8 px-6 max-w-[1480px] mx-auto`}>
         <section className="h-full flex flex-col">
           <div className="font-mono text-[14px] uppercase tracking-widest mb-2 shrink-0" style={{ color: 'oklch(0.95 0 0)' }}>
             power rankings

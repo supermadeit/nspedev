@@ -179,7 +179,14 @@ export default function TeamMetricsPage({ sport, label }: { sport: Sport; label:
   }
 
   return (
-    <div className="min-h-dvh w-full" style={{ backgroundColor: C.surface, color: C.textBright, fontFamily: 'monospace' }}>
+    // h-dvh + overflow-y-auto, not min-h-dvh — body has a global
+    // `overflow: hidden` (src/index.css), so every data page scrolls inside
+    // its own capped-height container (same as the charts pages) rather
+    // than relying on normal page/body scroll, which has nowhere to go.
+    // Reported 2026-10-01: content taller than the viewport (the two-card
+    // comparison modes especially) was invisible below the fold with no way
+    // to reach it short of browser zoom.
+    <div className="h-dvh w-full overflow-y-auto" style={{ backgroundColor: C.surface, color: C.textBright, fontFamily: 'monospace' }}>
       <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: `1px solid ${C.border}` }}>
         <div>
           <span className="font-mono font-bold text-[15px]" style={{ color: C.accent }}>{`{${label}}`}</span>

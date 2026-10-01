@@ -11,6 +11,7 @@ import { normalizeDisplayPlayer } from '@/lib/nspe-payloads'
 import { loadPlayerIndex, PLAYER_INDEX, normalizePlayerKey, type PlayerIndexEntry } from '@/lib/playerSearch'
 import { SportsSwitcher } from '@/components/SportsSwitcher'
 import { CHART_COLORS as C, SortableStatChart, type StatChartColumn } from '@/components/SortableStatChart'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 interface Row {
   player: string
@@ -85,6 +86,7 @@ const COLUMNS: StatChartColumn<Row>[] = [
 ]
 
 export default function NhlChartsPage() {
+  const isMobile = useIsMobile()
   const [data, setData] = useState<NhlScoringBucketsData | null>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
   const [indexByKey, setIndexByKey] = useState<Map<string, PlayerIndexEntry>>(new Map())
@@ -112,7 +114,10 @@ export default function NhlChartsPage() {
 
   return (
     <div className="h-dvh w-full overflow-y-auto" style={{ backgroundColor: C.surface, color: C.textBright, fontFamily: 'monospace' }}>
-      <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: `1px solid ${C.border}` }}>
+      {/* Mobile (reported 2026-10-01): stacks {homepage}/{sports}/
+          {team.metrics} into three rows, same treatment as the other chart
+          pages — desktop stays the original single row. */}
+      <div className={`flex gap-3 px-6 py-4 ${isMobile ? 'flex-col' : 'items-center justify-between'}`} style={{ borderBottom: `1px solid ${C.border}` }}>
         <div>
           <span className="font-mono font-bold text-[15px]" style={{ color: C.accent }}>
             {'{chart}'}
@@ -121,7 +126,7 @@ export default function NhlChartsPage() {
             {data?.season ?? '…'} NHL scoring · goal/point/assist/SOG threshold games · season totals
           </span>
         </div>
-        <div className="flex items-center gap-4">
+        <div className={`flex gap-2 ${isMobile ? 'flex-col items-start' : 'items-center gap-4'}`}>
           <a href="/" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
             {'{homepage}'}
           </a>

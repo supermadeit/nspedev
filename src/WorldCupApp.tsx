@@ -741,31 +741,39 @@ export default function WorldCupApp() {
           block ("nfl.rankings · 2026" / week label) is gone so the matchup
           strip right below can be the page's actual top-of-screen header,
           not something pushed down under a headline. */}
+      {/* Mobile (reported 2026-10-01): {sports}/{charts}/{team.metrics} plus
+          the back link stopped fitting one row once team.metrics joined —
+          stacks into three rows on mobile (back link alone, then {sports}+
+          {charts} together, then {team.metrics} underneath), same treatment
+          as SportSeasonPage.tsx's equivalent header; desktop stays the
+          original single row. */}
       <div className="absolute top-0 left-0 right-0 z-20 px-4 pt-3 pb-2">
-        <div className="flex items-center justify-between gap-4 max-w-[1480px] mx-auto">
+        <div className={`flex gap-2 max-w-[1480px] mx-auto ${isMobile ? 'flex-col' : 'items-center justify-between'}`}>
           <a href="/" className="font-mono font-bold text-[14px] hover:opacity-70 transition-opacity" style={{ color: 'oklch(0.95 0 0)' }}>
             ← nspe.dev
           </a>
-          <div className="flex items-center gap-4">
-            {/* {nfl.rankings}'s old tab button (a vestigial single-item toggle
-                — activeView never actually left 'rankings' via any live nav
-                path) is gone in favor of {sports}, in the same uniform spot
-                every sport's page now carries it — this is what lets a
-                visitor jump straight to another sport without going back to
-                the homepage first. {nfl.schedule}'s hidden tab (standings/
-                DivisionsView) is still unreachable via nav, same as before —
-                this swap doesn't change that, activeView just never flips
-                off 'rankings' anymore. */}
-            <SportsSwitcher current="nfl" />
-            {/* {charts} — originally mobile-only (it took {nfl.playoffs}'s
-                slot there since mobile had no room for both), now shown
-                unconditionally next to {sports} on desktop too (2026-09-30
-                ask). {nfl.playoffs}'s pending placeholder stays desktop-only,
-                shelved not deleted, same as before — just no longer swapped
-                out in favor of {charts}, both show now. */}
-            <a href="/charts" className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap" style={{ color: C.accent }}>
-              {'{charts}'}
-            </a>
+          <div className={`flex gap-2 ${isMobile ? 'flex-col items-start' : 'items-center gap-4'}`}>
+            <div className="flex items-center gap-4">
+              {/* {nfl.rankings}'s old tab button (a vestigial single-item toggle
+                  — activeView never actually left 'rankings' via any live nav
+                  path) is gone in favor of {sports}, in the same uniform spot
+                  every sport's page now carries it — this is what lets a
+                  visitor jump straight to another sport without going back to
+                  the homepage first. {nfl.schedule}'s hidden tab (standings/
+                  DivisionsView) is still unreachable via nav, same as before —
+                  this swap doesn't change that, activeView just never flips
+                  off 'rankings' anymore. */}
+              <SportsSwitcher current="nfl" />
+              {/* {charts} — originally mobile-only (it took {nfl.playoffs}'s
+                  slot there since mobile had no room for both), now shown
+                  unconditionally next to {sports} on desktop too (2026-09-30
+                  ask). {nfl.playoffs}'s pending placeholder stays desktop-only,
+                  shelved not deleted, same as before — just no longer swapped
+                  out in favor of {charts}, both show now. */}
+              <a href="/charts" className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap" style={{ color: C.accent }}>
+                {'{charts}'}
+              </a>
+            </div>
             {/* {team.metrics} added 2026-10-01, same slot/treatment as
                 {charts} above. */}
             <a href="/nfl.team.metrics" className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap" style={{ color: C.accent }}>
@@ -793,7 +801,10 @@ export default function WorldCupApp() {
         )}
       </div>
 
-      <div className="relative z-10 h-full pt-[148px] pb-8 px-6 max-w-[1480px] mx-auto">
+      {/* The fixed header above grew from 1 row to 3 on mobile (team.metrics
+          nav restructure, 2026-10-01) — reserved top padding has to grow
+          with it or the extra rows overlap the power-rankings grid below. */}
+      <div className={`relative z-10 h-full ${isMobile ? 'pt-[200px]' : 'pt-[148px]'} pb-8 px-6 max-w-[1480px] mx-auto`}>
         {/* {nfl.rankings} — power rankings is now the page's primary
             content (layout inversion from the previous matchup-library
             build, per the conversation this was rescoped in). The weekly

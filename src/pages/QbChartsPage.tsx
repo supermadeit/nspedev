@@ -27,6 +27,7 @@ import { fetchQbExplosives, type QbExplosivesData } from '@/lib/databaseApi'
 import { normalizeDisplayPlayer } from '@/lib/nspe-payloads'
 import { loadPlayerIndex, PLAYER_INDEX, type PlayerIndexEntry } from '@/lib/playerSearch'
 import { SportsSwitcher } from '@/components/SportsSwitcher'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 function normalizePlayerKey(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9]/g, '')
@@ -138,6 +139,7 @@ const COLUMNS: ColumnDef[] = [
 ]
 
 export default function QbChartsPage() {
+  const isMobile = useIsMobile()
   const [sortKey, setSortKey] = useState('totalYards')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
   const [data, setData] = useState<QbExplosivesData | null>(null)
@@ -218,7 +220,10 @@ export default function QbChartsPage() {
     // (MobileCalculatorApp, BuilderScreen, ResultsScreen) already has to
     // establish its own scroll container for the same reason.
     <div className="h-dvh w-full overflow-y-auto" style={{ backgroundColor: C.surface, color: C.textBright, fontFamily: 'monospace' }}>
-      <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: `1px solid ${C.border}` }}>
+      {/* Mobile (reported 2026-10-01): {homepage}/{sports}/{team.metrics}
+          stopped fitting one row once team.metrics joined — stacks into
+          three rows on mobile instead, desktop stays the original row. */}
+      <div className={`flex gap-3 px-6 py-4 ${isMobile ? 'flex-col' : 'items-center justify-between'}`} style={{ borderBottom: `1px solid ${C.border}` }}>
         <div>
           <span className="font-mono font-bold text-[15px]" style={{ color: C.accent }}>
             {'{chart}'}
@@ -233,7 +238,7 @@ export default function QbChartsPage() {
             landing on each sport's own {chart} page (MlbChartsPage.tsx/
             NbaChartsPage.tsx/NhlChartsPage.tsx) instead of its rankings
             page, now that all three exist. */}
-        <div className="flex items-center gap-4">
+        <div className={`flex gap-2 ${isMobile ? 'flex-col items-start' : 'items-center gap-4'}`}>
           <a href="/" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
             {'{homepage}'}
           </a>

@@ -6929,9 +6929,13 @@ function App() {
           (the only one that existed at the time), now that MLB/NBA/NHL have
           their own it opens the same up-popping four-sport menu {matchups}
           does rather than silently only ever reaching NFL's. */}
+      {/* {team.metrics} added 2026-10-01 next to {charts} — desktop only,
+          per the owner's own instruction; mobile's homepage keeps just
+          {matchups} as its one entry point, unchanged. */}
       {!isMobile && (
         <div className="absolute z-20 flex items-center gap-4" style={{ bottom: '52px', right: '440px' }}>
           <SportsSwitcher label="charts" variant="charts" direction="up" triggerSizePx={15} />
+          <SportsSwitcher label="team.metrics" variant="metrics" direction="up" triggerSizePx={15} />
           <SportsSwitcher label="matchups" direction="up" triggerSizePx={15} />
         </div>
       )}
