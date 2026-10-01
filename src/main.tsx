@@ -65,11 +65,12 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/mlb.charts" element={<MlbChartsPage />} />
           <Route path="/nba.charts" element={<NbaChartsPage />} />
           <Route path="/nhl.charts" element={<NhlChartsPage />} />
-          {/* {team.metrics} — nfl/nba/nhl only, no mlb (its team feed has no
-              opponent side, per nspe-v2-da 2026-10-01). Same "thin wrapper
-              around a shared page" pattern as SportSeasonPage above. */}
+          {/* {team.metrics} — all four sports as of 2026-10-01 (mlb joined
+              via its own dedicated engine). Same "thin wrapper around a
+              shared page" pattern as SportSeasonPage above. */}
           <Route path="/nfl.team.metrics" element={<TeamMetricsPage sport="nfl" label="nfl.team.metrics" />} />
           <Route path="/nba.team.metrics" element={<TeamMetricsPage sport="nba" label="nba.team.metrics" />} />
+          <Route path="/mlb.team.metrics" element={<TeamMetricsPage sport="mlb" label="mlb.team.metrics" />} />
           <Route path="/nhl.team.metrics" element={<TeamMetricsPage sport="nhl" label="nhl.team.metrics" />} />
           {/* Every profiled player shares the same qb-profiles/*.json section
               shape (verified across all 36 files), so this is a real dynamic

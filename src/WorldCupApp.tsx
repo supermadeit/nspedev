@@ -58,14 +58,18 @@ interface NflSeasonData {
 
 // ---------------- design tokens ----------------
 
+// label/dim bumped from their original dim greys (0.55/0.40) to match
+// `value`'s brightness — reported 2026-10-01: grey text site-wide was
+// becoming hard to read, owner wants white, may refine to green in specific
+// spots later.
 const C = {
-  label:  'oklch(0.55 0 0)',
+  label:  'oklch(0.88 0 0)',
   value:  'oklch(0.88 0 0)',
   accent: 'oklch(0.85 0.15 195)',
   green:  'oklch(0.85 0.15 145)',
   border: 'oklch(0.28 0 0)',
   panel:  'oklch(0.13 0 0)',
-  dim:    'oklch(0.40 0 0)',
+  dim:    'oklch(0.88 0 0)',
 }
 
 // ---------------- helpers ----------------

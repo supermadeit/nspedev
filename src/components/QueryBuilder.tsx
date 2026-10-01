@@ -357,7 +357,9 @@ export const C = {
   accentDim: 'oklch(0.55 0.12 195)',
   surface2: 'oklch(0.20 0 0)',
   border: 'oklch(0.28 0 0)',
-  textDim: 'oklch(0.48 0 0)',
+  // Bumped to match textBright — grey text site-wide was hard to read
+  // (2026-10-01), owner wants white.
+  textDim: 'oklch(0.88 0 0)',
   textBright: 'oklch(0.88 0 0)',
 }
 

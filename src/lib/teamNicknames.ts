@@ -147,10 +147,11 @@ export function teamNickname(sport: string, code: string): string {
   return map[code.toUpperCase()] ?? code
 }
 
-const ROSTER_MAPS: Record<'nfl' | 'nba' | 'nhl', Record<string, string>> = {
+const ROSTER_MAPS: Record<'nfl' | 'nba' | 'nhl' | 'mlb', Record<string, string>> = {
   nfl: NFL_NICKNAMES,
   nba: NBA_NICKNAMES,
   nhl: NHL_NICKNAMES,
+  mlb: MLB_NICKNAMES,
 }
 
 // {team.metrics}'s team picker — one entry per real team, alias codes
@@ -158,7 +159,9 @@ const ROSTER_MAPS: Record<'nfl' | 'nba' | 'nhl', Record<string, string>> = {
 // the map above. GET /team-metrics/{sport}/{team} accepts a code, city or
 // nickname and resolves it server-side, so which alias we send barely
 // matters — this just needs to not show the same team twice in a dropdown.
-export function teamRoster(sport: 'nfl' | 'nba' | 'nhl'): { code: string; nickname: string }[] {
+// mlb added 2026-10-01 — its OAK/ATH split (pre/post-2025 Athletics code) is
+// handled the same way as every other alias pair already in MLB_NICKNAMES.
+export function teamRoster(sport: 'nfl' | 'nba' | 'nhl' | 'mlb'): { code: string; nickname: string }[] {
   const map = ROSTER_MAPS[sport]
   const seen = new Set<string>()
   const out: { code: string; nickname: string }[] = []

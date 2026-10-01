@@ -18,7 +18,9 @@ const C = {
   accentDark: 'oklch(0.10 0.02 195)',
   surface: 'oklch(0.12 0 0)',
   border: 'oklch(0.30 0 0)',
-  textDim: 'oklch(0.55 0 0)',
+  // Bumped to match textBright — grey text site-wide was hard to read
+  // (2026-10-01), owner wants white.
+  textDim: 'oklch(0.92 0 0)',
   textBright: 'oklch(0.92 0 0)',
   green: 'oklch(0.78 0.18 145)',
 }

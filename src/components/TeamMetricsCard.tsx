@@ -26,12 +26,19 @@ export interface TeamMetricsFieldDef {
    * (same convention as SortableStatChart's column groups). */
   group?: string
   /** Only for array-valued metrics (NBA's points_by_quarter, NHL's
-   * goals_by_period) — labels each position in the array, e.g.
-   * ['Q1','Q2','Q3','Q4']. Ignored for plain-number metrics. */
+   * goals_by_period, MLB's runs_by_inning) — labels each position in the
+   * array, e.g. ['Q1','Q2','Q3','Q4']. Ignored for plain-number metrics. */
   periodLabels?: string[]
+  /** Overrides the default "whole numbers stay whole, else 1 decimal"
+   * formatting — needed for MLB's rate stats (batting_avg/OBP/SLG/OPS at
+   * .246-style 3 decimals, ERA/WHIP at 2), where the default 1-decimal
+   * rounding (0.246 -> "0.2") would destroy the actual stat. Per
+   * nspe-v2-da 2026-10-01. */
+  decimals?: number
 }
 
-function formatNumber(n: number): string {
+function formatNumber(n: number, decimals?: number): string {
+  if (decimals != null) return n.toFixed(decimals)
   // Whole numbers (games counts that snuck through, etc.) stay whole;
   // everything else — these are almost all per-game averages or
   // percentages — gets one decimal, which is what every example payload's
@@ -39,12 +46,12 @@ function formatNumber(n: number): string {
   return Number.isInteger(n) ? String(n) : n.toFixed(1)
 }
 
-function formatValue(v: TeamMetricsValue, periodLabels?: string[]): string {
+function formatValue(v: TeamMetricsValue, periodLabels?: string[], decimals?: number): string {
   if (v == null) return '—'
   if (Array.isArray(v)) {
-    return v.map((n, i) => `${periodLabels?.[i] ?? `#${i + 1}`} ${n == null ? '—' : formatNumber(n)}`).join('  ·  ')
+    return v.map((n, i) => `${periodLabels?.[i] ?? `#${i + 1}`} ${n == null ? '—' : formatNumber(n, decimals)}`).join('  ·  ')
   }
-  return formatNumber(v)
+  return formatNumber(v, decimals)
 }
 
 function MetricRow({ field, metrics }: { field: TeamMetricsFieldDef; metrics: TeamMetricsPayload['metrics'] }) {
@@ -60,27 +67,27 @@ function MetricRow({ field, metrics }: { field: TeamMetricsFieldDef; metrics: Te
         <div>
           <div className="font-mono text-[11px] mb-1" style={{ color: C.textDim }}>
             {field.label}
-            <span className="ml-1" style={{ color: 'oklch(0.40 0 0)' }}>({entry.unit})</span>
+            <span className="ml-1" style={{ color: C.textBright }}>({entry.unit})</span>
           </div>
-          <div className="font-mono text-[11px]" style={{ color: C.accent }}>for: {formatValue(entry.for, field.periodLabels)}</div>
+          <div className="font-mono text-[11px]" style={{ color: C.accent }}>for: {formatValue(entry.for, field.periodLabels, field.decimals)}</div>
           {entry.against !== undefined && (
-            <div className="font-mono text-[11px]" style={{ color: C.textDim }}>against: {formatValue(entry.against, field.periodLabels)}</div>
+            <div className="font-mono text-[11px]" style={{ color: C.textDim }}>against: {formatValue(entry.against, field.periodLabels, field.decimals)}</div>
           )}
         </div>
       ) : (
         <>
           <span className="font-mono text-[12px] truncate" style={{ color: C.textDim }}>{field.label}</span>
-          <span className="font-mono text-[13px] font-bold text-right" style={{ color: C.accent }}>{formatValue(entry.for)}</span>
+          <span className="font-mono text-[13px] font-bold text-right" style={{ color: C.accent }}>{formatValue(entry.for, undefined, field.decimals)}</span>
           <span className="font-mono text-[13px] text-right" style={{ color: entry.against === undefined ? 'transparent' : C.textDim }}>
-            {entry.against === undefined ? '—' : formatValue(entry.against)}
+            {entry.against === undefined ? '—' : formatValue(entry.against, undefined, field.decimals)}
           </span>
-          <span className="font-mono text-[9px] uppercase tracking-wider text-right whitespace-nowrap" style={{ color: 'oklch(0.40 0 0)' }}>
+          <span className="font-mono text-[9px] uppercase tracking-wider text-right whitespace-nowrap" style={{ color: C.textBright }}>
             {entry.unit}
           </span>
         </>
       )}
       {entry.note && (
-        <div className="col-span-full font-mono text-[10px] italic" style={{ color: 'oklch(0.40 0 0)' }}>{entry.note}</div>
+        <div className="col-span-full font-mono text-[10px] italic" style={{ color: C.textBright }}>{entry.note}</div>
       )}
     </div>
   )
@@ -133,7 +140,7 @@ export function TeamMetricsCard({
       </div>
 
       <div className="px-3 py-2">
-        <div className="grid grid-cols-[1fr_auto_auto_auto] gap-2 px-1 pb-1 font-mono text-[9px] uppercase tracking-widest" style={{ color: 'oklch(0.38 0 0)' }}>
+        <div className="grid grid-cols-[1fr_auto_auto_auto] gap-2 px-1 pb-1 font-mono text-[9px] uppercase tracking-widest" style={{ color: C.textBright }}>
           <span />
           <span className="text-right">for</span>
           <span className="text-right">vs</span>
@@ -162,11 +169,17 @@ export function TeamMetricsCard({
               </div>
             ))}
           </div>
+          {/* All four sports now carry this (2026-10-01) — null for the
+              current season, a footnote for past-season/history windows
+              where the player scrape only covers current rosters. */}
+          {payload.allows_note && (
+            <div className="mt-2 font-mono text-[10px] italic" style={{ color: C.textBright }}>{payload.allows_note}</div>
+          )}
         </div>
       )}
 
       {payload.box_score_coverage && (
-        <div className="px-4 py-2 font-mono text-[10px] italic" style={{ color: 'oklch(0.40 0 0)', borderTop: `1px solid ${C.border}` }}>
+        <div className="px-4 py-2 font-mono text-[10px] italic" style={{ color: C.textBright, borderTop: `1px solid ${C.border}` }}>
           {payload.box_score_coverage}
         </div>
       )}

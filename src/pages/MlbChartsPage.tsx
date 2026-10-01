@@ -124,6 +124,11 @@ export default function MlbChartsPage() {
             {'{homepage}'}
           </a>
           <SportsSwitcher current="mlb" variant="charts" />
+          {/* {team.metrics} added 2026-10-01 — mlb joined the other three
+              sports once its own dedicated team-metrics engine shipped. */}
+          <a href="/mlb.team.metrics" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
+            {'{team.metrics}'}
+          </a>
         </div>
       </div>
 

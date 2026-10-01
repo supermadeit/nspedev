@@ -16,7 +16,7 @@ export function PasswordInput({ className, ...props }: Omit<ComponentProps<'inpu
         // next real form control, not through this toggle.
         tabIndex={-1}
         aria-label={visible ? 'Hide password' : 'Show password'}
-        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs font-mono text-neutral-500 hover:text-neutral-200 transition-colors select-none"
+        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs font-mono text-white hover:text-neutral-200 transition-colors select-none"
       >
         {visible ? 'hide' : 'show'}
       </button>

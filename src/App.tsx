@@ -772,16 +772,16 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
       {(threshold != null || globalWindow != null) && (
         <div
           className="flex items-center gap-2 pb-1.5 mb-1 font-mono text-[11px]"
-          style={{ color: 'oklch(0.50 0 0)', borderBottom: `1px solid ${PITCH_BORDER}` }}
+          style={{ color: 'oklch(0.92 0 0)', borderBottom: `1px solid ${PITCH_BORDER}` }}
         >
           {threshold != null && (
-            <span>yds<span style={{ color: 'oklch(0.72 0 0)' }}>&ge;{threshold}</span></span>
+            <span>yds<span style={{ color: 'oklch(0.92 0 0)' }}>&ge;{threshold}</span></span>
           )}
           {threshold != null && globalWindow != null && (
-            <span style={{ color: 'oklch(0.30 0 0)' }}>·</span>
+            <span style={{ color: 'oklch(0.92 0 0)' }}>·</span>
           )}
           {globalWindow != null && (
-            <span>last <span style={{ color: 'oklch(0.72 0 0)' }}>{globalWindow}</span> games</span>
+            <span>last <span style={{ color: 'oklch(0.92 0 0)' }}>{globalWindow}</span> games</span>
           )}
         </div>
       )}
@@ -808,7 +808,7 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
                 {rowTeam && (
                   <>
                     <span style={{ color: 'oklch(0.70 0.10 195)' }}>{rowTeam}</span>
-                    <span style={{ color: 'oklch(0.55 0 0)' }}>{' — '}</span>
+                    <span style={{ color: 'oklch(0.92 0 0)' }}>{' — '}</span>
                   </>
                 )}
                 {normalizeDisplayPlayer(r.player)}
@@ -824,36 +824,36 @@ function NflExplosiveView({ payload }: { payload: NflExplosivePayload }) {
                 ? m.yards_list.join(', ')
                 : String(m.yards)
               return (
-                <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
-                  <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(m.date_iso ?? m.date) ?? (m.date_iso ?? m.date)}</span>
+                <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
+                  <span style={{ color: 'oklch(0.92 0 0)' }}>{extractDateToken(m.date_iso ?? m.date) ?? (m.date_iso ?? m.date)}</span>
                   {m.opponent && (
                     <>
-                      <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
+                      <span style={{ color: 'oklch(0.92 0 0)' }}>{' vs '}</span>
                       <span style={{ color: 'oklch(0.75 0.08 220)' }}>{m.opponent}</span>
                     </>
                   )}
-                  <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                  <span style={{ color: 'oklch(0.92 0 0)' }}>{' · '}</span>
                   <span style={{ color: 'oklch(0.85 0.15 145)' }}>{ydsDisplay}yds</span>
                   {m.quarter != null && (
-                    <span style={{ color: 'oklch(0.55 0 0)' }}> Q{m.quarter}</span>
+                    <span style={{ color: 'oklch(0.92 0 0)' }}> Q{m.quarter}</span>
                   )}
                   {m.touchdown && (
                     <span style={{ color: 'oklch(0.80 0.18 60)' }}> TD</span>
                   )}
                   {m.receiver && (
                     <>
-                      <span style={{ color: 'oklch(0.45 0 0)' }}>{' → '}</span>
-                      <span style={{ color: 'oklch(0.72 0 0)' }}>{normalizeDisplayPlayer(m.receiver)}</span>
+                      <span style={{ color: 'oklch(0.92 0 0)' }}>{' → '}</span>
+                      <span style={{ color: 'oklch(0.92 0 0)' }}>{normalizeDisplayPlayer(m.receiver)}</span>
                     </>
                   )}
                   {m.passer && (
                     <>
-                      <span style={{ color: 'oklch(0.45 0 0)' }}>{' from '}</span>
-                      <span style={{ color: 'oklch(0.72 0 0)' }}>{normalizeDisplayPlayer(m.passer)}</span>
+                      <span style={{ color: 'oklch(0.92 0 0)' }}>{' from '}</span>
+                      <span style={{ color: 'oklch(0.92 0 0)' }}>{normalizeDisplayPlayer(m.passer)}</span>
                     </>
                   )}
                   {m.count != null && m.count > 1 && (
-                    <span style={{ color: 'oklch(0.50 0 0)' }}> ({m.count} plays)</span>
+                    <span style={{ color: 'oklch(0.92 0 0)' }}> ({m.count} plays)</span>
                   )}
                 </div>
               )
@@ -978,7 +978,7 @@ function NflTeamSlotsView({ payload }: { payload: NflTeamSlotsPayload }) {
                 {`${r.wins}-${r.losses}${r.ties ? `-${r.ties}` : ''}`}
               </span>
             </div>
-            <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5" style={{ color: 'oklch(0.76 0 0)' }}>
+            <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5" style={{ color: 'oklch(0.92 0 0)' }}>
               <span className="whitespace-nowrap">{`${(r.win_pct * 100).toFixed(1)}% win`}</span>
               <span className="whitespace-nowrap">{`${r.games} game${r.games === 1 ? '' : 's'}`}</span>
               <span className="whitespace-nowrap">{`${r.pf.toFixed(1)} pf`}</span>
@@ -993,7 +993,7 @@ function NflTeamSlotsView({ payload }: { payload: NflTeamSlotsPayload }) {
 
       {games.length > 0 && (
         <>
-          <div className="font-mono text-[10px] uppercase tracking-widest" style={{ color: 'oklch(0.48 0 0)' }}>
+          <div className="font-mono text-[10px] uppercase tracking-widest" style={{ color: 'oklch(0.92 0 0)' }}>
             games
           </div>
           <div className="space-y-2">
@@ -1008,7 +1008,7 @@ function NflTeamSlotsView({ payload }: { payload: NflTeamSlotsPayload }) {
                 >
                   <div>
                     <span style={{ color: PARLAY_DIM }}>{extractDateToken(g.date) ?? g.date}</span>
-                    <span style={{ color: 'oklch(0.40 0 0)' }}>{'  '}</span>
+                    <span style={{ color: 'oklch(0.92 0 0)' }}>{'  '}</span>
                     <span style={{ color: PARLAY_CYAN }}>{`${g.venue === 'away' ? '@' : 'vs'} ${g.opponent}`}</span>
                   </div>
                   <div className="mt-1.5 flex flex-wrap gap-x-3">
@@ -1044,7 +1044,7 @@ function LoadingMessage({ query }: { query: string }) {
   return (
     <div className="space-y-1">
       <div style={{ color: 'oklch(0.85 0.15 195)' }}>{isParlay ? 'building parlay…' : 'building legs…'}</div>
-      <div className="text-[11px]" style={{ color: 'oklch(0.55 0 0)' }}>
+      <div className="text-[11px]" style={{ color: 'oklch(0.92 0 0)' }}>
         {`this can take up to a minute · ${elapsed}s`}
       </div>
     </div>
@@ -1211,7 +1211,7 @@ function ParlayLegCard({ leg, showPlayer = true }: { leg: NflParlayLeg; showPlay
         {leg.label}
         {leg.shadow ? <span style={{ color: PARLAY_DIM }}>{'  (shadow)'}</span> : null}
       </div>
-      <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5" style={{ color: 'oklch(0.76 0 0)' }}>
+      <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5" style={{ color: 'oklch(0.92 0 0)' }}>
         {stats.map((st, i) => (
           <span key={i} className="whitespace-nowrap" style={st.color ? { color: st.color } : undefined}>
             {st.text}
@@ -1239,7 +1239,7 @@ function NflParlayView({ payload }: { payload: NflParlayPayload }) {
         </span>
       </div>
       {picks.length === 0 ? (
-        <div className="text-center py-4 font-mono text-[12px]" style={{ color: 'oklch(0.70 0 0)' }}>
+        <div className="text-center py-4 font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
           No legs qualified for this shape
         </div>
       ) : (
@@ -1277,7 +1277,7 @@ function NflPlayerLegsView({ payload }: { payload: NflPlayerLegsPayload }) {
         </span>
       </div>
       {legs.length === 0 ? (
-        <div className="text-center py-4 font-mono text-[12px]" style={{ color: 'oklch(0.70 0 0)' }}>
+        <div className="text-center py-4 font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
           No legs for this player this week
         </div>
       ) : (
@@ -1509,15 +1509,15 @@ function NflOverviewScopesView({ payload }: { payload: NflOverviewScopesPayload 
             {isOpen && (
               <div className="space-y-1 pl-1">
                 {r.breakdown.map((b, j) => (
-                  <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
-                    {b.date && <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(b.date) ?? b.date}</span>}
+                  <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
+                    {b.date && <span style={{ color: 'oklch(0.92 0 0)' }}>{extractDateToken(b.date) ?? b.date}</span>}
                     {b.opponent && (
                       <>
-                        <span style={{ color: 'oklch(0.45 0 0)' }}>{b.date ? ' vs ' : 'vs '}</span>
+                        <span style={{ color: 'oklch(0.92 0 0)' }}>{b.date ? ' vs ' : 'vs '}</span>
                         <span style={{ color: 'oklch(0.75 0.08 220)' }}>{b.opponent}</span>
                       </>
                     )}
-                    {(b.date || b.opponent) && <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>}
+                    {(b.date || b.opponent) && <span style={{ color: 'oklch(0.92 0 0)' }}>{' · '}</span>}
                     <span style={{ color: CYAN }}>{b.amount} yds</span>
                   </div>
                 ))}
@@ -1577,7 +1577,7 @@ function NflOverviewStatNView({ payload, query = '' }: { payload: NflOverviewSta
       </div>
 
       {isLong ? (
-        <div className="text-[13px]" style={{ color: 'oklch(0.76 0 0)' }}>
+        <div className="text-[13px]" style={{ color: 'oklch(0.92 0 0)' }}>
           <span className="font-bold" style={{ color: CYAN }}>{`${payload.count}/${windowGames}`}</span>
           <span> games with a qualifying play</span>
           {payload.pct_of_games != null && <span style={{ color: DIM }}>{` (${payload.pct_of_games}%)`}</span>}
@@ -1618,15 +1618,15 @@ function NflOverviewStatNView({ payload, query = '' }: { payload: NflOverviewSta
           onToggle={() => toggle(0)}
         >
           {payload.matches.map((m, j) => (
-            <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
-              <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(m.date_iso ?? m.date) ?? m.date_iso ?? m.date}</span>
+            <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
+              <span style={{ color: 'oklch(0.92 0 0)' }}>{extractDateToken(m.date_iso ?? m.date) ?? m.date_iso ?? m.date}</span>
               {m.opponent && (
                 <>
-                  <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
+                  <span style={{ color: 'oklch(0.92 0 0)' }}>{' vs '}</span>
                   <span style={{ color: 'oklch(0.75 0.08 220)' }}>{m.opponent}</span>
                 </>
               )}
-              <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+              <span style={{ color: 'oklch(0.92 0 0)' }}>{' · '}</span>
               {isLong && m.plays != null && m.yards != null ? (
                 <>
                   <span style={{ color: CYAN }}>{`${m.plays} play${m.plays === 1 ? '' : 's'} · ${m.yards}${stat_kind}`}</span>
@@ -1698,10 +1698,11 @@ const OVERVIEW_GAME_META_KEYS = new Set(['date', 'date_iso', 'season', 'game_id'
 // on hand, no new endpoint for any sport. Every sport now shares one compact
 // per-game row format and one filter-chip bar (NFL's own bespoke rush/rec/
 // pass boxed-card layout was retired in favor of this one — see H2hView).
-// buildGameLogCategories below has no NFL entry yet (its stat-threshold
-// chips are position-dependent in a way NBA/MLB/NHL's aren't), so NFL's
-// rows render unfiltered for now — GameLogFilterBar already falls back to
-// that when a sport has no category list.
+// NFL's chips (added 2026-10-01) are built from `displayFields` instead of
+// a fixed list — unlike NBA/MLB/NHL's always-identical field sets, NFL's
+// varies by position (a QB's h2h sends pass_*/rush_*, a WR's sends
+// rec_*/rush_*), so a fixed chip list would either show irrelevant chips
+// for some positions or miss relevant ones for others.
 
 interface GameLogCategory {
   id: string
@@ -1720,8 +1721,54 @@ const NBA_DOUBLE_DOUBLE_KEYS = ['points', 'rebounds', 'assists', 'steals', 'bloc
 
 // customTotal is the user's own typed threshold for the one open-ended
 // category per sport ("totalN") — omitted entirely until they type a number,
-// rather than showing a chip with no meaningful threshold yet.
-function buildGameLogCategories(sport: string, customTotal: number | null): GameLogCategory[] {
+// rather than showing a chip with no meaningful threshold yet. `displayFields`
+// is NFL-only (see above) — every other sport ignores it.
+function buildGameLogCategories(sport: string, customTotal: number | null, displayFields?: string[] | null): GameLogCategory[] {
+  if (sport === 'nfl') {
+    const has = (f: string) => !!displayFields?.includes(f)
+    const cats: GameLogCategory[] = []
+    if (has('pass_yds')) {
+      cats.push({ id: 'pyds250', label: '250+ Pass Yds', predicate: (g) => numField(g, 'pass_yds') >= 250 })
+      cats.push({ id: 'pyds300', label: '300+ Pass Yds', predicate: (g) => numField(g, 'pass_yds') >= 300 })
+    }
+    if (has('pass_td')) {
+      cats.push({ id: 'ptd3', label: '3+ Pass TD', predicate: (g) => numField(g, 'pass_td') >= 3 })
+    }
+    if (has('rush_yds')) {
+      cats.push({ id: 'ryds100', label: '100+ Rush Yds', predicate: (g) => numField(g, 'rush_yds') >= 100 })
+    }
+    if (has('rush_td')) {
+      cats.push({ id: 'rtd2', label: '2+ Rush TD', predicate: (g) => numField(g, 'rush_td') >= 2 })
+    }
+    if (has('rec_yds')) {
+      cats.push({ id: 'recyds100', label: '100+ Rec Yds', predicate: (g) => numField(g, 'rec_yds') >= 100 })
+    }
+    if (has('rec')) {
+      cats.push({ id: 'rec10', label: '10+ Receptions', predicate: (g) => numField(g, 'rec') >= 10 })
+    }
+    if (has('rec_td')) {
+      cats.push({ id: 'rectd2', label: '2+ Rec TD', predicate: (g) => numField(g, 'rec_td') >= 2 })
+    }
+    // Any-TD chip works across every position, regardless of which specific
+    // TD fields this query's display_fields actually includes.
+    cats.push({
+      id: 'multitd',
+      label: 'multi-TD game',
+      predicate: (g) => numField(g, 'pass_td') + numField(g, 'rush_td') + numField(g, 'rec_td') >= 2,
+    })
+    if (customTotal != null) {
+      // "Total yards from scrimmage" (rush+rec) is the closest NFL
+      // equivalent to NBA's PTS+REB+AST / MLB's H+R+RBI combined-total idea
+      // — adding pass_yds too so it still means something for a QB's card,
+      // which has no rush/rec yards to combine otherwise.
+      cats.push({
+        id: 'total',
+        label: `${customTotal}+ total yds`,
+        predicate: (g) => numField(g, 'rush_yds') + numField(g, 'rec_yds') + numField(g, 'pass_yds') >= customTotal,
+      })
+    }
+    return cats
+  }
   if (sport === 'nba') {
     const cats: GameLogCategory[] = [
       { id: 'pts20', label: '20+ PTS', predicate: (g) => numField(g, 'points') >= 20 },
@@ -1792,10 +1839,13 @@ const CHIP_BORDER_INACTIVE = 'oklch(0.28 0 0)'
 function GameLogFilterBar({
   sport,
   games,
+  displayFields,
   children,
 }: {
   sport: string
   games: Record<string, unknown>[]
+  /** NFL only — see buildGameLogCategories' own comment on why. */
+  displayFields?: string[] | null
   children: (filteredGames: Record<string, unknown>[]) => React.ReactNode
 }) {
   const [activeIds, setActiveIds] = useState<Set<string>>(new Set())
@@ -1803,7 +1853,10 @@ function GameLogFilterBar({
   const parsedCustomTotal = customTotalInput.trim() && Number.isFinite(Number(customTotalInput))
     ? Number(customTotalInput)
     : null
-  const categories = useMemo(() => buildGameLogCategories(sport, parsedCustomTotal), [sport, parsedCustomTotal])
+  const categories = useMemo(
+    () => buildGameLogCategories(sport, parsedCustomTotal, displayFields),
+    [sport, parsedCustomTotal, displayFields],
+  )
 
   if (categories.length === 0) {
     // Sport not covered by a category list (yet) — render unfiltered rather
@@ -1882,8 +1935,8 @@ function GameLogRow({ g, valueLabel, metaKeys }: { g: Record<string, unknown>; v
   const hasValue = typeof g.value === 'number'
   const box = Object.entries(g).filter(([k, v]) => !metaKeys.has(k) && typeof v === 'number')
   return (
-    <div className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
-      <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(dateRaw) ?? dateRaw}</span>
+    <div className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
+      <span style={{ color: 'oklch(0.92 0 0)' }}>{extractDateToken(dateRaw) ?? dateRaw}</span>
       {opponent && <span style={{ color: 'oklch(0.75 0.08 220)' }}>{` ${opponent}`}</span>}
       {result && (
         <span style={{ color: outcome === 'W' ? 'oklch(0.78 0.18 145)' : outcome === 'L' ? 'oklch(0.70 0.15 25)' : 'oklch(0.55 0 0)' }}>
@@ -1892,12 +1945,12 @@ function GameLogRow({ g, valueLabel, metaKeys }: { g: Record<string, unknown>; v
       )}
       {hasValue && (
         <>
-          <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+          <span style={{ color: 'oklch(0.92 0 0)' }}>{' · '}</span>
           <span style={{ color: 'oklch(0.85 0.15 195)' }}>{`${g.value} ${valueLabel ?? ''}`.trim()}</span>
         </>
       )}
       {box.length > 0 && (
-        <span style={{ color: 'oklch(0.55 0 0)' }}>
+        <span style={{ color: 'oklch(0.92 0 0)' }}>
           {` · ${box.map(([k, v]) => `${v} ${boxStatLabel(k)}`).join(', ')}`}
         </span>
       )}
@@ -1959,7 +2012,7 @@ function OverviewStatNGenericView({ payload }: { payload: OverviewStatNPayload }
         </span>
       </div>
 
-      <div className="text-[13px]" style={{ color: 'oklch(0.76 0 0)' }}>
+      <div className="text-[13px]" style={{ color: 'oklch(0.92 0 0)' }}>
         <span className="font-bold" style={{ color: CYAN }}>{`${payload.count}/${payload.window_games}`}</span>
         <span> games</span>
         {(totalText || lastText) && (
@@ -2076,7 +2129,7 @@ function StatsOverviewView({ payload }: { payload: StatsOverviewPayload }) {
       </div>
 
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px]">
-        <span style={{ color: 'oklch(0.76 0 0)' }}>
+        <span style={{ color: 'oklch(0.92 0 0)' }}>
           <span className="font-bold" style={{ color: CYAN }}>{games ?? '—'}</span> games
           {payload.record ? <span style={{ color: DIM }}>{` · record ${payload.record}`}</span> : null}
         </span>
@@ -2347,7 +2400,7 @@ function PvpView({ payload }: { payload: PvpPayload }) {
             ariaLabel={`Toggle ${rel.relation} matchup`}
           >
             {rel.record && (
-              <div className="text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+              <div className="text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
                 {[a, b].map((p) => `${lastName(p.name)} ${rel.record?.[p.name] ?? '—'}`).join('  ·  ')}
               </div>
             )}
@@ -2410,17 +2463,17 @@ function PvpView({ payload }: { payload: PvpPayload }) {
                   const line = (who: string, stats: Record<string, number>) =>
                     `${who}: ${columns.map((c) => `${formatPvpNumber(stats[c])} ${c}`).join(', ')}`
                   return (
-                    <div key={g.game_id ?? j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+                    <div key={g.game_id ?? j} className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
                       <div>
-                        <span style={{ color: 'oklch(0.60 0 0)' }}>{g.date}</span>
+                        <span style={{ color: 'oklch(0.92 0 0)' }}>{g.date}</span>
                         {g.result_a && (
                           <span style={{ color: g.outcome_a === 'W' ? GREEN : g.outcome_a === 'L' ? 'oklch(0.70 0.15 25)' : DIM }}>
                             {` ${lastName(a.name)} ${g.result_a}`}
                           </span>
                         )}
                       </div>
-                      <div className="pl-2" style={{ color: 'oklch(0.66 0 0)' }}>{line(lastName(a.name), g.a)}</div>
-                      <div className="pl-2" style={{ color: 'oklch(0.66 0 0)' }}>{line(lastName(b.name), g.b)}</div>
+                      <div className="pl-2" style={{ color: 'oklch(0.92 0 0)' }}>{line(lastName(a.name), g.a)}</div>
+                      <div className="pl-2" style={{ color: 'oklch(0.92 0 0)' }}>{line(lastName(b.name), g.b)}</div>
                     </div>
                   )
                 })}
@@ -2449,9 +2502,9 @@ function MlbHrView({ payload }: { payload: MlbHrPayload }) {
   // A zero-row response used to render as a blank panel. Say so instead.
   if (payload.results.length === 0) {
     return (
-      <div className="text-center py-8 font-mono text-[13px] space-y-2" style={{ color: 'oklch(0.70 0 0)' }}>
+      <div className="text-center py-8 font-mono text-[13px] space-y-2" style={{ color: 'oklch(0.92 0 0)' }}>
         <div>No home runs matched</div>
-        <div className="text-[11px]" style={{ color: 'oklch(0.50 0 0)' }}>
+        <div className="text-[11px]" style={{ color: 'oklch(0.92 0 0)' }}>
           Try a lower distance or a wider window.
         </div>
       </div>
@@ -2468,7 +2521,7 @@ function MlbHrView({ payload }: { payload: MlbHrPayload }) {
             label={
               <>
                 <span style={{ color: 'oklch(0.70 0.10 195)' }}>{r.team}</span>
-                <span style={{ color: 'oklch(0.55 0 0)' }}>{' — '}</span>
+                <span style={{ color: 'oklch(0.92 0 0)' }}>{' — '}</span>
                 {normalizeDisplayPlayer(r.player)}
               </>
             }
@@ -2479,17 +2532,17 @@ function MlbHrView({ payload }: { payload: MlbHrPayload }) {
             onToggle={r.events?.length > 0 ? () => toggle(i) : undefined}
           >
             {r.events?.map((e, j) => (
-              <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
-                <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(e.date) ?? e.date}</span>
+              <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
+                <span style={{ color: 'oklch(0.92 0 0)' }}>{extractDateToken(e.date) ?? e.date}</span>
                 {e.opponent && (
                   <>
-                    <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
+                    <span style={{ color: 'oklch(0.92 0 0)' }}>{' vs '}</span>
                     <span style={{ color: 'oklch(0.75 0.08 220)' }}>{e.opponent}</span>
                   </>
                 )}
-                <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                <span style={{ color: 'oklch(0.92 0 0)' }}>{' · '}</span>
                 <span style={{ color: PITCH_GREEN }}>{e.distance_feet}ft</span>
-                <span style={{ color: 'oklch(0.50 0 0)' }}> Inn {e.inning}</span>
+                <span style={{ color: 'oklch(0.92 0 0)' }}> Inn {e.inning}</span>
               </div>
             ))}
           </ResultRow>
@@ -2518,7 +2571,7 @@ function MlbHrView({ payload }: { payload: MlbHrPayload }) {
                 {r.team && (
                   <>
                     <span style={{ color: 'oklch(0.70 0.10 195)' }}>{r.team}</span>
-                    <span style={{ color: 'oklch(0.55 0 0)' }}>{' — '}</span>
+                    <span style={{ color: 'oklch(0.92 0 0)' }}>{' — '}</span>
                   </>
                 )}
                 {normalizeDisplayPlayer(r.player)}
@@ -2531,20 +2584,20 @@ function MlbHrView({ payload }: { payload: MlbHrPayload }) {
             onToggle={() => toggle(i)}
           >
             {matchList.map((m, j) => (
-              <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+              <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
                 <div>
-                  <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(m.date) ?? m.date}</span>
+                  <span style={{ color: 'oklch(0.92 0 0)' }}>{extractDateToken(m.date) ?? m.date}</span>
                   {m.opponent && (
                     <>
-                      <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
+                      <span style={{ color: 'oklch(0.92 0 0)' }}>{' vs '}</span>
                       <span style={{ color: 'oklch(0.75 0.08 220)' }}>{m.opponent}</span>
                     </>
                   )}
-                  <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                  <span style={{ color: 'oklch(0.92 0 0)' }}>{' · '}</span>
                   <span style={{ color: PITCH_GREEN }}>{m.distance_feet}ft</span>
                 </div>
                 {m.description && (
-                  <div style={{ color: 'oklch(0.60 0 0)' }}>{m.description}</div>
+                  <div style={{ color: 'oklch(0.92 0 0)' }}>{m.description}</div>
                 )}
               </div>
             ))}
@@ -2582,7 +2635,7 @@ function MlbFirstPaTrendView({ payload }: { payload: MlbFirstPaTrendPayload }) {
                 {r.team && (
                   <>
                     <span style={{ color: 'oklch(0.70 0.10 195)' }}>{r.team}</span>
-                    <span style={{ color: 'oklch(0.55 0 0)' }}>{' — '}</span>
+                    <span style={{ color: 'oklch(0.92 0 0)' }}>{' — '}</span>
                   </>
                 )}
                 {normalizeDisplayPlayer(r.player)}
@@ -2595,23 +2648,23 @@ function MlbFirstPaTrendView({ payload }: { payload: MlbFirstPaTrendPayload }) {
             onToggle={() => toggle(i)}
           >
             {matchList.map((m, j) => (
-              <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+              <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
                 <div>
-                  <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(m.date) ?? m.date}</span>
+                  <span style={{ color: 'oklch(0.92 0 0)' }}>{extractDateToken(m.date) ?? m.date}</span>
                   {m.opponent && (
                     <>
-                      <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
+                      <span style={{ color: 'oklch(0.92 0 0)' }}>{' vs '}</span>
                       <span style={{ color: 'oklch(0.75 0.08 220)' }}>{m.opponent}</span>
                     </>
                   )}
-                  <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                  <span style={{ color: 'oklch(0.92 0 0)' }}>{' · '}</span>
                   <span style={{ color: PITCH_GREEN }}>{m.result}</span>
                   {m.distance_feet != null && (
                     <span style={{ color: PITCH_LABEL }}> ({m.distance_feet}ft)</span>
                   )}
                 </div>
                 {m.description && (
-                  <div style={{ color: 'oklch(0.60 0 0)' }}>{m.description}</div>
+                  <div style={{ color: 'oklch(0.92 0 0)' }}>{m.description}</div>
                 )}
               </div>
             ))}
@@ -2651,17 +2704,17 @@ function MlbTeamRunsView({ payload }: { payload: MlbTeamRunsPayload }) {
               onToggle={windowGames.length > 0 ? () => toggle(i) : undefined}
             >
               {windowGames.map((g, j) => (
-                <div key={g.game_id ?? j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
-                  <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(g.date_iso) ?? g.date_iso}</span>
+                <div key={g.game_id ?? j} className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
+                  <span style={{ color: 'oklch(0.92 0 0)' }}>{extractDateToken(g.date_iso) ?? g.date_iso}</span>
                   {g.opponent && (
                     <>
-                      <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
+                      <span style={{ color: 'oklch(0.92 0 0)' }}>{' vs '}</span>
                       <span style={{ color: 'oklch(0.75 0.08 220)' }}>{g.opponent}</span>
                     </>
                   )}
-                  <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                  <span style={{ color: 'oklch(0.92 0 0)' }}>{' · '}</span>
                   <span style={{ color: PITCH_GREEN }}>{`${g.runs_for}-${g.runs_allowed}`}</span>
-                  {g.result && <span style={{ color: 'oklch(0.55 0 0)' }}>{` ${g.result}`}</span>}
+                  {g.result && <span style={{ color: 'oklch(0.92 0 0)' }}>{` ${g.result}`}</span>}
                 </div>
               ))}
             </ResultRow>
@@ -2696,18 +2749,18 @@ function MlbTeamRunsView({ payload }: { payload: MlbTeamRunsPayload }) {
             onToggle={() => toggle(i)}
           >
             {matchList.map((m, j) => (
-              <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
-                <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(m.date_iso) ?? m.date_iso}</span>
+              <div key={j} className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
+                <span style={{ color: 'oklch(0.92 0 0)' }}>{extractDateToken(m.date_iso) ?? m.date_iso}</span>
                 {m.opponent && (
                   <>
-                    <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
+                    <span style={{ color: 'oklch(0.92 0 0)' }}>{' vs '}</span>
                     <span style={{ color: 'oklch(0.75 0.08 220)' }}>{m.opponent}</span>
                   </>
                 )}
-                <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                <span style={{ color: 'oklch(0.92 0 0)' }}>{' · '}</span>
                 <span style={{ color: PITCH_GREEN }}>{m.runs_for}</span>
                 <span style={{ color: PITCH_LABEL }}> runs for</span>
-                <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                <span style={{ color: 'oklch(0.92 0 0)' }}>{' · '}</span>
                 <span style={{ color: 'oklch(0.80 0.15 30)' }}>{m.runs_allowed}</span>
                 <span style={{ color: PITCH_LABEL }}> allowed</span>
               </div>
@@ -2856,28 +2909,6 @@ function H2hView({ payload }: { payload: H2hPayload }) {
 
   const formatAvg = (n?: number) => (typeof n === 'number' ? n.toFixed(3).replace(/^0+/, '') : '—')
 
-  const slashLine: { label: string; value: string }[] = [
-    { label: 'AVG', value: formatAvg(t.AVG) },
-    { label: 'OBP', value: formatAvg(t.OBP) },
-    { label: 'SLG', value: formatAvg(t.SLG) },
-    { label: 'OPS', value: formatAvg(t.OPS) },
-  ]
-
-  const counting: { label: string; value: number }[] = [
-    { label: 'G', value: t.games ?? 0 },
-    { label: 'AB', value: t.AB ?? 0 },
-    { label: 'H', value: t.H ?? 0 },
-    { label: 'R', value: t.R ?? 0 },
-    { label: 'HR', value: t.HR ?? 0 },
-    { label: 'RBI', value: t.RBI ?? 0 },
-    { label: 'TB', value: t.TB ?? 0 },
-    { label: '2B', value: t['2B'] ?? 0 },
-    { label: '3B', value: t['3B'] ?? 0 },
-    { label: 'BB', value: t.BB ?? 0 },
-    { label: 'SO', value: t.SO ?? 0 },
-    { label: 'SB', value: t.SB ?? 0 },
-  ]
-
   // Computed once here (not per group above) so both the totals grid below
   // and each game-log row use the exact same hidden set — a field that's
   // dropped from the summary shouldn't still show up per game.
@@ -2895,6 +2926,36 @@ function H2hView({ payload }: { payload: H2hPayload }) {
       ]
     : null
 
+  // Classic MLB fallback (no display_fields from the backend — still true
+  // for mlb-h2h as of 2026-10-01, see the comment on `displayFields` above).
+  // Used to render as two visually different stacked grids (a bold green
+  // AVG/OBP/SLG/OPS slash line, then a separate plainer 12-box counting
+  // grid below it) — reported 2026-10-01 as reading jumbled next to NFL's
+  // (and NBA's stat-overview's) single uniform grid of equally-styled
+  // boxes. Flattened into one list sharing genericCounting's exact box
+  // style/rendering below, so MLB's classic path isn't visually a second,
+  // different layout anymore.
+  const mlbClassicCounting: { label: string; value: string }[] = [
+    { label: 'AVG', value: formatAvg(t.AVG) },
+    { label: 'OBP', value: formatAvg(t.OBP) },
+    { label: 'SLG', value: formatAvg(t.SLG) },
+    { label: 'OPS', value: formatAvg(t.OPS) },
+    { label: 'G', value: String(t.games ?? 0) },
+    { label: 'AB', value: String(t.AB ?? 0) },
+    { label: 'H', value: String(t.H ?? 0) },
+    { label: 'R', value: String(t.R ?? 0) },
+    { label: 'HR', value: String(t.HR ?? 0) },
+    { label: 'RBI', value: String(t.RBI ?? 0) },
+    { label: 'TB', value: String(t.TB ?? 0) },
+    { label: '2B', value: String(t['2B'] ?? 0) },
+    { label: '3B', value: String(t['3B'] ?? 0) },
+    { label: 'BB', value: String(t.BB ?? 0) },
+    { label: 'SO', value: String(t.SO ?? 0) },
+    { label: 'SB', value: String(t.SB ?? 0) },
+  ]
+
+  const totalsBoxes = genericCounting ?? mlbClassicCounting
+
   return (
     <div className="space-y-4">
       {/* Header */}
@@ -2902,7 +2963,7 @@ function H2hView({ payload }: { payload: H2hPayload }) {
         {playerTeam ? (
           <>
             <span style={{ color: 'oklch(0.70 0.10 195)' }}>{playerTeam}</span>
-            <span style={{ color: 'oklch(0.55 0 0)' }}>{' — '}</span>
+            <span style={{ color: 'oklch(0.92 0 0)' }}>{' — '}</span>
           </>
         ) : null}
         <span>{playerLabel}</span>
@@ -2910,69 +2971,45 @@ function H2hView({ payload }: { payload: H2hPayload }) {
           <span style={{ color: 'oklch(0.70 0.10 195)' }}>{` · ${weekLabel}`}</span>
         ) : (
           <>
-            <span style={{ color: 'oklch(0.55 0 0)' }}> vs </span>
+            <span style={{ color: 'oklch(0.92 0 0)' }}> vs </span>
             <span style={{ color: 'oklch(0.70 0.10 195)' }}>{opponent || '—'}</span>
-            <span style={{ color: 'oklch(0.55 0 0)' }}>{` · ${venueLabel}`}</span>
+            <span style={{ color: 'oklch(0.92 0 0)' }}>{` · ${venueLabel}`}</span>
           </>
         )}
-        <span style={{ color: 'oklch(0.55 0 0)' }}>{windowLabel ? ` · ${windowLabel}` : ''}</span>
+        <span style={{ color: 'oklch(0.92 0 0)' }}>{windowLabel ? ` · ${windowLabel}` : ''}</span>
       </div>
 
-      {/* Totals card */}
+      {/* Totals card — one uniform grid of equally-styled boxes for every
+          sport (NFL's real display_fields, MLB's classic fallback, and any
+          future sport that sends display_fields all land here the same
+          way). Previously MLB's classic branch was its own, differently-
+          styled two-grid layout — reported 2026-10-01 as reading jumbled
+          next to this. */}
       <div
         className="rounded p-3"
         style={{ backgroundColor: 'oklch(0.18 0 0)', border: '1px solid oklch(0.28 0 0)' }}
       >
-        {genericCounting ? (
-          <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${Math.min(genericCounting.length, 6)}, minmax(0, 1fr))` }}>
-            {genericCounting.map((s) => (
-              <div key={s.label} className="flex flex-col items-center">
-                <span className="font-mono text-[10px] uppercase tracking-wider" style={{ color: 'oklch(0.55 0 0)' }}>
-                  {s.label}
-                </span>
-                <span className="font-mono font-bold text-[15px]" style={{ color: 'oklch(0.85 0.15 145)' }}>
-                  {s.value}
-                </span>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <>
-            <div className="grid grid-cols-4 gap-2 mb-3">
-              {slashLine.map((s) => (
-                <div key={s.label} className="flex flex-col items-center">
-                  <span className="font-mono text-[10px] uppercase tracking-wider" style={{ color: 'oklch(0.55 0 0)' }}>
-                    {s.label}
-                  </span>
-                  <span className="font-mono font-bold text-[15px]" style={{ color: 'oklch(0.85 0.15 145)' }}>
-                    {s.value}
-                  </span>
-                </div>
-              ))}
+        <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${Math.min(totalsBoxes.length, 6)}, minmax(0, 1fr))` }}>
+          {totalsBoxes.map((s) => (
+            <div key={s.label} className="flex flex-col items-center">
+              <span className="font-mono text-[10px] uppercase tracking-wider" style={{ color: 'oklch(0.92 0 0)' }}>
+                {s.label}
+              </span>
+              <span className="font-mono font-bold text-[15px]" style={{ color: 'oklch(0.85 0.15 145)' }}>
+                {s.value}
+              </span>
             </div>
-            <div className="grid grid-cols-6 gap-2">
-              {counting.map((s) => (
-                <div key={s.label} className="flex flex-col items-center">
-                  <span className="font-mono text-[10px] uppercase tracking-wider" style={{ color: 'oklch(0.48 0 0)' }}>
-                    {s.label}
-                  </span>
-                  <span className="font-mono text-[13px]" style={{ color: 'oklch(0.88 0 0)' }}>
-                    {s.value}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </>
-        )}
+          ))}
+        </div>
       </div>
 
       {/* Game log */}
       <div>
-        <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: 'oklch(0.48 0 0)' }}>
+        <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: 'oklch(0.92 0 0)' }}>
           game log
         </div>
         {games.length === 0 ? (
-          <div className="text-center py-4 font-mono text-[12px]" style={{ color: 'oklch(0.70 0 0)' }}>
+          <div className="text-center py-4 font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
             No games found in window
           </div>
         ) : (
@@ -2992,6 +3029,7 @@ function H2hView({ payload }: { payload: H2hPayload }) {
           // hiddenH2hFields is always null.
           <GameLogFilterBar
             sport={sport}
+            displayFields={displayFields}
             games={games.map((g) => {
               const merged: Record<string, unknown> = {
                 ...g,
@@ -3061,7 +3099,7 @@ function PitchGameCard({
         <span style={{ color: PITCH_LABEL }}>{date}</span>
         {matchup ? (
           <>
-            <span style={{ color: 'oklch(0.40 0 0)' }}>{'  '}</span>
+            <span style={{ color: 'oklch(0.92 0 0)' }}>{'  '}</span>
             <span style={{ color: 'oklch(0.70 0.10 195)' }}>{matchup}</span>
           </>
         ) : null}
@@ -3541,7 +3579,7 @@ function MlbBvpPitcherView({ payload }: { payload: MlbBvpPitcherPayload }) {
     <div className="space-y-4">
       <div className="font-mono text-[13px]" style={{ color: PITCH_ACCENT }}>
         <span style={{ color: 'oklch(0.90 0.18 195)' }}>{r.batter}</span>
-        <span style={{ color: 'oklch(0.55 0 0)' }}> vs </span>
+        <span style={{ color: 'oklch(0.92 0 0)' }}> vs </span>
         <span style={{ color: 'oklch(0.70 0.10 195)' }}>{r.pitcher}</span>
         {r.team && <span style={{ color: PITCH_LABEL }}>{` · ${r.team}`}</span>}
         <span style={{ color: PITCH_LABEL }}>{' · career'}</span>
@@ -3585,11 +3623,11 @@ function RefView({ payload }: { payload: RefPayload }) {
       <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
         <span>{player}</span>
         {q.player_team && <span style={{ color: 'oklch(0.70 0.10 195)' }}>{` · ${q.player_team}`}</span>}
-        <span style={{ color: 'oklch(0.55 0 0)' }}>
+        <span style={{ color: 'oklch(0.92 0 0)' }}>
           {` · ${outcomeLabel}${q.min_margin ? ` by ${q.min_margin}+` : ''}${q.window_label ? ` · ${q.window_label}` : ''}`}
         </span>
       </div>
-      <div className="font-mono text-[11px]" style={{ color: 'oklch(0.55 0 0)' }}>
+      <div className="font-mono text-[11px]" style={{ color: 'oklch(0.92 0 0)' }}>
         {count} game{count === 1 ? '' : 's'}
       </div>
       <div className="space-y-1.5">
@@ -3597,20 +3635,20 @@ function RefView({ payload }: { payload: RefPayload }) {
           const won = g.result?.startsWith('W')
           const lost = g.result?.startsWith('L')
           return (
-            <div key={`${g.date_iso ?? g.date}-${i}`} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
-              <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(g.date_iso ?? g.date) ?? g.date}</span>
+            <div key={`${g.date_iso ?? g.date}-${i}`} className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
+              <span style={{ color: 'oklch(0.92 0 0)' }}>{extractDateToken(g.date_iso ?? g.date) ?? g.date}</span>
               {g.opponent && (
                 <>
-                  <span style={{ color: 'oklch(0.45 0 0)' }}>{'  '}</span>
+                  <span style={{ color: 'oklch(0.92 0 0)' }}>{'  '}</span>
                   <span style={{ color: 'oklch(0.75 0.08 220)' }}>{g.opponent}</span>
                 </>
               )}
-              <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+              <span style={{ color: 'oklch(0.92 0 0)' }}>{' · '}</span>
               <span style={{ color: won ? 'oklch(0.78 0.18 145)' : lost ? 'oklch(0.70 0.15 25)' : 'oklch(0.85 0 0)' }}>
                 {g.result}
               </span>
               {typeof g.margin === 'number' && (
-                <span style={{ color: 'oklch(0.55 0 0)' }}>{` (${g.margin > 0 ? '+' : ''}${g.margin})`}</span>
+                <span style={{ color: 'oklch(0.92 0 0)' }}>{` (${g.margin > 0 ? '+' : ''}${g.margin})`}</span>
               )}
             </div>
           )
@@ -3634,7 +3672,7 @@ function NflTeamLeadersView({ payload }: { payload: NflTeamLeadersPayload }) {
     <div className="space-y-3">
       <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
         <span>{`${metricLabel} ${sideLabel} leaders`}</span>
-        <span style={{ color: 'oklch(0.55 0 0)' }}>
+        <span style={{ color: 'oklch(0.92 0 0)' }}>
           {`${q.window ? ` · ${q.window}` : ''}${q.last_n ? ` · last ${q.last_n}` : ''}`}
         </span>
       </div>
@@ -3646,14 +3684,14 @@ function NflTeamLeadersView({ payload }: { payload: NflTeamLeadersPayload }) {
             style={{ borderColor: PITCH_BORDER }}
           >
             <span className="font-mono text-[13px]" style={{ color: PITCH_ACCENT }}>
-              <span style={{ color: 'oklch(0.55 0 0)' }}>{`#${r.rank} `}</span>
+              <span style={{ color: 'oklch(0.92 0 0)' }}>{`#${r.rank} `}</span>
               {r.team}
-              <span style={{ color: 'oklch(0.48 0 0)' }}>{` · ${r.games}gp`}</span>
+              <span style={{ color: 'oklch(0.92 0 0)' }}>{` · ${r.games}gp`}</span>
             </span>
             <span className="font-mono text-[12px] flex items-center gap-3">
               <span style={{ color: PITCH_GREEN }}>{`${Number(r.for).toFixed(1)} for`}</span>
               <span style={{ color: 'oklch(0.70 0.15 25)' }}>{`${Number(r.against).toFixed(1)} agst`}</span>
-              <span style={{ color: 'oklch(0.55 0 0)' }}>{`${r.for_total} / ${r.against_total} tot`}</span>
+              <span style={{ color: 'oklch(0.92 0 0)' }}>{`${r.for_total} / ${r.against_total} tot`}</span>
             </span>
           </div>
         ))}
@@ -3673,9 +3711,9 @@ function NflTeammateSplitView({ payload }: { payload: NflTeammateSplitPayload })
     <div className="space-y-4">
       <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
         <span>{normalizeDisplayPlayer(q.player || 'player')}</span>
-        <span style={{ color: 'oklch(0.55 0 0)' }}>{' with/without '}</span>
+        <span style={{ color: 'oklch(0.92 0 0)' }}>{' with/without '}</span>
         <span style={{ color: 'oklch(0.70 0.10 195)' }}>{normalizeDisplayPlayer(q.teammate || 'teammate')}</span>
-        <span style={{ color: 'oklch(0.55 0 0)' }}>{q.window_label ? ` · ${q.window_label}` : ''}</span>
+        <span style={{ color: 'oklch(0.92 0 0)' }}>{q.window_label ? ` · ${q.window_label}` : ''}</span>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {rows.map((r) => {
@@ -3684,7 +3722,7 @@ function NflTeammateSplitView({ payload }: { payload: NflTeammateSplitPayload })
             <div key={r.split} className="rounded p-3" style={{ backgroundColor: 'oklch(0.18 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
               <div className="font-mono text-[11px] uppercase tracking-widest mb-2" style={{ color: PITCH_LABEL }}>
                 {r.label}
-                <span style={{ color: 'oklch(0.48 0 0)' }}>{` · ${r.games}gp`}</span>
+                <span style={{ color: 'oklch(0.92 0 0)' }}>{` · ${r.games}gp`}</span>
               </div>
               <div className="grid grid-cols-4 gap-2">
                 {entries.map(([k, v]) => (
@@ -3716,14 +3754,14 @@ function NflQuarterMatchupView({ payload }: { payload: NflQuarterMatchupPayload 
         <span>{normalizeDisplayPlayer(q.player || 'player')}</span>
         {q.player_team && <span style={{ color: 'oklch(0.70 0.10 195)' }}>{` · ${q.player_team}`}</span>}
         {isWeekQuery ? (
-          <span style={{ color: 'oklch(0.55 0 0)' }}>{` · week ${q.week}${q.week_end && q.week_end !== q.week ? `-${q.week_end}` : ''}`}</span>
+          <span style={{ color: 'oklch(0.92 0 0)' }}>{` · week ${q.week}${q.week_end && q.week_end !== q.week ? `-${q.week_end}` : ''}`}</span>
         ) : (
           <>
-            <span style={{ color: 'oklch(0.55 0 0)' }}> vs </span>
+            <span style={{ color: 'oklch(0.92 0 0)' }}> vs </span>
             <span style={{ color: 'oklch(0.70 0.10 195)' }}>{q.opponent_code || '—'}</span>
           </>
         )}
-        <span style={{ color: 'oklch(0.55 0 0)' }}>
+        <span style={{ color: 'oklch(0.92 0 0)' }}>
           {` · ${scopeLabel}${q.category ? ` ${q.category}` : ''}${q.window_label ? ` · ${q.window_label}` : ''}`}
         </span>
       </div>
@@ -3738,22 +3776,22 @@ function NflQuarterMatchupView({ payload }: { payload: NflQuarterMatchupPayload 
 
       <div className="space-y-1.5">
         {games.map((g, i) => (
-          <div key={`${g.date_iso}-${i}`} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
-            <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(g.date_iso) ?? g.date_iso}</span>
+          <div key={`${g.date_iso}-${i}`} className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
+            <span style={{ color: 'oklch(0.92 0 0)' }}>{extractDateToken(g.date_iso) ?? g.date_iso}</span>
             {g.opponent && (
               <>
-                <span style={{ color: 'oklch(0.45 0 0)' }}>{'  '}</span>
+                <span style={{ color: 'oklch(0.92 0 0)' }}>{'  '}</span>
                 <span style={{ color: 'oklch(0.75 0.08 220)' }}>{g.opponent}</span>
               </>
             )}
             {typeof g.value === 'number' && (
               <>
-                <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                <span style={{ color: 'oklch(0.92 0 0)' }}>{' · '}</span>
                 <span style={{ color: PITCH_GREEN }}>{`${g.value} ${scopeLabel}`}</span>
               </>
             )}
             {typeof g.h1_value === 'number' && (
-              <span style={{ color: 'oklch(0.55 0 0)' }}>{` · ${g.h1_value} 1H`}</span>
+              <span style={{ color: 'oklch(0.92 0 0)' }}>{` · ${g.h1_value} 1H`}</span>
             )}
             {typeof g.td === 'number' && g.td > 0 && (
               <span style={{ color: PITCH_GREEN }}>{` · ${g.td} td`}</span>
@@ -3775,7 +3813,7 @@ function NflQuarterLeagueView({ payload }: { payload: NflQuarterLeaguePayload })
   const header = (
     <div className="font-mono text-[13px] mb-3" style={{ color: 'oklch(0.90 0.18 195)' }}>
       <span>{`${scopeLabel}${q.category ? ` ${q.category}` : ''}`}</span>
-      <span style={{ color: 'oklch(0.55 0 0)' }}>{q.window_label ? ` · ${q.window_label}` : ''}</span>
+      <span style={{ color: 'oklch(0.92 0 0)' }}>{q.window_label ? ` · ${q.window_label}` : ''}</span>
     </div>
   )
 
@@ -3787,7 +3825,7 @@ function NflQuarterLeagueView({ payload }: { payload: NflQuarterLeaguePayload })
         {results.map((r, i) => (
           <div key={r.team} className="flex items-center justify-between py-1.5 border-b" style={{ borderColor: PITCH_BORDER }}>
             <span className="font-mono text-[13px]" style={{ color: PITCH_ACCENT }}>
-              <span style={{ color: 'oklch(0.55 0 0)' }}>{`#${i + 1} `}</span>
+              <span style={{ color: 'oklch(0.92 0 0)' }}>{`#${i + 1} `}</span>
               {r.team}
             </span>
             <span className="font-mono text-[12px]" style={{ color: 'oklch(0.85 0 0)' }}>
@@ -3807,7 +3845,7 @@ function NflQuarterLeagueView({ payload }: { payload: NflQuarterLeaguePayload })
         {results.map((r, i) => (
           <ResultRow
             key={i}
-            label={<><span>{normalizeDisplayPlayer(r.player)}</span><span style={{ color: 'oklch(0.55 0 0)' }}>{` ${r.team}`}</span></>}
+            label={<><span>{normalizeDisplayPlayer(r.player)}</span><span style={{ color: 'oklch(0.92 0 0)' }}>{` ${r.team}`}</span></>}
             badgeHeader={`${r.games}gp`}
             badgeValue={String(r.total)}
             accent={PITCH_GREEN}
@@ -3828,7 +3866,7 @@ function NflQuarterLeagueView({ payload }: { payload: NflQuarterLeaguePayload })
         return (
           <ResultRow
             key={i}
-            label={<><span>{normalizeDisplayPlayer(r.player)}</span><span style={{ color: 'oklch(0.55 0 0)' }}>{` ${r.team}`}</span></>}
+            label={<><span>{normalizeDisplayPlayer(r.player)}</span><span style={{ color: 'oklch(0.92 0 0)' }}>{` ${r.team}`}</span></>}
             badgeHeader={latestValue ? `${metLabel} · latest` : null}
             badgeValue={latestValue ?? metLabel}
             accent={PITCH_GREEN}
@@ -3836,17 +3874,17 @@ function NflQuarterLeagueView({ payload }: { payload: NflQuarterLeaguePayload })
             onToggle={() => toggle(i)}
           >
             {r.matches.map((m, j) => (
-              <div key={m.game_id ?? j} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
-                <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(m.date_iso) ?? m.date_iso}</span>
+              <div key={m.game_id ?? j} className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
+                <span style={{ color: 'oklch(0.92 0 0)' }}>{extractDateToken(m.date_iso) ?? m.date_iso}</span>
                 {m.opponent && (
                   <>
-                    <span style={{ color: 'oklch(0.45 0 0)' }}>{' vs '}</span>
+                    <span style={{ color: 'oklch(0.92 0 0)' }}>{' vs '}</span>
                     <span style={{ color: 'oklch(0.75 0.08 220)' }}>{m.opponent}</span>
                   </>
                 )}
                 {typeof m.value === 'number' && (
                   <>
-                    <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+                    <span style={{ color: 'oklch(0.92 0 0)' }}>{' · '}</span>
                     <span style={{ color: PITCH_GREEN }}>{m.value}</span>
                   </>
                 )}
@@ -3873,9 +3911,9 @@ function DateBoxScoreView({ payload }: { payload: DateBoxScorePayload }) {
       <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
         <span>{normalizeDisplayPlayer(q.player_display || q.player_query || 'player')}</span>
         {q.player_team && <span style={{ color: 'oklch(0.70 0.10 195)' }}>{` · ${q.player_team}`}</span>}
-        <span style={{ color: 'oklch(0.55 0 0)' }}> vs </span>
+        <span style={{ color: 'oklch(0.92 0 0)' }}> vs </span>
         <span style={{ color: 'oklch(0.70 0.10 195)' }}>{q.opponent_code || '—'}</span>
-        <span style={{ color: 'oklch(0.55 0 0)' }}>{q.window_label ? ` · ${q.window_label}` : ''}</span>
+        <span style={{ color: 'oklch(0.92 0 0)' }}>{q.window_label ? ` · ${q.window_label}` : ''}</span>
       </div>
 
       <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.18 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
@@ -3903,7 +3941,7 @@ function DateBoxScoreView({ payload }: { payload: DateBoxScorePayload }) {
 
       <div className="space-y-1.5">
         {games.map((g, i) => (
-          <div key={i} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+          <div key={i} className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
             {typeof g.result === 'string' && <span style={{ color: 'oklch(0.85 0 0)' }}>{`${g.result} · `}</span>}
             {Object.entries(g)
               .filter(([k]) => !['date', 'date_iso', 'venue', 'opponent', 'result'].includes(k) && typeof g[k] === 'number')
@@ -3927,7 +3965,7 @@ function NflWeekTeamView({ payload }: { payload: NflWeekTeamPayload }) {
     <div className="space-y-4">
       <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
         <span style={{ color: 'oklch(0.70 0.10 195)' }}>{q.team || 'TEAM'}</span>
-        <span style={{ color: 'oklch(0.55 0 0)' }}>
+        <span style={{ color: 'oklch(0.92 0 0)' }}>
           {` · week ${q.week}${q.week_end && q.week_end !== q.week ? `-${q.week_end}` : ''}${q.window_label ? ` · ${q.window_label}` : ''}`}
         </span>
       </div>
@@ -3943,16 +3981,16 @@ function NflWeekTeamView({ payload }: { payload: NflWeekTeamPayload }) {
 
       <div className="space-y-1.5">
         {games.map((g, i) => (
-          <div key={i} className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
-            <span style={{ color: 'oklch(0.60 0 0)' }}>{extractDateToken(g.date_iso) ?? g.date_iso}</span>
-            {g.season && <span style={{ color: 'oklch(0.48 0 0)' }}>{` (${g.season})`}</span>}
+          <div key={i} className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
+            <span style={{ color: 'oklch(0.92 0 0)' }}>{extractDateToken(g.date_iso) ?? g.date_iso}</span>
+            {g.season && <span style={{ color: 'oklch(0.92 0 0)' }}>{` (${g.season})`}</span>}
             {g.opponent && (
               <>
-                <span style={{ color: 'oklch(0.45 0 0)' }}>{'  '}</span>
+                <span style={{ color: 'oklch(0.92 0 0)' }}>{'  '}</span>
                 <span style={{ color: 'oklch(0.75 0.08 220)' }}>{`${g.venue === 'away' ? '@' : 'vs'} ${g.opponent}`}</span>
               </>
             )}
-            <span style={{ color: 'oklch(0.45 0 0)' }}>{' · '}</span>
+            <span style={{ color: 'oklch(0.92 0 0)' }}>{' · '}</span>
             <span style={{ color: g.outcome === 'W' ? 'oklch(0.78 0.18 145)' : g.outcome === 'L' ? 'oklch(0.70 0.15 25)' : 'oklch(0.85 0 0)' }}>
               {`${g.outcome ?? ''} ${g.pts_for}-${g.pts_allowed}`}
             </span>
@@ -4103,7 +4141,7 @@ function MlbReportLeaderboardView({ payload }: { payload: MlbReportLeaderboardPa
         <span>MLB Batter Report</span>
         <span style={{ color: PITCH_LABEL }}>{` · ${windowLabel} · top ${rows.length}`}</span>
         {generatedDate && (
-          <span style={{ color: 'oklch(0.42 0 0)' }}>{` · ${generatedDate}`}</span>
+          <span style={{ color: 'oklch(0.92 0 0)' }}>{` · ${generatedDate}`}</span>
         )}
       </div>
 
@@ -4219,7 +4257,7 @@ function MlbPlayerReportView({ payload }: { payload: MlbPlayerReportPayload }) {
           <span>{payload.player}</span>
           <span style={{ color: PITCH_LABEL }}>{` · ${windowLabel}`}</span>
           {dateRange && (
-            <span style={{ color: 'oklch(0.42 0 0)' }}>{` · ${dateRange}`}</span>
+            <span style={{ color: 'oklch(0.92 0 0)' }}>{` · ${dateRange}`}</span>
           )}
         </div>
         <div className="flex items-center gap-2 font-mono shrink-0">
@@ -4289,7 +4327,7 @@ function MlbPlayerReportView({ payload }: { payload: MlbPlayerReportPayload }) {
             style={{
               gridTemplateColumns: '1fr 64px 44px 48px',
               gap: '8px',
-              color: 'oklch(0.38 0 0)',
+              color: 'oklch(0.92 0 0)',
               borderBottom: '1px solid oklch(0.20 0 0)',
             }}
           >
@@ -5947,14 +5985,14 @@ function App() {
                         </span>
                       </div>
                       {matchLine && (
-                        <div className="mt-0.5 pl-2 font-mono text-[11px]" style={{ color: 'oklch(0.65 0 0)' }}>
+                        <div className="mt-0.5 pl-2 font-mono text-[11px]" style={{ color: 'oklch(0.92 0 0)' }}>
                           {matchLine}
                         </div>
                       )}
                     </div>
                   )
                 })}
-                {overflow > 0 && <div className="pt-1.5 font-mono text-[11px]" style={{ color: 'oklch(0.48 0 0)' }}>+ {overflow} more</div>}
+                {overflow > 0 && <div className="pt-1.5 font-mono text-[11px]" style={{ color: 'oklch(0.92 0 0)' }}>+ {overflow} more</div>}
               </div>
             )
           }
@@ -5963,7 +6001,7 @@ function App() {
           const normalized = normalizeQueryResults(payload, sanitized).slice(0, MAX_DEMO_ROWS)
           const overflow = results.length - MAX_DEMO_ROWS
           if (normalized.length === 0) {
-            return <div className="font-mono text-[12px]" style={{ color: 'oklch(0.48 0 0)' }}>no results</div>
+            return <div className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>no results</div>
           }
           const demoStatCtx = detectStatContext(payload, sanitized)
           const demoStatLabel = demoStatCtx ? demoStatCtx.unitLabel ?? statDisplayLabel(demoStatCtx.sport, demoStatCtx.stat) : ''
@@ -5993,7 +6031,7 @@ function App() {
                     </span>
                   </div>
                   {result.matchDetails && result.matchDetails.length > 0 && (
-                    <div className="mt-0.5 pl-2 font-mono text-[11px]" style={{ color: 'oklch(0.65 0 0)' }}>
+                    <div className="mt-0.5 pl-2 font-mono text-[11px]" style={{ color: 'oklch(0.92 0 0)' }}>
                       {result.matchDetails.map((m) => `${m.value}${m.statLabel} ${m.date}`).join('  ·  ')}
                     </div>
                   )}
@@ -6001,7 +6039,7 @@ function App() {
                 )
               })}
               {overflow > 0 && (
-                <div className="pt-1.5 font-mono text-[11px]" style={{ color: 'oklch(0.48 0 0)' }}>
+                <div className="pt-1.5 font-mono text-[11px]" style={{ color: 'oklch(0.92 0 0)' }}>
                   + {overflow} more
                 </div>
               )}
@@ -6055,7 +6093,7 @@ function App() {
             <div className="p-5">
               <div
                 className="text-[11px] leading-relaxed mb-3"
-                style={{ color: 'oklch(0.48 0 0)' }}
+                style={{ color: 'oklch(0.92 0 0)' }}
               >
                 Tap a command to prefill the search bar.
               </div>
@@ -6246,7 +6284,7 @@ function App() {
                   />
                   {resultsFilter && (
                     <>
-                      <span style={{ color: 'oklch(0.55 0 0)' }}>{`${rowCounts.shown}/${rowCounts.total}`}</span>
+                      <span style={{ color: 'oklch(0.92 0 0)' }}>{`${rowCounts.shown}/${rowCounts.total}`}</span>
                       <button
                         type="button"
                         onClick={() => setResultsFilter('')}
@@ -6266,7 +6304,7 @@ function App() {
             {pocketSnapshot && !isLoading && (
               <div
                 className="flex items-center justify-between gap-3 font-mono text-[11px] rounded px-3 py-1.5"
-                style={{ color: 'oklch(0.70 0 0)', backgroundColor: 'oklch(0.20 0 0)', border: '1px solid oklch(0.30 0 0)' }}
+                style={{ color: 'oklch(0.92 0 0)', backgroundColor: 'oklch(0.20 0 0)', border: '1px solid oklch(0.30 0 0)' }}
               >
                 <span>
                   saved pocket · {new Date(pocketSnapshot.savedAt).toLocaleDateString(undefined, { month: 'numeric', day: 'numeric', year: '2-digit' })}
@@ -6282,7 +6320,7 @@ function App() {
               </div>
             )}
             {isLoading ? (
-              <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
+              <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.92 0 0)' }}>
                 <LoadingMessage query={lastQuery} />
               </div>
             ) : queryGate ? (
@@ -6348,11 +6386,11 @@ function App() {
             ) : teamRunsResult ? (
               <MlbTeamRunsView payload={teamRunsResult} />
             ) : queryResults === null ? (
-              <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.70 0 0)' }}>
+              <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.92 0 0)' }}>
                 Build a query to begin
               </div>
             ) : queryResults.length === 0 ? (
-              <div className="text-center py-8 font-mono text-[13px] space-y-2" style={{ color: 'oklch(0.70 0 0)' }}>
+              <div className="text-center py-8 font-mono text-[13px] space-y-2" style={{ color: 'oklch(0.92 0 0)' }}>
                 <div>No results found</div>
                 {queryError && <div>{queryError}</div>}
               </div>
@@ -6431,7 +6469,7 @@ function App() {
                         {result.team ? (
                           <>
                             <span style={{ color: 'oklch(0.70 0.10 195)' }}>{result.team}</span>
-                            <span style={{ color: 'oklch(0.55 0 0)' }}>{' — '}</span>
+                            <span style={{ color: 'oklch(0.92 0 0)' }}>{' — '}</span>
                           </>
                         ) : null}
                         {result.player}
@@ -6449,7 +6487,7 @@ function App() {
                           <div
                             key={`${result.player}-streak-${detailIndex}`}
                             className="font-mono text-[12px]"
-                            style={{ color: 'oklch(0.76 0 0)' }}
+                            style={{ color: 'oklch(0.92 0 0)' }}
                           >
                             {`${detail.length} game streak ${detail.start} - ${detail.end}`}
                           </div>
@@ -6458,9 +6496,9 @@ function App() {
                     )}
 
                     {hasMatchDetails && result.matchDetails && (
-                      <div className="font-mono text-[12px]" style={{ color: 'oklch(0.76 0 0)' }}>
+                      <div className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
                         {isTrendRow && (
-                          <span style={{ color: 'oklch(0.55 0 0)' }}>{formatMet(result.total, result.windowSize)} — </span>
+                          <span style={{ color: 'oklch(0.92 0 0)' }}>{formatMet(result.total, result.windowSize)} — </span>
                         )}
                         {result.matchDetails
                           .map((m) => `${m.value}${m.statLabel} ${m.date}`)
@@ -6472,7 +6510,7 @@ function App() {
               })
             )}
             {resultsFilter && rowCounts.total > 0 && rowCounts.shown === 0 && !isLoading && (
-              <div className="text-center py-6 font-mono text-[13px]" style={{ color: 'oklch(0.60 0 0)' }}>
+              <div className="text-center py-6 font-mono text-[13px]" style={{ color: 'oklch(0.92 0 0)' }}>
                 {`No players or teams match "${resultsFilter.trim()}"`}
               </div>
             )}
@@ -6758,7 +6796,7 @@ function App() {
                 bottom-right group. The bar keeps "nspe" from reading as
                 "nspe {sample-queries}". */}
             {!isMobile && (
-              <span aria-hidden="true" className="font-mono text-[14px] -mx-2" style={{ color: 'oklch(0.45 0 0)' }}>|</span>
+              <span aria-hidden="true" className="font-mono text-[14px] -mx-2" style={{ color: 'oklch(0.92 0 0)' }}>|</span>
             )}
             {!isMobile && (
               <button
@@ -6858,7 +6896,7 @@ function App() {
               {'{query builder}'}
               <span
                 className="ml-2 font-normal"
-                style={{ color: 'oklch(0.55 0 0)', fontSize: '10px', letterSpacing: '0.1em' }}
+                style={{ color: 'oklch(0.92 0 0)', fontSize: '10px', letterSpacing: '0.1em' }}
               >
                 DRAG TO MOVE
               </span>
@@ -6966,17 +7004,17 @@ function App() {
               <span className="font-mono font-bold text-[13px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
                 {'{leaderboard}'}
               </span>
-              <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: 'oklch(0.55 0 0)' }}>
+              <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: 'oklch(0.92 0 0)' }}>
                 {leaderboardSportLabel(leaderboard.kind)} · top {leaderboard.rows.length}
               </span>
             </span>
             <span className="flex items-baseline gap-2">
               {!isLeaderboardOpen && leaderboard.rows[0] && (
-                <span className="font-mono text-[11px]" style={{ color: 'oklch(0.75 0 0)' }}>
+                <span className="font-mono text-[11px]" style={{ color: 'oklch(0.92 0 0)' }}>
                   #1 {normalizeLeaderboardPlayer(leaderboard.rows[0].player)} {leaderboard.rows[0].score.toFixed(1)}
                 </span>
               )}
-              <span className="font-mono text-[10px]" style={{ color: 'oklch(0.48 0 0)' }}>
+              <span className="font-mono text-[10px]" style={{ color: 'oklch(0.92 0 0)' }}>
                 {formatLeaderboardDate(leaderboard.generated_at)}
               </span>
               <span className="font-mono text-[11px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
@@ -6996,7 +7034,7 @@ function App() {
                   gap: '8px',
                   backgroundColor: 'oklch(0.14 0 0)',
                   borderBottom: '1px solid oklch(0.20 0 0)',
-                  color: 'oklch(0.42 0 0)',
+                  color: 'oklch(0.92 0 0)',
                 }}
               >
                 <span>#</span>
@@ -7021,9 +7059,9 @@ function App() {
                       color: 'oklch(0.85 0 0)',
                     }}
                   >
-                    <span style={{ color: 'oklch(0.48 0 0)' }}>{rank}</span>
+                    <span style={{ color: 'oklch(0.92 0 0)' }}>{rank}</span>
                     <span className="truncate" style={{ color: 'oklch(0.92 0 0)' }}>{player}</span>
-                    <span style={{ color: 'oklch(0.55 0 0)' }}>{row.team}</span>
+                    <span style={{ color: 'oklch(0.92 0 0)' }}>{row.team}</span>
                     <span style={{ color: 'oklch(0.85 0.15 195)' }} title={leaderboardStreakTooltip(row, isTop3)}>
                       {row.streak_label}({row.streak_length}){star}
                     </span>
@@ -7110,7 +7148,7 @@ function App() {
               </span>
               <span
                 className="font-mono text-[10px] uppercase tracking-widest"
-                style={{ color: 'oklch(0.55 0 0)' }}
+                style={{ color: 'oklch(0.92 0 0)' }}
               >
                 {leaderboardSportLabel(leaderboard.kind)} · top {leaderboard.rows.length}
               </span>
@@ -7118,7 +7156,7 @@ function App() {
             <span className="flex items-baseline gap-3">
               <span
                 className="font-mono text-[10px]"
-                style={{ color: 'oklch(0.48 0 0)' }}
+                style={{ color: 'oklch(0.92 0 0)' }}
               >
                 {formatLeaderboardDate(leaderboard.generated_at)}
               </span>
@@ -7141,7 +7179,7 @@ function App() {
                 gap: '8px',
                 backgroundColor: 'oklch(0.14 0 0)',
                 borderBottom: '1px solid oklch(0.20 0 0)',
-                color: 'oklch(0.42 0 0)',
+                color: 'oklch(0.92 0 0)',
               }}
             >
               <span>#</span>
@@ -7172,11 +7210,11 @@ function App() {
                       className="grid items-center"
                       style={{ gridTemplateColumns: `22px minmax(0,1fr) 36px ${mobileStreakColPx}px`, gap: '8px' }}
                     >
-                      <span style={{ color: 'oklch(0.48 0 0)' }}>{rank}</span>
+                      <span style={{ color: 'oklch(0.92 0 0)' }}>{rank}</span>
                       <span className="truncate" style={{ color: 'oklch(0.92 0 0)' }}>
                         {player}
                       </span>
-                      <span style={{ color: 'oklch(0.55 0 0)' }}>{row.team}</span>
+                      <span style={{ color: 'oklch(0.92 0 0)' }}>{row.team}</span>
                       <span
                         className="text-right whitespace-nowrap"
                         style={{ color: 'oklch(0.85 0.15 195)' }}
@@ -7192,7 +7230,7 @@ function App() {
                       >
                         <span
                           className="text-[10px] uppercase tracking-widest"
-                          style={{ color: 'oklch(0.42 0 0)' }}
+                          style={{ color: 'oklch(0.92 0 0)' }}
                           title={LEADERBOARD_SCORE_TOOLTIP}
                         >
                           score
@@ -7322,7 +7360,7 @@ function App() {
                 </div>
                 <div
                   className="font-mono text-[11px] mb-2"
-                  style={{ color: 'oklch(0.62 0 0)' }}
+                  style={{ color: 'oklch(0.92 0 0)' }}
                 >
                   Streak labels (mlb):
                 </div>

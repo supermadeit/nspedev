@@ -111,7 +111,7 @@ export default function SuccessPage() {
   return (
     <PageShell title="Payment" subtitle="Confirming your purchase.">
       {state === 'verifying' ? (
-        <p className="text-neutral-400 font-mono text-sm">Verifying payment…</p>
+        <p className="text-white font-mono text-sm">Verifying payment…</p>
       ) : null}
 
       {state === 'paid' ? (

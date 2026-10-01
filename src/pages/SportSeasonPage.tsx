@@ -33,14 +33,17 @@ import { MatchupInsightOverlay } from '@/components/MatchupInsightOverlay'
 import { SportsSwitcher, chartsHrefFor, metricsHrefFor } from '@/components/SportsSwitcher'
 import { teamNickname } from '@/lib/teamNicknames'
 
+// label/dim bumped to match `value`'s brightness — reported 2026-10-01:
+// grey text site-wide was becoming hard to read, owner wants white, may
+// refine to green in specific spots later.
 const C = {
-  label: 'oklch(0.55 0 0)',
+  label: 'oklch(0.88 0 0)',
   value: 'oklch(0.88 0 0)',
   accent: 'oklch(0.85 0.15 195)',
   green: 'oklch(0.85 0.15 145)',
   border: 'oklch(0.28 0 0)',
   panel: 'oklch(0.13 0 0)',
-  dim: 'oklch(0.40 0 0)',
+  dim: 'oklch(0.88 0 0)',
 }
 
 // ---------------- team-stat labels/formatting ----------------
@@ -369,10 +372,12 @@ export default function SportSeasonPage({ sport, label }: SportSeasonPageProps) 
             here without routing back through the homepage. {charts} added
             next to it 2026-09-30 — a direct link to this sport's own charts
             page (no popup needed, this page already knows its sport), same
-            slot NFL's page carries it in. {team.metrics} added 2026-10-01,
-            same treatment — mlb has no team-metrics page (metricsHrefFor
-            returns undefined), so this page's mlb mount just won't render
-            the link, nothing else needs to change.
+            slot NFL's page carries it in. {team.metrics} added 2026-10-01 —
+            mlb joined nfl/nba/nhl the same day once its own dedicated
+            team-metrics engine shipped, so metricsHrefFor now resolves for
+            every sport this page covers; the `metricsHrefFor(sport) &&`
+            guard stays in place as defensive future-proofing rather than
+            live conditional logic.
             Mobile (reported 2026-10-01): four items ({label}/{sports}/
             {charts}/{team.metrics}) plus the back link don't fit one row
             once team.metrics joined them, so this stacks into three rows on

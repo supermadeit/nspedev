@@ -19,7 +19,9 @@ const C = {
   surface: 'oklch(0.13 0 0)',
   surface2: 'oklch(0.18 0 0)',
   border: 'oklch(0.30 0 0)',
-  textDim: 'oklch(0.55 0 0)',
+  // Bumped to match textBright — grey text site-wide was hard to read
+  // (2026-10-01), owner wants white.
+  textDim: 'oklch(0.90 0 0)',
   textBright: 'oklch(0.90 0 0)',
   danger: 'oklch(0.70 0.18 25)',
 }

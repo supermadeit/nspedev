@@ -492,18 +492,20 @@ export interface TeamMetricsRecord {
   road?: string
   points_for?: number
   points_against?: number
-  /** NHL spells these goals_for/goals_against instead — see
-   * normalizeTeamMetricsRecord below, which folds both spellings into one
-   * shape so TeamMetricsCard.tsx doesn't need to care which sport it's
-   * rendering here. */
+  /** NHL spells these goals_for/goals_against, MLB spells them
+   * runs_for/runs_against — see normalizeTeamMetricsRecord below, which
+   * folds all three spellings into one shape so TeamMetricsCard.tsx doesn't
+   * need to care which sport it's rendering here. */
   goals_for?: number
   goals_against?: number
+  runs_for?: number
+  runs_against?: number
   margin?: number
   record: string
 }
 
 export interface TeamMetricsPayload {
-  sport: 'nfl' | 'nba' | 'nhl'
+  sport: 'nfl' | 'nba' | 'nhl' | 'mlb'
   team: string
   window: TeamMetricsWindow
   games: number
@@ -513,6 +515,13 @@ export interface TeamMetricsPayload {
   record?: TeamMetricsRecord
   metrics: Record<string, TeamMetricsMetricEntry>
   allows: Record<string, TeamMetricsAllowsEntry>
+  // Added to all four sports' payloads 2026-10-01 (same release as mlb
+  // itself) — null for the current season; a footnote for past-season/
+  // history windows, where the player-threshold scrape only covers current
+  // rosters so `allows` undercounts. Optional (not just nullable) since it
+  // predates mlb's launch on nfl/nba/nhl and old cached responses won't
+  // have the key at all.
+  allows_note?: string | null
   box_score_coverage?: string | null
 }
 
@@ -522,22 +531,23 @@ function isTeamMetricsPayload(v: unknown): v is TeamMetricsPayload {
   return typeof r.team === 'string' && typeof r.metrics === 'object' && r.metrics !== null
 }
 
-// NHL's record block uses goals_for/goals_against instead of
-// points_for/points_against — this reads either spelling into one shape so
-// the card component never has to branch on sport just for this.
+// NHL's record block uses goals_for/goals_against and MLB's uses
+// runs_for/runs_against instead of points_for/points_against — this reads
+// whichever spelling is present into one shape so the card component never
+// has to branch on sport just for this.
 export function normalizeTeamMetricsRecord(record: TeamMetricsRecord | undefined): (TeamMetricsRecord & { pointsFor?: number; pointsAgainst?: number }) | undefined {
   if (!record) return undefined
   return {
     ...record,
-    pointsFor: record.points_for ?? record.goals_for,
-    pointsAgainst: record.points_against ?? record.goals_against,
+    pointsFor: record.points_for ?? record.goals_for ?? record.runs_for,
+    pointsAgainst: record.points_against ?? record.goals_against ?? record.runs_against,
   }
 }
 
 export type TeamMetricsWindowParam = 'season' | 'history' | string
 
 export async function fetchTeamMetrics(
-  sport: 'nfl' | 'nba' | 'nhl',
+  sport: 'nfl' | 'nba' | 'nhl' | 'mlb',
   team: string,
   window: TeamMetricsWindowParam = 'season',
 ): Promise<TeamMetricsPayload> {

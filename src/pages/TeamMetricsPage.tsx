@@ -1,6 +1,7 @@
-// {team.metrics} — nfl/nba/nhl (no mlb; its team feed has no opponent side,
-// per nspe-v2-da 2026-10-01). One shared page component mounted 3x via
-// routes with different `sport`/`label` props — same pattern SportSeasonPage
+// {team.metrics} — nfl/nba/nhl/mlb (mlb joined 2026-10-01, its own dedicated
+// engine rather than a retrofit of the gap-having team feed the others
+// originally used). One shared page component mounted 4x via routes with
+// different `sport`/`label` props — same pattern SportSeasonPage
 // already established for the rankings pages, since the page SHELL here
 // (team/window pickers, mode switching, fetch orchestration) is identical
 // across sports; only the metric field list differs, which is what
@@ -24,8 +25,9 @@ import { SportsSwitcher } from '@/components/SportsSwitcher'
 import { TeamMetricsCard, type TeamMetricsFieldDef } from '@/components/TeamMetricsCard'
 import { fetchTeamMetrics, type TeamMetricsPayload } from '@/lib/databaseApi'
 import { teamRoster } from '@/lib/teamNicknames'
+import { useIsMobile } from '@/hooks/use-mobile'
 
-type Sport = 'nfl' | 'nba' | 'nhl'
+type Sport = 'nfl' | 'nba' | 'nhl' | 'mlb'
 type Mode = 'single' | 'vsTeam' | 'vsHistory'
 
 const FIELD_GROUPS_BY_SPORT: Record<Sport, TeamMetricsFieldDef[]> = {
@@ -102,6 +104,47 @@ const FIELD_GROUPS_BY_SPORT: Record<Sport, TeamMetricsFieldDef[]> = {
     { key: 'takeaways', label: 'Takeaways', group: 'Puck Possession' },
     { key: 'giveaways', label: 'Giveaways', group: 'Puck Possession' },
   ],
+  mlb: [
+    { key: 'runs', label: 'Runs', group: 'Scoring' },
+    { key: 'runs_by_inning', label: 'Runs by Inning', group: 'Scoring', periodLabels: ['1', '2', '3', '4', '5', '6', '7', '8', '9'] },
+    { key: 'first_five_runs', label: 'First 5 Runs', group: 'Scoring' },
+    { key: 'extra_innings_runs', label: 'Extra Innings Runs', group: 'Scoring' },
+    { key: 'hits', label: 'Hits', group: 'Batting' },
+    { key: 'home_runs', label: 'Home Runs', group: 'Batting' },
+    { key: 'doubles', label: 'Doubles', group: 'Batting' },
+    { key: 'triples', label: 'Triples', group: 'Batting' },
+    { key: 'walks', label: 'Walks', group: 'Batting' },
+    { key: 'strikeouts', label: 'Strikeouts', group: 'Batting' },
+    { key: 'stolen_bases', label: 'Stolen Bases', group: 'Batting' },
+    { key: 'total_bases', label: 'Total Bases', group: 'Batting' },
+    { key: 'extra_base_hits', label: 'Extra-Base Hits', group: 'Batting' },
+    { key: 'left_on_base', label: 'Left on Base', group: 'Batting' },
+    { key: 'gidp', label: 'GIDP', group: 'Batting' },
+    { key: 'pitching_strikeouts', label: 'Strikeouts', group: 'Pitching' },
+    { key: 'walks_allowed', label: 'Walks Allowed', group: 'Pitching' },
+    { key: 'hits_allowed', label: 'Hits Allowed', group: 'Pitching' },
+    { key: 'home_runs_allowed', label: 'HR Allowed', group: 'Pitching' },
+    { key: 'quality_starts', label: 'Quality Starts', group: 'Pitching', decimals: 2 },
+    { key: 'saves', label: 'Saves', group: 'Pitching' },
+    { key: 'blown_saves', label: 'Blown Saves', group: 'Pitching' },
+    { key: 'holds', label: 'Holds', group: 'Pitching' },
+    { key: 'pitches', label: 'Pitches', group: 'Pitching' },
+    // errors_committed (full history, from the games index) and errors (box
+    // score only, 2020+) are genuinely two separate keys on this payload —
+    // kept as two rows, not merged, so each one's own coverage stays honest.
+    { key: 'errors_committed', label: 'Errors', group: 'Fielding' },
+    { key: 'errors', label: 'Errors (box)', group: 'Fielding' },
+    { key: 'double_plays', label: 'Double Plays', group: 'Fielding' },
+    { key: 'fielding_pct', label: 'Fielding %', group: 'Fielding', decimals: 3 },
+    // Rates — decimals explicit since these are .246-style stats, not
+    // percentages; the default 1-decimal rounding would read as "0.2".
+    { key: 'batting_avg', label: 'AVG', group: 'Rates', decimals: 3 },
+    { key: 'on_base_pct', label: 'OBP', group: 'Rates', decimals: 3 },
+    { key: 'slugging', label: 'SLG', group: 'Rates', decimals: 3 },
+    { key: 'ops', label: 'OPS', group: 'Rates', decimals: 3 },
+    { key: 'era', label: 'ERA', group: 'Rates', decimals: 2 },
+    { key: 'whip', label: 'WHIP', group: 'Rates', decimals: 2 },
+  ],
 }
 
 interface FetchState {
@@ -138,8 +181,9 @@ function useTeamMetricsFetch(sport: Sport, team: string, window: string, enabled
 // nspe-v2-da 2026-10-01, who confirmed `season`/`history` need no such
 // disambiguation (both are safe everywhere) and that hardcoding the span
 // per sport is cheaper than fetching every option's real window.label up
-// front just to populate a dropdown. NFL's token already equals its season
-// year 1:1, so it needs no second form.
+// front just to populate a dropdown. NFL's and MLB's tokens already equal
+// their season year 1:1 (confirmed for mlb 2026-10-01), so neither needs a
+// second form — both just fall through to the plain `String(year)` below.
 function yearOptionLabel(sport: Sport, year: number): string {
   if (sport === 'nba') return `${year} (${year - 1}-${String(year).slice(2)})`
   if (sport === 'nhl') return `${year} (${year}-${String(year + 1).slice(2)})`
@@ -153,6 +197,7 @@ const MODE_TABS: { key: Mode; label: string }[] = [
 ]
 
 export default function TeamMetricsPage({ sport, label }: { sport: Sport; label: string }) {
+  const isMobile = useIsMobile()
   const roster = useMemo(() => teamRoster(sport), [sport])
   const fieldGroups = FIELD_GROUPS_BY_SPORT[sport]
   const currentYear = new Date().getFullYear()
@@ -187,14 +232,17 @@ export default function TeamMetricsPage({ sport, label }: { sport: Sport; label:
     // comparison modes especially) was invisible below the fold with no way
     // to reach it short of browser zoom.
     <div className="h-dvh w-full overflow-y-auto" style={{ backgroundColor: C.surface, color: C.textBright, fontFamily: 'monospace' }}>
-      <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: `1px solid ${C.border}` }}>
+      {/* Mobile (reported 2026-10-01): {homepage}+{sports} ran off-screen on
+          one row — stacks {sports} underneath {homepage} on mobile, same
+          treatment as the other chart pages; desktop stays the original row. */}
+      <div className={`flex gap-3 px-6 py-4 ${isMobile ? 'flex-col' : 'items-center justify-between'}`} style={{ borderBottom: `1px solid ${C.border}` }}>
         <div>
           <span className="font-mono font-bold text-[15px]" style={{ color: C.accent }}>{`{${label}}`}</span>
           <span className="ml-2 font-mono text-[12px]" style={{ color: C.textDim }}>
             team production, what they do vs. what they allow
           </span>
         </div>
-        <div className="flex items-center gap-4">
+        <div className={`flex gap-2 ${isMobile ? 'flex-col items-start' : 'items-center gap-4'}`}>
           <a href="/" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
             {'{homepage}'}
           </a>

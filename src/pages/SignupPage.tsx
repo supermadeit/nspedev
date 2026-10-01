@@ -96,7 +96,7 @@ export default function SignupPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <p className="text-xs text-neutral-500">At least 6 characters.</p>
+          <p className="text-xs text-white">At least 6 characters.</p>
         </div>
         <Button type="submit" className="w-full" disabled={submitting}>
           {submitting ? 'Creating account…' : 'Sign up'}

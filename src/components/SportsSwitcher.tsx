@@ -39,14 +39,14 @@ export function chartsHrefFor(sport: SportKey): string {
   return CHARTS_LINKS.find((l) => l.sport === sport)?.href ?? '/charts'
 }
 
-// {team.metrics} — nfl/nba/nhl only (mlb's team feed has no opponent side,
-// per nspe-v2-da 2026-10-01, so there's no mlb page for this to link to).
-// Deliberately NOT in CHARTS_LINKS/RANKINGS_LINKS' pattern of "include every
-// sport" — a caller on an mlb page should just not render this link at all
-// rather than get a route that 404s.
+// {team.metrics} — mlb joined nfl/nba/nhl 2026-10-01 (its original "no
+// opponent side" gap got a dedicated mlb engine, not retrofitted onto the
+// team feed that gap was about). All four sports now covered, same as
+// CHARTS_LINKS/RANKINGS_LINKS.
 const METRICS_LINKS: { sport: SportKey; href: string; label: string }[] = [
   { sport: 'nfl', href: '/nfl.team.metrics', label: 'nfl.team.metrics' },
   { sport: 'nba', href: '/nba.team.metrics', label: 'nba.team.metrics' },
+  { sport: 'mlb', href: '/mlb.team.metrics', label: 'mlb.team.metrics' },
   { sport: 'nhl', href: '/nhl.team.metrics', label: 'nhl.team.metrics' },
 ]
 
@@ -73,10 +73,9 @@ const ACCENT = 'oklch(0.85 0.15 195)'
 // menu would either run off-screen or read backwards.
 // `variant` picks which link set to switch between — "rankings" (default)
 // for every sport's rankings/matchups page, "charts" for every sport's
-// {chart} page, "metrics" for {team.metrics} (nfl/nba/nhl only — no mlb
-// entry exists, see METRICS_LINKS above) — so switching sport from any one
-// of these lands on the same kind of page for the next sport, not a
-// different one.
+// {chart} page, "metrics" for {team.metrics} (all four sports as of
+// 2026-10-01) — so switching sport from any one of these lands on the same
+// kind of page for the next sport, not a different one.
 // `triggerSizePx` overrides the closed-button text size — 14px everywhere by
 // default (unchanged), but the homepage's {charts}/{matchups} pair use 15px
 // so they read the same size as the {chart} title text on the page they

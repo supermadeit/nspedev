@@ -24,7 +24,7 @@
   --secondary-foreground: #f2f2f2;
   
   --muted: #2d2d2d;
-  --muted-foreground: #999999;
+  --muted-foreground: #ffffff;
   
   --accent: #2dd4eb;
   --accent-foreground: #1e1e1e;
@@ -65,7 +65,7 @@
     --secondary-foreground: oklch(0.95 0 0);
     
     --muted: oklch(0.18 0 0);
-    --muted-foreground: oklch(0.60 0 0);
+    --muted-foreground: oklch(0.92 0 0);
     
     --accent: oklch(0.90 0.18 195);
     --accent-foreground: oklch(0.12 0 0);

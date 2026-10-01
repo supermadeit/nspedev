@@ -187,7 +187,7 @@ export default function AccountPage() {
             <div className="flex items-center justify-between">
               <div className="text-lg">
                 {loading ? '—' : profile?.username ? `@${profile.username}` : (
-                  <span className="text-neutral-400">not set</span>
+                  <span className="text-white">not set</span>
                 )}
               </div>
               <Button variant="secondary" onClick={startEditingUsername} disabled={loading}>
@@ -205,10 +205,10 @@ export default function AccountPage() {
         <CardContent className="space-y-4">
           <div className="text-4xl font-semibold">
             {loading ? '—' : (profile?.credits ?? 0).toLocaleString()}
-            <span className="text-base text-neutral-400 ml-2">credits</span>
+            <span className="text-base text-white ml-2">credits</span>
           </div>
           {profile?.plan ? (
-            <div className="text-sm text-neutral-400">
+            <div className="text-sm text-white">
               Plan: <span className="text-neutral-100">{profile.plan}</span>
             </div>
           ) : null}
@@ -223,7 +223,7 @@ export default function AccountPage() {
           <CardTitle>Search suggestions</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          <p className="text-sm text-neutral-400">
+          <p className="text-sm text-white">
             Show command suggestions ({'{psc}'}) as you type in the search bar. Player search always stays on.
           </p>
           <Button variant="secondary" onClick={togglePsc} aria-pressed={pscOn} className="self-start">
