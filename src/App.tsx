@@ -2870,15 +2870,32 @@ const H2H_FIELD_GROUPS: string[][] = [
   ['pass_cmp', 'pass_att', 'pass_yds', 'pass_td', 'pass_int', 'pass_lng', 'pass_rtg'],
 ]
 
-// Flattened group order — backend's display_fields (and each game's own key
-// order) don't necessarily list tgts right after the receiving fields it
-// belongs with, which is what let it land in the same visual row as the
-// rushing stats above. Sorting against this fixed order instead guarantees
-// rushing, then receiving (tgts included), then passing, every time,
-// regardless of what order the backend actually sent them in. A no-op for
-// any sport whose fields aren't in this list at all (MLB/NHL) — every field
-// ties, so the original order is kept (Array#sort is stable).
-const NFL_FIELD_ORDER = H2H_FIELD_GROUPS.flat()
+const RUSH_FIELD_GROUP = H2H_FIELD_GROUPS[0]
+const REC_FIELD_GROUP = H2H_FIELD_GROUPS[1]
+// qbr tags along with the passing group for ordering purposes even though
+// it's its own field, not part of H2H_FIELD_GROUPS' passing list (qbr has no
+// all-zero-hiding concept — a QB always has it).
+const PASS_FIELD_GROUP = [...H2H_FIELD_GROUPS[2], 'qbr']
+
+// Game-log column order — the player's own dominant category (from
+// payload.pbp.category, the same field H2hView's Q1/1H columns are keyed
+// to) goes first, immediately followed by its own Q1/1H splits, then the
+// remaining categories. Reported 2026-10-02: the old fixed rush-then-rec-
+// then-pass order put a QB's passing line (his real category) after his
+// much-less-relevant rushing line, and similarly buried a WR's receiving
+// line behind rushing — this instead reorders per query so whichever stat
+// the player actually does lands first, with its own Q1/1H right next to it.
+// A no-op for any sport whose fields aren't in these groups at all (MLB/
+// NHL) — every field ties, so the original order is kept (Array#sort is
+// stable).
+function nflGameLogFieldOrder(category: string | undefined): string[] {
+  const splits = category ? [`q1_${category}_yds`, `1h_${category}_yds`] : []
+  if (category === 'pass') return [...PASS_FIELD_GROUP, ...splits, ...RUSH_FIELD_GROUP, ...REC_FIELD_GROUP]
+  if (category === 'rec') return [...REC_FIELD_GROUP, ...splits, ...RUSH_FIELD_GROUP, ...PASS_FIELD_GROUP]
+  // Default: rush-dominant — category === 'rush', or no pbp block at all
+  // (same order this always used before Q1/1H existed).
+  return [...RUSH_FIELD_GROUP, ...splits, ...REC_FIELD_GROUP, ...PASS_FIELD_GROUP]
+}
 
 function sortByFieldOrder<T>(items: T[], keyOf: (item: T) => string, order: string[]): T[] {
   const priority = new Map(order.map((f, i) => [f, i]))
@@ -2928,13 +2945,14 @@ function H2hView({ payload }: { payload: H2hPayload }) {
   const halfByDate = new Map<string, number>()
   for (const e of pbp?.half_splits?.q1 ?? []) q1ByDate.set(e.date_iso, e.value)
   for (const e of pbp?.half_splits?.['1h'] ?? []) halfByDate.set(e.date_iso, e.value)
+  const gameLogFieldOrder = nflGameLogFieldOrder(pbp?.category)
   // engine is "{sport}-h2h"/"{sport}-week" (dash-joined) — every sport now
   // shares the same filterable game-log table (GameLogFilterBar/
   // GameLogTable), the one NBA's OverviewStatNGenericView introduced. NFL used
   // to keep its own bespoke rush/rec/pass boxed-card layout here; that's
   // gone as of the "uniform for every sport" change — its field order is
-  // still football-specific (see NFL_FIELD_ORDER), just rendered through the
-  // shared table component now like everyone else's fields are.
+  // still football-specific (see nflGameLogFieldOrder), just rendered through
+  // the shared table component now like everyone else's fields are.
   const sport = payload.engine.split('-')[0]
 
   const playerLabel = normalizeDisplayPlayer(q.player_display || q.player_query || 'player')
@@ -3065,10 +3083,10 @@ function H2hView({ payload }: { payload: H2hPayload }) {
           // stripped from each game's own record too, not just the totals
           // card, so a rusher/receiver's row doesn't fill up with "0 pass
           // cmp, 0 pass att, ..." for a group that never applies to them;
-          // and fields are reordered to rushing-then-receiving-then-passing
-          // to match the totals card above. Both steps are no-ops for
-          // MLB/NHL, whose fields never appear in NFL_FIELD_ORDER and whose
-          // hiddenH2hFields is always null.
+          // and fields are reordered with the player's own dominant category
+          // first (see nflGameLogFieldOrder). Both steps are no-ops for
+          // MLB/NHL, whose fields never appear in these groups at all, and
+          // whose hiddenH2hFields is always null.
           <GameLogFilterBar
             sport={sport}
             displayFields={displayFields}
@@ -3107,7 +3125,7 @@ function H2hView({ payload }: { payload: H2hPayload }) {
                 if (q1v != null) merged[`q1_${pbp.category}_yds`] = q1v
                 if (hv != null) merged[`1h_${pbp.category}_yds`] = hv
               }
-              return reorderRecordByFieldOrder(merged, NFL_FIELD_ORDER)
+              return reorderRecordByFieldOrder(merged, gameLogFieldOrder)
             }) as unknown as Record<string, unknown>[]}
           >
             {(filteredGames) => <GameLogTable games={filteredGames} metaKeys={H2H_GAME_LOG_META_KEYS} />}
@@ -6225,14 +6243,26 @@ function App() {
         </div>
       )}
 
-      {isMiniOpen && (
+      {/* h2h results take over the full viewport — requested 2026-10-02 as
+          the one result type that should, everything else keeps the normal
+          draggable/resizable (desktop) or compact (mobile) panel below.
+          Dragging/resizing a panel that already fills the screen has
+          nothing to do, so the header's drag handlers and the resize handle
+          are both skipped in this mode rather than left wired to no-op. */}
+      {isMiniOpen && (() => {
+        const isH2hFullScreen = Boolean(h2hResult)
+        return (
         <div
           ref={miniRef}
-          className={isMobile
+          className={isH2hFullScreen
+            ? 'fixed inset-0 z-30 flex flex-col overflow-hidden'
+            : isMobile
             ? 'fixed z-30 rounded-lg shadow-2xl overflow-hidden'
             : 'absolute z-30 flex flex-col rounded-lg shadow-2xl overflow-hidden'
           }
-          style={isMobile
+          style={isH2hFullScreen
+            ? { backgroundColor: 'oklch(0.15 0 0)' }
+            : isMobile
             ? {
                 left: `${(mobileMiniPosition ?? { x: 8, y: 8 }).x}px`,
                 top: `${(mobileMiniPosition ?? { x: 8, y: 8 }).y}px`,
@@ -6255,8 +6285,8 @@ function App() {
           <div
             className="flex flex-none items-center justify-between px-5 py-3 select-none"
             style={{ backgroundColor: 'oklch(0.18 0 0)', borderBottom: '1px solid oklch(0.30 0 0)', touchAction: 'none' }}
-            onMouseDown={handleMouseDown}
-            onTouchStart={isMobile ? handleMobileHeaderTouchStart : undefined}
+            onMouseDown={isH2hFullScreen ? undefined : handleMouseDown}
+            onTouchStart={isH2hFullScreen ? undefined : isMobile ? handleMobileHeaderTouchStart : undefined}
           >
             <span className="font-mono font-bold text-[14px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
               {h2hResult
@@ -6352,7 +6382,7 @@ function App() {
 
           <div
             ref={resultsScrollRef}
-            className={`overflow-y-auto px-5 pb-4 space-y-3 ${isMobile ? 'max-h-[calc(100dvh-130px)]' : 'flex-1 min-h-0'}`}
+            className={`overflow-y-auto px-5 pb-4 space-y-3 ${isH2hFullScreen ? 'flex-1 min-h-0' : isMobile ? 'max-h-[calc(100dvh-130px)]' : 'flex-1 min-h-0'}`}
           >
             {/* Required "never merge silently" transparency for a follow-up
                 question — the header above already shows the full rewritten
@@ -6619,7 +6649,7 @@ function App() {
             </div>
             </ResultsFilterContext.Provider>
           </div>
-          {!isMobile && (
+          {!isMobile && !isH2hFullScreen && (
             <div
               onMouseDown={handleResizeMouseDown}
               role="separator"
@@ -6633,7 +6663,8 @@ function App() {
             />
           )}
         </div>
-      )}
+        )
+      })()}
 
       {/* Stacking: this wrapper deliberately creates no stacking context
           (relative, no z-index), so it paints at the base layer — under
