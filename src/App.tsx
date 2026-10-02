@@ -2916,6 +2916,18 @@ function H2hView({ payload }: { payload: H2hPayload }) {
   const q = payload.query ?? {}
   const t = payload.totals ?? {}
   const games = payload.games ?? []
+  // Per-game Q1/1H value for the player's own primary stat category (rush
+  // for a back, rec for a receiver, pass for a QB — see H2hPayload.pbp's own
+  // comment) — keyed by date_iso since the per-game rows carry no game_id of
+  // their own. Requested 2026-10-02: once the universal-schema passing
+  // columns were stripped from a skill player's game log (see the
+  // displayFields filter below), replace that freed-up space with this
+  // instead, rather than leaving the table shorter.
+  const pbp = payload.pbp
+  const q1ByDate = new Map<string, number>()
+  const halfByDate = new Map<string, number>()
+  for (const e of pbp?.half_splits?.q1 ?? []) q1ByDate.set(e.date_iso, e.value)
+  for (const e of pbp?.half_splits?.['1h'] ?? []) halfByDate.set(e.date_iso, e.value)
   // engine is "{sport}-h2h"/"{sport}-week" (dash-joined) — every sport now
   // shares the same filterable game-log table (GameLogFilterBar/
   // GameLogTable), the one NBA's OverviewStatNGenericView introduced. NFL used
@@ -3067,8 +3079,33 @@ function H2hView({ payload }: { payload: H2hPayload }) {
                   .filter(Boolean)
                   .join(' '),
               }
+              // Every per-game row carries the full universal stat schema
+              // (pass_cmp, qbr, etc, zeroed out) regardless of position —
+              // display_fields is the actual source of truth for which ones
+              // apply to this player. Reported 2026-10-01: a RB's game-log
+              // table was showing a full PASS ATT/YDS/TD/INT/LNG/RTG column
+              // group of zeros because the old box-score-tail rendering
+              // buried that leak in wrapped text where it went unnoticed;
+              // the table surfaces it as real columns, so it needs fixing
+              // at the source rather than papering over it per-view.
+              if (displayFields) {
+                for (const k of Object.keys(merged)) {
+                  if (!OVERVIEW_GAME_META_KEYS.has(k) && !displayFields.includes(k)) delete merged[k]
+                }
+              }
               if (hiddenH2hFields) {
                 for (const f of hiddenH2hFields) delete merged[f]
+              }
+              // Quarter/half-scoped yardage for this player's own category —
+              // added after the universal-schema strip above so it's never
+              // mistaken for one of those leaked fields. Missing for games
+              // outside the pbp coverage window (shows as "—" in the table,
+              // same as any other field a given game doesn't have).
+              if (pbp && typeof g.date_iso === 'string') {
+                const q1v = q1ByDate.get(g.date_iso)
+                const hv = halfByDate.get(g.date_iso)
+                if (q1v != null) merged[`q1_${pbp.category}_yds`] = q1v
+                if (hv != null) merged[`1h_${pbp.category}_yds`] = hv
               }
               return reorderRecordByFieldOrder(merged, NFL_FIELD_ORDER)
             }) as unknown as Record<string, unknown>[]}

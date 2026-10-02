@@ -167,6 +167,18 @@ export interface H2hPayload {
   totals: H2hTotals
   games: H2hGame[]
   staff_breakdown?: H2hStaffBreakdown
+  // Per-game 1st-quarter/1st-half value for the player's primary stat
+  // category (rush for a back, rec for a receiver, pass for a QB — whichever
+  // `category` names), keyed by game_id + date_iso. Already present on every
+  // nfl-h2h response (not just "-q1"/"-1h"-suffixed queries), just unused by
+  // H2hView until 2026-10-02.
+  pbp?: {
+    category: string
+    half_splits?: {
+      q1?: { game_id: string; value: number; date_iso: string }[]
+      '1h'?: { game_id: string; value: number; date_iso: string }[]
+    }
+  }
 }
 
 export function isH2hPayload(payload: unknown): payload is H2hPayload {
