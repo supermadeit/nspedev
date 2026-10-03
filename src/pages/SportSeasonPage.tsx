@@ -390,7 +390,15 @@ export default function SportSeasonPage({ sport, label }: SportSeasonPageProps) 
           </a>
           <div className={`flex gap-2 ${isMobile ? 'flex-col items-start' : 'items-center gap-4'}`}>
             <div className="flex items-center gap-4">
-              <span className="font-mono font-bold text-[14px] whitespace-nowrap" style={{ color: C.accent, textDecoration: 'underline' }}>
+              {/* Bordered badge, not underlined link text — matches the
+                  nspe.dev logo's own treatment on the homepage (App.tsx) —
+                  so this reads as "you are here" rather than a fourth
+                  actionable button next to {sports}/{charts}/{team.metrics}
+                  (reported 2026-10-03, looked identical to those). */}
+              <span
+                className="font-mono font-bold text-[14px] whitespace-nowrap rounded px-2 py-1"
+                style={{ color: C.accent, border: `1px solid ${C.accent}` }}
+              >
                 {`{${label}}`}
               </span>
               <SportsSwitcher current={sport} />

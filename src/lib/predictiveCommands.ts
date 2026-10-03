@@ -102,17 +102,15 @@ const PARLAY_SHAPES = ['3/2/1', '3/3/3', '2/2', '5/4/3/2/1', '5/5/5/5/5', '6/6/6
 
 function buildParlayCommands(): SampleQuery[] {
   const out: SampleQuery[] = [
-    { label: 'nfl parlay · default', command: `nspe nfl -parlay -week${PARLAY_WEEK}` },
+    { label: 'nfl parlay · default', command: `nspe nfl -parlay -week${PARLAY_WEEK}`, pscShelved: true },
   ]
-  // {psc} keeps the default plus the 3/2/1 longshot/safe variants (3/2/1 IS
-  // the default shape, so its plain entry is redundant); everything else is
-  // shelved from the dropdown but still listed in {sample-queries}.
+  // -parlay is shelved out of the {psc} dropdown entirely (2026-10-03, owner
+  // ask) — every entry below gets pscShelved:true now. Still fully listed in
+  // {sample-queries}, just not surfaced as a typing suggestion.
   for (const shape of PARLAY_SHAPES) {
-    const isDefaultShape = shape === '3/2/1'
-    const shelved = isDefaultShape ? {} : { pscShelved: true }
     out.push({ label: `nfl parlay · ${shape}`, command: `nspe nfl -parlay -week${PARLAY_WEEK} -shape ${shape}`, pscShelved: true })
-    out.push({ label: `nfl parlay · ${shape} longshot`, command: `nspe nfl -parlay -week${PARLAY_WEEK} -shape ${shape} -risk longshot`, ...shelved })
-    out.push({ label: `nfl parlay · ${shape} safe`, command: `nspe nfl -parlay -week${PARLAY_WEEK} -shape ${shape} -risk safe`, ...shelved })
+    out.push({ label: `nfl parlay · ${shape} longshot`, command: `nspe nfl -parlay -week${PARLAY_WEEK} -shape ${shape} -risk longshot`, pscShelved: true })
+    out.push({ label: `nfl parlay · ${shape} safe`, command: `nspe nfl -parlay -week${PARLAY_WEEK} -shape ${shape} -risk safe`, pscShelved: true })
   }
   out.push({ label: 'nfl parlay · 3/3/3 standard risk', command: `nspe nfl -parlay -week${PARLAY_WEEK} -shape 3/3/3 -risk`, pscShelved: true })
   return out

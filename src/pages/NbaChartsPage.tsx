@@ -126,7 +126,7 @@ export default function NbaChartsPage() {
 
   return (
     <div className="h-dvh w-full overflow-y-auto" style={{ backgroundColor: C.surface, color: C.textBright, fontFamily: 'monospace' }}>
-      {/* Mobile (reported 2026-10-01): stacks {homepage}/{sports}/
+      {/* Mobile (reported 2026-10-01): stacks {HOMEPAGE}/{sports}/
           {team.metrics} into three rows, same treatment as the other chart
           pages — desktop stays the original single row. */}
       <div className={`flex gap-3 px-6 py-4 ${isMobile ? 'flex-col' : 'items-center justify-between'}`} style={{ borderBottom: `1px solid ${C.border}` }}>
@@ -140,7 +140,7 @@ export default function NbaChartsPage() {
         </div>
         <div className={`flex gap-2 ${isMobile ? 'flex-col items-start' : 'items-center gap-4'}`}>
           <a href="/" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
-            {'{homepage}'}
+            {'{HOMEPAGE}'}
           </a>
           <SportsSwitcher current="nba" variant="charts" />
           <a href="/nba.team.metrics" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>

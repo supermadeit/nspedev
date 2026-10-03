@@ -232,8 +232,8 @@ export default function TeamMetricsPage({ sport, label }: { sport: Sport; label:
     // comparison modes especially) was invisible below the fold with no way
     // to reach it short of browser zoom.
     <div className="h-dvh w-full overflow-y-auto" style={{ backgroundColor: C.surface, color: C.textBright, fontFamily: 'monospace' }}>
-      {/* Mobile (reported 2026-10-01): {homepage}+{sports} ran off-screen on
-          one row — stacks {sports} underneath {homepage} on mobile, same
+      {/* Mobile (reported 2026-10-01): {HOMEPAGE}+{sports} ran off-screen on
+          one row — stacks {sports} underneath {HOMEPAGE} on mobile, same
           treatment as the other chart pages; desktop stays the original row. */}
       <div className={`flex gap-3 px-6 py-4 ${isMobile ? 'flex-col' : 'items-center justify-between'}`} style={{ borderBottom: `1px solid ${C.border}` }}>
         <div>
@@ -244,7 +244,7 @@ export default function TeamMetricsPage({ sport, label }: { sport: Sport; label:
         </div>
         <div className={`flex gap-2 ${isMobile ? 'flex-col items-start' : 'items-center gap-4'}`}>
           <a href="/" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
-            {'{homepage}'}
+            {'{HOMEPAGE}'}
           </a>
           <SportsSwitcher current={sport} variant="metrics" />
         </div>

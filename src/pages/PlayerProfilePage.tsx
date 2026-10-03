@@ -320,7 +320,7 @@ export default function PlayerProfilePage() {
           {state.status === 'error' ? `couldn't load profile — ${state.message}` : `no profile found for "${slug}"`}
         </span>
         <a href="/" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
-          {'{homepage}'}
+          {'{HOMEPAGE}'}
         </a>
       </div>
     )
@@ -365,7 +365,7 @@ export default function PlayerProfilePage() {
               {'{chart}'}
             </a>
             <a href="/" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
-              {'{homepage}'}
+              {'{HOMEPAGE}'}
             </a>
           </div>
         </div>

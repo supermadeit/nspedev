@@ -1,6 +1,6 @@
 // Uniform "{sports}" nav control — dropped into the same spot on every
 // sport's rankings/matchups page (WorldCupApp.tsx for NFL, SportSeasonPage.tsx
-// for NBA/MLB/NHL) and next to {homepage} on the charts page, so a visitor
+// for NBA/MLB/NHL) and next to {HOMEPAGE} on the charts page, so a visitor
 // can jump straight from any one of these pages to any other sport without
 // routing back through the homepage first. Standalone styling (not importing
 // any host page's own `C` palette, since the three host files don't share
@@ -62,7 +62,7 @@ const ACCENT = 'oklch(0.85 0.15 195)'
 // instead.
 // `label` overrides the trigger button's own text — "sports" everywhere this
 // is a lateral nav control on a page that's already a specific sport
-// ({nfl.rankings}'s old slot, each SportSeasonPage, {homepage} next to
+// ({nfl.rankings}'s old slot, each SportSeasonPage, {HOMEPAGE} next to
 // {sports} on the charts page), "matchups" on the homepage itself, where
 // it's the discovery entry point into this whole feature rather than a
 // same-page switch.

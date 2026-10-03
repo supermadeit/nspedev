@@ -1,24 +1,358 @@
 {
-  "engine": "mlb-bvp-pitcher",
+  "engine": "combo-leaderboard",
+  "kind": "nfl_combo_leaderboard",
   "query": {
-    "player_query": "ohtani",
-    "pitcher_query": "paul skenes"
+    "stats": [
+      "pass_yds",
+      "rush_yds"
+    ],
+    "short": "pass+rush",
+    "threshold": 250,
+    "last": null,
+    "top": 25,
+    "year_window": [
+      2026,
+      2026
+    ],
+    "career": false,
+    "date_range": null
   },
-  "row": {
-    "batter": "Shohei Ohtani",
-    "pitcher": "Paul Skenes",
-    "team": "PIT",
-    "AB": 14,
-    "H": 2,
-    "2B": 0,
-    "3B": 0,
-    "HR": 1,
-    "RBI": 2,
-    "BB": 1,
-    "K": 7,
-    "AVG": 0.143,
-    "OBP": 0.2,
-    "SLG": 0.357,
-    "OPS": 0.557
-  }
-}
+  "rows": [
+    {
+      "player": "BryceYoung",
+      "team": "CAR",
+      "count": 3,
+      "games_in_window": 3,
+      "latest": "2026-09-27",
+      "matches": [
+        {
+          "val": 291,
+          "date": "9/27/26"
+        },
+        {
+          "val": 293,
+          "date": "9/20/26"
+        },
+        {
+          "val": 371,
+          "date": "9/13/26"
+        }
+      ]
+    },
+    {
+      "player": "TylerShough",
+      "team": "NO",
+      "count": 3,
+      "games_in_window": 3,
+      "latest": "2026-09-27",
+      "matches": [
+        {
+          "val": 291,
+          "date": "9/27/26"
+        },
+        {
+          "val": 275,
+          "date": "9/20/26"
+        },
+        {
+          "val": 418,
+          "date": "9/13/26"
+        }
+      ]
+    },
+    {
+      "player": "AaronRodgers",
+      "team": "PIT",
+      "count": 2,
+      "games_in_window": 4,
+      "latest": "2026-10-01",
+      "matches": [
+        {
+          "val": 299,
+          "date": "10/1/26"
+        },
+        {
+          "val": 302,
+          "date": "9/27/26"
+        }
+      ]
+    },
+    {
+      "player": "DeshaunWatson",
+      "team": "CLE",
+      "count": 2,
+      "games_in_window": 4,
+      "latest": "2026-10-01",
+      "matches": [
+        {
+          "val": 290,
+          "date": "10/1/26"
+        },
+        {
+          "val": 260,
+          "date": "9/20/26"
+        }
+      ]
+    },
+    {
+      "player": "JacobyBrissett",
+      "team": "ARI",
+      "count": 2,
+      "games_in_window": 3,
+      "latest": "2026-09-27",
+      "matches": [
+        {
+          "val": 284,
+          "date": "9/27/26"
+        },
+        {
+          "val": 291,
+          "date": "9/13/26"
+        }
+      ]
+    },
+    {
+      "player": "BrockPurdy",
+      "team": "SF",
+      "count": 2,
+      "games_in_window": 3,
+      "latest": "2026-09-27",
+      "matches": [
+        {
+          "val": 331,
+          "date": "9/27/26"
+        },
+        {
+          "val": 317,
+          "date": "9/20/26"
+        }
+      ]
+    },
+    {
+      "player": "JoeBurrow",
+      "team": "CIN",
+      "count": 2,
+      "games_in_window": 3,
+      "latest": "2026-09-27",
+      "matches": [
+        {
+          "val": 295,
+          "date": "9/27/26"
+        },
+        {
+          "val": 274,
+          "date": "9/13/26"
+        }
+      ]
+    },
+    {
+      "player": "DakPrescott",
+      "team": "DAL",
+      "count": 2,
+      "games_in_window": 3,
+      "latest": "2026-09-27",
+      "matches": [
+        {
+          "val": 295,
+          "date": "9/27/26"
+        },
+        {
+          "val": 305,
+          "date": "9/20/26"
+        }
+      ]
+    },
+    {
+      "player": "MatthewStafford",
+      "team": "LAR",
+      "count": 2,
+      "games_in_window": 3,
+      "latest": "2026-09-27",
+      "matches": [
+        {
+          "val": 403,
+          "date": "9/27/26"
+        },
+        {
+          "val": 326,
+          "date": "9/21/26"
+        }
+      ]
+    },
+    {
+      "player": "MalikWillis",
+      "team": "GB",
+      "count": 2,
+      "games_in_window": 3,
+      "latest": "2026-09-27",
+      "matches": [
+        {
+          "val": 266,
+          "date": "9/27/26"
+        },
+        {
+          "val": 259,
+          "date": "9/13/26"
+        }
+      ]
+    },
+    {
+      "player": "JaredGoff",
+      "team": "DET",
+      "count": 2,
+      "games_in_window": 3,
+      "latest": "2026-09-27",
+      "matches": [
+        {
+          "val": 275,
+          "date": "9/27/26"
+        },
+        {
+          "val": 334,
+          "date": "9/17/26"
+        }
+      ]
+    },
+    {
+      "player": "KirkCousins",
+      "team": "ATL",
+      "count": 2,
+      "games_in_window": 3,
+      "latest": "2026-09-27",
+      "matches": [
+        {
+          "val": 251,
+          "date": "9/27/26"
+        },
+        {
+          "val": 254,
+          "date": "9/20/26"
+        }
+      ]
+    },
+    {
+      "player": "GenoSmith",
+      "team": "LV",
+      "count": 2,
+      "games_in_window": 3,
+      "latest": "2026-09-27",
+      "matches": [
+        {
+          "val": 333,
+          "date": "9/27/26"
+        },
+        {
+          "val": 264,
+          "date": "9/20/26"
+        }
+      ]
+    },
+    {
+      "player": "JordanLove",
+      "team": "GB",
+      "count": 2,
+      "games_in_window": 3,
+      "latest": "2026-09-24",
+      "matches": [
+        {
+          "val": 312,
+          "date": "9/24/26"
+        },
+        {
+          "val": 387,
+          "date": "9/13/26"
+        }
+      ]
+    },
+    {
+      "player": "CJStroud",
+      "team": "UNK",
+      "count": 2,
+      "games_in_window": 3,
+      "latest": "2026-09-20",
+      "matches": [
+        {
+          "val": 382,
+          "date": "9/20/26"
+        },
+        {
+          "val": 289,
+          "date": "9/13/26"
+        }
+      ]
+    },
+    {
+      "player": "LamarJackson",
+      "team": "BAL",
+      "count": 2,
+      "games_in_window": 3,
+      "latest": "2026-09-20",
+      "matches": [
+        {
+          "val": 269,
+          "date": "9/20/26"
+        },
+        {
+          "val": 364,
+          "date": "9/13/26"
+        }
+      ]
+    },
+    {
+      "player": "JoshAllen",
+      "team": "BUF",
+      "count": 2,
+      "games_in_window": 3,
+      "latest": "2026-09-17",
+      "matches": [
+        {
+          "val": 317,
+          "date": "9/17/26"
+        },
+        {
+          "val": 357,
+          "date": "9/13/26"
+        }
+      ]
+    },
+    {
+      "player": "CaseKeenum",
+      "team": "CHI",
+      "count": 1,
+      "games_in_window": 1,
+      "latest": "2026-09-28",
+      "matches": [
+        {
+          "val": 253,
+          "date": "9/28/26"
+        }
+      ]
+    },
+    {
+      "player": "SamDarnold",
+      "team": "SEA",
+      "count": 1,
+      "games_in_window": 2,
+      "latest": "2026-09-27",
+      "matches": [
+        {
+          "val": 384,
+          "date": "9/27/26"
+        }
+      ]
+    },
+    {
+      "player": "MichaelPenixJr",
+      "team": "ATL",
+      "count": 1,
+      "games_in_window": 1,
+      "latest": "2026-09-24",
+      "matches": [
+        {
+          "val": 254,
+          "date": "9/24/26"
+        }
+          ]
+        }
+      ]
+    }

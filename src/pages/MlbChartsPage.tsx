@@ -107,7 +107,7 @@ export default function MlbChartsPage() {
     <div className="h-dvh w-full overflow-y-auto" style={{ backgroundColor: C.surface, color: C.textBright, fontFamily: 'monospace' }}>
       {/* Mobile: stacked rows for the right-side nav group, same treatment
           as the other three chart pages (2026-10-01) — mlb has no
-          team.metrics link, so this is just {homepage}/{sports} but kept
+          team.metrics link, so this is just {HOMEPAGE}/{sports} but kept
           uniform with the others rather than a special one-off two-item
           layout. */}
       <div className={`flex gap-3 px-6 py-4 ${isMobile ? 'flex-col' : 'items-center justify-between'}`} style={{ borderBottom: `1px solid ${C.border}` }}>
@@ -121,7 +121,7 @@ export default function MlbChartsPage() {
         </div>
         <div className={`flex gap-2 ${isMobile ? 'flex-col items-start' : 'items-center gap-4'}`}>
           <a href="/" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
-            {'{homepage}'}
+            {'{HOMEPAGE}'}
           </a>
           <SportsSwitcher current="mlb" variant="charts" />
           {/* {team.metrics} added 2026-10-01 — mlb joined the other three

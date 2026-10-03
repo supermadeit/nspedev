@@ -222,7 +222,7 @@ export default function QbChartsPage() {
     // (MobileCalculatorApp, BuilderScreen, ResultsScreen) already has to
     // establish its own scroll container for the same reason.
     <div className="h-dvh w-full overflow-y-auto" style={{ backgroundColor: C.surface, color: C.textBright, fontFamily: 'monospace' }}>
-      {/* Mobile (reported 2026-10-01): {homepage}/{sports}/{team.metrics}
+      {/* Mobile (reported 2026-10-01): {HOMEPAGE}/{sports}/{team.metrics}
           stopped fitting one row once team.metrics joined — stacks into
           three rows on mobile instead, desktop stays the original row. */}
       <div className={`flex gap-3 px-6 py-4 ${isMobile ? 'flex-col' : 'items-center justify-between'}`} style={{ borderBottom: `1px solid ${C.border}` }}>
@@ -234,7 +234,7 @@ export default function QbChartsPage() {
             {data?.season ?? '…'} QB pass yds / quarter · explosive pass plays by distance band
           </span>
         </div>
-        {/* {sports} next to {homepage} — this is an NFL chart (QB
+        {/* {sports} next to {HOMEPAGE} — this is an NFL chart (QB
             explosives), so `current="nfl"` hides the redundant self-link and
             lists the other three. `variant="charts"` keeps this switcher
             landing on each sport's own {chart} page (MlbChartsPage.tsx/
@@ -242,7 +242,7 @@ export default function QbChartsPage() {
             page, now that all three exist. */}
         <div className={`flex gap-2 ${isMobile ? 'flex-col items-start' : 'items-center gap-4'}`}>
           <a href="/" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
-            {'{homepage}'}
+            {'{HOMEPAGE}'}
           </a>
           <SportsSwitcher current="nfl" variant="charts" />
           <a href="/nfl.team.metrics" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>

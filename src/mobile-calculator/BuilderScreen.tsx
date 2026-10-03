@@ -123,7 +123,7 @@ export function BuilderScreen({ state, onRun, isLoading, popularPlayers = [], on
             className="font-mono text-[11px] font-bold underline"
             style={{ color: C.accent }}
           >
-            {'{homepage}'}
+            {'{HOMEPAGE}'}
           </a>
           <a
             href="/charts"
