@@ -1717,7 +1717,7 @@ function boxStatLabel(key: string): string {
   return BOX_STAT_LABELS[key] ?? key.replace(/_/g, ' ')
 }
 
-const OVERVIEW_GAME_META_KEYS = new Set(['date', 'date_iso', 'season', 'game_id', 'opponent', 'result', 'outcome', 'value'])
+const OVERVIEW_GAME_META_KEYS = new Set(['date', 'date_iso', 'season', 'game_id', 'opponent', 'home_away', 'result', 'outcome', 'value'])
 
 // ---------- shared filterable game log (NFL/NBA/MLB/NHL "vs team" game lists) ----------
 // A long-running rivalry's h2h-shaped game log (either engine family: the
@@ -1905,15 +1905,24 @@ function buildGameLogCategories(
     // goal/hat trick) — left those as-is. Points only had one rung ("3+
     // points"); added a lighter one below it (2026-10-03, owner request to
     // ladder every sport).
+    //
+    // Bug fix (2026-10-03, found while wiring up NBA/NHL's new vs-team games
+    // array): these predicates read numField(g, 'g')/numField(g, 'pts'), but
+    // every real NHL per-game row (confirmed live, both the existing -ov
+    // engine and the new vs-team one) uses the long-form keys 'goals'/
+    // 'points' — 'g'/'pts' never existed on any row, so every chip here
+    // except a 0-threshold always evaluated to 0 and matched nothing. Was
+    // never caught because nothing before this exercised NHL's own filter
+    // chips end to end.
     const cats: GameLogCategory[] = [
-      { id: 'goal1', label: 'goal', predicate: (g) => numField(g, 'g') >= 1 },
-      { id: 'goal2', label: 'multi-goal game', predicate: (g) => numField(g, 'g') >= 2 },
-      { id: 'hat', label: 'hat trick', predicate: (g) => numField(g, 'g') >= 3 },
-      { id: 'pts2', label: '2+ Points', predicate: (g) => numField(g, 'pts') >= 2 },
-      { id: 'pts3', label: '3+ Points', predicate: (g) => numField(g, 'pts') >= 3 },
+      { id: 'goal1', label: 'goal', predicate: (g) => numField(g, 'goals') >= 1 },
+      { id: 'goal2', label: 'multi-goal game', predicate: (g) => numField(g, 'goals') >= 2 },
+      { id: 'hat', label: 'hat trick', predicate: (g) => numField(g, 'goals') >= 3 },
+      { id: 'pts2', label: '2+ Points', predicate: (g) => numField(g, 'points') >= 2 },
+      { id: 'pts3', label: '3+ Points', predicate: (g) => numField(g, 'points') >= 3 },
     ]
     if (customTotal != null) {
-      cats.push({ id: 'ptsN', label: `${customTotal}+ points`, predicate: (g) => numField(g, 'pts') >= customTotal })
+      cats.push({ id: 'ptsN', label: `${customTotal}+ points`, predicate: (g) => numField(g, 'points') >= customTotal })
     }
     return cats
   }
@@ -2079,7 +2088,17 @@ function GameLogTable({ games, valueLabel, metaKeys }: { games: Record<string, u
               <span style={{ color: DIM }}>{extractDateToken(dateRaw) ?? dateRaw}</span>
               <span className="truncate" style={{ color: 'oklch(0.75 0.08 220)' }}>{opponent || '—'}</span>
               {hasResult && (
-                <span style={{ color: outcome === 'W' ? 'oklch(0.78 0.18 145)' : outcome === 'L' ? 'oklch(0.70 0.15 25)' : DIM }}>
+                <span
+                  style={{
+                    // NHL's third outcome (an overtime/shootout loss still
+                    // earns a standings point, unlike a regulation loss) —
+                    // its own amber shade keeps it visually distinct from a
+                    // plain win/loss rather than falling into the same grey
+                    // "no result" bucket a missing result gets.
+                    color:
+                      outcome === 'W' ? 'oklch(0.78 0.18 145)' : outcome === 'L' ? 'oklch(0.70 0.15 25)' : outcome === 'OTL' ? 'oklch(0.80 0.15 85)' : DIM,
+                  }}
+                >
                   {result || '—'}
                 </span>
               )}
@@ -2217,6 +2236,10 @@ function StatsOverviewView({ payload }: { payload: StatsOverviewPayload }) {
   const CYAN_BRIGHT = 'oklch(0.90 0.18 195)'
   const BORDER = 'oklch(0.22 0 0)'
   const q = payload.query
+  // engine is "{sport}_overview" (underscore-joined) — drives which filter-
+  // chip set applies, same role `sport` plays in H2hView.
+  const sport = payload.engine.split('_')[0]
+  const games = payload.games ?? []
 
   return (
     <div className="space-y-3 font-mono">
@@ -2230,6 +2253,23 @@ function StatsOverviewView({ payload }: { payload: StatsOverviewPayload }) {
         </div>
       </div>
       <StatsOverviewBody payload={payload} />
+
+      {/* Per-game rows (2026-10-03) — NBA/NHL's "vs team" view gets the same
+          filterable game log NFL/MLB's h2h already has, now that the backend
+          sends a real games array for it (see StatsOverviewGame's comment in
+          nspe-payloads.ts). Omitted (games: []) on a bare career overview
+          with no opponent — the backend holds those back to keep payload
+          size down, not a bug on this end. */}
+      {games.length > 0 && (
+        <div>
+          <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: DIM }}>
+            game log
+          </div>
+          <GameLogFilterBar sport={sport} games={games as unknown as Record<string, unknown>[]}>
+            {(filteredGames) => <GameLogTable games={filteredGames} metaKeys={OVERVIEW_GAME_META_KEYS} />}
+          </GameLogFilterBar>
+        </div>
+      )}
     </div>
   )
 }

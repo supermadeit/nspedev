@@ -1663,6 +1663,31 @@ export interface StatsOverviewPayload {
   // "How many games cleared each common bar" — e.g. PTS 20+ 10/16, 30+ 3/16.
   // Sent on the filtered views (`... -ov vs phi`); optional everywhere.
   count_line?: Array<{ stat: string; label: string; min: number; count: number; window_games: number }>
+  // Per-game rows (2026-10-03, nba_overview/nhl_overview) — newest first.
+  // Included for every vs-team view and any window of 120 games or fewer; a
+  // bare career overview (hundreds of games) omits them to hold payload size
+  // (games_included: false, games: []). No pbp/Q1-1H block for these sports
+  // (NFL-only — see H2hPayload.pbp). NHL rows use the long-form keys its own
+  // `columns` already do (goals/points/shots_on_goal/...), same shape as the
+  // -ov engine's own per-game rows, not the short g/pts keys the game-log
+  // filter chips used to assume (see buildGameLogCategories' 2026-10-03 note
+  // in App.tsx).
+  games_included?: boolean
+  games?: StatsOverviewGame[]
+}
+
+export interface StatsOverviewGame {
+  date: string
+  date_iso: string
+  season?: number
+  game_id?: string
+  opponent?: string
+  home_away?: string
+  // nfl-h2h's own result shape ("W 4-3 OT"), null when the row has none.
+  result?: string | null
+  // NHL's third outcome (OTL) alongside the usual W/L.
+  outcome?: 'W' | 'L' | 'OTL' | string | null
+  [key: string]: string | number | boolean | null | undefined
 }
 
 export function isStatsOverviewPayload(payload: unknown): payload is StatsOverviewPayload {
