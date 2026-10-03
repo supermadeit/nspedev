@@ -1781,6 +1781,7 @@ function buildGameLogCategories(
         cats.push({ id: 'pyds300', label: '300+ Pass Yds', predicate: (g) => numField(g, 'pass_yds') >= 300 })
       }
       if (has('pass_td')) {
+        cats.push({ id: 'ptd2', label: '2+ Pass TD', predicate: (g) => numField(g, 'pass_td') >= 2 })
         cats.push({ id: 'ptd3', label: '3+ Pass TD', predicate: (g) => numField(g, 'pass_td') >= 3 })
       }
       // QBs keep a single light rushing threshold rather than the RB-style
@@ -1872,13 +1873,20 @@ function buildGameLogCategories(
     return cats
   }
   if (sport === 'mlb') {
+    // Hits/HR were already 2-step ladders, just under one-off labels ("HR
+    // game"/"multi-HR game") instead of the "N+ Stat" ladder convention used
+    // everywhere else — relabeled for consistency. RBI/runs each only had
+    // one rung before (2026-10-03, owner request to ladder every sport);
+    // both get a second, heavier step the same way Pass TD/Any TD did.
     const cats: GameLogCategory[] = [
-      { id: 'h2', label: '2+ hits', predicate: (g) => numField(g, 'H') >= 2 },
-      { id: 'h3', label: '3+ hits', predicate: (g) => numField(g, 'H') >= 3 },
-      { id: 'hr1', label: 'HR game', predicate: (g) => numField(g, 'HR') >= 1 },
-      { id: 'hr2', label: 'multi-HR game', predicate: (g) => numField(g, 'HR') >= 2 },
+      { id: 'h2', label: '2+ Hits', predicate: (g) => numField(g, 'H') >= 2 },
+      { id: 'h3', label: '3+ Hits', predicate: (g) => numField(g, 'H') >= 3 },
+      { id: 'hr1', label: '1+ HR', predicate: (g) => numField(g, 'HR') >= 1 },
+      { id: 'hr2', label: '2+ HR', predicate: (g) => numField(g, 'HR') >= 2 },
       { id: 'rbi2', label: '2+ RBI', predicate: (g) => numField(g, 'RBI') >= 2 },
-      { id: 'r2', label: 'multi-run game', predicate: (g) => numField(g, 'R') >= 2 },
+      { id: 'rbi3', label: '3+ RBI', predicate: (g) => numField(g, 'RBI') >= 3 },
+      { id: 'r2', label: '2+ Runs', predicate: (g) => numField(g, 'R') >= 2 },
+      { id: 'r3', label: '3+ Runs', predicate: (g) => numField(g, 'R') >= 3 },
     ]
     if (customTotal != null) {
       cats.push({
@@ -1892,12 +1900,17 @@ function buildGameLogCategories(
   if (sport === 'nhl') {
     // No separate "totalN" category here — in hockey, points already IS
     // goals+assists combined, so a customizable points threshold fills the
-    // same role a combined "total" plays for NBA/MLB.
+    // same role a combined "total" plays for NBA/MLB. Goals were already a
+    // 3-step ladder under their own recognizable hockey names (goal/multi-
+    // goal/hat trick) — left those as-is. Points only had one rung ("3+
+    // points"); added a lighter one below it (2026-10-03, owner request to
+    // ladder every sport).
     const cats: GameLogCategory[] = [
       { id: 'goal1', label: 'goal', predicate: (g) => numField(g, 'g') >= 1 },
       { id: 'goal2', label: 'multi-goal game', predicate: (g) => numField(g, 'g') >= 2 },
       { id: 'hat', label: 'hat trick', predicate: (g) => numField(g, 'g') >= 3 },
-      { id: 'pts3', label: '3+ points', predicate: (g) => numField(g, 'pts') >= 3 },
+      { id: 'pts2', label: '2+ Points', predicate: (g) => numField(g, 'pts') >= 2 },
+      { id: 'pts3', label: '3+ Points', predicate: (g) => numField(g, 'pts') >= 3 },
     ]
     if (customTotal != null) {
       cats.push({ id: 'ptsN', label: `${customTotal}+ points`, predicate: (g) => numField(g, 'pts') >= customTotal })
