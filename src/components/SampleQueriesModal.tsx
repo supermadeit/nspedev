@@ -1,13 +1,22 @@
-// Desktop's {sample-queries} modal — same curated command list mobile's
-// SampleQueriesScreen shows (both read buildSampleQueries() from
-// @/lib/sampleQueries.ts), just windowed as a centered modal instead of a
-// full-screen takeover, matching this app's existing modal chrome (see
-// AutoDemo.tsx). Replaces the old {sample-commands} scripted-typing demo as
-// the primary entry point — that feature is shelved, not deleted, for a
-// possible later redesign.
+// {sample-queries} — shared by both desktop and mobile's main search bar
+// (App.tsx renders one instance; mobile-calculator's separate /calculator app
+// has its own SampleQueriesScreen.tsx full-screen takeover with the same
+// data, unrelated to this file). Replaces the old {sample-commands}
+// scripted-typing demo as the primary entry point — that feature is shelved,
+// not deleted, for a possible later redesign.
+//
+// Full-screen takeover (2026-10-03) — was a centered `max-w-[720px]` modal,
+// which on a narrow mobile viewport (this same component opens from mobile's
+// search bar too) left each row only ~300-350px wide for a `whitespace-nowrap`
+// command string; the catalog's longer commands (up to ~56 chars, e.g.
+// "nspe nfl pass -yds300 -prime -leaderboard -career -top10") ran past the
+// row's own edge instead of fitting inside it. Full width fixes that outright
+// and leaves room for longer commands later; each row also gets its own
+// `overflow-x-auto` as a second line of defense for whatever's still too
+// long for the viewport even at full width.
 //
 // Every row is a one-tap copy-to-clipboard target (the whole row, not a
-// small icon) — the modal stays open afterward so multiple commands can be
+// small icon) — the screen stays open afterward so multiple commands can be
 // copied in one visit rather than closing after the first tap.
 import { buildSampleQueries, type SampleQuery } from '@/lib/sampleQueries'
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
@@ -51,8 +60,12 @@ function SampleQueryRow({ query }: { query: SampleQuery }) {
           {copied ? '{copied}' : '{copy}'}
         </span>
       </div>
-      <div className="font-mono text-[13px] whitespace-nowrap" style={{ color: C.accent }}>
-        {query.command}
+      {/* overflow-x-auto is the fallback for a command still too long for
+          the viewport even at full screen width — see the file banner. */}
+      <div className="overflow-x-auto">
+        <div className="font-mono text-[13px] whitespace-nowrap" style={{ color: C.accent }}>
+          {query.command}
+        </div>
       </div>
     </button>
   )
@@ -64,43 +77,36 @@ export function SampleQueriesModal({ open, onClose }: SampleQueriesModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ backgroundColor: 'rgba(0,0,0,0.80)' }}
-      onClick={onClose}
+      className="fixed inset-0 z-50 flex flex-col"
+      style={{ backgroundColor: C.surface, fontFamily: 'monospace' }}
       role="dialog"
       aria-modal="true"
     >
       <div
-        className="w-full max-w-[720px] max-h-[80vh] rounded-lg overflow-hidden shadow-2xl flex flex-col"
-        style={{ backgroundColor: C.surface, border: `1px solid ${C.border}`, fontFamily: 'monospace' }}
-        onClick={(e) => e.stopPropagation()}
+        className="flex items-center justify-between px-5 py-3 flex-none"
+        style={{ backgroundColor: 'oklch(0.16 0 0)', borderBottom: `1px solid ${C.border}` }}
       >
-        <div
-          className="flex items-center justify-between px-5 py-3 flex-none"
-          style={{ backgroundColor: 'oklch(0.16 0 0)', borderBottom: `1px solid ${C.border}` }}
-        >
-          <span className="font-mono font-bold text-[13px]" style={{ color: C.accent }}>
-            {'{sample-queries}'}
-            <span className="ml-2 font-normal text-[11px]" style={{ color: C.textDim }}>
-              {queries.length} curated commands
-            </span>
+        <span className="font-mono font-bold text-[13px]" style={{ color: C.accent }}>
+          {'{sample-queries}'}
+          <span className="ml-2 font-normal text-[11px]" style={{ color: C.textDim }}>
+            {queries.length} curated commands
           </span>
-          <button
-            type="button"
-            onClick={onClose}
-            className="font-mono text-[14px] hover:opacity-70 transition-opacity"
-            style={{ color: C.accent }}
-            aria-label="Close"
-          >
-            ✕
-          </button>
-        </div>
+        </span>
+        <button
+          type="button"
+          onClick={onClose}
+          className="font-mono text-[14px] hover:opacity-70 transition-opacity"
+          style={{ color: C.accent }}
+          aria-label="Close"
+        >
+          ✕
+        </button>
+      </div>
 
-        <div className="overflow-y-auto px-5 py-4 space-y-2">
-          {queries.map((q) => (
-            <SampleQueryRow key={q.command} query={q} />
-          ))}
-        </div>
+      <div className="flex-1 min-h-0 overflow-y-auto px-5 py-4 space-y-2">
+        {queries.map((q) => (
+          <SampleQueryRow key={q.command} query={q} />
+        ))}
       </div>
     </div>
   )

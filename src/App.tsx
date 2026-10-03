@@ -654,6 +654,24 @@ function normalizeNameForCuratedMatch(name: string): string {
     .join('')
 }
 
+// A trailing "Jr"/"Sr"/"Ii"/"Iii"/"Iv" straight out of normalizeDisplayPlayer's
+// regex reconstruction (title-cased like any other word-looking chunk) reads
+// wrong on its own terms, independent of whether the player has a live
+// player-index entry to pull the real name from (H2hView's own index lookup
+// only covers its much smaller curated roster — reported 2026-10-03 for
+// James Cook III, who isn't indexed at all). Fixes the suffix in place
+// rather than requiring an index match just for this one, common case.
+const NAME_SUFFIX_RECASE: Record<string, string> = { jr: 'Jr.', sr: 'Sr.', ii: 'II', iii: 'III', iv: 'IV' }
+function fixNameSuffixCasing(name: string): string {
+  const words = name.split(' ')
+  const lastKey = words[words.length - 1]?.toLowerCase()
+  if (lastKey && NAME_SUFFIX_RECASE[lastKey]) {
+    words[words.length - 1] = NAME_SUFFIX_RECASE[lastKey]
+    return words.join(' ')
+  }
+  return name
+}
+
 // Every whitespace-separated term must appear (any order), so "judge nyy"
 // finds Aaron Judge on the Yankees and "mahomes" finds him anywhere.
 function rowMatchesFilter(filter: string, text: string): boolean {
@@ -1734,40 +1752,93 @@ const NBA_DOUBLE_DOUBLE_KEYS = ['points', 'rebounds', 'assists', 'steals', 'bloc
 // customTotal is the user's own typed threshold for the one open-ended
 // category per sport ("totalN") — omitted entirely until they type a number,
 // rather than showing a chip with no meaningful threshold yet. `displayFields`
-// is NFL-only (see above) — every other sport ignores it.
-function buildGameLogCategories(sport: string, customTotal: number | null, displayFields?: string[] | null): GameLogCategory[] {
+// is NFL-only (see above) — every other sport ignores it. `category` is also
+// NFL-only (payload.pbp?.category, see H2hView) — the player's own primary
+// stat family (rush/rec/pass), used to pick WHICH chip set applies.
+//
+// Reworked 2026-10-03 (owner request) from a pure displayFields-presence
+// check to a category-gated one: a WR/TE's own display_fields legitimately
+// include rush_* (jet sweeps, reverses), which fired the RB-style 100+ Rush
+// Yds/2+ Rush TD chips for every receiver regardless of how rarely they
+// actually rush. Falls back to the old presence-only behavior if category is
+// ever missing, rather than silently hiding chips for an untested edge case.
+function buildGameLogCategories(
+  sport: string,
+  customTotal: number | null,
+  displayFields?: string[] | null,
+  category?: string | null,
+): GameLogCategory[] {
   if (sport === 'nfl') {
     const has = (f: string) => !!displayFields?.includes(f)
+    const showPass = category === 'pass' || (!category && has('pass_yds'))
+    const showRush = category === 'rush' || (!category && has('rush_yds'))
+    const showRec = category === 'rec' || (!category && has('rec_yds'))
     const cats: GameLogCategory[] = []
-    if (has('pass_yds')) {
-      cats.push({ id: 'pyds250', label: '250+ Pass Yds', predicate: (g) => numField(g, 'pass_yds') >= 250 })
-      cats.push({ id: 'pyds300', label: '300+ Pass Yds', predicate: (g) => numField(g, 'pass_yds') >= 300 })
+
+    if (showPass) {
+      if (has('pass_yds')) {
+        cats.push({ id: 'pyds250', label: '250+ Pass Yds', predicate: (g) => numField(g, 'pass_yds') >= 250 })
+        cats.push({ id: 'pyds300', label: '300+ Pass Yds', predicate: (g) => numField(g, 'pass_yds') >= 300 })
+      }
+      if (has('pass_td')) {
+        cats.push({ id: 'ptd3', label: '3+ Pass TD', predicate: (g) => numField(g, 'pass_td') >= 3 })
+      }
+      // QBs keep a single light rushing threshold rather than the RB-style
+      // set below — a real rushing game for a QB starts well under 100 yds.
+      if (has('rush_yds')) {
+        cats.push({ id: 'qbrush25', label: '25+ Rush Yds', predicate: (g) => numField(g, 'rush_yds') >= 25 })
+      }
     }
-    if (has('pass_td')) {
-      cats.push({ id: 'ptd3', label: '3+ Pass TD', predicate: (g) => numField(g, 'pass_td') >= 3 })
+
+    if (showRush) {
+      if (has('rush_yds')) {
+        cats.push({ id: 'ryds100', label: '100+ Rush Yds', predicate: (g) => numField(g, 'rush_yds') >= 100 })
+      }
+      if (has('rush_td')) {
+        cats.push({ id: 'rtd2', label: '2+ Rush TD', predicate: (g) => numField(g, 'rush_td') >= 2 })
+      }
+      // Lightened from 100 to 50 — a back rarely clears 100 receiving yards,
+      // so that threshold almost never lit up for anyone at the position.
+      if (has('rec_yds')) {
+        cats.push({ id: 'recyds50', label: '50+ Rec Yds', predicate: (g) => numField(g, 'rec_yds') >= 50 })
+      }
+      if (has('rec')) {
+        cats.push({ id: 'rec10', label: '10+ Receptions', predicate: (g) => numField(g, 'rec') >= 10 })
+      }
+      cats.push({
+        id: 'multitd',
+        label: 'multi-TD game',
+        predicate: (g) => numField(g, 'pass_td') + numField(g, 'rush_td') + numField(g, 'rec_td') >= 2,
+      })
     }
-    if (has('rush_yds')) {
-      cats.push({ id: 'ryds100', label: '100+ Rush Yds', predicate: (g) => numField(g, 'rush_yds') >= 100 })
+
+    if (showRec) {
+      // Replaces the old single "multi-TD game" chip with a 2-step ladder —
+      // same idea (any TD at all, counting pass/rush/rec td together), just
+      // with a lighter first rung.
+      if (has('rec_td') || has('rush_td') || has('pass_td')) {
+        cats.push({
+          id: 'anytd1',
+          label: '1+ Any TD',
+          predicate: (g) => numField(g, 'pass_td') + numField(g, 'rush_td') + numField(g, 'rec_td') >= 1,
+        })
+        cats.push({
+          id: 'anytd2',
+          label: '2+ Any TD',
+          predicate: (g) => numField(g, 'pass_td') + numField(g, 'rush_td') + numField(g, 'rec_td') >= 2,
+        })
+      }
+      if (has('rec_yds')) {
+        cats.push({ id: 'recyds80', label: '80+ Rec Yds', predicate: (g) => numField(g, 'rec_yds') >= 80 })
+        cats.push({ id: 'recyds100', label: '100+ Rec Yds', predicate: (g) => numField(g, 'rec_yds') >= 100 })
+      }
+      if (has('rec')) {
+        cats.push({ id: 'rec6', label: '6+ Receptions', predicate: (g) => numField(g, 'rec') >= 6 })
+        cats.push({ id: 'rec8', label: '8+ Receptions', predicate: (g) => numField(g, 'rec') >= 8 })
+        cats.push({ id: 'rec10', label: '10+ Receptions', predicate: (g) => numField(g, 'rec') >= 10 })
+      }
     }
-    if (has('rush_td')) {
-      cats.push({ id: 'rtd2', label: '2+ Rush TD', predicate: (g) => numField(g, 'rush_td') >= 2 })
-    }
-    if (has('rec_yds')) {
-      cats.push({ id: 'recyds100', label: '100+ Rec Yds', predicate: (g) => numField(g, 'rec_yds') >= 100 })
-    }
-    if (has('rec')) {
-      cats.push({ id: 'rec10', label: '10+ Receptions', predicate: (g) => numField(g, 'rec') >= 10 })
-    }
-    if (has('rec_td')) {
-      cats.push({ id: 'rectd2', label: '2+ Rec TD', predicate: (g) => numField(g, 'rec_td') >= 2 })
-    }
-    // Any-TD chip works across every position, regardless of which specific
-    // TD fields this query's display_fields actually includes.
-    cats.push({
-      id: 'multitd',
-      label: 'multi-TD game',
-      predicate: (g) => numField(g, 'pass_td') + numField(g, 'rush_td') + numField(g, 'rec_td') >= 2,
-    })
+
     if (customTotal != null) {
       // "Total yards from scrimmage" (rush+rec) is the closest NFL
       // equivalent to NBA's PTS+REB+AST / MLB's H+R+RBI combined-total idea
@@ -1852,12 +1923,15 @@ function GameLogFilterBar({
   sport,
   games,
   displayFields,
+  category,
   children,
 }: {
   sport: string
   games: Record<string, unknown>[]
   /** NFL only — see buildGameLogCategories' own comment on why. */
   displayFields?: string[] | null
+  /** NFL only — payload.pbp?.category, picks which chip set applies. */
+  category?: string | null
   children: (filteredGames: Record<string, unknown>[]) => React.ReactNode
 }) {
   const [activeIds, setActiveIds] = useState<Set<string>>(new Set())
@@ -1866,8 +1940,8 @@ function GameLogFilterBar({
     ? Number(customTotalInput)
     : null
   const categories = useMemo(
-    () => buildGameLogCategories(sport, parsedCustomTotal, displayFields),
-    [sport, parsedCustomTotal, displayFields],
+    () => buildGameLogCategories(sport, parsedCustomTotal, displayFields, category),
+    [sport, parsedCustomTotal, displayFields, category],
   )
 
   if (categories.length === 0) {
@@ -2955,7 +3029,18 @@ function H2hView({ payload }: { payload: H2hPayload }) {
   // the shared table component now like everyone else's fields are.
   const sport = payload.engine.split('-')[0]
 
-  const playerLabel = normalizeDisplayPlayer(q.player_display || q.player_query || 'player')
+  // player_display is a squashed alias key ("JamesCookIii") with no
+  // recoverable case/hyphen/suffix info — normalizeDisplayPlayer's regex
+  // reinserts spaces before capitals but can't tell "Iii" was really "III"
+  // (same root cause the chart pages had, 2026-09-30). Prefer the live
+  // player index's real display name whenever there's a match, same fix
+  // shape as those pages, falling back to the regex reconstruction only for
+  // names the index doesn't have.
+  const regexPlayerLabel = normalizeDisplayPlayer(q.player_display || q.player_query || 'player')
+  const indexedPlayer = PLAYER_INDEX.find(
+    (e) => e.sport === sport && normalizeNameForCuratedMatch(e.name) === normalizeNameForCuratedMatch(regexPlayerLabel),
+  )
+  const playerLabel = indexedPlayer?.name ?? fixNameSuffixCasing(regexPlayerLabel)
   const playerTeam = q.player_team || ''
   const opponent = q.opponent_code || ''
   const venueLabel =
@@ -3007,25 +3092,38 @@ function H2hView({ payload }: { payload: H2hPayload }) {
 
   return (
     <div className="space-y-4">
-      {/* Header */}
+      {/* Header — "home & away"/window moved to their own line below the
+          player/team/opponent line (2026-10-03): on one line, that whole
+          string was wrapping mid-name on mobile (the exact "Iii" casing bug
+          below made it worse, but even a correctly-cased name was wrapping
+          before "home & away" on a phone-width screen). */}
       <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
-        {playerTeam ? (
-          <>
-            <span style={{ color: 'oklch(0.70 0.10 195)' }}>{playerTeam}</span>
-            <span style={{ color: 'oklch(0.92 0 0)' }}>{' — '}</span>
-          </>
-        ) : null}
-        <span>{playerLabel}</span>
-        {isWeekQuery ? (
-          <span style={{ color: 'oklch(0.70 0.10 195)' }}>{` · ${weekLabel}`}</span>
-        ) : (
-          <>
-            <span style={{ color: 'oklch(0.92 0 0)' }}> vs </span>
-            <span style={{ color: 'oklch(0.70 0.10 195)' }}>{opponent || '—'}</span>
-            <span style={{ color: 'oklch(0.92 0 0)' }}>{` · ${venueLabel}`}</span>
-          </>
+        <div>
+          {playerTeam ? (
+            <>
+              <span style={{ color: 'oklch(0.70 0.10 195)' }}>{playerTeam}</span>
+              <span style={{ color: 'oklch(0.92 0 0)' }}>{' — '}</span>
+            </>
+          ) : null}
+          <span>{playerLabel}</span>
+          {isWeekQuery ? (
+            <>
+              <span style={{ color: 'oklch(0.70 0.10 195)' }}>{` · ${weekLabel}`}</span>
+              <span style={{ color: 'oklch(0.92 0 0)' }}>{windowLabel ? ` · ${windowLabel}` : ''}</span>
+            </>
+          ) : (
+            <>
+              <span style={{ color: 'oklch(0.92 0 0)' }}> vs </span>
+              <span style={{ color: 'oklch(0.70 0.10 195)' }}>{opponent || '—'}</span>
+            </>
+          )}
+        </div>
+        {!isWeekQuery && (
+          <div style={{ color: 'oklch(0.92 0 0)' }}>
+            {venueLabel}
+            {windowLabel ? ` · ${windowLabel}` : ''}
+          </div>
         )}
-        <span style={{ color: 'oklch(0.92 0 0)' }}>{windowLabel ? ` · ${windowLabel}` : ''}</span>
       </div>
 
       {/* MLB's rate-stat slash-line — not part of the table below (see the
@@ -3090,6 +3188,7 @@ function H2hView({ payload }: { payload: H2hPayload }) {
           <GameLogFilterBar
             sport={sport}
             displayFields={displayFields}
+            category={pbp?.category}
             games={games.map((g) => {
               const merged: Record<string, unknown> = {
                 ...g,
