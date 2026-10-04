@@ -1,12 +1,30 @@
 import { useState, useMemo, useEffect, useRef } from 'react'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { getTeamCodes } from '@/lib/teams'
+import { loadPlayerIndex, searchPlayers, type PlayerIndexEntry } from '@/lib/playerSearch'
+import { PlayerSearchDropdown } from './PlayerSearchDropdown'
 
 export type QueryMode = 'trend' | 'compute' | 'streak' | 'h2h' | 'team' | 'explosive'
 export type SeasonType = 'post' | ''
 export type PeriodType = 'q1' | '1h' | ''
 export type ComputeWindow = '-season' | '-career' | '-last' | ''
 export type TeamStat = 'runs' | 'allowed' | ''
+// NFL joined {team} 2026-10-04 (backend's nfl_team_yards engine) — a
+// completely different shape from MLB's own team mode (a flat, full-league
+// leaderboard sorted by total, not a per-game trend/compute threshold), so
+// it gets its own sport toggle + stat set rather than reusing teamStat.
+// Flag's last letter is direction, not the stat: "f" = for (offense), "a" =
+// against (defense) — confirmed live + by backend (nspe-v2-da, 2026-10-04):
+// -ryf/-pyf are FOR, -rya/-pya are AGAINST (the "a" names read like
+// "allowed" and are easy to mistake for a modifier rather than the base
+// flag — there is no separate -allowed/-ryaa/-pyaa).
+export type NflTeamStat = 'rushFor' | 'passFor' | 'rushAg' | 'passAg' | ''
+export const NFL_TEAM_STAT_FLAGS: Record<Exclude<NflTeamStat, ''>, string> = {
+  rushFor: 'ryf',
+  passFor: 'pyf',
+  rushAg: 'rya',
+  passAg: 'pya',
+}
 export type ExplosiveLeague = 'mlb' | 'nfl'
 export type MlbFirstPaFlag = 'xbh' | 'walk' | 'single' | 'hit' | ''
 export type NflStatType = 'yds' | 'td' | 'total'
@@ -69,6 +87,10 @@ interface PersistedBuilderState {
   h2hOpponent: string
   teamStat: TeamStat
   teamSubMode: 'trend' | 'compute'
+  teamSport: 'mlb' | 'nfl'
+  nflTeamStat: NflTeamStat
+  nflTeamYearFrom: string
+  nflTeamYearTo: string
   batPosition: string
   mlbFirstFlag: MlbFirstPaFlag
   nflStatType: NflStatType
@@ -351,6 +373,16 @@ for (let y = 2026; y >= 2020; y -= 1) SEASON_YEARS_VISIBLE.push(y)
 export const SEASON_YEARS_OLDER: number[] = []
 for (let y = 2019; y >= 2010; y -= 1) SEASON_YEARS_OLDER.push(y)
 
+// NFL {team} year/range picker (2026-10-04, replaces the earlier "this
+// season / -career" toggle) — confirmed live that `nspe nfl team -rya
+// {YYYY}` and `-rya {YYYY-YYYY}` are both real, directly-typable grammar
+// (not just an internal shape `-career` happens to produce): a single year
+// sends `season_year: YYYY`, a range sends `season_year: [YYYY, YYYY]`, and
+// `-career` itself resolves to the range [2000, 2026] — so 2000 is the
+// earliest year with real data behind it.
+export const NFL_TEAM_YARDS_YEARS: number[] = []
+for (let y = 2026; y >= 2000; y -= 1) NFL_TEAM_YARDS_YEARS.push(y)
+
 export const C = {
   accent: 'oklch(0.85 0.15 195)',
   accentDark: 'oklch(0.10 0.02 195)',
@@ -599,6 +631,16 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
   const [h2hSport, setH2hSport] = useState<'mlb' | 'nfl' | 'nba' | 'nhl'>(initial.h2hSport ?? 'mlb')
   const [h2hPlayer, setH2hPlayer] = useState(initial.h2hPlayer ?? '')
   const [h2hOpponent, setH2hOpponent] = useState(initial.h2hOpponent ?? '')
+  // Live, sport-scoped player-name autocomplete (2026-10-04) — backed by the
+  // same PLAYER_INDEX/searchPlayers the homepage search bar and
+  // PlayerProfilePage use, so the player-name field isn't limited to typing
+  // a name blind or picking from the ~20-name "popular" pill row below it.
+  // sportFilter=h2hSport keeps cross-sport collisions out (typing "par" with
+  // NFL selected surfaces Parker Washington, not Jabari Parker).
+  const [isPlayerIndexReady, setIsPlayerIndexReady] = useState(false)
+  const [h2hPlayerActiveIndex, setH2hPlayerActiveIndex] = useState(0)
+  const [h2hPlayerDropdownDismissed, setH2hPlayerDropdownDismissed] = useState(false)
+  const h2hPlayerFieldRef = useRef<HTMLDivElement>(null)
   // Collapses the "popular {top N}" pill list below the player-name input —
   // up to 20 names, which is a lot of scanning/scrolling once you already
   // know who you want. Expanded by default (unchanged first-open behavior);
@@ -607,6 +649,18 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
   // team (runs scored/allowed)
   const [teamStat, setTeamStat] = useState<TeamStat>(initial.teamStat ?? '')
   const [teamSubMode, setTeamSubMode] = useState<'trend' | 'compute'>(initial.teamSubMode ?? 'trend')
+  // NFL {team} — independent of the MLB fields above, same pattern as
+  // h2hSport/explosiveLeague (a self-contained sport toggle rather than
+  // reusing the generic trend/compute `sport` picker, which team mode
+  // doesn't render at all).
+  const [teamSport, setTeamSport] = useState<'mlb' | 'nfl'>(initial.teamSport ?? 'mlb')
+  const [nflTeamStat, setNflTeamStat] = useState<NflTeamStat>(initial.nflTeamStat ?? '')
+  // '' = current season (no year suffix sent at all, matching the engine's
+  // own default). nflTeamYearTo only has effect when it differs from
+  // nflTeamYearFrom — the command builder below collapses "2024-2024" to a
+  // plain "2024" either way.
+  const [nflTeamYearFrom, setNflTeamYearFrom] = useState(initial.nflTeamYearFrom ?? '')
+  const [nflTeamYearTo, setNflTeamYearTo] = useState(initial.nflTeamYearTo ?? '')
   // batter position (MLB only)
   const [batPosition, setBatPosition] = useState(initial.batPosition ?? '')
   // first plate appearance (MLB trend only)
@@ -626,6 +680,57 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
   const [nflMinYds, setNflMinYds] = useState(initial.nflMinYds ?? '')
 
   useEffect(() => {
+    loadPlayerIndex().then(() => setIsPlayerIndexReady(true))
+  }, [])
+
+  // Dismiss the player-search dropdown on an outside click — same
+  // pointerdown-on-document pattern App.tsx's desktop search bar uses for
+  // the identical dropdown, so clicking elsewhere in the panel (or outside
+  // it) closes it instead of leaving it open over whatever's rendered next.
+  useEffect(() => {
+    const handlePointerDown = (e: PointerEvent) => {
+      if (h2hPlayerFieldRef.current && !h2hPlayerFieldRef.current.contains(e.target as Node)) {
+        setH2hPlayerDropdownDismissed(true)
+      }
+    }
+    document.addEventListener('pointerdown', handlePointerDown)
+    return () => document.removeEventListener('pointerdown', handlePointerDown)
+  }, [])
+
+  const h2hPlayerMatches = useMemo(() => {
+    if (!h2hPlayer.trim()) return []
+    return searchPlayers(h2hPlayer, 8, h2hSport)
+    // isPlayerIndexReady isn't read in the body — it's a dep purely so this
+    // recomputes once the index finishes loading (PLAYER_INDEX starts empty;
+    // searchPlayers reads it live, so nothing here needs to change except
+    // the deps list forcing a re-run).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [h2hPlayer, h2hSport, isPlayerIndexReady])
+
+  const selectH2hPlayerMatch = (entry: PlayerIndexEntry) => {
+    setH2hPlayer(entry.name)
+    setH2hPlayerDropdownDismissed(true)
+  }
+
+  const handleH2hPlayerKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Escape') {
+      setH2hPlayerDropdownDismissed(true)
+      return
+    }
+    if (h2hPlayerDropdownDismissed || h2hPlayerMatches.length === 0) return
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setH2hPlayerActiveIndex((i) => (i + 1) % h2hPlayerMatches.length)
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setH2hPlayerActiveIndex((i) => (i - 1 + h2hPlayerMatches.length) % h2hPlayerMatches.length)
+    } else if (e.key === 'Enter') {
+      e.preventDefault()
+      selectH2hPlayerMatch(h2hPlayerMatches[h2hPlayerActiveIndex]?.entry ?? h2hPlayerMatches[0].entry)
+    }
+  }
+
+  useEffect(() => {
     if (typeof window === 'undefined') return
     const payload: PersistedBuilderState = {
       mode, sport, period, yearFilter, stat,
@@ -633,7 +738,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
       minN, maxN, thresholdMode, computeWindow, windowN,
       streakN,
       h2hSport, h2hPlayer, h2hOpponent,
-      teamStat, teamSubMode,
+      teamStat, teamSubMode, teamSport, nflTeamStat, nflTeamYearFrom, nflTeamYearTo,
       batPosition, mlbFirstFlag, nflStatType, nflCombo,
       explosiveLeague, nflPlayType, nflYds,
       nflExplosiveSubMode, nflMinYds,
@@ -643,7 +748,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
     } catch {
       // ignore quota / unavailable storage
     }
-  }, [storageKey, mode, sport, period, yearFilter, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hSport, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, nflStatType, nflCombo, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds])
+  }, [storageKey, mode, sport, period, yearFilter, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hSport, h2hPlayer, h2hOpponent, teamStat, teamSubMode, teamSport, nflTeamStat, nflTeamYearFrom, nflTeamYearTo, batPosition, mlbFirstFlag, nflStatType, nflCombo, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds])
 
   const isNbaHalfPeriod = sport === 'nba' && period === '1h'
   // Double-double / triple-double are boolean occurrence stats (did it
@@ -739,6 +844,24 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
       // them, which is what "how has this player done against this team" is
       // actually asking.
       return `nspe ${h2hSport} ${player.toLowerCase()} vs ${h2hOpponent} -career`
+    }
+
+    if (mode === 'team' && teamSport === 'nfl') {
+      if (!nflTeamStat) return ''
+      const parts = ['nspe', 'nfl', 'team', `-${NFL_TEAM_STAT_FLAGS[nflTeamStat]}`]
+      if (nflTeamYearFrom) {
+        if (nflTeamYearTo && nflTeamYearTo !== nflTeamYearFrom) {
+          // Backend accepts either order fine (confirmed live — "2024-2020"
+          // returns the same 5-season aggregate as "2020-2024"), but sorting
+          // here keeps the sent command reading naturally regardless of
+          // which dropdown the user filled in first.
+          const [a, b] = [Number(nflTeamYearFrom), Number(nflTeamYearTo)].sort((x, y) => x - y)
+          parts.push(`${a}-${b}`)
+        } else {
+          parts.push(nflTeamYearFrom)
+        }
+      }
+      return parts.join(' ')
     }
 
     if (mode === 'team') {
@@ -842,7 +965,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
     if (yearFilter) parts.push(yearFilter)
 
     return parts.join(' ')
-  }, [mode, sport, period, yearFilter, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hSport, h2hPlayer, h2hOpponent, teamStat, teamSubMode, batPosition, mlbFirstFlag, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds, nflStatType, nflCombo])
+  }, [mode, sport, period, yearFilter, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hSport, h2hPlayer, h2hOpponent, teamStat, teamSubMode, teamSport, nflTeamStat, nflTeamYearFrom, nflTeamYearTo, batPosition, mlbFirstFlag, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds, nflStatType, nflCombo])
 
   const canRun = Boolean(builtCommand) && !isLoading
 
@@ -908,7 +1031,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
         setComputeWindow('-last')
         setWindowN('10')
       }
-    } else if (mode === 'team') {
+    } else if (mode === 'team' && teamSport === 'mlb') {
       if (!teamStat) return
       if (teamSubMode === 'trend') {
         setThresholdN(String(TEAM_RUNS_TREND_PRESETS[0]))
@@ -935,7 +1058,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode, sport, stat, nflStatType, nflCombo, firstPaActive, teamStat, teamSubMode, explosiveLeague, nflExplosiveSubMode])
+  }, [mode, sport, stat, nflStatType, nflCombo, firstPaActive, teamStat, teamSubMode, teamSport, explosiveLeague, nflExplosiveSubMode])
 
   // Same idea for MLB first plate appearance — picking a category fills in
   // the met/last window right away.
@@ -989,6 +1112,8 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
             : (nflExplosiveSubMode === 'compute'
               ? '▸ nspe nfl long {pass|rush|rec} -yds minN -season'
               : '▸ nspe nfl long {pass|rush|rec} -ydsN -lastA/B'))
+          : teamSport === 'nfl'
+          ? '▸ nspe nfl team {-ryf|-pyf|-rya|-pya} {YYYY|YYYY-YYYY}'
           : (teamSubMode === 'compute'
             ? '▸ nspe mlb team {-runs|-allowed} minN {maxN} {-season|-lastN}'
             : '▸ nspe mlb team {-runs|-allowed}N -lastA/B')}
@@ -1182,12 +1307,18 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
             </div>
           </div>
 
-          <div className="mb-3">
+          <div className="mb-3 relative" ref={h2hPlayerFieldRef}>
             <SLabel>player name</SLabel>
             <input
               type="text"
               value={h2hPlayer}
-              onChange={(e) => setH2hPlayer(e.target.value)}
+              onChange={(e) => {
+                setH2hPlayer(e.target.value)
+                setH2hPlayerActiveIndex(0)
+                setH2hPlayerDropdownDismissed(false)
+              }}
+              onFocus={() => setH2hPlayerDropdownDismissed(false)}
+              onKeyDown={handleH2hPlayerKeyDown}
               placeholder={
                 h2hSport === 'mlb'
                   ? 'type any MLB player (e.g. ketel marte)'
@@ -1204,6 +1335,21 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
                 color: C.accent,
               }}
             />
+            {/* Live, sport-scoped autocomplete off the same PLAYER_INDEX the
+                homepage search bar and {database} use — see searchPlayers'
+                sportFilter param. Sits as an absolute overlay (not inline
+                layout) so it doesn't push the "popular" pill row below it
+                down and up every keystroke. */}
+            {h2hPlayerMatches.length > 0 && !h2hPlayerDropdownDismissed && (
+              <div className="absolute top-full left-0 right-0 mt-1 z-20">
+                <PlayerSearchDropdown
+                  matches={h2hPlayerMatches}
+                  activeIndex={h2hPlayerActiveIndex}
+                  onHoverIndex={setH2hPlayerActiveIndex}
+                  onSelect={selectH2hPlayerMatch}
+                />
+              </div>
+            )}
           </div>
 
           {(() => {
@@ -1250,9 +1396,110 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
         </>
       )}
 
-      {/* Team: runs scored/allowed */}
+      {/* Team: MLB runs scored/allowed, NFL team-yards leaderboard */}
       {mode === 'team' && (
         <>
+          <div className="mb-3">
+            <SLabel>sport</SLabel>
+            <div className="flex gap-1.5">
+              <Pill selected={teamSport === 'mlb'} onClick={() => setTeamSport('mlb')}>
+                MLB
+              </Pill>
+              <Pill selected={teamSport === 'nfl'} onClick={() => setTeamSport('nfl')}>
+                NFL
+              </Pill>
+            </div>
+          </div>
+
+          {teamSport === 'nfl' && (
+            <>
+              {/* nfl_team_yards: a flat, full-league leaderboard (sorted by
+                  total) rather than MLB team mode's per-game trend/compute
+                  threshold — so no met/last window or min/max here, just the
+                  stat pick and an optional career aggregate. See
+                  NFL_TEAM_STAT_FLAGS' comment for the for/against flag
+                  mapping (confirmed live + by backend, 2026-10-04). */}
+              <div className="mb-3">
+                <SLabel>stat</SLabel>
+                <div className="flex gap-1.5 flex-wrap">
+                  <Pill
+                    selected={nflTeamStat === 'rushFor'}
+                    onClick={() => setNflTeamStat((p) => (p === 'rushFor' ? '' : 'rushFor'))}
+                  >
+                    {'{rushFor}'}
+                  </Pill>
+                  <Pill
+                    selected={nflTeamStat === 'passFor'}
+                    onClick={() => setNflTeamStat((p) => (p === 'passFor' ? '' : 'passFor'))}
+                  >
+                    {'{passFor}'}
+                  </Pill>
+                  <Pill
+                    selected={nflTeamStat === 'rushAg'}
+                    onClick={() => setNflTeamStat((p) => (p === 'rushAg' ? '' : 'rushAg'))}
+                  >
+                    {'{rushAg}'}
+                  </Pill>
+                  <Pill
+                    selected={nflTeamStat === 'passAg'}
+                    onClick={() => setNflTeamStat((p) => (p === 'passAg' ? '' : 'passAg'))}
+                  >
+                    {'{passAg}'}
+                  </Pill>
+                </div>
+              </div>
+
+              {nflTeamStat && (
+                <div className="mb-3">
+                  <SLabel>season {'{optional}'}</SLabel>
+                  <div className="flex items-end gap-1.5">
+                    <select
+                      value={nflTeamYearFrom}
+                      onChange={(e) => {
+                        setNflTeamYearFrom(e.target.value)
+                        // Clearing "from" clears "to" too — a dangling "to"
+                        // with no "from" isn't a state builtCommand handles.
+                        if (!e.target.value) setNflTeamYearTo('')
+                      }}
+                      className={selectClass}
+                      style={{ ...selectStyle, width: '84px' }}
+                    >
+                      <option value="">current</option>
+                      {NFL_TEAM_YARDS_YEARS.map((y) => (
+                        <option key={y} value={y}>
+                          {y}
+                        </option>
+                      ))}
+                    </select>
+                    {nflTeamYearFrom && (
+                      <>
+                        <span style={{ color: C.textDim, paddingBottom: '8px' }}>–</span>
+                        <select
+                          value={nflTeamYearTo}
+                          onChange={(e) => setNflTeamYearTo(e.target.value)}
+                          className={selectClass}
+                          style={{ ...selectStyle, width: '104px' }}
+                        >
+                          <option value="">(single year)</option>
+                          {NFL_TEAM_YARDS_YEARS.map((y) => (
+                            <option key={y} value={y}>
+                              {y}
+                            </option>
+                          ))}
+                        </select>
+                      </>
+                    )}
+                  </div>
+                  <div className="text-[10px] mt-1.5" style={{ color: C.textDim }}>
+                    blank = current season · add a "to" year for a range (career ≈ 2000–2026)
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+
+          {teamSport === 'mlb' && (
+            <>
           <div className="mb-3">
             <SLabel>mode</SLabel>
             <div className="flex gap-1.5">
@@ -1367,6 +1614,8 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
                 </div>
               </div>
             </div>
+          )}
+            </>
           )}
         </>
       )}

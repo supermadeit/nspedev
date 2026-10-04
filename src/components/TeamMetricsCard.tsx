@@ -140,11 +140,19 @@ export function TeamMetricsCard({
       </div>
 
       <div className="px-3 py-2">
+        {/* "for"/"vs"/"unit" tested as unclear (reported 2026-10-04,
+            screenshot) — a reader had no way to tell "vs" meant "what this
+            team allows" rather than a generic comparison marker. "for" now
+            matches the color of the bold cyan value it sits over (same cyan
+            = "this team produces" cue MetricRow already uses below it);
+            "unit" -> "allowed" since the white number + its unit abbreviation
+            right under it (e.g. "417.3 AVG/GM") read together as one idea —
+            what the opponent put up against this team. */}
         <div className="grid grid-cols-[1fr_auto_auto_auto] gap-2 px-1 pb-1 font-mono text-[9px] uppercase tracking-widest" style={{ color: C.textBright }}>
           <span />
-          <span className="text-right">for</span>
+          <span className="text-right font-bold" style={{ color: C.accent }}>for</span>
           <span className="text-right">vs</span>
-          <span className="text-right">unit</span>
+          <span className="text-right">allowed</span>
         </div>
         {groupedFields.map((g, gi) => (
           <div key={gi}>

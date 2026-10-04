@@ -21,7 +21,7 @@
 // at vs. what do they allow" without a second team involved at all.
 import { useEffect, useMemo, useState } from 'react'
 import { C } from '@/components/ProfileSections'
-import { SportsSwitcher } from '@/components/SportsSwitcher'
+import { SportsSwitcher, chartsHrefFor } from '@/components/SportsSwitcher'
 import { TeamMetricsCard, type TeamMetricsFieldDef } from '@/components/TeamMetricsCard'
 import { fetchTeamMetrics, type TeamMetricsPayload } from '@/lib/databaseApi'
 import { teamRoster } from '@/lib/teamNicknames'
@@ -234,19 +234,38 @@ export default function TeamMetricsPage({ sport, label }: { sport: Sport; label:
     <div className="h-dvh w-full overflow-y-auto" style={{ backgroundColor: C.surface, color: C.textBright, fontFamily: 'monospace' }}>
       {/* Mobile (reported 2026-10-01): {HOMEPAGE}+{sports} ran off-screen on
           one row — stacks {sports} underneath {HOMEPAGE} on mobile, same
-          treatment as the other chart pages; desktop stays the original row. */}
+          treatment as the other chart pages; desktop stays the original row.
+          Nav order (2026-10-04, owner): {sports} {charts} {HOMEPAGE} left to
+          right, HOMEPAGE furthest right. */}
       <div className={`flex gap-3 px-6 py-4 ${isMobile ? 'flex-col' : 'items-center justify-between'}`} style={{ borderBottom: `1px solid ${C.border}` }}>
         <div>
-          <span className="font-mono font-bold text-[15px]" style={{ color: C.accent }}>{`{${label}}`}</span>
+          {/* Bordered badge, not a `{brace}` button — this is the page's own
+              logo/title, not an actionable link, same treatment as the
+              nspe.dev logo on the homepage (reported 2026-10-04: braces made
+              it read as a fourth nav button next to {sports}/{charts}/
+              {HOMEPAGE}). */}
+          <span
+            className="font-mono font-bold text-[15px] rounded px-2 py-1"
+            style={{ color: C.accent, border: `1px solid ${C.accent}` }}
+          >
+            {label}
+          </span>
           <span className="ml-2 font-mono text-[12px]" style={{ color: C.textDim }}>
             team production, what they do vs. what they allow
           </span>
         </div>
         <div className={`flex gap-2 ${isMobile ? 'flex-col items-start' : 'items-center gap-4'}`}>
+          <SportsSwitcher current={sport} variant="metrics" />
+          <a
+            href={chartsHrefFor(sport)}
+            className="font-mono text-[13px] underline hover:opacity-80 transition-opacity"
+            style={{ color: C.accent }}
+          >
+            {'{charts}'}
+          </a>
           <a href="/" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
             {'{HOMEPAGE}'}
           </a>
-          <SportsSwitcher current={sport} variant="metrics" />
         </div>
       </div>
 

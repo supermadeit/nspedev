@@ -2224,6 +2224,65 @@ export function extractMlbTeamRunsPayload(payload: unknown): MlbTeamRunsPayload 
   return null
 }
 
+// ---------- NFL Team Yards For/Against (nfl team -ryf|-pyf|-rya|-pya) ----------
+// One engine for all four stat/direction combos — `query.stat` carries the
+// raw flag (ryf/pyf/rya/pya), `query.direction` ("for"|"against") and
+// `query.label` (e.g. "Rush Yards Against") are the backend's own
+// pre-formatted framing, so the view reads those rather than re-deriving
+// for/against from the flag's last letter itself (see
+// NFL_TEAM_STAT_FLAGS' comment in QueryBuilder.tsx for why that letter is
+// easy to misread). Confirmed live + shape doc from backend (nspe-v2-da,
+// 2026-10-04): a flat, full-league leaderboard sorted by total — `rank` is
+// that total-sort position, `rank_avg` a separate per-game-average sort
+// (useful since early-season game counts differ team to team). `focus` is
+// only present when the command named one team (`nspe nfl team DAL -rya`).
+export interface NflTeamYardsRow {
+  team: string
+  total: number
+  games: number
+  avg: number
+  rank?: number
+  rank_avg?: number
+}
+
+export interface NflTeamYardsPayload {
+  engine: 'nfl_team_yards'
+  query: {
+    stat: string
+    label?: string
+    season_year?: number | [number, number]
+    window_label?: string
+    team?: string | null
+    direction?: 'for' | 'against'
+    sort?: string
+  }
+  teams?: number
+  focus?: NflTeamYardsRow | null
+  results: NflTeamYardsRow[]
+}
+
+export function isNflTeamYardsPayload(payload: unknown): payload is NflTeamYardsPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return rec.engine === 'nfl_team_yards' && Array.isArray(rec.results)
+}
+
+export function extractNflTeamYardsPayload(payload: unknown): NflTeamYardsPayload | null {
+  if (isNflTeamYardsPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isNflTeamYardsPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isNflTeamYardsPayload(v)) return v
+    }
+  }
+  return null
+}
+
 // ---------------- Generic query-result path (stat context, matches, streaks) ----------------
 
 export interface StatContext {

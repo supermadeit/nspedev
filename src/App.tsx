@@ -60,6 +60,7 @@ import {
   extractMlbReportLeaderboardPayload,
   extractMlbTeamOverviewPayload,
   extractMlbTeamRunsPayload,
+  extractNflTeamYardsPayload,
   extractExplosiveOverviewPayload,
   extractNflParlayPayload,
   extractNflPlayerSlotsPayload,
@@ -100,6 +101,7 @@ import {
   type MlbTeamRunsComputeResult,
   type MlbTeamRunsPayload,
   type MlbTeamRunsTrendResult,
+  type NflTeamYardsPayload,
   type ExplosiveOverviewPayload,
   type NflParlayLeg,
   type NflParlayPayload,
@@ -1878,9 +1880,20 @@ function buildGameLogCategories(
     // everywhere else — relabeled for consistency. RBI/runs each only had
     // one rung before (2026-10-03, owner request to ladder every sport);
     // both get a second, heavier step the same way Pass TD/Any TD did.
+    //
+    // 2B/3B added 2026-10-04 (owner: "2bases 3bases 4bases") — HR already
+    // covers "4 bases" under its existing hr1/hr2 chips above, so no
+    // separate entry for that. Confirmed live that every MLB per-game row
+    // carries `2B`/`3B` fields (box-score doubles/triples), same casing as
+    // `H`/`HR`/`RBI`/`R`. Triples get a single rung, not a 2-step ladder —
+    // a multi-triple game is rare enough it isn't worth a "2+ 3B" chip that
+    // would almost never light up.
     const cats: GameLogCategory[] = [
       { id: 'h2', label: '2+ Hits', predicate: (g) => numField(g, 'H') >= 2 },
       { id: 'h3', label: '3+ Hits', predicate: (g) => numField(g, 'H') >= 3 },
+      { id: 'db1', label: '1+ 2B', predicate: (g) => numField(g, '2B') >= 1 },
+      { id: 'db2', label: '2+ 2B', predicate: (g) => numField(g, '2B') >= 2 },
+      { id: 'tb1', label: '1+ 3B', predicate: (g) => numField(g, '3B') >= 1 },
       { id: 'hr1', label: '1+ HR', predicate: (g) => numField(g, 'HR') >= 1 },
       { id: 'hr2', label: '2+ HR', predicate: (g) => numField(g, 'HR') >= 2 },
       { id: 'rbi2', label: '2+ RBI', predicate: (g) => numField(g, 'RBI') >= 2 },
@@ -3966,6 +3979,88 @@ function NflTeammateSplitView({ payload }: { payload: NflTeammateSplitPayload })
   )
 }
 
+// nfl_team_yards (nfl team -ryf|-pyf|-rya|-pya) — flat, full-league
+// leaderboard sorted by total, one stat/direction per query. Backend's
+// richer shape (query.label/direction/window_label, teams, focus, and
+// per-row rank/rank_avg) is still in their working tree as of 2026-10-04,
+// not yet deployed — every field below is read defensively with a
+// client-side fallback so this renders correctly against *today's*
+// production response (just team/total/games/avg, no label/rank/focus) and
+// automatically picks up the richer fields with no further change once
+// backend pushes them.
+const NFL_TEAM_YARDS_LABELS: Record<string, string> = {
+  ryf: 'Rush Yards For',
+  pyf: 'Pass Yards For',
+  rya: 'Rush Yards Against',
+  pya: 'Pass Yards Against',
+}
+
+function NflTeamYardsView({ payload }: { payload: NflTeamYardsPayload }) {
+  const q = payload.query
+  const results = payload.results ?? []
+  const label = q.label ?? NFL_TEAM_YARDS_LABELS[q.stat] ?? q.stat.toUpperCase()
+  const windowLabel = q.window_label ?? (Array.isArray(q.season_year) ? 'career' : q.season_year ? String(q.season_year) : '')
+  const isAgainst = q.direction === 'against' || (!q.direction && (q.stat === 'rya' || q.stat === 'pya'))
+  const focus = payload.focus
+
+  // `results` already arrives sorted by total desc, so index+1 covers `rank`
+  // whenever the backend hasn't sent its own yet; `rank_avg` needs its own
+  // sort since per-game average doesn't track the total-sort order once
+  // teams have played different numbers of games.
+  const rankAvgByTeam = useMemo(() => {
+    const byAvgDesc = [...results].sort((a, b) => b.avg - a.avg)
+    const m = new Map<string, number>()
+    byAvgDesc.forEach((r, i) => m.set(r.team, i + 1))
+    return m
+  }, [results])
+
+  return (
+    <div className="space-y-3">
+      <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+        <span>{`NFL ${label}`}</span>
+        {windowLabel && <span style={{ color: 'oklch(0.92 0 0)' }}>{` · ${windowLabel}`}</span>}
+      </div>
+      {focus && (
+        <div
+          className="font-mono text-[12px] rounded px-3 py-2"
+          style={{ backgroundColor: 'oklch(0.16 0 0)', border: `1px solid ${PITCH_BORDER}`, color: 'oklch(0.92 0 0)' }}
+        >
+          <span style={{ color: PITCH_ACCENT, fontWeight: 700 }}>{focus.team}</span>
+          <span>{`: ${focus.total} yds, ${focus.avg}/g — `}</span>
+          <span style={{ color: PITCH_GREEN }}>{`#${focus.rank ?? '—'} of ${payload.teams ?? results.length} by total`}</span>
+          <span>{', '}</span>
+          <span style={{ color: PITCH_GREEN }}>{`#${focus.rank_avg ?? rankAvgByTeam.get(focus.team) ?? '—'} by avg`}</span>
+        </div>
+      )}
+      <div className="space-y-0">
+        {results.map((r, i) => {
+          const rank = r.rank ?? i + 1
+          const rankAvg = r.rank_avg ?? rankAvgByTeam.get(r.team)
+          const isFocusRow = focus?.team === r.team
+          return (
+            <div
+              key={r.team}
+              className="flex items-center justify-between py-1.5 border-b"
+              style={{ borderColor: PITCH_BORDER, backgroundColor: isFocusRow ? 'oklch(0.18 0 0)' : 'transparent' }}
+            >
+              <span className="font-mono text-[13px]" style={{ color: isFocusRow ? PITCH_ACCENT : 'oklch(0.92 0 0)' }}>
+                <span style={{ color: PITCH_LABEL }}>{`#${rank} `}</span>
+                {r.team}
+              </span>
+              <span className="font-mono text-[12px] flex items-center gap-3">
+                <span style={{ color: isAgainst ? 'oklch(0.70 0.15 25)' : PITCH_GREEN }}>{`${r.total} tot`}</span>
+                <span style={{ color: 'oklch(0.92 0 0)' }}>{`${r.avg}/g`}</span>
+                {rankAvg && <span style={{ color: PITCH_LABEL }}>{`#${rankAvg} avg`}</span>}
+                <span style={{ color: PITCH_LABEL }}>{`${r.games}gp`}</span>
+              </span>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 // nfl-quarter-h2h / nfl-quarter-week — single player, quarter/half-scoped,
 // vs one opponent or one week#. totals keys are scope-specific (q1_pass_td,
 // 1h_pass_yds, ...) so this walks them generically rather than a fixed
@@ -4837,6 +4932,7 @@ function App() {
   const [hrResult, setHrResult] = useState<MlbHrPayload | null>(null)
   const [firstPaResult, setFirstPaResult] = useState<MlbFirstPaTrendPayload | null>(null)
   const [teamRunsResult, setTeamRunsResult] = useState<MlbTeamRunsPayload | null>(null)
+  const [nflTeamYardsResult, setNflTeamYardsResult] = useState<NflTeamYardsPayload | null>(null)
   const [lastQuery, setLastQuery] = useState('')
   // Conversational follow-ups ("what about receiving?") — client-side only,
   // per the backend's spec (docs/frontend_spec_followup_questions_2026-09-27.md
@@ -5271,6 +5367,7 @@ function App() {
     setHrResult(null)
     setFirstPaResult(null)
     setTeamRunsResult(null)
+    setNflTeamYardsResult(null)
   }
 
   // Routes a parsed /run payload to whichever result view it belongs to.
@@ -5425,6 +5522,13 @@ function App() {
     const teamRunsPayload = extractMlbTeamRunsPayload(payload)
     if (teamRunsPayload) {
       setTeamRunsResult(teamRunsPayload)
+      setQueryResults([])
+      return
+    }
+
+    const nflTeamYardsPayload = extractNflTeamYardsPayload(payload)
+    if (nflTeamYardsPayload) {
+      setNflTeamYardsResult(nflTeamYardsPayload)
       setQueryResults([])
       return
     }
@@ -6669,6 +6773,8 @@ function App() {
               <MlbFirstPaTrendView payload={firstPaResult} />
             ) : teamRunsResult ? (
               <MlbTeamRunsView payload={teamRunsResult} />
+            ) : nflTeamYardsResult ? (
+              <NflTeamYardsView payload={nflTeamYardsResult} />
             ) : queryResults === null ? (
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.92 0 0)' }}>
                 Build a query to begin

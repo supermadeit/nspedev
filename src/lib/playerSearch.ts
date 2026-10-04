@@ -131,15 +131,24 @@ export interface PlayerMatch {
 // prefix-match some other name token — this is what lets a search keep
 // narrowing as the user keeps typing instead of staying stuck on a
 // first-name-only match set.
-export function searchPlayers(query: string, limit = 8): PlayerMatch[] {
+// `sportFilter` ('mlb'/'nfl'/'nba'/'nhl'), when passed, narrows the index to
+// that sport before matching at all — added 2026-10-04 for QueryBuilder's
+// h2h player field (owner: typing "par" with NFL selected should surface
+// Parker Washington, not Jabari Parker, and vice versa with NBA selected).
+// Every PLAYER_INDEX entry carries a `sport` right now (confirmed live,
+// 311/311), but this still only filters entries that HAVE the field — an
+// entry missing it is treated as "unknown," not "wrong sport," same stance
+// PlayerIndexEntry.sport's own doc comment takes elsewhere in this file.
+export function searchPlayers(query: string, limit = 8, sportFilter?: string): PlayerMatch[] {
   const tokens = query.trim().toLowerCase().split(/\s+/).filter(Boolean)
   if (tokens.length === 0) return []
 
+  const pool = sportFilter ? PLAYER_INDEX.filter((e) => !e.sport || e.sport === sportFilter) : PLAYER_INDEX
   let matches: PlayerMatch[]
 
   if (tokens.length === 1) {
     const [token] = tokens
-    matches = PLAYER_INDEX.filter((e) => e.nameTokens.some((t) => t.startsWith(token))).map(
+    matches = pool.filter((e) => e.nameTokens.some((t) => t.startsWith(token))).map(
       (entry): PlayerMatch => ({
         entry,
         matchedOn: entry.firstName.startsWith(token) ? 'first' : 'other',
@@ -155,7 +164,7 @@ export function searchPlayers(query: string, limit = 8): PlayerMatch[] {
     })
   } else {
     const [firstToken, ...restTokens] = tokens
-    matches = PLAYER_INDEX.filter(
+    matches = pool.filter(
       (e) =>
         e.firstName.startsWith(firstToken) &&
         restTokens.every((rt) => e.nameTokens.some((t) => t.startsWith(rt))),
