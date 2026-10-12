@@ -241,6 +241,54 @@ export function sanitizeQueryForApi(query: string): string {
   return query.trim().replace(/^nspe\s+/i, '')
 }
 
+// Plain-English chat (2026-10-12 backend handoff, docs/frontend_chat_box_
+// 2026-10-12.md in nspe-v2) — client-side guess at whether a typed query is
+// nspe syntax or a question, used ONLY for picking the fetch abort timeout
+// and the loading indicator's wording before the response comes back. The
+// backend is the real, authoritative router (it decides by whether `agent`
+// comes back non-null) — a wrong guess here never changes what runs or how
+// it's rendered, just how long the client waits and what the spinner says
+// while waiting. Shared by App.tsx (desktop) and useNspeQuery.ts (mobile) so
+// both pick the same timeout for the same query rather than drifting.
+// Mirrors the spec's own rule exactly: the first word (after an optional
+// leading "nspe") being a league head, a denomination board, or starting
+// with "-" means syntax; everything else is a question — except a league
+// head immediately followed by actual question wording ("nfl who has the
+// most rushing yards?"), which is still a question despite the leading
+// league head.
+const LEAGUE_HEADS = new Set(['nfl', 'nba', 'nhl', 'mlb', 'cfb', 'ncaaf', 'hybrid', 'plus', 'bets', 'read', 'scout'])
+const DENOM_BOARDS = new Set(['333', '321', '4444', '54321'])
+const QUESTION_LEAD_WORDS = new Set([
+  'who', 'what', 'when', 'where', 'why', 'how', 'does', 'do', 'did', 'is', 'are', 'was', 'were',
+  'can', 'will', 'should', 'has', 'have', 'had',
+])
+
+export function looksLikeNspeSyntax(query: string): boolean {
+  const trimmed = query.trim()
+  if (!trimmed) return true
+  const words = trimmed.replace(/^nspe\s+/i, '').trim().split(/\s+/)
+  const first = (words[0] || '').toLowerCase()
+  if (first.startsWith('-')) return true
+  if (DENOM_BOARDS.has(first)) return true
+  if (LEAGUE_HEADS.has(first)) {
+    const rest = words.slice(1).map((w) => w.toLowerCase())
+    if (trimmed.endsWith('?') || rest.some((w) => QUESTION_LEAD_WORDS.has(w))) return false
+    return true
+  }
+  return false
+}
+
+// Fetch abort timeout for a /run call, picked from the query's own shape:
+// -parlay/-legs build a whole slate server-side (own, longer ceiling); a
+// plain-English question goes to the real assistant and takes 3-25s per
+// backend, with 60s as their STATED FLOOR, not a ceiling, hence the margin
+// above it; anything else is ordinary syntax, warm and well under a second.
+export function queryTimeoutMs(query: string): number {
+  if (/(^|\s)-(parlay|legs)\b/.test(query)) return 120000
+  if (!looksLikeNspeSyntax(query)) return 75000
+  return 12000
+}
+
 // The guest quota block the backend now sends on every /run response body
 // (confirmed spec, not the header this was originally speculatively read
 // from): {kind: "guest", remaining, limit, token} for an anonymous request,
@@ -255,11 +303,27 @@ export interface GuestQuota {
   token: string
 }
 
-export function readGuestQuota(payload: ApiPayload): GuestQuota | null {
+// Bug fix (2026-10-12, found while wiring up the plain-English chat
+// response, which documents this block as nested `payload.quota.kind`):
+// confirmed live against a real nfl_team_yards response that the quota
+// block has ALWAYS been nested under `payload.quota`, never flat at
+// `payload.kind` — `payload.kind` is `undefined` on every real response.
+// That means this function (and isAuthenticatedQuotaKind below) has been
+// returning null unconditionally in production, which silently broke the
+// "N free queries left today" banner for every guest visitor — it never had
+// a count to show. Reads `payload.quota` now, with a fallback to the
+// payload root in case some other caller genuinely does send it flat.
+function quotaRecord(payload: ApiPayload): Record<string, unknown> | null {
   if (!payload || Array.isArray(payload) || typeof payload !== 'object') return null
   const rec = payload as Record<string, unknown>
-  if (rec.kind !== 'guest') return null
-  const { remaining, limit, token } = rec
+  if (rec.quota && typeof rec.quota === 'object' && !Array.isArray(rec.quota)) return rec.quota as Record<string, unknown>
+  return rec
+}
+
+export function readGuestQuota(payload: ApiPayload): GuestQuota | null {
+  const quota = quotaRecord(payload)
+  if (!quota || quota.kind !== 'guest') return null
+  const { remaining, limit, token } = quota
   if (typeof remaining !== 'number' || typeof limit !== 'number' || typeof token !== 'string' || !token) return null
   return { kind: 'guest', remaining, limit, token }
 }
@@ -268,8 +332,7 @@ export function readGuestQuota(payload: ApiPayload): GuestQuota | null {
 // subscriber plan) — the counterpart to readGuestQuota, used to clear a
 // stale guest-quota banner the moment someone logs in mid-session.
 export function isAuthenticatedQuotaKind(payload: ApiPayload): boolean {
-  if (!payload || Array.isArray(payload) || typeof payload !== 'object') return false
-  const kind = (payload as Record<string, unknown>).kind
+  const kind = quotaRecord(payload)?.kind
   return kind === 'credits' || kind === 'subscriber'
 }
 

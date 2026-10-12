@@ -200,6 +200,83 @@ export function isH2hPayload(payload: unknown): payload is H2hPayload {
   return (engine.endsWith('-h2h') || engine.endsWith('-week')) && typeof rec.totals === 'object' && Array.isArray(rec.games)
 }
 
+// ---------- Plain-English chat (POST /run routes a question here) ----------
+// Backend handoff 2026-10-12 (docs/frontend_chat_box_2026-10-12.md,
+// nspe-v2 repo): the deterministic NL mapper is gone, /learn and /interpret
+// (the NL ones — {learn.nspe}'s own /learn is a separate, unrelated
+// endpoint and was unaffected once backend restored it) no longer exist, and
+// /run now routes ANYTHING that isn't nspe syntax to the real assistant
+// (POST /agent under the hood). The one signal that distinguishes this from
+// every other payload shape in this file: `agent` is a non-null object
+// (`null` for every syntax query, confirmed live against nfl_team_yards and
+// others — nothing above this needs to change). Checked first in
+// applyPayload for exactly that reason.
+export interface AgentBlock {
+  commands: string[]
+  model: string | null
+  cost_usd: number | null
+  elapsed_s: number | null
+  deterministic: boolean
+  // Only meaningful when true — Claude couldn't answer. `reason === "sign_in"`
+  // is the signed-out case (render a sign-in prompt, nothing ran, nothing was
+  // charged); any other case carries `fallback` naming why (model error,
+  // outage) and renders as a notice instead of an error.
+  unavailable: boolean
+  reason: string | null
+  fallback: string | null
+}
+
+export interface AgentChatPayload {
+  output: string
+  agent: AgentBlock
+}
+
+export function extractAgentChatPayload(payload: unknown): AgentChatPayload | null {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return null
+  const rec = payload as Record<string, unknown>
+  if (!rec.agent || typeof rec.agent !== 'object' || Array.isArray(rec.agent)) return null
+  const a = rec.agent as Record<string, unknown>
+  return {
+    output: typeof rec.output === 'string' ? rec.output : '',
+    agent: {
+      commands: Array.isArray(a.commands) ? a.commands.filter((c): c is string => typeof c === 'string') : [],
+      model: typeof a.model === 'string' ? a.model : null,
+      cost_usd: typeof a.cost_usd === 'number' ? a.cost_usd : null,
+      elapsed_s: typeof a.elapsed_s === 'number' ? a.elapsed_s : null,
+      deterministic: Boolean(a.deterministic),
+      unavailable: Boolean(a.unavailable),
+      reason: typeof a.reason === 'string' ? a.reason : null,
+      fallback: typeof a.fallback === 'string' ? a.fallback : null,
+    },
+  }
+}
+
+// `quota` for a chat answer: {kind:"subscriber"} (no cap) or {kind:"free",
+// remaining, limit} — same top-level `payload.quota` field syntax queries
+// already carry (readGuestQuota/isAuthenticatedQuotaKind in nspe-api.ts),
+// just with "free" as the signed-up-but-uncapped-plan kind instead of
+// "credits". Kept separate from those two since chat's gate (POST /agent)
+// never returns "guest" — signed-out is agent.reason === "sign_in" instead,
+// handled above, before quota is ever consulted.
+export interface AgentQuota {
+  kind: string
+  remaining?: number
+  limit?: number
+}
+
+export function extractAgentQuota(payload: unknown): AgentQuota | null {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return null
+  const rec = payload as Record<string, unknown>
+  if (!rec.quota || typeof rec.quota !== 'object' || Array.isArray(rec.quota)) return null
+  const q = rec.quota as Record<string, unknown>
+  if (typeof q.kind !== 'string') return null
+  return {
+    kind: q.kind,
+    remaining: typeof q.remaining === 'number' ? q.remaining : undefined,
+    limit: typeof q.limit === 'number' ? q.limit : undefined,
+  }
+}
+
 // h2h responses may arrive either as a top-level JSON object or wrapped inside
 // the standard envelope as `{ output: "<json string>", ... }`. Try both shapes.
 export function extractH2hPayload(payload: unknown): H2hPayload | null {

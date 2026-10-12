@@ -37,8 +37,10 @@ import {
   formatQueryError,
   getPayloadError,
   isAuthenticatedQuotaKind,
+  looksLikeNspeSyntax,
   parseApiPayload,
   QueryGateError,
+  queryTimeoutMs,
   readGuestQuota,
   RUN_ENDPOINTS,
   sanitizeQueryForApi,
@@ -61,6 +63,8 @@ import {
   extractMlbTeamOverviewPayload,
   extractMlbTeamRunsPayload,
   extractNflTeamYardsPayload,
+  extractAgentChatPayload,
+  extractAgentQuota,
   extractExplosiveOverviewPayload,
   extractNflParlayPayload,
   extractNflPlayerSlotsPayload,
@@ -102,6 +106,8 @@ import {
   type MlbTeamRunsPayload,
   type MlbTeamRunsTrendResult,
   type NflTeamYardsPayload,
+  type AgentBlock,
+  type AgentQuota,
   type ExplosiveOverviewPayload,
   type NflParlayLeg,
   type NflParlayPayload,
@@ -1050,11 +1056,17 @@ function NflTeamSlotsView({ payload }: { payload: NflTeamSlotsPayload }) {
 
 // "Running query..." for ordinary commands; -parlay/-legs build a whole slate
 // server-side and take 45-70s, so they get a message that says so, with an
-// elapsed-seconds counter so it visibly isn't hung.
+// elapsed-seconds counter so it visibly isn't hung. A plain-English question
+// gets the same elapsed-counter treatment (2026-10-12) — the assistant takes
+// 3-25s, and per backend the thinking state has to start the instant the
+// query is sent (the slow part is the model planning before its first
+// command even runs), which this already does since LoadingMessage mounts
+// the moment isLoading flips true, before the fetch itself starts.
 function LoadingMessage({ query }: { query: string }) {
   const isParlay = /(^|\s)-parlay\b/.test(query)
   const isLegs = /(^|\s)-legs\b/.test(query)
-  const slow = isParlay || isLegs
+  const isChat = !isParlay && !isLegs && !looksLikeNspeSyntax(query)
+  const slow = isParlay || isLegs || isChat
   const [elapsed, setElapsed] = useState(0)
   useEffect(() => {
     if (!slow) return
@@ -1064,9 +1076,11 @@ function LoadingMessage({ query }: { query: string }) {
   if (!slow) return <>Running query...</>
   return (
     <div className="space-y-1">
-      <div style={{ color: 'oklch(0.85 0.15 195)' }}>{isParlay ? 'building parlay…' : 'building legs…'}</div>
+      <div style={{ color: 'oklch(0.85 0.15 195)' }}>
+        {isParlay ? 'building parlay…' : isLegs ? 'building legs…' : 'thinking…'}
+      </div>
       <div className="text-[11px]" style={{ color: 'oklch(0.92 0 0)' }}>
-        {`this can take up to a minute · ${elapsed}s`}
+        {isChat ? `usually 3-25s · ${elapsed}s` : `this can take up to a minute · ${elapsed}s`}
       </div>
     </div>
   )
@@ -1191,6 +1205,217 @@ function GuestQuotaNotice({ remaining, stacked }: { remaining: number | null; st
         </a>
       )}
     </span>
+  )
+}
+
+// ---- Plain-English chat (2026-10-12 backend handoff) --------------------
+// The query-results panel's second render mode, alongside the unchanged
+// rows/CLI-text "results mode" every other View in this file produces —
+// picked in applyPayload by whether the response's `agent` field is a
+// non-null object (see extractAgentChatPayload, nspe-payloads.ts). No
+// markdown library pulled in for this — `marked` sits in package.json
+// unused by anything, and dangerouslySetInnerHTML-ing an LLM's own text
+// (which a crafted question could in principle try to steer) isn't worth it
+// for a scope this narrow. AnswerBlock below hand-parses exactly the three
+// constructs the spec names (bold, bullets, a short table) straight to React
+// elements — no HTML injection surface at all.
+
+interface AgentChatResult {
+  question: string
+  output: string
+  agent: AgentBlock
+  quota: AgentQuota | null
+}
+
+// The answer always ends with a literal "Commands:" block (one `nspe ...`
+// per line) per spec — that block is also in `agent.commands` pre-parsed,
+// which is what the chip row below actually renders, so this just trims the
+// redundant text tail off the prose rather than parsing it.
+function splitAnswerFromCommandsBlock(output: string): string {
+  const idx = output.search(/\n\s*Commands:\s*\n/i)
+  return (idx === -1 ? output : output.slice(0, idx)).trim()
+}
+
+function renderInlineBold(text: string, keyPrefix: string): ReactNode[] {
+  return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
+    part.startsWith('**') && part.endsWith('**') && part.length > 4 ? (
+      <strong key={`${keyPrefix}-${i}`} style={{ color: 'oklch(0.97 0 0)' }}>
+        {part.slice(2, -2)}
+      </strong>
+    ) : (
+      <span key={`${keyPrefix}-${i}`}>{part}</span>
+    ),
+  )
+}
+
+// A GFM-style pipe table: a header row, a "---|---" separator row, then data
+// rows — the "short table now and then" the spec mentions.
+function isTableBlock(lines: string[]): boolean {
+  return lines.length >= 2 && lines[0].includes('|') && /^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)+\|?\s*$/.test(lines[1])
+}
+
+function splitTableRow(line: string): string[] {
+  return line.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map((c) => c.trim())
+}
+
+function AnswerBlock({ block, blockKey }: { block: string; blockKey: string }) {
+  const lines = block.split('\n').filter((l) => l.trim().length > 0)
+  if (lines.length === 0) return null
+
+  if (lines.every((l) => /^\s*[-•*]\s+/.test(l))) {
+    return (
+      <ul className="list-disc pl-5 space-y-0.5">
+        {lines.map((l, i) => (
+          <li key={`${blockKey}-${i}`}>{renderInlineBold(l.replace(/^\s*[-•*]\s+/, ''), `${blockKey}-${i}`)}</li>
+        ))}
+      </ul>
+    )
+  }
+
+  if (isTableBlock(lines)) {
+    const header = splitTableRow(lines[0])
+    const rows = lines.slice(2).map(splitTableRow)
+    return (
+      <div className="overflow-x-auto">
+        <table className="text-[12px]" style={{ borderCollapse: 'collapse' }}>
+          <thead>
+            <tr>
+              {header.map((h, i) => (
+                <th
+                  key={i}
+                  className="text-left px-2 py-1 whitespace-nowrap"
+                  style={{ borderBottom: '1px solid oklch(0.30 0 0)', color: 'oklch(0.85 0.15 195)' }}
+                >
+                  {h}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r, ri) => (
+              <tr key={ri}>
+                {r.map((c, ci) => (
+                  <td key={ci} className="px-2 py-1 whitespace-nowrap" style={{ borderBottom: '1px solid oklch(0.20 0 0)' }}>
+                    {c}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )
+  }
+
+  return <p className="leading-relaxed whitespace-pre-line">{renderInlineBold(lines.join('\n'), blockKey)}</p>
+}
+
+function AgentAnswerText({ text }: { text: string }) {
+  const blocks = text.split(/\n\s*\n/).map((b) => b.trim()).filter(Boolean)
+  return (
+    <div className="space-y-2 font-mono text-[13px]" style={{ color: 'oklch(0.92 0 0)' }}>
+      {blocks.map((b, i) => (
+        <AnswerBlock key={i} block={b} blockKey={`b${i}`} />
+      ))}
+    </div>
+  )
+}
+
+function AgentCommandChip({ command, onRun }: { command: string; onRun: (cmd: string) => void }) {
+  return (
+    <button
+      type="button"
+      onClick={() => onRun(command)}
+      className="font-mono text-[12px] rounded px-2.5 py-1.5 text-left hover:opacity-80 transition-opacity"
+      style={{ backgroundColor: 'oklch(0.14 0 0)', border: '1px solid oklch(0.85 0.15 195)', color: 'oklch(0.85 0.15 195)' }}
+    >
+      {command}
+    </button>
+  )
+}
+
+// Signed-out question — `output` IS the backend's own sign-in message
+// ("Sign in to ask questions in plain English -- typed nspe syntax ...
+// works without an account."), shown as-is rather than paired with a
+// redundant headline that would just repeat it. Nothing ran, nothing was
+// charged, per spec — this is an invitation, same posture QueryGateNotice
+// already takes for the syntax-side 401/402/429 gates.
+function AgentSignInCard({ message }: { message: string }) {
+  const ACCENT = 'oklch(0.78 0.18 145)'
+  return (
+    <div
+      className="rounded-lg px-4 py-4 space-y-3 text-center font-mono"
+      style={{ backgroundColor: 'oklch(0.16 0 0)', border: `1px solid ${ACCENT}` }}
+    >
+      <div className="text-[13px]" style={{ color: 'oklch(0.85 0 0)' }}>{message}</div>
+      <div className="flex items-center justify-center gap-4 pt-1">
+        <a href="/signup" className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: ACCENT }}>
+          {'{sign-up}'}
+        </a>
+        <a href="/login" className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: 'oklch(0.85 0.15 195)' }}>
+          {'{log-in}'}
+        </a>
+      </div>
+    </div>
+  )
+}
+
+// agent.unavailable with a reason other than sign_in (agent.fallback names
+// it — a model error or outage) — `output` already tells the visitor to
+// type the syntax instead, per spec, so this is a quiet notice, not an
+// error banner.
+function AgentNoticeCard({ message }: { message: string }) {
+  return (
+    <div
+      className="rounded-lg px-4 py-3 font-mono text-[13px]"
+      style={{ backgroundColor: 'oklch(0.16 0 0)', border: '1px solid oklch(0.28 0 0)', color: 'oklch(0.85 0 0)' }}
+    >
+      {message}
+    </div>
+  )
+}
+
+function AgentChatView({ result, onRunCommand }: { result: AgentChatResult; onRunCommand: (cmd: string) => void }) {
+  const { question, output, agent, quota } = result
+
+  if (agent.unavailable && agent.reason === 'sign_in') return <AgentSignInCard message={output} />
+  if (agent.unavailable) return <AgentNoticeCard message={output} />
+
+  const answerText = splitAnswerFromCommandsBlock(output)
+
+  return (
+    <div className="space-y-4">
+      <div className="rounded-lg px-4 py-3" style={{ backgroundColor: 'oklch(0.14 0 0)', border: '1px solid oklch(0.28 0 0)' }}>
+        <div className="font-mono text-[9px] uppercase tracking-widest mb-1" style={{ color: 'oklch(0.92 0 0)' }}>
+          you asked
+        </div>
+        <div className="font-mono text-[13px]" style={{ color: 'oklch(0.85 0.15 195)' }}>{question}</div>
+      </div>
+
+      <div className="rounded-lg px-4 py-3" style={{ backgroundColor: 'oklch(0.12 0 0)', border: '1px solid oklch(0.30 0 0)' }}>
+        <AgentAnswerText text={answerText} />
+      </div>
+
+      {agent.commands.length > 0 && (
+        <div>
+          <div className="font-mono text-[9px] uppercase tracking-widest mb-1.5" style={{ color: 'oklch(0.92 0 0)' }}>
+            run it yourself
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {agent.commands.map((cmd) => (
+              <AgentCommandChip key={cmd} command={cmd} onRun={onRunCommand} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* cost_usd is for the owner's dashboard, never shown here, per spec. */}
+      {quota?.kind === 'free' && typeof quota.remaining === 'number' && (
+        <div className="font-mono text-[11px]" style={{ color: 'oklch(0.92 0 0)' }}>
+          {quota.remaining} question{quota.remaining === 1 ? '' : 's'} left today
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -4933,6 +5158,7 @@ function App() {
   const [firstPaResult, setFirstPaResult] = useState<MlbFirstPaTrendPayload | null>(null)
   const [teamRunsResult, setTeamRunsResult] = useState<MlbTeamRunsPayload | null>(null)
   const [nflTeamYardsResult, setNflTeamYardsResult] = useState<NflTeamYardsPayload | null>(null)
+  const [agentChatResult, setAgentChatResult] = useState<AgentChatResult | null>(null)
   const [lastQuery, setLastQuery] = useState('')
   // Conversational follow-ups ("what about receiving?") — client-side only,
   // per the backend's spec (docs/frontend_spec_followup_questions_2026-09-27.md
@@ -5368,12 +5594,30 @@ function App() {
     setFirstPaResult(null)
     setTeamRunsResult(null)
     setNflTeamYardsResult(null)
+    setAgentChatResult(null)
   }
 
   // Routes a parsed /run payload to whichever result view it belongs to.
   // Split out of runQuery so a saved pocket (a stored payload) replays
   // through exactly the same routing as a live query.
   const applyPayload = (payload: ApiPayload, sanitizedQuery: string) => {
+    // Plain-English chat (2026-10-12) — checked first since `agent` being a
+    // non-null object is the authoritative, structure-independent signal the
+    // backend itself uses to route /run; every other extractor below keys
+    // off `engine`/shape fields that only exist on syntax responses, where
+    // `agent` is always null, so this can't collide with any of them.
+    const agentChatPayload = extractAgentChatPayload(payload)
+    if (agentChatPayload) {
+      setAgentChatResult({
+        question: sanitizedQuery,
+        output: agentChatPayload.output,
+        agent: agentChatPayload.agent,
+        quota: extractAgentQuota(payload),
+      })
+      setQueryResults([])
+      return
+    }
+
     const h2hPayload = extractH2hPayload(payload)
     if (h2hPayload) {
       setH2hResult(h2hPayload)
@@ -5783,9 +6027,13 @@ function App() {
           },
           body: JSON.stringify({ query: effectiveQuery }),
         },
-        // -parlay/-legs build a whole slate server-side and run far longer than
-        // an ordinary query, so they get a much longer ceiling.
-        /(^|\s)-(parlay|legs)\b/.test(effectiveQuery) ? 120000 : 12000,
+        // See queryTimeoutMs (nspe-api.ts) — -parlay/-legs get their own long
+        // ceiling, a plain-English question (2026-10-12) gets real margin
+        // above the assistant's stated 60s floor (the old ~12s abort here is
+        // exactly what produced the "No API endpoint responded successfully
+        // ... AbortError" screen on a real chat answer before this existed),
+        // ordinary syntax is unchanged.
+        queryTimeoutMs(effectiveQuery),
       )
 
       const payload = await parseApiPayload(response)
@@ -6713,6 +6961,8 @@ function App() {
               </div>
             ) : queryGate ? (
               <QueryGateNotice gate={queryGate} isLoggedIn={Boolean(user)} onRetry={() => runQuery(lastQuery)} />
+            ) : agentChatResult ? (
+              <AgentChatView result={agentChatResult} onRunCommand={(cmd) => runQuery(cmd)} />
             ) : h2hResult ? (
               <H2hView payload={h2hResult} />
             ) : pitchResult ? (
