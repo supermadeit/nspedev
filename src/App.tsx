@@ -6754,18 +6754,38 @@ function App() {
           nothing to do, so the header's drag handlers and the resize handle
           are both skipped in this mode rather than left wired to no-op. */}
       {isMiniOpen && (() => {
-        const isH2hFullScreen = Boolean(h2hResult)
+        // Full-screen H2H stays full-screen on mobile (it already has
+        // nowhere else to put the room) but desktop's own version of it
+        // read as too aggressive (reported 2026-10-13) — most of the
+        // screen, not literally all of it, same "large floating panel"
+        // feel the rest of the desktop results panel already has, just
+        // bigger. A visible gutter around the edges (not draggable or
+        // resizable, like the plain full-screen case — just a fixed, large
+        // size) is what keeps it from reading as a takeover.
+        const isH2hFullScreen = Boolean(h2hResult) && isMobile
+        const isH2hLarge = Boolean(h2hResult) && !isMobile
         return (
         <div
           ref={miniRef}
           className={isH2hFullScreen
             ? 'fixed inset-0 z-30 flex flex-col overflow-hidden'
+            : isH2hLarge
+            ? 'fixed z-30 flex flex-col rounded-lg shadow-2xl overflow-hidden'
             : isMobile
             ? 'fixed z-30 rounded-lg shadow-2xl overflow-hidden'
             : 'absolute z-30 flex flex-col rounded-lg shadow-2xl overflow-hidden'
           }
           style={isH2hFullScreen
             ? { backgroundColor: 'oklch(0.15 0 0)' }
+            : isH2hLarge
+            ? {
+                top: '4vh',
+                left: '4vw',
+                width: '92vw',
+                height: '92vh',
+                backgroundColor: 'oklch(0.15 0 0)',
+                border: '1px solid oklch(0.30 0 0)',
+              }
             : isMobile
             ? {
                 left: `${(mobileMiniPosition ?? { x: 8, y: 8 }).x}px`,
@@ -6789,7 +6809,7 @@ function App() {
           <div
             className="flex flex-none items-center justify-between px-5 py-3 select-none"
             style={{ backgroundColor: 'oklch(0.18 0 0)', borderBottom: '1px solid oklch(0.30 0 0)', touchAction: 'none' }}
-            onMouseDown={isH2hFullScreen ? undefined : handleMouseDown}
+            onMouseDown={isH2hFullScreen || isH2hLarge ? undefined : handleMouseDown}
             onTouchStart={isH2hFullScreen ? undefined : isMobile ? handleMobileHeaderTouchStart : undefined}
           >
             <span className="font-mono font-bold text-[14px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
@@ -7157,7 +7177,7 @@ function App() {
             </div>
             </ResultsFilterContext.Provider>
           </div>
-          {!isMobile && !isH2hFullScreen && (
+          {!isMobile && !isH2hFullScreen && !isH2hLarge && (
             <div
               onMouseDown={handleResizeMouseDown}
               role="separator"
