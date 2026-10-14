@@ -611,6 +611,54 @@ function TrendBadge({
   )
 }
 
+// The expanded per-game breakdown under a trend row (met=N · view) used to
+// be one inline comma-joined blob — 40+ dates run together with no visual
+// anchor, unreadable past a handful of games (flagged live via
+// `nhl -ast2 -leaderboard`, screenshot showed exactly this). Boxed container
+// + one row per game, zebra-striped so a long list stays scannable, value
+// left / date right like the rest of the result rows read. The trend header
+// (met=N · window) sits once at the top of the box instead of repeated or
+// buried inline with the first date.
+function MatchDetailsBox({
+  header,
+  details,
+}: {
+  header?: string | null
+  details: { value: number | string; statLabel: string; date: string }[]
+}) {
+  return (
+    <div className="rounded overflow-hidden" style={{ border: '1px solid oklch(0.26 0 0)' }}>
+      {header && (
+        <div
+          className="px-2.5 py-1 font-mono text-[11px] font-bold"
+          style={{
+            backgroundColor: 'oklch(0.20 0.03 145)',
+            color: 'oklch(0.85 0.15 145)',
+            borderBottom: '1px solid oklch(0.26 0 0)',
+          }}
+        >
+          {header}
+        </div>
+      )}
+      <div>
+        {details.map((m, i) => (
+          <div
+            key={i}
+            className="flex items-center justify-between px-2.5 py-1 font-mono text-[12px]"
+            style={{
+              backgroundColor: i % 2 === 0 ? 'oklch(0.135 0 0)' : 'oklch(0.155 0 0)',
+              borderTop: i === 0 ? undefined : '1px solid oklch(0.21 0 0)',
+            }}
+          >
+            <span style={{ color: 'oklch(0.92 0 0)' }}>{`${m.value}${m.statLabel}`}</span>
+            <span style={{ color: 'oklch(0.60 0.07 195)' }}>{m.date}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // Per-payload collapse/expand state for a list of result rows, keyed by
 // index. Was previously copy-pasted (identical useState<Set<number>> +
 // toggle function) into every trend/compute view separately — pulled out
@@ -7156,14 +7204,10 @@ function App() {
                     )}
 
                     {hasMatchDetails && result.matchDetails && (
-                      <div className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
-                        {isTrendRow && (
-                          <span style={{ color: 'oklch(0.92 0 0)' }}>{formatMet(result.total, result.windowSize)} — </span>
-                        )}
-                        {result.matchDetails
-                          .map((m) => `${m.value}${m.statLabel} ${m.date}`)
-                          .join(', ')}
-                      </div>
+                      <MatchDetailsBox
+                        header={isTrendRow ? formatMet(result.total, result.windowSize) : null}
+                        details={result.matchDetails}
+                      />
                     )}
                   </ResultRow>
                 )
