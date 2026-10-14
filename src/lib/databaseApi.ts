@@ -221,6 +221,72 @@ export async function fetchNflPowerRankings(): Promise<NflPowerRankingsData> {
   return data
 }
 
+// Homepage leaderboard widget + hitlist ticker — these two were still the
+// original build-time bundled snapshots (src/assets/data/leaderboard.json,
+// hitlist.json), re-copied by hand/rebuild only, so both drifted stale
+// (flagged live 2026-10-14: the bundled leaderboard was 9/28, hitlist from
+// whenever it was last hand-pasted). Backend's daily cron + Spaces sync +
+// `_public_refresh_loop` (30-min allowlist poll) already serve fresh copies
+// of both at these same `/api/data/output/` paths, same free/unauthenticated/
+// precomputed pattern as power-rankings and qb-explosives above — this is
+// that swap. Row shapes are unchanged from the bundled files (App.tsx's
+// LeaderboardPayload / HitlistEntry already read these field names), so no
+// consumer-side remapping was needed, just the fetch.
+export interface NflLeaderboardHeatData {
+  kind: string
+  generated_at: string
+  thresholds?: Record<string, unknown>
+  weights?: Record<string, number>
+  rows: Array<Record<string, unknown>>
+}
+
+function isNflLeaderboardHeatData(value: unknown): value is NflLeaderboardHeatData {
+  return !!value && typeof value === 'object' && Array.isArray((value as Record<string, unknown>).rows)
+}
+
+export async function fetchNflLeaderboardHeat(): Promise<NflLeaderboardHeatData> {
+  const urls = API_BASE_CANDIDATES.map((base) => joinUrl(base, '/api/data/output/nfl_leaderboard_heat.json'))
+  const res = await fetchFirstOk(urls)
+  if (!res) throw new Error('nfl_leaderboard_heat.json not found')
+  const data: unknown = await res.json()
+  if (!isNflLeaderboardHeatData(data)) throw new Error('Unrecognized nfl_leaderboard_heat response shape.')
+  return data
+}
+
+export interface HitlistRow {
+  player?: string
+  team?: string
+  stat?: string
+  values?: number[]
+  threshold?: number
+  window?: string
+  hit_dates?: string[]
+  games_meeting?: number
+  window_games?: number
+  latest_value?: number
+  latest_date?: string
+  raw?: string
+}
+
+export interface HitlistData {
+  league: string
+  generated_at: string
+  rows: HitlistRow[]
+}
+
+function isHitlistData(value: unknown): value is HitlistData {
+  return !!value && typeof value === 'object' && Array.isArray((value as Record<string, unknown>).rows)
+}
+
+export async function fetchHitlist(): Promise<HitlistData> {
+  const urls = API_BASE_CANDIDATES.map((base) => joinUrl(base, '/api/data/output/hitlist.json'))
+  const res = await fetchFirstOk(urls)
+  if (!res) throw new Error('hitlist.json not found')
+  const data: unknown = await res.json()
+  if (!isHitlistData(data)) throw new Error('Unrecognized hitlist response shape.')
+  return data
+}
+
 // ---------------- multi-sport power rankings / schedule ----------------
 // Generalized siblings of fetchNflPowerRankings/the NFL-only types above, for
 // the NBA/MLB/NHL rollout — same free/unauthenticated/daily-precomputed file

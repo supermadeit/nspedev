@@ -46,6 +46,7 @@ import {
   sanitizeQueryForApi,
 } from '@/lib/nspe-api'
 import { guestTokenHeader, setGuestToken } from '@/lib/guestToken'
+import { fetchHitlist, fetchNflLeaderboardHeat } from '@/lib/databaseApi'
 import {
   buildStatsOverviewFromH2h,
   detectStatContext,
@@ -5231,6 +5232,19 @@ function App() {
   const [guestQueriesRemaining, setGuestQueriesRemaining] = useState<number | null>(null)
   const [expandedPlayers, setExpandedPlayers] = useState<Record<string, boolean>>({})
   const [hitlistEntries, setHitlistEntries] = useState<HitlistEntry[]>(hitlistData as HitlistEntry[])
+  // Live swap for the ticker, same "bundled paints first, live replaces it"
+  // call as the leaderboard effect further down — see fetchHitlist's own
+  // comment in databaseApi.ts. Backend's live file is `.rows` (an envelope),
+  // not the bare array the bundled hitlist.json is, hence the unwrap here.
+  useEffect(() => {
+    let cancelled = false
+    fetchHitlist()
+      .then((data) => {
+        if (!cancelled) setHitlistEntries(data.rows as HitlistEntry[])
+      })
+      .catch((err) => console.error('Failed to load live hitlist.json, keeping bundled snapshot:', err))
+    return () => { cancelled = true }
+  }, [])
   const [isBuilderOpen, setIsBuilderOpen] = useState(false)
   const [builderPosition, setBuilderPosition] = useState({
     x: Math.max(16, Math.floor(window.innerWidth / 2 - 320)),
@@ -5261,7 +5275,23 @@ function App() {
   const mobileLeaderboardRows = useExpandableRows()
   const [isGlossaryOpen, setIsGlossaryOpen] = useState(false)
   const [isH2hStaffOpen, setIsH2hStaffOpen] = useState(false)
-  const leaderboard = leaderboardData as unknown as LeaderboardPayload
+  // Bundled snapshot paints immediately (leaderboard.json / hitlist.json,
+  // last re-copied by hand/rebuild only — drifted stale, flagged live
+  // 2026-10-14), swapped for backend's live, daily-refreshed
+  // /api/data/output/{nfl_leaderboard_heat,hitlist}.json the moment the fetch
+  // resolves. A failure just leaves the bundled snapshot showing (logged,
+  // not surfaced) rather than breaking the homepage widgets outright — same
+  // "stale beats broken" call as the bundled fallback itself already made.
+  const [leaderboard, setLeaderboard] = useState<LeaderboardPayload>(leaderboardData as unknown as LeaderboardPayload)
+  useEffect(() => {
+    let cancelled = false
+    fetchNflLeaderboardHeat()
+      .then((data) => {
+        if (!cancelled) setLeaderboard(data as unknown as LeaderboardPayload)
+      })
+      .catch((err) => console.error('Failed to load live nfl_leaderboard_heat.json, keeping bundled snapshot:', err))
+    return () => { cancelled = true }
+  }, [])
   // Mobile leaderboard: the stat(streak) column is sized to its longest value
   // (monospace, ~7.2px/char at 12px) and right-aligned to the same edge the
   // expanded row's score sits on, so the player column gets all the rest.
