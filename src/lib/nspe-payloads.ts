@@ -3010,6 +3010,31 @@ export function extractMatchDetails(row: Record<string, unknown>, ctx: StatConte
   return out
 }
 
+// `-splits` rows (confirmed live 2026-10-14, reported via screenshot —
+// every row showed "0") carry no top-level total/value at all: the real
+// number lives in a `splits` array instead, shaped one of two ways
+// depending on the window — `{date, value}` per game for `-season -splits`
+// (`splits_single_season: true`) or `{season, total}` per season for
+// `-career -splits` (`splits_single_season: false`). Either way, summing
+// the array reconstructs the real total; returns null (not 0) when there's
+// nothing to sum, so the normal totalCandidate chain below still falls
+// through to its other candidates first rather than this always winning.
+function sumSplitsTotal(row: Record<string, unknown>): number | null {
+  if (!Array.isArray(row.splits)) return null
+  let sum = 0
+  let any = false
+  for (const entry of row.splits) {
+    if (!entry || typeof entry !== 'object' || Array.isArray(entry)) continue
+    const rec = entry as Record<string, unknown>
+    const v = typeof rec.total === 'number' ? rec.total : typeof rec.value === 'number' ? rec.value : null
+    if (v != null) {
+      sum += v
+      any = true
+    }
+  }
+  return any ? sum : null
+}
+
 export function normalizeQueryResults(payload: ApiPayload, fallbackQuery = ''): QueryResult[] {
   const statContext = detectStatContext(payload, fallbackQuery)
   let envelope = extractResultArray(payload)
@@ -3089,13 +3114,19 @@ export function normalizeQueryResults(payload: ApiPayload, fallbackQuery = ''): 
         row.total ??
         row.value ??
         row.count ??
+        // mlb_stat_leaderboard's own "how many games met the threshold"
+        // field (confirmed live 2026-10-14, e.g. `nspe mlb -leaderboard
+        // -hr2`) — no total/value/count on that shape at all, which is why
+        // it was also showing 0 alongside the -splits bug above.
+        row.games_meeting ??
         row.met ??
         row.hits ??
         row.stat_total ??
         row.statTotal ??
         row.result ??
         matchesCount ??
-        gamesFromNotes
+        gamesFromNotes ??
+        sumSplitsTotal(row)
 
       if (typeof playerCandidate !== 'string' || !playerCandidate.trim()) {
         return null
