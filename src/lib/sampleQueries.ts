@@ -33,14 +33,17 @@ export function buildSampleQueries(): SampleQuery[] {
 // specific enough query (e.g. "mlb -hits") still finds the traditional
 // commands via prefix match regardless of this ordering.
 //
-// Within each of those two buckets, NFL/MLB additionally rank ahead of every
-// other sport — it's currently NFL/MLB season, NBA/NHL aren't. This is a
-// soft, temporary priority, not a hard exclusion: NBA/NHL entries still
-// appear, just lower in the list — a specific enough query still finds them
-// via prefix match regardless of this ordering, same as the moat/rest split
-// above. Revisit once more than one sport is actually in season.
+// Within each of those two buckets, NFL/NBA/NHL additionally rank ahead of
+// MLB — updated 2026-10-15 (owner call): NFL/NBA/NHL are the upcoming/in-
+// stride seasons now, MLB is winding down. Was NFL/MLB prioritized over
+// NBA/NHL (the inverse) back when this was written for early-season NFL/MLB
+// overlap — see git history if that split ever needs resurrecting. Still a
+// soft, temporary priority, not a hard exclusion: MLB entries still appear,
+// just lower in the list — a specific enough query still finds them via
+// prefix match regardless of this ordering, same as the moat/rest split
+// above. Revisit each time the in-season mix actually changes.
 function seasonPriority(command: string): number {
-  return /^nspe (nfl|mlb)\b/i.test(command) ? 0 : 1
+  return /^nspe (nfl|nba|nhl)\b/i.test(command) ? 0 : 1
 }
 
 // Stable sort by seasonPriority alone — Array.prototype.sort is spec-stable

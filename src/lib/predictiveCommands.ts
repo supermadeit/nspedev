@@ -136,6 +136,9 @@ const PLAYER_OV_COMMANDS: SampleQuery[] = [
   { label: 'nfl count · td (-ov)', command: 'nspe nfl jamarr -td1 -ov -career', playerHint: 'jamarr', positions: ['RB', 'WR', 'TE'] },
   { label: 'nfl count · last 10 (-ov)', command: 'nspe nfl mahomes -yds300 -ov -last10', playerHint: 'mahomes', positions: ['QB'] },
   { label: 'nfl count · last 10 (-ov)', command: 'nspe nfl jamarr -yds100 -ov -last10', playerHint: 'jamarr', positions: ['RB', 'WR', 'TE'] },
+  // Position-agnostic (confirmed live 2026-10-15 for both a QB and an RB —
+  // category auto-infers same as the plain count entries above).
+  { label: 'nfl count · explosive plays 40+ (-ov)', command: 'nspe nfl mahomes -long40 -ov -career', playerHint: 'mahomes' },
   // Shelved: -sb is valid syntax but not worth suggesting for every QB (most
   // never played in a Super Bowl), and it currently returns 0 for Mahomes even
   // though he has Super Bowl games — backend fix pending. If it comes back,
@@ -147,6 +150,12 @@ const PLAYER_OV_COMMANDS: SampleQuery[] = [
   { label: 'mlb count · hits (-ov)', command: 'nspe mlb judge -hits2 -ov -career', playerHint: 'judge' },
   { label: 'mlb count · doubles (-ov)', command: 'nspe mlb judge -dub1 -ov -career', playerHint: 'judge' },
   { label: 'mlb count · last 20 (-ov)', command: 'nspe mlb judge -hits2 -ov -last20', playerHint: 'judge' },
+  // Confirmed live 2026-10-15 — real engine (mlb_overview_statn), real
+  // counts, some combined-production stat distinct from hits/tb alone (the
+  // envelope's internal field name isn't self-explanatory enough to label
+  // precisely here — worth asking backend exactly what -total sums before
+  // this gets much more visible than one catalog entry).
+  { label: 'mlb count · combined production (-ov)', command: 'nspe mlb jose ramirez -total3 -ov 2025', playerHint: 'jose ramirez' },
   // NBA
   { label: 'nba overview · seasons (-ov)', command: 'nspe nba curry -ov -career', playerHint: 'curry' },
   { label: 'nba count · points (-ov)', command: 'nspe nba curry -pts20 -ov -career', playerHint: 'curry' },
@@ -154,10 +163,15 @@ const PLAYER_OV_COMMANDS: SampleQuery[] = [
   { label: 'nba count · rebounds (-ov)', command: 'nspe nba jokic -reb8 -ov -career', playerHint: 'jokic', positions: ['F', 'C'] },
   { label: 'nba count · assists (-ov)', command: 'nspe nba jokic -ast6 -ov -career', playerHint: 'jokic', positions: ['G'] },
   { label: 'nba count · last 20 (-ov)', command: 'nspe nba curry -pts20 -ov -last20', playerHint: 'curry' },
+  // Period-scoped -ov — confirmed live 2026-10-15, real engine
+  // (nba_overview_scope_statn), first period-scoped -ov entry in this
+  // catalog for NBA (NFL already had the equivalent 1h/q1 shape).
+  { label: 'nba count · pts (1h, -ov)', command: 'nspe nba brunson 1h -pts20 -ov -last20', playerHint: 'brunson' },
   { label: 'nba trend · double-double', command: 'nspe nba -dub -last4/5' },
   // NHL (skaters)
   { label: 'nhl overview · season line (-ov)', command: 'nspe nhl mcdavid -ov', playerHint: 'mcdavid' },
   { label: 'nhl count · multi-point (-ov)', command: 'nspe nhl mcdavid -pts2 -ov', playerHint: 'mcdavid', positions: ['C', 'LW', 'RW'] },
+  { label: 'nhl count · multi-point, career (-ov)', command: 'nspe nhl mcdavid -pts2 -ov -career', playerHint: 'mcdavid', positions: ['C', 'LW', 'RW'] },
   { label: 'nhl count · points (-ov)', command: 'nspe nhl mcdavid -pts1 -ov', playerHint: 'mcdavid', positions: ['D'] },
   { label: 'nhl count · shots (-ov)', command: 'nspe nhl mcdavid -sog3 -ov', playerHint: 'mcdavid' },
   { label: 'nhl count · goals (-ov)', command: 'nspe nhl mcdavid -g1 -ov', playerHint: 'mcdavid', positions: ['C', 'LW', 'RW'] },
