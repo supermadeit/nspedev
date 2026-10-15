@@ -1383,7 +1383,13 @@ function AgentAnswerText({ text }: { text: string }) {
   )
 }
 
-function AgentCommandChip({ command, onRun }: { command: string; onRun: (cmd: string) => void }) {
+// `label` is the clarification-chip case (a human-readable interpretation,
+// e.g. "NBA player points leaderboard (2025-26 season so far)") — the chip
+// still runs `command` on click either way, it just displays something
+// readable instead of raw syntax when one's given. Omitted entirely (every
+// "run it yourself" chip) falls back to showing the command itself, exactly
+// as before.
+function AgentCommandChip({ command, label, onRun }: { command: string; label?: string; onRun: (cmd: string) => void }) {
   return (
     <button
       type="button"
@@ -1391,7 +1397,7 @@ function AgentCommandChip({ command, onRun }: { command: string; onRun: (cmd: st
       className="font-mono text-[12px] rounded px-2.5 py-1.5 text-left hover:opacity-80 transition-opacity"
       style={{ backgroundColor: 'oklch(0.14 0 0)', border: '1px solid oklch(0.85 0.15 195)', color: 'oklch(0.85 0.15 195)' }}
     >
-      {command}
+      {label ?? command}
     </button>
   )
 }
@@ -1474,6 +1480,24 @@ function AgentChatView({ result, onRunCommand }: { result: AgentChatResult; onRu
           </div>
         )}
       </div>
+
+      {/* Cross-domain ambiguity ("who leads in points" — team points across
+          four sports, or player points across two) — the model chose to ask
+          instead of guess, per its own dedicated prompt rule (backend,
+          2026-10-15). `answerText` above already carries the lead-in line
+          (the model's own, or a backend-filled default — always something
+          there). A click reruns that option's `command` as a normal typed
+          query via the same onRunCommand path "run it yourself" chips use —
+          deliberately NOT a follow-up question back to the model: it's
+          already valid nspe syntax, so running it directly is cheaper,
+          faster, and more reliable than rephrasing it into English first. */}
+      {agent.clarificationOptions.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {agent.clarificationOptions.map((opt, i) => (
+            <AgentCommandChip key={`${opt.command}-${i}`} command={opt.command} label={opt.label} onRun={onRunCommand} />
+          ))}
+        </div>
+      )}
 
       {agent.commands.length > 0 && (
         <div>

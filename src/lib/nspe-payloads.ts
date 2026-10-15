@@ -243,6 +243,21 @@ export interface AgentBlock {
   // text itself. Parsed here for completeness/future use, no render change
   // needed today.
   needs_clarification: boolean
+  // Cross-domain ambiguity (backend, 2026-10-15) -- distinct from both
+  // `disambiguation` (a deterministic player-name collision, mechanical, no
+  // model judgment) and `needs_clarification` (the model ran dry on budget).
+  // This is the model actively choosing to ask rather than guess when a
+  // question could mean genuinely different things across sports/stat
+  // families ("who leads in points" = NFL/NBA/NHL/CFB team points, or NBA/NHL
+  // player points) -- its own tool call, its own prompt rule. 2-4 entries.
+  // `command` is already a valid nspe syntax string -- a chip click reruns it
+  // directly as a typed-syntax /run call, same as a "run it yourself" chip,
+  // never rephrased back into English (cheaper, faster, no second model
+  // call). `output`/`answer` carries the lead-in text to show above the
+  // chips (backend fills a default when the model didn't write one, so
+  // there's always something to render). Never cached backend-side, so this
+  // can't get stuck serving a stale clarification to everyone.
+  clarificationOptions: { label: string; command: string }[]
 }
 
 export interface AgentChatPayload {
@@ -269,6 +284,13 @@ export function extractAgentChatPayload(payload: unknown): AgentChatPayload | nu
       cached: Boolean(a.cached),
       data_as_of: typeof a.data_as_of === 'string' ? a.data_as_of : null,
       needs_clarification: Boolean(a.needs_clarification),
+      clarificationOptions: Array.isArray(a.clarification_options)
+        ? a.clarification_options.filter(
+            (o): o is { label: string; command: string } =>
+              !!o && typeof o === 'object' && typeof (o as Record<string, unknown>).label === 'string' &&
+              typeof (o as Record<string, unknown>).command === 'string',
+          )
+        : [],
     },
   }
 }
