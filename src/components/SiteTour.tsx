@@ -42,12 +42,12 @@ const STEPS: TourStep[] = [
   {
     target: 'tour-search',
     caption:
-      'Type here and this bar suggests real, runnable commands as you go — that\'s predictive syntax ({psc}). Prefer a blank slate? Turn it off in Account Settings.',
+      'Type here and ask a question in plain English — try "what team does luka doncic score the most against" — and the assistant reads it, runs it, and answers. No syntax required. Needs a free sign-in; running a command yourself doesn\'t.',
   },
   {
     target: 'tour-sample-queries',
     caption:
-      '{sample-queries} is a list of ready-made commands — copy and paste any of them. One more thing worth knowing: this search bar also understands plain-English questions, not just commands — ask something like "how many times has Mahomes thrown for 300 yards" and it reads the question, runs it, and answers, no syntax required.',
+      '{sample-queries} is a list of ready-made commands — copy and paste any of them straight into the search bar. These run for free, no account needed, if you\'d rather see real syntax than ask in plain English.',
   },
   {
     target: 'tour-build',
