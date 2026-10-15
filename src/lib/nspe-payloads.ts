@@ -234,6 +234,15 @@ export interface AgentBlock {
   // see AgentChatView's "as of" note.
   cached: boolean
   data_as_of: string | null
+  // Distinct from `unavailable` on purpose (backend, 2026-10-15) — fires when
+  // the model ran dry on token budget after doing real tool work and is
+  // asking the user to narrow the question, not a failure. `unavailable`
+  // stays false and exit_code stays 0 for this case, so AgentChatView's
+  // existing fallthrough (nothing special-cases this field) already renders
+  // it as a normal answer — the "be more specific" ask is just the answer
+  // text itself. Parsed here for completeness/future use, no render change
+  // needed today.
+  needs_clarification: boolean
 }
 
 export interface AgentChatPayload {
@@ -259,6 +268,7 @@ export function extractAgentChatPayload(payload: unknown): AgentChatPayload | nu
       fallback: typeof a.fallback === 'string' ? a.fallback : null,
       cached: Boolean(a.cached),
       data_as_of: typeof a.data_as_of === 'string' ? a.data_as_of : null,
+      needs_clarification: Boolean(a.needs_clarification),
     },
   }
 }
