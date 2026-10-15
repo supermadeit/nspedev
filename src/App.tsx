@@ -39,6 +39,7 @@ import {
   isAuthenticatedQuotaKind,
   looksLikeNspeSyntax,
   parseApiPayload,
+  QUESTION_LEAD_WORDS,
   QueryGateError,
   queryTimeoutMs,
   readGuestQuota,
@@ -5089,6 +5090,26 @@ function looksLikePlayerSearch(value: string): boolean {
   return true
 }
 
+// Once someone's clearly mid-way through typing a full NL question, the
+// {psc}/player-search dropdowns stop being useful and just compete for
+// attention with the "just ask it" affordance (flagged live 2026-10-15 —
+// typing a whole sentence still left both dropdowns open the entire time).
+// Deliberately conservative — a bare name or a short, genuinely ambiguous
+// fragment ("derrick henry", "nfl pass") must keep its suggestions, so this
+// only fires once there's BOTH real length (4+ words) AND a recognizable
+// question marker (a lead word, or a trailing "?"), never on length alone.
+// Reuses nspe-api.ts's QUESTION_LEAD_WORDS (the same list /run's own NL-vs-
+// syntax routing already trusts) rather than inventing a second word list
+// that could quietly drift from it.
+function looksLikeNlInProgress(value: string): boolean {
+  const trimmed = value.trim()
+  if (!trimmed) return false
+  const words = trimmed.toLowerCase().split(/\s+/)
+  if (words.length < 4) return false
+  if (trimmed.endsWith('?')) return true
+  return words.some((w) => QUESTION_LEAD_WORDS.has(w))
+}
+
 const SPORT_TOKENS = ['mlb', 'nfl', 'nba', 'nhl', 'cfb', 'ncaaf']
 
 // Strips a leading "nspe"/sport prefix so "nspe nfl saquon" can still
@@ -5603,6 +5624,11 @@ function App() {
     : keywordMatches.length > 0
     ? keywordMatches
     : matchupSuggestions
+  // See looksLikeNlInProgress's own comment — gates both dropdowns' render,
+  // not their underlying match computation above, so Enter-to-navigate and
+  // every other consumer of playerMatches/greenMatches elsewhere keeps
+  // working exactly as before; this only hides the visual suggestion panel.
+  const isNlInProgress = useMemo(() => looksLikeNlInProgress(searchValue), [searchValue])
   const searchInputRef = useRef<HTMLInputElement>(null)
   // Mobile only — tapping outside the search input/dropdown dismisses
   // whichever dropdown is open. Separate from suppressSyntaxDropdown above
@@ -7391,7 +7417,7 @@ function App() {
                     {PLACEHOLDER_TEXTS[0]}
                   </div>
                 )}
-                {(playerMatches.length > 0 || greenMatches.length > 0) && !isMobileDropdownDismissed && (
+                {(playerMatches.length > 0 || greenMatches.length > 0) && !isNlInProgress && !isMobileDropdownDismissed && (
                   <div className="absolute top-[60px] left-0 right-0 z-[25] flex flex-col gap-2">
                     {playerMatches.length > 0 && (
                       <PlayerSearchDropdown
@@ -7494,7 +7520,7 @@ function App() {
                     {PLACEHOLDER_TEXTS[0]}
                   </div>
                 )}
-                {(playerMatches.length > 0 || greenMatches.length > 0) && !isDesktopDropdownDismissed && (
+                {(playerMatches.length > 0 || greenMatches.length > 0) && !isNlInProgress && !isDesktopDropdownDismissed && (
                   <div className="absolute top-[60px] left-0 right-0 z-[25] flex flex-col gap-2">
                     {playerMatches.length > 0 && (
                       <PlayerSearchDropdown

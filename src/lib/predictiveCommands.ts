@@ -203,19 +203,21 @@ const NFL_COMMANDS: SampleQuery[] = [
   { label: 'nfl compute · rush_yds', command: 'nspe nfl rush -ydsmin100 -last1' },
   { label: 'nfl compute · pass+rush (-pr)', command: 'nspe nfl -prmin250 -last1' },
   { label: 'nfl compute · rush+rec (-rr)', command: 'nspe nfl -rrmin80 -last1' },
-  // streak
-  { label: 'nfl streak · pass -td', command: 'nspe nfl pass -td1 -streak3 2025' },
-  { label: 'nfl streak · rush -yds', command: 'nspe nfl rush -yds50 -streak2 2025' },
+  // streak — shelved 2026-10-15 (owner ask): {psc} narrowed to trend/compute/
+  // -ov only now that NL questions are the primary surface; still fully
+  // listed in {sample-queries}.
+  { label: 'nfl streak · pass -td', command: 'nspe nfl pass -td1 -streak3 2025', pscShelved: true },
+  { label: 'nfl streak · rush -yds', command: 'nspe nfl rush -yds50 -streak2 2025', pscShelved: true },
   // 1h
   { label: 'nfl trend · pass (1h)', command: 'nspe nfl 1h pass -yds100 -last1/1' },
   { label: 'nfl trend · pass (1h)', command: 'nspe nfl 1h pass -yds120 -last1/1', pscShelved: true },
   { label: 'nfl trend · pass (1h)', command: 'nspe nfl 1h pass -yds150 -last1/1' },
-  // explosive — compact -long{N} form (byte-identical to the old
-  // "long {category} -yds{N}"; see the file-header note above).
-  { label: 'nfl explosive · pass', command: 'nspe nfl pass -long30 -last1/1' },
-  { label: 'nfl explosive · rush', command: 'nspe nfl rush -long20 -last1/1' },
-  { label: 'nfl explosive · rec', command: 'nspe nfl rec -long25 -last1/1' },
-  { label: 'nfl explosive compute · pass', command: 'nspe nfl pass -longmin400 -season' },
+  // explosive — shelved 2026-10-15 (owner ask, same {psc} narrowing as streak
+  // above).
+  { label: 'nfl explosive · pass', command: 'nspe nfl pass -long30 -last1/1', pscShelved: true },
+  { label: 'nfl explosive · rush', command: 'nspe nfl rush -long20 -last1/1', pscShelved: true },
+  { label: 'nfl explosive · rec', command: 'nspe nfl rec -long25 -last1/1', pscShelved: true },
+  { label: 'nfl explosive compute · pass', command: 'nspe nfl pass -longmin400 -season', pscShelved: true },
   // -ov — windows: bare YYYY, -career, YYYY-YYYY, or omitted (current season)
   { label: 'nfl overview · long (-ov)', command: 'nspe nfl long mahomes -ov', playerHint: 'mahomes' },
   { label: 'nfl overview · 1h (-ov, career)', command: 'nspe nfl 1h dak -ov -career', playerHint: 'dak', pscShelved: true },
@@ -241,14 +243,14 @@ const NFL_COMMANDS: SampleQuery[] = [
   // is solid from ~2016; earlier games are partly missing. Backend: player
   // tables are engine nfl_player_slots, team is nfl_team_slots.
   // Player slot comparison table (default category, or pass|rush|rec named):
-  { label: 'nfl slots · compare all slots', command: 'nspe nfl derrick henry -slots -ov -career', playerHint: 'derrick henry' },
+  { label: 'nfl slots · compare all slots', command: 'nspe nfl derrick henry -slots -ov -career', playerHint: 'derrick henry', pscShelved: true },
   { label: 'nfl slots · this season', command: 'nspe nfl derrick henry -slots -ov', playerHint: 'derrick henry', pscShelved: true },
   { label: 'nfl slots · one season', command: 'nspe nfl derrick henry -slots -ov 2025', playerHint: 'derrick henry', pscShelved: true },
   { label: 'nfl slots · range', command: 'nspe nfl derrick henry -slots -ov 2020-2025', playerHint: 'derrick henry', pscShelved: true },
   { label: 'nfl slots · pass', command: 'nspe nfl mahomes -slots pass -ov -career', pscShelved: true },
   { label: 'nfl slots · rec', command: 'nspe nfl cmac -slots -ov rec -career', pscShelved: true },
   // Single-slot personal views (bare table, or "how many games hit N"):
-  { label: 'nfl slot · MNF', command: 'nspe nfl derrick henry -mnf -ov -career', playerHint: 'derrick henry' },
+  { label: 'nfl slot · MNF', command: 'nspe nfl derrick henry -mnf -ov -career', playerHint: 'derrick henry', pscShelved: true },
   { label: 'nfl slot · SNF', command: 'nspe nfl derrick henry -snf -ov -career', playerHint: 'derrick henry', pscShelved: true },
   { label: 'nfl slot · TNF', command: 'nspe nfl derrick henry -tnf -ov -career', playerHint: 'derrick henry', pscShelved: true },
   { label: 'nfl slot · primetime', command: 'nspe nfl derrick henry -prime -ov -career', playerHint: 'derrick henry', pscShelved: true },
@@ -257,28 +259,28 @@ const NFL_COMMANDS: SampleQuery[] = [
   { label: 'nfl slot · TNF combined td', command: 'nspe nfl cmac any -tnf -td2 -ov -career', pscShelved: true },
   { label: 'nfl slot · MNF rush+rec td', command: 'nspe nfl cmac rushrec -mnf -td2 -ov -career', pscShelved: true },
   // League leaderboards filtered by slot (slots can be combined; -topN):
-  { label: 'nfl slot leaderboard · MNF', command: 'nspe nfl pass -yds300 -mnf -leaderboard -career' },
+  { label: 'nfl slot leaderboard · MNF', command: 'nspe nfl pass -yds300 -mnf -leaderboard -career', pscShelved: true },
   { label: 'nfl slot leaderboard · primetime', command: 'nspe nfl pass -yds300 -prime -leaderboard -career -top10', pscShelved: true },
   { label: 'nfl slot leaderboard · SNF+TNF', command: 'nspe nfl pass -yds300 -snf -tnf -leaderboard 2025', pscShelved: true },
   { label: 'nfl slot leaderboard · rush', command: 'nspe nfl rush -yds100 -snf -leaderboard -career', pscShelved: true },
   { label: 'nfl slot leaderboard · rec', command: 'nspe nfl rec -yds100 -mnf -leaderboard -career -top10', pscShelved: true },
   // Team records by slot (one team also lists each game):
-  { label: 'nfl team slot · MNF', command: 'nspe nfl team -mnf -career' },
-  { label: 'nfl team slot · SNF', command: 'nspe nfl team -snf -career' },
+  { label: 'nfl team slot · MNF', command: 'nspe nfl team -mnf -career', pscShelved: true },
+  { label: 'nfl team slot · SNF', command: 'nspe nfl team -snf -career', pscShelved: true },
   { label: 'nfl team slot · TNF', command: 'nspe nfl team -tnf -career', pscShelved: true },
   { label: 'nfl team slot · 1PM', command: 'nspe nfl team -1pm -career', pscShelved: true },
   { label: 'nfl team slot · 4PM', command: 'nspe nfl team -4pm -career', pscShelved: true },
-  { label: 'nfl team slot · primetime', command: 'nspe nfl team KC -prime -career' },
+  { label: 'nfl team slot · primetime', command: 'nspe nfl team KC -prime -career', pscShelved: true },
   { label: 'nfl team slot · range', command: 'nspe nfl team dal -tnf 2020-2025', pscShelved: true },
   // Player legs — every candidate parlay leg for one NFL player this week.
   // playerHint makes it surface for whichever NFL player is searched.
-  { label: 'nfl player legs', command: `nspe nfl jonathan taylor -week${PARLAY_WEEK} -legs`, playerHint: 'jonathan taylor' },
+  { label: 'nfl player legs', command: `nspe nfl jonathan taylor -week${PARLAY_WEEK} -legs`, playerHint: 'jonathan taylor', pscShelved: true },
   // h2h — divisional opponent (WSH is a real NFC East rival of DAL)
-  { label: 'nfl h2h (career)', command: 'nspe nfl dak vs wsh -career', playerHint: 'dak' },
+  { label: 'nfl h2h (career)', command: 'nspe nfl dak vs wsh -career', playerHint: 'dak', pscShelved: true },
   // "-week" — career performance in one week number across every season,
   // a different concept from h2h (opponent) despite reusing the same
   // totals/games rendering. Confirmed live against a real backend response.
-  { label: 'nfl career · week 1', command: 'nspe nfl dak -week1 -career', playerHint: 'dak', qbOnly: true },
+  { label: 'nfl career · week 1', command: 'nspe nfl dak -week1 -career', playerHint: 'dak', qbOnly: true, pscShelved: true },
 ]
 
 const MLB_COMMANDS: SampleQuery[] = [
@@ -319,16 +321,18 @@ const MLB_COMMANDS: SampleQuery[] = [
   { label: 'mlb compute · runs', command: 'nspe mlb -runsmin20 -last25' },
   { label: 'mlb compute · rbi', command: 'nspe mlb -rbimin10 -last10' },
   { label: 'mlb compute · tb', command: 'nspe mlb -tbmin100 -season' },
-  // streak
-  { label: 'mlb streak · hits', command: 'nspe mlb -hits1 -streak5' },
+  // streak — shelved 2026-10-15 (owner ask): {psc} narrowed to trend/compute/
+  // -ov only now that NL questions are the primary surface; still fully
+  // listed in {sample-queries}.
+  { label: 'mlb streak · hits', command: 'nspe mlb -hits1 -streak5', pscShelved: true },
   // -hr1 -streak3 (HR in 3 straight games) is rare enough it can genuinely
   // return zero qualifying players on a given day — tb2 is a far more
   // reliably-hit bar, so the sample never looks "broken" just from bad luck.
-  { label: 'mlb streak · tb', command: 'nspe mlb -tb2 -streak3' },
+  { label: 'mlb streak · tb', command: 'nspe mlb -tb2 -streak3', pscShelved: true },
   { label: 'mlb streak · hits', command: 'nspe mlb -hits1 -streak5', pscShelved: true },
-  { label: 'mlb streak · runs', command: 'nspe mlb -runs1 -streak5' },
-  { label: 'mlb streak · rbi', command: 'nspe mlb -rbi1 -streak5' },
-  { label: 'mlb streak · hr', command: 'nspe mlb -hr1 -streak2' },
+  { label: 'mlb streak · runs', command: 'nspe mlb -runs1 -streak5', pscShelved: true },
+  { label: 'mlb streak · rbi', command: 'nspe mlb -rbi1 -streak5', pscShelved: true },
+  { label: 'mlb streak · hr', command: 'nspe mlb -hr1 -streak2', pscShelved: true },
 
 
 
@@ -339,13 +343,14 @@ const MLB_COMMANDS: SampleQuery[] = [
   // rather than promoted to the front like other `long` commands.
   // Compact -long{N} form — byte-identical to the old "long -hr{N}" (MLB's
   // "long" is always HR distance, no category token to keep).
-  { label: 'mlb explosive · hr distance', command: 'nspe mlb -long350 -last1/5', placement: 'middle' },
-  { label: 'mlb explosive compute · hr distance', command: 'nspe mlb -longmin800 -last10', placement: 'middle' },
-  // first plate appearance — no threshold N, one PA per game
-  { label: 'mlb first pa · hit', command: 'nspe mlb first -hit -last1/1' },
-  { label: 'mlb first pa · xbh', command: 'nspe mlb first -xbh -last1/5' },
-  { label: 'mlb first pa · walk', command: 'nspe mlb first -walk -last1/5' },
-  { label: 'mlb first pa · single', command: 'nspe mlb first -single -last1/5' },
+  { label: 'mlb explosive · hr distance', command: 'nspe mlb -long350 -last1/5', placement: 'middle', pscShelved: true },
+  { label: 'mlb explosive compute · hr distance', command: 'nspe mlb -longmin800 -last10', placement: 'middle', pscShelved: true },
+  // first plate appearance — no threshold N, one PA per game. Shelved
+  // 2026-10-15 alongside streak/explosive above.
+  { label: 'mlb first pa · hit', command: 'nspe mlb first -hit -last1/1', pscShelved: true },
+  { label: 'mlb first pa · xbh', command: 'nspe mlb first -xbh -last1/5', pscShelved: true },
+  { label: 'mlb first pa · walk', command: 'nspe mlb first -walk -last1/5', pscShelved: true },
+  { label: 'mlb first pa · single', command: 'nspe mlb first -single -last1/5', pscShelved: true },
   // team
   { label: 'mlb team trend · runs for', command: 'nspe mlb team -runs5 -last2/5' },
   { label: 'mlb team trend · runs allowed', command: 'nspe mlb team -allowed4 -last2/5' },
@@ -356,17 +361,17 @@ const MLB_COMMANDS: SampleQuery[] = [
   // the player's full history against that team).
   { label: 'mlb h2h', command: 'nspe mlb aaron judge vs bos -career', playerHint: 'aaron judge', pscShelved: true },
   { label: 'mlb h2h', command: 'nspe mlb shohei ohtani vs sf -career', playerHint: 'shohei ohtani', pscShelved: true },
-  { label: 'mlb h2h', command: 'nspe mlb juan soto vs atl -career', playerHint: 'juan soto' },
+  { label: 'mlb h2h', command: 'nspe mlb juan soto vs atl -career', playerHint: 'juan soto', pscShelved: true },
   // -staff — season vs the team + career vs their CURRENT pitching staff
   // (engines/mlb/bvp.py). Backend only has per-pitcher data for a tracked
   // set of batters, so each entry is pinned to its player via onlyFor.
-  { label: 'mlb h2h · staff', command: 'nspe mlb rafael devers vs bos -staff', playerHint: 'rafael devers', onlyFor: 'rafael devers' },
+  { label: 'mlb h2h · staff', command: 'nspe mlb rafael devers vs bos -staff', playerHint: 'rafael devers', onlyFor: 'rafael devers', pscShelved: true },
   { label: 'mlb h2h · staff', command: 'nspe mlb aaron judge vs bos -staff', playerHint: 'aaron judge', onlyFor: 'aaron judge', pscShelved: true },
-  { label: 'mlb h2h · staff', command: 'nspe mlb shohei ohtani vs sf -staff', playerHint: 'shohei ohtani', onlyFor: 'shohei ohtani' },
+  { label: 'mlb h2h · staff', command: 'nspe mlb shohei ohtani vs sf -staff', playerHint: 'shohei ohtani', onlyFor: 'shohei ohtani', pscShelved: true },
   { label: 'mlb h2h · staff', command: 'nspe mlb yordan alvarez vs bos -staff', playerHint: 'yordan alvarez', onlyFor: 'yordan alvarez', pscShelved: true },
-  { label: 'mlb h2h · staff', command: 'nspe mlb juan soto vs atl -staff', playerHint: 'juan soto', onlyFor: 'juan soto' },
+  { label: 'mlb h2h · staff', command: 'nspe mlb juan soto vs atl -staff', playerHint: 'juan soto', onlyFor: 'juan soto', pscShelved: true },
   { label: 'mlb h2h · staff', command: 'nspe mlb pete alonso vs bos -staff', playerHint: 'pete alonso', onlyFor: 'pete alonso', pscShelved: true },
-  { label: 'mlb h2h · staff', command: 'nspe mlb pete crow armstrong vs stl -staff', playerHint: 'pete crow armstrong', onlyFor: 'pete crow armstrong' },
+  { label: 'mlb h2h · staff', command: 'nspe mlb pete crow armstrong vs stl -staff', playerHint: 'pete crow armstrong', onlyFor: 'pete crow armstrong', pscShelved: true },
 ]
 
 const NBA_COMMANDS: SampleQuery[] = [
@@ -417,11 +422,11 @@ const NBA_COMMANDS: SampleQuery[] = [
   // builtCommand comment, "-season 2025"), not a new grammar.
   { label: 'nba compute · total (2025)', command: 'nspe nba -totalmin2000 -season 2025' },
   { label: 'nba compute · 3pm', command: 'nspe nba -tpmmin20 -last10' },
-  // streak
-  { label: 'nba streak · pts', command: 'nspe nba -pts20 -streak3' },
-  { label: 'nba streak · ast', command: 'nspe nba -ast8 -streak5' },
-  { label: 'nba streak · reb', command: 'nspe nba -reb10 -streak4' },
-  { label: 'nba streak · blk', command: 'nspe nba -blk2 -streak3' },
+  // streak — shelved 2026-10-15 (owner ask), same {psc} narrowing as NFL/MLB.
+  { label: 'nba streak · pts', command: 'nspe nba -pts20 -streak3', pscShelved: true },
+  { label: 'nba streak · ast', command: 'nspe nba -ast8 -streak5', pscShelved: true },
+  { label: 'nba streak · reb', command: 'nspe nba -reb10 -streak4', pscShelved: true },
+  { label: 'nba streak · blk', command: 'nspe nba -blk2 -streak3', pscShelved: true },
 ]
 
 const NHL_COMMANDS: SampleQuery[] = [
@@ -461,10 +466,10 @@ const NHL_COMMANDS: SampleQuery[] = [
   { label: 'nhl compute · sog', command: 'nspe nhl -sogmin50 -last10' },
   // Shelved alongside the trend -blk entry above — same missing-data root cause.
   // { label: 'nhl compute · blocks', command: 'nspe nhl -blkmin20 -last10' },
-  // streak
-  { label: 'nhl streak · points', command: 'nspe nhl -pts1 -streak5' },
-  { label: 'nhl streak · goals', command: 'nspe nhl -g1 -streak3' },
-  { label: 'nhl streak · sog', command: 'nspe nhl -sog3 -streak4' },
+  // streak — shelved 2026-10-15 (owner ask), same {psc} narrowing as NFL/MLB/NBA.
+  { label: 'nhl streak · points', command: 'nspe nhl -pts1 -streak5', pscShelved: true },
+  { label: 'nhl streak · goals', command: 'nspe nhl -g1 -streak3', pscShelved: true },
+  { label: 'nhl streak · sog', command: 'nspe nhl -sog3 -streak4', pscShelved: true },
 ]
 
 // PvP (player vs player) — sport-agnostic, its own dedicated engine

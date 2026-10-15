@@ -258,7 +258,11 @@ export function sanitizeQueryForApi(query: string): string {
 // league head.
 const LEAGUE_HEADS = new Set(['nfl', 'nba', 'nhl', 'mlb', 'cfb', 'ncaaf', 'hybrid', 'plus', 'bets', 'read', 'scout'])
 const DENOM_BOARDS = new Set(['333', '321', '4444', '54321'])
-const QUESTION_LEAD_WORDS = new Set([
+// Exported for App.tsx's looksLikeNlInProgress — same word list, same
+// reasoning (a question-shaped sentence), reused rather than duplicated so
+// the two "is this NL" checks (route it vs. suppress the {psc}/player
+// dropdowns while typing it) never drift apart.
+export const QUESTION_LEAD_WORDS = new Set([
   'who', 'what', 'when', 'where', 'why', 'how', 'does', 'do', 'did', 'is', 'are', 'was', 'were',
   'can', 'will', 'should', 'has', 'have', 'had',
 ])
