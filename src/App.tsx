@@ -1459,10 +1459,18 @@ function AgentChatView({ result, onRunCommand }: { result: AgentChatResult; onRu
         {/* nspe isn't a live-data site — a cached answer can be hours old by
             design (good until the next twice-daily scrape), and the owner's
             own call was to surface that instead of hiding it, not pretend
-            every answer is this-second fresh. */}
+            every answer is this-second fresh.
+
+            Backend's cache check runs before the quota gate (a free hit costs
+            nothing, so it's not worth charging for) — which means a user at
+            0 remaining can land here with a full real answer AND the "0
+            questions left today" line below still reading 0, looking
+            contradictory with no context. The "free" clause below is that
+            context, not decoration. */}
         {agent.cached && (
           <div className="mt-2 pt-2 font-mono text-[10px]" style={{ borderTop: '1px solid oklch(0.24 0 0)', color: 'oklch(0.55 0.07 195)' }}>
             {agent.data_as_of ? `cached · data as of ${formatDataAsOf(agent.data_as_of)}` : 'cached answer'}
+            {quota?.kind === 'free' ? " · free, doesn't count against your daily limit" : ''}
           </div>
         )}
       </div>
