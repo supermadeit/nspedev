@@ -65,6 +65,7 @@ import {
   extractMlbTeamOverviewPayload,
   extractMlbTeamRunsPayload,
   extractNflTeamYardsPayload,
+  extractNbaVsEveryTeamPayload,
   extractAgentChatPayload,
   extractAgentQuota,
   extractExplosiveOverviewPayload,
@@ -108,6 +109,7 @@ import {
   type MlbTeamRunsPayload,
   type MlbTeamRunsTrendResult,
   type NflTeamYardsPayload,
+  type NbaVsEveryTeamPayload,
   type AgentBlock,
   type AgentQuota,
   type ExplosiveOverviewPayload,
@@ -4390,6 +4392,45 @@ function NflTeamYardsView({ payload }: { payload: NflTeamYardsPayload }) {
   )
 }
 
+// nba_player_vs_every_team_leaderboard — one player, one row per opponent
+// faced, ranked by avg points against them (confirmed live: results arrive
+// pre-sorted desc by avg_pts). Same visual shape as NflTeamYardsView just
+// above (rank/team/numbers), new component rather than reusing that one
+// since the row fields and the "what rank means" are different enough
+// (total_pts/avg_pts/high here, no focus-team highlight concept).
+function NbaVsEveryTeamView({ payload }: { payload: NbaVsEveryTeamPayload }) {
+  const results = payload.results ?? []
+  return (
+    <div className="space-y-3">
+      <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+        <span>{normalizeDisplayPlayer(payload.player)}</span>
+        <span style={{ color: 'oklch(0.92 0 0)' }}>{' vs every team'}</span>
+        {payload.window && <span style={{ color: 'oklch(0.92 0 0)' }}>{` · ${payload.window}`}</span>}
+      </div>
+      <div className="space-y-0">
+        {results.map((r, i) => (
+          <div
+            key={r.team}
+            className="flex items-center justify-between py-1.5 border-b"
+            style={{ borderColor: PITCH_BORDER }}
+          >
+            <span className="font-mono text-[13px]" style={{ color: 'oklch(0.92 0 0)' }}>
+              <span style={{ color: PITCH_LABEL }}>{`#${i + 1} `}</span>
+              {`vs ${r.team}`}
+            </span>
+            <span className="font-mono text-[12px] flex items-center gap-3">
+              <span style={{ color: PITCH_GREEN }}>{`${r.avg_pts}/g`}</span>
+              <span style={{ color: 'oklch(0.92 0 0)' }}>{`${r.total_pts} tot`}</span>
+              <span style={{ color: PITCH_LABEL }}>{`${r.high} high`}</span>
+              <span style={{ color: PITCH_LABEL }}>{`${r.games}gp`}</span>
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // nfl-quarter-h2h / nfl-quarter-week — single player, quarter/half-scoped,
 // vs one opponent or one week#. totals keys are scope-specific (q1_pass_td,
 // 1h_pass_yds, ...) so this walks them generically rather than a fixed
@@ -5282,6 +5323,7 @@ function App() {
   const [firstPaResult, setFirstPaResult] = useState<MlbFirstPaTrendPayload | null>(null)
   const [teamRunsResult, setTeamRunsResult] = useState<MlbTeamRunsPayload | null>(null)
   const [nflTeamYardsResult, setNflTeamYardsResult] = useState<NflTeamYardsPayload | null>(null)
+  const [nbaVsEveryTeamResult, setNbaVsEveryTeamResult] = useState<NbaVsEveryTeamPayload | null>(null)
   const [agentChatResult, setAgentChatResult] = useState<AgentChatResult | null>(null)
   const [lastQuery, setLastQuery] = useState('')
   // Conversational follow-ups ("what about receiving?") — client-side only,
@@ -5752,6 +5794,7 @@ function App() {
     setFirstPaResult(null)
     setTeamRunsResult(null)
     setNflTeamYardsResult(null)
+    setNbaVsEveryTeamResult(null)
     setAgentChatResult(null)
   }
 
@@ -5931,6 +5974,13 @@ function App() {
     const nflTeamYardsPayload = extractNflTeamYardsPayload(payload)
     if (nflTeamYardsPayload) {
       setNflTeamYardsResult(nflTeamYardsPayload)
+      setQueryResults([])
+      return
+    }
+
+    const nbaVsEveryTeamPayload = extractNbaVsEveryTeamPayload(payload)
+    if (nbaVsEveryTeamPayload) {
+      setNbaVsEveryTeamResult(nbaVsEveryTeamPayload)
       setQueryResults([])
       return
     }
@@ -7203,6 +7253,8 @@ function App() {
               <MlbTeamRunsView payload={teamRunsResult} />
             ) : nflTeamYardsResult ? (
               <NflTeamYardsView payload={nflTeamYardsResult} />
+            ) : nbaVsEveryTeamResult ? (
+              <NbaVsEveryTeamView payload={nbaVsEveryTeamResult} />
             ) : queryResults === null ? (
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.92 0 0)' }}>
                 Build a query to begin

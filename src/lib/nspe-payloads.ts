@@ -2404,6 +2404,57 @@ export function extractNflTeamYardsPayload(payload: unknown): NflTeamYardsPayloa
   return null
 }
 
+// nba_player_vs_every_team_leaderboard — "{player} -leaderboard vs -career
+// -top5" (NBA-specific; confirmed live 2026-10-15 the other three sports
+// don't share this shape — NFL/MLB ignore "vs" and return their own default
+// leaderboard, NHL errors asking for a stat token instead). One player, one
+// row per opponent team they've faced, ranked by avg_pts — the exact render
+// gap flagged live: the generic fallback expects player-keyed rows
+// (row.player/row.team as "this player, their own team"), but here `team` on
+// each row means the OPPONENT, and there's no per-row player field at all
+// (player is a single top-level field), so normalizeQueryResults found
+// nothing it recognized and showed "No results found" despite a real,
+// populated results array.
+export interface NbaVsEveryTeamRow {
+  team: string
+  games: number
+  avg_pts: number
+  total_pts: number
+  high: number
+}
+
+export interface NbaVsEveryTeamPayload {
+  engine: 'nba_player_vs_every_team_leaderboard'
+  player: string
+  player_id?: string
+  window: string
+  min_games?: number
+  count?: number
+  results: NbaVsEveryTeamRow[]
+}
+
+export function isNbaVsEveryTeamPayload(payload: unknown): payload is NbaVsEveryTeamPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return rec.engine === 'nba_player_vs_every_team_leaderboard' && Array.isArray(rec.results)
+}
+
+export function extractNbaVsEveryTeamPayload(payload: unknown): NbaVsEveryTeamPayload | null {
+  if (isNbaVsEveryTeamPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isNbaVsEveryTeamPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isNbaVsEveryTeamPayload(v)) return v
+    }
+  }
+  return null
+}
+
 // ---------------- Generic query-result path (stat context, matches, streaks) ----------------
 
 export interface StatContext {
