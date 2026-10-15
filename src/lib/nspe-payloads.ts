@@ -224,6 +224,16 @@ export interface AgentBlock {
   unavailable: boolean
   reason: string | null
   fallback: string | null
+  // Tier A answer cache (2026-10-15 design, backend building against
+  // core_pipeline_marker.json's generated_at as the cache epoch — nspe isn't
+  // a live-data site, so a cached answer can be hours old by design, not by
+  // accident). `cached` true means this skipped the model entirely;
+  // `data_as_of` is the scrape marker's timestamp the cached answer reflects,
+  // not when this particular request happened to hit the cache. Surfaced in
+  // the UI rather than hidden, per the owner's own framing of the tradeoff —
+  // see AgentChatView's "as of" note.
+  cached: boolean
+  data_as_of: string | null
 }
 
 export interface AgentChatPayload {
@@ -247,6 +257,8 @@ export function extractAgentChatPayload(payload: unknown): AgentChatPayload | nu
       unavailable: Boolean(a.unavailable),
       reason: typeof a.reason === 'string' ? a.reason : null,
       fallback: typeof a.fallback === 'string' ? a.fallback : null,
+      cached: Boolean(a.cached),
+      data_as_of: typeof a.data_as_of === 'string' ? a.data_as_of : null,
     },
   }
 }

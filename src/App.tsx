@@ -404,6 +404,19 @@ function formatLeaderboardDate(iso: string): string {
   return `${d.getMonth() + 1}/${d.getDate()}`
 }
 
+// A cached chat answer's data vintage (core_pipeline_marker.json's
+// generated_at, read straight through — see AgentBlock.data_as_of) — date AND
+// time, not just the date formatLeaderboardDate gives, since the whole point
+// is telling the ~7am scrape apart from the ~6pm one on the same day.
+function formatDataAsOf(iso: string): string {
+  if (!iso) return ''
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return ''
+  const date = `${d.getMonth() + 1}/${d.getDate()}`
+  const time = d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })
+  return `${date} ${time}`
+}
+
 function leaderboardSportLabel(kind: string): string {
   // NFL's real live `kind` is "nfl_leaderboard_heat" (an extra "_heat" suffix
   // other sports' plain "<sport>_leaderboard" kind doesn't have) — the old
@@ -1443,6 +1456,15 @@ function AgentChatView({ result, onRunCommand }: { result: AgentChatResult; onRu
 
       <div className="rounded-lg px-4 py-3" style={{ backgroundColor: 'oklch(0.12 0 0)', border: '1px solid oklch(0.30 0 0)' }}>
         <AgentAnswerText text={answerText} />
+        {/* nspe isn't a live-data site — a cached answer can be hours old by
+            design (good until the next twice-daily scrape), and the owner's
+            own call was to surface that instead of hiding it, not pretend
+            every answer is this-second fresh. */}
+        {agent.cached && (
+          <div className="mt-2 pt-2 font-mono text-[10px]" style={{ borderTop: '1px solid oklch(0.24 0 0)', color: 'oklch(0.55 0.07 195)' }}>
+            {agent.data_as_of ? `cached · data as of ${formatDataAsOf(agent.data_as_of)}` : 'cached answer'}
+          </div>
+        )}
       </div>
 
       {agent.commands.length > 0 && (
