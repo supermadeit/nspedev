@@ -42,12 +42,19 @@ const ANGLES: Angle[] = [
   {
     title: 'Matchup & situational splits',
     body:
-      'Primetime splits, which teams allow the most of a given stat, a batter against the opposing team’s current pitching staff, a skater against a specific goalie (coming soon) — the situational breakdowns a box score never shows.',
+      'Primetime splits, which teams allow the most of a given stat, a batter against the opposing team’s current pitching staff, a skater against a specific goalie — the situational breakdowns a box score never shows.',
+    // No example chip yet on purpose — the exact live command for skater-vs-
+    // goalie is still being reconciled with backend (a routing conflict
+    // against the existing nhl_pvp engine, found live 2026-10-16) before
+    // it's safe to show as something a visitor can actually click and run.
   },
   {
     title: 'Quarter & half-scoped search',
     body: 'Not just season totals — ask how a player performs in the first quarter, the first half, any period the game tracks.',
-    example: { label: 'nba · 1h overview', command: 'nspe nba brunson 1h -pts20 -ov -last20' },
+    // -career, not the "2025" the owner first suggested — confirmed live
+    // that specific season has no Q1 splits tracked for Luka yet (window_games:
+    // 0), while -career returns real, impressive numbers (46 of 64 games).
+    example: { label: 'nba · q1 overview', command: 'nspe nba luka doncic q1 -pts10 -ov -career' },
   },
   {
     title: 'Ask "how often," any stat, any window',
@@ -99,8 +106,15 @@ function AngleCard({ angle }: { angle: Angle }) {
 export default function WhyNspePage() {
   return (
     <div className="relative w-screen h-dvh overflow-y-auto" style={{ backgroundColor: 'oklch(0.06 0 0)' }}>
-      <Starfield />
-      <div className="relative z-10 min-h-full flex justify-center px-4 py-10 sm:py-16">
+      {/* fixed, not absolute -- this div scrolls (overflow-y-auto above, the
+          panel can run taller than the viewport), and an absolutely
+          positioned starfield would scroll right along with that content.
+          fixed pins it to the viewport itself so it reads as a static
+          backdrop no matter how far the text scrolls. */}
+      <div className="fixed inset-0 pointer-events-none">
+        <Starfield />
+      </div>
+      <div className="relative z-10 min-h-full flex justify-center px-4 pt-6 pb-10 sm:pt-10 sm:pb-16">
         <div
           className="w-full max-w-3xl rounded-xl p-6 sm:p-10 h-fit"
           style={{ backgroundColor: C.surface, border: `1px solid ${C.border}`, fontFamily: 'monospace' }}
@@ -134,7 +148,7 @@ export default function WhyNspePage() {
               SEARCH STATS LIKE THE PROS
             </h1>
             <p className="font-mono text-[14px]" style={{ color: C.textDim }}>
-              The kind of matchup detail teams and insiders actually use — now yours to search.
+              search the kind of matchup detail teams and insiders actually use
             </p>
           </div>
 
