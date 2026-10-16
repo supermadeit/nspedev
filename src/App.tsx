@@ -1572,6 +1572,24 @@ function AgentChatView({
   const lastTurn = turns[turns.length - 1]
   const blockedOnSignIn = Boolean(lastTurn?.agent.unavailable && lastTurn.agent.reason === 'sign_in')
 
+  // Owner report, 2026-10-16: a follow-up's answer renders below the fold,
+  // requiring a manual scroll to see it. scrollIntoView on this anchor (sits
+  // right after the last turn, where the input/status line lives) walks up
+  // every scrollable ancestor that needs it — works regardless of which
+  // parent is the actual scroll container, no prop-drilling resultsScrollRef
+  // down into this component needed. Guarded to only fire when turns.length
+  // actually grows (a real follow-up landed), not on first mount — the first
+  // turn is already in view when the card first appears, nothing to scroll
+  // to yet.
+  const followupAnchorRef = useRef<HTMLDivElement>(null)
+  const prevTurnCountRef = useRef(turns.length)
+  useEffect(() => {
+    if (turns.length > prevTurnCountRef.current) {
+      followupAnchorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
+    }
+    prevTurnCountRef.current = turns.length
+  }, [turns.length])
+
   const submit = () => {
     const trimmed = followupText.trim()
     if (!trimmed || isFollowupLoading) return
@@ -1586,31 +1604,44 @@ function AgentChatView({
       ))}
 
       {!blockedOnSignIn && (
-        <div
-          className="rounded-lg px-3 py-2 flex items-center gap-2"
-          style={{ backgroundColor: 'oklch(0.12 0 0)', border: '1px solid oklch(0.26 0 0)' }}
-        >
-          <input
-            type="text"
-            value={followupText}
-            onChange={(e) => setFollowupText(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') submit()
-            }}
-            disabled={isFollowupLoading}
-            placeholder="ask a follow-up…"
-            className="flex-1 bg-transparent font-mono text-[13px] outline-none disabled:opacity-50"
-            style={{ color: 'oklch(0.92 0 0)' }}
-          />
-          <button
-            type="button"
-            onClick={submit}
-            disabled={isFollowupLoading || !followupText.trim()}
-            className="font-mono text-[11px] uppercase tracking-widest px-2.5 py-1.5 rounded transition-opacity hover:opacity-80 disabled:opacity-40"
-            style={{ color: 'oklch(0.85 0.15 195)', border: '1px solid oklch(0.85 0.15 195)' }}
+        <div className="space-y-1.5" ref={followupAnchorRef}>
+          <div
+            className="rounded-lg px-3 py-2 flex items-center gap-2"
+            style={{ backgroundColor: 'oklch(0.12 0 0)', border: '1px solid oklch(0.26 0 0)' }}
           >
-            {isFollowupLoading ? '…' : 'ask'}
-          </button>
+            <input
+              type="text"
+              value={followupText}
+              onChange={(e) => setFollowupText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') submit()
+              }}
+              disabled={isFollowupLoading}
+              placeholder="ask a follow-up…"
+              className="flex-1 bg-transparent font-mono text-[13px] outline-none disabled:opacity-50"
+              style={{ color: 'oklch(0.92 0 0)' }}
+            />
+            {/* Button's own label stays fixed ("ask") whether loading or not —
+                swapping it to "…" (the original approach) changed the
+                button's content/width mid-interaction, which is what read as
+                a glitch right as it was clicked. The "{answering your
+                query}" line below carries the loading state instead, same
+                {brace} convention as every other status line in the app. */}
+            <button
+              type="button"
+              onClick={submit}
+              disabled={isFollowupLoading || !followupText.trim()}
+              className="font-mono text-[11px] uppercase tracking-widest px-2.5 py-1.5 rounded transition-opacity hover:opacity-80 disabled:opacity-40"
+              style={{ color: 'oklch(0.85 0.15 195)', border: '1px solid oklch(0.85 0.15 195)' }}
+            >
+              ask
+            </button>
+          </div>
+          {isFollowupLoading && (
+            <div className="font-mono text-[11px] px-1" style={{ color: 'oklch(0.70 0.10 195)' }}>
+              {'{answering your query}'}
+            </div>
+          )}
         </div>
       )}
     </div>
