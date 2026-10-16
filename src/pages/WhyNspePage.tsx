@@ -73,10 +73,10 @@ function AngleCard({ angle }: { angle: Angle }) {
   const { copied, copy } = useCopyToClipboard()
   return (
     <div className="rounded-lg p-4 flex flex-col" style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}` }}>
-      <div className="font-mono font-bold text-[14px] mb-1.5" style={{ color: C.accent }}>
+      <div className="font-mono font-bold text-[15px] mb-1.5" style={{ color: C.accent }}>
         {angle.title}
       </div>
-      <p className="font-mono text-[12.5px] leading-relaxed flex-1" style={{ color: C.textDim }}>
+      <p className="font-mono font-bold text-[13.5px] leading-relaxed flex-1" style={{ color: C.textDim }}>
         {angle.body}
       </p>
       {angle.example && (
