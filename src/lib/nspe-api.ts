@@ -287,9 +287,20 @@ export function looksLikeNspeSyntax(query: string): boolean {
 // plain-English question goes to the real assistant and takes 3-25s per
 // backend, with 60s as their STATED FLOOR, not a ceiling, hence the margin
 // above it; anything else is ordinary syntax, warm and well under a second.
+//
+// NL ceiling bumped 75s -> 100s on 2026-10-16 after a live client-side
+// AbortError on an unscoped superlative question ("what QB has thrown for
+// the most yards since 2020"). Backend ran the exact query 5x authenticated
+// and found nothing hanging -- 9.9s-18.4s worst case, well under even 75s,
+// with the ~2x spread coming from the model guessing a different arbitrary
+// threshold each run (the question gives it no floor), not re-querying
+// after a failure. Their read: likely a one-off latency blip somewhere
+// outside what agent.ask() alone can test (cold worker, auth lookup), not a
+// real bug worth chasing -- but real ~2x variance from something that
+// mundane is cheap defensive justification for more margin regardless.
 export function queryTimeoutMs(query: string): number {
   if (/(^|\s)-(parlay|legs)\b/.test(query)) return 120000
-  if (!looksLikeNspeSyntax(query)) return 75000
+  if (!looksLikeNspeSyntax(query)) return 100000
   return 12000
 }
 
