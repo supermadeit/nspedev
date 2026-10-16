@@ -208,10 +208,11 @@ export function TeamMetricsCard({
 // (owner ask, 2026-10-16). Same threshold data as the compact version
 // inside TeamMetricsCard (hidden there via `hideAllows` when this is
 // showing), just given real room: one row per threshold instead of a
-// wrapped chip grid, and — once backend ships it — the actual games/
-// players/opponent teams that met each one. Until then, each entry falls
-// back to a one-line note saying that detail isn't available yet rather
-// than silently looking identical to a threshold with no instances at all.
+// wrapped chip grid, plus the actual opposing players/games that met each
+// one (backend's `instances` field, confirmed live 2026-10-16). The
+// count-but-no-instances fallback below is now just a defensive guard for
+// a genuinely unexpected shape, not an expected "pending backend" state —
+// the feature's live on all 4 sports.
 export function OpponentThresholdsPanel({
   payload,
   teamLabel,
@@ -263,7 +264,7 @@ export function OpponentThresholdsPanel({
                 </div>
               ) : a.count > 0 ? (
                 <div className="mt-1.5 font-mono text-[10px] italic" style={{ color: C.textBright }}>
-                  per-game detail not available yet — {a.count} of {a.games} games met this
+                  {a.count} of {a.games} games met this — detail unavailable for this entry
                 </div>
               ) : null}
             </div>
