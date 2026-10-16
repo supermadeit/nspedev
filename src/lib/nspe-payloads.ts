@@ -265,33 +265,63 @@ export interface AgentChatPayload {
   agent: AgentBlock
 }
 
+// Shared by both /run's nested `agent` sub-object and /agent's own flat
+// top-level fields (confirmed identical field set/semantics by backend,
+// 2026-10-16 -- /agent is just flatter in shape, not leaner on data) so the
+// two extractors below don't duplicate this mapping.
+function buildAgentBlock(a: Record<string, unknown>): AgentBlock {
+  return {
+    commands: Array.isArray(a.commands) ? a.commands.filter((c): c is string => typeof c === 'string') : [],
+    model: typeof a.model === 'string' ? a.model : null,
+    cost_usd: typeof a.cost_usd === 'number' ? a.cost_usd : null,
+    elapsed_s: typeof a.elapsed_s === 'number' ? a.elapsed_s : null,
+    deterministic: Boolean(a.deterministic),
+    unavailable: Boolean(a.unavailable),
+    reason: typeof a.reason === 'string' ? a.reason : null,
+    fallback: typeof a.fallback === 'string' ? a.fallback : null,
+    cached: Boolean(a.cached),
+    data_as_of: typeof a.data_as_of === 'string' ? a.data_as_of : null,
+    needs_clarification: Boolean(a.needs_clarification),
+    clarificationOptions: Array.isArray(a.clarification_options)
+      ? a.clarification_options.filter(
+          (o): o is { label: string; command: string } =>
+            !!o && typeof o === 'object' && typeof (o as Record<string, unknown>).label === 'string' &&
+            typeof (o as Record<string, unknown>).command === 'string',
+        )
+      : [],
+  }
+}
+
 export function extractAgentChatPayload(payload: unknown): AgentChatPayload | null {
   if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return null
   const rec = payload as Record<string, unknown>
   if (!rec.agent || typeof rec.agent !== 'object' || Array.isArray(rec.agent)) return null
-  const a = rec.agent as Record<string, unknown>
   return {
     output: typeof rec.output === 'string' ? rec.output : '',
-    agent: {
-      commands: Array.isArray(a.commands) ? a.commands.filter((c): c is string => typeof c === 'string') : [],
-      model: typeof a.model === 'string' ? a.model : null,
-      cost_usd: typeof a.cost_usd === 'number' ? a.cost_usd : null,
-      elapsed_s: typeof a.elapsed_s === 'number' ? a.elapsed_s : null,
-      deterministic: Boolean(a.deterministic),
-      unavailable: Boolean(a.unavailable),
-      reason: typeof a.reason === 'string' ? a.reason : null,
-      fallback: typeof a.fallback === 'string' ? a.fallback : null,
-      cached: Boolean(a.cached),
-      data_as_of: typeof a.data_as_of === 'string' ? a.data_as_of : null,
-      needs_clarification: Boolean(a.needs_clarification),
-      clarificationOptions: Array.isArray(a.clarification_options)
-        ? a.clarification_options.filter(
-            (o): o is { label: string; command: string } =>
-              !!o && typeof o === 'object' && typeof (o as Record<string, unknown>).label === 'string' &&
-              typeof (o as Record<string, unknown>).command === 'string',
-          )
-        : [],
-    },
+    agent: buildAgentBlock(rec.agent as Record<string, unknown>),
+  }
+}
+
+// POST /agent's own response shape -- real multi-turn conversation endpoint
+// (confirmed live 2026-10-15/16, nspe-v2-da), used for every plain-English
+// question going forward instead of /run (which has no history field at
+// all). Flat, not nested: `answer` instead of /run's `output`, every
+// AgentBlock field sitting at the top level instead of under `agent`. Same
+// data, same field names/semantics otherwise (confirmed field-by-field by
+// backend) -- buildAgentBlock above handles both shapes from one mapping.
+// No single discriminator field to gate on the way `agent !== null` does for
+// extractAgentChatPayload (this is the only shape /agent ever returns), so
+// this only checks for a bare minimum ("looks like an object, has an answer
+// or is explicitly unavailable") rather than trying to rule out every other
+// payload shape in this file -- callers only reach for this against a known
+// /agent response, never a generic /run one.
+export function extractAgentTurnPayload(payload: unknown): AgentChatPayload | null {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return null
+  const rec = payload as Record<string, unknown>
+  if (typeof rec.answer !== 'string' && !rec.unavailable) return null
+  return {
+    output: typeof rec.answer === 'string' ? rec.answer : '',
+    agent: buildAgentBlock(rec),
   }
 }
 

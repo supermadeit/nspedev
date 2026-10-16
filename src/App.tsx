@@ -32,7 +32,9 @@ import {
 import { authHeader } from '@/lib/auth-token'
 import {
   type ApiPayload,
+  AGENT_ENDPOINTS,
   asNumber,
+  buildAgentHistory,
   fetchFirstSuccessful,
   formatQueryError,
   getPayloadError,
@@ -68,6 +70,7 @@ import {
   extractNbaVsEveryTeamPayload,
   extractNhlVsGoaliePairingPayload,
   extractAgentChatPayload,
+  extractAgentTurnPayload,
   extractAgentQuota,
   extractExplosiveOverviewPayload,
   extractNflParlayPayload,
@@ -1294,6 +1297,25 @@ interface AgentChatResult {
   quota: AgentQuota | null
 }
 
+// A follow-up's own network/gate error renders as a synthesized turn (see
+// askFollowup) rather than a separate error UI — this is that turn's base
+// AgentBlock, overridden with `unavailable: true` (+ `reason` for the
+// sign-in case) so it reuses AgentChatView's existing unavailable handling.
+const EMPTY_AGENT_BLOCK: AgentBlock = {
+  commands: [],
+  model: null,
+  cost_usd: null,
+  elapsed_s: null,
+  deterministic: false,
+  unavailable: false,
+  reason: null,
+  fallback: null,
+  cached: false,
+  data_as_of: null,
+  needs_clarification: false,
+  clarificationOptions: [],
+}
+
 // The answer always ends with a literal "Commands:" block (one `nspe ...`
 // per line) per spec — that block is also in `agent.commands` pre-parsed,
 // which is what the chip row below actually renders, so this just trims the
@@ -1448,8 +1470,8 @@ function AgentNoticeCard({ message }: { message: string }) {
   )
 }
 
-function AgentChatView({ result, onRunCommand }: { result: AgentChatResult; onRunCommand: (cmd: string) => void }) {
-  const { question, output, agent, quota } = result
+function AgentChatTurnView({ turn, onRunCommand }: { turn: AgentChatResult; onRunCommand: (cmd: string) => void }) {
+  const { question, output, agent, quota } = turn
 
   if (agent.unavailable && agent.reason === 'sign_in') return <AgentSignInCard message={output} />
   if (agent.unavailable) return <AgentNoticeCard message={output} />
@@ -1521,6 +1543,74 @@ function AgentChatView({ result, onRunCommand }: { result: AgentChatResult; onRu
       {quota?.kind === 'free' && typeof quota.remaining === 'number' && (
         <div className="font-mono text-[11px]" style={{ color: 'oklch(0.92 0 0)' }}>
           {quota.remaining} question{quota.remaining === 1 ? '' : 's'} left today
+        </div>
+      )}
+    </div>
+  )
+}
+
+// Real multi-turn conversation (owner ask, 2026-10-16 — replaces the old
+// single-shot-only /run chat card). Stacks one AgentChatTurnView per turn,
+// oldest first — same order the model itself sees them in via /agent's
+// history field (see buildAgentHistory, nspe-api.ts) — plus a follow-up
+// input pinned at the bottom so the whole exchange reads top to bottom in
+// one card. Input's hidden once the latest turn hits the sign-in wall — a
+// follow-up would just hit the same wall again, nothing useful for it to do
+// until that's resolved some other way (the sign-in card itself, not this).
+function AgentChatView({
+  turns,
+  onRunCommand,
+  onAskFollowup,
+  isFollowupLoading,
+}: {
+  turns: AgentChatResult[]
+  onRunCommand: (cmd: string) => void
+  onAskFollowup: (question: string) => void
+  isFollowupLoading: boolean
+}) {
+  const [followupText, setFollowupText] = useState('')
+  const lastTurn = turns[turns.length - 1]
+  const blockedOnSignIn = Boolean(lastTurn?.agent.unavailable && lastTurn.agent.reason === 'sign_in')
+
+  const submit = () => {
+    const trimmed = followupText.trim()
+    if (!trimmed || isFollowupLoading) return
+    onAskFollowup(trimmed)
+    setFollowupText('')
+  }
+
+  return (
+    <div className="space-y-6">
+      {turns.map((turn, i) => (
+        <AgentChatTurnView key={i} turn={turn} onRunCommand={onRunCommand} />
+      ))}
+
+      {!blockedOnSignIn && (
+        <div
+          className="rounded-lg px-3 py-2 flex items-center gap-2"
+          style={{ backgroundColor: 'oklch(0.12 0 0)', border: '1px solid oklch(0.26 0 0)' }}
+        >
+          <input
+            type="text"
+            value={followupText}
+            onChange={(e) => setFollowupText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') submit()
+            }}
+            disabled={isFollowupLoading}
+            placeholder="ask a follow-up…"
+            className="flex-1 bg-transparent font-mono text-[13px] outline-none disabled:opacity-50"
+            style={{ color: 'oklch(0.92 0 0)' }}
+          />
+          <button
+            type="button"
+            onClick={submit}
+            disabled={isFollowupLoading || !followupText.trim()}
+            className="font-mono text-[11px] uppercase tracking-widest px-2.5 py-1.5 rounded transition-opacity hover:opacity-80 disabled:opacity-40"
+            style={{ color: 'oklch(0.85 0.15 195)', border: '1px solid oklch(0.85 0.15 195)' }}
+          >
+            {isFollowupLoading ? '…' : 'ask'}
+          </button>
         </div>
       )}
     </div>
@@ -5356,7 +5446,13 @@ function App() {
   const [nflTeamYardsResult, setNflTeamYardsResult] = useState<NflTeamYardsPayload | null>(null)
   const [nbaVsEveryTeamResult, setNbaVsEveryTeamResult] = useState<NbaVsEveryTeamPayload | null>(null)
   const [nhlVsGoaliePairingResult, setNhlVsGoaliePairingResult] = useState<NhlVsGoaliePairingPayload | null>(null)
-  const [agentChatResult, setAgentChatResult] = useState<AgentChatResult | null>(null)
+  // A live conversation is a stack of turns, not a single result — the real
+  // follow-up chat (owner ask, 2026-10-16: point this at /agent + history
+  // instead of /run's one-shot-only answers, see runQuery/askFollowup below)
+  // appends to this array; a brand-new top-level question from the main
+  // search bar (or a pocket replay) resets it to a single-element array.
+  const [agentChatTurns, setAgentChatTurns] = useState<AgentChatResult[]>([])
+  const [isFollowupLoading, setIsFollowupLoading] = useState(false)
   const [lastQuery, setLastQuery] = useState('')
   // Conversational follow-ups ("what about receiving?") — client-side only,
   // per the backend's spec (docs/frontend_spec_followup_questions_2026-09-27.md
@@ -5828,7 +5924,7 @@ function App() {
     setNflTeamYardsResult(null)
     setNbaVsEveryTeamResult(null)
     setNhlVsGoaliePairingResult(null)
-    setAgentChatResult(null)
+    setAgentChatTurns([])
   }
 
   // Routes a parsed /run payload to whichever result view it belongs to.
@@ -5840,14 +5936,18 @@ function App() {
     // backend itself uses to route /run; every other extractor below keys
     // off `engine`/shape fields that only exist on syntax responses, where
     // `agent` is always null, so this can't collide with any of them.
+    // Only reachable via a replayed pocket/share-link now that live NL
+    // questions go straight to /agent (see runQuery) rather than through
+    // /run — a pocket is a frozen single-turn snapshot regardless, so a
+    // one-element array is the right shape here, not a live conversation.
     const agentChatPayload = extractAgentChatPayload(payload)
     if (agentChatPayload) {
-      setAgentChatResult({
+      setAgentChatTurns([{
         question: sanitizedQuery,
         output: agentChatPayload.output,
         agent: agentChatPayload.agent,
         quota: extractAgentQuota(payload),
-      })
+      }])
       setQueryResults([])
       return
     }
@@ -6256,7 +6356,62 @@ function App() {
       return
     }
 
+    // A plain-English question goes straight to /agent now, not /run — /run
+    // has no history field at all and isn't getting one (confirmed by
+    // backend, 2026-10-16), so this is also what makes a real follow-up
+    // conversation possible at all (see askFollowup below, which hits the
+    // same endpoint with the growing turn history this starts). Ordinary
+    // nspe syntax (including every "run it yourself"/clarification chip
+    // click, which always reruns raw syntax) is completely unchanged — still
+    // /run, still applyPayload's full engine-dispatch chain.
+    const isNlQuestion = !looksLikeNspeSyntax(effectiveQuery)
+
     try {
+      if (isNlQuestion) {
+        const { response } = await fetchFirstSuccessful(
+          AGENT_ENDPOINTS,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...authHeader(),
+              ...guestTokenHeader(),
+            },
+            body: JSON.stringify({ question: effectiveQuery, history: [] }),
+          },
+          queryTimeoutMs(effectiveQuery),
+        )
+
+        const payload = await parseApiPayload(response)
+        console.log('Agent response (turn 1):', payload)
+
+        const guestQuota = readGuestQuota(payload)
+        if (guestQuota) {
+          setGuestQueriesRemaining(guestQuota.remaining)
+          setGuestToken(guestQuota.token)
+        } else if (isAuthenticatedQuotaKind(payload)) {
+          setGuestQueriesRemaining(null)
+        }
+
+        setLastPayload(payload)
+        setPocketSnapshot(null)
+
+        const turn = extractAgentTurnPayload(payload)
+        if (turn) {
+          setAgentChatTurns([{
+            question: effectiveQuery,
+            output: turn.output,
+            agent: turn.agent,
+            quota: extractAgentQuota(payload),
+          }])
+          setQueryResults([])
+        } else {
+          setQueryResults([])
+          setQueryError('Unrecognized response from the assistant.')
+        }
+        return
+      }
+
       const { response, url } = await fetchFirstSuccessful(
         RUN_ENDPOINTS,
         {
@@ -6276,11 +6431,7 @@ function App() {
           body: JSON.stringify({ query: effectiveQuery }),
         },
         // See queryTimeoutMs (nspe-api.ts) — -parlay/-legs get their own long
-        // ceiling, a plain-English question (2026-10-12) gets real margin
-        // above the assistant's stated 60s floor (the old ~12s abort here is
-        // exactly what produced the "No API endpoint responded successfully
-        // ... AbortError" screen on a real chat answer before this existed),
-        // ordinary syntax is unchanged.
+        // ceiling, ordinary syntax is well under a second.
         queryTimeoutMs(effectiveQuery),
       )
 
@@ -6288,19 +6439,14 @@ function App() {
 
       console.log('Query response:', payload, 'via', url)
 
-      // Remember this turn's topic for the next follow-up. A genuinely new
-      // topic replaces the old one outright (no accumulated history). A
-      // pending disambiguation leaves lastNlContext untouched — nothing
-      // valid resolved yet, so there's nothing to overwrite it with. But a
-      // response that succeeded (no error) and simply isn't NL-shaped — raw
-      // CLI syntax, or an nl block with no player subject — clears it
-      // rather than leaving the old topic sitting there: nobody expects
-      // "what about this season?" two messages later to reattach to
-      // whatever the conversation was about before an unrelated query ran
-      // successfully in between. SHELVED (FOLLOWUP_QUESTIONS_ENABLED) —
-      // skipped entirely while off, so lastNlContext just stays null forever
-      // (its initial value) and detectFollowup above never has anything to
-      // match against even if this gate were somehow bypassed.
+      // Remember this turn's topic for the next follow-up. SHELVED
+      // (FOLLOWUP_QUESTIONS_ENABLED) along with the rest of the client-side
+      // sentence-rewrite mechanism this fed — retired 2026-10-16 in favor of
+      // /agent's own real history, which resolves an implicit subject
+      // ("dak" -> the prior turn's player) server-side instead of this
+      // file guessing at it. Left in place, still off, rather than torn out,
+      // in case any of this ever needs resurrecting for a reason unrelated
+      // to why it was shelved.
       if (FOLLOWUP_QUESTIONS_ENABLED) {
         const newContext = contextFromResponse(payload)
         if (newContext) {
@@ -6340,6 +6486,77 @@ function App() {
       }
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  // In-card follow-up — a genuinely separate action from runQuery (the main
+  // search bar): appends to the current conversation instead of replacing
+  // it, never touches resetResultState/lastQuery/the page-level isLoading,
+  // and renders its own errors as a synthesized turn (reusing
+  // AgentChatView's existing agent.unavailable handling) rather than the
+  // page-level queryError banner, since the rest of the conversation above
+  // it should stay visible and intact either way.
+  const askFollowup = async (question: string) => {
+    const trimmed = question.trim()
+    if (!trimmed || isFollowupLoading) return
+
+    setIsFollowupLoading(true)
+    const history = buildAgentHistory(agentChatTurns)
+
+    try {
+      const { response } = await fetchFirstSuccessful(
+        AGENT_ENDPOINTS,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...authHeader(),
+            ...guestTokenHeader(),
+          },
+          body: JSON.stringify({ question: trimmed, history }),
+        },
+        queryTimeoutMs(trimmed),
+      )
+
+      const payload = await parseApiPayload(response)
+      console.log('Agent response (follow-up):', payload)
+
+      const guestQuota = readGuestQuota(payload)
+      if (guestQuota) {
+        setGuestQueriesRemaining(guestQuota.remaining)
+        setGuestToken(guestQuota.token)
+      } else if (isAuthenticatedQuotaKind(payload)) {
+        setGuestQueriesRemaining(null)
+      }
+
+      const turn = extractAgentTurnPayload(payload)
+      if (turn) {
+        setAgentChatTurns((prev) => [...prev, {
+          question: trimmed,
+          output: turn.output,
+          agent: turn.agent,
+          quota: extractAgentQuota(payload),
+        }])
+      } else {
+        setAgentChatTurns((prev) => [...prev, {
+          question: trimmed,
+          output: 'Unrecognized response from the assistant.',
+          agent: { ...EMPTY_AGENT_BLOCK, unavailable: true },
+          quota: null,
+        }])
+      }
+    } catch (error) {
+      console.error('Follow-up error:', error)
+      const message = error instanceof QueryGateError ? (error.detail || error.message) : formatQueryError(error)
+      const reason = error instanceof QueryGateError && error.status === 401 ? 'sign_in' : null
+      setAgentChatTurns((prev) => [...prev, {
+        question: trimmed,
+        output: message,
+        agent: { ...EMPTY_AGENT_BLOCK, unavailable: true, reason },
+        quota: null,
+      }])
+    } finally {
+      setIsFollowupLoading(false)
     }
   }
 
@@ -7229,8 +7446,13 @@ function App() {
               </div>
             ) : queryGate ? (
               <QueryGateNotice gate={queryGate} isLoggedIn={Boolean(user)} onRetry={() => runQuery(lastQuery)} />
-            ) : agentChatResult ? (
-              <AgentChatView result={agentChatResult} onRunCommand={(cmd) => runQuery(cmd)} />
+            ) : agentChatTurns.length > 0 ? (
+              <AgentChatView
+                turns={agentChatTurns}
+                onRunCommand={(cmd) => runQuery(cmd)}
+                onAskFollowup={askFollowup}
+                isFollowupLoading={isFollowupLoading}
+              />
             ) : h2hResult ? (
               <H2hView payload={h2hResult} />
             ) : pitchResult ? (

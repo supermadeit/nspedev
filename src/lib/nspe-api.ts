@@ -65,9 +65,47 @@ export function buildRunEndpoints(bases: string[]): string[] {
   return bases.map((base) => joinUrl(base, '/run'))
 }
 
+// Real multi-turn conversation endpoint (confirmed live 2026-10-15, per
+// nspe-v2-da) — {question, history: [{role, content}, ...]} in, same gate/
+// quota/error semantics as /run. /run itself has no history field at all
+// and isn't getting one; a plain-English question is routed here instead of
+// /run going forward (see App.tsx's runQuery), so real follow-ups can carry
+// actual conversation context rather than /run's one-shot-only answers.
+export function buildAgentEndpoints(bases: string[]): string[] {
+  return bases.map((base) => joinUrl(base, '/agent'))
+}
+
 export const API_BASE_CANDIDATES = buildApiBaseCandidates()
 export const CONFIGURED_API_BASE = API_BASE_CANDIDATES[0] || 'https://api.nspe.dev'
 export const RUN_ENDPOINTS = buildRunEndpoints(API_BASE_CANDIDATES)
+export const AGENT_ENDPOINTS = buildAgentEndpoints(API_BASE_CANDIDATES)
+
+// Server caps per nspe-v2-da (2026-10-16): max 20 history entries / 4000
+// chars each, a 400 past that. Only the last 6 of whatever's sent actually
+// reaches the model (ask()'s own cap) -- these two constants just keep the
+// client from ever tripping the hard 400, not an attempt to mirror the
+// model's own context window.
+export const AGENT_HISTORY_MAX_TURNS = 20
+export const AGENT_HISTORY_MAX_CHARS = 4000
+
+export interface AgentHistoryTurn {
+  role: 'user' | 'assistant'
+  content: string
+}
+
+// Builds the history array to send with a follow-up — one {role, content}
+// per side of each prior turn, oldest first (server/model expect
+// chronological order, not newest-first like the UI's own display order
+// elsewhere). Truncates defensively to the caps above rather than trusting
+// a long conversation or a long answer to stay under them on its own.
+export function buildAgentHistory(turns: Array<{ question: string; output: string }>): AgentHistoryTurn[] {
+  const flat: AgentHistoryTurn[] = []
+  for (const t of turns) {
+    flat.push({ role: 'user', content: t.question.slice(0, AGENT_HISTORY_MAX_CHARS) })
+    flat.push({ role: 'assistant', content: t.output.slice(0, AGENT_HISTORY_MAX_CHARS) })
+  }
+  return flat.slice(-AGENT_HISTORY_MAX_TURNS)
+}
 
 // The /run query gate (daily allowance / login-required), as opposed to a
 // dead or unreachable endpoint. A 401/402 is a real answer from the backend
