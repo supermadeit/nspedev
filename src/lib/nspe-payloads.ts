@@ -934,6 +934,48 @@ export function extractMatchupInsightPayload(payload: unknown): MatchupInsightPa
   return null
 }
 
+// ---------- NFL team points leaderboard (`nfl team -pts -leaderboard`) ----------
+// Render-gap case found live 2026-10-16: the top-level `results` array here
+// is NOT empty (unlike most of this session's other render gaps) — the
+// generic row-renderer just doesn't recognize team-keyed rows with no
+// `player` field at all, same underlying problem as
+// NbaVsEveryTeamPayload's gap, so it still showed "No results found"
+// despite real data sitting right there in the response.
+export interface NflTeamPtsLeaderboardRow {
+  team: string
+  total: number
+  games: number
+  avg: number
+}
+
+export interface NflTeamPtsLeaderboardPayload {
+  engine: 'nfl_team_pts_leaderboard'
+  query: { stat: string; last: number | null; top: number; window_label: string }
+  results: NflTeamPtsLeaderboardRow[]
+}
+
+export function isNflTeamPtsLeaderboardPayload(payload: unknown): payload is NflTeamPtsLeaderboardPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return rec.engine === 'nfl_team_pts_leaderboard' && Array.isArray(rec.results)
+}
+
+export function extractNflTeamPtsLeaderboardPayload(payload: unknown): NflTeamPtsLeaderboardPayload | null {
+  if (isNflTeamPtsLeaderboardPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isNflTeamPtsLeaderboardPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isNflTeamPtsLeaderboardPayload(v)) return v
+    }
+  }
+  return null
+}
+
 // ---------- NFL power rankings ----------
 // A backend-computed weekly ranking of all 32 teams (composite `power_score`
 // from a handful of z-scored efficiency stats) — engine `nfl-power-rankings`.

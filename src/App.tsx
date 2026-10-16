@@ -69,6 +69,7 @@ import {
   extractNflTeamYardsPayload,
   extractNbaVsEveryTeamPayload,
   extractNflTeamOverviewPayload,
+  extractNflTeamPtsLeaderboardPayload,
   extractPowerRankingsPayload,
   extractNhlVsGoaliePairingPayload,
   extractAgentChatPayload,
@@ -117,6 +118,7 @@ import {
   type NflTeamYardsPayload,
   type NbaVsEveryTeamPayload,
   type NflTeamOverviewPayload,
+  type NflTeamPtsLeaderboardPayload,
   type PowerRankingsPayload,
   type NhlVsGoaliePairingPayload,
   type AgentBlock,
@@ -4703,6 +4705,40 @@ function PowerRankingsView({ payload }: { payload: PowerRankingsPayload }) {
   )
 }
 
+// nfl_team_pts_leaderboard (`nfl team -pts -leaderboard`) — results arrive
+// pre-sorted descending by `total` already, rank is just position in the
+// array. `query.stat` names the direction ("pts_for"/"pts_against", per
+// -allows' own for/against convention elsewhere) — titleized rather than
+// hardcoding a 2-way label, so a stat this engine adds later doesn't need a
+// frontend change to read sensibly.
+function NflTeamPtsLeaderboardView({ payload }: { payload: NflTeamPtsLeaderboardPayload }) {
+  const results = payload.results ?? []
+  const statLabel = payload.query.stat.replace(/_/g, ' ')
+  return (
+    <div className="space-y-3">
+      <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+        <span>{statLabel}</span>
+        <span style={{ color: 'oklch(0.92 0 0)' }}>{` · ${payload.query.window_label}`}</span>
+      </div>
+      <div className="space-y-0">
+        {results.map((r, i) => (
+          <div key={r.team} className="flex items-center justify-between py-1.5 border-b" style={{ borderColor: PITCH_BORDER }}>
+            <span className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
+              <span style={{ color: PITCH_LABEL }}>{`#${i + 1} `}</span>
+              {r.team}
+            </span>
+            <span className="font-mono text-[12px] flex items-center gap-3">
+              <span style={{ color: PITCH_GREEN }}>{`${r.avg}/g`}</span>
+              <span style={{ color: 'oklch(0.92 0 0)' }}>{`${r.total} tot`}</span>
+              <span style={{ color: PITCH_LABEL }}>{`${r.games}gp`}</span>
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // nfl-quarter-h2h / nfl-quarter-week — single player, quarter/half-scoped,
 // vs one opponent or one week#. totals keys are scope-specific (q1_pass_td,
 // 1h_pass_yds, ...) so this walks them generically rather than a fixed
@@ -5599,6 +5635,7 @@ function App() {
   const [nhlVsGoaliePairingResult, setNhlVsGoaliePairingResult] = useState<NhlVsGoaliePairingPayload | null>(null)
   const [nflTeamOverviewResult, setNflTeamOverviewResult] = useState<NflTeamOverviewPayload | null>(null)
   const [powerRankingsResult, setPowerRankingsResult] = useState<PowerRankingsPayload | null>(null)
+  const [nflTeamPtsLeaderboardResult, setNflTeamPtsLeaderboardResult] = useState<NflTeamPtsLeaderboardPayload | null>(null)
   // A live conversation is a stack of turns, not a single result — the real
   // follow-up chat (owner ask, 2026-10-16: point this at /agent + history
   // instead of /run's one-shot-only answers, see runQuery/askFollowup below)
@@ -5606,6 +5643,17 @@ function App() {
   // search bar (or a pocket replay) resets it to a single-element array.
   const [agentChatTurns, setAgentChatTurns] = useState<AgentChatResult[]>([])
   const [isFollowupLoading, setIsFollowupLoading] = useState(false)
+  // Owner report, 2026-10-16: clicking a "run it yourself" chip from inside
+  // a conversation replaced the whole chat with that command's result (or
+  // its error, for a render gap like the screenshot that prompted this) with
+  // no way back short of closing the panel and retyping the question from
+  // scratch. resetResultState parks the current conversation here instead
+  // of just discarding it whenever one exists; a "{return to chat}" control
+  // in the results header (shown whenever this is non-empty and no chat is
+  // currently showing) swaps it back into agentChatTurns with no re-fetch.
+  // One level of undo, not a stack — a second navigation-away before
+  // returning just replaces whatever was parked.
+  const [parkedChatTurns, setParkedChatTurns] = useState<AgentChatResult[] | null>(null)
   const [lastQuery, setLastQuery] = useState('')
   // Conversational follow-ups ("what about receiving?") — client-side only,
   // per the backend's spec (docs/frontend_spec_followup_questions_2026-09-27.md
@@ -6079,7 +6127,23 @@ function App() {
     setNhlVsGoaliePairingResult(null)
     setNflTeamOverviewResult(null)
     setPowerRankingsResult(null)
+    setNflTeamPtsLeaderboardResult(null)
+    // Park, don't discard — see parkedChatTurns' own comment above. Only
+    // parks a real conversation (never overwrites a park with an empty
+    // array), and only when there's something to park at all.
+    if (agentChatTurns.length > 0) setParkedChatTurns(agentChatTurns)
     setAgentChatTurns([])
+  }
+
+  // Swaps a parked conversation back into view — no re-fetch, the turns are
+  // still sitting right there in state. agentChatTurns.length > 0 is checked
+  // first in the render chain (ahead of every other result view), so this
+  // alone is enough to bring the chat back regardless of whatever other
+  // per-view result state is still sitting around unviewed underneath it.
+  const returnToChat = () => {
+    if (!parkedChatTurns) return
+    setAgentChatTurns(parkedChatTurns)
+    setParkedChatTurns(null)
   }
 
   // Routes a parsed /run payload to whichever result view it belongs to.
@@ -6283,6 +6347,13 @@ function App() {
     const nflTeamOverviewPayload = extractNflTeamOverviewPayload(payload)
     if (nflTeamOverviewPayload) {
       setNflTeamOverviewResult(nflTeamOverviewPayload)
+      setQueryResults([])
+      return
+    }
+
+    const nflTeamPtsLeaderboardPayload = extractNflTeamPtsLeaderboardPayload(payload)
+    if (nflTeamPtsLeaderboardPayload) {
+      setNflTeamPtsLeaderboardResult(nflTeamPtsLeaderboardPayload)
       setQueryResults([])
       return
     }
@@ -7512,6 +7583,22 @@ function App() {
                 : 'NSPE — Command Legend'}
             </span>
             <div className="flex items-center gap-3 flex-none">
+              {/* {return to chat}: back to a parked conversation (see
+                  parkedChatTurns' comment) without losing it or re-asking.
+                  Shown whenever one's parked and not already showing —
+                  works identically whether what's currently on screen is a
+                  normal result or an error/render-gap one, since it lives in
+                  the shared header rather than any one view. */}
+              {parkedChatTurns && agentChatTurns.length === 0 && (
+                <button
+                  type="button"
+                  onClick={returnToChat}
+                  className="font-mono font-bold text-[12px] underline hover:opacity-80 transition-opacity"
+                  style={{ color: 'oklch(0.85 0.15 195)' }}
+                >
+                  {'{return to chat}'}
+                </button>
+              )}
               {pocketNote && (
                 <span
                   className="font-mono text-[11px]"
@@ -7696,6 +7783,8 @@ function App() {
               <NhlVsGoaliePairingView payload={nhlVsGoaliePairingResult} />
             ) : nflTeamOverviewResult ? (
               <NflTeamOverviewView payload={nflTeamOverviewResult} />
+            ) : nflTeamPtsLeaderboardResult ? (
+              <NflTeamPtsLeaderboardView payload={nflTeamPtsLeaderboardResult} />
             ) : powerRankingsResult ? (
               <PowerRankingsView payload={powerRankingsResult} />
             ) : queryResults === null ? (
