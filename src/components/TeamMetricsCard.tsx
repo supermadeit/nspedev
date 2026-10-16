@@ -14,6 +14,7 @@
 // ProfileSections) for visual consistency.
 import { C } from '@/components/ProfileSections'
 import {
+  normalizeAllowsInstance,
   normalizeTeamMetricsRecord,
   type TeamMetricsPayload,
   type TeamMetricsValue,
@@ -98,11 +99,17 @@ export function TeamMetricsCard({
   teamLabel,
   fieldGroups,
   allowsLabel = 'opponent thresholds allowed',
+  hideAllows = false,
 }: {
   payload: TeamMetricsPayload
   teamLabel: string
   fieldGroups: TeamMetricsFieldDef[]
   allowsLabel?: string
+  /** Single-team mode moves this section out into its own expanded
+   * OpponentThresholdsPanel (see below) rather than the compact inline
+   * version here — set when that panel is rendering alongside this card so
+   * the same data doesn't show twice. */
+  hideAllows?: boolean
 }) {
   const record = normalizeTeamMetricsRecord(payload.record)
   const allowsEntries = Object.entries(payload.allows ?? {})
@@ -164,7 +171,7 @@ export function TeamMetricsCard({
         ))}
       </div>
 
-      {allowsEntries.length > 0 && (
+      {!hideAllows && allowsEntries.length > 0 && (
         <div className="px-4 py-3" style={{ borderTop: `1px solid ${C.border}`, backgroundColor: C.surface2 }}>
           <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: C.textDim }}>{allowsLabel}</div>
           <div className="flex flex-wrap gap-2">
@@ -189,6 +196,81 @@ export function TeamMetricsCard({
       {payload.box_score_coverage && (
         <div className="px-4 py-2 font-mono text-[10px] italic" style={{ color: C.textBright, borderTop: `1px solid ${C.border}` }}>
           {payload.box_score_coverage}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// Single-team mode's expanded "opponent thresholds allowed" — takes over
+// the space that's otherwise an unused placeholder on wider viewports once
+// {vs. another team}/{vs. a past season} stop needing it for a second card
+// (owner ask, 2026-10-16). Same threshold data as the compact version
+// inside TeamMetricsCard (hidden there via `hideAllows` when this is
+// showing), just given real room: one row per threshold instead of a
+// wrapped chip grid, and — once backend ships it — the actual games/
+// players/opponent teams that met each one. Until then, each entry falls
+// back to a one-line note saying that detail isn't available yet rather
+// than silently looking identical to a threshold with no instances at all.
+export function OpponentThresholdsPanel({
+  payload,
+  teamLabel,
+  allowsLabel = 'opponent thresholds allowed',
+}: {
+  payload: TeamMetricsPayload
+  teamLabel: string
+  allowsLabel?: string
+}) {
+  const allowsEntries = Object.entries(payload.allows ?? {})
+
+  return (
+    <div className="rounded-lg overflow-hidden" style={{ backgroundColor: C.surface, border: `1px solid ${C.border}` }}>
+      <div className="px-4 py-3" style={{ backgroundColor: C.surface2, borderBottom: `1px solid ${C.border}` }}>
+        <div className="flex items-baseline justify-between gap-3">
+          <span className="font-mono font-bold text-[15px]" style={{ color: C.accent }}>{allowsLabel}</span>
+          <span className="font-mono text-[11px]" style={{ color: C.textDim }}>{`vs. ${teamLabel}`}</span>
+        </div>
+      </div>
+
+      {allowsEntries.length === 0 ? (
+        <div className="px-4 py-6 font-mono text-[12px] text-center" style={{ color: C.textDim }}>
+          No threshold data for this window.
+        </div>
+      ) : (
+        <div className="px-4 py-3 space-y-3">
+          {allowsEntries.map(([key, a]) => (
+            <div key={key} className="rounded px-3 py-2.5" style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}` }}>
+              <div className="flex items-baseline justify-between gap-3">
+                <span className="font-mono text-[12px]" style={{ color: C.textBright }}>{a.label}</span>
+                <span className="font-mono text-[14px] font-bold" style={{ color: C.accent }}>
+                  {a.pct}% <span className="font-normal text-[10px]" style={{ color: C.textDim }}>({a.count}/{a.games} games)</span>
+                </span>
+              </div>
+              {a.instances && a.instances.length > 0 ? (
+                <div className="mt-2 space-y-1">
+                  {a.instances.map((inst, i) => {
+                    const n = normalizeAllowsInstance(inst)
+                    return (
+                      <div key={i} className="flex items-baseline justify-between gap-3 font-mono text-[11px]" style={{ color: C.textDim }}>
+                        <span>{n.who}</span>
+                        <span className="flex items-baseline gap-2">
+                          {n.value != null && <span style={{ color: C.textBright }}>{n.value}</span>}
+                          {n.date && <span>{n.date}</span>}
+                        </span>
+                      </div>
+                    )
+                  })}
+                </div>
+              ) : a.count > 0 ? (
+                <div className="mt-1.5 font-mono text-[10px] italic" style={{ color: C.textBright }}>
+                  per-game detail not available yet — {a.count} of {a.games} games met this
+                </div>
+              ) : null}
+            </div>
+          ))}
+          {payload.allows_note && (
+            <div className="font-mono text-[10px] italic" style={{ color: C.textBright }}>{payload.allows_note}</div>
+          )}
         </div>
       )}
     </div>

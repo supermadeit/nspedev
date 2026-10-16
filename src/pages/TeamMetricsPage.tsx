@@ -22,7 +22,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { C } from '@/components/ProfileSections'
 import { SportsSwitcher, chartsHrefFor } from '@/components/SportsSwitcher'
-import { TeamMetricsCard, type TeamMetricsFieldDef } from '@/components/TeamMetricsCard'
+import { TeamMetricsCard, OpponentThresholdsPanel, type TeamMetricsFieldDef } from '@/components/TeamMetricsCard'
 import { fetchTeamMetrics, type TeamMetricsPayload } from '@/lib/databaseApi'
 import { teamRoster } from '@/lib/teamNicknames'
 import { useIsMobile } from '@/hooks/use-mobile'
@@ -329,11 +329,32 @@ export default function TeamMetricsPage({ sport, label }: { sport: Sport; label:
         )}
       </div>
 
-      <div className={`px-6 pb-10 grid gap-4 ${mode !== 'single' ? 'md:grid-cols-2' : 'max-w-[640px]'}`}>
+      {/* Single-team mode used to cap at max-w-[640px] with the whole right
+          side of wider viewports sitting empty — that space was only ever a
+          placeholder for {vs. another team}'s second card. Now it always
+          runs the full md:grid-cols-2 width; single mode just fills the
+          second slot with the expanded thresholds panel instead of a second
+          TeamMetricsCard (owner ask, 2026-10-16). TeamMetricsCard's own
+          compact allows section is hidden in single mode (hideAllows) since
+          this panel is showing the same data with more room. */}
+      <div className="px-6 pb-10 grid gap-4 md:grid-cols-2">
         {cardA.error && <div className="font-mono text-[12px]" style={{ color: 'oklch(0.75 0.15 30)' }}>{cardA.error}</div>}
         {!cardA.error && !cardA.payload && <div className="font-mono text-[12px]" style={{ color: C.textDim }}>loading…</div>}
         {cardA.payload && (
-          <TeamMetricsCard payload={cardA.payload} teamLabel={teamLabelFor(teamA)} fieldGroups={fieldGroups} />
+          <TeamMetricsCard
+            payload={cardA.payload}
+            teamLabel={teamLabelFor(teamA)}
+            fieldGroups={fieldGroups}
+            hideAllows={mode === 'single'}
+          />
+        )}
+
+        {mode === 'single' && (
+          cardA.payload ? (
+            <OpponentThresholdsPanel payload={cardA.payload} teamLabel={teamLabelFor(teamA)} />
+          ) : !cardA.error ? (
+            <div className="font-mono text-[12px]" style={{ color: C.textDim }}>loading…</div>
+          ) : null
         )}
 
         {mode !== 'single' && (

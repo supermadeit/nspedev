@@ -542,11 +542,31 @@ export interface TeamMetricsMetricEntry {
   threshold_yards?: number
 }
 
+// A single game/opponent that actually met a threshold — e.g. the QB and
+// game where a team allowed 300+ passing yards. Not in the API yet as of
+// 2026-10-16 (confirmed live: /team-metrics only returns the aggregate
+// pct/count/games, nothing per-instance) — typed ahead of that landing so
+// OpponentThresholdsPanel can start rendering it the moment it does, same
+// "optional, defensively read" pattern every other not-yet-universal field
+// in this file already uses, rather than needing a second frontend pass.
+export interface TeamMetricsAllowsInstance {
+  /** Opponent team code, the specific player, or both — backend's exact
+   * field name(s) aren't confirmed yet, so normalizeAllowsInstance (below)
+   * tries several likely spellings rather than assuming one. */
+  opponent?: string
+  player?: string
+  value?: number
+  date?: string
+}
+
 export interface TeamMetricsAllowsEntry {
   label: string
   pct: number
   count: number
   games: number
+  /** Per-instance detail (who/when met this threshold) — optional, not
+   * live on any sport yet. See TeamMetricsAllowsInstance. */
+  instances?: TeamMetricsAllowsInstance[]
 }
 
 export interface TeamMetricsRecord {
@@ -595,6 +615,15 @@ function isTeamMetricsPayload(v: unknown): v is TeamMetricsPayload {
   if (!v || typeof v !== 'object') return false
   const r = v as Record<string, unknown>
   return typeof r.team === 'string' && typeof r.metrics === 'object' && r.metrics !== null
+}
+
+// Reads whichever field(s) backend actually ships for "who/when met this
+// threshold" into one shape — same defensive-naming tolerance as every
+// other not-yet-finalized response shape in this file, since the exact
+// field names aren't confirmed as of 2026-10-16.
+export function normalizeAllowsInstance(instance: TeamMetricsAllowsInstance): { who: string; value?: number; date?: string } {
+  const who = [instance.player, instance.opponent].filter(Boolean).join(' · ') || 'opponent'
+  return { who, value: instance.value, date: instance.date }
 }
 
 // NHL's record block uses goals_for/goals_against and MLB's uses
