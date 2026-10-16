@@ -68,6 +68,8 @@ import {
   extractMlbTeamRunsPayload,
   extractNflTeamYardsPayload,
   extractNbaVsEveryTeamPayload,
+  extractNflTeamOverviewPayload,
+  extractPowerRankingsPayload,
   extractNhlVsGoaliePairingPayload,
   extractAgentChatPayload,
   extractAgentTurnPayload,
@@ -114,6 +116,8 @@ import {
   type MlbTeamRunsTrendResult,
   type NflTeamYardsPayload,
   type NbaVsEveryTeamPayload,
+  type NflTeamOverviewPayload,
+  type PowerRankingsPayload,
   type NhlVsGoaliePairingPayload,
   type AgentBlock,
   type AgentQuota,
@@ -4583,6 +4587,122 @@ function NhlVsGoaliePairingView({ payload }: { payload: NhlVsGoaliePairingPayloa
   )
 }
 
+// nfl-team-overview (`nfl team <code> -ov`) — this team's own points for/
+// against, power-rankings standing (null for a window with no single-season
+// rank, e.g. -career), per-category league ranks, and "notable" opponent
+// performances against them (same pct/count/games shape team.metrics'
+// `allows` uses, plus the single best qualifying opponent via `top`).
+function NflTeamOverviewView({ payload }: { payload: NflTeamOverviewPayload }) {
+  const rankEntries = Object.entries(payload.ranks ?? {})
+  const notableEntries = Object.entries(payload.notable ?? {})
+  return (
+    <div className="space-y-4">
+      <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+        <span>{payload.team}</span>
+        <span style={{ color: 'oklch(0.92 0 0)' }}>{` · ${payload.window.label} · ${payload.games}gm`}</span>
+      </div>
+
+      <div className="rounded p-3 flex items-center gap-5" style={{ backgroundColor: 'oklch(0.18 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+        <StatBox label="points for" value={payload.points.for} />
+        <StatBox label="points against" value={payload.points.against} />
+        {payload.record ? (
+          <>
+            <div className="font-mono text-[13px]" style={{ color: 'oklch(0.92 0 0)' }}>{payload.record.record}</div>
+            <div className="font-mono text-[12px]" style={{ color: PITCH_GREEN }}>
+              {`power #${payload.record.power_rank} of ${payload.record.of}`}
+            </div>
+          </>
+        ) : (
+          <div className="font-mono text-[11px] italic" style={{ color: 'oklch(0.70 0 0)' }}>no single-season power rank for this window</div>
+        )}
+      </div>
+
+      {rankEntries.length > 0 && (
+        <div className="space-y-0">
+          {rankEntries.map(([key, r]) => (
+            <div key={key} className="flex items-center justify-between py-1.5 border-b" style={{ borderColor: PITCH_BORDER }}>
+              <span className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>{r.label}</span>
+              <span className="font-mono text-[12px] flex items-center gap-3">
+                <span style={{ color: PITCH_GREEN }}>{r.value}</span>
+                <span style={{ color: PITCH_LABEL }}>{`#${r.rank} of ${r.of}`}</span>
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {notableEntries.length > 0 && (
+        <div>
+          <div className="font-mono text-[9px] uppercase tracking-widest mb-1.5" style={{ color: 'oklch(0.92 0 0)' }}>
+            notable opponent performances allowed
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {notableEntries.map(([key, n]) => (
+              <div key={key} className="rounded px-2.5 py-1.5" style={{ backgroundColor: 'oklch(0.18 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+                <div className="font-mono text-[11px]" style={{ color: 'oklch(0.92 0 0)' }}>{n.label}</div>
+                <div className="font-mono text-[13px] font-bold" style={{ color: PITCH_GREEN }}>
+                  {n.pct}% <span className="font-normal text-[10px]" style={{ color: PITCH_LABEL }}>({n.count}/{n.games})</span>
+                </div>
+                {n.top && (
+                  <div className="font-mono text-[10px] mt-0.5" style={{ color: PITCH_LABEL }}>
+                    {`${normalizeDisplayPlayer(n.top.name)} · ${n.top.value} · ${n.top.date}`}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {payload.notes.length > 0 && (
+        <div className="space-y-1">
+          {payload.notes.map((note, i) => (
+            <div key={i} className="font-mono text-[10px] italic" style={{ color: 'oklch(0.70 0 0)' }}>{note}</div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// <league>-power-rankings (`<league> team -rankings {YYYY}`) — one shared
+// view across all 4 sports since the shape's uniform (confirmed by backend):
+// rank/team/record/power_score plus a loose bag of per-sport raw category
+// fields the `_z_*`-prefixed keys feed into. Only the handful typed on
+// PowerRankingsRow render here (point_margin/pts_for/pts_allowed) rather
+// than every possible per-sport field — enough to be useful without trying
+// to build a different column set per sport for a syntax-query result.
+function PowerRankingsView({ payload }: { payload: PowerRankingsPayload }) {
+  const results = [...(payload.results ?? [])].sort((a, b) => a.rank - b.rank)
+  return (
+    <div className="space-y-3">
+      <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+        <span>{payload.engine.replace(/[-_]/g, ' ')}</span>
+        <span style={{ color: 'oklch(0.92 0 0)' }}>{` · ${payload.query.season}`}</span>
+      </div>
+      <div className="space-y-0">
+        {results.map((r) => (
+          <div key={r.team} className="flex items-center justify-between py-1.5 border-b" style={{ borderColor: PITCH_BORDER }}>
+            <span className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
+              <span style={{ color: PITCH_LABEL }}>{`#${r.rank} `}</span>
+              {r.team}
+              <span style={{ color: PITCH_LABEL }}>{`  ${r.wins}-${r.losses}${r.ties ? `-${r.ties}` : ''}`}</span>
+            </span>
+            <span className="font-mono text-[12px] flex items-center gap-3">
+              {typeof r.point_margin === 'number' && (
+                <span style={{ color: r.point_margin >= 0 ? PITCH_GREEN : 'oklch(0.75 0.15 30)' }}>
+                  {r.point_margin >= 0 ? `+${r.point_margin}` : r.point_margin}
+                </span>
+              )}
+              <span style={{ color: PITCH_GREEN }}>{`${r.power_score} pwr`}</span>
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // nfl-quarter-h2h / nfl-quarter-week — single player, quarter/half-scoped,
 // vs one opponent or one week#. totals keys are scope-specific (q1_pass_td,
 // 1h_pass_yds, ...) so this walks them generically rather than a fixed
@@ -5477,6 +5597,8 @@ function App() {
   const [nflTeamYardsResult, setNflTeamYardsResult] = useState<NflTeamYardsPayload | null>(null)
   const [nbaVsEveryTeamResult, setNbaVsEveryTeamResult] = useState<NbaVsEveryTeamPayload | null>(null)
   const [nhlVsGoaliePairingResult, setNhlVsGoaliePairingResult] = useState<NhlVsGoaliePairingPayload | null>(null)
+  const [nflTeamOverviewResult, setNflTeamOverviewResult] = useState<NflTeamOverviewPayload | null>(null)
+  const [powerRankingsResult, setPowerRankingsResult] = useState<PowerRankingsPayload | null>(null)
   // A live conversation is a stack of turns, not a single result — the real
   // follow-up chat (owner ask, 2026-10-16: point this at /agent + history
   // instead of /run's one-shot-only answers, see runQuery/askFollowup below)
@@ -5955,6 +6077,8 @@ function App() {
     setNflTeamYardsResult(null)
     setNbaVsEveryTeamResult(null)
     setNhlVsGoaliePairingResult(null)
+    setNflTeamOverviewResult(null)
+    setPowerRankingsResult(null)
     setAgentChatTurns([])
   }
 
@@ -6152,6 +6276,26 @@ function App() {
     const nhlVsGoaliePairingPayload = extractNhlVsGoaliePairingPayload(payload)
     if (nhlVsGoaliePairingPayload) {
       setNhlVsGoaliePairingResult(nhlVsGoaliePairingPayload)
+      setQueryResults([])
+      return
+    }
+
+    const nflTeamOverviewPayload = extractNflTeamOverviewPayload(payload)
+    if (nflTeamOverviewPayload) {
+      setNflTeamOverviewResult(nflTeamOverviewPayload)
+      setQueryResults([])
+      return
+    }
+
+    // Checked after every sport-specific/single-purpose extractor above —
+    // isPowerRankingsPayload's `engine` test (/power[_-]rankings$/i) is
+    // broad by design (matches all 4 sports' <league>-power-rankings engines
+    // in one extractor) but that breadth is also why it has to go last: a
+    // more specific shape earlier in this chain should always win if one
+    // ever matched both (none currently do, but order still matters here).
+    const powerRankingsPayload = extractPowerRankingsPayload(payload)
+    if (powerRankingsPayload) {
+      setPowerRankingsResult(powerRankingsPayload)
       setQueryResults([])
       return
     }
@@ -7550,6 +7694,10 @@ function App() {
               <NbaVsEveryTeamView payload={nbaVsEveryTeamResult} />
             ) : nhlVsGoaliePairingResult ? (
               <NhlVsGoaliePairingView payload={nhlVsGoaliePairingResult} />
+            ) : nflTeamOverviewResult ? (
+              <NflTeamOverviewView payload={nflTeamOverviewResult} />
+            ) : powerRankingsResult ? (
+              <PowerRankingsView payload={powerRankingsResult} />
             ) : queryResults === null ? (
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.92 0 0)' }}>
                 Build a query to begin

@@ -2434,6 +2434,66 @@ export function extractNflTeamYardsPayload(payload: unknown): NflTeamYardsPayloa
   return null
 }
 
+// ---------- NFL Team Overview (`nfl team <code> -ov`) ----------
+// New 2026-10-16 (nspe-v2-da) — a team-level counterpart to the player -ov
+// shape: this team's own points for/against, its power-rankings standing
+// (null off-season-window, e.g. -career/history, where no single-season
+// rank applies), per-category league ranks, and "notable" — the same
+// pct/count/games threshold shape team.metrics' `allows` entries use, plus
+// a `top` field here naming the single best qualifying opposing performance
+// (the opponent who did it, not this team's own player — confirmed live
+// against nfl team DAL -ov: "notable.rec_100.top" names Texans/Buccaneers
+// players, i.e. who put up that line AGAINST Dallas).
+export interface NflTeamOverviewRankEntry {
+  label: string
+  value: number
+  rank: number
+  of: number
+}
+
+export interface NflTeamOverviewNotableEntry {
+  label: string
+  pct: number
+  count: number
+  games: number
+  top: { name: string; value: number; date: string } | null
+}
+
+export interface NflTeamOverviewPayload {
+  engine: 'nfl-team-overview'
+  query: { team: string; window: string }
+  team: string
+  window: { label: string; requested: string }
+  games: number
+  points: { for: number; against: number; unit: string }
+  record: { record: string; power_rank: number; power_score: number; of: number } | null
+  ranks: Record<string, NflTeamOverviewRankEntry>
+  notable: Record<string, NflTeamOverviewNotableEntry>
+  notes: string[]
+}
+
+export function isNflTeamOverviewPayload(payload: unknown): payload is NflTeamOverviewPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return rec.engine === 'nfl-team-overview'
+}
+
+export function extractNflTeamOverviewPayload(payload: unknown): NflTeamOverviewPayload | null {
+  if (isNflTeamOverviewPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isNflTeamOverviewPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isNflTeamOverviewPayload(v)) return v
+    }
+  }
+  return null
+}
+
 // nba_player_vs_every_team_leaderboard — "{player} -leaderboard vs -career
 // -top5" (NBA-specific; confirmed live 2026-10-15 the other three sports
 // don't share this shape — NFL/MLB ignore "vs" and return their own default
