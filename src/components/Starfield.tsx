@@ -1,18 +1,11 @@
-// Shared starfield background — extracted from App.tsx's homepage so other
-// pages (currently just PlayerProfilePage) can reuse the exact same look
-// without duplicating the generation logic. Renders once per mount (stars
-// don't need to re-roll on re-render), absolutely positioned and
-// pointer-events-none so it never blocks the page's real content.
+// Reusable version of the homepage's starry background (2026-10-16, built for
+// {why.nspe}). App.tsx's own homepage keeps its original inline
+// implementation untouched rather than being refactored to use this too —
+// not worth the risk of touching that file's core render path for a DRY
+// nicety. This is a deliberate, small duplication of the same density/char/
+// color pools and generate-once-on-mount behavior, not a drifted copy — keep
+// the two in sync if either one's visual tuning changes.
 import { useEffect, useState } from 'react'
-
-const STARFIELD_CHARS = ['$', '*', '+', '⋇', '𝛯', '☼', '➲', '✦', '⚛︎', '⚇']
-
-const TERMINAL_COLORS = [
-  'oklch(0.95 0 0)',
-  'oklch(0.85 0.15 195)',
-  'oklch(0.75 0.15 145)',
-  'oklch(0.65 0.15 250)',
-]
 
 interface Star {
   char: string
@@ -22,6 +15,16 @@ interface Star {
   opacity: number
 }
 
+const STARFIELD_CHARS = ['$', '*', '+', '⋇', '𝛯', '☼', '➲', '✦', '⚛︎', '⚇']
+const TERMINAL_COLORS = [
+  'oklch(0.95 0 0)',
+  'oklch(0.85 0.15 195)',
+  'oklch(0.75 0.15 145)',
+  'oklch(0.65 0.15 250)',
+]
+
+// Fills its nearest positioned ancestor — mount it inside a `relative`
+// wrapper with `overflow-hidden` the same way App.tsx's homepage does.
 export function Starfield() {
   const [stars, setStars] = useState<Star[]>([])
 
@@ -41,7 +44,7 @@ export function Starfield() {
   }, [])
 
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+    <div className="absolute inset-0 pointer-events-none">
       {stars.map((star, index) => (
         <span
           key={index}

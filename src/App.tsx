@@ -7676,6 +7676,23 @@ function App() {
                 {'{sample-queries}'}
               </button>
             )}
+            {/* {why.nspe} — the new showcase page (2026-10-16), same desktop-
+                only hint-line slot as {learn.nspe}/{sample-queries}. Full page
+                via useNavigate (not a modal like its two neighbors) since it's
+                meant to be shareable/linkable on its own, not a popover. */}
+            {!isMobile && (
+              <span aria-hidden="true" className="font-mono text-[14px] -mx-2" style={{ color: 'oklch(0.92 0 0)' }}>|</span>
+            )}
+            {!isMobile && (
+              <button
+                type="button"
+                onClick={() => navigate('/why.nspe')}
+                className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+                style={{ color: 'oklch(0.78 0.18 145)' }}
+              >
+                {'{why.nspe}'}
+              </button>
+            )}
           </div>
         </div>
       </div>

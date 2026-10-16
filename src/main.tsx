@@ -15,6 +15,7 @@ import RefillPage from './pages/RefillPage.tsx'
 import CheckoutPage from './pages/CheckoutPage.tsx'
 import SuccessPage from './pages/SuccessPage.tsx'
 import AccountPage from './pages/AccountPage.tsx'
+import WhyNspePage from './pages/WhyNspePage.tsx'
 import QbChartsPage from './pages/QbChartsPage.tsx'
 import MlbChartsPage from './pages/MlbChartsPage.tsx'
 import NbaChartsPage from './pages/NbaChartsPage.tsx'
@@ -82,6 +83,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/refill" element={<RefillPage />} />
+          <Route path="/why.nspe" element={<WhyNspePage />} />
           <Route
             path="/checkout"
             element={
