@@ -2455,6 +2455,55 @@ export function extractNbaVsEveryTeamPayload(payload: unknown): NbaVsEveryTeamPa
   return null
 }
 
+// nhl-vs-goalie-pairing (2026-10-16) — skater vs a specific goalie, season-
+// to-date only (confirmed by backend: data/output/nhl_vs_goalie/ is not
+// backfilled to full career history yet, a scrape-room ask still open), so
+// render copy must say "this season" and never imply "career". Single `row`
+// object, not an array under `results` like every other render-gap payload
+// this session — the generic fallback can't handle that shape either, same
+// underlying problem as NbaVsEveryTeamPayload just inverted (there, an array
+// the fallback misread; here, no array at all to find rows in).
+export interface NhlVsGoaliePairingRow {
+  skater: string
+  goalie: string
+  team: string
+  GP: number
+  G: number
+  A: number
+  PTS: number
+  SOG: number
+  PPG: number
+  GWG: number
+}
+
+export interface NhlVsGoaliePairingPayload {
+  engine: 'nhl-vs-goalie-pairing'
+  query: { skater_query: string; goalie_query: string }
+  row: NhlVsGoaliePairingRow
+}
+
+export function isNhlVsGoaliePairingPayload(payload: unknown): payload is NhlVsGoaliePairingPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  return rec.engine === 'nhl-vs-goalie-pairing' && !!rec.row && typeof rec.row === 'object'
+}
+
+export function extractNhlVsGoaliePairingPayload(payload: unknown): NhlVsGoaliePairingPayload | null {
+  if (isNhlVsGoaliePairingPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isNhlVsGoaliePairingPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isNhlVsGoaliePairingPayload(v)) return v
+    }
+  }
+  return null
+}
+
 // ---------------- Generic query-result path (stat context, matches, streaks) ----------------
 
 export interface StatContext {

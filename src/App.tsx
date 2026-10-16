@@ -66,6 +66,7 @@ import {
   extractMlbTeamRunsPayload,
   extractNflTeamYardsPayload,
   extractNbaVsEveryTeamPayload,
+  extractNhlVsGoaliePairingPayload,
   extractAgentChatPayload,
   extractAgentQuota,
   extractExplosiveOverviewPayload,
@@ -110,6 +111,7 @@ import {
   type MlbTeamRunsTrendResult,
   type NflTeamYardsPayload,
   type NbaVsEveryTeamPayload,
+  type NhlVsGoaliePairingPayload,
   type AgentBlock,
   type AgentQuota,
   type ExplosiveOverviewPayload,
@@ -4431,6 +4433,35 @@ function NbaVsEveryTeamView({ payload }: { payload: NbaVsEveryTeamPayload }) {
   )
 }
 
+// nhl-vs-goalie-pairing — single row, no array to map over (see the
+// extractor's comment for why that's a distinct render gap from
+// NbaVsEveryTeamView's). "this season" in the label, deliberately, not
+// "career" — the underlying dataset is season-to-date only as of 2026-10-16.
+function NhlVsGoaliePairingView({ payload }: { payload: NhlVsGoaliePairingPayload }) {
+  const r = payload.row
+  return (
+    <div className="space-y-3">
+      <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+        <span>{normalizeDisplayPlayer(r.skater)}</span>
+        <span style={{ color: 'oklch(0.92 0 0)' }}>{' vs '}</span>
+        <span>{normalizeDisplayPlayer(r.goalie)}</span>
+        <span style={{ color: 'oklch(0.92 0 0)' }}>{` (${r.team}) · this season`}</span>
+      </div>
+      <div className="rounded p-3" style={{ backgroundColor: 'oklch(0.18 0 0)', border: `1px solid ${PITCH_BORDER}` }}>
+        <div className="grid grid-cols-4 gap-2">
+          <StatBox label="GP" value={r.GP} />
+          <StatBox label="G" value={r.G} />
+          <StatBox label="A" value={r.A} />
+          <StatBox label="PTS" value={r.PTS} />
+          <StatBox label="SOG" value={r.SOG} />
+          <StatBox label="PPG" value={r.PPG} />
+          <StatBox label="GWG" value={r.GWG} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // nfl-quarter-h2h / nfl-quarter-week — single player, quarter/half-scoped,
 // vs one opponent or one week#. totals keys are scope-specific (q1_pass_td,
 // 1h_pass_yds, ...) so this walks them generically rather than a fixed
@@ -5324,6 +5355,7 @@ function App() {
   const [teamRunsResult, setTeamRunsResult] = useState<MlbTeamRunsPayload | null>(null)
   const [nflTeamYardsResult, setNflTeamYardsResult] = useState<NflTeamYardsPayload | null>(null)
   const [nbaVsEveryTeamResult, setNbaVsEveryTeamResult] = useState<NbaVsEveryTeamPayload | null>(null)
+  const [nhlVsGoaliePairingResult, setNhlVsGoaliePairingResult] = useState<NhlVsGoaliePairingPayload | null>(null)
   const [agentChatResult, setAgentChatResult] = useState<AgentChatResult | null>(null)
   const [lastQuery, setLastQuery] = useState('')
   // Conversational follow-ups ("what about receiving?") — client-side only,
@@ -5795,6 +5827,7 @@ function App() {
     setTeamRunsResult(null)
     setNflTeamYardsResult(null)
     setNbaVsEveryTeamResult(null)
+    setNhlVsGoaliePairingResult(null)
     setAgentChatResult(null)
   }
 
@@ -5981,6 +6014,13 @@ function App() {
     const nbaVsEveryTeamPayload = extractNbaVsEveryTeamPayload(payload)
     if (nbaVsEveryTeamPayload) {
       setNbaVsEveryTeamResult(nbaVsEveryTeamPayload)
+      setQueryResults([])
+      return
+    }
+
+    const nhlVsGoaliePairingPayload = extractNhlVsGoaliePairingPayload(payload)
+    if (nhlVsGoaliePairingPayload) {
+      setNhlVsGoaliePairingResult(nhlVsGoaliePairingPayload)
       setQueryResults([])
       return
     }
@@ -7255,6 +7295,8 @@ function App() {
               <NflTeamYardsView payload={nflTeamYardsResult} />
             ) : nbaVsEveryTeamResult ? (
               <NbaVsEveryTeamView payload={nbaVsEveryTeamResult} />
+            ) : nhlVsGoaliePairingResult ? (
+              <NhlVsGoaliePairingView payload={nhlVsGoaliePairingResult} />
             ) : queryResults === null ? (
               <div className="text-center py-8 font-mono text-[13px]" style={{ color: 'oklch(0.92 0 0)' }}>
                 Build a query to begin

@@ -43,10 +43,12 @@ const ANGLES: Angle[] = [
     title: 'Matchup & situational splits',
     body:
       'Primetime splits, which teams allow the most of a given stat, a batter against the opposing team’s current pitching staff, a skater against a specific goalie — the situational breakdowns a box score never shows.',
-    // No example chip yet on purpose — the exact live command for skater-vs-
-    // goalie is still being reconciled with backend (a routing conflict
-    // against the existing nhl_pvp engine, found live 2026-10-16) before
-    // it's safe to show as something a visitor can actually click and run.
+    // Confirmed live 2026-10-16 (nhl-vs-goalie-pairing engine, deployed and
+    // independently re-verified post-deploy). "this season" in the label and
+    // the copy below, not "career" -- backend's explicit caveat: the
+    // underlying dataset is season-to-date only right now (a scrape-room
+    // backfill to full career history is still an open ask).
+    example: { label: 'nhl · skater vs goalie (this season)', command: 'nspe nhl mcdavid vs kuemper' },
   },
   {
     title: 'Quarter & half-scoped search',
