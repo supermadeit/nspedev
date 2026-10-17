@@ -21,6 +21,7 @@ import { MatchupInsightOverlay } from '@/components/MatchupInsightOverlay'
 import { PlayerSearchDropdown } from '@/components/PlayerSearchDropdown'
 import { SyntaxSuggestionDropdown } from '@/components/SyntaxSuggestionDropdown'
 import { SportsSwitcher } from '@/components/SportsSwitcher'
+import { VoiceInputButton } from '@/components/VoiceInputButton'
 import { PLAYER_INDEX, loadPlayerIndex, resolvePlayerTeam, searchPlayers, searchPlayersFuzzy, searchPlayersLoose } from '@/lib/playerSearch'
 import {
   findPlayerSpotlightCommands,
@@ -1588,6 +1589,10 @@ function AgentChatTurnView({ turn, onRunCommand }: { turn: AgentChatResult; onRu
   )
 }
 
+// ~6 lines of 13px/mono text before the follow-up textarea caps out and
+// scrolls internally instead of growing further.
+const FOLLOWUP_TEXTAREA_MAX_HEIGHT = 140
+
 // Real multi-turn conversation (owner ask, 2026-10-16 — replaces the old
 // single-shot-only /run chat card). Stacks one AgentChatTurnView per turn,
 // oldest first — same order the model itself sees them in via /agent's
@@ -1608,6 +1613,7 @@ function AgentChatView({
   isFollowupLoading: boolean
 }) {
   const [followupText, setFollowupText] = useState('')
+  const followupTextareaRef = useRef<HTMLTextAreaElement>(null)
   const lastTurn = turns[turns.length - 1]
   const blockedOnSignIn = Boolean(lastTurn?.agent.unavailable && lastTurn.agent.reason === 'sign_in')
 
@@ -1636,6 +1642,21 @@ function AgentChatView({
     setFollowupText('')
   }
 
+  // Auto-grows with the text it holds — manually typed or dictated, same
+  // treatment either way (owner ask, 2026-10-17: this used to be a
+  // single-line <input>, which left a dictated-but-not-yet-reviewed prompt
+  // mostly hidden off the right edge, exactly when a user most needs to
+  // read it back and fix any speech-to-text typos before sending). Capped
+  // at FOLLOWUP_TEXTAREA_MAX_HEIGHT so one very long prompt doesn't push the
+  // ask button off whatever room is left in the panel — it scrolls inside
+  // itself past that instead of growing forever.
+  useEffect(() => {
+    const el = followupTextareaRef.current
+    if (!el) return
+    el.style.height = 'auto'
+    el.style.height = `${Math.min(el.scrollHeight, FOLLOWUP_TEXTAREA_MAX_HEIGHT)}px`
+  }, [followupText])
+
   return (
     <div className="space-y-6">
       {turns.map((turn, i) => (
@@ -1645,20 +1666,32 @@ function AgentChatView({
       {!blockedOnSignIn && (
         <div className="space-y-1.5" ref={followupAnchorRef}>
           <div
-            className="rounded-lg px-3 py-2 flex items-center gap-2"
+            className="rounded-lg px-3 py-2 flex items-end gap-2"
             style={{ backgroundColor: 'oklch(0.12 0 0)', border: '1px solid oklch(0.26 0 0)' }}
           >
-            <input
-              type="text"
+            <textarea
+              ref={followupTextareaRef}
+              rows={1}
               value={followupText}
               onChange={(e) => setFollowupText(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter') submit()
+                // Shift+Enter inserts a newline (now that this is a real
+                // multi-line field) — plain Enter still submits, same as
+                // before.
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault()
+                  submit()
+                }
               }}
               disabled={isFollowupLoading}
               placeholder="ask a follow-up…"
-              className="flex-1 bg-transparent font-mono text-[13px] outline-none disabled:opacity-50"
-              style={{ color: 'oklch(0.92 0 0)' }}
+              className="flex-1 bg-transparent font-mono text-[13px] outline-none disabled:opacity-50 resize-none py-1"
+              style={{ color: 'oklch(0.92 0 0)', maxHeight: `${FOLLOWUP_TEXTAREA_MAX_HEIGHT}px` }}
+            />
+            <VoiceInputButton
+              getBaseText={() => followupText}
+              onTranscript={setFollowupText}
+              className="mb-1 p-1"
             />
             {/* Button's own label stays fixed ("ask") whether loading or not —
                 swapping it to "…" (the original approach) changed the
@@ -8147,7 +8180,7 @@ function App() {
                   }}
                   onFocus={() => setIsMobileDropdownDismissed(false)}
                   onKeyDown={handleSearchSubmit}
-                  className="w-full h-[52px] px-5 py-3 bg-card text-foreground font-mono text-[16px] rounded-lg border border-border outline-none focus:border-primary transition-colors duration-200"
+                  className="w-full h-[52px] pl-5 pr-12 py-3 bg-card text-foreground font-mono text-[16px] rounded-lg border border-border outline-none focus:border-primary transition-colors duration-200"
                 />
                 {!searchValue && (
                   <div
@@ -8157,6 +8190,15 @@ function App() {
                     {PLACEHOLDER_TEXTS[0]}
                   </div>
                 )}
+                {/* Voice-to-text (owner ask, 2026-10-17). Right-aligned
+                    inside the search bar itself, same spot this kind of
+                    control sits in most dictation-enabled inputs elsewhere.
+                    Renders nothing on browsers without SpeechRecognition. */}
+                <VoiceInputButton
+                  getBaseText={() => searchValue}
+                  onTranscript={setSearchValue}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5"
+                />
                 {(playerMatches.length > 0 || greenMatches.length > 0) && !isNlInProgress && !isMobileDropdownDismissed && (
                   <div className="absolute top-[60px] left-0 right-0 z-[25] flex flex-col gap-2">
                     {playerMatches.length > 0 && (
@@ -8264,7 +8306,7 @@ function App() {
                   }}
                   onFocus={() => setIsDesktopDropdownDismissed(false)}
                   onKeyDown={handleSearchSubmit}
-                  className="w-full h-[52px] px-5 py-3 bg-card text-foreground font-mono text-[16px] rounded-lg border border-border outline-none focus:border-primary transition-colors duration-200"
+                  className="w-full h-[52px] pl-5 pr-12 py-3 bg-card text-foreground font-mono text-[16px] rounded-lg border border-border outline-none focus:border-primary transition-colors duration-200"
                   style={{
                     opacity: 1,
                   }}
@@ -8277,6 +8319,13 @@ function App() {
                     {PLACEHOLDER_TEXTS[0]}
                   </div>
                 )}
+                {/* Voice-to-text (owner ask, 2026-10-17). Same placement and
+                    behavior as the mobile input's own mic button above. */}
+                <VoiceInputButton
+                  getBaseText={() => searchValue}
+                  onTranscript={setSearchValue}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5"
+                />
                 {(playerMatches.length > 0 || greenMatches.length > 0) && !isNlInProgress && !isDesktopDropdownDismissed && (
                   <div className="absolute top-[60px] left-0 right-0 z-[25] flex flex-col gap-2">
                     {playerMatches.length > 0 && (
