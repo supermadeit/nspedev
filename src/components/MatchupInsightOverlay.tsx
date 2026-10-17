@@ -16,8 +16,10 @@
 // sign-in gate. See the conversation this was rescoped in for the two
 // worked examples (CAR/ARI, DET/CIN) the wording and player-selection
 // logic below were tuned against.
+import { useEffect, useState } from 'react'
 import { type MatchupInsightPayload, type MatchupPlayer, type MatchupTeamPlayers } from '@/lib/nspe-payloads'
 import { C } from '@/components/ProfileSections'
+import { PLAYER_INDEX, loadPlayerIndex } from '@/lib/playerSearch'
 
 export interface MatchupInsightOverlayProps {
   open: boolean
@@ -61,8 +63,57 @@ function statValue(split: Record<string, unknown>, key: string): number | null {
   return typeof v === 'number' ? v : null
 }
 
-function formatName(raw: string): string {
+// Naive fallback only — plain camelCase split, no name-database backing.
+// Correct for most names ("BryceYoung" -> "Bryce Young") but loses
+// internal capitals on Mc/Mac-style surnames ("TreyMcbride", should read
+// "McBride") and drops apostrophes entirely ("JaMarrChase", should read
+// "Ja'Marr"). resolveDisplayName below is what actually fixes this for
+// any player already in the live index; this only fires for the rare one
+// who isn't (index still loading, or genuinely missing from it).
+function formatNameFallback(raw: string): string {
   return raw.replace(/([a-z])([A-Z])/g, '$1 $2')
+}
+
+// Case/punctuation-insensitive key — "Ja'Marr Chase" and "JaMarrChase"
+// (this payload's own flattened player_name) both reduce to "jamarrchase",
+// which is what makes the lookup below work at all.
+function nameKey(name: string): string {
+  return name.toLowerCase().replace(/[^a-z]/g, '')
+}
+
+// Owner report, 2026-10-18: names on this payload are losslessly
+// flattened camelCase ("TreyMcbride", "JaMarrChase") with no reliable way
+// to algorithmically recover the real capitalization/punctuation (is
+// "Laporta" one word or "La" + "Porta"? Does "JaMarr" want an apostrophe?
+// Can't tell from the flattened string alone). The site's own live player
+// index (/database/index, already fetched for search/profile pages) turns
+// out to already carry the correctly formatted version of most of these
+// ("Trey McBride", "Ja'Marr Chase" — confirmed live) — so this matches
+// against that instead of guessing, falling back to the plain camelCase
+// split only for whoever isn't in it yet.
+function resolveDisplayName(raw: string): string {
+  const key = nameKey(raw)
+  const hit = PLAYER_INDEX.find((e) => nameKey(e.name) === key)
+  return hit ? hit.name : formatNameFallback(raw)
+}
+
+// Mirrors App.tsx's own isPlayerIndexReady pattern (see its loadPlayerIndex
+// useEffect) — loadPlayerIndex() is idempotent/safe to call from here even
+// if some other component already triggered it, and this overlay can't
+// assume one has (it mounts from three separate route trees — App.tsx,
+// WorldCupApp.tsx, SportSeasonPage.tsx — not all of which load the index
+// on their own). The index is usually already warm by the time someone
+// clicks into a matchup from a page that's been open a few seconds, so
+// this mostly just re-renders once with the same names already resolved
+// correctly; the fallback above covers the rare case where it's still
+// loading.
+function usePlayerIndexReady(): boolean {
+  const [ready, setReady] = useState(PLAYER_INDEX.length > 0)
+  useEffect(() => {
+    if (ready) return
+    loadPlayerIndex().then(() => setReady(true))
+  }, [ready])
+  return ready
 }
 
 function formatStatNumber(value: number): string {
@@ -179,7 +230,7 @@ function pickHighlights(players: MatchupPlayer[], sport: string): HighlightPick[
 function playerSentence(pick: HighlightPick, opponentLabel: string): string {
   const { player, role } = pick
   const spec = CATEGORY_SPECS[player.category]
-  const name = formatName(player.player_name)
+  const name = resolveDisplayName(player.player_name)
   if (!spec) return `${name} — no stat line available.`
 
   const formPrimary = statValue(player.recent_form, spec.primary)
@@ -219,6 +270,11 @@ function buildTeamSummary(team: MatchupTeamPlayers, sport: string, opponentLabel
 }
 
 export function MatchupInsightOverlay({ open, onClose, payload }: MatchupInsightOverlayProps) {
+  // Hook runs unconditionally (before the early return below, per the
+  // rules of hooks) — its only job is forcing one re-render once the
+  // index is ready, so resolveDisplayName's module-level PLAYER_INDEX
+  // read picks up real names instead of the camelCase fallback.
+  usePlayerIndexReady()
   if (!open || !payload) return null
 
   const teamA = payload.query.team_a
