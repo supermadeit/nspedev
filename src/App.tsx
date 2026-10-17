@@ -8166,17 +8166,34 @@ function App() {
                 {/* {pocket}: tucked above the search bar's right edge, same
                     spot as mobile. Greyed out logged-out (click sends to
                     log in). GuestQuotaNotice takes the opposite (left) edge
-                    of the same strip, so the two never collide. */}
-                <button
-                  type="button"
-                  data-tour="tour-pocket"
-                  onClick={openPockets}
-                  title={user ? 'Your saved results' : 'Log in to use pockets'}
-                  className="absolute -top-6 right-0 font-mono font-bold text-[12px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-                  style={{ color: 'oklch(0.85 0.15 195)', opacity: user ? 1 : 0.45 }}
-                >
-                  {'{pocket}'}
-                </button>
+                    of the same strip, so the two never collide. {resume}
+                    (owner ask, 2026-10-17 — "top line, not too far from
+                    {pocket}") sits just to {pocket}'s left in the same
+                    strip, shown only when there's a closed panel to reopen —
+                    see its own fuller comment on the mobile instance of this
+                    button, down in the hint-line row below. */}
+                <div className="absolute -top-6 right-0 flex items-center gap-3">
+                  {!isMiniOpen && lastPayload != null && (
+                    <button
+                      type="button"
+                      onClick={() => setIsMiniOpen(true)}
+                      className="font-mono font-bold text-[12px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+                      style={{ color: 'oklch(0.78 0.18 145)' }}
+                    >
+                      {'{resume}'}
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    data-tour="tour-pocket"
+                    onClick={openPockets}
+                    title={user ? 'Your saved results' : 'Log in to use pockets'}
+                    className="font-mono font-bold text-[12px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+                    style={{ color: 'oklch(0.85 0.15 195)', opacity: user ? 1 : 0.45 }}
+                  >
+                    {'{pocket}'}
+                  </button>
+                </div>
                 {!user && <GuestQuotaNotice remaining={guestQueriesRemaining} />}
                 <input
                   ref={searchInputRef}
@@ -8304,8 +8321,15 @@ function App() {
                 old chat the same way a "run it yourself" chip click
                 already does). This reopens the panel exactly as it was
                 left, chat or not, with zero re-fetch and zero state touched
-                — plain `setIsMiniOpen(true)`. */}
-            {!isMiniOpen && lastPayload != null && (
+                — plain `setIsMiniOpen(true)`.
+                Mobile only here — mobile's own {pocket} lives in this same
+                hint-line row (see the isMobile branch above), so "near
+                {pocket}" already means here on mobile. Desktop's {pocket}
+                is up on the search bar's top-right edge instead (see the
+                desktop search-container block below), so desktop gets its
+                own {resume} planted there, not this one — per the owner's
+                explicit "top line, not too far from {pocket}" placement. */}
+            {isMobile && !isMiniOpen && lastPayload != null && (
               <>
                 <span aria-hidden="true" className="font-mono text-[14px] -mx-2" style={{ color: 'oklch(0.92 0 0)' }}>|</span>
                 <button

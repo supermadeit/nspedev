@@ -173,20 +173,20 @@ function useTeamMetricsFetch(sport: Sport, team: string, window: string, enabled
   return state
 }
 
-// A plain year token means a different season per sport — NBA's is the
-// season's END year (2026 = 2025-26), NHL's is the START year (2024 =
-// 2024-25), so the SAME 2025-26 season is "2026" for NBA and "2025" for
-// NHL. A bare "2026" in the dropdown would silently pick the wrong season
-// for whichever sport doesn't match the viewer's assumption — flagged by
-// nspe-v2-da 2026-10-01, who confirmed `season`/`history` need no such
-// disambiguation (both are safe everywhere) and that hardcoding the span
-// per sport is cheaper than fetching every option's real window.label up
-// front just to populate a dropdown. NFL's and MLB's tokens already equal
-// their season year 1:1 (confirmed for mlb 2026-10-01), so neither needs a
-// second form — both just fall through to the plain `String(year)` below.
+// A plain year token used to mean a different season for NBA than NHL
+// (NBA: the season's END year; NHL: the START year) — backend unified this
+// 2026-10-17 (nspe-v2-da, not yet deployed as of this comment) after the
+// split turned out to be a real bug, not a documented convention: every
+// nspe command now reads a bare year as the DISPLAY/start year for BOTH
+// sports, so "2026" means the 2026-27 season everywhere, NBA included.
+// NFL's and MLB's tokens already equal their season year 1:1 (confirmed for
+// mlb 2026-10-01), so neither needs a second form — both just fall through
+// to the plain `String(year)` below. Explicitly NOT the same rule as the
+// player-profile page's own `?window=` (PlayerProfilePage.tsx) — backend
+// deliberately left that endpoint's year meaning untouched for now, so
+// don't copy this logic there without checking first.
 function yearOptionLabel(sport: Sport, year: number): string {
-  if (sport === 'nba') return `${year} (${year - 1}-${String(year).slice(2)})`
-  if (sport === 'nhl') return `${year} (${year}-${String(year + 1).slice(2)})`
+  if (sport === 'nba' || sport === 'nhl') return `${year} (${year}-${String(year + 1).slice(2)})`
   return String(year)
 }
 
