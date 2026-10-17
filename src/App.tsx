@@ -7607,10 +7607,20 @@ function App() {
         // size) is what keeps it from reading as a takeover.
         const isH2hFullScreen = Boolean(h2hResult) && isMobile
         const isH2hLarge = Boolean(h2hResult) && !isMobile
+        // Chat (agentChatTurns) gets the same full-screen treatment as H2H
+        // on mobile (reported 2026-10-17) — the cramped floating-panel size
+        // was the worst fit for a conversational, scroll-heavy surface with
+        // its own follow-up input box, and exiting no longer loses the
+        // conversation (✕ parks it, {resume}/{return to chat} bring it right
+        // back — see parkedChatTurns), so there's no cost to taking the
+        // whole screen the way there would've been before that existed.
+        // Desktop keeps the normal floating-panel size; this is mobile-only.
+        const isChatFullScreen = agentChatTurns.length > 0 && isMobile
+        const isMobileFullScreen = isH2hFullScreen || isChatFullScreen
         return (
         <div
           ref={miniRef}
-          className={isH2hFullScreen
+          className={isMobileFullScreen
             ? 'fixed inset-0 z-30 flex flex-col overflow-hidden'
             : isH2hLarge
             ? 'fixed z-30 flex flex-col rounded-lg shadow-2xl overflow-hidden'
@@ -7618,7 +7628,7 @@ function App() {
             ? 'fixed z-30 rounded-lg shadow-2xl overflow-hidden'
             : 'absolute z-30 flex flex-col rounded-lg shadow-2xl overflow-hidden'
           }
-          style={isH2hFullScreen
+          style={isMobileFullScreen
             ? { backgroundColor: 'oklch(0.15 0 0)' }
             : isH2hLarge
             ? {
@@ -7652,8 +7662,8 @@ function App() {
           <div
             className="flex flex-none items-center justify-between px-5 py-3 select-none"
             style={{ backgroundColor: 'oklch(0.18 0 0)', borderBottom: '1px solid oklch(0.30 0 0)', touchAction: 'none' }}
-            onMouseDown={isH2hFullScreen || isH2hLarge ? undefined : handleMouseDown}
-            onTouchStart={isH2hFullScreen ? undefined : isMobile ? handleMobileHeaderTouchStart : undefined}
+            onMouseDown={isMobileFullScreen || isH2hLarge ? undefined : handleMouseDown}
+            onTouchStart={isMobileFullScreen ? undefined : isMobile ? handleMobileHeaderTouchStart : undefined}
           >
             <span className="font-mono font-bold text-[14px]" style={{ color: 'oklch(0.85 0.15 195)' }}>
               {h2hResult
@@ -7777,7 +7787,7 @@ function App() {
 
           <div
             ref={resultsScrollRef}
-            className={`overflow-y-auto px-5 pb-4 space-y-3 ${isH2hFullScreen ? 'flex-1 min-h-0' : isMobile ? 'max-h-[calc(100dvh-130px)]' : 'flex-1 min-h-0'}`}
+            className={`overflow-y-auto px-5 pb-4 space-y-3 ${isMobileFullScreen ? 'flex-1 min-h-0' : isMobile ? 'max-h-[calc(100dvh-130px)]' : 'flex-1 min-h-0'}`}
           >
             {/* Required "never merge silently" transparency for a follow-up
                 question — the header above already shows the full rewritten
