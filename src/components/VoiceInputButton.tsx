@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { Mic } from 'lucide-react'
 import { useSpeechToText } from '@/hooks/use-speech-to-text'
 
@@ -16,6 +16,8 @@ import { useSpeechToText } from '@/hooks/use-speech-to-text'
 export function VoiceInputButton({
   getBaseText,
   onTranscript,
+  targetRef,
+  onListeningChange,
   className = '',
 }: {
   // Called once when listening starts, to snapshot the text already in the
@@ -24,6 +26,21 @@ export function VoiceInputButton({
   // Called with the full new field value (base + dictated text) as speech
   // is recognized, live on interim results and once more on the final one.
   onTranscript: (fullText: string) => void
+  // The actual <input>/<textarea> being dictated into (owner ask, 2026-10-18
+  // — follow-while-speaking for fields that don't grow, e.g. the homepage
+  // single-line CLI bar). Setting a controlled input's value via React state
+  // doesn't reliably move the caret or scroll position the way a real
+  // keystroke does — left alone, a long dictated command can keep the view
+  // scrolled to its start while new words land off-screen to the right.
+  // When passed, this pushes the caret (and scroll position, for a
+  // single-line field) to the end after each recognized chunk, so the
+  // just-spoken words stay in view instead of needing a manual scroll to
+  // find them. Optional — the follow-up chat textarea doesn't need it since
+  // it grows instead of scrolling.
+  targetRef?: React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>
+  // Reports listening on/off so a parent that wants to (e.g. highlighting
+  // the field itself while dictation is live, not just the mic icon) can.
+  onListeningChange?: (listening: boolean) => void
   className?: string
 }) {
   // A ref, not a plain variable — this needs to survive across the
@@ -34,7 +51,27 @@ export function VoiceInputButton({
   const { supported, listening, error, toggle } = useSpeechToText((spoken) => {
     const base = baseTextRef.current
     onTranscript(base ? `${base} ${spoken}` : spoken)
+    if (targetRef) {
+      // The state update above hasn't painted yet — wait a frame so the
+      // field's DOM value (and scrollWidth) actually reflects the new text
+      // before chasing the caret/scroll to its end.
+      requestAnimationFrame(() => {
+        const el = targetRef.current
+        if (!el) return
+        el.scrollLeft = el.scrollWidth
+        try {
+          el.setSelectionRange(el.value.length, el.value.length)
+        } catch {
+          // Thrown on input types that don't support text selection — none
+          // of this component's actual callers, but harmless either way.
+        }
+      })
+    }
   })
+
+  useEffect(() => {
+    onListeningChange?.(listening)
+  }, [listening, onListeningChange])
 
   if (!supported) return null
 

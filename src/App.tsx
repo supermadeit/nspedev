@@ -5547,6 +5547,10 @@ function MlbPlayerReportView({ payload }: { payload: MlbPlayerReportPayload }) {
 // reads as "the button that matters" without being distracting.
 const SEARCH_GLOW = '0 0 8px 1px oklch(0.90 0.18 195 / 0.55), 0 0 20px 4px oklch(0.90 0.18 195 / 0.25)'
 
+// Same two-layer treatment as SEARCH_GLOW, in the mic's own "listening" red
+// — put on the CLI search bar itself while voice dictation is live.
+const MIC_LISTENING_GLOW = '0 0 8px 1px oklch(0.70 0.18 25 / 0.55), 0 0 20px 4px oklch(0.70 0.18 25 / 0.25)'
+
 // Every command family in nspecommand_map.json (the CLI's own dispatch
 // catalog) opens with one of these tokens — a league name, 'ncaaf' (a pure
 // input alias for 'cfb'), the 'plus' batch-runner meta-command, 'help', or
@@ -5661,6 +5665,12 @@ const RESULTS_BOTTOM_SAFE = 56
 function App() {
   const [stars, setStars] = useState<Star[]>([])
   const [searchValue, setSearchValue] = useState('')
+  // Highlights the CLI search bar itself while voice dictation is live
+  // (owner ask, 2026-10-18) — the mic icon turning red already signals this,
+  // but the bar not expanding for long dictated commands (unlike the chat
+  // input) makes a clearer "this is actively listening" cue on the field
+  // worth having too.
+  const [isSearchMicListening, setIsSearchMicListening] = useState(false)
   const [isMiniOpen, setIsMiniOpen] = useState(false)
   const [isSampleMenuOpen, setIsSampleMenuOpen] = useState(false)
   const [isTutorialOpen, setIsTutorialOpen] = useState(false)
@@ -8181,6 +8191,7 @@ function App() {
                   onFocus={() => setIsMobileDropdownDismissed(false)}
                   onKeyDown={handleSearchSubmit}
                   className="w-full h-[52px] pl-5 pr-12 py-3 bg-card text-foreground font-mono text-[16px] rounded-lg border border-border outline-none focus:border-primary transition-colors duration-200"
+                  style={isSearchMicListening ? { boxShadow: MIC_LISTENING_GLOW } : undefined}
                 />
                 {!searchValue && (
                   <div
@@ -8193,10 +8204,19 @@ function App() {
                 {/* Voice-to-text (owner ask, 2026-10-17). Right-aligned
                     inside the search bar itself, same spot this kind of
                     control sits in most dictation-enabled inputs elsewhere.
-                    Renders nothing on browsers without SpeechRecognition. */}
+                    Renders nothing on browsers without SpeechRecognition.
+                    targetRef (2026-10-18): this single-line bar doesn't grow
+                    like the chat input does, so as dictated text outgrows
+                    its width, the caret/scroll gets pushed to follow the
+                    newest words rather than leaving the view stuck at the
+                    start — same effect a native keystroke-driven caret move
+                    already gets for free, just replicated for text that
+                    arrives programmatically instead. */}
                 <VoiceInputButton
                   getBaseText={() => searchValue}
                   onTranscript={setSearchValue}
+                  targetRef={searchInputRef}
+                  onListeningChange={setIsSearchMicListening}
                   className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5"
                 />
                 {(playerMatches.length > 0 || greenMatches.length > 0) && !isNlInProgress && !isMobileDropdownDismissed && (
@@ -8309,6 +8329,7 @@ function App() {
                   className="w-full h-[52px] pl-5 pr-12 py-3 bg-card text-foreground font-mono text-[16px] rounded-lg border border-border outline-none focus:border-primary transition-colors duration-200"
                   style={{
                     opacity: 1,
+                    ...(isSearchMicListening ? { boxShadow: MIC_LISTENING_GLOW } : null),
                   }}
                 />
                 {!searchValue && (
@@ -8320,10 +8341,13 @@ function App() {
                   </div>
                 )}
                 {/* Voice-to-text (owner ask, 2026-10-17). Same placement and
-                    behavior as the mobile input's own mic button above. */}
+                    behavior as the mobile input's own mic button above,
+                    including the caret-follow targetRef (2026-10-18). */}
                 <VoiceInputButton
                   getBaseText={() => searchValue}
                   onTranscript={setSearchValue}
+                  targetRef={searchInputRef}
+                  onListeningChange={setIsSearchMicListening}
                   className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5"
                 />
                 {(playerMatches.length > 0 || greenMatches.length > 0) && !isNlInProgress && !isDesktopDropdownDismissed && (
