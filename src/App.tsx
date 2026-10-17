@@ -6232,7 +6232,23 @@ function App() {
     // questions go straight to /agent (see runQuery) rather than through
     // /run — a pocket is a frozen single-turn snapshot regardless, so a
     // one-element array is the right shape here, not a live conversation.
-    const agentChatPayload = extractAgentChatPayload(payload)
+    //
+    // Real bug found 2026-10-17 (owner report): a pocket saved from a live
+    // NL answer saves `lastPayload` as-is, and since that switch to /agent,
+    // `lastPayload` for an NL turn is /agent's own FLAT response shape
+    // (`answer` at top level), not /run's nested `{output, agent: {...}}`
+    // envelope this first check alone recognizes. Replaying such a pocket
+    // matched nothing here, fell through every other engine-specific
+    // extractor below (none of which recognize a flat /agent shape either),
+    // and landed on "No results found" despite a perfectly good saved
+    // answer sitting right there — exactly why "re-run live" worked (that
+    // goes through runQuery's own /agent path fresh, cache-hit-fast) while
+    // the raw saved snapshot replay silently didn't. Falling back to
+    // extractAgentTurnPayload fixes this for every pocket saved from here
+    // on; a pocket saved BEFORE this fix still replays fine too, since
+    // extractAgentChatPayload (tried first) still recognizes its old
+    // nested shape unchanged.
+    const agentChatPayload = extractAgentChatPayload(payload) ?? extractAgentTurnPayload(payload)
     if (agentChatPayload) {
       setAgentChatTurns([{
         question: sanitizedQuery,
@@ -8276,6 +8292,31 @@ function App() {
               >
                 {'{learn.nspe}'}
               </button>
+            )}
+            {/* {resume} — owner ask, 2026-10-17: closing the results panel
+                (✕) never actually threw its state away (agentChatTurns,
+                parkedChatTurns, lastPayload all live in this component, not
+                the panel's own subtree, which just stops rendering while
+                isMiniOpen is false) — there was simply no way back in short
+                of typing a brand-new query, which the owner didn't want
+                counted as "resuming," since a real new query should still
+                behave exactly as it does today (replace the view, park the
+                old chat the same way a "run it yourself" chip click
+                already does). This reopens the panel exactly as it was
+                left, chat or not, with zero re-fetch and zero state touched
+                — plain `setIsMiniOpen(true)`. */}
+            {!isMiniOpen && lastPayload != null && (
+              <>
+                <span aria-hidden="true" className="font-mono text-[14px] -mx-2" style={{ color: 'oklch(0.92 0 0)' }}>|</span>
+                <button
+                  type="button"
+                  onClick={() => setIsMiniOpen(true)}
+                  className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+                  style={{ color: 'oklch(0.78 0.18 145)' }}
+                >
+                  {'{resume}'}
+                </button>
+              </>
             )}
             {/* Desktop only — mobile keeps {sample-queries} above the search
                 bar's left edge now (see above). Moved here from the
