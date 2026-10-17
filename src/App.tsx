@@ -1345,14 +1345,22 @@ function renderInlineBold(text: string, keyPrefix: string): ReactNode[] {
   )
 }
 
-// A GFM-style pipe table: a header row, a "---|---" separator row, then data
-// rows — the "short table now and then" the spec mentions.
-function isTableBlock(lines: string[]): boolean {
-  return lines.length >= 2 && lines[0].includes('|') && /^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)+\|?\s*$/.test(lines[1])
-}
-
 function splitTableRow(line: string): string[] {
   return line.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map((c) => c.trim())
+}
+
+// Finds a GFM pipe table anywhere within `lines`, not just starting at
+// line 0 — a short prose lead-in before the table ("Breakdown of those 53
+// games by TD count:") is common, and isTableBlock's old lines[0]-only
+// check missed the table entirely whenever one preceded it, falling
+// through to one big literal-pipes paragraph (screenshot, 2026-10-17: a
+// real 6-row table rendered as raw "| 0 | 7 |" text with no lead-in prose
+// shown as prose either). Returns -1 when no table's found at all.
+function findTableStart(lines: string[]): number {
+  for (let i = 0; i < lines.length - 1; i++) {
+    if (lines[i].includes('|') && /^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)+\|?\s*$/.test(lines[i + 1])) return i
+  }
+  return -1
 }
 
 function AnswerBlock({ block, blockKey }: { block: string; blockKey: string }) {
@@ -1369,37 +1377,60 @@ function AnswerBlock({ block, blockKey }: { block: string; blockKey: string }) {
     )
   }
 
-  if (isTableBlock(lines)) {
-    const header = splitTableRow(lines[0])
-    const rows = lines.slice(2).map(splitTableRow)
+  const tableStart = findTableStart(lines)
+  if (tableStart !== -1) {
+    const before = lines.slice(0, tableStart)
+    const header = splitTableRow(lines[tableStart])
+    // Data rows: every line after the separator that still looks like a
+    // pipe row. Stops at the first one that doesn't, so trailing prose in
+    // the same block (rare — usually a blank line splits it into its own
+    // block first) renders as prose after the table instead of erroring
+    // trying to parse it as a row.
+    let rowsEnd = tableStart + 2
+    while (rowsEnd < lines.length && lines[rowsEnd].includes('|')) rowsEnd++
+    const rows = lines.slice(tableStart + 2, rowsEnd).map(splitTableRow)
+    const after = lines.slice(rowsEnd)
+
     return (
-      <div className="overflow-x-auto">
-        <table className="text-[12px]" style={{ borderCollapse: 'collapse' }}>
-          <thead>
-            <tr>
-              {header.map((h, i) => (
-                <th
-                  key={i}
-                  className="text-left px-2 py-1 whitespace-nowrap"
-                  style={{ borderBottom: '1px solid oklch(0.30 0 0)', color: 'oklch(0.85 0.15 195)' }}
-                >
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((r, ri) => (
-              <tr key={ri}>
-                {r.map((c, ci) => (
-                  <td key={ci} className="px-2 py-1 whitespace-nowrap" style={{ borderBottom: '1px solid oklch(0.20 0 0)' }}>
-                    {c}
-                  </td>
+      <div className="space-y-2">
+        {before.length > 0 && (
+          <p className="leading-relaxed whitespace-pre-line">{renderInlineBold(before.join('\n'), `${blockKey}-pre`)}</p>
+        )}
+        <div className="overflow-x-auto rounded" style={{ border: '1px solid oklch(0.26 0 0)' }}>
+          <table className="text-[12px] w-full" style={{ borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ backgroundColor: 'oklch(0.16 0 0)' }}>
+                {header.map((h, i) => (
+                  <th
+                    key={i}
+                    className="text-left px-2.5 py-1.5 whitespace-nowrap"
+                    style={{ borderBottom: '1px solid oklch(0.30 0 0)', color: 'oklch(0.85 0.15 195)' }}
+                  >
+                    {h}
+                  </th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {rows.map((r, ri) => (
+                <tr key={ri} style={ri % 2 === 1 ? { backgroundColor: 'oklch(0.13 0 0)' } : undefined}>
+                  {r.map((c, ci) => (
+                    <td
+                      key={ci}
+                      className="px-2.5 py-1 whitespace-nowrap"
+                      style={{ borderBottom: '1px solid oklch(0.20 0 0)', color: ci === 0 ? 'oklch(0.92 0 0)' : 'oklch(0.85 0.15 195)' }}
+                    >
+                      {c}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {after.length > 0 && (
+          <p className="leading-relaxed whitespace-pre-line">{renderInlineBold(after.join('\n'), `${blockKey}-post`)}</p>
+        )}
       </div>
     )
   }
@@ -7679,6 +7710,18 @@ function App() {
                 ? `${lastQuery} — first pa · ${resultCountText(firstPaResult.results.length)}`
                 : teamRunsResult
                 ? `${lastQuery} — team runs · ${resultCountText(teamRunsResult.results.length)}`
+                // A chat turn's own queryResults is always set to [] (see
+                // runQuery/askFollowup) so it could never fall into this
+                // view's own branch — but [] is still truthy, so without this
+                // check it fell through to the generic "0results" suffix
+                // below regardless of how much real content the answer
+                // actually had (screenshot, 2026-10-17: a full table + real
+                // numbers, header still claimed "0results"). No row count
+                // applies to a conversational answer at all, so this drops
+                // the suffix entirely rather than inventing a number
+                // (turn count, answer length) nothing asked for.
+                : agentChatTurns.length > 0
+                ? lastQuery
                 : queryResults
                 ? `${lastQuery} — ${queryResults.length}results`
                 : 'NSPE — Command Legend'}
