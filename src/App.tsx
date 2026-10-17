@@ -7157,9 +7157,19 @@ function App() {
 
   // Count rendered rows (shown vs filtered out) for the filter box. Runs
   // after every render but only sets state when the numbers change.
+  // Owner report, 2026-10-18: chat "a lil loose... tricky to scroll
+  // sometimes" on mobile, compared against {sample-queries}'s own smoother
+  // full-screen scroll. AgentChatView never renders a single `data-result-
+  // row` element (it's not a row-filterable result view at all), so for the
+  // entire time someone's chatting this ran two full querySelectorAll
+  // passes over the results panel's DOM after literally every render —
+  // including every keystroke in the composer and every interim speech
+  // recognition update while dictating, both of which re-render this
+  // component. None of that work was ever used for anything in chat. Skips
+  // it outright whenever chat is what's actually showing.
   useLayoutEffect(() => {
     const root = resultsScrollRef.current
-    if (!root) return
+    if (!root || agentChatTurns.length > 0 || isComposingChat) return
     const shown = root.querySelectorAll('[data-result-row="shown"]').length
     const total = shown + root.querySelectorAll('[data-result-row="hidden"]').length
     setRowCounts((prev) => (prev.shown === shown && prev.total === total ? prev : { shown, total }))
@@ -7743,7 +7753,17 @@ function App() {
         >
           <div
             className="flex flex-none items-center justify-between px-5 py-3 select-none"
-            style={{ backgroundColor: 'oklch(0.18 0 0)', borderBottom: '1px solid oklch(0.30 0 0)', touchAction: 'none' }}
+            style={{
+              backgroundColor: 'oklch(0.18 0 0)',
+              borderBottom: '1px solid oklch(0.30 0 0)',
+              // touchAction: 'none' is only for the draggable floating-panel
+              // header (stops the page scrolling behind a drag gesture) —
+              // dragging's disabled outright in full-screen mode (see
+              // onTouchStart below), so this stays unset there instead of
+              // sitting on the header for no reason right next to a
+              // scrollable body it isn't needed for.
+              touchAction: isMobileFullScreen ? undefined : 'none',
+            }}
             onMouseDown={isMobileFullScreen || isH2hLarge ? undefined : handleMouseDown}
             onTouchStart={isMobileFullScreen ? undefined : isMobile ? handleMobileHeaderTouchStart : undefined}
           >
@@ -7876,6 +7896,16 @@ function App() {
           <div
             ref={resultsScrollRef}
             className={`overflow-y-auto px-5 pb-4 space-y-3 ${isMobileFullScreen ? 'flex-1 min-h-0' : isMobile ? 'max-h-[calc(100dvh-130px)]' : 'flex-1 min-h-0'}`}
+            // Owner report, 2026-10-18: full-screen mobile (chat especially)
+            // read as "a lil loose... tricky to scroll sometimes" next to
+            // {sample-queries}'s smoother full-screen scroll — one real
+            // difference between them is scroll chaining: once this
+            // container hits its own top/bottom, a mobile browser's default
+            // behavior lets the overscroll bleed into (and rubber-band) the
+            // page behind a `fixed` panel, which can read as the scroll
+            // "catching" or misbehaving right at the edges. `contain` stops
+            // the gesture there instead of handing it off.
+            style={isMobileFullScreen ? { overscrollBehavior: 'contain' } : undefined}
           >
             {/* Required "never merge silently" transparency for a follow-up
                 question — the header above already shows the full rewritten
@@ -8219,25 +8249,55 @@ function App() {
                   {'{sample-queries}'}
                 </button>
                 {!user && <GuestQuotaNotice remaining={guestQueriesRemaining} stacked />}
-                <input
-                  ref={searchInputRef}
-                  data-tour="tour-search"
-                  type="text"
-                  value={searchValue}
-                  onChange={(e) => {
-                    setSearchValue(e.target.value)
-                    setPlayerSearchActiveIndex(0)
-                    setPlayerNavTouched(false)
-                    setSyntaxActiveIndex(0)
-                    setSyntaxNavTouched(false)
-                    setSuppressSyntaxDropdown(false)
-                    setIsMobileDropdownDismissed(false)
-                  }}
-                  onFocus={() => setIsMobileDropdownDismissed(false)}
-                  onKeyDown={handleSearchSubmit}
-                  className="w-full h-[52px] pl-5 pr-12 py-3 bg-card text-foreground font-mono text-[16px] rounded-lg border border-border outline-none focus:border-primary transition-colors duration-200"
+                {/* Owner report, 2026-10-18: the mic as an absolute overlay
+                    (right-3/top-3) read as too close to {build} in mobile's
+                    stacked layout (input, then {search}/{build} right below
+                    it) — moved inline instead, same construction the chat
+                    composer's own input+mic+ask row already uses: one
+                    bordered box, the field as a flex-1 child, the mic as a
+                    normal flex sibling at the far right rather than
+                    overlapping the text. Border/background/focus styling
+                    moved from the <input> itself onto this wrapper so the
+                    whole box (field + mic) reads as one control. */}
+                <div
+                  className="flex items-center h-[52px] pl-5 pr-2 gap-1 bg-card rounded-lg border border-border outline-none focus-within:border-primary transition-colors duration-200"
                   style={isSearchMicListening ? { boxShadow: MIC_LISTENING_GLOW } : undefined}
-                />
+                >
+                  <input
+                    ref={searchInputRef}
+                    data-tour="tour-search"
+                    type="text"
+                    value={searchValue}
+                    onChange={(e) => {
+                      setSearchValue(e.target.value)
+                      setPlayerSearchActiveIndex(0)
+                      setPlayerNavTouched(false)
+                      setSyntaxActiveIndex(0)
+                      setSyntaxNavTouched(false)
+                      setSuppressSyntaxDropdown(false)
+                      setIsMobileDropdownDismissed(false)
+                    }}
+                    onFocus={() => setIsMobileDropdownDismissed(false)}
+                    onKeyDown={handleSearchSubmit}
+                    className="flex-1 min-w-0 h-full bg-transparent text-foreground font-mono text-[16px] outline-none"
+                  />
+                  {/* Voice-to-text (owner ask, 2026-10-17). Renders nothing
+                      on browsers without SpeechRecognition. targetRef
+                      (2026-10-18): this single-line bar doesn't grow like
+                      the chat input does, so as dictated text outgrows its
+                      width, the caret/scroll gets pushed to follow the
+                      newest words rather than leaving the view stuck at the
+                      start — same effect a native keystroke-driven caret
+                      move already gets for free, just replicated for text
+                      that arrives programmatically instead. */}
+                  <VoiceInputButton
+                    getBaseText={() => searchValue}
+                    onTranscript={setSearchValue}
+                    targetRef={searchInputRef}
+                    onListeningChange={setIsSearchMicListening}
+                    className="p-1.5 flex-none"
+                  />
+                </div>
                 {!searchValue && (
                   <div
                     className="absolute inset-0 flex items-center px-5 pointer-events-none font-mono text-[16px] text-muted-foreground"
@@ -8246,24 +8306,6 @@ function App() {
                     {PLACEHOLDER_TEXTS[0]}
                   </div>
                 )}
-                {/* Voice-to-text (owner ask, 2026-10-17). Right-aligned
-                    inside the search bar itself, same spot this kind of
-                    control sits in most dictation-enabled inputs elsewhere.
-                    Renders nothing on browsers without SpeechRecognition.
-                    targetRef (2026-10-18): this single-line bar doesn't grow
-                    like the chat input does, so as dictated text outgrows
-                    its width, the caret/scroll gets pushed to follow the
-                    newest words rather than leaving the view stuck at the
-                    start — same effect a native keystroke-driven caret move
-                    already gets for free, just replicated for text that
-                    arrives programmatically instead. */}
-                <VoiceInputButton
-                  getBaseText={() => searchValue}
-                  onTranscript={setSearchValue}
-                  targetRef={searchInputRef}
-                  onListeningChange={setIsSearchMicListening}
-                  className="absolute right-3 top-3 p-1.5"
-                />
                 {(playerMatches.length > 0 || greenMatches.length > 0) && !isNlInProgress && !isMobileDropdownDismissed && (
                   <div className="absolute top-[60px] left-0 right-0 z-[25] flex flex-col gap-2">
                     {playerMatches.length > 0 && (
@@ -8373,28 +8415,43 @@ function App() {
                   </button>
                 </div>
                 {!user && <GuestQuotaNotice remaining={guestQueriesRemaining} />}
-                <input
-                  ref={searchInputRef}
-                  data-tour="tour-search"
-                  type="text"
-                  value={searchValue}
-                  onChange={(e) => {
-                    setSearchValue(e.target.value)
-                    setPlayerSearchActiveIndex(0)
-                    setPlayerNavTouched(false)
-                    setSyntaxActiveIndex(0)
-                    setSyntaxNavTouched(false)
-                    setSuppressSyntaxDropdown(false)
-                    setIsDesktopDropdownDismissed(false)
-                  }}
-                  onFocus={() => setIsDesktopDropdownDismissed(false)}
-                  onKeyDown={handleSearchSubmit}
-                  className="w-full h-[52px] pl-5 pr-12 py-3 bg-card text-foreground font-mono text-[16px] rounded-lg border border-border outline-none focus:border-primary transition-colors duration-200"
-                  style={{
-                    opacity: 1,
-                    ...(isSearchMicListening ? { boxShadow: MIC_LISTENING_GLOW } : null),
-                  }}
-                />
+                {/* Same inline mic construction as the mobile input above
+                    (2026-10-18) — one bordered box, field as flex-1, mic as
+                    a normal flex sibling at the far right, same row the
+                    chat composer's own input+mic+ask already uses. */}
+                <div
+                  className="flex items-center h-[52px] pl-5 pr-2 gap-1 bg-card rounded-lg border border-border outline-none focus-within:border-primary transition-colors duration-200"
+                  style={isSearchMicListening ? { boxShadow: MIC_LISTENING_GLOW } : undefined}
+                >
+                  <input
+                    ref={searchInputRef}
+                    data-tour="tour-search"
+                    type="text"
+                    value={searchValue}
+                    onChange={(e) => {
+                      setSearchValue(e.target.value)
+                      setPlayerSearchActiveIndex(0)
+                      setPlayerNavTouched(false)
+                      setSyntaxActiveIndex(0)
+                      setSyntaxNavTouched(false)
+                      setSuppressSyntaxDropdown(false)
+                      setIsDesktopDropdownDismissed(false)
+                    }}
+                    onFocus={() => setIsDesktopDropdownDismissed(false)}
+                    onKeyDown={handleSearchSubmit}
+                    className="flex-1 min-w-0 h-full bg-transparent text-foreground font-mono text-[16px] outline-none"
+                  />
+                  {/* Voice-to-text (owner ask, 2026-10-17), including the
+                      caret-follow targetRef (2026-10-18) — see the mobile
+                      input's own fuller comment above. */}
+                  <VoiceInputButton
+                    getBaseText={() => searchValue}
+                    onTranscript={setSearchValue}
+                    targetRef={searchInputRef}
+                    onListeningChange={setIsSearchMicListening}
+                    className="p-1.5 flex-none"
+                  />
+                </div>
                 {!searchValue && (
                   <div
                     className="absolute inset-0 flex items-center px-5 pointer-events-none font-mono text-[16px] text-muted-foreground"
@@ -8403,16 +8460,6 @@ function App() {
                     {PLACEHOLDER_TEXTS[0]}
                   </div>
                 )}
-                {/* Voice-to-text (owner ask, 2026-10-17). Same placement and
-                    behavior as the mobile input's own mic button above,
-                    including the caret-follow targetRef (2026-10-18). */}
-                <VoiceInputButton
-                  getBaseText={() => searchValue}
-                  onTranscript={setSearchValue}
-                  targetRef={searchInputRef}
-                  onListeningChange={setIsSearchMicListening}
-                  className="absolute right-3 top-3 p-1.5"
-                />
                 {(playerMatches.length > 0 || greenMatches.length > 0) && !isNlInProgress && !isDesktopDropdownDismissed && (
                   <div className="absolute top-[60px] left-0 right-0 z-[25] flex flex-col gap-2">
                     {playerMatches.length > 0 && (
