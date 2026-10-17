@@ -934,6 +934,70 @@ export function extractMatchupInsightPayload(payload: unknown): MatchupInsightPa
   return null
 }
 
+// ---------- Team vs. team head-to-head (`<league> team <A> vs <B>`) ----------
+// One shared shape across all 4 sports (confirmed live for NFL 2026-10-16;
+// NHL/NBA/MLB shipped same day but not yet live on production as of this
+// writing — see the deploy-lag note where this is wired into App.tsx).
+// Despite backend's own assumption that NFL's version was "already
+// rendered" here, it wasn't — confirmed by grep, nothing in this file or
+// App.tsx referenced `nfl_team_h2h` before this. `a_stats`/`b_stats` are a
+// different field set per sport (NFL: total_yards/yards_per_play/turnovers/
+// possession_seconds; NHL: saves; NBA: reb/ast/fg_pct/fg3_pct; MLB: hits/
+// errors) — typed as a loose Record rather than a per-sport union, same
+// "render whatever's there generically" approach PowerRankingsRow already
+// takes for its own per-sport field spread. NHL/NBA/MLB never carry
+// window/-lastN (always full history including postseason, flagged inline
+// via season_type) — NFL's is the only one of the four with window support.
+export interface TeamH2hRecord {
+  wins: number
+  losses: number
+  // NHL only.
+  otl?: number
+  // Absent on NHL's record block (NFL/NBA/MLB all carry it, even when 0).
+  ties?: number
+}
+
+export interface TeamH2hGame {
+  date_iso: string
+  season: number | string
+  season_type?: string
+  outcome: string
+  pts_for: number
+  pts_allowed: number
+  a_stats?: Record<string, number>
+  b_stats?: Record<string, number>
+}
+
+export interface TeamH2hPayload {
+  engine: string
+  query: { team_a: string; team_b: string; window_label: string }
+  record: TeamH2hRecord
+  results: TeamH2hGame[]
+}
+
+export function isTeamH2hPayload(payload: unknown): payload is TeamH2hPayload {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false
+  const rec = payload as Record<string, unknown>
+  const engine = typeof rec.engine === 'string' ? rec.engine : ''
+  return /^(nfl|nba|mlb|nhl)_team_h2h$/.test(engine) && Array.isArray(rec.results)
+}
+
+export function extractTeamH2hPayload(payload: unknown): TeamH2hPayload | null {
+  if (isTeamH2hPayload(payload)) return payload
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const rec = payload as Record<string, unknown>
+    if (typeof rec.output === 'string') {
+      const inner = extractEnvelopeFromText(rec.output)
+      if (inner && isTeamH2hPayload(inner)) return inner
+    }
+    for (const key of ['data', 'result', 'payload', 'query_results_envelope']) {
+      const v = rec[key]
+      if (isTeamH2hPayload(v)) return v
+    }
+  }
+  return null
+}
+
 // ---------- NFL team points leaderboard (`nfl team -pts -leaderboard`) ----------
 // Render-gap case found live 2026-10-16: the top-level `results` array here
 // is NOT empty (unlike most of this session's other render gaps) — the

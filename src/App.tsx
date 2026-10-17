@@ -71,6 +71,7 @@ import {
   extractNflTeamOverviewPayload,
   extractNflTeamPtsLeaderboardPayload,
   extractPowerRankingsPayload,
+  extractTeamH2hPayload,
   extractNhlVsGoaliePairingPayload,
   extractAgentChatPayload,
   extractAgentTurnPayload,
@@ -120,6 +121,7 @@ import {
   type NflTeamOverviewPayload,
   type NflTeamPtsLeaderboardPayload,
   type PowerRankingsPayload,
+  type TeamH2hPayload,
   type NhlVsGoaliePairingPayload,
   type AgentBlock,
   type AgentQuota,
@@ -4739,6 +4741,75 @@ function NflTeamPtsLeaderboardView({ payload }: { payload: NflTeamPtsLeaderboard
   )
 }
 
+// <league>_team_h2h (`<league> team <A> vs <B>`) — full series history,
+// record + expandable per-meeting box-score detail. One shared view across
+// all 4 sports since the envelope shape is identical (backend's own
+// design); `a_stats`/`b_stats` are a different field set per sport, walked
+// generically via Object.entries rather than 4 separate per-sport layouts.
+function TeamH2hView({ payload }: { payload: TeamH2hPayload }) {
+  const { isExpanded, toggle } = useExpandableRows()
+  const { team_a, team_b, window_label } = payload.query
+  const r = payload.record
+  const results = payload.results ?? []
+
+  return (
+    <div className="space-y-3">
+      <div className="font-mono text-[13px]" style={{ color: 'oklch(0.90 0.18 195)' }}>
+        <span>{team_a}</span>
+        <span style={{ color: 'oklch(0.92 0 0)' }}>{' vs '}</span>
+        <span>{team_b}</span>
+        <span style={{ color: 'oklch(0.92 0 0)' }}>{` · ${window_label}`}</span>
+      </div>
+
+      <div className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
+        <span style={{ color: PITCH_GREEN }}>{`${r.wins}-${r.losses}`}</span>
+        {typeof r.otl === 'number' && <span>{`-${r.otl} OTL`}</span>}
+        {typeof r.ties === 'number' && r.ties > 0 && <span>{`-${r.ties} T`}</span>}
+        <span style={{ color: PITCH_LABEL }}>{` (${team_a}'s record)`}</span>
+      </div>
+
+      <div className="space-y-0">
+        {results.map((g, i) => {
+          const statEntries = [
+            ...Object.entries(g.a_stats ?? {}).map(([k, v]) => [`${team_a} ${k}`, v] as const),
+            ...Object.entries(g.b_stats ?? {}).map(([k, v]) => [`${team_b} ${k}`, v] as const),
+          ]
+          const outcomeColor = g.outcome === 'W' ? PITCH_GREEN : g.outcome === 'L' ? 'oklch(0.75 0.15 30)' : PITCH_LABEL
+          return (
+            <div key={`${g.date_iso}-${i}`} className="border-b" style={{ borderColor: PITCH_BORDER }}>
+              <button
+                type="button"
+                onClick={() => toggle(i)}
+                className="w-full flex items-center justify-between py-1.5 text-left hover:opacity-80 transition-opacity"
+              >
+                <span className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
+                  <span style={{ color: outcomeColor }}>{`${g.outcome} `}</span>
+                  {g.date_iso}
+                  {g.season_type && g.season_type !== 'regular' && (
+                    <span style={{ color: PITCH_LABEL }}>{` · ${g.season_type}`}</span>
+                  )}
+                </span>
+                <span className="font-mono text-[12px]" style={{ color: 'oklch(0.92 0 0)' }}>
+                  {`${g.pts_for}-${g.pts_allowed}`}
+                </span>
+              </button>
+              {isExpanded(i) && statEntries.length > 0 && (
+                <div className="pb-2 flex flex-wrap gap-x-4 gap-y-1">
+                  {statEntries.map(([label, value]) => (
+                    <span key={label} className="font-mono text-[11px]" style={{ color: PITCH_LABEL }}>
+                      {label}: <span style={{ color: 'oklch(0.92 0 0)' }}>{value}</span>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 // nfl-quarter-h2h / nfl-quarter-week — single player, quarter/half-scoped,
 // vs one opponent or one week#. totals keys are scope-specific (q1_pass_td,
 // 1h_pass_yds, ...) so this walks them generically rather than a fixed
@@ -5636,6 +5707,7 @@ function App() {
   const [nflTeamOverviewResult, setNflTeamOverviewResult] = useState<NflTeamOverviewPayload | null>(null)
   const [powerRankingsResult, setPowerRankingsResult] = useState<PowerRankingsPayload | null>(null)
   const [nflTeamPtsLeaderboardResult, setNflTeamPtsLeaderboardResult] = useState<NflTeamPtsLeaderboardPayload | null>(null)
+  const [teamH2hResult, setTeamH2hResult] = useState<TeamH2hPayload | null>(null)
   // A live conversation is a stack of turns, not a single result — the real
   // follow-up chat (owner ask, 2026-10-16: point this at /agent + history
   // instead of /run's one-shot-only answers, see runQuery/askFollowup below)
@@ -6128,6 +6200,7 @@ function App() {
     setNflTeamOverviewResult(null)
     setPowerRankingsResult(null)
     setNflTeamPtsLeaderboardResult(null)
+    setTeamH2hResult(null)
     // Park, don't discard — see parkedChatTurns' own comment above. Only
     // parks a real conversation (never overwrites a park with an empty
     // array), and only when there's something to park at all.
@@ -6184,6 +6257,18 @@ function App() {
         setIsMiniOpen(false)
         setIsH2hStaffOpen(true)
       }
+      return
+    }
+
+    // <league>_team_h2h — team vs. team, not player vs. player, hence a
+    // separate extractor/view from H2hPayload's above rather than a branch
+    // inside it (no `totals`/`games` keys H2hPayload's own check requires,
+    // and the underscore-suffixed engine name can't collide with that
+    // check's hyphen-suffix test regardless).
+    const teamH2hPayload = extractTeamH2hPayload(payload)
+    if (teamH2hPayload) {
+      setTeamH2hResult(teamH2hPayload)
+      setQueryResults([])
       return
     }
 
@@ -7717,6 +7802,8 @@ function App() {
               />
             ) : h2hResult ? (
               <H2hView payload={h2hResult} />
+            ) : teamH2hResult ? (
+              <TeamH2hView payload={teamH2hResult} />
             ) : pitchResult ? (
               <MlbPitchH2hView payload={pitchResult} query={lastQuery} />
             ) : fpvResult && SHOW_PITCHER_FPV ? (
