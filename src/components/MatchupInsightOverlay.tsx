@@ -1,14 +1,23 @@
 // `nfl matchup <A> vs <B>` full-screen overlay — purely descriptive, no
 // trend/compute window, never a predictive-syntax sample (the entry point
 // is a clickable {A vs B} button next to a real scheduled game, not typed).
-// v1 layout: two tabs rather than one long scroll, since the team-history
-// table and the per-player cards are different enough shapes that mixing
-// them in one scroll read as cluttered — see the conversation this was
-// designed in for the alternatives considered (a summary-card-then-expand
-// version is a plausible v2 if this turns out too dense).
-import { useState } from 'react'
-import { extractDateToken, type MatchupInsightPayload, type MatchupPlayer, type MatchupPlayerSplit } from '@/lib/nspe-payloads'
-import { C, MiniStat, SectionStack, type StatTableSection } from '@/components/ProfileSections'
+//
+// Rebuilt 2026-10-18 (owner ask) from a two-tab layout (a full meeting-
+// history table, then a grid of every player's stat card) down to just a
+// short, deterministic worded summary per team — two things drove this:
+// (1) /matchup is a free, unauthenticated feature, and the dropped
+// `meetings` table was the heaviest part of the payload for any
+// longstanding rivalry (CAR/ARI alone had 17 rows, each with two nested
+// stat objects) — real weight for a free feature that's already been
+// flaky under backend load; (2) a few sentences someone can actually read
+// in passing is a better fit for a header click-through than a dense
+// table/card grid was. The summary is templated from data already on the
+// payload, not an LLM call — stays free and instant, no new endpoint, no
+// sign-in gate. See the conversation this was rescoped in for the two
+// worked examples (CAR/ARI, DET/CIN) the wording and player-selection
+// logic below were tuned against.
+import { type MatchupInsightPayload, type MatchupPlayer, type MatchupTeamPlayers } from '@/lib/nspe-payloads'
+import { C } from '@/components/ProfileSections'
 
 export interface MatchupInsightOverlayProps {
   open: boolean
@@ -16,155 +25,206 @@ export interface MatchupInsightOverlayProps {
   payload: MatchupInsightPayload | null
 }
 
-type Tab = 'history' | 'players'
-
-// Was a fixed NFL column set (a/b yards + yards-per-play) — NBA's a_stats/
-// b_stats carry reb/ast/fg_pct/fg3_pct, MLB's carry hits/errors, NHL's carry
-// saves, so the extra columns beyond the universal date/season/result/pf/pa
-// ones are derived from whichever stat keys the first meeting actually has
-// (every meeting in one payload shares the same engine, so the first row's
-// keys are representative of the rest).
-function buildHistorySection(payload: MatchupInsightPayload): StatTableSection {
-  const teamA = payload.query.team_a
-  const teamB = payload.query.team_b
-  const sampleKeys = Object.keys(payload.meetings[0]?.a_stats ?? {})
-
-  const columns = [
-    { key: 'date', label: 'date' },
-    { key: 'season', label: 'season' },
-    { key: 'result', label: 'result' },
-    { key: 'pf', label: 'pf' },
-    { key: 'pa', label: 'pa' },
-    ...sampleKeys.map((k) => ({ key: `a_${k}`, label: `${teamA} ${statLabel(k)}` })),
-    ...sampleKeys.map((k) => ({ key: `b_${k}`, label: `${teamB} ${statLabel(k)}` })),
-  ]
-
-  return {
-    type: 'stat_table',
-    label: 'meeting history',
-    columns,
-    rows: payload.meetings.map((m, i) => ({
-      key: `${m.date_iso}-${i}`,
-      label: extractDateToken(m.date_iso) ?? m.date_iso,
-      values: [
-        extractDateToken(m.date_iso) ?? m.date_iso,
-        m.season,
-        m.outcome,
-        m.pts_for,
-        m.pts_allowed,
-        ...sampleKeys.map((k) => {
-          const v = m.a_stats[k]
-          return typeof v === 'number' ? formatPlayerStatValue(k, v) : '—'
-        }),
-        ...sampleKeys.map((k) => {
-          const v = m.b_stats[k]
-          return typeof v === 'number' ? formatPlayerStatValue(k, v) : '—'
-        }),
-      ],
-    })),
-  }
+// ---- per-sport stat vocabulary -----------------------------------------
+// One production stat per category to rank players by and lead each
+// sentence with. NFL has no backend-given "production" ranking (its own
+// `players` array sorts by vs_opponent.games — most history against this
+// specific opponent, a different notion — see the conversation this was
+// confirmed in), so NFL's yards-based ranking here is this file's own.
+// NBA/MLB/NHL's primary stat matches the backend engine's own sort key
+// (recent_form.pts/rbi/points respectively, confirmed by nspe-v2-da,
+// 2026-10-18) — picked for consistency with how the backend itself already
+// defines "produced the most," not independently chosen.
+interface CategorySpec {
+  primary: string
+  primaryLabel: string
+  secondary?: string
+  secondaryLabel?: string
+  verb: string
 }
 
-// Was a per-category (rush/rec/pass) hardcoded field list — only worked
-// because NFL was the only sport with matchup-insight. Now that NBA
-// ("scoring"), MLB ("batting"), and NHL each carry their own flat, unrelated
-// stat vocabulary on the same wire shape (see MatchupPlayerSplit's comment in
-// nspe-payloads.ts), the field list is derived from whatever keys are
-// actually present on the split instead of guessed from `category` — same
-// "render what's there" principle as the h2h view's zero-field hiding. Order
-// follows the object's own key order (the backend already emits a sensible
-// stat order per sport); `games` is pulled to the front since every sport's
-// split includes it and it reads best first.
-const STAT_LABELS: Record<string, string> = {
-  games: 'g',
-  attempts: 'att', completions: 'cmp', yards: 'yds', td: 'td', int: 'int', long: 'lng', pct: 'pct',
-  pts: 'pts', reb: 'reb', ast: 'ast', stl: 'stl', blk: 'blk', tpm: '3pm', tov: 'tov', min: 'min',
-  fg_pct: 'fg%', ft_pct: 'ft%', tpm_pct: '3p%',
-  ab: 'ab', h: 'h', hr: 'hr', rbi: 'rbi', bb: 'bb', so: 'so', avg: 'avg', obp: 'obp', tb: 'tb', slg: 'slg', ops: 'ops', r: 'r', sb: 'sb',
-  goals: 'gls', assists: 'a', points: 'pts', pim: 'pim', sog: 'sog', plus_minus: '+/-',
+const CATEGORY_SPECS: Record<string, CategorySpec> = {
+  // NFL
+  pass: { primary: 'yards', primaryLabel: 'yards', secondary: 'td', secondaryLabel: 'TDs', verb: 'thrown for' },
+  rush: { primary: 'yards', primaryLabel: 'yards', secondary: 'td', secondaryLabel: 'TDs', verb: 'rushed for' },
+  rec: { primary: 'yards', primaryLabel: 'yards', secondary: 'td', secondaryLabel: 'TDs', verb: 'caught for' },
+  // NBA
+  scoring: { primary: 'pts', primaryLabel: 'points', secondary: 'reb', secondaryLabel: 'rebounds', verb: 'averaged' },
+  // MLB
+  batting: { primary: 'rbi', primaryLabel: 'RBIs', secondary: 'hr', secondaryLabel: 'home runs', verb: 'driven in' },
+  // NHL
+  skater: { primary: 'points', primaryLabel: 'points', secondary: 'goals', secondaryLabel: 'goals', verb: 'posted' },
 }
 
-function statLabel(key: string): string {
-  return STAT_LABELS[key] ?? key.replace(/_/g, ' ')
+function statValue(split: Record<string, unknown>, key: string): number | null {
+  const v = split[key]
+  return typeof v === 'number' ? v : null
 }
 
-const RATE_STAT_KEYS = new Set(['pct', 'fg_pct', 'ft_pct', 'tpm_pct'])
-const AVERAGE_STAT_KEYS = new Set(['avg', 'obp', 'slg', 'ops'])
+function formatName(raw: string): string {
+  return raw.replace(/([a-z])([A-Z])/g, '$1 $2')
+}
 
-function formatPlayerStatValue(key: string, value: number): string {
-  if (RATE_STAT_KEYS.has(key) || key.endsWith('_pct')) {
-    return value <= 1 ? `${(value * 100).toFixed(1)}%` : `${value.toFixed(1)}%`
-  }
-  if (AVERAGE_STAT_KEYS.has(key)) {
-    return value < 1 ? value.toFixed(3).replace(/^0/, '') : value.toFixed(3)
-  }
-  if (key === 'long' || key === 'plus_minus') return Number.isInteger(value) ? String(value) : value.toFixed(1)
+function formatStatNumber(value: number): string {
   return Number.isInteger(value) ? String(value) : value.toFixed(1)
 }
 
-// NHL's `pim` (penalty minutes) read as an unexplained, easy-to-confuse-with-
-// `points` abbreviation once both showed up side by side in the same card —
-// dropped rather than relabeled, since relabeling it to "pts" would just
-// duplicate the `points` field that's already rendered right next to it.
-const EXCLUDED_SPLIT_KEYS = new Set(['pim'])
-
-function SplitBlock({ label, split }: { label: string; split: MatchupPlayerSplit }) {
-  const keys = Object.keys(split).filter(
-    (k) => k !== 'games' && k !== 'quarters' && !EXCLUDED_SPLIT_KEYS.has(k) && typeof split[k] === 'number',
-  )
-  const orderedKeys = split.games !== undefined ? ['games', ...keys] : keys
-  return (
-    <div>
-      <div className="font-mono text-[9px] uppercase tracking-widest mb-1.5" style={{ color: C.textDim }}>
-        {label}
-      </div>
-      <div className="flex flex-wrap gap-1.5 mb-1.5">
-        {orderedKeys.map((key) => {
-          const raw = split[key]
-          if (typeof raw !== 'number') return null
-          return <MiniStat key={key} label={statLabel(key)} value={formatPlayerStatValue(key, raw)} />
-        })}
-      </div>
-      {split.quarters && (
-        <div className="flex gap-1.5 font-mono text-[10px]" style={{ color: C.textDim }}>
-          {(['q1', 'q2', 'q3', 'q4', '1h', '2h'] as const).map((q) => (
-            <span key={q}>
-              {q}
-              <span style={{ color: C.textBright }}> {split.quarters![q]}</span>
-            </span>
-          ))}
-        </div>
-      )}
-    </div>
-  )
+// Every secondaryLabel above (and "yards" itself) is a plain plural with no
+// irregular form to worry about, so a trailing-s strip is enough — catches
+// "1 TDs"/"1 home runs"/"1 rebound[s]" rather than shipping grammatically
+// broken single-game sentences, which single-meeting samples (see
+// meetingPhrase below) hit often.
+function pluralize(label: string, count: number): string {
+  return count === 1 ? label.replace(/s$/, '') : label
 }
 
-function PlayerCard({ player, opponent }: { player: MatchupPlayer; opponent: string }) {
-  return (
-    <div className="rounded p-3" style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}` }}>
-      <div className="flex items-baseline gap-2 mb-2">
-        <span className="font-mono text-[13px] font-bold" style={{ color: C.textBright }}>
-          {player.player_name.replace(/([a-z])([A-Z])/g, '$1 $2')}
-        </span>
-        <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: C.accent }}>
-          {player.category}
-        </span>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <SplitBlock label={`vs ${opponent}`} split={player.vs_opponent} />
-        <SplitBlock label="recent form" split={player.recent_form} />
-      </div>
-    </div>
-  )
+// Ratio of a player's per-game production against THIS opponent to their
+// normal per-game production (recent form). >1 means they've outproduced
+// their own normal rate specifically against this team. Needs at least one
+// meeting on record and a positive recent-form baseline to mean anything —
+// returns null rather than a misleading number otherwise.
+function standoutRatio(player: MatchupPlayer): number | null {
+  const spec = CATEGORY_SPECS[player.category]
+  if (!spec) return null
+  const vsGames = player.vs_opponent.games
+  const formGames = player.recent_form.games
+  if (!vsGames || vsGames < 1 || !formGames || formGames < 1) return null
+  const vsVal = statValue(player.vs_opponent, spec.primary)
+  const formVal = statValue(player.recent_form, spec.primary)
+  if (vsVal === null || formVal === null || formVal <= 0) return null
+  const vsRate = vsVal / vsGames
+  const formRate = formVal / formGames
+  if (formRate <= 0) return null
+  return vsRate / formRate
+}
+
+function productionTotal(player: MatchupPlayer): number {
+  const spec = CATEGORY_SPECS[player.category]
+  if (!spec) return 0
+  return statValue(player.recent_form, spec.primary) ?? 0
+}
+
+// A rate bump has to clear this before it's worth leading with over the
+// team's actual top overall producer — tuned against the two worked
+// examples (LaPorta/Chase both clear it on a single-digit game sample,
+// McMillan's closer-but-not-quite 1.4x bump and ARI's 1.3x Harrison bump
+// both correctly stay below it, matching the owner-approved drafts).
+const STANDOUT_THRESHOLD = 1.4
+
+interface HighlightPick {
+  player: MatchupPlayer
+  // 'qb': NFL's auto-include slot (always shown, good or bad — see the
+  // file banner). 'standout': picked over the plain top producer because
+  // of a real bump against this specific opponent. 'producer': the
+  // team's actual top overall producer, no matchup-specific story to add.
+  role: 'qb' | 'standout' | 'producer'
+}
+
+// Up to two players per team: NFL's QB always takes one slot (whether
+// they've played well or poorly here — that's the point, see the
+// conversation this was confirmed in); the other slot goes to whichever is
+// more notable between the team's actual top overall producer and anyone
+// who's clearly outplayed their own normal rate specifically against this
+// opponent, even if that player wouldn't otherwise crack the top of the
+// list. Non-NFL sports have no equivalent "always include" position, so
+// both slots there are just producer-or-standout.
+function pickHighlights(players: MatchupPlayer[], sport: string): HighlightPick[] {
+  if (players.length === 0) return []
+
+  const qb = sport === 'nfl' ? players.find((p) => p.category === 'pass') : undefined
+  const pool = players.filter((p) => p !== qb)
+  if (pool.length === 0) return qb ? [{ player: qb, role: 'qb' }] : []
+
+  const byProduction = [...pool].sort((a, b) => productionTotal(b) - productionTotal(a))
+  const topProducer = byProduction[0]
+
+  const standoutCandidate = [...pool]
+    .filter((p) => p !== topProducer)
+    .map((p) => ({ player: p, ratio: standoutRatio(p) }))
+    .filter((x): x is { player: MatchupPlayer; ratio: number } => x.ratio !== null && x.ratio >= STANDOUT_THRESHOLD)
+    .sort((a, b) => b.ratio - a.ratio)[0]?.player
+
+  const picks: HighlightPick[] = []
+  if (qb) {
+    // Slot 1 is always the QB. Slot 2 is the standout if one clears the
+    // threshold, else the team's actual top producer.
+    picks.push({ player: qb, role: 'qb' })
+    picks.push(standoutCandidate
+      ? { player: standoutCandidate, role: 'standout' }
+      : { player: topProducer, role: 'producer' })
+  } else {
+    // No QB concept (non-NFL) — slot 1 is always the top producer, slot 2
+    // is the standout if one clears the threshold, else the next-best
+    // producer.
+    picks.push({ player: topProducer, role: 'producer' })
+    const second = standoutCandidate ?? byProduction[1]
+    if (second) picks.push({ player: second, role: standoutCandidate ? 'standout' : 'producer' })
+  }
+
+  // Dedup (defensive — the branches above shouldn't produce one, but a
+  // repeated name would read worse than a single mention) and cap at 2.
+  const seen = new Set<string>()
+  return picks.filter((pick) => {
+    if (seen.has(pick.player.player_name)) return false
+    seen.add(pick.player.player_name)
+    return true
+  }).slice(0, 2)
+}
+
+// vs_opponent is only appended for the 'qb' role (always — see the file
+// banner) and the 'standout' role (it's the whole reason they're
+// mentioned). A plain 'producer' pick gets its recent-form line only —
+// dragging in a middling or irrelevant matchup-history number for a player
+// who's just the team's best overall option reads as noise, not signal.
+function playerSentence(pick: HighlightPick, opponentLabel: string): string {
+  const { player, role } = pick
+  const spec = CATEGORY_SPECS[player.category]
+  const name = formatName(player.player_name)
+  if (!spec) return `${name} — no stat line available.`
+
+  const formPrimary = statValue(player.recent_form, spec.primary)
+  const formSecondary = spec.secondary ? statValue(player.recent_form, spec.secondary) : null
+  const formGames = player.recent_form.games
+
+  let sentence: string
+  if (formPrimary === null || !formGames) {
+    sentence = `${name} has no recent-form data available.`
+  } else {
+    const secondaryPhrase = formSecondary !== null && spec.secondaryLabel
+      ? ` and ${formatStatNumber(formSecondary)} ${pluralize(spec.secondaryLabel, formSecondary)}`
+      : ''
+    sentence = `${name} has ${spec.verb} ${formatStatNumber(formPrimary)} ${pluralize(spec.primaryLabel, formPrimary)}${secondaryPhrase} over his last ${formGames} games.`
+  }
+
+  if (role === 'qb' || role === 'standout') {
+    const vsGames = player.vs_opponent.games
+    const vsPrimary = statValue(player.vs_opponent, spec.primary)
+    if (vsGames && vsGames >= 1 && vsPrimary !== null) {
+      const vsSecondary = spec.secondary ? statValue(player.vs_opponent, spec.secondary) : null
+      const vsSecondaryPhrase = vsSecondary !== null && spec.secondaryLabel
+        ? ` and ${formatStatNumber(vsSecondary)} ${pluralize(spec.secondaryLabel, vsSecondary)}`
+        : ''
+      const meetingPhrase = vsGames === 1 ? `in his one game against ${opponentLabel}` : `across ${vsGames} meetings against ${opponentLabel}`
+      sentence += ` ${name.split(' ')[0]} has ${formatStatNumber(vsPrimary)} ${pluralize(spec.primaryLabel, vsPrimary)}${vsSecondaryPhrase} ${meetingPhrase}.`
+    }
+  }
+
+  return sentence
+}
+
+function buildTeamSummary(team: MatchupTeamPlayers, sport: string, opponentLabel: string): string {
+  const picks = pickHighlights(team.players, sport)
+  if (picks.length === 0) return `No recent-form data available for ${team.team}.`
+  return picks.map((pick) => playerSentence(pick, opponentLabel)).join(' ')
 }
 
 export function MatchupInsightOverlay({ open, onClose, payload }: MatchupInsightOverlayProps) {
-  const [tab, setTab] = useState<Tab>('history')
   if (!open || !payload) return null
 
   const teamA = payload.query.team_a
   const teamB = payload.query.team_b
   const record = payload.team_record
+  const sport = (payload.engine.match(/^([a-z]+)_matchup_insight$/i)?.[1] ?? 'nfl').toLowerCase()
 
   return (
     <div
@@ -175,7 +235,7 @@ export function MatchupInsightOverlay({ open, onClose, payload }: MatchupInsight
       aria-modal="true"
     >
       <div
-        className="w-full max-w-[960px] max-h-[90vh] rounded-lg overflow-hidden shadow-2xl flex flex-col"
+        className="w-full max-w-[720px] max-h-[90vh] rounded-lg overflow-hidden shadow-2xl flex flex-col"
         style={{ backgroundColor: C.surface, border: `1px solid ${C.border}`, fontFamily: 'monospace' }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -197,7 +257,7 @@ export function MatchupInsightOverlay({ open, onClose, payload }: MatchupInsight
           </button>
         </div>
 
-        <div className="px-5 py-3 flex-none flex items-center justify-between flex-wrap gap-2" style={{ borderBottom: `1px solid ${C.border}` }}>
+        <div className="px-5 py-3 flex-none" style={{ borderBottom: `1px solid ${C.border}` }}>
           {/* record is teamA's wins-losses. The team AHEAD is named (with its
               own wins first), never teamA by default; equal wins reads
               "series even". */}
@@ -213,53 +273,25 @@ export function MatchupInsightOverlay({ open, onClose, payload }: MatchupInsight
               {record.otl ? ` (${record.otl} OTL)` : ''}
             </span>
           </span>
-          <div className="flex gap-4">
-            <button
-              type="button"
-              onClick={() => setTab('history')}
-              className="font-mono text-[12px] hover:opacity-80 transition-opacity"
-              style={{ color: tab === 'history' ? C.accent : C.textDim, textDecoration: tab === 'history' ? 'underline' : 'none' }}
-            >
-              {'{team history}'}
-            </button>
-            <button
-              type="button"
-              onClick={() => setTab('players')}
-              className="font-mono text-[12px] hover:opacity-80 transition-opacity"
-              style={{ color: tab === 'players' ? C.accent : C.textDim, textDecoration: tab === 'players' ? 'underline' : 'none' }}
-            >
-              {'{player insights}'}
-            </button>
-          </div>
         </div>
 
-        <div className="overflow-y-auto px-5 py-4">
-          {tab === 'history' ? (
-            <SectionStack sections={[buildHistorySection(payload)]} />
-          ) : (
-            <div className="space-y-4">
-              <div>
-                <div className="font-mono text-[11px] uppercase tracking-widest mb-2" style={{ color: C.textDim }}>
-                  {teamA}
-                </div>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-                  {payload.team_a.players.map((p) => (
-                    <PlayerCard key={p.player_name} player={p} opponent={teamB} />
-                  ))}
-                </div>
-              </div>
-              <div>
-                <div className="font-mono text-[11px] uppercase tracking-widest mb-2" style={{ color: C.textDim }}>
-                  {teamB}
-                </div>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-                  {payload.team_b.players.map((p) => (
-                    <PlayerCard key={p.player_name} player={p} opponent={teamA} />
-                  ))}
-                </div>
-              </div>
+        <div className="overflow-y-auto px-5 py-4 space-y-4">
+          <div>
+            <div className="font-mono text-[11px] uppercase tracking-widest mb-1.5" style={{ color: C.textDim }}>
+              {teamA}
             </div>
-          )}
+            <p className="font-mono text-[13px] leading-relaxed" style={{ color: C.textBright }}>
+              {buildTeamSummary(payload.team_a, sport, teamB)}
+            </p>
+          </div>
+          <div>
+            <div className="font-mono text-[11px] uppercase tracking-widest mb-1.5" style={{ color: C.textDim }}>
+              {teamB}
+            </div>
+            <p className="font-mono text-[13px] leading-relaxed" style={{ color: C.textBright }}>
+              {buildTeamSummary(payload.team_b, sport, teamA)}
+            </p>
+          </div>
         </div>
       </div>
     </div>
