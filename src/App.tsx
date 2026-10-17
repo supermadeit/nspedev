@@ -1684,7 +1684,7 @@ function AgentChatView({
                 }
               }}
               disabled={isFollowupLoading}
-              placeholder="ask a follow-up…"
+              placeholder={turns.length === 0 ? 'ask about any matchup…' : 'ask a follow-up…'}
               className="flex-1 bg-transparent font-mono text-[13px] outline-none disabled:opacity-50 resize-none py-1"
               style={{ color: 'oklch(0.92 0 0)', maxHeight: `${FOLLOWUP_TEXTAREA_MAX_HEIGHT}px` }}
             />
@@ -5800,6 +5800,18 @@ function App() {
   // One level of undo, not a stack — a second navigation-away before
   // returning just replaces whatever was parked.
   const [parkedChatTurns, setParkedChatTurns] = useState<AgentChatResult[] | null>(null)
+  // {chat} (owner ask, 2026-10-18): true only in the window between opening
+  // the panel via the {chat} button and either the first message landing
+  // (agentChatTurns.length becomes > 0, which alone is enough to keep
+  // AgentChatView rendered from then on — this flag stops mattering, though
+  // resetResultState still clears it for cleanliness) or the panel closing
+  // again unused. Needed because AgentChatView otherwise only ever renders
+  // once there's at least one real turn — this is the one case where it
+  // needs to show with zero turns, just its composer input, so a first
+  // question can be typed/dictated into the same roomy auto-growing box the
+  // chat already uses for follow-ups, instead of the homepage's single-line
+  // CLI bar.
+  const [isComposingChat, setIsComposingChat] = useState(false)
   const [lastQuery, setLastQuery] = useState('')
   // Conversational follow-ups ("what about receiving?") — client-side only,
   // per the backend's spec (docs/frontend_spec_followup_questions_2026-09-27.md
@@ -6280,6 +6292,33 @@ function App() {
     // array), and only when there's something to park at all.
     if (agentChatTurns.length > 0) setParkedChatTurns(agentChatTurns)
     setAgentChatTurns([])
+    setIsComposingChat(false)
+  }
+
+  // {chat} button handler — opens the panel straight into its empty
+  // composer (see isComposingChat's own comment) rather than whatever the
+  // panel would otherwise show, which is correct here since this only ever
+  // runs when there's nothing to show yet (lastPayload is null — see the
+  // button's own render condition).
+  const openChatComposer = () => {
+    setIsComposingChat(true)
+    setIsMiniOpen(true)
+  }
+
+  // Routes the chat composer/follow-up box's submit to whichever of the two
+  // real request paths actually applies: the very first message in a fresh
+  // {chat}-opened conversation is, for every purpose that matters (setting
+  // lastQuery/lastPayload so {resume} and {pocket} work afterward, resetting
+  // whatever other result state might be sitting around), identical to
+  // typing that same question into the homepage search bar — so it just
+  // *is* runQuery, not a special case of it. Every turn after the first
+  // goes through askFollowup exactly as it always has. Safe to use
+  // unconditionally everywhere AgentChatView appears: outside the composer,
+  // agentChatTurns is never empty when the chat view is even showing, so
+  // this always resolves to askFollowup there, unchanged.
+  const submitChatMessage = (text: string) => {
+    if (agentChatTurns.length === 0) void runQuery(text)
+    else void askFollowup(text)
   }
 
   // Swaps a parked conversation back into view — no re-fetch, the turns are
@@ -7775,6 +7814,12 @@ function App() {
                 // (turn count, answer length) nothing asked for.
                 : agentChatTurns.length > 0
                 ? lastQuery
+                // {chat}-opened, nothing asked yet (see isComposingChat) —
+                // there's no lastQuery to show at all until the first
+                // message lands, so this gets its own title rather than
+                // falling through to the empty-state legend.
+                : isComposingChat
+                ? 'new chat'
                 : queryResults
                 ? `${lastQuery} — ${queryResults.length}results`
                 : 'NSPE — Command Legend'}
@@ -7905,12 +7950,12 @@ function App() {
               </div>
             ) : queryGate ? (
               <QueryGateNotice gate={queryGate} isLoggedIn={Boolean(user)} onRetry={() => runQuery(lastQuery)} />
-            ) : agentChatTurns.length > 0 ? (
+            ) : agentChatTurns.length > 0 || isComposingChat ? (
               <AgentChatView
                 turns={agentChatTurns}
                 onRunCommand={(cmd) => runQuery(cmd)}
-                onAskFollowup={askFollowup}
-                isFollowupLoading={isFollowupLoading}
+                onAskFollowup={submitChatMessage}
+                isFollowupLoading={agentChatTurns.length === 0 ? isLoading : isFollowupLoading}
               />
             ) : h2hResult ? (
               <H2hView payload={h2hResult} />
@@ -8217,7 +8262,7 @@ function App() {
                   onTranscript={setSearchValue}
                   targetRef={searchInputRef}
                   onListeningChange={setIsSearchMicListening}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5"
+                  className="absolute right-3 top-3 p-1.5"
                 />
                 {(playerMatches.length > 0 || greenMatches.length > 0) && !isNlInProgress && !isMobileDropdownDismissed && (
                   <div className="absolute top-[60px] left-0 right-0 z-[25] flex flex-col gap-2">
@@ -8286,8 +8331,26 @@ function App() {
                     {pocket}") sits just to {pocket}'s left in the same
                     strip, shown only when there's a closed panel to reopen —
                     see its own fuller comment on the mobile instance of this
-                    button, down in the hint-line row below. */}
+                    button, down in the hint-line row below. {chat} (owner
+                    ask, 2026-10-18) fills this exact slot by default, before
+                    there's anything to resume — the CLI bar stays
+                    single-line even with voice-to-text now following
+                    dictated text, so this is the escape hatch straight to
+                    the chat panel's own roomy, auto-growing composer for
+                    typing/dictating a first question instead. The two are
+                    mutually exclusive on the same `lastPayload` check,
+                    inverted — exactly one of them ever shows here. */}
                 <div className="absolute -top-6 right-0 flex items-center gap-3">
+                  {!isMiniOpen && lastPayload == null && (
+                    <button
+                      type="button"
+                      onClick={openChatComposer}
+                      className="font-mono font-bold text-[12px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+                      style={{ color: 'oklch(0.78 0.18 145)' }}
+                    >
+                      {'{chat}'}
+                    </button>
+                  )}
                   {!isMiniOpen && lastPayload != null && (
                     <button
                       type="button"
@@ -8348,7 +8411,7 @@ function App() {
                   onTranscript={setSearchValue}
                   targetRef={searchInputRef}
                   onListeningChange={setIsSearchMicListening}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5"
+                  className="absolute right-3 top-3 p-1.5"
                 />
                 {(playerMatches.length > 0 || greenMatches.length > 0) && !isNlInProgress && !isDesktopDropdownDismissed && (
                   <div className="absolute top-[60px] left-0 right-0 z-[25] flex flex-col gap-2">
@@ -8455,6 +8518,23 @@ function App() {
                 desktop search-container block below), so desktop gets its
                 own {resume} planted there, not this one — per the owner's
                 explicit "top line, not too far from {pocket}" placement. */}
+            {/* {chat} — owner ask, 2026-10-18: the same default-slot swap as
+                the desktop instance above (see its fuller comment) — fills
+                this exact spot before there's a closed panel to resume,
+                opening the chat composer directly instead. */}
+            {isMobile && !isMiniOpen && lastPayload == null && (
+              <>
+                <span aria-hidden="true" className="font-mono text-[14px] -mx-2" style={{ color: 'oklch(0.92 0 0)' }}>|</span>
+                <button
+                  type="button"
+                  onClick={openChatComposer}
+                  className="font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+                  style={{ color: 'oklch(0.78 0.18 145)' }}
+                >
+                  {'{chat}'}
+                </button>
+              </>
+            )}
             {isMobile && !isMiniOpen && lastPayload != null && (
               <>
                 <span aria-hidden="true" className="font-mono text-[14px] -mx-2" style={{ color: 'oklch(0.92 0 0)' }}>|</span>
