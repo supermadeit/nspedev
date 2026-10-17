@@ -8260,7 +8260,7 @@ function App() {
                     moved from the <input> itself onto this wrapper so the
                     whole box (field + mic) reads as one control. */}
                 <div
-                  className="flex items-center h-[52px] pl-5 pr-2 gap-1 bg-card rounded-lg border border-border outline-none focus-within:border-primary transition-colors duration-200"
+                  className="flex items-center h-[52px] pl-3 pr-2 gap-1 bg-card rounded-lg border border-border outline-none focus-within:border-primary transition-colors duration-200"
                   style={isSearchMicListening ? { boxShadow: MIC_LISTENING_GLOW } : undefined}
                 >
                   <input
@@ -8299,8 +8299,15 @@ function App() {
                   />
                 </div>
                 {!searchValue && (
+                  // Owner ask, 2026-10-18: nudge "{SPORTS}{WORLD} IS YOURS"
+                  // left on mobile — pl-3 here matches the wrapper's own
+                  // pl-3 above (was pl-5 on both, desktop unchanged) so the
+                  // placeholder still lines up exactly with where real typed
+                  // text starts, just both moved left together rather than
+                  // the placeholder drifting out of alignment with the
+                  // cursor's actual start position.
                   <div
-                    className="absolute inset-0 flex items-center px-5 pointer-events-none font-mono text-[16px] text-muted-foreground"
+                    className="absolute inset-0 flex items-center pl-3 pr-5 pointer-events-none font-mono text-[16px] text-muted-foreground"
                     style={{ opacity: 0.5 }}
                   >
                     {PLACEHOLDER_TEXTS[0]}
@@ -8899,38 +8906,25 @@ function App() {
         </div>
       )}
 
-      {isMobile && leaderboard?.rows?.length > 0 && (
-        <button
-          type="button"
-          onClick={() => setIsMobileLeaderboardOpen(true)}
-          className="absolute z-20 font-mono font-bold text-[13px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
-          style={{
-            bottom: '46px',
-            right: '12px',
-            color: 'oklch(0.85 0.15 195)',
-          }}
-          aria-label="Open leaderboard"
-        >
-          {'{leaderboard}'}
-        </button>
-      )}
+      {/* {leaderboard}'s mobile nav entry removed 2026-10-18 (owner ask) in
+          favor of {charts}/{team.metrics} below — shelved, not deleted: the
+          full-screen takeover modal, its state, and the data fetch all stay
+          in the file (see isMobileLeaderboardOpen further down), just with
+          no UI path left to open it on mobile. Desktop's own leaderboard
+          panel is untouched either way, this only ever affected the mobile
+          nav button. */}
 
-      {/* Mobile's homepage-level entry point into the sports pages — same
-          {matchups}-labeled SportsSwitcher desktop uses next to {charts},
-          just in mobile's own corner next to {leaderboard} since {charts}
-          isn't on the homepage row here (it moved to the power-rankings
-          page's top-right a while back). Used to be a plain {nfl.season}
-          link plus a separate {sports} toggle for the other three; both
-          collapsed into this one control once every sport's own page got a
-          uniform in-page {sports} switcher, which is what made a
-          homepage-level per-sport link redundant in the first place. Real
-          click-outside-to-close now too, which the old hand-rolled toggle
-          didn't have. */}
+      {/* Mobile's homepage-level entry points into the sports pages — same
+          {charts}/{team.metrics}/{matchups} trio desktop carries (see that
+          block above), just mobile-sized and stacked in one row in the
+          corner {leaderboard} used to occupy. {matchups} stays rightmost
+          (closest to the screen edge) since it was already there and is the
+          most-used of the three. Real click-outside-to-close on each one,
+          same as before. */}
       {isMobile && (
-        <div
-          className="absolute z-20"
-          style={{ bottom: '46px', right: leaderboard?.rows?.length > 0 ? '128px' : '12px' }}
-        >
+        <div className="absolute z-20 flex items-center gap-3" style={{ bottom: '46px', right: '12px' }}>
+          <SportsSwitcher label="charts" variant="charts" direction="up" />
+          <SportsSwitcher label="team.metrics" variant="metrics" direction="up" />
           <SportsSwitcher label="matchups" direction="up" />
         </div>
       )}
