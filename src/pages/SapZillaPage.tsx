@@ -93,13 +93,19 @@ export default function SapZillaPage() {
 
   function addLegFromPicker() {
     if (legs.length >= MAX_LEGS) return
-    if (kind === 'player') {
-      if (!selectedPlayer) return
-      setLegs((prev) => [...prev, buildPlayerLeg(sport, selectedPlayer, stat, scope, num)])
-    } else {
-      if (!teamCode.trim()) return
-      setLegs((prev) => [...prev, buildTeamLeg(teamCode, num)])
-    }
+    const built =
+      kind === 'player'
+        ? selectedPlayer
+          ? buildPlayerLeg(sport, selectedPlayer, stat, scope, num)
+          : null
+        : teamCode.trim()
+          ? buildTeamLeg(teamCode, num)
+          : null
+    if (!built) return
+    // Dedupe on add — caught live (owner screenshot, 2026-10-19): clicking
+    // "+ add leg" twice on the same selection silently added the same leg
+    // twice rather than refusing or no-opping.
+    setLegs((prev) => (prev.includes(built) ? prev : [...prev, built]))
   }
 
   function removeLeg(i: number) {
