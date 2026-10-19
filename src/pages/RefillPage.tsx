@@ -213,18 +213,22 @@ function PlansGrid({ plans, loadingPlan, onBuy }: { plans: NspePlan[]; loadingPl
   )
 }
 
-// The "what a credit actually costs" explainer backend asked for — pulled
-// live from the same /plans response (catalog.credits) rather than typed in
-// here a second time, so this can't drift out of sync with the rule the
-// backend is actually enforcing.
+// The "what a credit actually costs" explainer. Examples are still pulled
+// live from /plans (catalog.credits.examples) so those numbers can't drift,
+// but the rule text itself is deliberately NOT the backend's own `rule`
+// string — that reveals the internal $/credit conversion and the rounding
+// mechanic, which the owner doesn't want public (2026-10-19: "that's more
+// backend decision making as opposed to public information"). This is a
+// separate, intentionally vaguer sentence instead.
 function CreditsExplainer({ catalog }: { catalog: PlansCatalog }) {
-  const { rule, examples } = catalog.credits
+  const { examples } = catalog.credits
   return (
     <div className="rounded-lg p-5 space-y-3" style={{ border: `1px solid ${C.border}`, backgroundColor: C.surface2 }}>
       <div className="font-mono font-bold text-[14px]" style={{ color: C.accent }}>How chat credits work</div>
-      <p className="font-mono text-[13px]" style={{ color: C.textDim }}>{rule}</p>
-      <p className="font-mono text-[13px]" style={{ color: C.textBright }}>
-        A quick question is 1 credit; the deeper the answer, the more it costs — you only pay for the depth you asked for.
+      <p className="font-mono text-[13px]" style={{ color: C.textDim }}>
+        Typed syntax and the query builder never cost credits. A chat question's cost depends on how much work the
+        answer actually took — a quick question is 1 credit; the deeper the answer, the more it costs. You only pay
+        for the depth you asked for.
       </p>
       <div className="space-y-1.5">
         {examples.map((ex, i) => (
