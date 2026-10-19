@@ -412,7 +412,11 @@ interface LeaderboardRow {
   player: string
   team: string
   category: string
-  streak_type: string
+  // Null on a zero-streak row (confirmed live 2026-10-19 against Joe
+  // Burrow's post-rescore entry) — never dereferenced in that case anyway
+  // (leaderboardTagText/leaderboardStreakTooltip only read it when
+  // streak_length > 0), but the type should say so.
+  streak_type: string | null
   streak_label: string
   display_label: string
   streak_length: number
