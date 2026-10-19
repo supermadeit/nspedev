@@ -80,18 +80,29 @@ const ACCENT = 'oklch(0.85 0.15 195)'
 // default (unchanged), but the homepage's {charts}/{matchups} pair use 15px
 // so they read the same size as the {chart} title text on the page they
 // actually link to, rather than looking a size smaller by comparison.
+// `align` picks which way the menu opens horizontally — "right" (default,
+// unchanged) anchors the menu's right edge to the trigger's, so it opens
+// *leftward*; "left" anchors the menu's left edge instead, opening
+// *rightward*. Needed wherever a trigger sits close enough to the left
+// edge of a narrow mobile viewport that opening leftward runs the menu
+// off-screen (owner report, 2026-10-19 — team.metrics' {sports} and the
+// homepage mobile corner's {charts}, both left-aligned/leftmost triggers
+// with little room to their left on mobile; every other placement has
+// enough room to spare and is left on the default).
 export function SportsSwitcher({
   current,
   label = 'sports',
   direction = 'down',
   variant = 'rankings',
   triggerSizePx = 14,
+  align = 'right',
 }: {
   current?: SportKey
   label?: string
   direction?: 'up' | 'down'
   variant?: 'rankings' | 'charts' | 'metrics'
   triggerSizePx?: number
+  align?: 'left' | 'right'
 }) {
   const [open, setOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -121,7 +132,7 @@ export function SportsSwitcher({
       </button>
       {open && (
         <div
-          className={`absolute right-0 z-30 flex flex-col items-end gap-2 rounded px-3 py-2 ${direction === 'up' ? 'bottom-[26px]' : 'top-[26px]'}`}
+          className={`absolute z-30 flex flex-col gap-2 rounded px-3 py-2 ${align === 'left' ? 'left-0 items-start' : 'right-0 items-end'} ${direction === 'up' ? 'bottom-[26px]' : 'top-[26px]'}`}
           style={{ backgroundColor: 'oklch(0.14 0 0)', border: '1px solid oklch(0.28 0 0)' }}
         >
           {others.map((l) => (

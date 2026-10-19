@@ -279,7 +279,11 @@ export default function TeamMetricsPage({ sport, label }: { sport: Sport; label:
           </span>
         </div>
         <div className={`flex gap-2 ${isMobile ? 'flex-col items-start' : 'items-center gap-4'}`}>
-          <SportsSwitcher current={sport} variant="metrics" />
+          {/* Mobile: this sits flush-left (items-start, above) with little
+              room to its left, so the default leftward-opening menu ran
+              off-screen (owner report, 2026-10-19) — opens rightward there
+              instead. Desktop's row layout has room to spare, unchanged. */}
+          <SportsSwitcher current={sport} variant="metrics" align={isMobile ? 'left' : 'right'} />
           <a
             href={chartsHrefFor(sport)}
             className="font-mono text-[13px] underline hover:opacity-80 transition-opacity"

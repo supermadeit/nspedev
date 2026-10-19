@@ -8935,7 +8935,12 @@ function App() {
           same as before. */}
       {isMobile && (
         <div className="absolute z-20 flex items-center gap-3" style={{ bottom: '46px', right: '12px' }}>
-          <SportsSwitcher label="charts" variant="charts" direction="up" />
+          {/* {charts} is leftmost in this row, with little room to its left
+              on a narrow screen — the default leftward-opening menu ran
+              off-screen there (owner report, 2026-10-19), so it opens
+              rightward instead. team.metrics/matchups sit further right
+              with room to spare and are unchanged. */}
+          <SportsSwitcher label="charts" variant="charts" direction="up" align="left" />
           <SportsSwitcher label="team.metrics" variant="metrics" direction="up" />
           <SportsSwitcher label="matchups" direction="up" />
         </div>
