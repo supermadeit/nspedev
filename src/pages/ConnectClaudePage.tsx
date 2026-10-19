@@ -10,21 +10,20 @@
 // against their 20/day cap, per backend) — just needs a session, same bar
 // as /account, not a plan-gated route.
 //
-// The API key box is deliberately NOT wired to a live fetch yet — there's
-// no account-API-key endpoint anywhere in this codebase to call, and
-// backend's own description of "the existing one-active-key flow" doesn't
-// give an actual contract (path/method/shape) to build against. Rather than
-// guess one and ship a broken fetch, this holds that one piece as a visible
-// placeholder until backend confirms it — same "don't wire it until it's
-// confirmed" pattern used elsewhere this build (see TeamMetricsPage's held
-// last-N constant). Everything else below (the value-prop copy, the three
-// client setup snippets) doesn't depend on that and is real/live now.
-import { useState } from 'react'
+// STATUS (2026-10-19): /account/api-key is NOT live yet — backend says it's
+// in the owner's pending push. The fetch/create/rotate/revoke calls below
+// are wired against the real confirmed contract (not a guess), so this
+// works the moment that push lands; until then a visitor just sees "could
+// not load" rather than a crash. Verify live via curl before telling
+// anyone this works end to end.
+import { useEffect, useState } from 'react'
 import { PageShell } from './PageShell'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { getApiKey, createOrRotateApiKey, revokeApiKey, type ApiKeyInfo } from '@/lib/apiKey'
 
 const MCP_URL = 'https://api.nspe.dev/mcp'
+const KEY_PLACEHOLDER = 'nspe_YOUR_KEY'
 
 function CopyBlock({ text }: { text: string }) {
   const [copied, setCopied] = useState(false)
@@ -57,7 +56,147 @@ function CopyBlock({ text }: { text: string }) {
   )
 }
 
+type KeyState =
+  | { status: 'loading' }
+  | { status: 'error'; message: string }
+  | { status: 'none' }
+  | { status: 'masked'; info: ApiKeyInfo }
+  | { status: 'revealed'; raw: string; prefix: string; created_at: string; rotated: boolean }
+
+function ApiKeyCard({ onKeyRevealed }: { onKeyRevealed: (key: string) => void }) {
+  const [state, setState] = useState<KeyState>({ status: 'loading' })
+  const [confirmingRotate, setConfirmingRotate] = useState(false)
+  const [busy, setBusy] = useState(false)
+
+  const load = () => {
+    setState({ status: 'loading' })
+    getApiKey()
+      .then((info) => setState(info ? { status: 'masked', info } : { status: 'none' }))
+      .catch((e) => setState({ status: 'error', message: e instanceof Error ? e.message : 'Could not load your key.' }))
+  }
+
+  useEffect(load, [])
+
+  async function handleCreateOrRotate() {
+    setBusy(true)
+    setConfirmingRotate(false)
+    try {
+      const result = await createOrRotateApiKey()
+      setState({ status: 'revealed', raw: result.api_key, prefix: result.key_prefix, created_at: result.created_at, rotated: result.rotated })
+      onKeyRevealed(result.api_key)
+    } catch (e) {
+      setState({ status: 'error', message: e instanceof Error ? e.message : 'Could not create a key.' })
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  async function handleRevoke() {
+    setBusy(true)
+    try {
+      await revokeApiKey()
+      setState({ status: 'none' })
+    } catch (e) {
+      setState({ status: 'error', message: e instanceof Error ? e.message : 'Could not revoke your key.' })
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <Card className="border-neutral-800 bg-neutral-950">
+      <CardHeader>
+        <CardTitle>Your API key</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        {state.status === 'loading' && (
+          <div className="text-sm" style={{ color: 'oklch(0.70 0 0)' }}>loading…</div>
+        )}
+
+        {state.status === 'error' && (
+          <div className="rounded-lg px-4 py-3 text-sm" style={{ border: '1px solid oklch(0.6 0.2 25)', color: 'oklch(0.85 0.15 25)' }}>
+            {state.message}
+            <button type="button" onClick={load} className="ml-2 underline" style={{ color: 'oklch(0.85 0.15 195)' }}>
+              retry
+            </button>
+          </div>
+        )}
+
+        {state.status === 'none' && (
+          <>
+            <p className="text-sm" style={{ color: 'oklch(0.70 0 0)' }}>No active key yet.</p>
+            <Button onClick={handleCreateOrRotate} disabled={busy}>
+              {busy ? 'Creating…' : 'Create key'}
+            </Button>
+          </>
+        )}
+
+        {state.status === 'masked' && (
+          <>
+            <div className="font-mono text-sm" style={{ color: 'oklch(0.90 0 0)' }}>
+              {state.info.key_prefix}••••••••
+            </div>
+            <div className="text-xs" style={{ color: 'oklch(0.55 0 0)' }}>
+              created {new Date(state.info.created_at).toLocaleDateString()}
+              {state.info.last_used ? ` · last used ${new Date(state.info.last_used).toLocaleDateString()}` : ' · never used'}
+            </div>
+            {!confirmingRotate ? (
+              <div className="flex gap-3">
+                <Button variant="secondary" onClick={() => setConfirmingRotate(true)} disabled={busy}>
+                  Rotate key
+                </Button>
+                <Button variant="secondary" onClick={handleRevoke} disabled={busy}>
+                  Revoke
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-2 rounded-lg px-4 py-3" style={{ border: '1px solid oklch(0.6 0.2 25)' }}>
+                <p className="text-sm" style={{ color: 'oklch(0.85 0.15 25)' }}>
+                  Your current key stops working immediately — anything using it (Claude Code, Desktop, etc.) will need the new one.
+                </p>
+                <div className="flex gap-3">
+                  <Button onClick={handleCreateOrRotate} disabled={busy}>
+                    {busy ? 'Rotating…' : 'Yes, rotate'}
+                  </Button>
+                  <Button variant="secondary" onClick={() => setConfirmingRotate(false)} disabled={busy}>
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+        {state.status === 'revealed' && (
+          <>
+            <p className="text-sm font-semibold" style={{ color: 'oklch(0.78 0.18 145)' }}>
+              {state.rotated ? 'New key created — your old one no longer works.' : 'Key created.'}
+            </p>
+            <CopyBlock text={state.raw} />
+            <p className="text-xs" style={{ color: 'oklch(0.70 0 0)' }}>
+              You won't see this again — copy it now and drop it into the setup below. We only keep a
+              one-way hash, so even we can't show it to you a second time.
+            </p>
+            <Button
+              variant="secondary"
+              onClick={() => setState({ status: 'masked', info: { key_prefix: state.prefix, created_at: state.created_at, last_used: null } })}
+            >
+              Done, hide it
+            </Button>
+          </>
+        )}
+      </CardContent>
+    </Card>
+  )
+}
+
 export default function ConnectClaudePage() {
+  // Config snippets below drop in the real key right after it's minted
+  // (one-time reveal), falling back to a placeholder the rest of the time —
+  // no reason to make someone retype it by hand if we already have it.
+  const [liveKey, setLiveKey] = useState<string | null>(null)
+  const key = liveKey ?? KEY_PLACEHOLDER
+
   return (
     <PageShell
       title="Connect your Claude"
@@ -81,51 +220,26 @@ export default function ConnectClaudePage() {
             Every plan can try this, including free — connected calls share the same daily cap your account
             already has; a paid tier raises that cap rather than unlocking the feature itself.
           </p>
+          <p style={{ color: 'oklch(0.70 0 0)' }}>
+            Four tools once connected: run any builder command (e.g. <code>nspe nhl mackinnon -pts2 -ov -season</code>),
+            player search, the per-sport syntax cheat sheet, and team.metrics. A few owner-only commands
+            politely decline for everyone else.
+          </p>
         </CardContent>
       </Card>
 
-      <Card className="border-neutral-800 bg-neutral-950">
-        <CardHeader>
-          <CardTitle>Your API key</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {/* Held pending backend's actual key-issuance contract — see file
-              header comment. Not a loading spinner (there's nothing in
-              flight to wait on) and not an error (nothing's broken) — a
-              plain "not wired up yet" state. */}
-          <div
-            className="rounded-lg px-4 py-3 text-sm"
-            style={{ border: '1px dashed oklch(0.35 0 0)', color: 'oklch(0.70 0 0)' }}
-          >
-            Key generation is being finalized on our end — check back shortly and your key will show up
-            here. Once it does, drop it into the <code>&lt;YOUR_NSPE_API_KEY&gt;</code> placeholder in any
-            of the setups below.
-          </div>
-        </CardContent>
-      </Card>
+      <ApiKeyCard onKeyRevealed={setLiveKey} />
 
       <Card className="border-neutral-800 bg-neutral-950">
         <CardHeader>
           <CardTitle>Claude Code</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          <p className="text-sm" style={{ color: 'oklch(0.70 0 0)' }}>
-            Add nspe as a project-level MCP server (<code>.mcp.json</code> at your project root), or run the
-            equivalent <code>claude mcp add</code> command:
+          <p className="text-sm" style={{ color: 'oklch(0.70 0 0)' }}>One command, native HTTP transport:</p>
+          <CopyBlock text={`claude mcp add --transport http nspe ${MCP_URL} --header "X-API-Key: ${key}"`} />
+          <p className="text-xs" style={{ color: 'oklch(0.55 0 0)' }}>
+            Then in any session: "ask nspe how many 300-yard games Mahomes has this season."
           </p>
-          <CopyBlock
-            text={`{
-  "mcpServers": {
-    "nspe": {
-      "type": "http",
-      "url": "${MCP_URL}",
-      "headers": {
-        "X-API-Key": "<YOUR_NSPE_API_KEY>"
-      }
-    }
-  }
-}`}
-          />
         </CardContent>
       </Card>
 
@@ -135,12 +249,21 @@ export default function ConnectClaudePage() {
         </CardHeader>
         <CardContent className="space-y-3">
           <p className="text-sm" style={{ color: 'oklch(0.70 0 0)' }}>
-            Settings → Connectors → Add custom connector. Name it <code>nspe</code>, paste the URL below,
-            and add the header with your key:
+            Settings → Developer → Edit Config (<code>claude_desktop_config.json</code>). Needs Node installed:
           </p>
-          <CopyBlock text={MCP_URL} />
-          <p className="text-sm" style={{ color: 'oklch(0.70 0 0)' }}>
-            Header: <code>X-API-Key: &lt;YOUR_NSPE_API_KEY&gt;</code>
+          <CopyBlock
+            text={`{
+  "mcpServers": {
+    "nspe": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "${MCP_URL}", "--header", "X-API-Key:\${NSPE_API_KEY}"],
+      "env": { "NSPE_API_KEY": "${key}" }
+    }
+  }
+}`}
+          />
+          <p className="text-xs" style={{ color: 'oklch(0.55 0 0)' }}>
+            The env-var indirection is on purpose — the header value can't contain a space otherwise.
           </p>
         </CardContent>
       </Card>
@@ -151,9 +274,21 @@ export default function ConnectClaudePage() {
         </CardHeader>
         <CardContent className="space-y-3">
           <p className="text-sm" style={{ color: 'oklch(0.70 0 0)' }}>
-            Settings → Connectors → Add custom connector — same URL and header as Claude Desktop above.
+            Coming soon — claude.ai's custom connectors currently only support OAuth, not a static key.
+            Claude Code and Desktop both work today.
           </p>
-          <CopyBlock text={MCP_URL} />
+        </CardContent>
+      </Card>
+
+      <Card className="border-neutral-800 bg-neutral-950">
+        <CardHeader>
+          <CardTitle>Other MCP clients (Cursor, etc.)</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <p className="text-sm" style={{ color: 'oklch(0.70 0 0)' }}>
+            Server type <code>streamable-http</code>, URL and header below:
+          </p>
+          <CopyBlock text={`${MCP_URL}\nX-API-Key: ${key}`} />
         </CardContent>
       </Card>
 
