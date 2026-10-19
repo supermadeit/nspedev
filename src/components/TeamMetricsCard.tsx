@@ -12,6 +12,8 @@
 // each sport's own page defines that list. Reuses the same CHART_COLORS-
 // style token set (`C`) as every other data-dense page (SortableStatChart,
 // ProfileSections) for visual consistency.
+import { useState } from 'react'
+import { ChevronDown, ChevronRight } from 'lucide-react'
 import { C } from '@/components/ProfileSections'
 import {
   normalizeAllowsInstance,
@@ -100,6 +102,7 @@ export function TeamMetricsCard({
   fieldGroups,
   allowsLabel = 'opponent thresholds allowed',
   hideAllows = false,
+  collapsibleAllows = false,
 }: {
   payload: TeamMetricsPayload
   teamLabel: string
@@ -110,9 +113,15 @@ export function TeamMetricsCard({
    * version here — set when that panel is rendering alongside this card so
    * the same data doesn't show twice. */
   hideAllows?: boolean
+  /** nba/mlb/nhl carry enough threshold categories that the always-open
+   * chip grid pushes the rest of the page down and makes scrolling past it
+   * a chore (owner ask, 2026-10-19); nfl has few enough it's left expanded.
+   * Starts collapsed, click-to-expand. */
+  collapsibleAllows?: boolean
 }) {
   const record = normalizeTeamMetricsRecord(payload.record)
   const allowsEntries = Object.entries(payload.allows ?? {})
+  const [allowsOpen, setAllowsOpen] = useState(!collapsibleAllows)
 
   // Build group spans the same way SortableStatChart does for its column
   // headers — consecutive fields sharing a `group` get one heading, fields
@@ -173,22 +182,41 @@ export function TeamMetricsCard({
 
       {!hideAllows && allowsEntries.length > 0 && (
         <div className="px-4 py-3" style={{ borderTop: `1px solid ${C.border}`, backgroundColor: C.surface2 }}>
-          <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: C.textDim }}>{allowsLabel}</div>
-          <div className="flex flex-wrap gap-2">
-            {allowsEntries.map(([key, a]) => (
-              <div key={key} className="rounded px-2.5 py-1.5" style={{ backgroundColor: C.surface, border: `1px solid ${C.border}` }}>
-                <div className="font-mono text-[11px]" style={{ color: C.textBright }}>{a.label}</div>
-                <div className="font-mono text-[13px] font-bold" style={{ color: C.accent }}>
-                  {a.pct}% <span className="font-normal text-[10px]" style={{ color: C.textDim }}>({a.count}/{a.games})</span>
-                </div>
+          {collapsibleAllows ? (
+            <button
+              type="button"
+              onClick={() => setAllowsOpen((v) => !v)}
+              className="flex items-center gap-1.5 w-full font-mono text-[10px] uppercase tracking-widest mb-2 text-left"
+              style={{ color: C.textDim }}
+            >
+              {allowsOpen ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+              {allowsLabel}
+              <span className="normal-case tracking-normal" style={{ color: C.textBright }}>
+                ({allowsEntries.length}){!allowsOpen ? ' — click to view' : ''}
+              </span>
+            </button>
+          ) : (
+            <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: C.textDim }}>{allowsLabel}</div>
+          )}
+          {allowsOpen && (
+            <>
+              <div className="flex flex-wrap gap-2">
+                {allowsEntries.map(([key, a]) => (
+                  <div key={key} className="rounded px-2.5 py-1.5" style={{ backgroundColor: C.surface, border: `1px solid ${C.border}` }}>
+                    <div className="font-mono text-[11px]" style={{ color: C.textBright }}>{a.label}</div>
+                    <div className="font-mono text-[13px] font-bold" style={{ color: C.accent }}>
+                      {a.pct}% <span className="font-normal text-[10px]" style={{ color: C.textDim }}>({a.count}/{a.games})</span>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          {/* All four sports now carry this (2026-10-01) — null for the
-              current season, a footnote for past-season/history windows
-              where the player scrape only covers current rosters. */}
-          {payload.allows_note && (
-            <div className="mt-2 font-mono text-[10px] italic" style={{ color: C.textBright }}>{payload.allows_note}</div>
+              {/* All four sports now carry this (2026-10-01) — null for the
+                  current season, a footnote for past-season/history windows
+                  where the player scrape only covers current rosters. */}
+              {payload.allows_note && (
+                <div className="mt-2 font-mono text-[10px] italic" style={{ color: C.textBright }}>{payload.allows_note}</div>
+              )}
+            </>
           )}
         </div>
       )}
@@ -217,23 +245,47 @@ export function OpponentThresholdsPanel({
   payload,
   teamLabel,
   allowsLabel = 'opponent thresholds allowed',
+  collapsible = false,
 }: {
   payload: TeamMetricsPayload
   teamLabel: string
   allowsLabel?: string
+  /** See TeamMetricsCard's `collapsibleAllows` — same reasoning, this panel
+   * is the one WITH the per-instance detail, so it's the longer of the two
+   * to scroll past on nba/mlb/nhl. Starts collapsed, click-to-expand. */
+  collapsible?: boolean
 }) {
   const allowsEntries = Object.entries(payload.allows ?? {})
+  const [open, setOpen] = useState(!collapsible)
 
   return (
     <div className="rounded-lg overflow-hidden" style={{ backgroundColor: C.surface, border: `1px solid ${C.border}` }}>
-      <div className="px-4 py-3" style={{ backgroundColor: C.surface2, borderBottom: `1px solid ${C.border}` }}>
-        <div className="flex items-baseline justify-between gap-3">
-          <span className="font-mono font-bold text-[15px]" style={{ color: C.accent }}>{allowsLabel}</span>
-          <span className="font-mono text-[11px]" style={{ color: C.textDim }}>{`vs. ${teamLabel}`}</span>
-        </div>
+      <div
+        className="px-4 py-3"
+        style={{ backgroundColor: C.surface2, borderBottom: open ? `1px solid ${C.border}` : undefined }}
+      >
+        {collapsible ? (
+          <button type="button" onClick={() => setOpen((v) => !v)} className="flex items-center justify-between gap-3 w-full text-left">
+            <span className="flex items-center gap-1.5 font-mono font-bold text-[15px]" style={{ color: C.accent }}>
+              {open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+              {allowsLabel}
+              {!open && allowsEntries.length > 0 && (
+                <span className="font-normal text-[11px] normal-case" style={{ color: C.textDim }}>
+                  ({allowsEntries.length} — click to view)
+                </span>
+              )}
+            </span>
+            <span className="font-mono text-[11px]" style={{ color: C.textDim }}>{`vs. ${teamLabel}`}</span>
+          </button>
+        ) : (
+          <div className="flex items-baseline justify-between gap-3">
+            <span className="font-mono font-bold text-[15px]" style={{ color: C.accent }}>{allowsLabel}</span>
+            <span className="font-mono text-[11px]" style={{ color: C.textDim }}>{`vs. ${teamLabel}`}</span>
+          </div>
+        )}
       </div>
 
-      {allowsEntries.length === 0 ? (
+      {!open ? null : allowsEntries.length === 0 ? (
         <div className="px-4 py-6 font-mono text-[12px] text-center" style={{ color: C.textDim }}>
           No threshold data for this window.
         </div>

@@ -195,6 +195,25 @@ function yearOptionLabel(sport: Sport, year: number): string {
   return String(year)
 }
 
+// HELD, NOT YET LIVE (2026-10-18): backend is precomputing a last-N-games
+// window (last5/last10/last20) across the whole /team-metrics bundle
+// (metrics + record + allows, same denominators) — confirmed scope/
+// contract, but not yet built/deployed (expected after tonight's slate).
+// Staged here, ready to ship, but deliberately left unwired into the
+// dropdowns below until that's confirmed live — picking one of these before
+// the precompute files exist would fall through to the slow live-compute
+// path (the exact thing fixed earlier today), not fail outright, so this
+// wouldn't even be visibly broken to ship early — just quietly slow/flaky
+// for anyone who clicks it, which is worse than not being there yet.
+// DO NOT wire this into the <select> elements below until nspe-v2-da
+// confirms the precompute files are live; verify independently via curl
+// first, same as every other backend-dependent change this session.
+const LAST_N_WINDOW_OPTIONS: { value: string; label: string }[] = [
+  { value: 'last5', label: 'last 5 games' },
+  { value: 'last10', label: 'last 10 games' },
+  { value: 'last20', label: 'last 20 games' },
+]
+
 const MODE_TABS: { key: Mode; label: string }[] = [
   { key: 'single', label: 'single team' },
   { key: 'vsTeam', label: 'vs. another team' },
@@ -351,12 +370,13 @@ export default function TeamMetricsPage({ sport, label }: { sport: Sport; label:
             teamLabel={teamLabelFor(teamA)}
             fieldGroups={fieldGroups}
             hideAllows={mode === 'single'}
+            collapsibleAllows={sport !== 'nfl'}
           />
         )}
 
         {mode === 'single' && (
           cardA.payload ? (
-            <OpponentThresholdsPanel payload={cardA.payload} teamLabel={teamLabelFor(teamA)} />
+            <OpponentThresholdsPanel payload={cardA.payload} teamLabel={teamLabelFor(teamA)} collapsible={sport !== 'nfl'} />
           ) : !cardA.error ? (
             <div className="font-mono text-[12px]" style={{ color: C.textDim }}>loading…</div>
           ) : null
@@ -367,7 +387,7 @@ export default function TeamMetricsPage({ sport, label }: { sport: Sport; label:
             {cardB.error && <div className="font-mono text-[12px]" style={{ color: 'oklch(0.75 0.15 30)' }}>{cardB.error}</div>}
             {!cardB.error && !cardB.payload && <div className="font-mono text-[12px]" style={{ color: C.textDim }}>loading…</div>}
             {cardB.payload && (
-              <TeamMetricsCard payload={cardB.payload} teamLabel={teamLabelFor(cardBTeam)} fieldGroups={fieldGroups} />
+              <TeamMetricsCard payload={cardB.payload} teamLabel={teamLabelFor(cardBTeam)} fieldGroups={fieldGroups} collapsibleAllows={sport !== 'nfl'} />
             )}
           </>
         )}
