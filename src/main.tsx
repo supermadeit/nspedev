@@ -25,6 +25,7 @@ import SportSeasonPage from './pages/SportSeasonPage.tsx'
 import TeamMetricsPage from './pages/TeamMetricsPage.tsx'
 import TeamMetricsStatSharePage from './pages/TeamMetricsStatSharePage.tsx'
 import ConnectClaudePage from './pages/ConnectClaudePage.tsx'
+import SapZillaPage from './pages/SapZillaPage.tsx'
 
 import "./main.css"
 import "./styles/theme.css"
@@ -102,6 +103,10 @@ createRoot(document.getElementById('root')!).render(
               2026-10-19) — its own lightweight poster page, not the full
               App shell above. */}
           <Route path="/p/stat/:id" element={<TeamMetricsStatSharePage />} />
+          {/* {sap.zilla} — typed legs need no auth; the screenshot path
+              checks auth itself and redirects to /login only when that
+              specific action is used, so this stays unwrapped. */}
+          <Route path="/sap.zilla" element={<SapZillaPage />} />
           <Route
             path="/account"
             element={
