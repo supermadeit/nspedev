@@ -21,6 +21,7 @@
 import { Link } from 'react-router-dom'
 import { Starfield } from '@/components/Starfield'
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
+import { HomeLogoLink } from '@/components/HomeLogoLink'
 
 const C = {
   accent: 'oklch(0.85 0.15 195)',
@@ -125,13 +126,7 @@ export default function WhyNspePage() {
             className="flex items-center justify-between mb-10 pb-4"
             style={{ borderBottom: `1px solid ${C.border}` }}
           >
-            <Link
-              to="/"
-              className="font-mono font-bold text-lg tracking-tight hover:opacity-80 transition-opacity"
-              style={{ color: C.textBright }}
-            >
-              nspe.dev
-            </Link>
+            <HomeLogoLink fontSizePx={16} />
             <nav className="flex items-center gap-4 text-[13px] font-mono font-bold">
               <Link to="/refill" className="underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
                 {'{pricing}'}

@@ -70,11 +70,12 @@ export default function TeamMetricsStatSharePage() {
         )}
 
         {/* Footer brand mark — owner ask (2026-10-19): moved out of the
-            floating bottom-right overlap into an actual footer row, and
-            sized down (was 32x52, a third smaller here) since it only needs
-            to be noticeable, not a second focal point next to the stat
-            itself. Same MadeIt logo used bottom-left on the homepage. */}
-        <div className="flex justify-end mt-3 pr-1">
+            floating bottom-right overlap into an actual footer row, sized
+            down (was 32x52, a third smaller here) since it only needs to be
+            noticeable, not a second focal point next to the stat itself —
+            and aligned left (not right) per follow-up feedback, matching
+            where this same logo sits on the homepage. */}
+        <div className="flex justify-start mt-3 pl-1">
           <img
             src={madeitLogo}
             alt="nspe"

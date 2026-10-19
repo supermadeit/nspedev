@@ -8779,15 +8779,23 @@ function App() {
         </div>
       )}
 
+      {/* Mobile: smaller + raised (owner ask, 2026-10-19) — at the original
+          size/height it sat close enough to the mobile corner nav row below
+          ({charts}/{team.metrics}/{matchups}, bottom: 46px) that {charts},
+          the leftmost of the three and closest to this logo, visibly
+          overlapped it in its resting (closed) state. The dropdown itself
+          overlapping when opened is fine and unchanged — only the static
+          button collision needed fixing. Desktop's original size/position
+          is untouched. */}
       <img
         src={madeitLogo}
         alt="NSPE Footer Logo Left"
-        className="absolute bottom-[42px] left-4 z-10 pointer-events-none"
+        className={`absolute left-4 z-10 pointer-events-none ${isMobile ? 'bottom-[78px]' : 'bottom-[42px]'}`}
         style={{
-          width: '38.5px',
-          height: '63px',
-          maxWidth: '38.5px',
-          maxHeight: '63px',
+          width: isMobile ? '28px' : '38.5px',
+          height: isMobile ? '46px' : '63px',
+          maxWidth: isMobile ? '28px' : '38.5px',
+          maxHeight: isMobile ? '46px' : '63px',
           objectFit: 'contain',
         }}
       />
