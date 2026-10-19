@@ -395,17 +395,35 @@ function formatTickerEntry(entry: HitlistEntry): string {
   return `${teamPrefix}${playerLabel} ${header} ${pairs.join(', ')}`.trim()
 }
 
+// Rescored 2026-10-19 (owner-driven — the old streak/heater model let a
+// player rank #1 off a long-but-bad streak, e.g. Geno Smith leading throwing
+// for 119/182/252 yds in losses) from pure streak-length to weighted recent
+// form. A player no longer needs an active streak to appear at all — the
+// streak is now just a tag alongside the score, not the score itself —
+// so streak_length can be 0 (display_label/streak_label then read "-").
+// `quality`/`length_points`/`streak_score`/`heater_bonus`/`sustained_bonus`/
+// `heater_window`/`heater{...}` are gone from the new model; this interface
+// never actually had those fields right in the first place (the old one
+// listed avg/hits/at_bats, which were never real either — this is the
+// first time it matches a real curl'd response). `recent`/`season`/`games`/
+// `big_games_last5`/`duds_last3`/`last5` are new — optional since cached/
+// stale payloads from before the rescore won't have them.
 interface LeaderboardRow {
   player: string
   team: string
+  category: string
   streak_type: string
   streak_label: string
+  display_label: string
   streak_length: number
   streak_active: boolean
-  avg: number
-  hits: number
-  at_bats: number
   score: number
+  recent?: number
+  season?: number
+  games?: number
+  big_games_last5?: number
+  duds_last3?: number
+  last5?: { date: string; opp: string; pts: number }[]
 }
 
 interface LeaderboardPayload {
@@ -494,14 +512,34 @@ function describeStreakType(streakType: string): string {
 
 // Hover text for a leaderboard row's "stat(streak)" cell — explains what the
 // abbreviation + parenthesized number actually mean, since neither is
-// self-evident on first look.
+// self-evident on first look. A streak_length of 0 (post-rescore: a player
+// on the board purely on recent form, no active streak) gets its own
+// wording rather than a nonsensical "0-game streak". When present, recent/
+// season averages are appended — exactly the context that would have made
+// a Geno-Smith-style #1 (a long streak, bad recent form) legible at a
+// glance instead of a hover-only mystery.
 function leaderboardStreakTooltip(row: LeaderboardRow, isTop3: boolean): string {
-  const desc = describeStreakType(row.streak_type || row.streak_label)
-  const activePart = row.streak_active ? 'active streak' : 'streak'
-  return `${desc} — ${row.streak_length}-game ${activePart}${isTop3 ? ' · ★ = top 3 by score' : ''}`
+  const streakPart =
+    row.streak_length > 0
+      ? `${describeStreakType(row.streak_type || row.streak_label)} — ${row.streak_length}-game ${row.streak_active ? 'active streak' : 'streak'}`
+      : 'No active streak, ranked on recent form'
+  const formPart =
+    row.recent != null && row.season != null ? ` · recent ${row.recent.toFixed(1)} / season ${row.season.toFixed(1)}` : ''
+  return `${streakPart}${formPart}${isTop3 ? ' · ★ = top 3 by score' : ''}`
 }
 
 const LEADERBOARD_SCORE_TOOLTIP = 'Composite ranking value combining streak length, type weight, and recent form'
+
+// The "stat(streak)" cell's actual text — a streak tag when there is one
+// (streak_length > 0), otherwise falls back to the recent-form number that's
+// carrying the rank instead (post-rescore, a player doesn't need a streak to
+// be on the board at all). The em dash is a defensive last resort for an
+// already-stale cached payload with neither field, not an expected case.
+function leaderboardTagText(row: LeaderboardRow): string {
+  if (row.streak_length > 0) return `${row.streak_label}(${row.streak_length})`
+  if (row.recent != null) return `recent ${row.recent.toFixed(1)}`
+  return '—'
+}
 
 function normalizeLeaderboardPlayer(name: string): string {
   if (!name) return ''
@@ -8911,7 +8949,7 @@ function App() {
                     <span className="truncate" style={{ color: 'oklch(0.92 0 0)' }}>{player}</span>
                     <span style={{ color: 'oklch(0.92 0 0)' }}>{row.team}</span>
                     <span style={{ color: 'oklch(0.85 0.15 195)' }} title={leaderboardStreakTooltip(row, isTop3)}>
-                      {row.streak_label}({row.streak_length}){star}
+                      {leaderboardTagText(row)}{star}
                     </span>
                     <span className="text-right" style={{ color: 'oklch(0.78 0.18 145)', fontWeight: 600 }} title={LEADERBOARD_SCORE_TOOLTIP}>
                       {row.score.toFixed(1)}
@@ -9071,24 +9109,37 @@ function App() {
                         style={{ color: 'oklch(0.85 0.15 195)' }}
                         title={leaderboardStreakTooltip(row, isTop3)}
                       >
-                        {row.streak_label}({row.streak_length}){star}
+                        {leaderboardTagText(row)}{star}
                       </span>
                     </div>
                     {expanded && (
-                      <div
-                        className="flex items-center justify-between mt-1.5 pt-1.5"
-                        style={{ borderTop: '1px solid oklch(0.18 0 0)' }}
-                      >
-                        <span
-                          className="text-[10px] uppercase tracking-widest"
-                          style={{ color: 'oklch(0.92 0 0)' }}
-                          title={LEADERBOARD_SCORE_TOOLTIP}
-                        >
-                          score
-                        </span>
-                        <span style={{ color: 'oklch(0.78 0.18 145)', fontWeight: 600 }}>
-                          {row.score.toFixed(1)}
-                        </span>
+                      <div className="mt-1.5 pt-1.5 space-y-1" style={{ borderTop: '1px solid oklch(0.18 0 0)' }}>
+                        <div className="flex items-center justify-between">
+                          <span
+                            className="text-[10px] uppercase tracking-widest"
+                            style={{ color: 'oklch(0.92 0 0)' }}
+                            title={LEADERBOARD_SCORE_TOOLTIP}
+                          >
+                            score
+                          </span>
+                          <span style={{ color: 'oklch(0.78 0.18 145)', fontWeight: 600 }}>
+                            {row.score.toFixed(1)}
+                          </span>
+                        </div>
+                        {/* Post-rescore context (owner-driven, 2026-10-19) —
+                            the actual fix for "why is this player #1" being
+                            a hover-only mystery before: recent/season form,
+                            right where someone already tapped to look. */}
+                        {row.recent != null && row.season != null && (
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] uppercase tracking-widest" style={{ color: 'oklch(0.92 0 0)' }}>
+                              recent / season
+                            </span>
+                            <span style={{ color: 'oklch(0.92 0 0)' }}>
+                              {row.recent.toFixed(1)} / {row.season.toFixed(1)}
+                            </span>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
