@@ -8779,26 +8779,23 @@ function App() {
         </div>
       )}
 
-      {/* Mobile: smaller + raised (owner ask, 2026-10-19) — at the original
-          size/height it sat close enough to the mobile corner nav row below
-          ({charts}/{team.metrics}/{matchups}, bottom: 46px) that {charts},
-          the leftmost of the three and closest to this logo, visibly
-          overlapped it in its resting (closed) state. The dropdown itself
-          overlapping when opened is fine and unchanged — only the static
-          button collision needed fixing. Desktop's original size/position
-          is untouched. */}
-      <img
-        src={madeitLogo}
-        alt="NSPE Footer Logo Left"
-        className={`absolute left-4 z-10 pointer-events-none ${isMobile ? 'bottom-[78px]' : 'bottom-[42px]'}`}
-        style={{
-          width: isMobile ? '28px' : '38.5px',
-          height: isMobile ? '46px' : '63px',
-          maxWidth: isMobile ? '28px' : '38.5px',
-          maxHeight: isMobile ? '46px' : '63px',
-          objectFit: 'contain',
-        }}
-      />
+      {/* Dropped from mobile entirely (owner ask, 2026-10-19 — "looks out of
+          place" there after the smaller/raised fix from the round before).
+          Desktop keeps its original size/position untouched. */}
+      {!isMobile && (
+        <img
+          src={madeitLogo}
+          alt="NSPE Footer Logo Left"
+          className="absolute left-4 z-10 pointer-events-none bottom-[42px]"
+          style={{
+            width: '38.5px',
+            height: '63px',
+            maxWidth: '38.5px',
+            maxHeight: '63px',
+            objectFit: 'contain',
+          }}
+        />
+      )}
 
       {/* Desktop bottom row, left to right: {charts} {matchups} {leaderboard}
           (the leaderboard panel itself is unchanged, just to the right of
@@ -8927,31 +8924,42 @@ function App() {
         </div>
       )}
 
-      {/* {leaderboard}'s mobile nav entry removed 2026-10-18 (owner ask) in
-          favor of {charts}/{team.metrics} below — shelved, not deleted: the
-          full-screen takeover modal, its state, and the data fetch all stay
-          in the file (see isMobileLeaderboardOpen further down), just with
-          no UI path left to open it on mobile. Desktop's own leaderboard
-          panel is untouched either way, this only ever affected the mobile
+      {/* {leaderboard}'s mobile nav entry: removed 2026-10-18, restored
+          2026-10-19 in place of {matchups} (see the corner block below) —
+          this modal/state/fetch never actually left the file either round,
+          only the UI path to it came and went. Desktop's own leaderboard
+          panel is untouched throughout, this only ever affected the mobile
           nav button. */}
 
-      {/* Mobile's homepage-level entry points into the sports pages — same
-          {charts}/{team.metrics}/{matchups} trio desktop carries (see that
-          block above), just mobile-sized and stacked in one row in the
-          corner {leaderboard} used to occupy. {matchups} stays rightmost
-          (closest to the screen edge) since it was already there and is the
-          most-used of the three. Real click-outside-to-close on each one,
-          same as before. */}
+      {/* Mobile's homepage-level entry points — {charts}/{team.metrics}
+          stay, {matchups} swapped back out for {leaderboard} (owner ask,
+          2026-10-19 — reverses the 2026-10-18 swap further up). Same
+          full-screen takeover modal/state (isMobileLeaderboardOpen) this
+          always had, just with a UI path to open it again; {matchups}
+          itself isn't deleted, just no longer linked from this corner (same
+          shelve-don't-delete treatment {leaderboard} got the first time
+          around — reachable via {sports}/{charts}/team.metrics pages'
+          header nav instead). Real click-outside-to-close on the two
+          SportsSwitchers, same as before. */}
       {isMobile && (
         <div className="absolute z-20 flex items-center gap-3" style={{ bottom: '46px', right: '12px' }}>
           {/* {charts} is leftmost in this row, with little room to its left
               on a narrow screen — the default leftward-opening menu ran
               off-screen there (owner report, 2026-10-19), so it opens
-              rightward instead. team.metrics/matchups sit further right
-              with room to spare and are unchanged. */}
+              rightward instead. team.metrics/{leaderboard} sit further
+              right with room to spare and are unchanged. */}
           <SportsSwitcher label="charts" variant="charts" direction="up" align="left" />
           <SportsSwitcher label="team.metrics" variant="metrics" direction="up" />
-          <SportsSwitcher label="matchups" direction="up" />
+          {leaderboard?.rows?.length > 0 && (
+            <button
+              type="button"
+              onClick={() => setIsMobileLeaderboardOpen(true)}
+              className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+              style={{ color: 'oklch(0.85 0.15 195)' }}
+            >
+              {'{leaderboard}'}
+            </button>
+          )}
         </div>
       )}
 
