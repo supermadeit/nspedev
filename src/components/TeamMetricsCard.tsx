@@ -13,7 +13,6 @@
 // style token set (`C`) as every other data-dense page (SortableStatChart,
 // ProfileSections) for visual consistency.
 import { useState } from 'react'
-import { ChevronDown, ChevronRight } from 'lucide-react'
 import { C } from '@/components/ProfileSections'
 import {
   normalizeAllowsInstance,
@@ -113,15 +112,26 @@ export function TeamMetricsCard({
    * version here — set when that panel is rendering alongside this card so
    * the same data doesn't show twice. */
   hideAllows?: boolean
-  /** nba/mlb/nhl carry enough threshold categories that the always-open
-   * chip grid pushes the rest of the page down and makes scrolling past it
-   * a chore (owner ask, 2026-10-19); nfl has few enough it's left expanded.
-   * Starts collapsed, click-to-expand. */
+  /** nba/mlb/nhl carry enough threshold categories that showing every
+   * value at once pushes the rest of the page down and makes scrolling
+   * past it a chore (owner ask, 2026-10-19); nfl has few enough it's left
+   * fully expanded. The menu of categories always shows in full — this
+   * only gates the VALUE within each one, revealed per-category on click
+   * (not a whole-section collapse — corrected 2026-10-19, this is also the
+   * shape a future per-category subscription gate will slot into). */
   collapsibleAllows?: boolean
 }) {
   const record = normalizeTeamMetricsRecord(payload.record)
   const allowsEntries = Object.entries(payload.allows ?? {})
-  const [allowsOpen, setAllowsOpen] = useState(!collapsibleAllows)
+  const [openKeys, setOpenKeys] = useState<Set<string>>(new Set())
+  const toggleKey = (key: string) => {
+    setOpenKeys((prev) => {
+      const next = new Set(prev)
+      if (next.has(key)) next.delete(key)
+      else next.add(key)
+      return next
+    })
+  }
 
   // Build group spans the same way SortableStatChart does for its column
   // headers — consecutive fields sharing a `group` get one heading, fields
@@ -182,41 +192,35 @@ export function TeamMetricsCard({
 
       {!hideAllows && allowsEntries.length > 0 && (
         <div className="px-4 py-3" style={{ borderTop: `1px solid ${C.border}`, backgroundColor: C.surface2 }}>
-          {collapsibleAllows ? (
-            <button
-              type="button"
-              onClick={() => setAllowsOpen((v) => !v)}
-              className="flex items-center gap-1.5 w-full font-mono text-[10px] uppercase tracking-widest mb-2 text-left"
-              style={{ color: C.textDim }}
-            >
-              {allowsOpen ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
-              {allowsLabel}
-              <span className="normal-case tracking-normal" style={{ color: C.textBright }}>
-                ({allowsEntries.length}){!allowsOpen ? ' — click to view' : ''}
-              </span>
-            </button>
-          ) : (
-            <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: C.textDim }}>{allowsLabel}</div>
-          )}
-          {allowsOpen && (
-            <>
-              <div className="flex flex-wrap gap-2">
-                {allowsEntries.map(([key, a]) => (
-                  <div key={key} className="rounded px-2.5 py-1.5" style={{ backgroundColor: C.surface, border: `1px solid ${C.border}` }}>
-                    <div className="font-mono text-[11px]" style={{ color: C.textBright }}>{a.label}</div>
+          <div className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: C.textDim }}>{allowsLabel}</div>
+          <div className="flex flex-wrap gap-2">
+            {allowsEntries.map(([key, a]) => {
+              const isOpen = !collapsibleAllows || openKeys.has(key)
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={collapsibleAllows ? () => toggleKey(key) : undefined}
+                  className="rounded px-2.5 py-1.5 text-left"
+                  style={{ backgroundColor: C.surface, border: `1px solid ${C.border}`, cursor: collapsibleAllows ? 'pointer' : 'default' }}
+                >
+                  <div className="font-mono text-[11px]" style={{ color: C.textBright }}>{a.label}</div>
+                  {isOpen ? (
                     <div className="font-mono text-[13px] font-bold" style={{ color: C.accent }}>
                       {a.pct}% <span className="font-normal text-[10px]" style={{ color: C.textDim }}>({a.count}/{a.games})</span>
                     </div>
-                  </div>
-                ))}
-              </div>
-              {/* All four sports now carry this (2026-10-01) — null for the
-                  current season, a footnote for past-season/history windows
-                  where the player scrape only covers current rosters. */}
-              {payload.allows_note && (
-                <div className="mt-2 font-mono text-[10px] italic" style={{ color: C.textBright }}>{payload.allows_note}</div>
-              )}
-            </>
+                  ) : (
+                    <div className="font-mono text-[10px] italic" style={{ color: C.textDim }}>click to view</div>
+                  )}
+                </button>
+              )
+            })}
+          </div>
+          {/* All four sports now carry this (2026-10-01) — null for the
+              current season, a footnote for past-season/history windows
+              where the player scrape only covers current rosters. */}
+          {payload.allows_note && (
+            <div className="mt-2 font-mono text-[10px] italic" style={{ color: C.textBright }}>{payload.allows_note}</div>
           )}
         </div>
       )}
@@ -250,77 +254,83 @@ export function OpponentThresholdsPanel({
   payload: TeamMetricsPayload
   teamLabel: string
   allowsLabel?: string
-  /** See TeamMetricsCard's `collapsibleAllows` — same reasoning, this panel
-   * is the one WITH the per-instance detail, so it's the longer of the two
-   * to scroll past on nba/mlb/nhl. Starts collapsed, click-to-expand. */
+  /** See TeamMetricsCard's `collapsibleAllows` — same reasoning, and the
+   * same per-category (not whole-section) shape: the full menu of
+   * categories always shows, each one's own pct/count/instances detail is
+   * what's gated behind its own click (corrected 2026-10-19). This panel
+   * carries the per-instance detail, so it's the longer of the two to
+   * reveal per click on nba/mlb/nhl. */
   collapsible?: boolean
 }) {
   const allowsEntries = Object.entries(payload.allows ?? {})
-  const [open, setOpen] = useState(!collapsible)
+  const [openKeys, setOpenKeys] = useState<Set<string>>(new Set())
+  const toggleKey = (key: string) => {
+    setOpenKeys((prev) => {
+      const next = new Set(prev)
+      if (next.has(key)) next.delete(key)
+      else next.add(key)
+      return next
+    })
+  }
 
   return (
     <div className="rounded-lg overflow-hidden" style={{ backgroundColor: C.surface, border: `1px solid ${C.border}` }}>
-      <div
-        className="px-4 py-3"
-        style={{ backgroundColor: C.surface2, borderBottom: open ? `1px solid ${C.border}` : undefined }}
-      >
-        {collapsible ? (
-          <button type="button" onClick={() => setOpen((v) => !v)} className="flex items-center justify-between gap-3 w-full text-left">
-            <span className="flex items-center gap-1.5 font-mono font-bold text-[15px]" style={{ color: C.accent }}>
-              {open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-              {allowsLabel}
-              {!open && allowsEntries.length > 0 && (
-                <span className="font-normal text-[11px] normal-case" style={{ color: C.textDim }}>
-                  ({allowsEntries.length} — click to view)
-                </span>
-              )}
-            </span>
-            <span className="font-mono text-[11px]" style={{ color: C.textDim }}>{`vs. ${teamLabel}`}</span>
-          </button>
-        ) : (
-          <div className="flex items-baseline justify-between gap-3">
-            <span className="font-mono font-bold text-[15px]" style={{ color: C.accent }}>{allowsLabel}</span>
-            <span className="font-mono text-[11px]" style={{ color: C.textDim }}>{`vs. ${teamLabel}`}</span>
-          </div>
-        )}
+      <div className="px-4 py-3" style={{ backgroundColor: C.surface2, borderBottom: `1px solid ${C.border}` }}>
+        <div className="flex items-baseline justify-between gap-3">
+          <span className="font-mono font-bold text-[15px]" style={{ color: C.accent }}>{allowsLabel}</span>
+          <span className="font-mono text-[11px]" style={{ color: C.textDim }}>{`vs. ${teamLabel}`}</span>
+        </div>
       </div>
 
-      {!open ? null : allowsEntries.length === 0 ? (
+      {allowsEntries.length === 0 ? (
         <div className="px-4 py-6 font-mono text-[12px] text-center" style={{ color: C.textDim }}>
           No threshold data for this window.
         </div>
       ) : (
         <div className="px-4 py-3 space-y-3">
-          {allowsEntries.map(([key, a]) => (
-            <div key={key} className="rounded px-3 py-2.5" style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}` }}>
-              <div className="flex items-baseline justify-between gap-3">
-                <span className="font-mono text-[12px]" style={{ color: C.textBright }}>{a.label}</span>
-                <span className="font-mono text-[14px] font-bold" style={{ color: C.accent }}>
-                  {a.pct}% <span className="font-normal text-[10px]" style={{ color: C.textDim }}>({a.count}/{a.games} games)</span>
-                </span>
-              </div>
-              {a.instances && a.instances.length > 0 ? (
-                <div className="mt-2 space-y-1">
-                  {a.instances.map((inst, i) => {
-                    const n = normalizeAllowsInstance(inst)
-                    return (
-                      <div key={i} className="flex items-baseline justify-between gap-3 font-mono text-[11px]" style={{ color: C.textDim }}>
-                        <span>{n.who}</span>
-                        <span className="flex items-baseline gap-2">
-                          {n.value != null && <span style={{ color: C.textBright }}>{n.value}</span>}
-                          {n.date && <span>{n.date}</span>}
-                        </span>
-                      </div>
-                    )
-                  })}
+          {allowsEntries.map(([key, a]) => {
+            const isOpen = !collapsible || openKeys.has(key)
+            return (
+              <button
+                key={key}
+                type="button"
+                onClick={collapsible ? () => toggleKey(key) : undefined}
+                className="block w-full rounded px-3 py-2.5 text-left"
+                style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}`, cursor: collapsible ? 'pointer' : 'default' }}
+              >
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="font-mono text-[12px]" style={{ color: C.textBright }}>{a.label}</span>
+                  {isOpen ? (
+                    <span className="font-mono text-[14px] font-bold" style={{ color: C.accent }}>
+                      {a.pct}% <span className="font-normal text-[10px]" style={{ color: C.textDim }}>({a.count}/{a.games} games)</span>
+                    </span>
+                  ) : (
+                    <span className="font-mono text-[10px] italic" style={{ color: C.textDim }}>click to view</span>
+                  )}
                 </div>
-              ) : a.count > 0 ? (
-                <div className="mt-1.5 font-mono text-[10px] italic" style={{ color: C.textBright }}>
-                  {a.count} of {a.games} games met this — detail unavailable for this entry
-                </div>
-              ) : null}
-            </div>
-          ))}
+                {isOpen && (a.instances && a.instances.length > 0 ? (
+                  <div className="mt-2 space-y-1">
+                    {a.instances.map((inst, i) => {
+                      const n = normalizeAllowsInstance(inst)
+                      return (
+                        <div key={i} className="flex items-baseline justify-between gap-3 font-mono text-[11px]" style={{ color: C.textDim }}>
+                          <span>{n.who}</span>
+                          <span className="flex items-baseline gap-2">
+                            {n.value != null && <span style={{ color: C.textBright }}>{n.value}</span>}
+                            {n.date && <span>{n.date}</span>}
+                          </span>
+                        </div>
+                      )
+                    })}
+                  </div>
+                ) : a.count > 0 ? (
+                  <div className="mt-1.5 font-mono text-[10px] italic" style={{ color: C.textBright }}>
+                    {a.count} of {a.games} games met this — detail unavailable for this entry
+                  </div>
+                ) : null)}
+              </button>
+            )
+          })}
           {payload.allows_note && (
             <div className="font-mono text-[10px] italic" style={{ color: C.textBright }}>{payload.allows_note}</div>
           )}
