@@ -20,6 +20,7 @@
 // since a team's own for/against split already answers "what are they good
 // at vs. what do they allow" without a second team involved at all.
 import { useEffect, useMemo, useState } from 'react'
+import { HomeLogoLink } from '@/components/HomeLogoLink'
 import { C } from '@/components/ProfileSections'
 import { SportsSwitcher, chartsHrefFor } from '@/components/SportsSwitcher'
 import { TeamMetricsCard, OpponentThresholdsPanel, type TeamMetricsFieldDef } from '@/components/TeamMetricsCard'
@@ -291,9 +292,7 @@ export default function TeamMetricsPage({ sport, label }: { sport: Sport; label:
           >
             {'{charts}'}
           </a>
-          <a href="/" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
-            {'{HOMEPAGE}'}
-          </a>
+          <HomeLogoLink fontSizePx={13} />
         </div>
       </div>
 

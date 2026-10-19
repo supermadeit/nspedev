@@ -14,6 +14,7 @@ import { normalizeAllowsInstance } from '@/lib/databaseApi'
 import { getPocket, type TeamMetricsStatSnapshot } from '@/lib/pockets'
 import madeitLogo from '@/assets/images/madeit-tech-logo-v2.jpeg'
 import { metricsHrefFor } from '@/components/SportsSwitcher'
+import { HomeLogoLink } from '@/components/HomeLogoLink'
 
 type LoadState =
   | { status: 'loading' }
@@ -52,11 +53,7 @@ export default function TeamMetricsStatSharePage() {
       className="min-h-screen w-full flex items-center justify-center px-4 py-10"
       style={{ backgroundColor: C.surface, fontFamily: 'monospace' }}
     >
-      <div className="w-full max-w-md relative">
-        <Link to="/" className="block text-center mb-6 font-mono text-[15px] font-bold tracking-wide" style={{ color: C.accent }}>
-          {'{nspe}'}
-        </Link>
-
+      <div className="w-full max-w-md">
         {state.status === 'loading' && (
           <div className="text-center font-mono text-[13px]" style={{ color: C.textDim }}>loading…</div>
         )}
@@ -72,15 +69,19 @@ export default function TeamMetricsStatSharePage() {
           <StatPoster snapshot={state.snapshot} />
         )}
 
-        {/* Bottom-right brand mark (owner ask, 2026-10-19 — the same logo
-            that sits bottom-left on the homepage, moved here so a shared
-            link/screenshot carries the brand wherever it travels). */}
-        <img
-          src={madeitLogo}
-          alt="nspe"
-          className="absolute bottom-[-28px] right-0 pointer-events-none"
-          style={{ width: '32px', height: '52px', maxWidth: '32px', maxHeight: '52px', objectFit: 'contain' }}
-        />
+        {/* Footer brand mark — owner ask (2026-10-19): moved out of the
+            floating bottom-right overlap into an actual footer row, and
+            sized down (was 32x52, a third smaller here) since it only needs
+            to be noticeable, not a second focal point next to the stat
+            itself. Same MadeIt logo used bottom-left on the homepage. */}
+        <div className="flex justify-end mt-3 pr-1">
+          <img
+            src={madeitLogo}
+            alt="nspe"
+            className="pointer-events-none"
+            style={{ width: '22px', height: '36px', maxWidth: '22px', maxHeight: '36px', objectFit: 'contain' }}
+          />
+        </div>
       </div>
     </div>
   )
@@ -92,10 +93,17 @@ function StatPoster({ snapshot }: { snapshot: TeamMetricsStatSnapshot }) {
 
   return (
     <div className="rounded-lg overflow-hidden" style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}` }}>
-      <div className="px-5 pt-5 pb-4 text-center" style={{ borderBottom: `1px solid ${C.border}` }}>
-        <div className="font-mono font-bold text-[16px]" style={{ color: C.accent }}>{`{${teamLabel}}`}</div>
-        <div className="font-mono text-[11px] mt-0.5" style={{ color: C.textDim }}>
-          {win.label} · {games} GM · {sport.toUpperCase()}
+      <div className="px-5 pt-5 pb-4 flex items-center justify-between gap-3" style={{ borderBottom: `1px solid ${C.border}` }}>
+        {/* The nspe.dev logo doubles as the home link here too — far left,
+            same as everywhere else on the site now (owner ask, 2026-10-19).
+            Team/window info moves to the right of it rather than its old
+            centered-alone treatment. */}
+        <HomeLogoLink fontSizePx={13} />
+        <div className="text-right">
+          <div className="font-mono font-bold text-[16px]" style={{ color: C.accent }}>{`{${teamLabel}}`}</div>
+          <div className="font-mono text-[11px] mt-0.5" style={{ color: C.textDim }}>
+            {win.label} · {games} GM · {sport.toUpperCase()}
+          </div>
         </div>
       </div>
 

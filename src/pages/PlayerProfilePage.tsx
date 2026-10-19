@@ -10,6 +10,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { normalizeDisplayPlayer } from '@/lib/nspe-payloads'
+import { HomeLogoLink } from '@/components/HomeLogoLink'
 import { fetchPlayerProfile } from '@/lib/databaseApi'
 import { loadPlayerIndex, searchPlayers } from '@/lib/playerSearch'
 import { PlayerSearchDropdown } from '@/components/PlayerSearchDropdown'
@@ -319,9 +320,7 @@ export default function PlayerProfilePage() {
         <span className="font-mono text-[14px]" style={{ color: C.textDim }}>
           {state.status === 'error' ? `couldn't load profile — ${state.message}` : `no profile found for "${slug}"`}
         </span>
-        <a href="/" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
-          {'{HOMEPAGE}'}
-        </a>
+        <HomeLogoLink fontSizePx={13} />
       </div>
     )
   }
@@ -364,9 +363,7 @@ export default function PlayerProfilePage() {
             <a href="/charts" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
               {'{chart}'}
             </a>
-            <a href="/" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
-              {'{HOMEPAGE}'}
-            </a>
+            <HomeLogoLink fontSizePx={13} />
           </div>
         </div>
 

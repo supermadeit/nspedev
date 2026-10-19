@@ -6,6 +6,7 @@
 // Per nspe-v2-da (2026-09-30): goal/point/assist/SOG threshold-game counts
 // plus season totals including PIM — 956 players, no minimum-games floor.
 import { useEffect, useMemo, useState } from 'react'
+import { HomeLogoLink } from '@/components/HomeLogoLink'
 import { fetchNhlScoringBuckets, type NhlScoringBucketRow, type NhlScoringBucketsData } from '@/lib/databaseApi'
 import { normalizeDisplayPlayer } from '@/lib/nspe-payloads'
 import { loadPlayerIndex, PLAYER_INDEX, normalizePlayerKey, type PlayerIndexEntry } from '@/lib/playerSearch'
@@ -127,9 +128,7 @@ export default function NhlChartsPage() {
           </span>
         </div>
         <div className={`flex gap-2 ${isMobile ? 'flex-col items-start' : 'items-center gap-4'}`}>
-          <a href="/" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
-            {'{HOMEPAGE}'}
-          </a>
+          <HomeLogoLink fontSizePx={13} />
           <SportsSwitcher current="nhl" variant="charts" />
           <a href="/nhl.team.metrics" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
             {'{team.metrics}'}

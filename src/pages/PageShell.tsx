@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { C } from '@/components/ProfileSections'
+import { HomeLogoLink } from '@/components/HomeLogoLink'
 
 /**
  * Centered, dark-themed shell used by the monetization pages (auth, refill,
@@ -36,13 +37,7 @@ export function PageShell({
         className="w-full max-w-5xl flex items-center justify-between mb-10 pb-4"
         style={{ borderBottom: `1px solid ${C.border}` }}
       >
-        <Link
-          to="/"
-          className="font-mono font-bold text-lg tracking-tight hover:opacity-80 transition-opacity"
-          style={{ color: C.textBright }}
-        >
-          nspe.dev
-        </Link>
+        <HomeLogoLink fontSizePx={16} />
         <nav className="flex items-center gap-4 text-[13px] font-mono font-bold">
           <Link to="/refill" className="underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
             {'{pricing}'}

@@ -22,6 +22,7 @@ import { PlayerSearchDropdown } from '@/components/PlayerSearchDropdown'
 import { SyntaxSuggestionDropdown } from '@/components/SyntaxSuggestionDropdown'
 import { SportsSwitcher } from '@/components/SportsSwitcher'
 import { VoiceInputButton } from '@/components/VoiceInputButton'
+import { HomeLogoLink } from '@/components/HomeLogoLink'
 import { PLAYER_INDEX, loadPlayerIndex, resolvePlayerTeam, searchPlayers, searchPlayersFuzzy, searchPlayersLoose } from '@/lib/playerSearch'
 import {
   findPlayerSpotlightCommands,
@@ -7424,13 +7425,13 @@ function App() {
       >
         {/* {preview} dropped — no longer needed. Bordered like the power-
             rankings team-code box (RankingTile in WorldCupApp.tsx), same
-            shape, terminal green instead of that box's cyan. */}
-        <span
-          className="rounded px-2 py-1 font-bold whitespace-nowrap"
-          style={{ color: 'oklch(0.95 0 0)', border: '1px solid oklch(0.85 0.15 145)' }}
-        >
-          nspe.dev
-        </span>
+            shape, terminal green instead of that box's cyan. Now the site's
+            uniform home link/logo (see HomeLogoLink) — this is already the
+            homepage, so clicking it is a no-op, but it stays the same
+            component (glow included) rather than a special-cased plain
+            span, so there's exactly one "what does our logo look like"
+            definition site-wide. */}
+        <HomeLogoLink />
         {/* {sample-queries} moved to above the search bar's left edge on
             mobile (mirrors {pocket} on the right) — see the search block
             below. {pocket} moved there too, on both platforms. */}

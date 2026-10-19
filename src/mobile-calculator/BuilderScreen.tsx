@@ -6,6 +6,7 @@
 // pills that shrink to their text — and section labels are kept small and
 // secondary so the buttons themselves stay the dominant visual element.
 import type { ReactNode } from 'react'
+import { HomeLogoLink } from '@/components/HomeLogoLink'
 import {
   COMPUTE_WINDOW_N_PRESETS,
   EXPLOSIVE_MLB_COMPUTE_PRESETS,
@@ -118,13 +119,7 @@ export function BuilderScreen({ state, onRun, isLoading, popularPlayers = [], on
           nspe.dev <span style={{ color: 'oklch(0.75 0.15 145)' }}>{'{preview}'}</span>
         </span>
         <div className="flex items-center flex-wrap justify-end gap-x-2.5 gap-y-1">
-          <a
-            href="/"
-            className="font-mono text-[11px] font-bold underline"
-            style={{ color: C.accent }}
-          >
-            {'{HOMEPAGE}'}
-          </a>
+          <HomeLogoLink fontSizePx={11} />
           <a
             href="/charts"
             className="font-mono text-[11px] font-bold underline"

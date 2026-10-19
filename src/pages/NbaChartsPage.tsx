@@ -10,6 +10,7 @@
 // anywhere on file yet (waiting on scrape-room's per-player box-score work).
 // 470 players, no minimum-games floor.
 import { useEffect, useMemo, useState } from 'react'
+import { HomeLogoLink } from '@/components/HomeLogoLink'
 import { fetchNbaScoringBuckets, type NbaScoringBucketRow, type NbaScoringBucketsData } from '@/lib/databaseApi'
 import { normalizeDisplayPlayer } from '@/lib/nspe-payloads'
 import { loadPlayerIndex, PLAYER_INDEX, normalizePlayerKey, type PlayerIndexEntry } from '@/lib/playerSearch'
@@ -139,9 +140,7 @@ export default function NbaChartsPage() {
           </span>
         </div>
         <div className={`flex gap-2 ${isMobile ? 'flex-col items-start' : 'items-center gap-4'}`}>
-          <a href="/" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
-            {'{HOMEPAGE}'}
-          </a>
+          <HomeLogoLink fontSizePx={13} />
           <SportsSwitcher current="nba" variant="charts" />
           <a href="/nba.team.metrics" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
             {'{team.metrics}'}

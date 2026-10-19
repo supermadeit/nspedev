@@ -10,6 +10,7 @@
 // bases) — 393 batters, no minimum-games floor, so sorting/filtering by
 // volume is left to the person looking at the table, same as NFL's chart.
 import { useEffect, useMemo, useState } from 'react'
+import { HomeLogoLink } from '@/components/HomeLogoLink'
 import { fetchMlbBatterBuckets, type MlbBatterBucketRow, type MlbBatterBucketsData } from '@/lib/databaseApi'
 import { normalizeDisplayPlayer } from '@/lib/nspe-payloads'
 import { loadPlayerIndex, PLAYER_INDEX, normalizePlayerKey, type PlayerIndexEntry } from '@/lib/playerSearch'
@@ -120,9 +121,7 @@ export default function MlbChartsPage() {
           </span>
         </div>
         <div className={`flex gap-2 ${isMobile ? 'flex-col items-start' : 'items-center gap-4'}`}>
-          <a href="/" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
-            {'{HOMEPAGE}'}
-          </a>
+          <HomeLogoLink fontSizePx={13} />
           <SportsSwitcher current="mlb" variant="charts" />
           {/* {team.metrics} added 2026-10-01 — mlb joined the other three
               sports once its own dedicated team-metrics engine shipped. */}

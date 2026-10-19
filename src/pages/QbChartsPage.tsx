@@ -23,6 +23,7 @@
 // no games in the chart source (e.g. Deshaun Watson, who didn't play in
 // 2025) naturally drops out on its own — nothing special-cased for that.
 import { useEffect, useMemo, useState } from 'react'
+import { HomeLogoLink } from '@/components/HomeLogoLink'
 import { fetchQbExplosives, type QbExplosivesData } from '@/lib/databaseApi'
 import { normalizeDisplayPlayer } from '@/lib/nspe-payloads'
 import { loadPlayerIndex, PLAYER_INDEX, type PlayerIndexEntry } from '@/lib/playerSearch'
@@ -241,9 +242,7 @@ export default function QbChartsPage() {
             NbaChartsPage.tsx/NhlChartsPage.tsx) instead of its rankings
             page, now that all three exist. */}
         <div className={`flex gap-2 ${isMobile ? 'flex-col items-start' : 'items-center gap-4'}`}>
-          <a href="/" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
-            {'{HOMEPAGE}'}
-          </a>
+          <HomeLogoLink fontSizePx={13} />
           <SportsSwitcher current="nfl" variant="charts" />
           <a href="/nfl.team.metrics" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
             {'{team.metrics}'}
