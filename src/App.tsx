@@ -9072,7 +9072,7 @@ function App() {
             <div
               className="grid items-center px-4 py-1 font-mono text-[10px] uppercase tracking-widest sticky top-0"
               style={{
-                gridTemplateColumns: `22px minmax(0,1fr) 36px ${mobileSeasonColPx}px 56px`,
+                gridTemplateColumns: `22px minmax(0,1fr) 36px ${mobileSeasonColPx}px`,
                 gap: '8px',
                 backgroundColor: 'oklch(0.14 0 0)',
                 borderBottom: '1px solid oklch(0.20 0 0)',
@@ -9082,8 +9082,7 @@ function App() {
               <span>#</span>
               <span>player</span>
               <span>tm</span>
-              <span className="text-right">season</span>
-              <span className="text-right" title={`${LEADERBOARD_SCORE_TOOLTIP}. Tap a row for more.`}>score</span>
+              <span className="text-right" title="Tap a row for more.">season</span>
             </div>
             {leaderboard.rows.map((row, idx) => {
                 const rank = String(idx + 1).padStart(2, '0')
@@ -9106,7 +9105,7 @@ function App() {
                   >
                     <div
                       className="grid items-center"
-                      style={{ gridTemplateColumns: `22px minmax(0,1fr) 36px ${mobileSeasonColPx}px 56px`, gap: '8px' }}
+                      style={{ gridTemplateColumns: `22px minmax(0,1fr) 36px ${mobileSeasonColPx}px`, gap: '8px' }}
                     >
                       <span style={{ color: 'oklch(0.92 0 0)' }}>{rank}{isTop3 ? '★' : ''}</span>
                       <span className="truncate" style={{ color: 'oklch(0.92 0 0)' }}>
@@ -9116,18 +9115,14 @@ function App() {
                       <span className="text-right whitespace-nowrap" style={{ color: 'oklch(0.85 0.15 195)' }} title={leaderboardSeasonTooltip(row)}>
                         {seasonCell}
                       </span>
-                      <span className="text-right whitespace-nowrap" style={{ color: 'oklch(0.78 0.18 145)', fontWeight: 600 }}>
-                        {row.score.toFixed(1)}
-                      </span>
                     </div>
-                    {/* Score moved into the always-visible row above (owner
-                        ask, 2026-10-19 — the streak column became the
-                        season-stat one now visible there instead), so this
-                        expand panel's job is the second season_stats entry
-                        (e.g. Pass TD, next to the headline Pass Yds already
-                        showing above) plus recent/season form — together,
-                        the actual answer to "why is this player ranked
-                        here." */}
+                    {/* Score dropped entirely on mobile too (owner ask,
+                        2026-10-19 — matches the desktop removal from
+                        earlier the same day), so this expand panel's job is
+                        the second season_stats entry (e.g. Pass TD, next to
+                        the headline Pass Yds already showing in the row
+                        above) plus recent/season form — together, the
+                        actual answer to "why is this player ranked here." */}
                     {expanded && (row.season_stats?.[1] || (row.recent != null && row.season != null)) && (
                       <div className="space-y-1 mt-1.5 pt-1.5" style={{ borderTop: '1px solid oklch(0.18 0 0)' }}>
                         {row.season_stats?.[1] && (
