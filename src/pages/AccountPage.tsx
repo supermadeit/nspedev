@@ -220,6 +220,21 @@ export default function AccountPage() {
 
       <Card className="border-neutral-800 bg-neutral-950">
         <CardHeader>
+          <CardTitle>Connect your Claude</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <p className="text-sm text-white">
+            Plug nspe's data/tools into the Claude you already use — no extra AI-usage cost, your plan just
+            decides how much you get to call.
+          </p>
+          <Button asChild>
+            <Link to="/connect">{'{b.y.o.c}'}</Link>
+          </Button>
+        </CardContent>
+      </Card>
+
+      <Card className="border-neutral-800 bg-neutral-950">
+        <CardHeader>
           <CardTitle>Search suggestions</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">

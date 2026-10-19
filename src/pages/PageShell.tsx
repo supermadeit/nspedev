@@ -50,6 +50,9 @@ export function PageShell({
           <Link to="/account" className="underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
             {'{account}'}
           </Link>
+          <Link to="/connect" className="underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
+            {'{b.y.o.c}'}
+          </Link>
         </nav>
       </header>
 

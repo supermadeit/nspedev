@@ -24,6 +24,7 @@ import PlayerProfilePage from './pages/PlayerProfilePage.tsx'
 import SportSeasonPage from './pages/SportSeasonPage.tsx'
 import TeamMetricsPage from './pages/TeamMetricsPage.tsx'
 import TeamMetricsStatSharePage from './pages/TeamMetricsStatSharePage.tsx'
+import ConnectClaudePage from './pages/ConnectClaudePage.tsx'
 
 import "./main.css"
 import "./styles/theme.css"
@@ -106,6 +107,17 @@ createRoot(document.getElementById('root')!).render(
             element={
               <ProtectedRoute>
                 <AccountPage />
+              </ProtectedRoute>
+            }
+          />
+          {/* {b.y.o.c} — "Connect your Claude." Login-gated like /account, not
+              plan-gated — free-tier users can try it against their existing
+              daily cap (owner/backend, 2026-10-19). */}
+          <Route
+            path="/connect"
+            element={
+              <ProtectedRoute>
+                <ConnectClaudePage />
               </ProtectedRoute>
             }
           />
