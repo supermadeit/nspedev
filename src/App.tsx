@@ -8928,7 +8928,7 @@ function App() {
               <div
                 className="grid items-center px-3 py-1 font-mono text-[10px] uppercase tracking-widest sticky top-0"
                 style={{
-                  gridTemplateColumns: '22px 1fr 36px 150px 56px',
+                  gridTemplateColumns: '22px 1fr 36px 220px',
                   gap: '8px',
                   backgroundColor: 'oklch(0.14 0 0)',
                   borderBottom: '1px solid oklch(0.20 0 0)',
@@ -8939,7 +8939,6 @@ function App() {
                 <span>player</span>
                 <span>tm</span>
                 <span>season</span>
-                <span className="text-right" title={LEADERBOARD_SCORE_TOOLTIP}>score</span>
               </div>
               {leaderboard.rows.map((row, idx) => {
                 const rank = String(idx + 1).padStart(2, '0')
@@ -8951,7 +8950,7 @@ function App() {
                     key={`${row.player}-${idx}`}
                     className="grid items-center px-3 py-1.5 font-mono text-[12px]"
                     style={{
-                      gridTemplateColumns: '22px 1fr 36px 150px 56px',
+                      gridTemplateColumns: '22px 1fr 36px 220px',
                       gap: '8px',
                       borderBottom: idx === leaderboard.rows.length - 1 ? 'none' : '1px solid oklch(0.16 0 0)',
                       color: 'oklch(0.85 0 0)',
@@ -8960,11 +8959,8 @@ function App() {
                     <span style={{ color: 'oklch(0.92 0 0)' }}>{rank}{isTop3 ? '★' : ''}</span>
                     <span className="truncate" style={{ color: 'oklch(0.92 0 0)' }}>{player}</span>
                     <span style={{ color: 'oklch(0.92 0 0)' }}>{row.team}</span>
-                    <span className="truncate" style={{ color: 'oklch(0.85 0.15 195)' }} title={leaderboardSeasonTooltip(row)}>
+                    <span style={{ color: 'oklch(0.85 0.15 195)' }} title={leaderboardSeasonTooltip(row)}>
                       {seasonCell}
-                    </span>
-                    <span className="text-right" style={{ color: 'oklch(0.78 0.18 145)', fontWeight: 600 }} title={LEADERBOARD_SCORE_TOOLTIP}>
-                      {row.score.toFixed(1)}
                     </span>
                   </div>
                 )
