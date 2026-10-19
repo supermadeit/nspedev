@@ -413,9 +413,9 @@ interface LeaderboardRow {
   team: string
   category: string
   // Null on a zero-streak row (confirmed live 2026-10-19 against Joe
-  // Burrow's post-rescore entry) — never dereferenced in that case anyway
-  // (leaderboardTagText/leaderboardStreakTooltip only read it when
-  // streak_length > 0), but the type should say so.
+  // Burrow's post-rescore entry) — kept for completeness, not read for
+  // display anywhere (the old streak tag/tooltip this fed is gone, see
+  // season_stats below), but the type should say so.
   streak_type: string | null
   streak_label: string
   display_label: string
@@ -428,6 +428,24 @@ interface LeaderboardRow {
   big_games_last5?: number
   duds_last3?: number
   last5?: { date: string; opp: string; pts: number }[]
+  // Refined 2026-10-19 (owner, superseding a same-day "just remove the
+  // streak column" ask): rather than drop the column, it becomes the
+  // player's season total at their position's headline stat plus their
+  // league rank there — ordered by display priority, e.g. QB:
+  // [{pass_yds,...}, {pass_td,...}], rush/rec: [{_yds,...}, {td,...}].
+  // `of` is the full size of that position's pool this season (every
+  // detected player with a game on file, not just ranked ones). Can be
+  // empty in theory — render nothing for that row when it is. Absent
+  // entirely on NBA/MLB rows (not rescored to carry this yet).
+  season_stats?: LeaderboardSeasonStat[]
+}
+
+interface LeaderboardSeasonStat {
+  key: string
+  label: string
+  value: number
+  rank: number
+  of: number
 }
 
 interface LeaderboardPayload {
@@ -471,78 +489,66 @@ function leaderboardSportLabel(kind: string): string {
   return m ? m[1].toLowerCase() : kind
 }
 
-// Best-effort expansion of a leaderboard streak_type code ("3PASSRUSHTD",
-// "150RECYDS") into plain words for a hover tooltip — reported 2026-09-30:
-// "'3PrTD(3)★' and a 99.6 score mean nothing to a new visitor." The old
-// {glossary} nav entry that explained this is shelved (see the comment on
-// its removal further down), so this reuses the same GLOSSARY_STREAK_LABELS-
-// style knowledge inline via `title` tooltips instead of trying to resurrect
-// that whole panel. Longest/most-specific patterns first so "PASSRUSHTD"
-// matches before the plainer "PASSTD"/"RUSHTD" it contains.
-const STREAK_TOKEN_LABELS: [RegExp, string][] = [
-  [/LONGCOMP/i, 'Yard Completion'],
-  [/PASSRUSHTD/i, 'Pass + Rush TDs'],
-  [/RUSHRECTD/i, 'Rush + Rec TDs'],
-  [/PASSTD/i, 'Passing TDs'],
-  [/RUSHTD/i, 'Rushing TDs'],
-  [/RECTD/i, 'Receiving TDs'],
-  [/RECYDS/i, 'Receiving Yards'],
-  [/RUSHREC/i, 'Rush + Rec Yards'],
-  [/RUSHYDS/i, 'Rushing Yards'],
-  [/PASSYDS/i, 'Passing Yards'],
-  [/YDS/i, 'Yards'],
-  [/TB\b/i, 'Total Bases'],
-  [/RBI/i, 'RBI'],
-  [/HR\b/i, 'Home Runs'],
-  [/OB\b/i, 'On-Base'],
-  // Exact-match only (anchored) — "2R" is a real backend streak_type (also
-  // native to nfl-leaderboard.json, not a leftover) for "2+ TD", a bare
-  // letter too short/generic to substring-match safely like the others above.
-  [/^R$/i, 'Touchdowns'],
-]
+const LEADERBOARD_SCORE_TOOLTIP = 'Composite ranking value based on recent and season form'
 
-function describeStreakType(streakType: string): string {
-  const m = /^(\d+)?(.*)$/.exec(streakType || '')
-  const threshold = m?.[1]
-  let rest = (m?.[2] ?? streakType).trim()
-  for (const [re, label] of STREAK_TOKEN_LABELS) {
-    if (re.test(rest)) {
-      rest = label
-      break
-    }
+// The old streak_type/streak_label glossary (STREAK_TOKEN_LABELS,
+// describeStreakType, the "stat(streak)" tag/tooltip) is gone along with the
+// column it only existed for — superseded 2026-10-19 by season_stats below,
+// same day as the rescore itself. streak_type/streak_label/streak_length/
+// streak_active/display_label are still real fields on the row (backend
+// keeps sending them), just nothing here reads them for display anymore.
+
+// pass/rush/rec -> the position word a rank is "#N of M" within — matches
+// season_stats' own category field, not a guess at every possible value.
+function leaderboardPositionWord(category: string): string {
+  if (category === 'pass') return 'QB'
+  if (category === 'rush') return 'RB'
+  if (category === 'rec') return 'WR/TE'
+  return category.toUpperCase()
+}
+
+function formatSeasonStatValue(value: number): string {
+  return Number.isInteger(value) ? value.toLocaleString() : value.toFixed(1)
+}
+
+// Desktop's visible season-stat cell — e.g. "1,504 Pass Yds · #7 QB". Only
+// the first (headline) entry; the second lives in the tooltip alongside
+// recent/season. Null renders nothing, same as an empty/absent list.
+function leaderboardSeasonCellText(row: LeaderboardRow): string | null {
+  const stat = row.season_stats?.[0]
+  if (!stat) return null
+  return `${formatSeasonStatValue(stat.value)} ${stat.label} · #${stat.rank} ${leaderboardPositionWord(row.category)}`
+}
+
+// Mobile's collapsed-row version — shorter since the row has less width to
+// give it; the label/position move into the cell's own title tooltip
+// instead of being spelled out inline.
+function leaderboardSeasonCellCompact(row: LeaderboardRow): string | null {
+  const stat = row.season_stats?.[0]
+  if (!stat) return null
+  return `${formatSeasonStatValue(stat.value)} · #${stat.rank}`
+}
+
+// Full context for the season-stat cell — desktop hover, and mobile's
+// existing tap-to-expand panel: the headline stat's full "#N of M" pool
+// size, the second season_stats entry (e.g. Pass TD) when there is one, and
+// recent/season form alongside it — the actual answer to "why is this
+// player ranked here," not spread across a separate streak explanation
+// anymore.
+function leaderboardSeasonTooltip(row: LeaderboardRow): string {
+  const parts: string[] = []
+  const headline = row.season_stats?.[0]
+  if (headline) {
+    parts.push(`${headline.label}: ${formatSeasonStatValue(headline.value)}, #${headline.rank} of ${headline.of} ${leaderboardPositionWord(row.category)}`)
   }
-  return threshold ? `${threshold}+ ${rest}` : rest
-}
-
-// Hover text for a leaderboard row's "stat(streak)" cell — explains what the
-// abbreviation + parenthesized number actually mean, since neither is
-// self-evident on first look. A streak_length of 0 (post-rescore: a player
-// on the board purely on recent form, no active streak) gets its own
-// wording rather than a nonsensical "0-game streak". When present, recent/
-// season averages are appended — exactly the context that would have made
-// a Geno-Smith-style #1 (a long streak, bad recent form) legible at a
-// glance instead of a hover-only mystery.
-function leaderboardStreakTooltip(row: LeaderboardRow, isTop3: boolean): string {
-  const streakPart =
-    row.streak_length > 0
-      ? `${describeStreakType(row.streak_type || row.streak_label)} — ${row.streak_length}-game ${row.streak_active ? 'active streak' : 'streak'}`
-      : 'No active streak, ranked on recent form'
-  const formPart =
-    row.recent != null && row.season != null ? ` · recent ${row.recent.toFixed(1)} / season ${row.season.toFixed(1)}` : ''
-  return `${streakPart}${formPart}${isTop3 ? ' · ★ = top 3 by score' : ''}`
-}
-
-const LEADERBOARD_SCORE_TOOLTIP = 'Composite ranking value combining streak length, type weight, and recent form'
-
-// The "stat(streak)" cell's actual text — a streak tag when there is one
-// (streak_length > 0), otherwise falls back to the recent-form number that's
-// carrying the rank instead (post-rescore, a player doesn't need a streak to
-// be on the board at all). The em dash is a defensive last resort for an
-// already-stale cached payload with neither field, not an expected case.
-function leaderboardTagText(row: LeaderboardRow): string {
-  if (row.streak_length > 0) return `${row.streak_label}(${row.streak_length})`
-  if (row.recent != null) return `recent ${row.recent.toFixed(1)}`
-  return '—'
+  const second = row.season_stats?.[1]
+  if (second) {
+    parts.push(`${second.label}: ${formatSeasonStatValue(second.value)} (#${second.rank} of ${second.of})`)
+  }
+  if (row.recent != null && row.season != null) {
+    parts.push(`recent ${row.recent.toFixed(1)} / season ${row.season.toFixed(1)}`)
+  }
+  return parts.join(' · ')
 }
 
 function normalizeLeaderboardPlayer(name: string): string {
@@ -5939,11 +5945,13 @@ function App() {
       .catch((err) => console.error('Failed to load live nfl_leaderboard_heat.json, keeping bundled snapshot:', err))
     return () => { cancelled = true }
   }, [])
-  // Mobile leaderboard: the stat(streak) column is sized to its longest value
-  // (monospace, ~7.2px/char at 12px) and right-aligned to the same edge the
-  // expanded row's score sits on, so the player column gets all the rest.
-  const mobileStreakColPx = Math.ceil(
-    Math.max(6, ...(leaderboard?.rows ?? []).map((r) => `${r.streak_label}(${r.streak_length})★`.length)) * 7.2,
+  // Mobile leaderboard: the season-stat column (owner refinement, 2026-10-19
+  // — the streak column became this rather than being dropped outright) is
+  // sized to its longest actual value, same approach the streak column this
+  // replaced used, just measuring "1,504 · #7"-style text instead of a
+  // streak tag.
+  const mobileSeasonColPx = Math.ceil(
+    Math.max(6, ...(leaderboard?.rows ?? []).map((r) => (leaderboardSeasonCellCompact(r) ?? '').length)) * 7.2,
   ) + 2
   // NFL h2h's "popular players" list — the leaderboard.json shape above is
   // MLB's stat-threshold format; the NFL leaderboard is a different "heat"
@@ -8920,7 +8928,7 @@ function App() {
               <div
                 className="grid items-center px-3 py-1 font-mono text-[10px] uppercase tracking-widest sticky top-0"
                 style={{
-                  gridTemplateColumns: '22px 1fr 36px 84px 56px',
+                  gridTemplateColumns: '22px 1fr 36px 150px 56px',
                   gap: '8px',
                   backgroundColor: 'oklch(0.14 0 0)',
                   borderBottom: '1px solid oklch(0.20 0 0)',
@@ -8930,30 +8938,30 @@ function App() {
                 <span>#</span>
                 <span>player</span>
                 <span>tm</span>
-                <span title="e.g. 3PrTD(2) = 3+ Pass+Rush TDs, active 2 games. ★ = top 3 by score">stat(streak)</span>
+                <span>season</span>
                 <span className="text-right" title={LEADERBOARD_SCORE_TOOLTIP}>score</span>
               </div>
               {leaderboard.rows.map((row, idx) => {
                 const rank = String(idx + 1).padStart(2, '0')
                 const player = normalizeLeaderboardPlayer(row.player)
                 const isTop3 = idx < 3
-                const star = isTop3 ? '★' : ' '
+                const seasonCell = leaderboardSeasonCellText(row)
                 return (
                   <div
                     key={`${row.player}-${idx}`}
                     className="grid items-center px-3 py-1.5 font-mono text-[12px]"
                     style={{
-                      gridTemplateColumns: '22px 1fr 36px 84px 56px',
+                      gridTemplateColumns: '22px 1fr 36px 150px 56px',
                       gap: '8px',
                       borderBottom: idx === leaderboard.rows.length - 1 ? 'none' : '1px solid oklch(0.16 0 0)',
                       color: 'oklch(0.85 0 0)',
                     }}
                   >
-                    <span style={{ color: 'oklch(0.92 0 0)' }}>{rank}</span>
+                    <span style={{ color: 'oklch(0.92 0 0)' }}>{rank}{isTop3 ? '★' : ''}</span>
                     <span className="truncate" style={{ color: 'oklch(0.92 0 0)' }}>{player}</span>
                     <span style={{ color: 'oklch(0.92 0 0)' }}>{row.team}</span>
-                    <span style={{ color: 'oklch(0.85 0.15 195)' }} title={leaderboardStreakTooltip(row, isTop3)}>
-                      {leaderboardTagText(row)}{star}
+                    <span className="truncate" style={{ color: 'oklch(0.85 0.15 195)' }} title={leaderboardSeasonTooltip(row)}>
+                      {seasonCell}
                     </span>
                     <span className="text-right" style={{ color: 'oklch(0.78 0.18 145)', fontWeight: 600 }} title={LEADERBOARD_SCORE_TOOLTIP}>
                       {row.score.toFixed(1)}
@@ -9068,7 +9076,7 @@ function App() {
             <div
               className="grid items-center px-4 py-1 font-mono text-[10px] uppercase tracking-widest sticky top-0"
               style={{
-                gridTemplateColumns: `22px minmax(0,1fr) 36px ${mobileStreakColPx}px`,
+                gridTemplateColumns: `22px minmax(0,1fr) 36px ${mobileSeasonColPx}px 56px`,
                 gap: '8px',
                 backgroundColor: 'oklch(0.14 0 0)',
                 borderBottom: '1px solid oklch(0.20 0 0)',
@@ -9078,14 +9086,15 @@ function App() {
               <span>#</span>
               <span>player</span>
               <span>tm</span>
-              <span className="text-right" title="e.g. 3PrTD(2) = 3+ Pass+Rush TDs, active 2 games. ★ = top 3 by score. Tap a row for score.">streak</span>
+              <span className="text-right">season</span>
+              <span className="text-right" title={`${LEADERBOARD_SCORE_TOOLTIP}. Tap a row for more.`}>score</span>
             </div>
             {leaderboard.rows.map((row, idx) => {
                 const rank = String(idx + 1).padStart(2, '0')
                 const player = normalizeLeaderboardPlayer(row.player)
                 const isTop3 = idx < 3
-                const star = isTop3 ? '★' : ' '
                 const expanded = mobileLeaderboardRows.isExpanded(idx)
+                const seasonCell = leaderboardSeasonCellCompact(row)
                 return (
                   <div
                     key={`m-${row.player}-${idx}`}
@@ -9101,39 +9110,40 @@ function App() {
                   >
                     <div
                       className="grid items-center"
-                      style={{ gridTemplateColumns: `22px minmax(0,1fr) 36px ${mobileStreakColPx}px`, gap: '8px' }}
+                      style={{ gridTemplateColumns: `22px minmax(0,1fr) 36px ${mobileSeasonColPx}px 56px`, gap: '8px' }}
                     >
-                      <span style={{ color: 'oklch(0.92 0 0)' }}>{rank}</span>
+                      <span style={{ color: 'oklch(0.92 0 0)' }}>{rank}{isTop3 ? '★' : ''}</span>
                       <span className="truncate" style={{ color: 'oklch(0.92 0 0)' }}>
                         {player}
                       </span>
                       <span style={{ color: 'oklch(0.92 0 0)' }}>{row.team}</span>
-                      <span
-                        className="text-right whitespace-nowrap"
-                        style={{ color: 'oklch(0.85 0.15 195)' }}
-                        title={leaderboardStreakTooltip(row, isTop3)}
-                      >
-                        {leaderboardTagText(row)}{star}
+                      <span className="text-right whitespace-nowrap" style={{ color: 'oklch(0.85 0.15 195)' }} title={leaderboardSeasonTooltip(row)}>
+                        {seasonCell}
+                      </span>
+                      <span className="text-right whitespace-nowrap" style={{ color: 'oklch(0.78 0.18 145)', fontWeight: 600 }}>
+                        {row.score.toFixed(1)}
                       </span>
                     </div>
-                    {expanded && (
-                      <div className="mt-1.5 pt-1.5 space-y-1" style={{ borderTop: '1px solid oklch(0.18 0 0)' }}>
-                        <div className="flex items-center justify-between">
-                          <span
-                            className="text-[10px] uppercase tracking-widest"
-                            style={{ color: 'oklch(0.92 0 0)' }}
-                            title={LEADERBOARD_SCORE_TOOLTIP}
-                          >
-                            score
-                          </span>
-                          <span style={{ color: 'oklch(0.78 0.18 145)', fontWeight: 600 }}>
-                            {row.score.toFixed(1)}
-                          </span>
-                        </div>
-                        {/* Post-rescore context (owner-driven, 2026-10-19) —
-                            the actual fix for "why is this player #1" being
-                            a hover-only mystery before: recent/season form,
-                            right where someone already tapped to look. */}
+                    {/* Score moved into the always-visible row above (owner
+                        ask, 2026-10-19 — the streak column became the
+                        season-stat one now visible there instead), so this
+                        expand panel's job is the second season_stats entry
+                        (e.g. Pass TD, next to the headline Pass Yds already
+                        showing above) plus recent/season form — together,
+                        the actual answer to "why is this player ranked
+                        here." */}
+                    {expanded && (row.season_stats?.[1] || (row.recent != null && row.season != null)) && (
+                      <div className="space-y-1 mt-1.5 pt-1.5" style={{ borderTop: '1px solid oklch(0.18 0 0)' }}>
+                        {row.season_stats?.[1] && (
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] uppercase tracking-widest" style={{ color: 'oklch(0.92 0 0)' }}>
+                              {row.season_stats[1].label}
+                            </span>
+                            <span style={{ color: 'oklch(0.92 0 0)' }}>
+                              {formatSeasonStatValue(row.season_stats[1].value)} · #{row.season_stats[1].rank} of {row.season_stats[1].of}
+                            </span>
+                          </div>
+                        )}
                         {row.recent != null && row.season != null && (
                           <div className="flex items-center justify-between">
                             <span className="text-[10px] uppercase tracking-widest" style={{ color: 'oklch(0.92 0 0)' }}>
