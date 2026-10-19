@@ -553,6 +553,11 @@ export interface TeamMetricsMetricEntry {
 // elsewhere in the app, reused here rather than duplicated.
 export interface TeamMetricsAllowsInstance {
   name: string
+  /** The opposing player's team code (the opponent of the team this
+   * instance's threshold is read against), e.g. "CAR" — added to all four
+   * sports 2026-10-19 so instances can be filtered/labeled by team, not
+   * just by player name. */
+  team?: string
   value?: number
   date?: string
 }

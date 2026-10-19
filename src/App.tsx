@@ -6747,26 +6747,38 @@ function App() {
   }
 
   // Replays a saved snapshot through the same routing a live query uses.
+  // Only ever called with a regular query-result pocket (ApiPayload) — a
+  // single-stat team.metrics pocket (kind: 'team_metrics_stat') isn't
+  // shaped like one and gets its own share page instead (see below and
+  // PocketsModal's handleOpen, which routes those away before they'd ever
+  // reach here).
   const openPocketSnapshot = (pocket: Pocket) => {
+    const payload = pocket.payload as ApiPayload
     resetResultState()
     setQueryError(null)
     setIsLoading(false)
     setLastQuery(pocket.command)
-    setLastPayload(pocket.payload)
+    setLastPayload(payload)
     setPocketSnapshot({ savedAt: pocket.created_at })
-    applyPayload(pocket.payload, sanitizeQueryForApi(pocket.command))
+    applyPayload(payload, sanitizeQueryForApi(pocket.command))
     setIsMiniOpen(true)
   }
 
-  // /p/:id share links — load the pocket once and show it.
+  // /p/:id share links — load the pocket once and show it. A stat-kind
+  // pocket shared/typed in here (rather than via its own /p/stat/:id link)
+  // gets redirected there instead of misrendered through the query-results
+  // path above.
   useEffect(() => {
     if (!sharedPocketId) return
     let active = true
     getPocket(sharedPocketId)
       .then((pocket) => {
         if (!active) return
-        if (pocket) openPocketSnapshot(pocket)
-        else {
+        if (pocket && pocket.kind === 'team_metrics_stat') {
+          navigate(`/p/stat/${sharedPocketId}`, { replace: true })
+        } else if (pocket) {
+          openPocketSnapshot(pocket)
+        } else {
           resetResultState()
           setQueryResults([])
           setQueryError("That pocket doesn't exist or isn't shared.")

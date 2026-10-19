@@ -65,3 +65,13 @@ as $$
 $$;
 
 grant execute on function public.get_public_pocket(uuid) to anon, authenticated;
+
+-- 2026-10-19: single-stat team.metrics "shareables" (owner ask) reuse this
+-- same table rather than a parallel one — `payload` was already
+-- shape-agnostic jsonb. `kind` distinguishes what's in it: null/absent for
+-- the original query-result pockets, 'team_metrics_stat' for a single
+-- opponent-allowed-threshold snapshot (frontend's TeamMetricsStatSnapshot
+-- shape, see src/lib/pockets.ts). Nothing else here needs to change —
+-- get_public_pocket already does `select *`, so `kind` rides along for
+-- free on shared reads.
+alter table public.pockets add column if not exists kind text;

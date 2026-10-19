@@ -13,13 +13,68 @@
 // style token set (`C`) as every other data-dense page (SortableStatChart,
 // ProfileSections) for visual consistency.
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { C } from '@/components/ProfileSections'
 import {
   normalizeAllowsInstance,
   normalizeTeamMetricsRecord,
+  type TeamMetricsAllowsEntry,
   type TeamMetricsPayload,
   type TeamMetricsValue,
 } from '@/lib/databaseApi'
+import { useAuth } from '@/context/AuthContext'
+import { PocketError, pocketShareUrl, saveTeamMetricsStatPocket, type TeamMetricsStatSnapshot } from '@/lib/pockets'
+
+const DANGER = 'oklch(0.75 0.15 30)'
+
+function buildStatSnapshot(payload: TeamMetricsPayload, teamLabel: string, stat: TeamMetricsAllowsEntry): TeamMetricsStatSnapshot {
+  return { sport: payload.sport, team: payload.team, teamLabel, window: payload.window, games: payload.games, stat }
+}
+
+type SaveStatus = 'saving' | 'saved' | 'error'
+
+// Shared by both the compact chip grid and the single-team detail panel
+// below — "save this one stat as a shareable link" (owner ask, 2026-10-19).
+// Saves AND copies the share link in one click rather than a save-then-go-
+// share-it-separately flow, since the whole point is one-click shareability;
+// see saveTeamMetricsStatPocket's own comment for why it defaults public.
+function useSaveStatPocket() {
+  const { user } = useAuth()
+  const navigate = useNavigate()
+  const [state, setState] = useState<Record<string, { status: SaveStatus; message: string }>>({})
+
+  const save = (key: string, snapshot: TeamMetricsStatSnapshot) => {
+    if (!user) {
+      navigate(`/login?redirect=${encodeURIComponent(window.location.pathname)}`)
+      return
+    }
+    setState((s) => ({ ...s, [key]: { status: 'saving', message: 'saving…' } }))
+    void saveTeamMetricsStatPocket(snapshot)
+      .then(async (pocket) => {
+        let message = 'link copied ✓'
+        try {
+          await navigator.clipboard.writeText(pocketShareUrl(pocket.id, pocket.kind))
+        } catch {
+          message = 'saved (copy failed)'
+        }
+        setState((s) => ({ ...s, [key]: { status: 'saved', message } }))
+      })
+      .catch((e) => {
+        setState((s) => ({ ...s, [key]: { status: 'error', message: e instanceof PocketError ? e.message : 'could not save' } }))
+      })
+      .finally(() => {
+        window.setTimeout(() => {
+          setState((s) => {
+            const next = { ...s }
+            delete next[key]
+            return next
+          })
+        }, 2600)
+      })
+  }
+
+  return { saveState: state, save }
+}
 
 export interface TeamMetricsFieldDef {
   key: string
@@ -132,6 +187,7 @@ export function TeamMetricsCard({
       return next
     })
   }
+  const { saveState, save } = useSaveStatPocket()
 
   // Build group spans the same way SortableStatChart does for its column
   // headers — consecutive fields sharing a `group` get one heading, fields
@@ -196,23 +252,36 @@ export function TeamMetricsCard({
           <div className="flex flex-wrap gap-2">
             {allowsEntries.map(([key, a]) => {
               const isOpen = !collapsibleAllows || openKeys.has(key)
+              const saved = saveState[key]
               return (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={collapsibleAllows ? () => toggleKey(key) : undefined}
-                  className="rounded px-2.5 py-1.5 text-left"
-                  style={{ backgroundColor: C.surface, border: `1px solid ${C.border}`, cursor: collapsibleAllows ? 'pointer' : 'default' }}
-                >
-                  <div className="font-mono text-[11px]" style={{ color: C.textBright }}>{a.label}</div>
-                  {isOpen ? (
-                    <div className="font-mono text-[13px] font-bold" style={{ color: C.accent }}>
-                      {a.pct}% <span className="font-normal text-[10px]" style={{ color: C.textDim }}>({a.count}/{a.games})</span>
-                    </div>
-                  ) : (
-                    <div className="font-mono text-[10px] italic" style={{ color: C.textDim }}>click to view</div>
+                <div key={key} className="rounded px-2.5 py-1.5" style={{ backgroundColor: C.surface, border: `1px solid ${C.border}` }}>
+                  <button
+                    type="button"
+                    onClick={collapsibleAllows ? () => toggleKey(key) : undefined}
+                    className="block w-full text-left"
+                    style={{ cursor: collapsibleAllows ? 'pointer' : 'default' }}
+                  >
+                    <div className="font-mono text-[11px]" style={{ color: C.textBright }}>{a.label}</div>
+                    {isOpen ? (
+                      <div className="font-mono text-[13px] font-bold" style={{ color: C.accent }}>
+                        {a.pct}% <span className="font-normal text-[10px]" style={{ color: C.textDim }}>({a.count}/{a.games})</span>
+                      </div>
+                    ) : (
+                      <div className="font-mono text-[10px] italic" style={{ color: C.textDim }}>click to view</div>
+                    )}
+                  </button>
+                  {isOpen && (
+                    <button
+                      type="button"
+                      onClick={() => save(key, buildStatSnapshot(payload, teamLabel, a))}
+                      disabled={saved?.status === 'saving'}
+                      className="mt-1 font-mono text-[9px] underline disabled:opacity-50"
+                      style={{ color: saved?.status === 'error' ? DANGER : C.textDim }}
+                    >
+                      {saved?.message ?? 'save & share'}
+                    </button>
                   )}
-                </button>
+                </div>
               )
             })}
           </div>
@@ -272,6 +341,7 @@ export function OpponentThresholdsPanel({
       return next
     })
   }
+  const { saveState, save } = useSaveStatPocket()
 
   return (
     <div className="rounded-lg overflow-hidden" style={{ backgroundColor: C.surface, border: `1px solid ${C.border}` }}>
@@ -290,45 +360,58 @@ export function OpponentThresholdsPanel({
         <div className="px-4 py-3 space-y-3">
           {allowsEntries.map(([key, a]) => {
             const isOpen = !collapsible || openKeys.has(key)
+            const saved = saveState[key]
             return (
-              <button
-                key={key}
-                type="button"
-                onClick={collapsible ? () => toggleKey(key) : undefined}
-                className="block w-full rounded px-3 py-2.5 text-left"
-                style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}`, cursor: collapsible ? 'pointer' : 'default' }}
-              >
-                <div className="flex items-baseline justify-between gap-3">
-                  <span className="font-mono text-[12px]" style={{ color: C.textBright }}>{a.label}</span>
-                  {isOpen ? (
-                    <span className="font-mono text-[14px] font-bold" style={{ color: C.accent }}>
-                      {a.pct}% <span className="font-normal text-[10px]" style={{ color: C.textDim }}>({a.count}/{a.games} games)</span>
-                    </span>
-                  ) : (
-                    <span className="font-mono text-[10px] italic" style={{ color: C.textDim }}>click to view</span>
-                  )}
-                </div>
-                {isOpen && (a.instances && a.instances.length > 0 ? (
-                  <div className="mt-2 space-y-1">
-                    {a.instances.map((inst, i) => {
-                      const n = normalizeAllowsInstance(inst)
-                      return (
-                        <div key={i} className="flex items-baseline justify-between gap-3 font-mono text-[11px]" style={{ color: C.textDim }}>
-                          <span>{n.who}</span>
-                          <span className="flex items-baseline gap-2">
-                            {n.value != null && <span style={{ color: C.textBright }}>{n.value}</span>}
-                            {n.date && <span>{n.date}</span>}
-                          </span>
-                        </div>
-                      )
-                    })}
+              <div key={key} className="rounded px-3 py-2.5" style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}` }}>
+                <button
+                  type="button"
+                  onClick={collapsible ? () => toggleKey(key) : undefined}
+                  className="block w-full text-left"
+                  style={{ cursor: collapsible ? 'pointer' : 'default' }}
+                >
+                  <div className="flex items-baseline justify-between gap-3">
+                    <span className="font-mono text-[12px]" style={{ color: C.textBright }}>{a.label}</span>
+                    {isOpen ? (
+                      <span className="font-mono text-[14px] font-bold" style={{ color: C.accent }}>
+                        {a.pct}% <span className="font-normal text-[10px]" style={{ color: C.textDim }}>({a.count}/{a.games} games)</span>
+                      </span>
+                    ) : (
+                      <span className="font-mono text-[10px] italic" style={{ color: C.textDim }}>click to view</span>
+                    )}
                   </div>
-                ) : a.count > 0 ? (
-                  <div className="mt-1.5 font-mono text-[10px] italic" style={{ color: C.textBright }}>
-                    {a.count} of {a.games} games met this — detail unavailable for this entry
-                  </div>
-                ) : null)}
-              </button>
+                  {isOpen && (a.instances && a.instances.length > 0 ? (
+                    <div className="mt-2 space-y-1">
+                      {a.instances.map((inst, i) => {
+                        const n = normalizeAllowsInstance(inst)
+                        return (
+                          <div key={i} className="flex items-baseline justify-between gap-3 font-mono text-[11px]" style={{ color: C.textDim }}>
+                            <span>{n.who}{inst.team ? ` (${inst.team})` : ''}</span>
+                            <span className="flex items-baseline gap-2">
+                              {n.value != null && <span style={{ color: C.textBright }}>{n.value}</span>}
+                              {n.date && <span>{n.date}</span>}
+                            </span>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  ) : a.count > 0 ? (
+                    <div className="mt-1.5 font-mono text-[10px] italic" style={{ color: C.textBright }}>
+                      {a.count} of {a.games} games met this — detail unavailable for this entry
+                    </div>
+                  ) : null)}
+                </button>
+                {isOpen && (
+                  <button
+                    type="button"
+                    onClick={() => save(key, buildStatSnapshot(payload, teamLabel, a))}
+                    disabled={saved?.status === 'saving'}
+                    className="mt-2 font-mono text-[10px] underline disabled:opacity-50"
+                    style={{ color: saved?.status === 'error' ? DANGER : C.textDim }}
+                  >
+                    {saved?.message ?? 'save & share'}
+                  </button>
+                )}
+              </div>
             )
           })}
           {payload.allows_note && (

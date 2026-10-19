@@ -23,6 +23,7 @@ import NhlChartsPage from './pages/NhlChartsPage.tsx'
 import PlayerProfilePage from './pages/PlayerProfilePage.tsx'
 import SportSeasonPage from './pages/SportSeasonPage.tsx'
 import TeamMetricsPage from './pages/TeamMetricsPage.tsx'
+import TeamMetricsStatSharePage from './pages/TeamMetricsStatSharePage.tsx'
 
 import "./main.css"
 import "./styles/theme.css"
@@ -96,6 +97,10 @@ createRoot(document.getElementById('root')!).render(
           {/* Shared pocket link — same App, which reads :id and replays the saved
               snapshot in the normal results panel. */}
           <Route path="/p/:id" element={<App />} />
+          {/* A single team.metrics stat, saved/shared on its own (owner ask,
+              2026-10-19) — its own lightweight poster page, not the full
+              App shell above. */}
+          <Route path="/p/stat/:id" element={<TeamMetricsStatSharePage />} />
           <Route
             path="/account"
             element={

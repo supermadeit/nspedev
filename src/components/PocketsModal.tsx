@@ -1,6 +1,7 @@
 // {pockets} — the signed-in user's saved results. Open one to replay its
 // snapshot in the normal results panel, toggle a public share link, or delete.
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   POCKET_LIMIT,
   PocketError,
@@ -40,6 +41,7 @@ function formatSaved(iso: string): string {
 }
 
 export function PocketsModal({ open, onClose, onOpenPocket, refreshKey }: PocketsModalProps) {
+  const navigate = useNavigate()
   const [items, setItems] = useState<PocketSummary[] | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [busyId, setBusyId] = useState<string | null>(null)
@@ -76,7 +78,15 @@ export function PocketsModal({ open, onClose, onOpenPocket, refreshKey }: Pocket
     }
   }
 
-  async function handleOpen(id: string) {
+  async function handleOpen(id: string, kind?: string | null) {
+    // Single-stat snapshots aren't shaped like a query result (no `command`
+    // to re-run, no ApiPayload envelope), so they get their own poster page
+    // instead of trying to replay through the CLI results panel.
+    if (kind === 'team_metrics_stat') {
+      navigate(`/p/stat/${id}`)
+      onClose()
+      return
+    }
     const pocket = await run(id, () => getPocket(id))
     if (pocket) {
       onOpenPocket(pocket)
@@ -94,16 +104,16 @@ export function PocketsModal({ open, onClose, onOpenPocket, refreshKey }: Pocket
     })
     if (!ok) return
     setItems((prev) => prev?.map((x) => (x.id === p.id ? { ...x, is_public: next } : x)) ?? prev)
-    if (next) await copyLink(p.id)
+    if (next) await copyLink(p.id, p.kind)
   }
 
-  async function copyLink(id: string) {
+  async function copyLink(id: string, kind?: string | null) {
     try {
-      await navigator.clipboard.writeText(pocketShareUrl(id))
+      await navigator.clipboard.writeText(pocketShareUrl(id, kind))
       setCopiedId(id)
       window.setTimeout(() => setCopiedId((c) => (c === id ? null : c)), 1800)
     } catch {
-      setError(`Copy failed — link: ${pocketShareUrl(id)}`)
+      setError(`Copy failed — link: ${pocketShareUrl(id, kind)}`)
     }
   }
 
@@ -170,14 +180,14 @@ export function PocketsModal({ open, onClose, onOpenPocket, refreshKey }: Pocket
                     {p.is_public ? ' · shared' : ''}
                   </span>
                   <span className="flex items-center gap-4 ml-auto">
-                    <button className={linkBtn} style={{ color: C.green }} disabled={busyId === p.id} onClick={() => handleOpen(p.id)}>
+                    <button className={linkBtn} style={{ color: C.green }} disabled={busyId === p.id} onClick={() => handleOpen(p.id, p.kind)}>
                       open
                     </button>
                     <button className={linkBtn} style={{ color: C.accent }} disabled={busyId === p.id} onClick={() => handleShare(p)}>
                       {p.is_public ? 'unshare' : 'share'}
                     </button>
                     {p.is_public && (
-                      <button className={linkBtn} style={{ color: C.accent }} onClick={() => copyLink(p.id)}>
+                      <button className={linkBtn} style={{ color: C.accent }} onClick={() => copyLink(p.id, p.kind)}>
                         {copiedId === p.id ? 'copied ✓' : 'copy link'}
                       </button>
                     )}
