@@ -10,17 +10,20 @@
 // against their 20/day cap, per backend) — just needs a session, same bar
 // as /account, not a plan-gated route.
 //
-// STATUS (2026-10-19): /account/api-key is NOT live yet — backend says it's
-// in the owner's pending push. The fetch/create/rotate/revoke calls below
-// are wired against the real confirmed contract (not a guess), so this
-// works the moment that push lands; until then a visitor just sees "could
-// not load" rather than a crash. Verify live via curl before telling
-// anyone this works end to end.
+// STATUS (2026-10-19): /account/api-key, /plans and /mcp are confirmed live
+// (curl'd directly — GET /plans returns the real catalog, POST /mcp without
+// a key 401s, GET /mcp 405s, GET /account/api-key without auth 401s). The
+// signed-in create/rotate/revoke round trip and a real run_nspe call with a
+// freshly-minted key still need an actual logged-in browser session to
+// verify, which this agent has no way to produce (no test credentials in
+// this repo) — that part is still unverified pending someone with a real
+// account clicking through it.
 import { useEffect, useState } from 'react'
 import { PageShell } from './PageShell'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { getApiKey, createOrRotateApiKey, revokeApiKey, type ApiKeyInfo } from '@/lib/apiKey'
+import { fetchPlansCatalog } from '@/lib/plans'
 
 const MCP_URL = 'https://api.nspe.dev/mcp'
 const KEY_PLACEHOLDER = 'nspe_YOUR_KEY'
@@ -197,6 +200,26 @@ export default function ConnectClaudePage() {
   const [liveKey, setLiveKey] = useState<string | null>(null)
   const key = liveKey ?? KEY_PLACEHOLDER
 
+  // The free tier's actual daily caps, pulled from the same /plans catalog
+  // /refill uses — backend's ask (2026-10-19): the free allowances belong
+  // here as the "try it first" line, not on /refill (that page is for
+  // paying). Null until loaded; falls back to generic wording rather than
+  // blocking the page on this one fetch.
+  const [freeCaps, setFreeCaps] = useState<{ questionsDay: number; callsDay: number } | null>(null)
+  useEffect(() => {
+    fetchPlansCatalog()
+      .then((catalog) => {
+        const free = catalog.plans.find((p) => p.slug === 'free')
+        if (free && free.connect_calls_day != null) {
+          setFreeCaps({ questionsDay: free.free_questions_day, callsDay: free.connect_calls_day })
+        }
+      })
+      .catch(() => {
+        // Generic fallback copy below covers this — not worth an error banner
+        // for a single descriptive line.
+      })
+  }, [])
+
   return (
     <PageShell
       title="Connect your Claude"
@@ -217,8 +240,9 @@ export default function ConnectClaudePage() {
             over time.
           </p>
           <p style={{ color: 'oklch(0.70 0 0)' }}>
-            Every plan can try this, including free — connected calls share the same daily cap your account
-            already has; a paid tier raises that cap rather than unlocking the feature itself.
+            {freeCaps
+              ? `Every plan can try this, including free — ${freeCaps.questionsDay} questions a day on the site, ${freeCaps.callsDay} connected calls a day from your own Claude. A paid tier raises that cap rather than unlocking the feature itself.`
+              : 'Every plan can try this, including free — connected calls share the same daily cap your account already has; a paid tier raises that cap rather than unlocking the feature itself.'}
           </p>
           <p style={{ color: 'oklch(0.70 0 0)' }}>
             Four tools once connected: run any builder command (e.g. <code>nspe nhl mackinnon -pts2 -ov -season</code>),
