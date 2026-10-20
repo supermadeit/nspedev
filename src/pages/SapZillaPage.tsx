@@ -264,7 +264,7 @@ export default function SapZillaPage() {
 
         {/* ---- composer ---- */}
         <div className="rounded-lg p-4 space-y-3" style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}` }}>
-          <div className="font-mono text-[11px] uppercase tracking-widest" style={{ color: C.textDim }}>build a leg</div>
+          <div className="font-mono text-[11px] uppercase tracking-widest" style={{ color: C.textDim }}>check probability</div>
 
           <div className="flex flex-wrap gap-2">
             {LAB_SPORTS.map((s) => (
