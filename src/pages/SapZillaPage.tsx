@@ -242,7 +242,7 @@ export default function SapZillaPage() {
         <div className="rounded-lg p-4 font-mono text-[13px] space-y-2" style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}` }}>
           <p style={{ color: C.textBright }}>
             Build a ticket — a player prop, a team line, or a few stacked together — and {'{sap.zilla}'} counts up every
-            game it's actually happened, going back as far as you want. No odds in, no odds out: just "0 of 131" or
+            game it's actually happened, going back as far as you want. No odds in, no odds out: just "3 of 131" or
             "87 of 138," so you're looking at the real history before anyone else's price on it.
           </p>
           <p style={{ color: C.textDim }}>
