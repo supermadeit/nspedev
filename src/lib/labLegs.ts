@@ -11,7 +11,7 @@
 // the API itself, this just avoids handing a novice user a 13-item dropdown
 // of raw stat codes (owner ask, 2026-10-19: "categories that lead to other
 // props ... then a number selector", same spirit as {team.metrics}).
-export type LabSport = 'nfl' | 'nba' | 'mlb' | 'nhl'
+export type LabSport = 'nfl' | 'nba' | 'mlb' | 'nhl' | 'cfb'
 
 export interface LabStatOption {
   value: string
@@ -34,6 +34,12 @@ export const LAB_SPORTS: { value: LabSport; label: string }[] = [
   { value: 'nba', label: 'NBA' },
   { value: 'mlb', label: 'MLB' },
   { value: 'nhl', label: 'NHL' },
+  // First college sport (confirmed live 2026-10-20, deploy 33558fa) — same
+  // rubric/stat keys as NFL, no quarter/half scope at all (college has no
+  // quarter-level source; GET /lab/lines marks every cfb stat's `scopes`
+  // null). "ncaaf" is accepted server-side as an alias but legs built here
+  // always use "cfb" since that's the canonical league token.
+  { value: 'cfb', label: 'CFB' },
 ]
 
 export const LAB_STATS: Record<LabSport, LabStatOption[]> = {
@@ -82,6 +88,24 @@ export const LAB_STATS: Record<LabSport, LabStatOption[]> = {
     { value: 'pts', label: 'Points', default: 2 },
     { value: 'blk', label: 'Blocks', default: 2 },
   ],
+  // Confirmed live 2026-10-20 — the exact same 14 keys/defaults as NFL,
+  // scopes always null (no quarter/half source for college).
+  cfb: [
+    { value: 'pyds', label: 'Pass Yds', default: 250 },
+    { value: 'ptd', label: 'Pass TD', default: 2 },
+    { value: 'int', label: 'INT', default: 1 },
+    { value: 'ryds', label: 'Rush Yds', default: 60 },
+    { value: 'rtd', label: 'Rush TD', default: 1 },
+    { value: 'rec', label: 'Receptions', default: 5 },
+    { value: 'recyds', label: 'Rec Yds', default: 60 },
+    { value: 'rectd', label: 'Rec TD', default: 1 },
+    { value: 'rr', label: 'Rush+Rec Yds', default: 80 },
+    { value: 'rrtd', label: 'Rush+Rec TD', default: 1 },
+    { value: 'pr', label: 'Pass+Rush Yds', default: 275 },
+    { value: 'plong', label: 'Longest Pass', default: 40 },
+    { value: 'rlong', label: 'Longest Rush', default: 20 },
+    { value: 'reclong', label: 'Longest Reception', default: 25 },
+  ],
 }
 
 export const LAB_CATEGORIES: Record<LabSport, LabCategoryOption[]> = {
@@ -108,6 +132,13 @@ export const LAB_CATEGORIES: Record<LabSport, LabCategoryOption[]> = {
     { key: 'playmaking', label: 'Playmaking', stats: ['a'] },
     { key: 'defense', label: 'Defense', stats: ['blk'] },
     { key: 'combined', label: 'Combined', stats: ['pts'] },
+  ],
+  // Same grouping as NFL — identical stat keys, so no reason to regroup them.
+  cfb: [
+    { key: 'passing', label: 'Passing', stats: ['pyds', 'ptd', 'plong', 'int'] },
+    { key: 'rushing', label: 'Rushing', stats: ['ryds', 'rtd', 'rlong'] },
+    { key: 'receiving', label: 'Receiving', stats: ['rec', 'recyds', 'rectd', 'reclong'] },
+    { key: 'combined', label: 'Combined', stats: ['rr', 'rrtd', 'pr'] },
   ],
 }
 

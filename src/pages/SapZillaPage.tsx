@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/context/AuthContext'
 import { C } from '@/components/ProfileSections'
 import { HomeLogoLink } from '@/components/HomeLogoLink'
-import { loadPlayerIndex, searchPlayers, type PlayerMatch } from '@/lib/playerSearch'
+import { loadPlayerIndex, searchPlayers, PLAYER_INDEX, type PlayerMatch } from '@/lib/playerSearch'
 import { teamRoster } from '@/lib/teamNicknames'
 import {
   LAB_SPORTS,
@@ -94,9 +94,26 @@ export default function SapZillaPage() {
 
   const numValue = numText === '' ? 0 : parseInt(numText, 10) || 0
 
+  // Forces one re-render once the index finishes loading, so
+  // sportHasPlayerIndex below reflects reality instead of the empty-array
+  // state this module starts in (same pattern as MatchupInsightOverlay's
+  // usePlayerIndexReady).
+  const [indexReady, setIndexReady] = useState(PLAYER_INDEX.length > 0)
   useEffect(() => {
-    loadPlayerIndex()
-  }, [])
+    if (indexReady) return
+    loadPlayerIndex().then(() => setIndexReady(true))
+  }, [indexReady])
+
+  // CFB has no player-search index yet (confirmed live 2026-10-20 — GET
+  // /database/index carries nfl/nba/mlb/nhl only, zero cfb entries), even
+  // though /lab resolves CFB player names fine server-side. Without this,
+  // the "+ add leg" button would stay permanently disabled for CFB since
+  // selecting a player currently requires clicking an autocomplete match
+  // that can never appear. Falls back to the raw typed name for any sport
+  // with no index coverage — a wrong name just surfaces in the result's
+  // own errors[], same graceful-degradation rule as everywhere else here.
+  const sportHasPlayerIndex = PLAYER_INDEX.some((e) => e.sport === sport)
+  const effectivePlayer = selectedPlayer ?? (!sportHasPlayerIndex ? playerQuery.trim() || null : null)
 
   useEffect(() => {
     const cat = LAB_CATEGORIES[sport][0]
@@ -144,11 +161,11 @@ export default function SapZillaPage() {
   function addLegFromPicker() {
     if (legs.length >= MAX_LEGS || numValue <= 0) return
     if (kind === 'player') {
-      if (!selectedPlayer) return
-      const raw = buildPlayerLeg(sport, selectedPlayer, stat, scope, numValue)
+      if (!effectivePlayer) return
+      const raw = buildPlayerLeg(sport, effectivePlayer, stat, scope, numValue)
       const statLabel = labStatOption(sport, stat)?.label ?? stat
       const scopeLabel = scope === 'season' ? '' : ` (${LAB_NFL_SCOPES.find((s) => s.value === scope)?.label})`
-      const label = `${selectedPlayer} · ${statLabel} ${numValue}+${scopeLabel}`
+      const label = `${effectivePlayer} · ${statLabel} ${numValue}+${scopeLabel}`
       // Dedupe on add — caught live (owner screenshot, 2026-10-19): clicking
       // "+ add leg" twice on the same selection silently added it twice.
       setLegs((prev) => (prev.some((l) => l.raw === raw) ? prev : [...prev, { raw, label }]))
@@ -307,7 +324,7 @@ export default function SapZillaPage() {
                   setSelectedPlayer(null)
                   setPlayerQuery(e.target.value)
                 }}
-                placeholder="search a player…"
+                placeholder={sportHasPlayerIndex ? 'search a player…' : "type the player's full name…"}
                 className="w-full rounded px-3 py-2 font-mono text-[13px]"
                 style={fieldStyle()}
               />
@@ -439,7 +456,7 @@ export default function SapZillaPage() {
             <button
               type="button"
               onClick={addLegFromPicker}
-              disabled={legs.length >= MAX_LEGS || numValue <= 0 || (kind === 'player' ? !selectedPlayer : !teamCode)}
+              disabled={legs.length >= MAX_LEGS || numValue <= 0 || (kind === 'player' ? !effectivePlayer : !teamCode)}
               className="font-mono text-[12px] font-bold px-3 py-1.5 rounded disabled:opacity-40"
               style={{ border: `1px solid ${C.accent}`, color: C.accent }}
             >
