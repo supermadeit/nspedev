@@ -695,7 +695,7 @@ function pct(split: { hits: number; n: number }): string {
 }
 
 function LeagueLegDetail({ view }: { view: LabLeagueView }) {
-  const { games, top, note } = view
+  const { games, top } = view
   return (
     <div className="px-4 pb-3 font-mono text-[12px] space-y-2" style={{ color: C.textDim, borderTop: `1px solid ${C.border}` }}>
       <div className="pt-2.5 uppercase tracking-widest text-[10px]">per game, {view.unit}</div>
@@ -718,7 +718,6 @@ function LeagueLegDetail({ view }: { view: LabLeagueView }) {
           ))}
         </div>
       )}
-      {note && <div className="italic">{note}</div>}
     </div>
   )
 }
