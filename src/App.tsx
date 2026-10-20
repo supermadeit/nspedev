@@ -23,7 +23,7 @@ import { SyntaxSuggestionDropdown } from '@/components/SyntaxSuggestionDropdown'
 import { SportsSwitcher } from '@/components/SportsSwitcher'
 import { VoiceInputButton } from '@/components/VoiceInputButton'
 import { HomeLogoLink } from '@/components/HomeLogoLink'
-import { PLAYER_INDEX, loadPlayerIndex, resolvePlayerTeam, searchPlayers, searchPlayersFuzzy, searchPlayersLoose } from '@/lib/playerSearch'
+import { PLAYER_INDEX, loadPlayerIndex, resolvePlayerTeam, searchPlayers, searchPlayersFuzzy, searchPlayersLoose, hasProfilePage } from '@/lib/playerSearch'
 import {
   findPlayerSpotlightCommands,
   getMatchupSuggestions,
@@ -6038,7 +6038,12 @@ function App() {
     // Sport already typed ("nspe nfl saquon") — see stripSportPrefix's
     // comment for why the whole-string check above misses this case.
     else if (rest && looksLikePlayerSearch(rest)) matches = searchPlayers(rest, 8)
-    return sport ? matches.filter((m) => !m.entry.sport || m.entry.sport === sport) : matches
+    const filtered = sport ? matches.filter((m) => !m.entry.sport || m.entry.sport === sport) : matches
+    // This dropdown selects straight into /database/{slug} — cfb/cbb have
+    // no profile page yet (reported 2026-10-26: selecting Arch Manning
+    // 404'd), so they're excluded here even though they're in the index now
+    // for sap.zilla's sake.
+    return filtered.filter((m) => hasProfilePage(m.entry))
   }, [searchValue, isPlayerIndexReady])
   // Loose: falls back to searchPlayersLoose (junk-tolerant) only when the
   // strict search above found nothing — this is what actually renders the
@@ -6050,7 +6055,7 @@ function App() {
   const playerMatches = useMemo(() => {
     if (strictPlayerMatches.length > 0) return strictPlayerMatches
     const { sport, rest } = stripSportPrefix(searchValue)
-    const loose = searchPlayersLoose(rest, 8)
+    const loose = searchPlayersLoose(rest, 8).filter((m) => hasProfilePage(m.entry))
     if (loose.length > 0) return sport ? loose.filter((m) => !m.entry.sport || m.entry.sport === sport) : loose
     // Typo tolerance, tried last — only reached when both the strict and
     // junk-tolerant prefix searches above found nothing at all (see
@@ -6058,7 +6063,7 @@ function App() {
     // generous here specifically). This is what makes "saqoun vs chi"
     // surface Saquon Barkley's own {psc} templates instead of falling back
     // to a generic, unsubstituted catalog example.
-    const fuzzy = searchPlayersFuzzy(rest, 8)
+    const fuzzy = searchPlayersFuzzy(rest, 8).filter((m) => hasProfilePage(m.entry))
     return sport ? fuzzy.filter((m) => !m.entry.sport || m.entry.sport === sport) : fuzzy
   }, [searchValue, strictPlayerMatches, isPlayerIndexReady])
   // True only once the user has actually pressed an arrow key to browse the

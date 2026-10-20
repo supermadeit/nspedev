@@ -32,6 +32,19 @@ export interface PlayerIndexEntry {
   nameTokens: string[]
 }
 
+// Sports whose index entries exist for search-as-a-building-block uses
+// ({sap.zilla}'s leg picker, which never navigates anywhere) but have no
+// player profile page yet — GET /database/{slug} 404s for them (confirmed
+// live 2026-10-20: cfb/cbb landed in the index before their profile pages
+// did). Any call site that navigates to a profile on selection needs to
+// filter these out; sap.zilla's own searchPlayers() calls are deliberately
+// left unfiltered, since picking a result there just builds a string.
+export const NO_PROFILE_SPORTS = new Set(['cfb', 'cbb'])
+
+export function hasProfilePage(entry: PlayerIndexEntry): boolean {
+  return !entry.sport || !NO_PROFILE_SPORTS.has(entry.sport)
+}
+
 // Suffixes are real words in the display name but aren't what anyone types
 // to search for a player — dropping them means the word before the suffix
 // (the actual surname) is treated as the last searchable token instead.
