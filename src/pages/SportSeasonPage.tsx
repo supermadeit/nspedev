@@ -32,6 +32,7 @@ import mlbGamesStatic from '@/assets/data/mlb_games_static.json'
 import nhlGamesStatic from '@/assets/data/nhl_games_static.json'
 import { API_BASE_CANDIDATES, fetchJsonCandidate, joinUrl, parseApiPayload } from '@/lib/nspe-api'
 import { extractMatchupInsightPayload, type MatchupInsightPayload } from '@/lib/nspe-payloads'
+import { fetchMatchupGame, MatchupNotFoundError, type MatchupGameFile } from '@/lib/matchupsApi'
 import { MatchupInsightOverlay } from '@/components/MatchupInsightOverlay'
 import { SportsSwitcher, chartsHrefFor, metricsHrefFor } from '@/components/SportsSwitcher'
 import { teamNickname } from '@/lib/teamNicknames'
@@ -200,7 +201,7 @@ function formatGameTime(startTimeUtc: string): string {
   return d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })
 }
 
-function DailyMatchupStrip({ games, sport, onMatchupClick }: { games: SportGame[]; sport: SportKey; onMatchupClick: (teamA: string, teamB: string) => void }) {
+function DailyMatchupStrip({ games, sport, onMatchupClick }: { games: SportGame[]; sport: SportKey; onMatchupClick: (teamA: string, teamB: string, dateIso: string) => void }) {
   const grouped = useMemo(() => {
     const startOfToday = new Date()
     startOfToday.setHours(0, 0, 0, 0)
@@ -236,7 +237,7 @@ function DailyMatchupStrip({ games, sport, onMatchupClick }: { games: SportGame[
               <button
                 key={g.game_id}
                 type="button"
-                onClick={() => onMatchupClick(g.away_team, g.home_team)}
+                onClick={() => onMatchupClick(g.away_team, g.home_team, g.date_iso)}
                 className="shrink-0 rounded px-2.5 py-1.5 text-left hover:opacity-80 transition-opacity"
                 style={{ backgroundColor: 'oklch(0.10 0 0)', border: `1px solid ${C.green}` }}
               >
@@ -296,7 +297,7 @@ export default function SportSeasonPage({ sport, label }: SportSeasonPageProps) 
 
   const games = STATIC_SCHEDULES[sport]
 
-  const [matchupResult, setMatchupResult] = useState<MatchupInsightPayload | null>(null)
+  const [matchupResult, setMatchupResult] = useState<MatchupInsightPayload | MatchupGameFile | null>(null)
   const [isMatchupOpen, setIsMatchupOpen] = useState(false)
   const [isMatchupLoading, setIsMatchupLoading] = useState(false)
   const [matchupNotice, setMatchupNotice] = useState<string | null>(null)
@@ -316,10 +317,30 @@ export default function SportSeasonPage({ sport, label }: SportSeasonPageProps) 
     return () => { cancelled = true }
   }, [sport])
 
-  const requestMatchup = async (teamA: string, teamB: string) => {
+  // Precomputed static file tried first (owner ask, 2026-10-26 — the live
+  // /matchup route below was slow enough (7-8s for NBA, measured) to feel
+  // broken even when it eventually succeeded). Confirmed live 2026-10-19
+  // (deploy 4c31c53) via curl before wiring this up. A MatchupNotFoundError
+  // (game not on this sport's precomputed slate) falls through to the old
+  // live call unchanged.
+  const requestMatchup = async (teamA: string, teamB: string, dateIso?: string) => {
     setIsMatchupLoading(true)
     setMatchupNotice(null)
     try {
+      if (dateIso) {
+        try {
+          const gameFile = await fetchMatchupGame(sport, dateIso, teamA, teamB)
+          setMatchupResult(gameFile)
+          setIsMatchupOpen(true)
+          return
+        } catch (err) {
+          if (!(err instanceof MatchupNotFoundError)) {
+            console.error('Static matchup fetch failed, falling back to live:', err)
+          }
+          // fall through to the live fetch below
+        }
+      }
+
       const urls = API_BASE_CANDIDATES.map((base) => joinUrl(base, `/matchup/${sport}/${teamA.toLowerCase()}/${teamB.toLowerCase()}`))
       const response = await fetchJsonCandidate(urls, 10000)
       if (response.status === 404) {

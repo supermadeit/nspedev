@@ -14,6 +14,7 @@ import {
 } from '@/lib/nspe-payloads'
 import { MatchupInsightOverlay } from '@/components/MatchupInsightOverlay'
 import { SportsSwitcher } from '@/components/SportsSwitcher'
+import { fetchMatchupGame, MatchupNotFoundError, type MatchupGameFile } from '@/lib/matchupsApi'
 
 // ---------------- types ----------------
 
@@ -383,7 +384,7 @@ function WeekMatchupStrip({
   totalWeeks: number
   initialWeek: number
   nicknames: Record<string, string>
-  onMatchupClick: (teamA: string, teamB: string) => void
+  onMatchupClick: (teamA: string, teamB: string, dateIso: string) => void
 }) {
   const [week, setWeek] = useState(initialWeek)
   // See the matching comment on MatchupLibraryView's weekGames above — same
@@ -417,7 +418,7 @@ function WeekMatchupStrip({
           <button
             key={g.game_id}
             type="button"
-            onClick={() => onMatchupClick(g.away_team, g.home_team)}
+            onClick={() => onMatchupClick(g.away_team, g.home_team, g.date_iso)}
             className="shrink-0 rounded px-2.5 py-1.5 text-left hover:opacity-80 transition-opacity"
             style={{ backgroundColor: 'oklch(0.10 0 0)', border: `1px solid ${C.green}` }}
           >
@@ -635,7 +636,7 @@ export default function WorldCupApp() {
   // keeps fetching live.
   const games: SportGame[] = (nflGamesStatic as unknown as SportScheduleData).games
 
-  const [matchupResult, setMatchupResult] = useState<MatchupInsightPayload | null>(null)
+  const [matchupResult, setMatchupResult] = useState<MatchupInsightPayload | MatchupGameFile | null>(null)
   const [isMatchupOpen, setIsMatchupOpen] = useState(false)
   const [isMatchupLoading, setIsMatchupLoading] = useState(false)
   // A gate error here (401/402) used to just vanish into console.error, so a
@@ -651,6 +652,17 @@ export default function WorldCupApp() {
   // undecided homepage-header entry point (bypassing this page entirely)
   // was discussed too, tangled up with an upcoming logo redesign, but that's
   // additive and doesn't block this one.
+  // Precomputed static file tried first (owner ask, 2026-10-26 — the live
+  // /matchup route below was the actual bug: NFL walks play-by-play per
+  // request and 504s behind the proxy after ~30s, well past this page's own
+  // 10s client timeout, which is why clicking a matchup "did nothing" no
+  // matter how many times it was retried). Confirmed live 2026-10-19 (deploy
+  // 4c31c53) via curl before wiring this up. A MatchupNotFoundError (game
+  // not on today's/this week's precomputed slate) falls through to the old
+  // live call unchanged; any other static-fetch failure also falls through
+  // rather than surfacing an error for a case the live route might still
+  // handle fine.
+  //
   // Was a metered /run call ("nfl matchup <a> vs <b>") — swapped for the
   // free, unauthenticated GET /matchup/{a}/{b} once backend confirmed it
   // exists and verified live to return the exact same MatchupInsightPayload
@@ -660,10 +672,24 @@ export default function WorldCupApp() {
   // pair of codes 404s with "could not resolve team(s)", confirmed live);
   // other sports still go through their own /run-based paths until backend
   // extends this route to them.
-  const requestMatchup = async (teamA: string, teamB: string) => {
+  const requestMatchup = async (teamA: string, teamB: string, dateIso?: string) => {
     setIsMatchupLoading(true)
     setMatchupNotice(null)
     try {
+      if (dateIso) {
+        try {
+          const gameFile = await fetchMatchupGame('nfl', dateIso, teamA, teamB)
+          setMatchupResult(gameFile)
+          setIsMatchupOpen(true)
+          return
+        } catch (err) {
+          if (!(err instanceof MatchupNotFoundError)) {
+            console.error('Static matchup fetch failed, falling back to live:', err)
+          }
+          // fall through to the live fetch below
+        }
+      }
+
       const urls = API_BASE_CANDIDATES.map((base) =>
         joinUrl(base, `/matchup/${teamA.toLowerCase()}/${teamB.toLowerCase()}`),
       )

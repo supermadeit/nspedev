@@ -18,13 +18,21 @@
 // logic below were tuned against.
 import { useEffect, useState } from 'react'
 import { type MatchupInsightPayload, type MatchupPlayer, type MatchupTeamPlayers } from '@/lib/nspe-payloads'
+import { type MatchupGameFile, type MatchupAllowsHighlight, type MatchupStarterInfo } from '@/lib/matchupsApi'
 import { C } from '@/components/ProfileSections'
 import { PLAYER_INDEX, loadPlayerIndex } from '@/lib/playerSearch'
 
 export interface MatchupInsightOverlayProps {
   open: boolean
   onClose: () => void
-  payload: MatchupInsightPayload | null
+  payload: MatchupInsightPayload | MatchupGameFile | null
+}
+
+// Precomputed files (owner ask, 2026-10-26) carry a `summary` block already
+// built server-side — only check needed to tell one from a plain live
+// /matchup payload, which has no such field.
+function isGameFile(p: MatchupInsightPayload | MatchupGameFile): p is MatchupGameFile {
+  return 'summary' in p
 }
 
 // ---- per-sport stat vocabulary -----------------------------------------
@@ -269,6 +277,49 @@ function buildTeamSummary(team: MatchupTeamPlayers, sport: string, opponentLabel
   return picks.map((pick) => playerSentence(pick, opponentLabel)).join(' ')
 }
 
+// A compact league-rank badge from the structured allows_highlight fields —
+// not a repeat of its own `.text`, which is already the trailing sentence
+// of the paragraph above it (confirmed against real NHL/NFL files: both
+// end with the exact same "<TEAM> allows <label> ... #<rank> of <of>"
+// clause) — repeating that verbatim as a second line would just be the
+// same sentence twice.
+function AllowsBadge({ highlight }: { highlight: MatchupAllowsHighlight | null }) {
+  if (!highlight) return null
+  return (
+    <div
+      className="mt-1.5 inline-block font-mono text-[11px] rounded px-2 py-1"
+      style={{ border: `1px solid ${C.border}`, color: C.textDim }}
+    >
+      {highlight.label} allowed: <span style={{ color: C.accent, fontWeight: 700 }}>{highlight.pct.toFixed(0)}%</span>
+      {' '}({highlight.count} of {highlight.games}) · #{highlight.rank} of {highlight.of}
+    </div>
+  )
+}
+
+// NHL only — absent on every other sport's file.
+function StartersRow({ starters }: { starters: Record<string, MatchupStarterInfo> | null | undefined }) {
+  if (!starters) return null
+  const teams = Object.keys(starters)
+  if (teams.length === 0) return null
+  const statusColor = (status: MatchupStarterInfo['status']) =>
+    status === 'confirmed' ? 'oklch(0.78 0.16 145)' : status === 'likely' ? 'oklch(0.80 0.15 85)' : C.textDim
+  return (
+    <div className="flex flex-wrap gap-4 font-mono text-[12px]" style={{ color: C.textDim }}>
+      {teams.map((team) => {
+        const s = starters[team]
+        return (
+          <span key={team}>
+            {team} goalie: <span style={{ color: C.textBright }}>{s.goalie}</span>{' '}
+            <span className="uppercase text-[9px] tracking-wider font-bold" style={{ color: statusColor(s.status) }}>
+              {s.status}
+            </span>
+          </span>
+        )
+      })}
+    </div>
+  )
+}
+
 export function MatchupInsightOverlay({ open, onClose, payload }: MatchupInsightOverlayProps) {
   // Hook runs unconditionally (before the early return below, per the
   // rules of hooks) — its only job is forcing one re-render once the
@@ -331,22 +382,34 @@ export function MatchupInsightOverlay({ open, onClose, payload }: MatchupInsight
           </span>
         </div>
 
+        {isGameFile(payload) && payload.starters && (
+          <div className="px-5 py-3 flex-none" style={{ borderBottom: `1px solid ${C.border}` }}>
+            <StartersRow starters={payload.starters} />
+          </div>
+        )}
+
         <div className="overflow-y-auto px-5 py-4 space-y-4">
           <div>
             <div className="font-mono text-[11px] uppercase tracking-widest mb-1.5" style={{ color: C.textDim }}>
               {teamA}
             </div>
             <p className="font-mono text-[13px] leading-relaxed" style={{ color: C.textBright }}>
-              {buildTeamSummary(payload.team_a, sport, teamB)}
+              {isGameFile(payload) ? payload.summary.team_a : buildTeamSummary(payload.team_a, sport, teamB)}
             </p>
+            {/* allows_highlight.team_a describes what team_a's players FACE
+                (team_b/home's defense) — confirmed against real files: it's
+                the opponent's highlight, not the team's own, same team as
+                the trailing sentence of summary.team_a itself. */}
+            {isGameFile(payload) && <AllowsBadge highlight={payload.allows_highlight.team_a} />}
           </div>
           <div>
             <div className="font-mono text-[11px] uppercase tracking-widest mb-1.5" style={{ color: C.textDim }}>
               {teamB}
             </div>
             <p className="font-mono text-[13px] leading-relaxed" style={{ color: C.textBright }}>
-              {buildTeamSummary(payload.team_b, sport, teamA)}
+              {isGameFile(payload) ? payload.summary.team_b : buildTeamSummary(payload.team_b, sport, teamA)}
             </p>
+            {isGameFile(payload) && <AllowsBadge highlight={payload.allows_highlight.team_b} />}
           </div>
         </div>
       </div>
