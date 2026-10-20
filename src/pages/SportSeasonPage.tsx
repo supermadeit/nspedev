@@ -22,11 +22,14 @@ import { StarsBackground } from '@/components/StarsBackground'
 import { useIsMobile } from '@/hooks/use-mobile'
 import {
   fetchPowerRankings,
-  fetchSportSchedule,
   type SportGame,
   type SportKey,
   type SportPowerRankingsRow,
+  type SportScheduleData,
 } from '@/lib/databaseApi'
+import nbaGamesStatic from '@/assets/data/nba_games_static.json'
+import mlbGamesStatic from '@/assets/data/mlb_games_static.json'
+import nhlGamesStatic from '@/assets/data/nhl_games_static.json'
 import { API_BASE_CANDIDATES, fetchJsonCandidate, joinUrl, parseApiPayload } from '@/lib/nspe-api'
 import { extractMatchupInsightPayload, type MatchupInsightPayload } from '@/lib/nspe-payloads'
 import { MatchupInsightOverlay } from '@/components/MatchupInsightOverlay'
@@ -260,35 +263,20 @@ function DailyMatchupStrip({ games, sport, onMatchupClick }: { games: SportGame[
   )
 }
 
-// ---------------- season-label guessing ----------------
-// The rankings feed and the schedule feed label seasons differently (rankings
-// season:2026 for the same NHL data the schedule feed files as
-// nhl_games/2027.json — rankings uses the year the season started, the
-// schedule feed follows the normal NBA/NHL convention of naming a season by
-// the calendar year it ends in). Guessed independently of the rankings
-// payload for that reason, with adjacent-year fallbacks in case the guess is
-// ever off by one (e.g. right at a season rollover).
-function guessSeasonLabel(sport: SportKey, now: Date): number {
-  if (sport === 'mlb' || sport === 'nfl') return now.getFullYear()
-  // nba/nhl: a season spanning fall Y -> spring Y+1 is labeled Y+1; from July
-  // onward the upcoming season's file is already the relevant one.
-  return now.getMonth() >= 6 ? now.getFullYear() + 1 : now.getFullYear()
-}
-
-async function fetchScheduleWithFallback(sport: SportKey): Promise<SportGame[]> {
-  const now = new Date()
-  const primary = guessSeasonLabel(sport, now)
-  const candidates = [primary, primary + 1, primary - 1]
-  let lastErr: unknown = null
-  for (const season of candidates) {
-    try {
-      const data = await fetchSportSchedule(sport, season)
-      return data.games
-    } catch (err) {
-      lastErr = err
-    }
-  }
-  throw lastErr ?? new Error(`No schedule file found for ${sport}`)
+// ---------------- static schedule snapshot ----------------
+// Back to bundled static files (owner ask, 2026-10-26) — the live
+// {sport}_games/{season}.json fetch this replaced (plus the season-guessing
+// fallback it needed, since the rankings feed and schedule feed label
+// seasons differently) was unreliable ("won't load"), and DailyMatchupStrip
+// only ever shows a 7-day window — it doesn't need live scores the way
+// power rankings does; it's a glanceable strip, not where anyone checks a
+// result. Each snapshot is trimmed to a ~21-day window and needs re-pulling
+// periodically to stay current; power rankings below is unaffected and
+// keeps fetching live.
+const STATIC_SCHEDULES: Record<Exclude<SportKey, 'nfl'>, SportGame[]> = {
+  nba: (nbaGamesStatic as unknown as SportScheduleData).games,
+  mlb: (mlbGamesStatic as unknown as SportScheduleData).games,
+  nhl: (nhlGamesStatic as unknown as SportScheduleData).games,
 }
 
 // ---------------- page ----------------
@@ -306,7 +294,7 @@ export default function SportSeasonPage({ sport, label }: SportSeasonPageProps) 
   const [generatedAt, setGeneratedAt] = useState<string | null>(null)
   const [selectedTeam, setSelectedTeam] = useState<SportPowerRankingsRow | null>(null)
 
-  const [games, setGames] = useState<SportGame[]>([])
+  const games = STATIC_SCHEDULES[sport]
 
   const [matchupResult, setMatchupResult] = useState<MatchupInsightPayload | null>(null)
   const [isMatchupOpen, setIsMatchupOpen] = useState(false)
@@ -325,14 +313,6 @@ export default function SportSeasonPage({ sport, label }: SportSeasonPageProps) 
         console.error(`Failed to load ${sport} power rankings:`, err)
         if (!cancelled) setPowerRankingsError("Couldn't load power rankings — try refreshing.")
       })
-    return () => { cancelled = true }
-  }, [sport])
-
-  useEffect(() => {
-    let cancelled = false
-    fetchScheduleWithFallback(sport)
-      .then((g) => { if (!cancelled) setGames(g) })
-      .catch((err) => console.error(`Failed to load ${sport} schedule:`, err))
     return () => { cancelled = true }
   }, [sport])
 

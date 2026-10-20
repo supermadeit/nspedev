@@ -462,19 +462,6 @@ function formatLeaderboardDate(iso: string): string {
   return `${d.getMonth() + 1}/${d.getDate()}`
 }
 
-// A cached chat answer's data vintage (core_pipeline_marker.json's
-// generated_at, read straight through — see AgentBlock.data_as_of) — date AND
-// time, not just the date formatLeaderboardDate gives, since the whole point
-// is telling the ~7am scrape apart from the ~6pm one on the same day.
-function formatDataAsOf(iso: string): string {
-  if (!iso) return ''
-  const d = new Date(iso)
-  if (Number.isNaN(d.getTime())) return ''
-  const date = `${d.getMonth() + 1}/${d.getDate()}`
-  const time = d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })
-  return `${date} ${time}`
-}
-
 function leaderboardSportLabel(kind: string): string {
   // NFL's real live `kind` is "nfl_leaderboard_heat" (an extra "_heat" suffix
   // other sports' plain "<sport>_leaderboard" kind doesn't have) — the old
@@ -1578,23 +1565,6 @@ function AgentChatTurnView({ turn, onRunCommand }: { turn: AgentChatResult; onRu
 
       <div className="rounded-lg px-4 py-3" style={{ backgroundColor: 'oklch(0.12 0 0)', border: '1px solid oklch(0.30 0 0)' }}>
         <AgentAnswerText text={answerText} />
-        {/* nspe isn't a live-data site — a cached answer can be hours old by
-            design (good until the next twice-daily scrape), and the owner's
-            own call was to surface that instead of hiding it, not pretend
-            every answer is this-second fresh.
-
-            Backend's cache check runs before the quota gate (a free hit costs
-            nothing, so it's not worth charging for) — which means a user at
-            0 remaining can land here with a full real answer AND the "0
-            questions left today" line below still reading 0, looking
-            contradictory with no context. The "free" clause below is that
-            context, not decoration. */}
-        {agent.cached && (
-          <div className="mt-2 pt-2 font-mono text-[10px]" style={{ borderTop: '1px solid oklch(0.24 0 0)', color: 'oklch(0.55 0.07 195)' }}>
-            {agent.data_as_of ? `cached · data as of ${formatDataAsOf(agent.data_as_of)}` : 'cached answer'}
-            {quota?.kind === 'free' ? " · free, doesn't count against your daily limit" : ''}
-          </div>
-        )}
       </div>
 
       {/* Cross-domain ambiguity ("who leads in points" — team points across
@@ -8847,7 +8817,7 @@ function App() {
         />
       )}
 
-      {/* Desktop bottom row, left to right: {charts} {matchups} {leaderboard}
+      {/* Desktop bottom row, left to right: {charts} {rankings} {leaderboard}
           (the leaderboard panel itself is unchanged, just to the right of
           this group). {sample-queries} moved up under the search bar, and
           {tutorial} lives in the query builder panel's own header.
@@ -8855,24 +8825,25 @@ function App() {
           this file, just unreachable, same shelve pattern as
           {sample-commands}/{database} until the tutorial/howto rework
           replaces it). The old flat {nfl.season}/{nba.season}/
-          {mlb.playoffs}/{nhl.season} links are gone — {matchups} is the
+          {mlb.playoffs}/{nhl.season} links are gone — this one button is the
           single homepage entry point into all four now (SportsSwitcher with
-          no `current`, so every sport shows; `label="matchups"` since this
-          is the discovery entry point rather than a same-page lateral
-          switch, which is what every other placement of this component
-          still calls {sports}). {charts} is the same SportsSwitcher, just
-          `variant="charts"` — was a plain link straight to NFL's /charts
-          (the only one that existed at the time), now that MLB/NBA/NHL have
-          their own it opens the same up-popping four-sport menu {matchups}
-          does rather than silently only ever reaching NFL's. */}
+          no `current`, so every sport shows). Relabeled from "matchups" to
+          "rankings" (owner ask, 2026-10-26) since power rankings is each
+          page's primary content now, not head-to-head matchups — the menu
+          itself and its 4 destinations are unchanged, just the trigger's
+          text. {charts} is the same SportsSwitcher, just `variant="charts"`
+          — was a plain link straight to NFL's /charts (the only one that
+          existed at the time), now that MLB/NBA/NHL have their own it opens
+          the same up-popping four-sport menu this one does rather than
+          silently only ever reaching NFL's. */}
       {/* {team.metrics} added 2026-10-01 next to {charts} — desktop only,
           per the owner's own instruction; mobile's homepage keeps just
-          {matchups} as its one entry point, unchanged. */}
+          {leaderboard} as its one entry point (swapped back in, 2026-10-19). */}
       {!isMobile && (
         <div className="absolute z-20 flex items-center gap-4" style={{ bottom: '52px', right: '440px' }}>
           <SportsSwitcher label="charts" variant="charts" direction="up" triggerSizePx={15} />
           <SportsSwitcher label="team.metrics" variant="metrics" direction="up" triggerSizePx={15} />
-          <SportsSwitcher label="matchups" direction="up" triggerSizePx={15} />
+          <SportsSwitcher label="rankings" direction="up" triggerSizePx={15} />
         </div>
       )}
 

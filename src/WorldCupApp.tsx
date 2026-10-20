@@ -2,8 +2,9 @@ import { useEffect, useMemo, useState } from 'react'
 import { StarsBackground } from '@/components/StarsBackground'
 import { getCurrentNflWeek } from '@/lib/nflWeek'
 import nflData from '@/assets/data/worldcup.json'
+import nflGamesStatic from '@/assets/data/nfl_games_static.json'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { fetchNflPowerRankings, fetchSportSchedule, type SportGame } from '@/lib/databaseApi'
+import { fetchNflPowerRankings, type SportGame, type SportScheduleData } from '@/lib/databaseApi'
 import { API_BASE_CANDIDATES, fetchJsonCandidate, joinUrl, parseApiPayload } from '@/lib/nspe-api'
 import {
   extractMatchupInsightPayload,
@@ -624,19 +625,15 @@ export default function WorldCupApp() {
   // this file, which is a separate data source that wasn't part of that ask.
   const initialScheduleWeek = getCurrentNflWeek(data.total_weeks, data.current_week)
 
-  const [games, setGames] = useState<SportGame[]>([])
-  // Live nfl_games/{season}.json — same free/unauthenticated, real-score-
-  // carrying feed NBA/MLB/NHL already run on (see SportSeasonPage.tsx). This
-  // replaces the old bundled nfl_schedule.json, which had zero games with a
-  // populated score, ever — WeekMatchupStrip couldn't show real results for
-  // a just-concluded week no matter how "current" current_week was.
-  useEffect(() => {
-    let cancelled = false
-    fetchSportSchedule('nfl', data.season)
-      .then((s) => { if (!cancelled) setGames(s.games) })
-      .catch((err) => console.error('Failed to load NFL schedule:', err))
-    return () => { cancelled = true }
-  }, [data.season])
+  // Back to a bundled static file (owner ask, 2026-10-26) — the live
+  // nfl_games/{season}.json fetch this replaced was unreliable ("won't
+  // load"), and this header strip doesn't need live scores the way power
+  // rankings does; it's just a glanceable weekly slate now, not where
+  // anyone checks a result. A fresh snapshot (src/assets/data/
+  // nfl_games_static.json, the full season — only ~117KB) needs re-pulling
+  // periodically to stay current; power rankings below is unaffected and
+  // keeps fetching live.
+  const games: SportGame[] = (nflGamesStatic as unknown as SportScheduleData).games
 
   const [matchupResult, setMatchupResult] = useState<MatchupInsightPayload | null>(null)
   const [isMatchupOpen, setIsMatchupOpen] = useState(false)

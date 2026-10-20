@@ -285,12 +285,6 @@ export function TeamMetricsCard({
               )
             })}
           </div>
-          {/* All four sports now carry this (2026-10-01) — null for the
-              current season, a footnote for past-season/history windows
-              where the player scrape only covers current rosters. */}
-          {payload.allows_note && (
-            <div className="mt-2 font-mono text-[10px] italic" style={{ color: C.textBright }}>{payload.allows_note}</div>
-          )}
         </div>
       )}
 
@@ -414,9 +408,6 @@ export function OpponentThresholdsPanel({
               </div>
             )
           })}
-          {payload.allows_note && (
-            <div className="font-mono text-[10px] italic" style={{ color: C.textBright }}>{payload.allows_note}</div>
-          )}
         </div>
       )}
     </div>

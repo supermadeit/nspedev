@@ -150,9 +150,6 @@ function WindowBar({
           </button>
         </span>
       </div>
-      {win?.coverage && (
-        <div className="font-mono text-[11px]" style={{ color: C.textDim }}>{win.coverage}</div>
-      )}
       {notice && (
         <div className="font-mono text-[12px]" style={{ color: 'oklch(0.75 0.15 30)' }}>{notice}</div>
       )}
