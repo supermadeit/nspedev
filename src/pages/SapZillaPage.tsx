@@ -283,7 +283,7 @@ export default function SapZillaPage() {
     // capped-height scroll container, same fix as {team.metrics}. Without
     // it, content past the fold (the "run it" button included) was just
     // clipped with no way to reach it (reported 2026-10-19).
-    <div className="h-dvh w-full overflow-y-auto" style={{ backgroundColor: C.surface, color: C.textBright, fontFamily: 'monospace' }}>
+    <div className="h-dvh w-full overflow-y-auto bg-background" style={{ color: C.textBright, fontFamily: 'monospace' }}>
       <div className="flex items-center justify-between gap-3 px-6 py-4" style={{ borderBottom: `1px solid ${C.border}` }}>
         <div className="flex items-center gap-3">
           <span className="font-mono font-bold text-[15px] rounded px-2 py-1" style={{ color: C.accent, border: `1px solid ${C.accent}` }}>
@@ -603,6 +603,19 @@ export default function SapZillaPage() {
   )
 }
 
+// Owner ask, 2026-10-26: color the hit-rate percentage itself — green at/
+// over 55%, red at/under 45%, yellow in the 46-54% gap between them.
+function pctColor(ratio: number): string {
+  const p = ratio * 100
+  if (p >= 55) return C.green
+  if (p <= 45) return C.red
+  return C.yellow
+}
+
+function pctColorFromSplit(split: { hits: number; n: number }): string {
+  return split.n > 0 ? pctColor(split.hits / split.n) : C.textDim
+}
+
 function LabResults({ result, imageResult }: { result: LabResult; imageResult: LabImageResult | null }) {
   const showIndependent = result.joint.clusters.some((c) => c.method !== 'single') && result.joint.method !== 'single'
   return (
@@ -640,7 +653,7 @@ function LabResults({ result, imageResult }: { result: LabResult; imageResult: L
               <div className="flex items-center justify-between gap-3 px-4 py-2.5 font-mono text-[13px]">
                 <span style={{ color: C.textBright }}>{leg.text}</span>
                 <span className="whitespace-nowrap font-bold" style={{ color: C.accent }}>
-                  {leg.hits} of {leg.n} <span className="font-normal" style={{ color: C.textDim }}>({(leg.pct * 100).toFixed(0)}%)</span>
+                  {leg.hits} of {leg.n} <span className="font-normal" style={{ color: pctColor(leg.pct) }}>({(leg.pct * 100).toFixed(0)}%)</span>
                 </span>
               </div>
               {leg.league_view && <LeagueLegDetail view={leg.league_view} />}
@@ -653,7 +666,12 @@ function LabResults({ result, imageResult }: { result: LabResult; imageResult: L
         <div className="rounded-lg p-4 font-mono text-[13px] space-y-1" style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}` }}>
           <div style={{ color: C.textBright }}>{result.card.together}</div>
           {showIndependent && (
-            <div style={{ color: C.textDim }}>if independent: {((result.joint.independent_pct ?? 0) * 100).toFixed(0)}%</div>
+            <div style={{ color: C.textDim }}>
+              if independent:{' '}
+              <span style={{ color: pctColor(result.joint.independent_pct ?? 0) }}>
+                {((result.joint.independent_pct ?? 0) * 100).toFixed(0)}%
+              </span>
+            </div>
           )}
         </div>
       )}
@@ -699,11 +717,11 @@ function LeagueLegDetail({ view }: { view: LabLeagueView }) {
       <div className="flex flex-wrap gap-x-5 gap-y-1">
         <span>
           at least one side hit: <span style={{ color: C.textBright }}>{games.at_least_one_complete.hits} of {games.at_least_one_complete.n}</span>
-          {' '}({pct(games.at_least_one_complete)})
+          {' '}(<span style={{ color: pctColorFromSplit(games.at_least_one_complete) }}>{pct(games.at_least_one_complete)}</span>)
         </span>
         <span>
           both sides hit: <span style={{ color: C.textBright }}>{games.both_sides.hits} of {games.both_sides.n}</span>
-          {' '}({pct(games.both_sides)})
+          {' '}(<span style={{ color: pctColorFromSplit(games.both_sides) }}>{pct(games.both_sides)}</span>)
         </span>
       </div>
       {top.length > 0 && (

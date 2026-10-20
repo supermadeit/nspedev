@@ -14,6 +14,8 @@ import { extractDateToken } from '@/lib/nspe-payloads'
 export const C = {
   accent: 'oklch(0.85 0.15 195)',
   green: 'oklch(0.85 0.15 145)',
+  red: 'oklch(0.75 0.15 30)',
+  yellow: 'oklch(0.80 0.15 95)',
   surface: 'oklch(0.10 0 0)',
   surface2: 'oklch(0.15 0 0)',
   border: 'oklch(0.25 0 0)',
