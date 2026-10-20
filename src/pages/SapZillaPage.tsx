@@ -290,7 +290,7 @@ export default function SapZillaPage() {
             {'{sap.zilla}'}
           </span>
           <span className="font-mono text-[12px]" style={{ color: C.textDim }}>
-            how often has this actually happened — counts only, never a price
+            how often props happen in general, select player, vs opponent etc
           </span>
         </div>
         <HomeLogoLink fontSizePx={13} />
@@ -299,12 +299,10 @@ export default function SapZillaPage() {
       <div className="px-6 py-6 max-w-3xl mx-auto space-y-5">
         <div className="rounded-lg p-4 font-mono text-[13px] space-y-2" style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}` }}>
           <p style={{ color: C.textBright }}>
-            Build a ticket — a player prop, a team line, or a few stacked together — and {'{sap.zilla}'} counts up every
-            game it's actually happened, going back as far as you want. No odds in, no odds out: just "3 of 131" or
-            "87 of 138," so you're looking at the real history before anyone else's price on it.
+            Pick a prop or line, or stack a few, and {'{sap.zilla}'} counts every game it actually happened
           </p>
           <p style={{ color: C.textDim }}>
-            Think of it as the proof.zilla to whatever you were about to take on faith.
+            The proof to whatever you were about to take on faith.
           </p>
         </div>
 
