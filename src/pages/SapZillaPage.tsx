@@ -24,8 +24,10 @@ import {
   LAB_SPORTS,
   LAB_CATEGORIES,
   LAB_NFL_SCOPES,
-  LAB_TEAM_STAT_DEFAULT,
+  LAB_TEAM_STATS,
+  LAB_TEAM_SCOPES,
   labStatOption,
+  labTeamStatOption,
   labStatSupportsScope,
   buildPlayerLeg,
   buildTeamLeg,
@@ -62,6 +64,8 @@ export default function SapZillaPage() {
   const [playerMatches, setPlayerMatches] = useState<PlayerMatch[]>([])
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null)
   const [teamCode, setTeamCode] = useState('')
+  const [teamStat, setTeamStat] = useState(LAB_TEAM_STATS[0].value)
+  const [teamScope, setTeamScope] = useState<LabScope>('season')
   const [category, setCategory] = useState(LAB_CATEGORIES.nfl[0].key)
   const [stat, setStat] = useState(LAB_CATEGORIES.nfl[0].stats[0])
   const [scope, setScope] = useState<LabScope>('season')
@@ -113,7 +117,13 @@ export default function SapZillaPage() {
 
   function selectKind(k: 'player' | 'team') {
     setKind(k)
-    setNumText(String(k === 'team' ? LAB_TEAM_STAT_DEFAULT : labStatOption(sport, stat)?.default ?? 0))
+    setNumText(String(k === 'team' ? labTeamStatOption(teamStat)?.default ?? 0 : labStatOption(sport, stat)?.default ?? 0))
+  }
+
+  function selectTeamStat(statValue: string) {
+    setTeamStat(statValue)
+    setNumText(String(labTeamStatOption(statValue)?.default ?? 0))
+    setTeamScope('season')
   }
 
   function selectCategory(catKey: string) {
@@ -144,9 +154,11 @@ export default function SapZillaPage() {
       setLegs((prev) => (prev.some((l) => l.raw === raw) ? prev : [...prev, { raw, label }]))
     } else {
       if (!teamCode.trim()) return
-      const raw = buildTeamLeg(teamCode, numValue)
+      const raw = buildTeamLeg(teamCode, teamStat, teamScope, numValue)
       const nickname = teamRoster('nfl').find((t) => t.code === teamCode)?.nickname ?? teamCode.toUpperCase()
-      const label = `${nickname} · Points ${numValue}+`
+      const statLabel = labTeamStatOption(teamStat)?.label ?? teamStat
+      const scopeLabel = teamScope === 'season' ? '' : ` (${LAB_TEAM_SCOPES.find((s) => s.value === teamScope)?.label})`
+      const label = `${nickname} · ${statLabel} ${numValue}+${scopeLabel}`
       setLegs((prev) => (prev.some((l) => l.raw === raw) ? prev : [...prev, { raw, label }]))
     }
   }
@@ -280,7 +292,7 @@ export default function SapZillaPage() {
                     className="font-mono text-[12px] font-bold px-3 py-1.5 rounded"
                     style={{ border: `1px solid ${kind === k ? C.accent : C.border}`, color: kind === k ? C.accent : C.textDim }}
                   >
-                    {k === 'player' ? 'player' : 'team (points only)'}
+                    {k === 'player' ? 'player' : 'team'}
                   </button>
                 ))}
               </>
@@ -333,8 +345,7 @@ export default function SapZillaPage() {
 
           {/* Category → stat chips — no raw stat codes or syntax shown
               anywhere, same spirit as {team.metrics}'s click-to-view menus
-              (owner ask, 2026-10-19). Team legs skip this entirely; points
-              is the only team line for now.
+              (owner ask, 2026-10-19).
               A category holding exactly one stat (NHL's old Playmaking/
               Defense/Combined, NBA's old Rebounding/Playmaking) renders as
               a single direct stat chip instead — no point clicking a
@@ -382,13 +393,38 @@ export default function SapZillaPage() {
             </>
           )}
 
+          {/* Team legs grew from points-only to 5 stats, all scoped
+              (confirmed live 2026-10-26) — same flat chip row as a
+              single-category sport section, no category wrapper needed
+              for just 5 items. */}
+          {kind === 'team' && (
+            <div className="flex flex-wrap gap-2">
+              {LAB_TEAM_STATS.map((s) => (
+                <button
+                  key={s.value}
+                  type="button"
+                  onClick={() => selectTeamStat(s.value)}
+                  className="font-mono text-[12px] px-2.5 py-1 rounded"
+                  style={{ border: `1px solid ${teamStat === s.value ? C.accent : C.border}`, color: teamStat === s.value ? C.accent : C.textDim }}
+                >
+                  {s.label}
+                </button>
+              ))}
+            </div>
+          )}
+
           <div className="flex flex-wrap gap-2 items-center">
             <span className="font-mono text-[12px] font-bold" style={{ color: C.textBright }}>
-              {kind === 'player' ? statOption?.label ?? stat : 'Points'}
+              {kind === 'player' ? statOption?.label ?? stat : labTeamStatOption(teamStat)?.label ?? teamStat}
             </span>
             {kind === 'player' && labStatSupportsScope(sport, stat) && (
               <select value={scope} onChange={(e) => setScope(e.target.value as LabScope)} className="rounded px-2 py-1.5 font-mono text-[12px]" style={fieldStyle()}>
                 {LAB_NFL_SCOPES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
+              </select>
+            )}
+            {kind === 'team' && (
+              <select value={teamScope} onChange={(e) => setTeamScope(e.target.value as LabScope)} className="rounded px-2 py-1.5 font-mono text-[12px]" style={fieldStyle()}>
+                {LAB_TEAM_SCOPES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
               </select>
             )}
             <span className="font-mono text-[12px]" style={{ color: C.textDim }}>at least</span>

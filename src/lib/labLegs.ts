@@ -116,10 +116,11 @@ export function labStatOption(sport: LabSport, stat: string): LabStatOption | un
 }
 
 // NFL-only — a quarter/half prefix on the stat token. Trimmed to the 3
-// cases worth surfacing in the picker (full game, 1st quarter, 1st half);
-// the backend contract also has q2/q3/q4/2h/every-quarter/each-half, but
-// those stay reachable only by hand-typed syntax for now (owner ask,
-// 2026-10-19: keep the "window" column simple, default to full game).
+// cases worth surfacing in the picker for PLAYER legs (full game, 1st
+// quarter, 1st half); the backend contract also has q2/q3/q4/2h/every-
+// quarter/each-half, but those stay reachable only by hand-typed syntax for
+// now (owner ask, 2026-10-19: keep the "window" column simple, default to
+// full game). Team legs get a wider set below — see LAB_TEAM_SCOPES.
 export type LabScope = 'season' | 'q1' | 'q2' | 'q3' | 'q4' | '1h' | '2h' | 'eq' | 'eh'
 
 export const LAB_NFL_SCOPES: { value: LabScope; label: string }[] = [
@@ -153,12 +154,39 @@ export function buildPlayerLeg(sport: LabSport, playerName: string, stat: string
   return `${sport} ${playerName.toLowerCase()} ${buildLineToken(stat, scope, n)}`
 }
 
-/** Team legs are NFL-only, points-only in v1 (confirmed 2026-10-19 — team
- * TD lines error, team box scores have no TD field on file yet). */
-export const LAB_TEAM_STAT_DEFAULT = 24 // GET /lab/lines team_lines.nfl[0].default
+// Team legs are NFL-only. Grew from points-only to 5 stats with full
+// quarter/half scoping (confirmed live 2026-10-26, deploy a7a6d4a — GET
+// /lab/lines team_lines.nfl now lists all 5 with the same 9-entry scopes
+// array scoped player stats carry; team_lines_pending.nfl is empty, so
+// nothing's held back anymore).
+export const LAB_TEAM_STATS: LabStatOption[] = [
+  { value: 'pts', label: 'Points', default: 24 },
+  { value: 'td', label: 'Any TD', default: 3 },
+  { value: 'rtd', label: 'Rush TD', default: 1 },
+  { value: 'ptd', label: 'Pass TD', default: 2 },
+  { value: 'fg', label: 'Field Goal', default: 2 },
+]
 
-export function buildTeamLeg(teamCode: string, n: number): string {
-  return `nfl team ${teamCode.toLowerCase()} -pts${n}`
+export function labTeamStatOption(stat: string): LabStatOption | undefined {
+  return LAB_TEAM_STATS.find((s) => s.value === stat)
+}
+
+// Every team stat scopes identically (unlike player stats, where only 4 of
+// 13 do) — widened past the player picker's 3-option trim to include every
+// quarter/each half specifically, since those are the showcased use case
+// ("KC a TD in each half", "a FG in each half" — the owner's original ask
+// per backend). q2/q3/q4/2h stay hand-typed-only, same reasoning as the
+// player scope trim.
+export const LAB_TEAM_SCOPES: { value: LabScope; label: string }[] = [
+  { value: 'season', label: 'full game' },
+  { value: 'q1', label: '1st quarter' },
+  { value: '1h', label: '1st half' },
+  { value: 'eq', label: 'every quarter' },
+  { value: 'eh', label: 'each half' },
+]
+
+export function buildTeamLeg(teamCode: string, stat: string, scope: LabScope, n: number): string {
+  return `nfl team ${teamCode.toLowerCase()} ${buildLineToken(stat, scope, n)}`
 }
 
 // Kept for when typed syntax returns alongside a legend (owner ask,
@@ -167,6 +195,7 @@ export const LAB_SYNTAX_EXAMPLES = [
   'nfl josh allen -q1ryds10',
   'nfl james cook -rr80',
   'nfl team buf -pts24',
+  'nfl team kc -ehtd1',
   'nba jalen brunson -pra45',
   'mlb aaron judge -hr1',
   'nhl connor mcdavid -pts2',
