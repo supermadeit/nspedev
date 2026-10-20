@@ -1,18 +1,32 @@
-// {sap.zilla}'s guided leg builder — turns a (league, player/team, stat,
-// scope, number) selection into the exact leg string POST /lab expects
-// ("nfl josh allen -eqryds10"), so most people never have to hand-write the
-// syntax. Deliberately scoped to the stats/scopes backend's contract
-// documented with an unambiguous, fully-written example (season-scope
-// stats for all four sports; NFL's quarter/half/every-quarter scopes) —
-// anything a user wants beyond this list can still be typed directly into
-// the raw legs box next to this picker, using the same cheat sheet shown
-// there. A bad leg just comes back in `errors[]` (per the contract), so a
-// wrong guess here degrades to a clear per-leg error, not a crash.
+// {sap.zilla}'s guided leg builder — turns a (league, player/team, category,
+// stat, window, number) selection into the exact leg string POST /lab
+// expects ("nfl josh allen -q1ryds10"), so a user never sees or types the
+// syntax itself. Deliberately scoped to the stats/scopes backend's contract
+// documented with an unambiguous, fully-written example — anything beyond
+// this list degrades to a clear per-leg error from the backend, not a
+// crash, per the contract's own `errors[]`.
+//
+// Categories (Passing/Rushing/Receiving/... ) are a frontend-only grouping
+// on top of the backend's flat stat list — there's no category concept in
+// the API itself, this just avoids handing a novice user a 13-item dropdown
+// of raw stat codes (owner ask, 2026-10-19: "categories that lead to other
+// props ... then a number selector", same spirit as {team.metrics}).
 export type LabSport = 'nfl' | 'nba' | 'mlb' | 'nhl'
 
 export interface LabStatOption {
   value: string
   label: string
+  // Per-stat sensible starting threshold, mirrored from GET /lab/lines'
+  // own `default` field (verified live 2026-10-19) — a flat "100" default
+  // regardless of stat was confusing (a novice picking "pass TD" still saw
+  // 100, which reads like a yardage line, not a touchdown count).
+  default: number
+}
+
+export interface LabCategoryOption {
+  key: string
+  label: string
+  stats: string[] // LabStatOption.value refs, within this sport's LAB_STATS
 }
 
 export const LAB_SPORTS: { value: LabSport; label: string }[] = [
@@ -24,68 +38,105 @@ export const LAB_SPORTS: { value: LabSport; label: string }[] = [
 
 export const LAB_STATS: Record<LabSport, LabStatOption[]> = {
   nfl: [
-    { value: 'pyds', label: 'Pass Yds' },
-    { value: 'ptd', label: 'Pass TD' },
-    { value: 'ryds', label: 'Rush Yds' },
-    { value: 'rtd', label: 'Rush TD' },
-    { value: 'rec', label: 'Receptions' },
-    { value: 'recyds', label: 'Rec Yds' },
-    { value: 'rectd', label: 'Rec TD' },
-    { value: 'rr', label: 'Rush+Rec Yds' },
-    { value: 'rrtd', label: 'Rush+Rec TD' },
-    { value: 'pr', label: 'Pass+Rush Yds' },
-    { value: 'plong', label: 'Longest Pass' },
-    { value: 'rlong', label: 'Longest Rush' },
-    { value: 'reclong', label: 'Longest Reception' },
+    { value: 'pyds', label: 'Pass Yds', default: 250 },
+    { value: 'ptd', label: 'Pass TD', default: 2 },
+    { value: 'int', label: 'INT', default: 1 },
+    { value: 'ryds', label: 'Rush Yds', default: 60 },
+    { value: 'rtd', label: 'Rush TD', default: 1 },
+    { value: 'rec', label: 'Receptions', default: 5 },
+    { value: 'recyds', label: 'Rec Yds', default: 60 },
+    { value: 'rectd', label: 'Rec TD', default: 1 },
+    { value: 'rr', label: 'Rush+Rec Yds', default: 80 },
+    { value: 'rrtd', label: 'Rush+Rec TD', default: 1 },
+    { value: 'pr', label: 'Pass+Rush Yds', default: 275 },
+    { value: 'plong', label: 'Longest Pass', default: 40 },
+    { value: 'rlong', label: 'Longest Rush', default: 20 },
+    { value: 'reclong', label: 'Longest Reception', default: 25 },
   ],
   nba: [
-    { value: 'pts', label: 'PTS' },
-    { value: 'reb', label: 'REB' },
-    { value: 'ast', label: 'AST' },
-    { value: 'tpm', label: '3PM' },
-    { value: 'stl', label: 'STL' },
-    { value: 'blk', label: 'BLK' },
-    { value: 'pra', label: 'PTS+REB+AST' },
-    { value: 'pa', label: 'PTS+AST' },
-    { value: 'pr', label: 'PTS+REB' },
-    { value: 'ra', label: 'REB+AST' },
+    { value: 'pts', label: 'PTS', default: 25 },
+    { value: 'reb', label: 'REB', default: 10 },
+    { value: 'ast', label: 'AST', default: 8 },
+    { value: 'tpm', label: '3PM', default: 4 },
+    { value: 'stl', label: 'STL', default: 2 },
+    { value: 'blk', label: 'BLK', default: 2 },
+    { value: 'pra', label: 'PTS+REB+AST', default: 35 },
+    { value: 'pa', label: 'PTS+AST', default: 30 },
+    { value: 'pr', label: 'PTS+REB', default: 30 },
+    { value: 'ra', label: 'REB+AST', default: 15 },
   ],
   mlb: [
-    { value: 'h', label: 'Hits' },
-    { value: 'r', label: 'Runs' },
-    { value: 'rbi', label: 'RBI' },
-    { value: 'tb', label: 'Total Bases' },
-    { value: 'bb', label: 'Walks' },
-    { value: 'hr', label: 'Home Runs' },
-    { value: 'hrr', label: 'HRR' },
-    { value: 'k', label: 'Strikeouts' },
+    { value: 'h', label: 'Hits', default: 2 },
+    { value: 'r', label: 'Runs', default: 1 },
+    { value: 'rbi', label: 'RBI', default: 1 },
+    { value: 'tb', label: 'Total Bases', default: 2 },
+    { value: 'bb', label: 'Walks', default: 1 },
+    { value: 'hr', label: 'Home Runs', default: 1 },
+    { value: 'hrr', label: 'HRR', default: 3 },
+    { value: 'k', label: 'Strikeouts', default: 6 },
   ],
   nhl: [
-    { value: 'sog', label: 'SOG' },
-    { value: 'g', label: 'Goals' },
-    { value: 'a', label: 'Assists' },
-    { value: 'pts', label: 'Points' },
-    { value: 'blk', label: 'Blocks' },
+    { value: 'sog', label: 'SOG', default: 4 },
+    { value: 'g', label: 'Goals', default: 1 },
+    { value: 'a', label: 'Assists', default: 1 },
+    { value: 'pts', label: 'Points', default: 2 },
+    { value: 'blk', label: 'Blocks', default: 2 },
   ],
 }
 
-// NFL-only — quarter/half scopes prefix the stat token. "every quarter"/
-// "each half" mean the threshold held in all 4 quarters / both halves of
-// the same game, not a one-time hit; backend's examples: -eqryds10,
-// -eqpyds, -eqrecyds, -eqrec, -q1pyds40, -1hryds40, -ehryds10.
+export const LAB_CATEGORIES: Record<LabSport, LabCategoryOption[]> = {
+  nfl: [
+    { key: 'passing', label: 'Passing', stats: ['pyds', 'ptd', 'plong', 'int'] },
+    { key: 'rushing', label: 'Rushing', stats: ['ryds', 'rtd', 'rlong'] },
+    { key: 'receiving', label: 'Receiving', stats: ['rec', 'recyds', 'rectd', 'reclong'] },
+    { key: 'combined', label: 'Combined', stats: ['rr', 'rrtd', 'pr'] },
+  ],
+  nba: [
+    { key: 'scoring', label: 'Scoring', stats: ['pts', 'tpm'] },
+    { key: 'rebounding', label: 'Rebounding', stats: ['reb'] },
+    { key: 'playmaking', label: 'Playmaking', stats: ['ast'] },
+    { key: 'defense', label: 'Defense', stats: ['stl', 'blk'] },
+    { key: 'combined', label: 'Combined', stats: ['pra', 'pa', 'pr', 'ra'] },
+  ],
+  mlb: [
+    { key: 'hitting', label: 'Hitting', stats: ['h', 'hr', 'tb', 'rbi', 'r', 'bb'] },
+    { key: 'pitching', label: 'Pitching', stats: ['k'] },
+    { key: 'combined', label: 'Combined', stats: ['hrr'] },
+  ],
+  nhl: [
+    { key: 'shooting', label: 'Shooting', stats: ['sog', 'g'] },
+    { key: 'playmaking', label: 'Playmaking', stats: ['a'] },
+    { key: 'defense', label: 'Defense', stats: ['blk'] },
+    { key: 'combined', label: 'Combined', stats: ['pts'] },
+  ],
+}
+
+export function labStatOption(sport: LabSport, stat: string): LabStatOption | undefined {
+  return LAB_STATS[sport].find((s) => s.value === stat)
+}
+
+// NFL-only — a quarter/half prefix on the stat token. Trimmed to the 3
+// cases worth surfacing in the picker (full game, 1st quarter, 1st half);
+// the backend contract also has q2/q3/q4/2h/every-quarter/each-half, but
+// those stay reachable only by hand-typed syntax for now (owner ask,
+// 2026-10-19: keep the "window" column simple, default to full game).
 export type LabScope = 'season' | 'q1' | 'q2' | 'q3' | 'q4' | '1h' | '2h' | 'eq' | 'eh'
 
 export const LAB_NFL_SCOPES: { value: LabScope; label: string }[] = [
-  { value: 'season', label: 'any game' },
+  { value: 'season', label: 'full game' },
   { value: 'q1', label: '1st quarter' },
-  { value: 'q2', label: '2nd quarter' },
-  { value: 'q3', label: '3rd quarter' },
-  { value: 'q4', label: '4th quarter' },
   { value: '1h', label: '1st half' },
-  { value: '2h', label: '2nd half' },
-  { value: 'eq', label: 'every quarter' },
-  { value: 'eh', label: 'each half' },
 ]
+
+// Per GET /lab/lines (verified live 2026-10-19): only these 4 NFL stats
+// carry quarter/half scopes at all — showing the window selector for e.g.
+// Pass TD produced syntax the backend has never supported ("-ehptd2"),
+// which is the bug this list exists to prevent.
+export const LAB_NFL_SCOPE_STATS = ['pyds', 'ryds', 'rec', 'recyds']
+
+export function labStatSupportsScope(sport: LabSport, stat: string): boolean {
+  return sport === 'nfl' && LAB_NFL_SCOPE_STATS.includes(stat)
+}
 
 function scopePrefix(scope: LabScope): string {
   return scope === 'season' ? '' : scope
@@ -97,22 +148,23 @@ export function buildLineToken(stat: string, scope: LabScope, n: number): string
   return `-${scopePrefix(scope)}${stat}${n}`
 }
 
-/** A full leg string for a player: "nfl josh allen -eqryds10". */
+/** A full leg string for a player: "nfl josh allen -q1ryds10". */
 export function buildPlayerLeg(sport: LabSport, playerName: string, stat: string, scope: LabScope, n: number): string {
   return `${sport} ${playerName.toLowerCase()} ${buildLineToken(stat, scope, n)}`
 }
 
 /** Team legs are NFL-only, points-only in v1 (confirmed 2026-10-19 — team
  * TD lines error, team box scores have no TD field on file yet). */
+export const LAB_TEAM_STAT_DEFAULT = 24 // GET /lab/lines team_lines.nfl[0].default
+
 export function buildTeamLeg(teamCode: string, n: number): string {
   return `nfl team ${teamCode.toLowerCase()} -pts${n}`
 }
 
-// Shown next to the raw-legs box so anyone who wants a scope/stat this
-// picker doesn't cover can still type it correctly, straight from the
-// contract rather than a guess.
+// Kept for when typed syntax returns alongside a legend (owner ask,
+// 2026-10-19: picker-only for now) — not referenced by the page currently.
 export const LAB_SYNTAX_EXAMPLES = [
-  'nfl josh allen -eqryds10',
+  'nfl josh allen -q1ryds10',
   'nfl james cook -rr80',
   'nfl team buf -pts24',
   'nba jalen brunson -pra45',

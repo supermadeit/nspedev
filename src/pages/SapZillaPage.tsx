@@ -6,11 +6,13 @@
 // PageShell/shadcn chrome) per the owner's inclination — not a hard
 // instruction, just where this naturally landed.
 //
-// Two ways in, one endpoint: typed legs (free, no auth — a picker builds
-// the common case, a raw box covers anything the picker doesn't) and a
-// screenshot of a real slip (signed in, costs a free question or a
-// credit — the model reads legs out of the image, returned as editable
-// text so a misread leg can be fixed and re-run free as a typed one).
+// Two ways in, one endpoint: a category → stat → number picker (free, no
+// auth — never shows the user raw syntax like "-q1ryds10", it just builds
+// it) and a screenshot of a real slip (signed in, costs a free question or
+// a credit — the model reads legs out of the image, shown read-only in the
+// results section below). The old "type legs directly" box is removed for
+// now (owner ask, 2026-10-19) — it's coming back once there's a legend to
+// go with it.
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/context/AuthContext'
@@ -20,9 +22,11 @@ import { loadPlayerIndex, searchPlayers, type PlayerMatch } from '@/lib/playerSe
 import { teamRoster } from '@/lib/teamNicknames'
 import {
   LAB_SPORTS,
-  LAB_STATS,
+  LAB_CATEGORIES,
   LAB_NFL_SCOPES,
-  LAB_SYNTAX_EXAMPLES,
+  LAB_TEAM_STAT_DEFAULT,
+  labStatOption,
+  labStatSupportsScope,
   buildPlayerLeg,
   buildTeamLeg,
   type LabSport,
@@ -38,6 +42,15 @@ function fieldStyle(): CSSProperties {
   return { backgroundColor: C.surface, border: `1px solid ${C.border}`, color: C.textBright }
 }
 
+// A leg the picker built, plus a plain-English label for the on-screen
+// list — the actual "nfl josh allen -q1ryds10" string is what goes over
+// the wire, never what the user reads (owner ask, 2026-10-19: no made-up
+// or exposed syntax anywhere on this page).
+interface BuiltLeg {
+  raw: string
+  label: string
+}
+
 export default function SapZillaPage() {
   const { user } = useAuth()
   const navigate = useNavigate()
@@ -49,13 +62,17 @@ export default function SapZillaPage() {
   const [playerMatches, setPlayerMatches] = useState<PlayerMatch[]>([])
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null)
   const [teamCode, setTeamCode] = useState('')
-  const [stat, setStat] = useState(LAB_STATS.nfl[0].value)
+  const [category, setCategory] = useState(LAB_CATEGORIES.nfl[0].key)
+  const [stat, setStat] = useState(LAB_CATEGORIES.nfl[0].stats[0])
   const [scope, setScope] = useState<LabScope>('season')
-  const [num, setNum] = useState(100)
-  const [legs, setLegs] = useState<string[]>([])
-  const [rawLegsText, setRawLegsText] = useState('')
+  // A string, not a number — a controlled number input that coerces to 0
+  // on every keystroke fights the user mid-type ("3" then "0" renders as
+  // "030" once the field has already snapped to 0 in between). Parsed to
+  // a number only when actually building a leg. (reported 2026-10-19)
+  const [numText, setNumText] = useState(String(labStatOption('nfl', LAB_CATEGORIES.nfl[0].stats[0])?.default ?? 0))
+  const [legs, setLegs] = useState<BuiltLeg[]>([])
 
-  // ---- window options ----
+  // ---- date range ----
   const [since, setSince] = useState(2018)
   const [post, setPost] = useState(false)
   const [seasonOnly, setSeasonOnly] = useState(false)
@@ -71,16 +88,19 @@ export default function SapZillaPage() {
   const [runError, setRunError] = useState<string | null>(null)
   const [result, setResult] = useState<LabResult | LabImageResult | null>(null)
 
+  const numValue = numText === '' ? 0 : parseInt(numText, 10) || 0
+
   useEffect(() => {
     loadPlayerIndex()
   }, [])
 
   useEffect(() => {
-    setStat(LAB_STATS[sport][0].value)
-    if (sport !== 'nfl') {
-      setKind('player')
-      setScope('season')
-    }
+    const cat = LAB_CATEGORIES[sport][0]
+    setCategory(cat.key)
+    setStat(cat.stats[0])
+    setNumText(String(labStatOption(sport, cat.stats[0])?.default ?? 0))
+    setScope('season')
+    if (sport !== 'nfl') setKind('player')
   }, [sport])
 
   useEffect(() => {
@@ -91,21 +111,44 @@ export default function SapZillaPage() {
     setPlayerMatches(searchPlayers(playerQuery, 6, sport))
   }, [playerQuery, sport])
 
+  function selectKind(k: 'player' | 'team') {
+    setKind(k)
+    setNumText(String(k === 'team' ? LAB_TEAM_STAT_DEFAULT : labStatOption(sport, stat)?.default ?? 0))
+  }
+
+  function selectCategory(catKey: string) {
+    setCategory(catKey)
+    const cat = LAB_CATEGORIES[sport].find((c) => c.key === catKey)
+    const firstStat = cat?.stats[0] ?? ''
+    setStat(firstStat)
+    setNumText(String(labStatOption(sport, firstStat)?.default ?? 0))
+    setScope('season')
+  }
+
+  function selectStat(statValue: string) {
+    setStat(statValue)
+    setNumText(String(labStatOption(sport, statValue)?.default ?? 0))
+    setScope('season')
+  }
+
   function addLegFromPicker() {
-    if (legs.length >= MAX_LEGS) return
-    const built =
-      kind === 'player'
-        ? selectedPlayer
-          ? buildPlayerLeg(sport, selectedPlayer, stat, scope, num)
-          : null
-        : teamCode.trim()
-          ? buildTeamLeg(teamCode, num)
-          : null
-    if (!built) return
-    // Dedupe on add — caught live (owner screenshot, 2026-10-19): clicking
-    // "+ add leg" twice on the same selection silently added the same leg
-    // twice rather than refusing or no-opping.
-    setLegs((prev) => (prev.includes(built) ? prev : [...prev, built]))
+    if (legs.length >= MAX_LEGS || numValue <= 0) return
+    if (kind === 'player') {
+      if (!selectedPlayer) return
+      const raw = buildPlayerLeg(sport, selectedPlayer, stat, scope, numValue)
+      const statLabel = labStatOption(sport, stat)?.label ?? stat
+      const scopeLabel = scope === 'season' ? '' : ` (${LAB_NFL_SCOPES.find((s) => s.value === scope)?.label})`
+      const label = `${selectedPlayer} · ${statLabel} ${numValue}+${scopeLabel}`
+      // Dedupe on add — caught live (owner screenshot, 2026-10-19): clicking
+      // "+ add leg" twice on the same selection silently added it twice.
+      setLegs((prev) => (prev.some((l) => l.raw === raw) ? prev : [...prev, { raw, label }]))
+    } else {
+      if (!teamCode.trim()) return
+      const raw = buildTeamLeg(teamCode, numValue)
+      const nickname = teamRoster('nfl').find((t) => t.code === teamCode)?.nickname ?? teamCode.toUpperCase()
+      const label = `${nickname} · Points ${numValue}+`
+      setLegs((prev) => (prev.some((l) => l.raw === raw) ? prev : [...prev, { raw, label }]))
+    }
   }
 
   function removeLeg(i: number) {
@@ -148,11 +191,6 @@ export default function SapZillaPage() {
       try {
         const res = await runLabImage(imageDataUri, { since, post, season: seasonOnly })
         setResult(res)
-        // Read legs come back as editable text, per the contract's own UX
-        // ask — pre-fill the raw box so a misread leg can be fixed and
-        // re-run free as typed legs, rather than re-uploading the image.
-        setRawLegsText(res.read_from_image.legs.join('\n'))
-        setLegs([])
       } catch (e) {
         setRunError(e instanceof LabError_ ? e.message : 'Could not read that screenshot.')
       } finally {
@@ -161,15 +199,13 @@ export default function SapZillaPage() {
       return
     }
 
-    const rawLines = rawLegsText.split('\n').map((l) => l.trim()).filter(Boolean)
-    const allLegs = [...legs, ...rawLines].slice(0, MAX_LEGS)
-    if (allLegs.length === 0) {
+    if (legs.length === 0) {
       setRunError('Add at least one leg first.')
       return
     }
     setRunning(true)
     try {
-      const res = await runLabLegs(allLegs, { since, post, season: seasonOnly })
+      const res = await runLabLegs(legs.map((l) => l.raw), { since, post, season: seasonOnly })
       setResult(res)
     } catch (e) {
       setRunError(e instanceof LabError_ ? e.message : 'Something went wrong.')
@@ -179,9 +215,17 @@ export default function SapZillaPage() {
   }
 
   const imageResult = result && 'read_from_image' in result ? (result as LabImageResult) : null
+  const statOption = labStatOption(sport, stat)
+  const activeCategories = LAB_CATEGORIES[sport]
+  const activeCategory = activeCategories.find((c) => c.key === category) ?? activeCategories[0]
 
   return (
-    <div className="min-h-dvh w-full overflow-y-auto" style={{ backgroundColor: C.surface, color: C.textBright, fontFamily: 'monospace' }}>
+    // h-dvh + overflow-y-auto, not min-h-dvh — body has a global
+    // `overflow: hidden` (src/index.css), so this page needs its own
+    // capped-height scroll container, same fix as {team.metrics}. Without
+    // it, content past the fold (the "run it" button included) was just
+    // clipped with no way to reach it (reported 2026-10-19).
+    <div className="h-dvh w-full overflow-y-auto" style={{ backgroundColor: C.surface, color: C.textBright, fontFamily: 'monospace' }}>
       <div className="flex items-center justify-between gap-3 px-6 py-4" style={{ borderBottom: `1px solid ${C.border}` }}>
         <div className="flex items-center gap-3">
           <span className="font-mono font-bold text-[15px] rounded px-2 py-1" style={{ color: C.accent, border: `1px solid ${C.accent}` }}>
@@ -232,7 +276,7 @@ export default function SapZillaPage() {
                   <button
                     key={k}
                     type="button"
-                    onClick={() => setKind(k)}
+                    onClick={() => selectKind(k)}
                     className="font-mono text-[12px] font-bold px-3 py-1.5 rounded"
                     style={{ border: `1px solid ${kind === k ? C.accent : C.border}`, color: kind === k ? C.accent : C.textDim }}
                   >
@@ -287,31 +331,67 @@ export default function SapZillaPage() {
             </select>
           )}
 
+          {/* Category → stat chips — no raw stat codes or syntax shown
+              anywhere, same spirit as {team.metrics}'s click-to-view menus
+              (owner ask, 2026-10-19). Team legs skip this entirely; points
+              is the only team line for now. */}
+          {kind === 'player' && (
+            <>
+              <div className="flex flex-wrap gap-2">
+                {activeCategories.map((c) => (
+                  <button
+                    key={c.key}
+                    type="button"
+                    onClick={() => selectCategory(c.key)}
+                    className="font-mono text-[12px] px-2.5 py-1 rounded"
+                    style={{ border: `1px solid ${category === c.key ? C.accent : C.border}`, color: category === c.key ? C.accent : C.textDim }}
+                  >
+                    {c.label}
+                  </button>
+                ))}
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {activeCategory.stats.map((sVal) => {
+                  const opt = labStatOption(sport, sVal)
+                  if (!opt) return null
+                  return (
+                    <button
+                      key={sVal}
+                      type="button"
+                      onClick={() => selectStat(sVal)}
+                      className="font-mono text-[12px] px-2.5 py-1 rounded"
+                      style={{ border: `1px solid ${stat === sVal ? C.accent : C.border}`, color: stat === sVal ? C.accent : C.textDim }}
+                    >
+                      {opt.label}
+                    </button>
+                  )
+                })}
+              </div>
+            </>
+          )}
+
           <div className="flex flex-wrap gap-2 items-center">
-            {kind === 'player' ? (
-              <select value={stat} onChange={(e) => setStat(e.target.value)} className="rounded px-2 py-1.5 font-mono text-[12px]" style={fieldStyle()}>
-                {LAB_STATS[sport].map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
-              </select>
-            ) : (
-              <span className="font-mono text-[12px]" style={{ color: C.textDim }}>points</span>
-            )}
-            {kind === 'player' && sport === 'nfl' && (
+            <span className="font-mono text-[12px] font-bold" style={{ color: C.textBright }}>
+              {kind === 'player' ? statOption?.label ?? stat : 'Points'}
+            </span>
+            {kind === 'player' && labStatSupportsScope(sport, stat) && (
               <select value={scope} onChange={(e) => setScope(e.target.value as LabScope)} className="rounded px-2 py-1.5 font-mono text-[12px]" style={fieldStyle()}>
                 {LAB_NFL_SCOPES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
               </select>
             )}
             <span className="font-mono text-[12px]" style={{ color: C.textDim }}>at least</span>
             <input
-              type="number"
-              value={num}
-              onChange={(e) => setNum(Number(e.target.value) || 0)}
+              type="text"
+              inputMode="numeric"
+              value={numText}
+              onChange={(e) => setNumText(e.target.value.replace(/[^\d]/g, '').slice(0, 4))}
               className="w-20 rounded px-2 py-1.5 font-mono text-[12px]"
               style={fieldStyle()}
             />
             <button
               type="button"
               onClick={addLegFromPicker}
-              disabled={legs.length >= MAX_LEGS || (kind === 'player' ? !selectedPlayer : !teamCode)}
+              disabled={legs.length >= MAX_LEGS || numValue <= 0 || (kind === 'player' ? !selectedPlayer : !teamCode)}
               className="font-mono text-[12px] font-bold px-3 py-1.5 rounded disabled:opacity-40"
               style={{ border: `1px solid ${C.accent}`, color: C.accent }}
             >
@@ -323,29 +403,26 @@ export default function SapZillaPage() {
             <div className="space-y-1.5">
               {legs.map((leg, i) => (
                 <div key={i} className="flex items-center justify-between gap-2 rounded px-2.5 py-1.5" style={{ backgroundColor: C.surface, border: `1px solid ${C.border}` }}>
-                  <span className="font-mono text-[12px]" style={{ color: C.textBright }}>{leg}</span>
+                  <span className="font-mono text-[12px]" style={{ color: C.textBright }}>{leg.label}</span>
                   <button type="button" onClick={() => removeLeg(i)} className="font-mono text-[12px]" style={{ color: C.textDim }}>✕</button>
                 </div>
               ))}
             </div>
           )}
 
-          <div>
-            <div className="font-mono text-[10px] uppercase tracking-widest mb-1" style={{ color: C.textDim }}>
-              or type legs directly ({legs.length + (rawLegsText.trim() ? rawLegsText.split('\n').filter((l) => l.trim()).length : 0)}/{MAX_LEGS})
-            </div>
-            <textarea
-              value={rawLegsText}
-              onChange={(e) => setRawLegsText(e.target.value)}
-              placeholder={LAB_SYNTAX_EXAMPLES.join('\n')}
-              rows={3}
-              className="w-full rounded px-3 py-2 font-mono text-[12px]"
-              style={fieldStyle()}
-            />
-          </div>
+          <button
+            type="button"
+            onClick={run}
+            disabled={running}
+            className="w-full font-mono font-bold text-[14px] py-2.5 rounded disabled:opacity-50"
+            style={{ border: `1px solid ${C.accent}`, color: C.accent }}
+          >
+            {running ? 'running…' : imageDataUri ? 'read my screenshot' : 'run it'}
+          </button>
         </div>
 
-        {/* ---- screenshot ---- */}
+        {/* ---- screenshot — a separate path from the picker above, not
+            mixed into it (owner ask, 2026-10-19) ---- */}
         <div
           className="rounded-lg p-4 space-y-2 text-center"
           style={{ backgroundColor: C.surface2, border: `1px dashed ${C.border}` }}
@@ -379,7 +456,7 @@ export default function SapZillaPage() {
           {imageError && <div className="font-mono text-[11px]" style={{ color: 'oklch(0.75 0.15 30)' }}>{imageError}</div>}
         </div>
 
-        {/* ---- window ---- */}
+        {/* ---- date range ---- */}
         <div className="flex flex-wrap items-center gap-4 font-mono text-[12px]" style={{ color: C.textDim }}>
           <label className="flex items-center gap-1.5">
             since
@@ -394,16 +471,6 @@ export default function SapZillaPage() {
             <input type="checkbox" checked={seasonOnly} onChange={(e) => setSeasonOnly(e.target.checked)} /> this season only
           </label>
         </div>
-
-        <button
-          type="button"
-          onClick={run}
-          disabled={running}
-          className="w-full font-mono font-bold text-[14px] py-2.5 rounded disabled:opacity-50"
-          style={{ border: `1px solid ${C.accent}`, color: C.accent }}
-        >
-          {running ? 'running…' : imageDataUri ? 'read my screenshot' : 'run it'}
-        </button>
 
         {runError && (
           <div className="rounded px-3 py-2 font-mono text-[12px]" style={{ border: '1px solid oklch(0.6 0.2 25)', color: 'oklch(0.85 0.15 25)' }}>
