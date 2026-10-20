@@ -11,7 +11,7 @@
 // the API itself, this just avoids handing a novice user a 13-item dropdown
 // of raw stat codes (owner ask, 2026-10-19: "categories that lead to other
 // props ... then a number selector", same spirit as {team.metrics}).
-export type LabSport = 'nfl' | 'nba' | 'mlb' | 'nhl' | 'cfb'
+export type LabSport = 'nfl' | 'nba' | 'mlb' | 'nhl' | 'cfb' | 'cbb'
 
 export interface LabStatOption {
   value: string
@@ -34,12 +34,14 @@ export const LAB_SPORTS: { value: LabSport; label: string }[] = [
   { value: 'nba', label: 'NBA' },
   { value: 'mlb', label: 'MLB' },
   { value: 'nhl', label: 'NHL' },
-  // First college sport (confirmed live 2026-10-20, deploy 33558fa) — same
-  // rubric/stat keys as NFL, no quarter/half scope at all (college has no
-  // quarter-level source; GET /lab/lines marks every cfb stat's `scopes`
-  // null). "ncaaf" is accepted server-side as an alias but legs built here
-  // always use "cfb" since that's the canonical league token.
+  // First two college sports (confirmed live 2026-10-20, deploys 33558fa /
+  // 0996ea2) — same rubric/stat keys as their pro counterparts, no
+  // quarter/half scope at all (college has no period-level source; GET
+  // /lab/lines marks every cfb/cbb stat's `scopes` null). "ncaaf"/"ncaab"
+  // are accepted server-side as aliases but legs built here always use the
+  // canonical cfb/cbb tokens.
   { value: 'cfb', label: 'CFB' },
+  { value: 'cbb', label: 'CBB' },
 ]
 
 export const LAB_STATS: Record<LabSport, LabStatOption[]> = {
@@ -106,6 +108,19 @@ export const LAB_STATS: Record<LabSport, LabStatOption[]> = {
     { value: 'rlong', label: 'Longest Rush', default: 20 },
     { value: 'reclong', label: 'Longest Reception', default: 25 },
   ],
+  // Confirmed live 2026-10-20 — identical to NBA's 10 keys/defaults.
+  cbb: [
+    { value: 'pts', label: 'PTS', default: 25 },
+    { value: 'reb', label: 'REB', default: 10 },
+    { value: 'ast', label: 'AST', default: 8 },
+    { value: 'tpm', label: '3PM', default: 4 },
+    { value: 'stl', label: 'STL', default: 2 },
+    { value: 'blk', label: 'BLK', default: 2 },
+    { value: 'pra', label: 'PTS+REB+AST', default: 35 },
+    { value: 'pa', label: 'PTS+AST', default: 30 },
+    { value: 'pr', label: 'PTS+REB', default: 30 },
+    { value: 'ra', label: 'REB+AST', default: 15 },
+  ],
 }
 
 export const LAB_CATEGORIES: Record<LabSport, LabCategoryOption[]> = {
@@ -139,6 +154,14 @@ export const LAB_CATEGORIES: Record<LabSport, LabCategoryOption[]> = {
     { key: 'rushing', label: 'Rushing', stats: ['ryds', 'rtd', 'rlong'] },
     { key: 'receiving', label: 'Receiving', stats: ['rec', 'recyds', 'rectd', 'reclong'] },
     { key: 'combined', label: 'Combined', stats: ['rr', 'rrtd', 'pr'] },
+  ],
+  // Same grouping as NBA — identical stat keys.
+  cbb: [
+    { key: 'scoring', label: 'Scoring', stats: ['pts', 'tpm'] },
+    { key: 'rebounding', label: 'Rebounding', stats: ['reb'] },
+    { key: 'playmaking', label: 'Playmaking', stats: ['ast'] },
+    { key: 'defense', label: 'Defense', stats: ['stl', 'blk'] },
+    { key: 'combined', label: 'Combined', stats: ['pra', 'pa', 'pr', 'ra'] },
   ],
 }
 

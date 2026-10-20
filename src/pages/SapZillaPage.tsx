@@ -104,14 +104,17 @@ export default function SapZillaPage() {
     loadPlayerIndex().then(() => setIndexReady(true))
   }, [indexReady])
 
-  // CFB has no player-search index yet (confirmed live 2026-10-20 — GET
-  // /database/index carries nfl/nba/mlb/nhl only, zero cfb entries), even
-  // though /lab resolves CFB player names fine server-side. Without this,
-  // the "+ add leg" button would stay permanently disabled for CFB since
-  // selecting a player currently requires clicking an autocomplete match
-  // that can never appear. Falls back to the raw typed name for any sport
-  // with no index coverage — a wrong name just surfaces in the result's
-  // own errors[], same graceful-degradation rule as everywhere else here.
+  // Originally added because GET /database/index briefly carried no cfb
+  // entries at all (confirmed live 2026-10-20), which would have left the
+  // "+ add leg" button permanently disabled for CFB — selecting a player
+  // currently requires clicking an autocomplete match that could never
+  // appear. Backend added cfb/cbb to the index same day, so this is
+  // dormant in practice now (both have real coverage), but kept as a
+  // generic safety net — computed live against whatever's actually in the
+  // index, so it self-retires per sport the moment that sport gets
+  // coverage, no code change needed each time. A wrong typed name just
+  // surfaces in the result's own errors[], same graceful-degradation rule
+  // as everywhere else here.
   const sportHasPlayerIndex = PLAYER_INDEX.some((e) => e.sport === sport)
   const effectivePlayer = selectedPlayer ?? (!sportHasPlayerIndex ? playerQuery.trim() || null : null)
 
