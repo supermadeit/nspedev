@@ -334,39 +334,51 @@ export default function SapZillaPage() {
           {/* Category → stat chips — no raw stat codes or syntax shown
               anywhere, same spirit as {team.metrics}'s click-to-view menus
               (owner ask, 2026-10-19). Team legs skip this entirely; points
-              is the only team line for now. */}
+              is the only team line for now.
+              A category holding exactly one stat (NHL's old Playmaking/
+              Defense/Combined, NBA's old Rebounding/Playmaking) renders as
+              a single direct stat chip instead — no point clicking a
+              category just to reveal the one stat it contains (owner ask,
+              2026-10-26). Clicking it still goes through selectCategory,
+              which already auto-picks that lone stat. */}
           {kind === 'player' && (
             <>
               <div className="flex flex-wrap gap-2">
-                {activeCategories.map((c) => (
-                  <button
-                    key={c.key}
-                    type="button"
-                    onClick={() => selectCategory(c.key)}
-                    className="font-mono text-[12px] px-2.5 py-1 rounded"
-                    style={{ border: `1px solid ${category === c.key ? C.accent : C.border}`, color: category === c.key ? C.accent : C.textDim }}
-                  >
-                    {c.label}
-                  </button>
-                ))}
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {activeCategory.stats.map((sVal) => {
-                  const opt = labStatOption(sport, sVal)
-                  if (!opt) return null
+                {activeCategories.map((c) => {
+                  const isSingleStat = c.stats.length === 1
+                  const label = isSingleStat ? labStatOption(sport, c.stats[0])?.label ?? c.label : c.label
                   return (
                     <button
-                      key={sVal}
+                      key={c.key}
                       type="button"
-                      onClick={() => selectStat(sVal)}
+                      onClick={() => selectCategory(c.key)}
                       className="font-mono text-[12px] px-2.5 py-1 rounded"
-                      style={{ border: `1px solid ${stat === sVal ? C.accent : C.border}`, color: stat === sVal ? C.accent : C.textDim }}
+                      style={{ border: `1px solid ${category === c.key ? C.accent : C.border}`, color: category === c.key ? C.accent : C.textDim }}
                     >
-                      {opt.label}
+                      {label}
                     </button>
                   )
                 })}
               </div>
+              {activeCategory.stats.length > 1 && (
+                <div className="flex flex-wrap gap-2">
+                  {activeCategory.stats.map((sVal) => {
+                    const opt = labStatOption(sport, sVal)
+                    if (!opt) return null
+                    return (
+                      <button
+                        key={sVal}
+                        type="button"
+                        onClick={() => selectStat(sVal)}
+                        className="font-mono text-[12px] px-2.5 py-1 rounded"
+                        style={{ border: `1px solid ${stat === sVal ? C.accent : C.border}`, color: stat === sVal ? C.accent : C.textDim }}
+                      >
+                        {opt.label}
+                      </button>
+                    )
+                  })}
+                </div>
+              )}
             </>
           )}
 
