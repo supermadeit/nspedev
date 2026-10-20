@@ -2258,6 +2258,15 @@ const BOX_STAT_LABELS: Record<string, string> = {
   ppg: 'PPG',
   ppa: 'PPA',
   gwg: 'GWG',
+  // NBA -ov's combined lines (confirmed live 2026-10-26) — the internal key
+  // on query.thresholds[].stat and avg_in_matches/totals is double-
+  // underscored ("__pa__"), which the plain underscore->space fallback
+  // would otherwise render as "  pa  " instead of a real label.
+  __pa__: 'PTS+AST',
+  __pra__: 'PTS+REB+AST',
+  __pr__: 'PTS+REB',
+  __ra__: 'REB+AST',
+  __stocks__: 'STOCKS',
 }
 
 function boxStatLabel(key: string): string {

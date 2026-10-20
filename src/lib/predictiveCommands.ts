@@ -167,6 +167,14 @@ const PLAYER_OV_COMMANDS: SampleQuery[] = [
   // (nba_overview_scope_statn), first period-scoped -ov entry in this
   // catalog for NBA (NFL already had the equivalent 1h/q1 shape).
   { label: 'nba count · pts (1h, -ov)', command: 'nspe nba brunson 1h -pts20 -ov -last20', playerHint: 'brunson' },
+  // Combined lines on -ov — confirmed live 2026-10-26, same internal keys
+  // (__pa__/__pra__/__pr__/__ra__/__stocks__) the rubric and {sap.zilla}'s
+  // /lab already use. "nspe nba cade cunningham -pa30 -ov -2025" -> 48 of
+  // 64, confirmed both this stat-before-ov order and backend's own
+  // stat-after-ov order work identically.
+  { label: 'nba count · pts+ast (-ov)', command: 'nspe nba cunningham -pa30 -ov -2025', playerHint: 'cunningham' },
+  { label: 'nba count · pts+reb+ast (-ov)', command: 'nspe nba jokic -pra40 -ov -career', playerHint: 'jokic', positions: ['F', 'C'] },
+  { label: 'nba count · stocks (-ov)', command: 'nspe nba jokic -stocks2 -ov -career', playerHint: 'jokic' },
   { label: 'nba trend · double-double', command: 'nspe nba -dub -last4/5' },
   // NHL (skaters)
   { label: 'nhl overview · season line (-ov)', command: 'nspe nhl mcdavid -ov', playerHint: 'mcdavid' },
