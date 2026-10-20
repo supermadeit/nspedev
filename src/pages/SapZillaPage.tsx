@@ -299,10 +299,7 @@ export default function SapZillaPage() {
       <div className="px-6 py-6 max-w-3xl mx-auto space-y-5">
         <div className="rounded-lg p-4 font-mono text-[13px] space-y-2" style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}` }}>
           <p style={{ color: C.textBright }}>
-            Pick a prop or line, or stack a few, and {'{sap.zilla}'} counts every game it actually happened
-          </p>
-          <p style={{ color: C.textDim }}>
-            The proof to whatever you were about to take on faith.
+            Pick a prop or line, and {'{sap.zilla}'} counts every game it happened
           </p>
         </div>
 
@@ -571,7 +568,7 @@ export default function SapZillaPage() {
             </div>
           ) : (
             <button type="button" onClick={() => fileInputRef.current?.click()} className="font-mono text-[12px]" style={{ color: C.textDim }}>
-              drop a screenshot of a slip here, or click to choose one — {user ? 'free question or 1 credit' : 'sign in required'}
+              drop a screenshot of a slip here, or click to choose one{user ? '' : ' — sign in required'}
             </button>
           )}
           {imageError && <div className="font-mono text-[11px]" style={{ color: 'oklch(0.75 0.15 30)' }}>{imageError}</div>}
