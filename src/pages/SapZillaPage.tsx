@@ -26,15 +26,17 @@ import {
   LAB_NFL_SCOPES,
   LAB_TEAM_STATS,
   LAB_TEAM_SCOPES,
+  LAB_LEAGUE_POSITIONS,
   labStatOption,
   labTeamStatOption,
   labStatSupportsScope,
   buildPlayerLeg,
   buildTeamLeg,
+  buildLeagueLeg,
   type LabSport,
   type LabScope,
 } from '@/lib/labLegs'
-import { runLabLegs, runLabImage, LabError_, type LabResult, type LabImageResult } from '@/lib/labApi'
+import { runLabLegs, runLabImage, LabError_, type LabResult, type LabImageResult, type LabLeagueView } from '@/lib/labApi'
 import madeitLogo from '@/assets/images/madeit-tech-logo-v2.jpeg'
 
 const MAX_LEGS = 12
@@ -59,13 +61,17 @@ export default function SapZillaPage() {
 
   // ---- composer state ----
   const [sport, setSport] = useState<LabSport>('nfl')
-  const [kind, setKind] = useState<'player' | 'team'>('player')
+  const [kind, setKind] = useState<'player' | 'team' | 'league'>('player')
   const [playerQuery, setPlayerQuery] = useState('')
   const [playerMatches, setPlayerMatches] = useState<PlayerMatch[]>([])
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null)
   const [teamCode, setTeamCode] = useState('')
   const [teamStat, setTeamStat] = useState(LAB_TEAM_STATS[0].value)
   const [teamScope, setTeamScope] = useState<LabScope>('season')
+  // League-wide legs reuse the same category/stat state as player legs
+  // (same per-sport stat catalog, confirmed live) — only "position or any"
+  // is unique to this kind.
+  const [leaguePosition, setLeaguePosition] = useState('any')
   const [category, setCategory] = useState(LAB_CATEGORIES.nfl[0].key)
   const [stat, setStat] = useState(LAB_CATEGORIES.nfl[0].stats[0])
   const [scope, setScope] = useState<LabScope>('season')
@@ -77,7 +83,10 @@ export default function SapZillaPage() {
   const [legs, setLegs] = useState<BuiltLeg[]>([])
 
   // ---- date range ----
-  const [since, setSince] = useState(2018)
+  // Default bumped 2018 -> 2020 (owner ask, 2026-10-26: "the decade, not
+  // 2018") — matches GET /lab/lines' own options.since. 2018/2019 stay
+  // selectable in the dropdown below, just not pre-selected anymore.
+  const [since, setSince] = useState(2020)
   const [post, setPost] = useState(false)
   const [seasonOnly, setSeasonOnly] = useState(false)
 
@@ -124,7 +133,12 @@ export default function SapZillaPage() {
     setStat(cat.stats[0])
     setNumText(String(labStatOption(sport, cat.stats[0])?.default ?? 0))
     setScope('season')
-    if (sport !== 'nfl') setKind('player')
+    setLeaguePosition('any')
+    // Team legs are NFL-only — drop back to player if a non-NFL sport gets
+    // picked while "team" was selected. League-wide works for every sport,
+    // so it's left alone here (functional update so this effect doesn't
+    // need `kind` in its deps).
+    if (sport !== 'nfl') setKind((k) => (k === 'team' ? 'player' : k))
   }, [sport])
 
   useEffect(() => {
@@ -135,8 +149,10 @@ export default function SapZillaPage() {
     setPlayerMatches(searchPlayers(playerQuery, 6, sport))
   }, [playerQuery, sport])
 
-  function selectKind(k: 'player' | 'team') {
+  function selectKind(k: 'player' | 'team' | 'league') {
     setKind(k)
+    // player and league share the same stat catalog/state, so only team
+    // has a different source for the default.
     setNumText(String(k === 'team' ? labTeamStatOption(teamStat)?.default ?? 0 : labStatOption(sport, stat)?.default ?? 0))
   }
 
@@ -172,13 +188,23 @@ export default function SapZillaPage() {
       // Dedupe on add — caught live (owner screenshot, 2026-10-19): clicking
       // "+ add leg" twice on the same selection silently added it twice.
       setLegs((prev) => (prev.some((l) => l.raw === raw) ? prev : [...prev, { raw, label }]))
-    } else {
+    } else if (kind === 'team') {
       if (!teamCode.trim()) return
       const raw = buildTeamLeg(teamCode, teamStat, teamScope, numValue)
       const nickname = teamRoster('nfl').find((t) => t.code === teamCode)?.nickname ?? teamCode.toUpperCase()
       const statLabel = labTeamStatOption(teamStat)?.label ?? teamStat
       const scopeLabel = teamScope === 'season' ? '' : ` (${LAB_TEAM_SCOPES.find((s) => s.value === teamScope)?.label})`
       const label = `${nickname} · ${statLabel} ${numValue}+${scopeLabel}`
+      setLegs((prev) => (prev.some((l) => l.raw === raw) ? prev : [...prev, { raw, label }]))
+    } else {
+      // league-wide — a population rate, not one player/team's history. No
+      // extra required field beyond the stat/number already needed for
+      // every kind (leaguePosition defaults to "any", always valid).
+      const raw = buildLeagueLeg(sport, leaguePosition, stat, numValue)
+      const sportLabel = LAB_SPORTS.find((s) => s.value === sport)?.label ?? sport
+      const posLabel = leaguePosition === 'any' ? 'any position' : leaguePosition
+      const statLabel = labStatOption(sport, stat)?.label ?? stat
+      const label = `${sportLabel} ${posLabel} · ${statLabel} ${numValue}+`
       setLegs((prev) => (prev.some((l) => l.raw === raw) ? prev : [...prev, { raw, label }]))
     }
   }
@@ -301,22 +327,18 @@ export default function SapZillaPage() {
                 {s.label}
               </button>
             ))}
-            {sport === 'nfl' && (
-              <>
-                <span className="w-px self-stretch" style={{ backgroundColor: C.border }} />
-                {(['player', 'team'] as const).map((k) => (
-                  <button
-                    key={k}
-                    type="button"
-                    onClick={() => selectKind(k)}
-                    className="font-mono text-[12px] font-bold px-3 py-1.5 rounded"
-                    style={{ border: `1px solid ${kind === k ? C.accent : C.border}`, color: kind === k ? C.accent : C.textDim }}
-                  >
-                    {k === 'player' ? 'player' : 'team'}
-                  </button>
-                ))}
-              </>
-            )}
+            <span className="w-px self-stretch" style={{ backgroundColor: C.border }} />
+            {(sport === 'nfl' ? (['player', 'team', 'league'] as const) : (['player', 'league'] as const)).map((k) => (
+              <button
+                key={k}
+                type="button"
+                onClick={() => selectKind(k)}
+                className="font-mono text-[12px] font-bold px-3 py-1.5 rounded"
+                style={{ border: `1px solid ${kind === k ? C.accent : C.border}`, color: kind === k ? C.accent : C.textDim }}
+              >
+                {k === 'player' ? 'player' : k === 'team' ? 'team' : 'league-wide'}
+              </button>
+            ))}
           </div>
 
           {kind === 'player' ? (
@@ -354,13 +376,38 @@ export default function SapZillaPage() {
                 </div>
               )}
             </div>
-          ) : (
+          ) : kind === 'team' ? (
             <select value={teamCode} onChange={(e) => setTeamCode(e.target.value)} className="w-full rounded px-3 py-2 font-mono text-[13px]" style={fieldStyle()}>
               <option value="">select a team…</option>
               {teamRoster('nfl').map((t) => (
                 <option key={t.code} value={t.code}>{t.nickname} ({t.code})</option>
               ))}
             </select>
+          ) : (
+            // League-wide — a position (or "any") in place of one player.
+            // MLB has no position breakdown at all (confirmed live), so it
+            // only ever offers "any", never a position chip.
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => setLeaguePosition('any')}
+                className="font-mono text-[12px] px-2.5 py-1 rounded"
+                style={{ border: `1px solid ${leaguePosition === 'any' ? C.accent : C.border}`, color: leaguePosition === 'any' ? C.accent : C.textDim }}
+              >
+                any position
+              </button>
+              {LAB_LEAGUE_POSITIONS[sport].map((pos) => (
+                <button
+                  key={pos}
+                  type="button"
+                  onClick={() => setLeaguePosition(pos)}
+                  className="font-mono text-[12px] px-2.5 py-1 rounded"
+                  style={{ border: `1px solid ${leaguePosition === pos ? C.accent : C.border}`, color: leaguePosition === pos ? C.accent : C.textDim }}
+                >
+                  {pos}
+                </button>
+              ))}
+            </div>
           )}
 
           {/* Category → stat chips — no raw stat codes or syntax shown
@@ -372,7 +419,7 @@ export default function SapZillaPage() {
               category just to reveal the one stat it contains (owner ask,
               2026-10-26). Clicking it still goes through selectCategory,
               which already auto-picks that lone stat. */}
-          {kind === 'player' && (
+          {(kind === 'player' || kind === 'league') && (
             <>
               <div className="flex flex-wrap gap-2">
                 {activeCategories.map((c) => {
@@ -435,8 +482,12 @@ export default function SapZillaPage() {
 
           <div className="flex flex-wrap gap-2 items-center">
             <span className="font-mono text-[12px] font-bold" style={{ color: C.textBright }}>
-              {kind === 'player' ? statOption?.label ?? stat : labTeamStatOption(teamStat)?.label ?? teamStat}
+              {kind === 'team' ? labTeamStatOption(teamStat)?.label ?? teamStat : statOption?.label ?? stat}
             </span>
+            {/* Player legs only — league-wide legs are whole-game only, no
+                scope ever (a scoped league leg errors server-side,
+                confirmed live 2026-10-26), even for a stat that supports
+                scope as a player leg. */}
             {kind === 'player' && labStatSupportsScope(sport, stat) && (
               <select value={scope} onChange={(e) => setScope(e.target.value as LabScope)} className="rounded px-2 py-1.5 font-mono text-[12px]" style={fieldStyle()}>
                 {LAB_NFL_SCOPES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
@@ -459,7 +510,11 @@ export default function SapZillaPage() {
             <button
               type="button"
               onClick={addLegFromPicker}
-              disabled={legs.length >= MAX_LEGS || numValue <= 0 || (kind === 'player' ? !effectivePlayer : !teamCode)}
+              disabled={
+                legs.length >= MAX_LEGS ||
+                numValue <= 0 ||
+                (kind === 'player' ? !effectivePlayer : kind === 'team' ? !teamCode : false)
+              }
               className="font-mono text-[12px] font-bold px-3 py-1.5 rounded disabled:opacity-40"
               style={{ border: `1px solid ${C.accent}`, color: C.accent }}
             >
@@ -586,15 +641,14 @@ function LabResults({ result, imageResult }: { result: LabResult; imageResult: L
       {result.legs.length > 0 && (
         <div className="rounded-lg overflow-hidden" style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}` }}>
           {result.legs.map((leg, i) => (
-            <div
-              key={i}
-              className="flex items-center justify-between gap-3 px-4 py-2.5 font-mono text-[13px]"
-              style={{ borderBottom: i === result.legs.length - 1 ? 'none' : `1px solid ${C.border}` }}
-            >
-              <span style={{ color: C.textBright }}>{leg.text}</span>
-              <span className="whitespace-nowrap font-bold" style={{ color: C.accent }}>
-                {leg.hits} of {leg.n} <span className="font-normal" style={{ color: C.textDim }}>({(leg.pct * 100).toFixed(0)}%)</span>
-              </span>
+            <div key={i} style={{ borderBottom: i === result.legs.length - 1 ? 'none' : `1px solid ${C.border}` }}>
+              <div className="flex items-center justify-between gap-3 px-4 py-2.5 font-mono text-[13px]">
+                <span style={{ color: C.textBright }}>{leg.text}</span>
+                <span className="whitespace-nowrap font-bold" style={{ color: C.accent }}>
+                  {leg.hits} of {leg.n} <span className="font-normal" style={{ color: C.textDim }}>({(leg.pct * 100).toFixed(0)}%)</span>
+                </span>
+              </div>
+              {leg.league_view && <LeagueLegDetail view={leg.league_view} />}
             </div>
           ))}
         </div>
@@ -604,7 +658,7 @@ function LabResults({ result, imageResult }: { result: LabResult; imageResult: L
         <div className="rounded-lg p-4 font-mono text-[13px] space-y-1" style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}` }}>
           <div style={{ color: C.textBright }}>{result.card.together}</div>
           {showIndependent && (
-            <div style={{ color: C.textDim }}>if independent: {(result.joint.independent_pct * 100).toFixed(0)}%</div>
+            <div style={{ color: C.textDim }}>if independent: {((result.joint.independent_pct ?? 0) * 100).toFixed(0)}%</div>
           )}
         </div>
       )}
@@ -627,6 +681,46 @@ function LabResults({ result, imageResult }: { result: LabResult; imageResult: L
           <img src={madeitLogo} alt="nspe" className="pointer-events-none" style={{ width: '22px', height: '36px', objectFit: 'contain' }} />
         </div>
       </div>
+    </div>
+  )
+}
+
+// League-wide legs measure a population, not one player — the owner wants
+// both units visible at once (owner ask, 2026-10-26): the row above this
+// already shows the player-game rate (hits/n on the leg itself); this
+// panel adds the per-GAME view (at_least_one_complete / both_sides, both
+// measured over complete_games — the games where both sides' data is on
+// file), the top-5 individual leaderboard, and the data-coverage note,
+// printed verbatim per the contract rather than reworded.
+function pct(split: { hits: number; n: number }): string {
+  return split.n > 0 ? `${((split.hits / split.n) * 100).toFixed(0)}%` : '—'
+}
+
+function LeagueLegDetail({ view }: { view: LabLeagueView }) {
+  const { games, top, note } = view
+  return (
+    <div className="px-4 pb-3 font-mono text-[12px] space-y-2" style={{ color: C.textDim, borderTop: `1px solid ${C.border}` }}>
+      <div className="pt-2.5 uppercase tracking-widest text-[10px]">per game, {view.unit}</div>
+      <div className="flex flex-wrap gap-x-5 gap-y-1">
+        <span>
+          at least one side hit: <span style={{ color: C.textBright }}>{games.at_least_one_complete.hits} of {games.at_least_one_complete.n}</span>
+          {' '}({pct(games.at_least_one_complete)})
+        </span>
+        <span>
+          both sides hit: <span style={{ color: C.textBright }}>{games.both_sides.hits} of {games.both_sides.n}</span>
+          {' '}({pct(games.both_sides)})
+        </span>
+      </div>
+      {top.length > 0 && (
+        <div className="flex flex-wrap gap-x-4 gap-y-1">
+          {top.map((p, i) => (
+            <span key={i}>
+              <span style={{ color: C.textBright }}>{p.player}</span> {p.hits}/{p.n}
+            </span>
+          ))}
+        </div>
+      )}
+      {note && <div className="italic">{note}</div>}
     </div>
   )
 }

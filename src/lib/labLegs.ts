@@ -243,6 +243,29 @@ export function buildTeamLeg(teamCode: string, stat: string, scope: LabScope, n:
   return `nfl team ${teamCode.toLowerCase()} ${buildLineToken(stat, scope, n)}`
 }
 
+// League-wide prop legs — a population rate ("how often does a QB start
+// clear 2+ pass TD"), not one player's history. Confirmed live 2026-10-26
+// (deploy abe7462). Every sport supports this (unlike team legs, which stay
+// NFL-only); MLB has no position breakdown at all, so its picker should
+// only ever offer "any", never a position chip row.
+export const LAB_LEAGUE_POSITIONS: Record<LabSport, string[]> = {
+  nfl: ['QB', 'RB', 'WR', 'TE'],
+  cfb: ['QB', 'RB', 'WR', 'TE'],
+  nba: ['G', 'F', 'C'],
+  cbb: ['G', 'F', 'C'],
+  nhl: ['C', 'LW', 'RW', 'D'],
+  mlb: [],
+}
+
+// Same stat catalog player legs already use for this sport (confirmed
+// live — "nfl qb -ptd2", "cfb wr -recyds100", "nba g -pts25" all reuse the
+// exact per-sport stat keys already in LAB_STATS). Whole-game only, no
+// scope ever — a scoped league leg errors server-side ("unknown line"),
+// confirmed live.
+export function buildLeagueLeg(sport: LabSport, positionOrAny: string, stat: string, n: number): string {
+  return `${sport} ${positionOrAny.toLowerCase()} -${stat}${n}`
+}
+
 // Kept for when typed syntax returns alongside a legend (owner ask,
 // 2026-10-19: picker-only for now) — not referenced by the page currently.
 export const LAB_SYNTAX_EXAMPLES = [

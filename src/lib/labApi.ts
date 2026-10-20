@@ -17,12 +17,45 @@ export interface LabSplit {
   n: number
 }
 
+// A league-wide leg's unit is a PLAYER-GAME population, not a single
+// player's history — confirmed live 2026-10-26 (deploy abe7462). The owner
+// wants both rates shown/toggleable: the headline player-game rate (top-
+// level hits/n/pct on the leg itself) and a per-GAME view using
+// at_least_one_complete/both_sides (both measured over complete_games —
+// the games where both sides' data is on file).
+export interface LabLeagueTopPlayer {
+  player: string
+  hits: number
+  n: number
+  pct: number
+}
+
+export interface LabLeagueView {
+  unit: string
+  games: {
+    games_on_file: number
+    at_least_one: LabSplit
+    complete_games: number
+    at_least_one_complete: LabSplit
+    both_sides: LabSplit
+  }
+  by_season: Record<string, LabSplit>
+  // Top 5 max, each clearing a minimum games-played floor server-side.
+  top: LabLeagueTopPlayer[]
+  // A count on this payload, not a list (confirmed live) — how many
+  // distinct players fed the population.
+  players: number
+  // Print verbatim on the card — the same "current players only" caveat
+  // every other history-window number on this site carries.
+  note: string
+}
+
 export interface LabLeg {
   text: string
   league: string
-  kind: 'player' | 'team'
-  player: string
-  team: string
+  kind: 'player' | 'team' | 'league'
+  player: string | null
+  team: string | null
   line: string
   hits: number
   n: number
@@ -30,10 +63,14 @@ export interface LabLeg {
   // Opponent/venue filtering ("vs TEAM" = every meeting, "@TEAM" = only
   // games at that team) and the season/last-10 breakdown — confirmed live
   // 2026-10-19, see nspe-v2-da. opponent/venue are null when the leg didn't
-  // use either suffix; splits is always present.
+  // use either suffix; splits is always present on player/team legs, an
+  // empty object on league legs (confirmed live — no per-player splits
+  // concept for a population rate).
   opponent?: string | null
   venue?: string | null
-  splits?: { season: LabSplit; last10: LabSplit }
+  splits?: { season?: LabSplit; last10?: LabSplit }
+  // League-wide legs only (kind === 'league') — confirmed live 2026-10-26.
+  league_view?: LabLeagueView
 }
 
 export interface LabCluster {
@@ -45,9 +82,12 @@ export interface LabCluster {
 }
 
 export interface LabJoint {
-  pct: number
-  method: 'single' | 'measured' | 'independent' | 'mixed'
-  independent_pct: number
+  // null when every leg is a league leg, or the only legs present can't
+  // joint-measure (confirmed live) — a population rate "is not an event on
+  // a slip," so it never enters the together line.
+  pct: number | null
+  method: 'single' | 'measured' | 'independent' | 'mixed' | 'none'
+  independent_pct: number | null
   clusters: LabCluster[]
 }
 
@@ -134,9 +174,12 @@ async function postLab<T>(body: Record<string, unknown>): Promise<T> {
   throw new LabError_(lastError?.status ?? 0, lastError?.message ?? 'Something went wrong.')
 }
 
-/** Typed legs — free, no auth required. */
+/** Typed legs — free, no auth required. Default window bumped 2018 -> 2020
+ * (owner ask, 2026-10-26: "the decade, not 2018") — matches GET /lab/lines'
+ * own options.since, confirmed live. 2018/2019 are still valid if someone
+ * explicitly asks (confirmed live too), just not the default anymore. */
 export function runLabLegs(legs: string[], opts: LabOptions = {}): Promise<LabResult> {
-  return postLab<LabResult>({ legs, since: opts.since ?? 2018, post: opts.post ?? false, season: opts.season ?? false })
+  return postLab<LabResult>({ legs, since: opts.since ?? 2020, post: opts.post ?? false, season: opts.season ?? false })
 }
 
 /** A screenshot of a slip — needs a signed-in session; spends a free
@@ -144,7 +187,7 @@ export function runLabLegs(legs: string[], opts: LabOptions = {}): Promise<LabRe
 export function runLabImage(dataUri: string, opts: LabOptions = {}): Promise<LabImageResult> {
   return postLab<LabImageResult>({
     image: dataUri,
-    since: opts.since ?? 2018,
+    since: opts.since ?? 2020,
     post: opts.post ?? false,
     season: opts.season ?? false,
   })
