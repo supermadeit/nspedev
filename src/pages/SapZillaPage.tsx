@@ -618,6 +618,14 @@ function pctColorFromSplit(split: { hits: number; n: number }): string {
 
 function LabResults({ result, imageResult }: { result: LabResult; imageResult: LabImageResult | null }) {
   const showIndependent = result.joint.clusters.some((c) => c.method !== 'single') && result.joint.method !== 'single'
+  // A pure league-wide ticket's share poster used to repeat the backend's
+  // card.headline/card.lines text, which is phrased off the player-game
+  // rate (the same "82 of 189" the leg row no longer shows) — a second,
+  // conflicting number right under the first box's correct one. Owner ask,
+  // 2026-10-27: fold the two into one box. For an all-league ticket we skip
+  // the separate poster entirely and just carry the brand mark into the
+  // bottom of the legs box that already has the right numbers.
+  const leagueOnly = result.legs.length > 0 && result.legs.every((l) => l.kind === 'league' && l.league_view)
   return (
     <div className="space-y-4">
       {imageResult && (
@@ -677,6 +685,11 @@ function LabResults({ result, imageResult }: { result: LabResult; imageResult: L
               {leg.league_view && <LeagueLegDetail view={leg.league_view} />}
             </div>
           ))}
+          {leagueOnly && (
+            <div className="flex justify-start px-4 py-3" style={{ borderTop: `1px solid ${C.border}` }}>
+              <img src={madeitLogo} alt="nspe" className="pointer-events-none" style={{ width: '22px', height: '36px', objectFit: 'contain' }} />
+            </div>
+          )}
         </div>
       )}
 
@@ -698,20 +711,24 @@ function LabResults({ result, imageResult }: { result: LabResult; imageResult: L
           as {team.metrics}' single-stat shareables. No persisted share
           link yet (that's a fast-follow, same as team.metrics got one
           after its own base page shipped) — this is the "good enough to
-          screenshot" version for now. */}
-      <div className="rounded-lg overflow-hidden" style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}` }}>
-        <div className="px-5 py-5 text-center">
-          <div className="font-mono font-bold text-[18px]" style={{ color: C.accent }}>{result.card.headline}</div>
-          <div className="mt-3 space-y-1">
-            {result.card.lines.map((l, i) => (
-              <div key={i} className="font-mono text-[13px]" style={{ color: C.textBright }}>{l}</div>
-            ))}
+          screenshot" version for now. Skipped for an all-league ticket —
+          see leagueOnly above, the logo rides along on the legs box instead
+          so the per-game numbers only ever appear once. */}
+      {!leagueOnly && (
+        <div className="rounded-lg overflow-hidden" style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}` }}>
+          <div className="px-5 py-5 text-center">
+            <div className="font-mono font-bold text-[18px]" style={{ color: C.accent }}>{result.card.headline}</div>
+            <div className="mt-3 space-y-1">
+              {result.card.lines.map((l, i) => (
+                <div key={i} className="font-mono text-[13px]" style={{ color: C.textBright }}>{l}</div>
+              ))}
+            </div>
+          </div>
+          <div className="flex justify-start px-5 pb-4">
+            <img src={madeitLogo} alt="nspe" className="pointer-events-none" style={{ width: '22px', height: '36px', objectFit: 'contain' }} />
           </div>
         </div>
-        <div className="flex justify-start px-5 pb-4">
-          <img src={madeitLogo} alt="nspe" className="pointer-events-none" style={{ width: '22px', height: '36px', objectFit: 'contain' }} />
-        </div>
-      </div>
+      )}
     </div>
   )
 }
