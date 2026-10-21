@@ -652,8 +652,26 @@ function LabResults({ result, imageResult }: { result: LabResult; imageResult: L
             <div key={i} style={{ borderBottom: i === result.legs.length - 1 ? 'none' : `1px solid ${C.border}` }}>
               <div className="flex items-center justify-between gap-3 px-4 py-2.5 font-mono text-[13px]">
                 <span style={{ color: C.textBright }}>{leg.text}</span>
+                {/* League-wide legs lead with the per-GAME "at least one
+                    side" rate, not leg.hits/leg.n (the player-GAME rate) —
+                    owner ask, 2026-10-27: the player-game number reads as a
+                    much lower (and confusing) percentage for the exact same
+                    population, so it no longer surfaces at all; the per-game
+                    split is the one real people read as "the odds." */}
                 <span className="whitespace-nowrap font-bold" style={{ color: C.accent }}>
-                  {leg.hits} of {leg.n} <span className="font-normal" style={{ color: pctColor(leg.pct) }}>({(leg.pct * 100).toFixed(0)}%)</span>
+                  {leg.league_view ? (
+                    <>
+                      {leg.league_view.games.at_least_one_complete.hits} of {leg.league_view.games.at_least_one_complete.n}{' '}
+                      <span className="font-normal" style={{ color: pctColorFromSplit(leg.league_view.games.at_least_one_complete) }}>
+                        ({pct(leg.league_view.games.at_least_one_complete)})
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      {leg.hits} of {leg.n}{' '}
+                      <span className="font-normal" style={{ color: pctColor(leg.pct) }}>({(leg.pct * 100).toFixed(0)}%)</span>
+                    </>
+                  )}
                 </span>
               </div>
               {leg.league_view && <LeagueLegDetail view={leg.league_view} />}
@@ -715,10 +733,8 @@ function LeagueLegDetail({ view }: { view: LabLeagueView }) {
     <div className="px-4 pb-3 font-mono text-[12px] space-y-2" style={{ color: C.textDim, borderTop: `1px solid ${C.border}` }}>
       <div className="pt-2.5 uppercase tracking-widest text-[10px]">per game, {view.unit}</div>
       <div className="flex flex-wrap gap-x-5 gap-y-1">
-        <span>
-          at least one side hit: <span style={{ color: C.textBright }}>{games.at_least_one_complete.hits} of {games.at_least_one_complete.n}</span>
-          {' '}(<span style={{ color: pctColorFromSplit(games.at_least_one_complete) }}>{pct(games.at_least_one_complete)}</span>)
-        </span>
+        {/* "at least one side hit" now leads the row above as the headline
+            number — not repeated here to avoid showing the same stat twice. */}
         <span>
           both sides hit: <span style={{ color: C.textBright }}>{games.both_sides.hits} of {games.both_sides.n}</span>
           {' '}(<span style={{ color: pctColorFromSplit(games.both_sides) }}>{pct(games.both_sides)}</span>)
