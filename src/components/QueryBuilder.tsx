@@ -1939,8 +1939,14 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
           row. {YY} not {YYYY} to keep the row compact; the {older} dropdown
           covers 2010-2019. Pre-2010 (career-spanning players) isn't
           reachable here yet — planned manual-YYYY-input follow-up, not
-          built. */}
-      {optionalOpen && isBuilderQuery && !firstPaActive && (
+          built.
+          Owner ask, 2026-10-27: no longer gated behind {more options} — it
+          was getting missed/hidden there. Always visible at the bottom now,
+          same as period/{more options} used to leave it when a year was
+          already set (optionalOpen's own Boolean(... || yearFilter) check
+          already treated an active year as "don't hide this," this just
+          makes that the default instead of the exception). */}
+      {isBuilderQuery && !firstPaActive && (
         <div className="mb-3">
           <SLabel>season {'{optional}'}</SLabel>
           <div className="flex gap-1.5 flex-wrap items-center">
