@@ -7799,7 +7799,15 @@ function App() {
           }
         >
           <div
-            className="flex flex-none items-center justify-between px-5 py-3 select-none"
+            // Two stacked rows on mobile (owner report, 2026-10-28,
+            // screenshot: a long wrapped command title and the button
+            // cluster sharing one `items-center` row left them visually
+            // interleaved — the buttons, vertically centered against the
+            // whole multi-line title block, landed mid-sentence instead of
+            // reading as a separate control row). Desktop's title rarely
+            // wraps at this panel's width, so it keeps the single
+            // space-between row.
+            className={isMobile ? 'flex flex-col flex-none gap-2 px-5 py-3 select-none' : 'flex flex-none items-center justify-between px-5 py-3 select-none'}
             style={{
               backgroundColor: 'oklch(0.18 0 0)',
               borderBottom: '1px solid oklch(0.30 0 0)',
@@ -7891,7 +7899,7 @@ function App() {
                 ? `${lastQuery} — ${queryResults.length}results`
                 : 'NSPE — Command Legend'}
             </span>
-            <div className="flex items-center gap-3 flex-none">
+            <div className={isMobile ? 'flex items-center justify-end gap-3 flex-none flex-wrap' : 'flex items-center gap-3 flex-none'}>
               {/* {return to chat}: back to a parked conversation (see
                   parkedChatTurns' comment) without losing it or re-asking.
                   Shown whenever one's parked and not already showing —
@@ -7921,7 +7929,19 @@ function App() {
                   run), same as {pocket} right next to it. */}
               <button
                 type="button"
-                onClick={() => setIsBuilderOpen(true)}
+                onClick={() => {
+                  setIsBuilderOpen(true)
+                  // Desktop's builder is a floating panel that can sit right
+                  // on top of the results window — leaving both open read
+                  // as cluttered/overlapping (owner report, 2026-10-28), so
+                  // this closes results out from under it there. Mobile's
+                  // builder is a full-screen takeover that already fully
+                  // covers the results panel on its own, and its own
+                  // "‹ back" button relies on isMiniOpen still being true to
+                  // land back on these same results — closing it here too
+                  // would break that return path for no visual benefit.
+                  if (!isMobile) setIsMiniOpen(false)
+                }}
                 className="font-mono font-bold text-[12px] underline hover:opacity-80 transition-opacity"
                 style={{ color: 'oklch(0.85 0.15 195)' }}
               >

@@ -650,8 +650,12 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
   // plain "2024" either way.
   const [nflTeamYearFrom, setNflTeamYearFrom] = useState(initial.nflTeamYearFrom ?? '')
   const [nflTeamYearTo, setNflTeamYearTo] = useState(initial.nflTeamYearTo ?? '')
-  // first plate appearance (MLB trend only)
-  const [mlbFirstFlag, setMlbFirstFlag] = useState<MlbFirstPaFlag>(initial.mlbFirstFlag ?? '')
+  // first plate appearance (MLB trend only) — shelved (see the removed
+  // Pill row's comment below), and deliberately NOT restored from
+  // persisted state anymore: a returning user with an old truthy value
+  // saved from before this change would otherwise land on firstPaActive
+  // with no UI left to clear it.
+  const [mlbFirstFlag, setMlbFirstFlag] = useState<MlbFirstPaFlag>('')
   // NFL stat type: yards or touchdowns, applies to rush/pass/rec
   const [nflStatType, setNflStatType] = useState<NflStatType>(initial.nflStatType ?? 'yds')
   // Combo toggle (pass+rush / rush+rec), independent of nflStatType so -td
@@ -1698,26 +1702,15 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
         </div>
       )}
 
-      {/* First plate appearance (MLB trend only — one PA per game, no
-          threshold N). Promoted to always-visible (owner ask, 2026-10-27,
-          "like we did for the year selector") — no longer gated behind
-          {more options}. */}
-      {mode === 'trend' && sport === 'mlb' && (
-        <div className="mb-3">
-          <SLabel>first plate appearance {'{optional}'}</SLabel>
-          <div className="flex gap-1.5 flex-wrap">
-            {(['xbh', 'walk', 'single', 'hit'] as const).map((f) => (
-              <Pill
-                key={f}
-                selected={mlbFirstFlag === f}
-                onClick={() => setMlbFirstFlag((p) => (p === f ? '' : f))}
-              >
-                {`-${f}`}
-              </Pill>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* First plate appearance (MLB) — removed from the UI (owner ask,
+          2026-10-28: "it isn't working right now, we'll deal with that
+          another time"). Shelved, not deleted, same pattern as other
+          not-ready features on this site: mlbFirstFlag/firstPaActive and
+          everything downstream of them are untouched, there's just no
+          longer a way to set mlbFirstFlag to a non-empty value, so
+          firstPaActive can never be true and this whole code path goes
+          dormant on its own. Revive by putting the Pill row back here
+          once the underlying issue's fixed. */}
 
       {firstPaActive && (
         <div className="mb-3 flex items-end gap-1.5">
