@@ -358,39 +358,50 @@ export default function VsGoaliePage() {
                     showing {rank.count}{typeof rank.total === 'number' ? ` of ${rank.total}` : ''}
                   </span>
                 </div>
-                <table className="w-full font-mono text-[12px]">
-                  <thead>
-                    <tr style={{ color: C.textDim }}>
-                      <th className="text-left px-4 py-1.5">{direction === 'goalie' ? 'skater' : 'goalie'}</th>
-                      <th className="text-left px-2 py-1.5">team</th>
-                      <th className="text-right px-2 py-1.5">GP</th>
-                      <th className="text-right px-2 py-1.5">G</th>
-                      <th className="text-right px-2 py-1.5">A</th>
-                      <th className="text-right px-2 py-1.5">PTS</th>
-                      <th className="text-right px-2 py-1.5">SOG</th>
-                      <th className="text-right px-4 py-1.5">PTS/GM</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {rank.rows.map((r, i) => (
-                      <tr
-                        key={i}
-                        onClick={() => openDrillIn(r.name)}
-                        className="cursor-pointer hover:opacity-80"
-                        style={{ borderTop: `1px solid ${C.border}` }}
-                      >
-                        <td className="px-4 py-1.5" style={{ color: C.textBright }}>{r.name}</td>
-                        <td className="px-2 py-1.5" style={{ color: C.textDim }}>{r.team}</td>
-                        <td className="text-right px-2 py-1.5">{r.gp}</td>
-                        <td className="text-right px-2 py-1.5">{r.g}</td>
-                        <td className="text-right px-2 py-1.5">{r.a}</td>
-                        <td className="text-right px-2 py-1.5 font-bold" style={{ color: C.accent }}>{r.pts}</td>
-                        <td className="text-right px-2 py-1.5">{r.sog}</td>
-                        <td className="text-right px-4 py-1.5">{r.pts_per_gm.toFixed(2)}</td>
+                {/* overflow-x-auto on this wrapper, not the card around it
+                    (owner report, 2026-10-28) — the table itself scrolls
+                    sideways on a narrow screen instead of either squeezing
+                    its columns unreadably thin or dragging the whole page
+                    into horizontal scroll, same pattern {charts}' own
+                    SortableStatChart already uses. minWidth 100% (not
+                    width/w-full) so the table still fills the card when it
+                    fits, and only grows past that — never shrinks below its
+                    natural column widths — when it doesn't. */}
+                <div className="overflow-x-auto">
+                  <table className="font-mono text-[12px]" style={{ minWidth: '100%' }}>
+                    <thead>
+                      <tr style={{ color: C.textDim }}>
+                        <th className="text-left px-4 py-1.5 whitespace-nowrap">{direction === 'goalie' ? 'skater' : 'goalie'}</th>
+                        <th className="text-left px-2 py-1.5 whitespace-nowrap">team</th>
+                        <th className="text-right px-2 py-1.5 whitespace-nowrap">GP</th>
+                        <th className="text-right px-2 py-1.5 whitespace-nowrap">G</th>
+                        <th className="text-right px-2 py-1.5 whitespace-nowrap">A</th>
+                        <th className="text-right px-2 py-1.5 whitespace-nowrap">PTS</th>
+                        <th className="text-right px-2 py-1.5 whitespace-nowrap">SOG</th>
+                        <th className="text-right px-4 py-1.5 whitespace-nowrap">PTS/GM</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {rank.rows.map((r, i) => (
+                        <tr
+                          key={i}
+                          onClick={() => openDrillIn(r.name)}
+                          className="cursor-pointer hover:opacity-80"
+                          style={{ borderTop: `1px solid ${C.border}` }}
+                        >
+                          <td className="px-4 py-1.5 whitespace-nowrap" style={{ color: C.textBright }}>{r.name}</td>
+                          <td className="px-2 py-1.5 whitespace-nowrap" style={{ color: C.textDim }}>{r.team}</td>
+                          <td className="text-right px-2 py-1.5 whitespace-nowrap">{r.gp}</td>
+                          <td className="text-right px-2 py-1.5 whitespace-nowrap">{r.g}</td>
+                          <td className="text-right px-2 py-1.5 whitespace-nowrap">{r.a}</td>
+                          <td className="text-right px-2 py-1.5 font-bold whitespace-nowrap" style={{ color: C.accent }}>{r.pts}</td>
+                          <td className="text-right px-2 py-1.5 whitespace-nowrap">{r.sog}</td>
+                          <td className="text-right px-4 py-1.5 whitespace-nowrap">{r.pts_per_gm.toFixed(2)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
                 {typeof rank.total === 'number' && rank.total > rank.rows.length && top < TOP_MAX && (
                   <div className="px-4 py-2.5" style={{ borderTop: `1px solid ${C.border}` }}>
                     <button
@@ -528,40 +539,42 @@ function GamesOverlay({
                 <span>multi-goal games <span style={{ color: C.textBright }}>{games.summary.multi_goal_games}</span></span>
                 <span>blank games <span style={{ color: C.textBright }}>{games.summary.blank_games}</span></span>
               </div>
-              <table className="w-full font-mono text-[12px]">
+              <div className="overflow-x-auto">
+              <table className="font-mono text-[12px]" style={{ minWidth: '100%' }}>
                 <thead>
                   <tr style={{ color: C.textDim }}>
-                    <th className="text-left px-5 py-1.5">date</th>
-                    <th className="text-left px-2 py-1.5">opp</th>
-                    <th className="text-left px-2 py-1.5">result</th>
-                    <th className="text-right px-2 py-1.5">G</th>
-                    <th className="text-right px-2 py-1.5">A</th>
-                    <th className="text-right px-2 py-1.5">PTS</th>
-                    <th className="text-right px-2 py-1.5">SOG</th>
+                    <th className="text-left px-5 py-1.5 whitespace-nowrap">date</th>
+                    <th className="text-left px-2 py-1.5 whitespace-nowrap">opp</th>
+                    <th className="text-left px-2 py-1.5 whitespace-nowrap">result</th>
+                    <th className="text-right px-2 py-1.5 whitespace-nowrap">G</th>
+                    <th className="text-right px-2 py-1.5 whitespace-nowrap">A</th>
+                    <th className="text-right px-2 py-1.5 whitespace-nowrap">PTS</th>
+                    <th className="text-right px-2 py-1.5 whitespace-nowrap">SOG</th>
                     {/* The goalie's own decision for that game, independent of
                         the skater's team result just to its left — easy to
                         misread as the same thing (flagged by backend), so
                         it's labeled "goalie dec." rather than just "dec." */}
-                    <th className="text-right px-5 py-1.5">goalie dec.</th>
+                    <th className="text-right px-5 py-1.5 whitespace-nowrap">goalie dec.</th>
                   </tr>
                 </thead>
                 <tbody>
                   {games.games.map((g, i) => (
                     <tr key={i} style={{ borderTop: `1px solid ${C.border}` }}>
-                      <td className="px-5 py-1.5" style={{ color: C.textBright }}>{g.date}</td>
-                      <td className="px-2 py-1.5" style={{ color: C.textDim }}>{g.opponent}</td>
-                      <td className="px-2 py-1.5" style={{ color: C.textDim }}>{g.result}</td>
-                      <td className="text-right px-2 py-1.5">{g.G}</td>
-                      <td className="text-right px-2 py-1.5">{g.A}</td>
-                      <td className="text-right px-2 py-1.5 font-bold" style={{ color: C.accent }}>{g.PTS}</td>
-                      <td className="text-right px-2 py-1.5">{g.SOG}</td>
-                      <td className="text-right px-5 py-1.5" style={{ color: C.textDim }}>
+                      <td className="px-5 py-1.5 whitespace-nowrap" style={{ color: C.textBright }}>{g.date}</td>
+                      <td className="px-2 py-1.5 whitespace-nowrap" style={{ color: C.textDim }}>{g.opponent}</td>
+                      <td className="px-2 py-1.5 whitespace-nowrap" style={{ color: C.textDim }}>{g.result}</td>
+                      <td className="text-right px-2 py-1.5 whitespace-nowrap">{g.G}</td>
+                      <td className="text-right px-2 py-1.5 whitespace-nowrap">{g.A}</td>
+                      <td className="text-right px-2 py-1.5 font-bold whitespace-nowrap" style={{ color: C.accent }}>{g.PTS}</td>
+                      <td className="text-right px-2 py-1.5 whitespace-nowrap">{g.SOG}</td>
+                      <td className="text-right px-5 py-1.5 whitespace-nowrap" style={{ color: C.textDim }}>
                         {g.goalie.started ? `${g.goalie.decision} (${g.goalie.saves}/${g.goalie.shots_against})` : '—'}
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+              </div>
             </>
           )}
         </div>
