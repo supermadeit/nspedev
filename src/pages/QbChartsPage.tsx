@@ -24,6 +24,7 @@
 // 2025) naturally drops out on its own — nothing special-cased for that.
 import { useEffect, useMemo, useState } from 'react'
 import { HomeLogoLink } from '@/components/HomeLogoLink'
+import { MobileToolHeader } from '@/components/MobileToolHeader'
 import { fetchQbExplosives, type QbExplosivesData } from '@/lib/databaseApi'
 import { normalizeDisplayPlayer } from '@/lib/nspe-payloads'
 import { loadPlayerIndex, PLAYER_INDEX, type PlayerIndexEntry } from '@/lib/playerSearch'
@@ -223,32 +224,50 @@ export default function QbChartsPage() {
     // (MobileCalculatorApp, BuilderScreen, ResultsScreen) already has to
     // establish its own scroll container for the same reason.
     <div className="h-dvh w-full overflow-y-auto" style={{ backgroundColor: C.surface, color: C.textBright, fontFamily: 'monospace' }}>
-      {/* Mobile (reported 2026-10-01): {HOMEPAGE}/{sports}/{team.metrics}
-          stopped fitting one row once team.metrics joined — stacks into
-          three rows on mobile instead, desktop stays the original row. */}
-      <div className={`flex gap-3 px-6 py-4 ${isMobile ? 'flex-col' : 'items-center justify-between'}`} style={{ borderBottom: `1px solid ${C.border}` }}>
-        <div>
-          <span className="font-mono font-bold text-[15px]" style={{ color: C.accent }}>
-            {'{chart}'}
-          </span>
-          <span className="ml-2 font-mono text-[12px]" style={{ color: C.textDim }}>
-            {data?.season ?? '…'} QB pass yds / quarter · explosive pass plays by distance band
-          </span>
+      {/* Mobile (reported 2026-10-01, reworked 2026-10-28): used to stack
+          the badge+inline-tagline and the logo/nav links into three rows
+          that still ran long with the tagline wrapping — now uses the
+          shared {vs.goalie}-style MobileToolHeader instead (logo row,
+          badge+{how.to.use} row, nav row), with the old tagline moved into
+          the modal. Desktop keeps the original single row untouched. */}
+      {isMobile ? (
+        <MobileToolHeader
+          badge={'{chart}'}
+          introBody={<p>{data?.season ?? '…'} QB pass yds / quarter · explosive pass plays by distance band</p>}
+          nav={
+            <>
+              <SportsSwitcher current="nfl" variant="charts" />
+              <a href="/nfl.team.metrics" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
+                {'{team.metrics}'}
+              </a>
+            </>
+          }
+        />
+      ) : (
+        <div className="flex items-center justify-between gap-3 px-6 py-4" style={{ borderBottom: `1px solid ${C.border}` }}>
+          <div>
+            <span className="font-mono font-bold text-[15px]" style={{ color: C.accent }}>
+              {'{chart}'}
+            </span>
+            <span className="ml-2 font-mono text-[12px]" style={{ color: C.textDim }}>
+              {data?.season ?? '…'} QB pass yds / quarter · explosive pass plays by distance band
+            </span>
+          </div>
+          {/* {sports} next to {HOMEPAGE} — this is an NFL chart (QB
+              explosives), so `current="nfl"` hides the redundant self-link
+              and lists the other three. `variant="charts"` keeps this
+              switcher landing on each sport's own {chart} page
+              (MlbChartsPage.tsx/NbaChartsPage.tsx/NhlChartsPage.tsx)
+              instead of its rankings page, now that all three exist. */}
+          <div className="flex items-center gap-4">
+            <HomeLogoLink fontSizePx={13} />
+            <SportsSwitcher current="nfl" variant="charts" />
+            <a href="/nfl.team.metrics" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
+              {'{team.metrics}'}
+            </a>
+          </div>
         </div>
-        {/* {sports} next to {HOMEPAGE} — this is an NFL chart (QB
-            explosives), so `current="nfl"` hides the redundant self-link and
-            lists the other three. `variant="charts"` keeps this switcher
-            landing on each sport's own {chart} page (MlbChartsPage.tsx/
-            NbaChartsPage.tsx/NhlChartsPage.tsx) instead of its rankings
-            page, now that all three exist. */}
-        <div className={`flex gap-2 ${isMobile ? 'flex-col items-start' : 'items-center gap-4'}`}>
-          <HomeLogoLink fontSizePx={13} />
-          <SportsSwitcher current="nfl" variant="charts" />
-          <a href="/nfl.team.metrics" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
-            {'{team.metrics}'}
-          </a>
-        </div>
-      </div>
+      )}
 
       <div className="px-6 py-3 font-mono text-[11px]" style={{ color: C.textDim }}>
         {loadError ? loadError : !data ? 'loading…' : `${rows.length} QBs · click any column to sort · TD counts are explosive-play TDs only, not season pass TD totals`}

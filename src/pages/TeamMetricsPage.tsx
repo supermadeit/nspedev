@@ -21,6 +21,7 @@
 // at vs. what do they allow" without a second team involved at all.
 import { useEffect, useMemo, useState } from 'react'
 import { HomeLogoLink } from '@/components/HomeLogoLink'
+import { MobileToolHeader } from '@/components/MobileToolHeader'
 import { C } from '@/components/ProfileSections'
 import { SportsSwitcher, chartsHrefFor } from '@/components/SportsSwitcher'
 import { TeamMetricsCard, OpponentThresholdsPanel, type TeamMetricsFieldDef } from '@/components/TeamMetricsCard'
@@ -257,44 +258,59 @@ export default function TeamMetricsPage({ sport, label }: { sport: Sport; label:
     // comparison modes especially) was invisible below the fold with no way
     // to reach it short of browser zoom.
     <div className="h-dvh w-full overflow-y-auto" style={{ backgroundColor: C.surface, color: C.textBright, fontFamily: 'monospace' }}>
-      {/* Mobile (reported 2026-10-01): {HOMEPAGE}+{sports} ran off-screen on
-          one row — stacks {sports} underneath {HOMEPAGE} on mobile, same
-          treatment as the other chart pages; desktop stays the original row.
-          Nav order (2026-10-04, owner): {sports} {charts} {HOMEPAGE} left to
-          right, HOMEPAGE furthest right. */}
-      <div className={`flex gap-3 px-6 py-4 ${isMobile ? 'flex-col' : 'items-center justify-between'}`} style={{ borderBottom: `1px solid ${C.border}` }}>
-        <div>
-          {/* Bordered badge, not a `{brace}` button — this is the page's own
-              logo/title, not an actionable link, same treatment as the
-              nspe.dev logo on the homepage (reported 2026-10-04: braces made
-              it read as a fourth nav button next to {sports}/{charts}/
-              {HOMEPAGE}). */}
-          <span
-            className="font-mono font-bold text-[15px] rounded px-2 py-1"
-            style={{ color: C.accent, border: `1px solid ${C.accent}` }}
-          >
-            {label}
-          </span>
-          <span className="ml-2 font-mono text-[12px]" style={{ color: C.textDim }}>
-            team production, what they do vs. what they allow
-          </span>
+      {/* Mobile reworked 2026-10-28 to the shared {vs.goalie}-style
+          MobileToolHeader (logo row, badge+{how.to.use} row, nav row) —
+          same jumbling/vertical-space issue the chart pages had. Desktop
+          keeps the original single row (nav order per owner, 2026-10-04:
+          {sports} {charts} {HOMEPAGE} left to right). */}
+      {isMobile ? (
+        <MobileToolHeader
+          badge={label}
+          introBody={<p>team production, what they do vs. what they allow</p>}
+          nav={
+            <>
+              <SportsSwitcher current={sport} variant="metrics" align="left" />
+              <a
+                href={chartsHrefFor(sport)}
+                className="font-mono text-[13px] underline hover:opacity-80 transition-opacity"
+                style={{ color: C.accent }}
+              >
+                {'{charts}'}
+              </a>
+            </>
+          }
+        />
+      ) : (
+        <div className="flex items-center justify-between gap-3 px-6 py-4" style={{ borderBottom: `1px solid ${C.border}` }}>
+          <div>
+            {/* Bordered badge, not a `{brace}` button — this is the page's
+                own logo/title, not an actionable link, same treatment as
+                the nspe.dev logo on the homepage (reported 2026-10-04:
+                braces made it read as a fourth nav button next to
+                {sports}/{charts}/{HOMEPAGE}). */}
+            <span
+              className="font-mono font-bold text-[15px] rounded px-2 py-1"
+              style={{ color: C.accent, border: `1px solid ${C.accent}` }}
+            >
+              {label}
+            </span>
+            <span className="ml-2 font-mono text-[12px]" style={{ color: C.textDim }}>
+              team production, what they do vs. what they allow
+            </span>
+          </div>
+          <div className="flex items-center gap-4">
+            <SportsSwitcher current={sport} variant="metrics" align="right" />
+            <a
+              href={chartsHrefFor(sport)}
+              className="font-mono text-[13px] underline hover:opacity-80 transition-opacity"
+              style={{ color: C.accent }}
+            >
+              {'{charts}'}
+            </a>
+            <HomeLogoLink fontSizePx={13} />
+          </div>
         </div>
-        <div className={`flex gap-2 ${isMobile ? 'flex-col items-start' : 'items-center gap-4'}`}>
-          {/* Mobile: this sits flush-left (items-start, above) with little
-              room to its left, so the default leftward-opening menu ran
-              off-screen (owner report, 2026-10-19) — opens rightward there
-              instead. Desktop's row layout has room to spare, unchanged. */}
-          <SportsSwitcher current={sport} variant="metrics" align={isMobile ? 'left' : 'right'} />
-          <a
-            href={chartsHrefFor(sport)}
-            className="font-mono text-[13px] underline hover:opacity-80 transition-opacity"
-            style={{ color: C.accent }}
-          >
-            {'{charts}'}
-          </a>
-          <HomeLogoLink fontSizePx={13} />
-        </div>
-      </div>
+      )}
 
       <div className="px-6 py-4 flex flex-wrap items-center gap-2">
         {MODE_TABS.map((t) => (

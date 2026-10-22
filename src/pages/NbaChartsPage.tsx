@@ -11,6 +11,7 @@
 // 470 players, no minimum-games floor.
 import { useEffect, useMemo, useState } from 'react'
 import { HomeLogoLink } from '@/components/HomeLogoLink'
+import { MobileToolHeader } from '@/components/MobileToolHeader'
 import { fetchNbaScoringBuckets, type NbaScoringBucketRow, type NbaScoringBucketsData } from '@/lib/databaseApi'
 import { normalizeDisplayPlayer } from '@/lib/nspe-payloads'
 import { loadPlayerIndex, PLAYER_INDEX, normalizePlayerKey, type PlayerIndexEntry } from '@/lib/playerSearch'
@@ -127,26 +128,42 @@ export default function NbaChartsPage() {
 
   return (
     <div className="h-dvh w-full overflow-y-auto" style={{ backgroundColor: C.surface, color: C.textBright, fontFamily: 'monospace' }}>
-      {/* Mobile (reported 2026-10-01): stacks {HOMEPAGE}/{sports}/
-          {team.metrics} into three rows, same treatment as the other chart
-          pages — desktop stays the original single row. */}
-      <div className={`flex gap-3 px-6 py-4 ${isMobile ? 'flex-col' : 'items-center justify-between'}`} style={{ borderBottom: `1px solid ${C.border}` }}>
-        <div>
-          <span className="font-mono font-bold text-[15px]" style={{ color: C.accent }}>
-            {'{chart}'}
-          </span>
-          <span className="ml-2 font-mono text-[12px]" style={{ color: C.textDim }}>
-            {data?.season ?? '…'} NBA scoring · points by quarter · threshold bands · defense
-          </span>
+      {/* Mobile reworked 2026-10-28 to the shared {vs.goalie}-style
+          MobileToolHeader (logo row, badge+{how.to.use} row, nav row) —
+          the old stacked layout's inline tagline ate vertical space before
+          any real content. Desktop keeps the original single row. */}
+      {isMobile ? (
+        <MobileToolHeader
+          badge={'{chart}'}
+          introBody={<p>{data?.season ?? '…'} NBA scoring · points by quarter · threshold bands · defense</p>}
+          nav={
+            <>
+              <SportsSwitcher current="nba" variant="charts" />
+              <a href="/nba.team.metrics" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
+                {'{team.metrics}'}
+              </a>
+            </>
+          }
+        />
+      ) : (
+        <div className="flex items-center justify-between gap-3 px-6 py-4" style={{ borderBottom: `1px solid ${C.border}` }}>
+          <div>
+            <span className="font-mono font-bold text-[15px]" style={{ color: C.accent }}>
+              {'{chart}'}
+            </span>
+            <span className="ml-2 font-mono text-[12px]" style={{ color: C.textDim }}>
+              {data?.season ?? '…'} NBA scoring · points by quarter · threshold bands · defense
+            </span>
+          </div>
+          <div className="flex items-center gap-4">
+            <HomeLogoLink fontSizePx={13} />
+            <SportsSwitcher current="nba" variant="charts" />
+            <a href="/nba.team.metrics" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
+              {'{team.metrics}'}
+            </a>
+          </div>
         </div>
-        <div className={`flex gap-2 ${isMobile ? 'flex-col items-start' : 'items-center gap-4'}`}>
-          <HomeLogoLink fontSizePx={13} />
-          <SportsSwitcher current="nba" variant="charts" />
-          <a href="/nba.team.metrics" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
-            {'{team.metrics}'}
-          </a>
-        </div>
-      </div>
+      )}
 
       <div className="px-6 py-3 font-mono text-[11px]" style={{ color: C.textDim }}>
         {loadError ? loadError : !data ? 'loading…' : `${rows.length} players · click any column to sort · no per-quarter reb/ast/stl/blk exists, scoring only`}

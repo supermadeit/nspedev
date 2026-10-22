@@ -8897,17 +8897,21 @@ function App() {
           <SportsSwitcher label="charts" variant="charts" direction="up" triggerSizePx={15} />
           <SportsSwitcher label="team.metrics" variant="metrics" direction="up" triggerSizePx={15} />
           <SportsSwitcher label="rankings" direction="up" triggerSizePx={15} />
-          {/* {skater.vs.goalie} — NHL skater-vs-goalie top rankings (owner
-              ask, 2026-10-27; renamed from {vs.goalie} 2026-10-28). Plain
-              link, not a SportsSwitcher popup — this is a single NHL-only
-              destination, not a per-sport menu. */}
+          {/* {vs.goalie} — NHL skater-vs-goalie top rankings (owner ask,
+              2026-10-27). Plain link, not a SportsSwitcher popup — this is
+              a single NHL-only destination, not a per-sport menu. The page
+              itself rebranded to {skater.vs.goalie} (2026-10-28), but this
+              nav button keeps the short form — owner ask, 2026-10-28: the
+              long form was crowding {charts} off-screen on mobile next to
+              its two siblings here, "vs.goalie" is enough on a homepage
+              nav button, the fuller name is for the page's own header. */}
           <button
             type="button"
             onClick={() => navigate('/nhl.vs.goalie')}
             className="font-mono font-bold underline hover:opacity-80 transition-opacity whitespace-nowrap"
             style={{ color: 'oklch(0.85 0.15 195)', fontSize: '15px' }}
           >
-            {'{skater.vs.goalie}'}
+            {'{vs.goalie}'}
           </button>
         </div>
       )}
@@ -9008,25 +9012,29 @@ function App() {
 
       {/* {leaderboard}'s mobile nav entry: removed 2026-10-18, restored
           2026-10-19 in place of {matchups}, removed again 2026-10-28 in
-          place of {skater.vs.goalie} (owner ask — mobile had no entry
-          point for the new page, chose to swap rather than add a fourth
-          button here). Same shelve-don't-delete treatment each round: the
+          place of {vs.goalie} (owner ask — mobile had no entry point for
+          the new page, chose to swap rather than add a fourth button
+          here). Same shelve-don't-delete treatment each round: the
           modal/state/fetch below (isMobileLeaderboardOpen) never actually
           leaves the file, only the UI path to it comes and goes. Desktop's
           own leaderboard panel is untouched throughout, this only ever
           affected the mobile nav button. */}
 
       {/* Mobile's homepage-level entry points — {charts}/{team.metrics}
-          stay, {leaderboard} swapped out for {skater.vs.goalie} (owner ask,
-          2026-10-28). Real click-outside-to-close on the two
-          SportsSwitchers, same as before. */}
+          stay, {leaderboard} swapped out for {vs.goalie} (owner ask,
+          2026-10-28). Short form, not {skater.vs.goalie} — the full name
+          was pushing {charts} ~60% off-screen in this three-button row
+          (owner report, same day); the page's own header keeps the full
+          branding, this nav button just needs to fit. Real
+          click-outside-to-close on the two SportsSwitchers, same as
+          before. */}
       {isMobile && (
         <div className="absolute z-20 flex items-center gap-3" style={{ bottom: '46px', right: '12px' }}>
           {/* {charts} is leftmost in this row, with little room to its left
               on a narrow screen — the default leftward-opening menu ran
               off-screen there (owner report, 2026-10-19), so it opens
-              rightward instead. team.metrics/{skater.vs.goalie} sit further
-              right with room to spare and are unchanged. */}
+              rightward instead. team.metrics/{vs.goalie} sit further right
+              with room to spare and are unchanged. */}
           <SportsSwitcher label="charts" variant="charts" direction="up" align="left" />
           <SportsSwitcher label="team.metrics" variant="metrics" direction="up" />
           <button
@@ -9035,7 +9043,7 @@ function App() {
             className="font-mono font-bold text-[14px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
             style={{ color: 'oklch(0.85 0.15 195)' }}
           >
-            {'{skater.vs.goalie}'}
+            {'{vs.goalie}'}
           </button>
         </div>
       )}

@@ -11,6 +11,7 @@
 // volume is left to the person looking at the table, same as NFL's chart.
 import { useEffect, useMemo, useState } from 'react'
 import { HomeLogoLink } from '@/components/HomeLogoLink'
+import { MobileToolHeader } from '@/components/MobileToolHeader'
 import { fetchMlbBatterBuckets, type MlbBatterBucketRow, type MlbBatterBucketsData } from '@/lib/databaseApi'
 import { normalizeDisplayPlayer } from '@/lib/nspe-payloads'
 import { loadPlayerIndex, PLAYER_INDEX, normalizePlayerKey, type PlayerIndexEntry } from '@/lib/playerSearch'
@@ -106,30 +107,44 @@ export default function MlbChartsPage() {
 
   return (
     <div className="h-dvh w-full overflow-y-auto" style={{ backgroundColor: C.surface, color: C.textBright, fontFamily: 'monospace' }}>
-      {/* Mobile: stacked rows for the right-side nav group, same treatment
-          as the other three chart pages (2026-10-01) — mlb has no
-          team.metrics link, so this is just {HOMEPAGE}/{sports} but kept
-          uniform with the others rather than a special one-off two-item
-          layout. */}
-      <div className={`flex gap-3 px-6 py-4 ${isMobile ? 'flex-col' : 'items-center justify-between'}`} style={{ borderBottom: `1px solid ${C.border}` }}>
-        <div>
-          <span className="font-mono font-bold text-[15px]" style={{ color: C.accent }}>
-            {'{chart}'}
-          </span>
-          <span className="ml-2 font-mono text-[12px]" style={{ color: C.textDim }}>
-            {data?.season ?? '…'} MLB batting · season counting-stat buckets
-          </span>
+      {/* Mobile reworked 2026-10-28 to the shared {vs.goalie}-style
+          MobileToolHeader (logo row, badge+{how.to.use} row, nav row) — the
+          old stacked layout's inline tagline ate vertical space before any
+          real content. Desktop keeps the original single row untouched. */}
+      {isMobile ? (
+        <MobileToolHeader
+          badge={'{chart}'}
+          introBody={<p>{data?.season ?? '…'} MLB batting · season counting-stat buckets</p>}
+          nav={
+            <>
+              <SportsSwitcher current="mlb" variant="charts" />
+              <a href="/mlb.team.metrics" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
+                {'{team.metrics}'}
+              </a>
+            </>
+          }
+        />
+      ) : (
+        <div className="flex items-center justify-between gap-3 px-6 py-4" style={{ borderBottom: `1px solid ${C.border}` }}>
+          <div>
+            <span className="font-mono font-bold text-[15px]" style={{ color: C.accent }}>
+              {'{chart}'}
+            </span>
+            <span className="ml-2 font-mono text-[12px]" style={{ color: C.textDim }}>
+              {data?.season ?? '…'} MLB batting · season counting-stat buckets
+            </span>
+          </div>
+          <div className="flex items-center gap-4">
+            <HomeLogoLink fontSizePx={13} />
+            <SportsSwitcher current="mlb" variant="charts" />
+            {/* {team.metrics} added 2026-10-01 — mlb joined the other three
+                sports once its own dedicated team-metrics engine shipped. */}
+            <a href="/mlb.team.metrics" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
+              {'{team.metrics}'}
+            </a>
+          </div>
         </div>
-        <div className={`flex gap-2 ${isMobile ? 'flex-col items-start' : 'items-center gap-4'}`}>
-          <HomeLogoLink fontSizePx={13} />
-          <SportsSwitcher current="mlb" variant="charts" />
-          {/* {team.metrics} added 2026-10-01 — mlb joined the other three
-              sports once its own dedicated team-metrics engine shipped. */}
-          <a href="/mlb.team.metrics" className="font-mono text-[13px] underline hover:opacity-80 transition-opacity" style={{ color: C.accent }}>
-            {'{team.metrics}'}
-          </a>
-        </div>
-      </div>
+      )}
 
       <div className="px-6 py-3 font-mono text-[11px]" style={{ color: C.textDim }}>
         {loadError ? loadError : !data ? 'loading…' : `${rows.length} batters · click any column to sort`}
