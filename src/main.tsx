@@ -26,6 +26,7 @@ import TeamMetricsPage from './pages/TeamMetricsPage.tsx'
 import TeamMetricsStatSharePage from './pages/TeamMetricsStatSharePage.tsx'
 import ConnectClaudePage from './pages/ConnectClaudePage.tsx'
 import SapZillaPage from './pages/SapZillaPage.tsx'
+import VsGoaliePage from './pages/VsGoaliePage.tsx'
 
 import "./main.css"
 import "./styles/theme.css"
@@ -107,6 +108,18 @@ createRoot(document.getElementById('root')!).render(
               checks auth itself and redirects to /login only when that
               specific action is used, so this stays unwrapped. */}
           <Route path="/sap.zilla" element={<SapZillaPage />} />
+          {/* {vs.goalie} — NHL skater-vs-goalie top rankings (owner ask,
+              2026-10-27). Sign-in gated like /account/{connect} via
+              ProtectedRoute; the Pro-plan gate itself is a 402 the backend
+              returns, handled inside the page (see vsGoalieApi.ts). */}
+          <Route
+            path="/nhl.vs.goalie"
+            element={
+              <ProtectedRoute>
+                <VsGoaliePage />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/account"
             element={
