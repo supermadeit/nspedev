@@ -8897,16 +8897,17 @@ function App() {
           <SportsSwitcher label="charts" variant="charts" direction="up" triggerSizePx={15} />
           <SportsSwitcher label="team.metrics" variant="metrics" direction="up" triggerSizePx={15} />
           <SportsSwitcher label="rankings" direction="up" triggerSizePx={15} />
-          {/* {vs.goalie} — NHL skater-vs-goalie top rankings (owner ask,
-              2026-10-27). Plain link, not a SportsSwitcher popup — this is
-              a single NHL-only destination, not a per-sport menu. */}
+          {/* {skater.vs.goalie} — NHL skater-vs-goalie top rankings (owner
+              ask, 2026-10-27; renamed from {vs.goalie} 2026-10-28). Plain
+              link, not a SportsSwitcher popup — this is a single NHL-only
+              destination, not a per-sport menu. */}
           <button
             type="button"
             onClick={() => navigate('/nhl.vs.goalie')}
             className="font-mono font-bold underline hover:opacity-80 transition-opacity whitespace-nowrap"
             style={{ color: 'oklch(0.85 0.15 195)', fontSize: '15px' }}
           >
-            {'{vs.goalie}'}
+            {'{skater.vs.goalie}'}
           </button>
         </div>
       )}

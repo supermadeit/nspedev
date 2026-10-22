@@ -1,4 +1,7 @@
-// {vs.goalie} — NHL skater-vs-goalie top rankings. Pick a goalie, see the
+// {skater.vs.goalie} (branded {vs.goalie} until 2026-10-28, renamed per
+// owner ask — route/file/module names below are unchanged, this is a
+// display-label-only rename) — NHL skater-vs-goalie top rankings. Pick a
+// goalie, see the
 // top skaters who've produced against them; pick a skater, see the top
 // goalies they've produced against. Same visual family as {team.metrics}
 // (full-height dark terminal page, bordered cards, no PageShell/shadcn
@@ -50,6 +53,7 @@ function fieldStyle(): React.CSSProperties {
 
 export default function VsGoaliePage() {
   const [direction, setDirection] = useState<Direction>('goalie')
+  const [isIntroOpen, setIsIntroOpen] = useState(false)
 
   // ---- goalie-direction picker (goalie is the subject, skaters rank) ----
   const [goalies, setGoalies] = useState<VsGoalieListing[] | null>(null)
@@ -93,6 +97,18 @@ export default function VsGoaliePage() {
       setSkaterMatches([])
       return
     }
+    // Team-code search (owner ask, 2026-10-28): "EDM" should surface every
+    // Oilers skater, not just whoever's name happens to contain those
+    // letters. searchPlayers() (the shared, name-only matcher) has no team
+    // concept, so this is a local supplement rather than a change to that
+    // shared utility — an exact team-code hit takes over the dropdown
+    // entirely; otherwise it's the normal name search.
+    const q = skaterQuery.trim().toLowerCase()
+    const byTeam = PLAYER_INDEX.filter((e) => e.sport === 'nhl' && e.team.toLowerCase() === q)
+    if (byTeam.length > 0) {
+      setSkaterMatches(byTeam.slice(0, 30).map((entry) => ({ entry, matchedOn: 'other', matchedPrefix: q })))
+      return
+    }
     setSkaterMatches(searchPlayers(skaterQuery, 6, 'nhl'))
   }, [skaterQuery])
 
@@ -108,6 +124,10 @@ export default function VsGoaliePage() {
   const goalieMatches = useMemo(() => {
     if (!goalies || !goalieQuery.trim()) return []
     const q = goalieQuery.trim().toLowerCase()
+    // Team-code search, same idea as the skater picker below: "EDM" shows
+    // every Oilers goalie on file instead of a name substring match.
+    const byTeam = goalies.filter((g) => g.team.toLowerCase() === q)
+    if (byTeam.length > 0) return byTeam
     return goalies.filter((g) => g.name.toLowerCase().includes(q)).slice(0, 8)
   }, [goalies, goalieQuery])
 
@@ -171,16 +191,31 @@ export default function VsGoaliePage() {
 
   return (
     <div className="h-dvh w-full overflow-y-auto bg-background" style={{ color: C.textBright, fontFamily: 'monospace' }}>
-      <div className="flex items-center justify-between gap-3 px-6 py-4" style={{ borderBottom: `1px solid ${C.border}` }}>
-        <div className="flex items-center gap-3">
-          <span className="font-mono font-bold text-[15px] rounded px-2 py-1" style={{ color: C.accent, border: `1px solid ${C.accent}` }}>
-            {'{vs.goalie}'}
-          </span>
-          <span className="font-mono text-[12px]" style={{ color: C.textDim }}>
-            pick a goalie or a skater, see who actually does well against whom
-          </span>
+      {/* Two stacked rows (owner ask, 2026-10-28): nspe.dev top-left on its
+          own row, {skater.vs.goalie} + {how.to.use} sharing the row below
+          it — previously all three (badge, a tagline, the logo) crammed
+          into one items-center row, which is exactly the "button text reads
+          as part of the sentence" jumbling reported elsewhere this same
+          round once the tagline got long enough to wrap on a phone. The
+          static tagline itself is gone — {how.to.use} opens IntroModal with
+          the same explanation instead of it always sitting in the header. */}
+      <div className="flex flex-col gap-3 px-6 py-4" style={{ borderBottom: `1px solid ${C.border}` }}>
+        <div>
+          <HomeLogoLink fontSizePx={13} />
         </div>
-        <HomeLogoLink fontSizePx={13} />
+        <div className="flex items-center justify-between gap-3">
+          <span className="font-mono font-bold text-[15px] rounded px-2 py-1" style={{ color: C.accent, border: `1px solid ${C.accent}` }}>
+            {'{skater.vs.goalie}'}
+          </span>
+          <button
+            type="button"
+            onClick={() => setIsIntroOpen(true)}
+            className="font-mono font-bold text-[12px] underline hover:opacity-80 transition-opacity whitespace-nowrap"
+            style={{ color: 'oklch(0.78 0.18 145)' }}
+          >
+            {'{how.to.use}'}
+          </button>
+        </div>
       </div>
 
       <div className="px-6 py-6 max-w-3xl mx-auto space-y-5">
@@ -371,11 +406,6 @@ export default function VsGoaliePage() {
               </div>
             )}
 
-            {!subjectReady && (
-              <div className="font-mono text-[12px]" style={{ color: C.textDim }}>
-                {direction === 'goalie' ? 'pick a goalie to see who produces against them.' : 'pick a skater to see who they produce against.'}
-              </div>
-            )}
           </>
         )}
       </div>
@@ -389,6 +419,45 @@ export default function VsGoaliePage() {
           onClose={() => setDrillSubject(null)}
         />
       )}
+
+      <IntroModal open={isIntroOpen} onClose={() => setIsIntroOpen(false)} />
+    </div>
+  )
+}
+
+// Owner ask, 2026-10-28: the page's own explanation moved out of an
+// always-on header tagline (which jumbled on mobile once it ran long
+// enough to wrap) and into this on-demand modal, reached via {how.to.use}
+// — same role as {query builder}'s own {build.tutorial} button. Also makes
+// the old "pick a goalie to see who produces against them" hint under the
+// picker redundant, so that's gone too rather than saying the same thing
+// twice in two places.
+function IntroModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  if (!open) return null
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ backgroundColor: 'rgba(0,0,0,0.80)' }}
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+    >
+      <div
+        className="w-full max-w-[480px] rounded-lg overflow-hidden shadow-2xl"
+        style={{ backgroundColor: C.surface, border: `1px solid ${C.border}`, fontFamily: 'monospace' }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between px-5 py-3" style={{ backgroundColor: 'oklch(0.16 0 0)', borderBottom: `1px solid ${C.border}` }}>
+          <span className="font-mono font-bold text-[13px]" style={{ color: C.accent }}>{'{how.to.use}'}</span>
+          <button type="button" onClick={onClose} className="font-mono text-[14px] hover:opacity-70 transition-opacity" style={{ color: C.accent }} aria-label="Close">
+            ✕
+          </button>
+        </div>
+        <div className="px-5 py-4 space-y-2 font-mono text-[13px]" style={{ color: C.textBright }}>
+          <p>welcome to {'{skater vs goalie}'} — select a skater to see their history vs goalies</p>
+          <p style={{ color: C.textDim }}>alternatively, select a goalie to see their history vs skaters</p>
+        </div>
+      </div>
     </div>
   )
 }
@@ -397,7 +466,7 @@ function GatePanel({ kind, message }: { kind: 'signin' | 'pro'; message?: string
   return (
     <div className="rounded-lg p-5 font-mono text-[13px] space-y-2" style={{ backgroundColor: C.surface2, border: `1px solid ${C.border}` }}>
       <div style={{ color: C.textBright }}>
-        {kind === 'signin' ? 'sign in to use {vs.goalie}.' : (message || 'Skater vs goalie is a Pro page.')}
+        {kind === 'signin' ? 'sign in to use {skater.vs.goalie}.' : (message || 'Skater vs goalie is a Pro page.')}
       </div>
       <a
         href={kind === 'signin' ? '/login?redirect=%2Fnhl.vs.goalie' : '/refill'}
