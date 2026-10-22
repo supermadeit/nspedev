@@ -91,7 +91,6 @@ interface PersistedBuilderState {
   nflTeamStat: NflTeamStat
   nflTeamYearFrom: string
   nflTeamYearTo: string
-  batPosition: string
   mlbFirstFlag: MlbFirstPaFlag
   nflStatType: NflStatType
   nflCombo: boolean
@@ -106,16 +105,6 @@ export interface PopularPlayer {
   player: string
   team: string
 }
-
-const MLB_POSITIONS = [
-  { value: 'c', label: 'C', title: 'Catcher' },
-  { value: 'of', label: 'OF', title: 'Outfielder' },
-  { value: 'ss', label: 'SS', title: 'Shortstop' },
-  { value: '1b', label: '1B', title: 'First Base' },
-  { value: '2b', label: '2B', title: 'Second Base' },
-  { value: '3b', label: '3B', title: 'Third Base' },
-  { value: 'dh', label: 'DH', title: 'Designated Hitter' },
-]
 
 const STORAGE_KEY_DESKTOP = 'nspe.queryBuilder.desktop.v1'
 const STORAGE_KEY_MOBILE = 'nspe.queryBuilder.mobile.v1'
@@ -661,8 +650,6 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
   // plain "2024" either way.
   const [nflTeamYearFrom, setNflTeamYearFrom] = useState(initial.nflTeamYearFrom ?? '')
   const [nflTeamYearTo, setNflTeamYearTo] = useState(initial.nflTeamYearTo ?? '')
-  // batter position (MLB only)
-  const [batPosition, setBatPosition] = useState(initial.batPosition ?? '')
   // first plate appearance (MLB trend only)
   const [mlbFirstFlag, setMlbFirstFlag] = useState<MlbFirstPaFlag>(initial.mlbFirstFlag ?? '')
   // NFL stat type: yards or touchdowns, applies to rush/pass/rec
@@ -739,7 +726,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
       streakN,
       h2hSport, h2hPlayer, h2hOpponent,
       teamStat, teamSubMode, teamSport, nflTeamStat, nflTeamYearFrom, nflTeamYearTo,
-      batPosition, mlbFirstFlag, nflStatType, nflCombo,
+      mlbFirstFlag, nflStatType, nflCombo,
       explosiveLeague, nflPlayType, nflYds,
       nflExplosiveSubMode, nflMinYds,
     }
@@ -748,7 +735,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
     } catch {
       // ignore quota / unavailable storage
     }
-  }, [storageKey, mode, sport, period, yearFilter, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hSport, h2hPlayer, h2hOpponent, teamStat, teamSubMode, teamSport, nflTeamStat, nflTeamYearFrom, nflTeamYearTo, batPosition, mlbFirstFlag, nflStatType, nflCombo, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds])
+  }, [storageKey, mode, sport, period, yearFilter, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hSport, h2hPlayer, h2hOpponent, teamStat, teamSubMode, teamSport, nflTeamStat, nflTeamYearFrom, nflTeamYearTo, mlbFirstFlag, nflStatType, nflCombo, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds])
 
   const isNbaHalfPeriod = sport === 'nba' && period === '1h'
   // Double-double / triple-double are boolean occurrence stats (did it
@@ -759,12 +746,15 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
     statType: nflStatType,
     combo: nflCombo,
   })
-  // Optional controls (period, first PA, batter position, season) live behind
-  // one toggle so the default view is just sport / stat / threshold. Stays
-  // open on its own whenever one of them already holds a value, so a set
-  // option can never be hidden out from under the user.
+  // Optional controls live behind one toggle so the default view is just
+  // sport / stat / threshold. Period is the only thing left behind it now —
+  // first PA, batter position, and season all used to live here too, but
+  // batter position was dropped (owner ask, 2026-10-27) and first PA/season
+  // both got promoted to always-visible (same ask, "like we did for the
+  // year selector") since being tucked behind {more options} meant users
+  // kept missing them and re-entering selections from scratch.
   const [showMore, setShowMore] = useState(false)
-  const optionalOpen = showMore || Boolean(period || mlbFirstFlag || batPosition || yearFilter)
+  const optionalOpen = showMore || Boolean(period)
   const allStats = SPORT_STATS[sport] ?? []
   const stats = isNbaHalfPeriod
     ? allStats.filter((s) => NBA_HALF_STATS.has(s.value))
@@ -780,10 +770,6 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
     // MLB has no q1 yet — clear q1 if switching to MLB
     if (s === 'mlb' && period === 'q1') {
       setPeriod('')
-    }
-    // position filter is MLB-only — clear when switching away
-    if (s !== 'mlb') {
-      setBatPosition('')
     }
   }
 
@@ -801,7 +787,6 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
     if (m === 'explosive') {
       setStat('')
       if (period === '1h' || period === 'q1') setPeriod('')
-      setBatPosition('')
     }
   }
 
@@ -893,7 +878,6 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
 
     const parts: string[] = ['nspe', sport]
 
-    if (sport === 'mlb' && batPosition) parts.push(batPosition)
     if (period === 'q1') {
       if (sport === 'nhl') parts.push('p1')
       else if (sport !== 'mlb') parts.push('q1')
@@ -965,7 +949,7 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
     if (yearFilter) parts.push(yearFilter)
 
     return parts.join(' ')
-  }, [mode, sport, period, yearFilter, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hSport, h2hPlayer, h2hOpponent, teamStat, teamSubMode, teamSport, nflTeamStat, nflTeamYearFrom, nflTeamYearTo, batPosition, mlbFirstFlag, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds, nflStatType, nflCombo])
+  }, [mode, sport, period, yearFilter, stat, thresholdN, lastA, lastB, minN, maxN, thresholdMode, computeWindow, windowN, streakN, h2hSport, h2hPlayer, h2hOpponent, teamStat, teamSubMode, teamSport, nflTeamStat, nflTeamYearFrom, nflTeamYearTo, mlbFirstFlag, explosiveLeague, nflPlayType, nflYds, nflExplosiveSubMode, nflMinYds, nflStatType, nflCombo])
 
   const canRun = Boolean(builtCommand) && !isLoading
 
@@ -1662,13 +1646,19 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
         </div>
       )}
 
-      {/* Optional-controls toggle — right under sport. */}
+      {/* Optional-controls toggle — right under sport. Only gates `period`
+          now (see optionalOpen above) — disabled used to also check
+          mlbFirstFlag/batPosition/yearFilter, which is exactly what broke
+          this button once season got promoted to always-visible: any
+          selected year permanently locked the toggle disabled, since
+          yearFilter being truthy no longer has anything to do with whether
+          the optional (period) section should stay forced open. */}
       {isBuilderQuery && sport && !firstPaActive && (
         <div className="mb-3">
           <button
             type="button"
             onClick={() => setShowMore((v) => !v)}
-            disabled={Boolean(period || mlbFirstFlag || batPosition || yearFilter)}
+            disabled={Boolean(period)}
             className="font-mono text-[11px] underline underline-offset-4 hover:opacity-80 transition-opacity"
             style={{ color: C.accentDim, cursor: 'pointer' }}
           >
@@ -1708,8 +1698,11 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
         </div>
       )}
 
-      {/* First plate appearance (MLB trend only — one PA per game, no threshold N) */}
-      {optionalOpen && mode === 'trend' && sport === 'mlb' && (
+      {/* First plate appearance (MLB trend only — one PA per game, no
+          threshold N). Promoted to always-visible (owner ask, 2026-10-27,
+          "like we did for the year selector") — no longer gated behind
+          {more options}. */}
+      {mode === 'trend' && sport === 'mlb' && (
         <div className="mb-3">
           <SLabel>first plate appearance {'{optional}'}</SLabel>
           <div className="flex gap-1.5 flex-wrap">
@@ -1736,24 +1729,6 @@ export function QueryBuilder({ onRunQuery, isLoading, popularPlayers = [], nflPo
           <div>
             <SLabel>-last</SLabel>
             <NumSelect value={lastB} onChange={setLastB} options={WINDOW_LAST_PRESETS} w={64} />
-          </div>
-        </div>
-      )}
-
-      {/* Batter position (MLB only) */}
-      {optionalOpen && isBuilderQuery && sport === 'mlb' && !firstPaActive && (
-        <div className="mb-3">
-          <SLabel>batter position {'{optional}'}</SLabel>
-          <div className="flex gap-1.5 flex-wrap">
-            {MLB_POSITIONS.map((pos) => (
-              <Pill
-                key={pos.value}
-                selected={batPosition === pos.value}
-                onClick={() => setBatPosition((prev) => (prev === pos.value ? '' : pos.value))}
-              >
-                {pos.label}
-              </Pill>
-            ))}
           </div>
         </div>
       )}

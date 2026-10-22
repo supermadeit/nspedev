@@ -7908,6 +7908,25 @@ function App() {
                   {'{return to chat}'}
                 </button>
               )}
+              {/* {return to builder}: reopens the query builder panel without
+                  touching isMiniOpen, so these results stay open underneath
+                  it (owner ask, 2026-10-27 — users had to close out of
+                  results and re-enter every selection from scratch to run
+                  another query). QueryBuilder already persists every field
+                  to localStorage on change and reloads it on mount (see
+                  loadPersistedState in QueryBuilder.tsx), so this alone is
+                  enough to make prior selections "static" too — there was
+                  no missing persistence logic, just no way back in. Always
+                  shown here (not conditioned on how the current result was
+                  run), same as {pocket} right next to it. */}
+              <button
+                type="button"
+                onClick={() => setIsBuilderOpen(true)}
+                className="font-mono font-bold text-[12px] underline hover:opacity-80 transition-opacity"
+                style={{ color: 'oklch(0.85 0.15 195)' }}
+              >
+                {'{return to builder}'}
+              </button>
               {pocketNote && (
                 <span
                   className="font-mono text-[11px]"
